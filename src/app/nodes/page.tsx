@@ -1,20 +1,42 @@
 
+"use client"
+
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Activity, Map, Server, Globe, Signal, Database } from "lucide-react"
+import { Activity, Map, Server, Globe, Signal, Database, ShieldAlert, ShieldCheck } from "lucide-react"
+import { useEffect, useState } from "react"
 
-const nodes = [
-  { name: "Sirajganj-Edge-01", region: "South Asia", status: "Operational", load: "12%", latency: "112ms" },
-  { name: "Dhaka-Core-02", region: "South Asia", status: "Operational", load: "45%", latency: "118ms" },
-  { name: "Singapore-Relay-01", region: "SE Asia", status: "Operational", load: "28%", latency: "156ms" },
-  { name: "London-Bridge-04", region: "Europe", status: "Maintenance", load: "0%", latency: "--" },
-  { name: "NYC-Vault-01", region: "North America", status: "Operational", load: "62%", latency: "210ms" },
-  { name: "Dubai-Gateway-03", region: "Middle East", status: "Operational", load: "19%", latency: "134ms" },
+const INITIAL_NODES = [
+  { id: "1", name: "Sirajganj-Edge-01", region: "South Asia", status: "Operational", load: 12, latency: 112, integrity: "Verified" },
+  { id: "2", name: "Dhaka-Core-02", region: "South Asia", status: "Operational", load: 45, latency: 118, integrity: "Verified" },
+  { id: "3", name: "Singapore-Relay-01", region: "SE Asia", status: "Operational", load: 28, latency: 156, integrity: "Verified" },
+  { id: "4", name: "London-Bridge-04", region: "Europe", status: "Maintenance", load: 0, latency: 450, integrity: "Untrusted" },
+  { id: "5", name: "NYC-Vault-01", region: "North America", status: "Operational", load: 62, latency: 210, integrity: "Verified" },
+  { id: "6", name: "Dubai-Gateway-03", region: "Middle East", status: "Operational", load: 19, latency: 134, integrity: "Verified" },
 ]
 
 export default function NodesPage() {
+  const [nodes, setNodes] = useState(INITIAL_NODES)
+
+  // Simulation of live updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNodes(prev => prev.map(node => {
+        if (node.status === "Maintenance") return node
+        const change = Math.floor(Math.random() * 20) - 10
+        const newLatency = Math.max(80, node.latency + change)
+        return {
+          ...node,
+          latency: newLatency,
+          load: Math.min(100, Math.max(5, node.load + (Math.random() * 4 - 2)))
+        }
+      }))
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
@@ -23,13 +45,13 @@ export default function NodesPage() {
           <header className="flex items-center justify-between">
             <div>
               <h2 className="text-3xl font-headline font-bold flex items-center gap-3">
-                <Activity className="size-8 text-primary" />
+                <Activity className="size-8 text-primary animate-pulse" />
                 Regional Node Watchtower
               </h2>
               <p className="text-muted-foreground mt-1">Live observability of the 12 distributed ledger nodes.</p>
             </div>
             <div className="hidden md:flex items-center gap-3">
-              <Badge variant="outline" className="text-emerald-500 border-emerald-500/20">All Systems Clear</Badge>
+              <Badge variant="outline" className="text-emerald-500 border-emerald-500/20 glow-emerald">All Systems Clear</Badge>
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <Signal className="size-3" />
                 Last sync: Just now
@@ -38,58 +60,67 @@ export default function NodesPage() {
           </header>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {nodes.map((node, i) => (
-              <Card key={i} className="glass-card hover:border-primary/50 transition-all duration-300">
+            {nodes.map((node) => (
+              <Card key={node.id} className={`glass-card group hover:border-primary/50 transition-all duration-300 overflow-hidden relative ${node.latency > 300 ? 'border-destructive/50' : ''}`}>
+                {node.latency > 300 && (
+                  <div className="absolute top-0 left-0 w-full h-1 bg-destructive animate-pulse" />
+                )}
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">
                     <div className="p-2 bg-primary/10 rounded-lg">
-                      <Server className="size-5 text-primary" />
+                      <Server className={`size-5 ${node.latency > 300 ? 'text-destructive' : 'text-primary'}`} />
                     </div>
                     <Badge className={node.status === "Operational" ? "bg-emerald-500" : "bg-amber-500"}>
                       {node.status}
                     </Badge>
                   </div>
                   <CardTitle className="text-lg font-headline mt-4">{node.name}</CardTitle>
-                  <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <CardDescription className="text-xs flex items-center gap-1">
                     <Map className="size-3" />
                     {node.region}
-                  </p>
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-4 space-y-4">
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-muted/50 p-3 rounded-lg border border-white/5">
+                    <div className={`p-3 rounded-lg border border-white/5 bg-background/50 ${node.latency > 300 ? 'text-destructive' : ''}`}>
                       <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-tighter">Latency</p>
-                      <p className="text-xl font-headline font-bold">{node.latency}</p>
+                      <p className="text-xl font-headline font-bold">{node.latency}ms</p>
                     </div>
-                    <div className="bg-muted/50 p-3 rounded-lg border border-white/5">
+                    <div className="p-3 rounded-lg border border-white/5 bg-background/50">
                       <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-tighter">Usage</p>
-                      <p className="text-xl font-headline font-bold">{node.load}</p>
+                      <p className="text-xl font-headline font-bold">{node.load.toFixed(1)}%</p>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-2">
+                  <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-2 font-mono">
+                    <span className="flex items-center gap-1">
+                      {node.integrity === "Verified" ? <ShieldCheck className="size-3 text-emerald-500" /> : <ShieldAlert className="size-3 text-destructive" />}
+                      {node.integrity}
+                    </span>
                     <span className="flex items-center gap-1"><Database className="size-3" /> HMAC_V4_L4</span>
-                    <span className="flex items-center gap-1"><Globe className="size-3" /> Public IP: 103.14.***.***</span>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
 
-          <Card className="glass-card">
+          <Card className="glass-card scan-effect overflow-hidden">
             <CardHeader>
-              <CardTitle className="font-headline">Global Topology Metrics</CardTitle>
+              <CardTitle className="font-headline flex items-center gap-2">
+                <Signal className="size-5 text-primary" />
+                Network Topology Health
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[300px] w-full bg-muted/20 rounded-xl flex items-end justify-between p-8 gap-4">
-                {[45, 67, 32, 98, 54, 76, 33, 56, 88, 44, 23, 67].map((h, i) => (
-                  <div key={i} className="flex-1 flex flex-col items-center gap-2">
-                    <div className="w-full bg-primary/20 rounded-t-sm relative group cursor-help">
+              <div className="h-[200px] w-full bg-muted/20 rounded-xl flex items-end justify-between p-6 gap-2">
+                {nodes.map((node, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
+                    <div className="w-full bg-primary/20 rounded-t-sm relative">
                       <div 
-                        className="w-full bg-primary transition-all duration-1000 absolute bottom-0 hover:glow-primary" 
-                        style={{ height: `${h}%` }} 
+                        className={`w-full transition-all duration-1000 absolute bottom-0 ${node.latency > 300 ? 'bg-destructive' : 'bg-primary'} glow-primary`} 
+                        style={{ height: `${node.load}%` }} 
                       />
                     </div>
-                    <span className="text-[8px] text-muted-foreground font-mono">Node-{i+1}</span>
+                    <span className="text-[8px] text-muted-foreground font-mono truncate w-full text-center">N-{i+1}</span>
                   </div>
                 ))}
               </div>

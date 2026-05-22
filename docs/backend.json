@@ -1,0 +1,63 @@
+
+{
+  "entities": {
+    "NodeStatus": {
+      "title": "Node Status",
+      "description": "Real-time status and metrics of a distributed ledger node.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "region": { "type": "string" },
+        "status": { "type": "string", "enum": ["Operational", "Maintenance", "Degraded"] },
+        "latency": { "type": "number", "description": "Latency in milliseconds" },
+        "load": { "type": "number", "description": "CPU/Memory load percentage" },
+        "successRate": { "type": "number", "description": "Handshake success rate" },
+        "integrity": { "type": "string", "enum": ["Verified", "Untrusted"] },
+        "lastSeen": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "region", "status", "latency", "load"]
+    },
+    "BorderLog": {
+      "title": "HMAC_V4 Border Log",
+      "description": "Incoming request logs at the digital border.",
+      "type": "object",
+      "properties": {
+        "timestamp": { "type": "number" },
+        "signature": { "type": "string" },
+        "origin": { "type": "string" },
+        "path": { "type": "string" },
+        "result": { "type": "string", "enum": ["ACCEPTED", "REJECTED"] },
+        "reason": { "type": "string" }
+      },
+      "required": ["timestamp", "signature", "origin", "result"]
+    },
+    "TreasuryStatus": {
+      "title": "Sovereign Treasury Overview",
+      "description": "Multi-ledger balances and liquidity health.",
+      "type": "object",
+      "properties": {
+        "totalVolume": { "type": "number" },
+        "settlementQueue": { "type": "number" },
+        "liquidityHealth": { "type": "number" },
+        "dailyThroughput": { "type": "number" }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["google.com"]
+  },
+  "firestore": {
+    "/nodes/{nodeId}": {
+      "schema": "NodeStatus",
+      "description": "Distributed node metrics"
+    },
+    "/border_logs/{logId}": {
+      "schema": "BorderLog",
+      "description": "Border entry monitoring"
+    },
+    "/treasury/global": {
+      "schema": "TreasuryStatus",
+      "description": "Global treasury metrics"
+    }
+  }
+}

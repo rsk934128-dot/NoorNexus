@@ -5,31 +5,26 @@
 
 @layer base {
   :root {
-    --background: 220 17% 8%;
+    --background: 220 30% 4%; /* Matte Black Deep */
     --foreground: 210 20% 98%;
-    --card: 220 17% 10%;
+    --card: 220 25% 7%;
     --card-foreground: 210 20% 98%;
-    --popover: 220 17% 10%;
+    --popover: 220 25% 7%;
     --popover-foreground: 210 20% 98%;
-    --primary: 220 100% 65%;
-    --primary-foreground: 220 100% 10%;
-    --secondary: 247 100% 77%;
-    --secondary-foreground: 247 100% 10%;
-    --muted: 220 17% 15%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 247 100% 77%;
-    --accent-foreground: 247 100% 10%;
+    --primary: 199 100% 50%; /* Neon Blue */
+    --primary-foreground: 199 100% 10%;
+    --secondary: 160 100% 45%; /* Emerald Accent */
+    --secondary-foreground: 160 100% 10%;
+    --muted: 220 20% 12%;
+    --muted-foreground: 215 15% 65%;
+    --accent: 199 100% 50%;
+    --accent-foreground: 199 100% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 17% 18%;
-    --input: 220 17% 18%;
-    --ring: 220 100% 65%;
-    --chart-1: 220 100% 65%;
-    --chart-2: 247 100% 77%;
-    --chart-3: 180 100% 50%;
-    --chart-4: 300 100% 60%;
-    --chart-5: 45 100% 60%;
-    --radius: 0.75rem;
+    --border: 220 20% 15%;
+    --input: 220 20% 15%;
+    --ring: 199 100% 50%;
+    --radius: 0.5rem;
   }
 }
 
@@ -40,21 +35,43 @@
   body {
     @apply bg-background text-foreground font-body antialiased;
   }
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-headline tracking-tight;
-  }
 }
 
 .cyber-grid {
-  background-image: linear-gradient(rgba(77, 137, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(77, 137, 255, 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background-image: linear-gradient(rgba(0, 150, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 150, 255, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
 }
 
 .glass-card {
-  @apply bg-card/60 backdrop-blur-md border border-white/5;
+  @apply bg-card/40 backdrop-blur-xl border border-white/5 shadow-2xl;
 }
 
 .glow-primary {
-  box-shadow: 0 0 20px rgba(77, 137, 255, 0.3);
+  box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
+}
+
+.glow-emerald {
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+.command-spacing {
+  @apply gap-4 p-4;
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.scan-effect::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  animation: scan-line 4s linear infinite;
+  opacity: 0.2;
 }
