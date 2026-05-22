@@ -1,1 +1,5 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/hmac-v4-config-generator.ts';
+import '@/ai/flows/autonomous-compliance-monitor.ts';

@@ -1,0 +1,94 @@
+
+"use client"
+
+import * as React from "react"
+import { 
+  LayoutDashboard, 
+  ShieldCheck, 
+  Layers, 
+  Activity, 
+  CreditCard, 
+  Send, 
+  Terminal,
+  Settings,
+  Globe
+} from "lucide-react"
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarSeparator,
+} from "@/components/ui/sidebar"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+
+const items = [
+  { title: "Command Center", url: "/", icon: LayoutDashboard },
+  { title: "Compliance Agent", url: "/compliance", icon: ShieldCheck },
+  { title: "One Engine Ledger", url: "/ledger", icon: Layers },
+  { title: "Node Watchtower", url: "/nodes", icon: Activity },
+  { title: "SmartRemit P2P", url: "/remittance", icon: Send },
+]
+
+export function AppSidebar() {
+  const pathname = usePathname()
+
+  return (
+    <Sidebar className="border-r border-white/5 bg-card/80 backdrop-blur-xl">
+      <SidebarHeader className="p-4">
+        <div className="flex items-center gap-3">
+          <div className="size-8 bg-primary rounded-lg flex items-center justify-center glow-primary">
+            <Globe className="size-5 text-primary-foreground" />
+          </div>
+          <div>
+            <h1 className="text-lg font-headline font-bold text-primary tracking-tight">NoorNexus</h1>
+            <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Sovereign Infra</p>
+          </div>
+        </div>
+      </SidebarHeader>
+      <SidebarSeparator />
+      <SidebarContent>
+        <SidebarMenu className="px-2 pt-4">
+          {items.map((item) => (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton 
+                asChild 
+                isActive={pathname === item.url}
+                className="hover:bg-primary/10 hover:text-primary transition-all duration-200"
+              >
+                <Link href={item.url}>
+                  <item.icon className="size-5" />
+                  <span className="font-medium">{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarContent>
+      <SidebarFooter className="p-4">
+        <div className="flex flex-col gap-2">
+          <SidebarMenuButton className="text-muted-foreground hover:text-primary">
+            <Terminal className="size-4" />
+            <span className="text-xs">Security Console</span>
+          </SidebarMenuButton>
+          <SidebarMenuButton className="text-muted-foreground hover:text-primary">
+            <Settings className="size-4" />
+            <span className="text-xs">System Settings</span>
+          </SidebarMenuButton>
+        </div>
+        <div className="mt-4 p-3 bg-muted/50 rounded-lg border border-white/5">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[10px] font-bold text-emerald-500 uppercase">Stable_L4</span>
+          </div>
+          <p className="text-[10px] text-muted-foreground">Sirajganj-Edge-01 Live</p>
+        </div>
+      </SidebarFooter>
+    </Sidebar>
+  )
+}
