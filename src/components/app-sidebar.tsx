@@ -7,11 +7,12 @@ import {
   ShieldCheck, 
   Layers, 
   Activity, 
-  CreditCard, 
   Send, 
   Terminal,
   Settings,
-  Globe
+  Globe,
+  Radar,
+  Lock
 } from "lucide-react"
 
 import {
@@ -29,6 +30,7 @@ import { usePathname } from "next/navigation"
 
 const items = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
+  { title: "Border Monitor", url: "/border-monitor", icon: Radar },
   { title: "Compliance Agent", url: "/compliance", icon: ShieldCheck },
   { title: "One Engine Ledger", url: "/ledger", icon: Layers },
   { title: "Node Watchtower", url: "/nodes", icon: Activity },
@@ -43,11 +45,11 @@ export function AppSidebar() {
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-3">
           <div className="size-8 bg-primary rounded-lg flex items-center justify-center glow-primary">
-            <Globe className="size-5 text-primary-foreground" />
+            <Lock className="size-5 text-primary-foreground" />
           </div>
           <div>
             <h1 className="text-lg font-headline font-bold text-primary tracking-tight">NoorNexus</h1>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Sovereign Infra</p>
+            <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Imperial OS v3</p>
           </div>
         </div>
       </SidebarHeader>
@@ -74,17 +76,17 @@ export function AppSidebar() {
         <div className="flex flex-col gap-2">
           <SidebarMenuButton className="text-muted-foreground hover:text-primary">
             <Terminal className="size-4" />
-            <span className="text-xs">Security Console</span>
+            <span className="text-xs">Root Access Level 4</span>
           </SidebarMenuButton>
           <SidebarMenuButton className="text-muted-foreground hover:text-primary">
             <Settings className="size-4" />
-            <span className="text-xs">System Settings</span>
+            <span className="text-xs">Ecosystem Parameters</span>
           </SidebarMenuButton>
         </div>
         <div className="mt-4 p-3 bg-muted/50 rounded-lg border border-white/5">
           <div className="flex items-center gap-2 mb-1">
             <div className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-bold text-emerald-500 uppercase">Stable_L4</span>
+            <span className="text-[10px] font-bold text-emerald-500 uppercase">Mesh: Active</span>
           </div>
           <p className="text-[10px] text-muted-foreground">Sirajganj-Edge-01 Live</p>
         </div>

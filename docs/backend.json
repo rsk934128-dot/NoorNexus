@@ -26,8 +26,9 @@
         "signature": { "type": "string" },
         "origin": { "type": "string" },
         "path": { "type": "string" },
-        "result": { "type": "string", "enum": ["ACCEPTED", "REJECTED"] },
-        "reason": { "type": "string" }
+        "result": { "type": "string", "enum": ["ACCEPTED", "REJECTED", "WARNING"] },
+        "reason": { "type": "string" },
+        "riskScore": { "type": "number" }
       },
       "required": ["timestamp", "signature", "origin", "result"]
     },
