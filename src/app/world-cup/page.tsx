@@ -22,7 +22,8 @@ import {
   Send,
   Cpu,
   Loader2,
-  BarChart3
+  BarChart3,
+  Youtube
 } from "lucide-react"
 import {
   Dialog,
@@ -38,7 +39,6 @@ import { getMatchInsight, type MatchInsightOutput } from "@/ai/flows/sports-insi
 import { useToast } from "@/hooks/use-toast"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
-// Tactical Signal Data
 const SIGNAL_DATA = [
   { time: '10:00', latency: 12, load: 45 },
   { time: '10:05', latency: 15, load: 52 },
@@ -53,7 +53,6 @@ export default function WorldCupPage() {
   const db = useFirestore()
   const { user } = useUser()
   
-  // Real-time Data Subscriptions
   const matchesQuery = useMemo(() => query(collection(db, "sports_matches"), orderBy("status")), [db])
   const serversQuery = useMemo(() => query(collection(db, "sports_servers")), [db])
   const chatQuery = useMemo(() => query(collection(db, "sports_chat"), orderBy("timestamp", "desc"), limit(50)), [db])
@@ -78,6 +77,14 @@ export default function WorldCupPage() {
   }, [servers, matches, selectedServer, activeMatch])
 
   const handleLaunchUplink = () => {
+    if (!activeMatch?.uplink) {
+      toast({
+        title: "Uplink Unavailable",
+        description: "No secure stream link found for this match in the Sovereign Ledger.",
+        variant: "destructive"
+      })
+      return
+    }
     setIsHandshaking(true)
     setHandshakeProgress(0)
     const interval = setInterval(() => {
@@ -86,9 +93,9 @@ export default function WorldCupPage() {
           clearInterval(interval)
           return 100
         }
-        return prev + 20
+        return prev + 10
       })
-    }, 200)
+    }, 150)
   }
 
   const handleSendMessage = () => {
@@ -97,7 +104,7 @@ export default function WorldCupPage() {
       user: user.displayName || user.email || "Sovereign_User",
       message: chatInput,
       timestamp: Date.now()
-    })
+    }).catch(console.error)
     setChatInput("")
   }
 
@@ -137,7 +144,7 @@ export default function WorldCupPage() {
                 </div>
                 <div>
                   <h2 className="text-3xl font-headline font-bold uppercase tracking-tight text-primary">GSMIFY SOVEREIGN SPORTS</h2>
-                  <p className="text-[10px] text-muted-foreground font-mono tracking-[0.4em] uppercase font-bold">MISSION 400 | OS v3.2 Intelligence</p>
+                  <p className="text-[10px] text-muted-foreground font-mono tracking-[0.4em] uppercase font-bold">MISSION 400 | WORLD CUP RELAY</p>
                 </div>
               </div>
             </div>
@@ -157,11 +164,11 @@ export default function WorldCupPage() {
               <Card className="glass-card border-white/5 overflow-hidden relative group">
                 <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 bg-white/2 py-3 px-6">
                   <div className="flex items-center gap-4">
-                    <Badge variant="outline" className="text-[10px] border-primary/50 text-primary font-bold">
-                      {activeMatch?.status === 'LIVE' ? 'LIVE STREAM' : 'UPCOMING'}
+                    <Badge variant="outline" className="text-[10px] border-primary/50 text-primary font-bold uppercase">
+                      {activeMatch?.status || 'SELECT MATCH'}
                     </Badge>
-                    <span className="text-sm font-headline font-bold uppercase">
-                      {activeMatch ? `${activeMatch.home} vs ${activeMatch.away}` : "SELECT A MATCH"}
+                    <span className="text-sm font-headline font-bold uppercase tracking-widest">
+                      {activeMatch ? `${activeMatch.home} vs ${activeMatch.away}` : "AWAITING SELECTION"}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -177,23 +184,24 @@ export default function WorldCupPage() {
                   <div className="absolute inset-0 opacity-20 bg-[url('https://picsum.photos/seed/stadium/1200/800')] bg-cover" />
                   <div className="relative z-10 flex flex-col items-center gap-6 text-center px-4">
                     <div className="size-24 rounded-full border-2 border-primary/30 flex items-center justify-center animate-spin-slow">
-                      <PlayCircle className="size-12 text-primary/50" />
+                      <Youtube className="size-12 text-primary/50" />
                     </div>
                     <div className="space-y-2">
-                       <h3 className="text-2xl font-headline font-bold text-white uppercase tracking-widest">Sovereign Uplink Gateway</h3>
-                       <p className="text-sm text-muted-foreground font-mono">ENCRYPTED STREAMING CHANNEL: GSMIFY_B_400</p>
+                       <h3 className="text-2xl font-headline font-bold text-white uppercase tracking-widest">Sovereign Stream Gateway</h3>
+                       <p className="text-sm text-muted-foreground font-mono">ENCRYPTED RELAY CHANNEL: MISSION_400_UPLINK</p>
                     </div>
                     <Button 
                       onClick={handleLaunchUplink}
-                      className="bg-primary text-primary-foreground font-bold uppercase tracking-widest px-10 h-14 glow-primary"
+                      className="bg-primary text-primary-foreground font-bold uppercase tracking-widest px-10 h-14 glow-primary flex items-center gap-3"
                     >
+                      <Zap className="size-5" />
                       Establish Secure Handshake
                     </Button>
                   </div>
                 </CardContent>
                 <div className="bg-muted/30 p-4 border-t border-white/5 flex flex-wrap gap-4 items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase">Server:</span>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase">Target Node:</span>
                     <div className="flex gap-2">
                       {servers.length > 0 ? servers.map(s => (
                         <Button 
@@ -206,7 +214,7 @@ export default function WorldCupPage() {
                           {s.name}
                         </Button>
                       )) : (
-                        <Badge variant="outline" className="text-[10px] border-white/5 opacity-50">SYNCING SERVERS...</Badge>
+                        <Badge variant="outline" className="text-[10px] border-white/5 opacity-50">SYNCING...</Badge>
                       )}
                     </div>
                   </div>
@@ -216,7 +224,7 @@ export default function WorldCupPage() {
                     className="bg-amber-500/20 text-amber-500 border border-amber-500/30 hover:bg-amber-500/30 text-[10px] h-7 gap-2"
                   >
                     {aiLoading ? <Loader2 className="size-3 animate-spin" /> : <Cpu className="size-3" />}
-                    NORA-AI ANALYSIS
+                    NORA-AI ANALYTICS
                   </Button>
                 </div>
               </Card>
@@ -301,16 +309,6 @@ export default function WorldCupPage() {
                            <div className="h-full bg-primary animate-progress" />
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
-                         <div className="p-3 bg-white/5 rounded-lg border border-white/5">
-                            <p className="text-[8px] text-muted-foreground uppercase font-bold">Signal Buffer</p>
-                            <p className="text-xl font-headline font-bold text-emerald-500">OPTIMAL</p>
-                         </div>
-                         <div className="p-3 bg-white/5 rounded-lg border border-white/5">
-                            <p className="text-[8px] text-muted-foreground uppercase font-bold">Sync Epoch</p>
-                            <p className="text-xl font-headline font-bold text-primary">#402</p>
-                         </div>
-                      </div>
                       <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg">
                          <p className="text-[9px] font-mono text-primary/80 uppercase">Node SG-Core-01 Handshake: Verified</p>
                       </div>
@@ -326,7 +324,6 @@ export default function WorldCupPage() {
                     <MessageSquare className="size-4 text-primary" />
                     Imperial Mesh Chat
                   </CardTitle>
-                  <CardDescription className="text-[10px] uppercase font-bold">MISSION_400_COMMUNITY</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
                   <ScrollArea className="flex-1 p-4">
@@ -377,7 +374,7 @@ export default function WorldCupPage() {
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                   {matches.map(match => (
+                   {matches.length > 0 ? matches.map(match => (
                      <div 
                        key={match.id} 
                        onClick={() => setActiveMatch(match)}
@@ -393,7 +390,9 @@ export default function WorldCupPage() {
                            <p className={`text-[8px] uppercase font-bold ${match.status === 'LIVE' ? 'text-primary animate-pulse' : 'text-muted-foreground'}`}>{match.status}</p>
                         </div>
                      </div>
-                   ))}
+                   )) : (
+                     <p className="text-[10px] text-center text-muted-foreground italic py-4">Syncing Ledger...</p>
+                   )}
                 </CardContent>
               </Card>
 
@@ -411,7 +410,7 @@ export default function WorldCupPage() {
                         <p className="text-[9px] text-muted-foreground leading-tight italic">{item.content}</p>
                      </div>
                    )) : (
-                     <p className="text-[9px] text-muted-foreground italic">Syncing mission data...</p>
+                     <p className="text-[9px] text-muted-foreground italic">Awaiting mission data...</p>
                    )}
                 </CardContent>
               </Card>
@@ -425,10 +424,10 @@ export default function WorldCupPage() {
           <DialogHeader>
             <DialogTitle className="font-headline text-xl flex items-center gap-3 text-primary uppercase">
               <Lock className="size-5" />
-              Sovereign Handshake Sequence
+              Secure Stream Handshake
             </DialogTitle>
             <DialogDescription className="text-[10px] font-mono uppercase text-muted-foreground">
-              ESTABLISHING VERIFIED ROUTE TO BROADCASATER
+              ESTABLISHING UPLINK TO MISSION_400_BROADCASTER
             </DialogDescription>
           </DialogHeader>
 
@@ -439,7 +438,7 @@ export default function WorldCupPage() {
               </div>
               <div className="space-y-2">
                 <p className="text-primary font-mono text-xs animate-pulse uppercase">
-                  Routing Signal... {handshakeProgress}%
+                  Routing Signal Through {selectedServer?.name || "Mesh Hub"}... {handshakeProgress}%
                 </p>
                 <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
                   <div className="h-full bg-primary transition-all duration-300" style={{ width: `${handshakeProgress}%` }} />
@@ -449,16 +448,21 @@ export default function WorldCupPage() {
 
             {handshakeProgress === 100 && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
-                 <p className="text-[10px] text-muted-foreground font-mono leading-relaxed px-4">
-                    Sovereign Intelligence Layer has verified the signal route for <strong>{activeMatch?.home} vs {activeMatch?.away}</strong>.
-                 </p>
+                 <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-lg text-emerald-500">
+                   <p className="text-[10px] font-mono leading-relaxed uppercase">
+                     <strong>Handshake Verified:</strong> Routing successful for {activeMatch?.home} vs {activeMatch?.away}. Signal integrity 100%.
+                   </p>
+                 </div>
                  <Button 
-                    className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary"
+                    className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary flex items-center justify-center gap-3"
                     onClick={() => {
                       setIsHandshaking(false)
-                      if (activeMatch?.uplink) window.open(activeMatch.uplink, '_blank')
+                      if (activeMatch?.uplink) {
+                        window.open(activeMatch.uplink, '_blank')
+                      }
                     }}
                  >
+                    <Youtube className="size-5" />
                     Launch Official Uplink
                  </Button>
               </div>
