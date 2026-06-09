@@ -324,11 +324,11 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-muted-foreground leading-relaxed">
-                      <p className="text-primary">{`&gt;`} parallel_mode: incubating</p>
-                      <p className="text-emerald-500">{`&gt;`} config_cache: hit</p>
-                      <p className="text-amber-500">{`&gt;`} workers: {performance.workers} (max: 4)</p>
-                      <p className="text-primary/70">{`&gt;`} libs: compose, room, media3, robolectric</p>
-                      <p className="animate-pulse">{`&gt;`} jvm_args: -Xmx4g -UTF-8</p>
+                      <p className="text-primary">&gt; parallel_mode: incubating</p>
+                      <p className="text-emerald-500">&gt; config_cache: hit</p>
+                      <p className="text-amber-500">&gt; workers: {performance.workers} (max: 4)</p>
+                      <p className="text-primary/70">&gt; libs: compose, room, media3, robolectric</p>
+                      <p className="animate-pulse">&gt; jvm_args: -Xmx4g -UTF-8</p>
                    </div>
                    <div className="flex flex-col gap-2">
                       <div className="flex justify-between text-[10px] font-mono">
@@ -449,4 +449,3 @@ export default function Home() {
     </div>
   )
 }
-

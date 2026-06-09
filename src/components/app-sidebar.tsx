@@ -15,6 +15,7 @@ import {
   Radar,
   ChevronRight,
   LogOut,
+  LogIn,
   User as UserIcon
 } from "lucide-react"
 
