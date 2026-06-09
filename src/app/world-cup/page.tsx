@@ -23,7 +23,8 @@ import {
   Youtube,
   Globe,
   Radio,
-  ExternalLink
+  ExternalLink,
+  RefreshCw
 } from "lucide-react"
 import {
   Dialog,
@@ -34,7 +35,7 @@ import {
 } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useCollection, useFirestore, useUser } from "@/firebase"
-import { collection, query, orderBy, limit, addDoc } from "firebase/firestore"
+import { collection, query, orderBy, limit, addDoc, where } from "firebase/firestore"
 import { getMatchInsight, type MatchInsightOutput } from "@/ai/flows/sports-insight-flow"
 import { useToast } from "@/hooks/use-toast"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
@@ -55,11 +56,18 @@ export default function WorldCupPage() {
   const db = useFirestore()
   const { user } = useUser()
   
-  const matchesQuery = useMemo(() => query(collection(db, "sports_matches"), orderBy("status")), [db])
+  // লজিক: শুধুমাত্র LIVE এবং UPCOMING ম্যাচগুলো দেখাবে। FINISHED ম্যাচগুলো লিস্ট থেকে নিজে থেকেই সরে যাবে।
+  const matchesQuery = useMemo(() => 
+    query(
+      collection(db, "sports_matches"), 
+      where("status", "in", ["LIVE", "UPCOMING"]),
+      limit(20)
+    ), [db])
+    
   const serversQuery = useMemo(() => query(collection(db, "sports_servers")), [db])
   const chatQuery = useMemo(() => query(collection(db, "sports_chat"), orderBy("timestamp", "desc"), limit(50)), [db])
 
-  const { data: matches } = useCollection<any>(matchesQuery)
+  const { data: matches, loading: matchesLoading } = useCollection<any>(matchesQuery)
   const { data: servers } = useCollection<any>(serversQuery)
   const { data: chats } = useCollection<any>(chatQuery)
 
@@ -77,14 +85,22 @@ export default function WorldCupPage() {
       setSelectedServer(servers[0])
     }
     
+    // যখনই ফায়ারবেস থেকে নতুন ডেটা আসবে, একটিভ ম্যাচ আপডেট হবে
     if (matches.length > 0) {
       if (!activeMatch) {
         const liveMatch = matches.find(m => m.status === 'LIVE') || matches[0]
         setActiveMatch(liveMatch)
+      } else {
+        // যদি বর্তমান একটিভ ম্যাচটি ডাটাবেস থেকে রিমুভ হয়ে যায় (এক্সপায়ার), তবে নতুন একটি সিলেক্ট করবে
+        const stillExists = matches.find(m => m.id === activeMatch.id)
+        if (!stillExists) {
+          setActiveMatch(matches[0])
+        }
       }
-    } else if (!activeMatch) {
+    } else if (!matchesLoading && !activeMatch) {
+      // যদি কোনো ডাইনামিক ডাটা না থাকে, তবে ডিফল্ট ইম্পেরিয়াল ফিড দেখাবে
       setActiveMatch({
-        id: "imperial-01",
+        id: "imperial-default",
         home: "SOVEREIGN",
         away: "WORLD FEED",
         status: "LIVE",
@@ -93,7 +109,7 @@ export default function WorldCupPage() {
         description: "IMPERIAL MISSION 400 UPLINK"
       })
     }
-  }, [servers, matches, activeMatch, selectedServer])
+  }, [servers, matches, activeMatch, selectedServer, matchesLoading])
 
   const handleLaunchUplink = () => {
     setIsHandshaking(true)
@@ -163,7 +179,12 @@ export default function WorldCupPage() {
                 </div>
                 <div>
                   <h2 className="text-4xl font-headline font-bold uppercase tracking-tight text-primary">GSMIFY SOVEREIGN SPORTS</h2>
-                  <p className="text-[11px] text-muted-foreground font-mono tracking-[0.5em] uppercase font-bold">MISSION 400 | WORLD CUP RELAY CENTER</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-[11px] text-muted-foreground font-mono tracking-[0.5em] uppercase font-bold">MISSION 400 | WORLD CUP RELAY</p>
+                    <Badge variant="outline" className="text-[9px] border-emerald-500/30 text-emerald-500 flex items-center gap-1">
+                      <RefreshCw className="size-2 animate-spin" /> LIVE SYNC ACTIVE
+                    </Badge>
+                  </div>
                 </div>
               </div>
             </div>
@@ -171,9 +192,6 @@ export default function WorldCupPage() {
                <Badge className="bg-primary/10 text-primary border-primary/20 px-5 py-2.5 h-auto gap-2 font-bold text-sm">
                   <Radio className="size-4 animate-pulse text-destructive" />
                   MESH LATENCY: {selectedServer?.ping || "12ms"}
-               </Badge>
-               <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter text-xs">
-                  UPLINK STABILITY: 99.9%
                </Badge>
             </div>
           </header>
@@ -199,9 +217,6 @@ export default function WorldCupPage() {
                     >
                       <Monitor className="size-3" />
                       {playerMode === 'GATEWAY' ? "EMBED MODE" : "GATEWAY MODE"}
-                    </Button>
-                    <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-primary">
-                      <Maximize2 className="size-4" />
                     </Button>
                   </div>
                 </CardHeader>
@@ -266,16 +281,14 @@ export default function WorldCupPage() {
                       )}
                     </div>
                   </div>
-                  <div className="flex gap-3">
-                    <Button 
-                      onClick={handleGetAiInsight}
-                      disabled={aiLoading || !activeMatch}
-                      className="bg-amber-500/20 text-amber-500 border border-amber-500/30 hover:bg-amber-500/30 text-[11px] h-8 gap-3 font-bold"
-                    >
-                      {aiLoading ? <Loader2 className="size-4 animate-spin" /> : <Cpu className="size-4" />}
-                      NORA-AI ANALYSIS
-                    </Button>
-                  </div>
+                  <Button 
+                    onClick={handleGetAiInsight}
+                    disabled={aiLoading || !activeMatch}
+                    className="bg-amber-500/20 text-amber-500 border border-amber-500/30 hover:bg-amber-500/30 text-[11px] h-8 gap-3 font-bold"
+                  >
+                    {aiLoading ? <Loader2 className="size-4 animate-spin" /> : <Cpu className="size-4" />}
+                    NORA-AI ANALYSIS
+                  </Button>
                 </div>
               </Card>
 
@@ -318,10 +331,6 @@ export default function WorldCupPage() {
                         <p className="text-xs text-muted-foreground leading-relaxed font-mono italic">"{aiInsight.tacticalAnalysis}"</p>
                       </div>
                     </div>
-                    <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex gap-4 items-center">
-                       <ShieldCheck className="size-6 text-emerald-500" />
-                       <p className="text-[11px] font-mono font-bold text-emerald-500/90 uppercase">{aiInsight.recommendation}</p>
-                    </div>
                   </CardContent>
                 </Card>
               )}
@@ -355,28 +364,10 @@ export default function WorldCupPage() {
                       </CardTitle>
                    </CardHeader>
                    <CardContent className="space-y-6 pt-4">
-                      <div className="space-y-3">
-                        <div className="flex justify-between text-[11px] font-bold">
-                           <span className="text-muted-foreground uppercase">MESH THROUGHPUT</span>
-                           <span className="text-primary">L4_SECURE_SYNCED</span>
-                        </div>
-                        <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                           <div className="h-full bg-primary animate-progress glow-primary" />
-                        </div>
-                      </div>
                       <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-2">
-                         <p className="text-[9px] font-mono text-muted-foreground uppercase">NODE_IDENTITY: VERIFIED (HMAC_V4_L4)</p>
+                         <p className="text-[9px] font-mono text-muted-foreground uppercase">NODE_IDENTITY: VERIFIED</p>
                          <p className="text-[9px] font-mono text-emerald-500 uppercase">PROTOCOL_STATUS: OPTIMIZED</p>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                         <div className="p-3 bg-white/5 rounded-lg border border-white/5">
-                            <p className="text-[9px] text-muted-foreground uppercase tracking-tighter">ENCRYPTION</p>
-                            <p className="text-xs font-bold text-white uppercase">AES_256_GCM</p>
-                         </div>
-                         <div className="p-3 bg-white/5 rounded-lg border border-white/5">
-                            <p className="text-[9px] text-muted-foreground uppercase tracking-tighter">RELAY MODE</p>
-                            <p className="text-xs font-bold text-white uppercase">MISSION_400</p>
-                         </div>
+                         <p className="text-[9px] font-mono text-primary uppercase">DATA_INTEGRITY: REAL-TIME SYNC ON</p>
                       </div>
                    </CardContent>
                 </Card>
@@ -441,12 +432,17 @@ export default function WorldCupPage() {
                       <Radio className="size-4" />
                       Live Sovereign Feeds
                    </CardTitle>
-                   <CardDescription className="text-[9px] uppercase">Automated Global Uplinks</CardDescription>
+                   <CardDescription className="text-[9px] uppercase">Active & Valid Links Only</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <ScrollArea className="h-[400px]">
                    <div className="space-y-4 pr-3">
-                   {matches.length > 0 ? matches.map(match => (
+                   {matchesLoading ? (
+                     <div className="flex flex-col items-center justify-center py-10 gap-3">
+                        <Loader2 className="size-6 animate-spin text-primary" />
+                        <p className="text-[10px] font-mono text-muted-foreground uppercase">Syncing mesh nodes...</p>
+                     </div>
+                   ) : matches.length > 0 ? matches.map(match => (
                      <div 
                        key={match.id} 
                        onClick={() => {
@@ -466,13 +462,13 @@ export default function WorldCupPage() {
                         <div className="text-right">
                            <p className="text-[11px] font-bold text-primary">{match.score || match.time}</p>
                            <div className="flex items-center gap-1.5 justify-end">
-                              <div className={`size-1.5 rounded-full ${match.status === 'LIVE' ? 'bg-destructive animate-pulse' : 'bg-muted'}`} />
-                              <p className={`text-[9px] uppercase font-bold ${match.status === 'LIVE' ? 'text-destructive' : 'text-muted-foreground'}`}>{match.status}</p>
+                              <div className={`size-1.5 rounded-full ${match.status === 'LIVE' ? 'bg-destructive animate-pulse' : 'bg-primary'}`} />
+                              <p className={`text-[9px] uppercase font-bold ${match.status === 'LIVE' ? 'text-destructive' : 'text-primary'}`}>{match.status}</p>
                            </div>
                         </div>
                      </div>
                    )) : (
-                     <p className="text-[10px] text-center text-muted-foreground font-mono py-10">AWAITING LIVE MESH DATA...</p>
+                     <p className="text-[10px] text-center text-muted-foreground font-mono py-10 uppercase">No active feeds detected.</p>
                    )}
                    </div>
                    </ScrollArea>
@@ -490,20 +486,16 @@ export default function WorldCupPage() {
               <Lock className="size-6" />
               Secure Sovereign Handshake
             </DialogTitle>
-            <DialogDescription className="text-[11px] font-mono uppercase text-muted-foreground tracking-[0.3em] mt-2">
-              ESTABLISHING ENCRYPTED UPLINK TO MISSION_400_BROADCASTER
-            </DialogDescription>
           </DialogHeader>
 
           <div className="py-10 text-center space-y-8">
             <div className="space-y-6">
               <div className="size-24 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto relative border border-primary/20 glow-primary">
                 <ShieldCheck className="size-12 text-primary animate-pulse" />
-                <div className="absolute inset-0 border border-primary/10 rounded-3xl animate-ping" />
               </div>
               <div className="space-y-4">
                 <p className="text-primary font-mono text-sm animate-pulse uppercase tracking-widest font-bold">
-                  Routing Signal Through {selectedServer?.name || "Global Mesh Hub"}... {handshakeProgress}%
+                  Verifying Live Link... {handshakeProgress}%
                 </p>
                 <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
                   <div className="h-full bg-primary glow-primary transition-all duration-300" style={{ width: `${handshakeProgress}%` }} />
@@ -513,13 +505,8 @@ export default function WorldCupPage() {
 
             {handshakeProgress === 100 && (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-5">
-                 <div className="p-5 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl text-emerald-500">
-                   <p className="text-[11px] font-mono leading-relaxed uppercase font-bold">
-                     Handshake Verified: Identity Match 100%. Protocol Secured for {activeMatch?.home} vs {activeMatch?.away}.
-                   </p>
-                 </div>
                  <Button 
-                    className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-16 glow-primary flex items-center justify-center gap-4 text-lg hover:scale-[1.02] transition-transform"
+                    className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-16 glow-primary flex items-center justify-center gap-4 text-lg"
                     onClick={() => {
                       setIsHandshaking(false)
                       if (activeMatch?.uplink) {
