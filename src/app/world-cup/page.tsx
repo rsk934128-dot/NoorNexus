@@ -22,7 +22,9 @@ import {
   ChevronRight,
   Maximize2,
   AlertCircle,
-  ExternalLink
+  ExternalLink,
+  CalendarDays,
+  Clock
 } from "lucide-react"
 import {
   Dialog,
@@ -42,9 +44,8 @@ const channels = [
     quality: "4K Native", 
     type: "Local", 
     freq: "12.4 GHz",
-    // Official Channel ID fallback for live streams
     streamUrl: "https://www.youtube.com/embed/live_stream?channel=UCOTo6is_T_Iis6Vp6w7V6oA",
-    directUrl: "https://www.youtube.com/@TSports_bd/live"
+    directUrl: "https://www.tsports.com/live"
   },
   { 
     id: 2, 
@@ -55,7 +56,7 @@ const channels = [
     type: "Local", 
     freq: "11.2 GHz",
     streamUrl: "https://www.youtube.com/embed/videoseries?list=PLvG2S5_G_lV-wXo9KInoYlU_0S1I0s0Xy",
-    directUrl: "https://www.youtube.com/@GTVLive/live"
+    directUrl: "https://www.gtv.com.bd/live"
   },
   { 
     id: 3, 
@@ -78,29 +79,16 @@ const channels = [
     freq: "12.9 GHz",
     streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC67f2SstIAnp6pUpE9_UQ8Q",
     directUrl: "https://www.skysports.com/cricket"
-  },
-  { 
-    id: 5, 
-    name: "Willow Cricket", 
-    origin: "USA/Global", 
-    status: "Operational", 
-    quality: "HD", 
-    type: "Foreign", 
-    freq: "15.2 GHz",
-    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLpA-pGst005YQWv0-eFmE4HqY13uHAnYn",
-    directUrl: "https://www.willow.tv/"
-  },
-  { 
-    id: 6, 
-    name: "BTV Sports", 
-    origin: "Bangladesh", 
-    status: "Operational", 
-    quality: "Standard", 
-    type: "Local", 
-    freq: "10.1 GHz",
-    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC8_2q3Yitp3o_tW2-uN8Jyw",
-    directUrl: "https://www.btv.gov.bd/"
-  },
+  }
+]
+
+// Today's matches provided by the user (June 10, 2026)
+const todaysMatches = [
+  { id: 1, home: "KSA", away: "SEN", time: "6:00 PM", type: "Int. Friendly", status: "Upcoming" },
+  { id: 2, home: "POR", away: "NGA", time: "8:45 PM", type: "Int. Friendly", status: "Upcoming" },
+  { id: 3, home: "ENG", away: "CRC", time: "9:00 PM", type: "Int. Friendly", status: "Upcoming" },
+  { id: 4, home: "ARG", away: "ISL", time: "9:00 PM", type: "Int. Friendly", status: "Upcoming" },
+  { id: 5, home: "IRQ", away: "VEN", time: "9:00 PM", type: "Int. Friendly", status: "Upcoming" },
 ]
 
 export default function WorldCupPage() {
@@ -144,9 +132,12 @@ export default function WorldCupPage() {
             <div className="space-y-1">
               <div className="flex items-center gap-3">
                 <Trophy className="size-8 text-amber-500 animate-pulse" />
-                <h2 className="text-3xl font-headline font-bold">World Cup Relay Center</h2>
+                <h2 className="text-3xl font-headline font-bold uppercase tracking-tight">Sovereign Relay Center</h2>
               </div>
-              <p className="text-muted-foreground font-medium">Sovereign signal interception for the global cricket empire.</p>
+              <p className="text-muted-foreground font-medium flex items-center gap-2">
+                <CalendarDays className="size-4 text-primary" />
+                Operational Status: June 10, 2026 | Active Intelligence
+              </p>
             </div>
             <div className="flex gap-4">
                <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/30 px-4 py-2 h-auto gap-2 font-bold tracking-widest">
@@ -168,7 +159,7 @@ export default function WorldCupPage() {
                       <Tv className="size-5 text-amber-500" />
                       Interception Hub (লাইভ স্ট্রিমিং চ্যানেল)
                     </CardTitle>
-                    <CardDescription>Select a secure frequency to tap into the live transmission.</CardDescription>
+                    <CardDescription>Secure sovereign frequencies for global sports monitoring.</CardDescription>
                   </div>
                   <div className="text-right hidden sm:block">
                     <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Mesh Throughput</p>
@@ -245,14 +236,14 @@ export default function WorldCupPage() {
                   <CardContent>
                     <div className="space-y-3">
                       <div className="flex justify-between items-center text-xs">
-                        <span className="text-muted-foreground">BD Support Index:</span>
-                        <span className="font-bold text-emerald-500">88%</span>
+                        <span className="text-muted-foreground">Global Support Index:</span>
+                        <span className="font-bold text-emerald-500">92%</span>
                       </div>
                       <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full bg-emerald-500" style={{ width: '88%' }} />
+                        <div className="h-full bg-emerald-500" style={{ width: '92%' }} />
                       </div>
                       <p className="text-[10px] italic text-muted-foreground leading-relaxed mt-2">
-                        "National mesh sentiment indicates high confidence for the upcoming Sirajganj-hosted matches."
+                        "High priority traffic detected for tonight's International Friendlies. Mesh capacity adjusted."
                       </p>
                     </div>
                   </CardContent>
@@ -290,34 +281,45 @@ export default function WorldCupPage() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card">
+              <Card className="glass-card border-primary/20">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-xs uppercase font-bold text-muted-foreground flex items-center gap-2">
-                       <Trophy className="size-4" />
-                       Match Intelligence
+                       <Clock className="size-4 text-primary" />
+                       Match Intelligence (আজকের ম্যাচ)
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
-                    <div className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-4">
-                       <div className="flex justify-between items-center">
-                          <div className="text-center">
-                            <div className="size-10 bg-muted rounded-full flex items-center justify-center mb-1 border border-white/10 font-bold">BD</div>
-                            <span className="text-[10px] font-bold">TIGERS</span>
-                          </div>
-                          <div className="text-center">
-                             <span className="text-xs text-amber-500 font-bold font-mono">LIVE</span>
-                             <div className="text-lg font-headline font-bold">242/4</div>
-                             <span className="text-[8px] text-muted-foreground uppercase">38.2 OVERS</span>
-                          </div>
-                          <div className="text-center">
-                             <div className="size-10 bg-muted rounded-full flex items-center justify-center mb-1 border border-white/10 font-bold">IND</div>
-                             <span className="text-[10px] font-bold">MEN IN BLUE</span>
-                          </div>
-                       </div>
+                    <div className="space-y-3">
+                       {todaysMatches.map((match) => (
+                         <div key={match.id} className="p-3 bg-white/5 rounded-xl border border-white/5 hover:border-primary/30 transition-all group">
+                            <div className="flex justify-between items-center mb-2">
+                               <Badge variant="outline" className="text-[8px] h-4 border-white/10 uppercase font-mono">
+                                  {match.type}
+                               </Badge>
+                               <span className="text-[9px] font-bold text-primary animate-pulse">{match.status}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                               <div className="flex items-center gap-2">
+                                  <div className="size-6 bg-muted rounded flex items-center justify-center font-bold text-[10px]">{match.home}</div>
+                                  <span className="text-xs font-bold italic">VS</span>
+                                  <div className="size-6 bg-muted rounded flex items-center justify-center font-bold text-[10px]">{match.away}</div>
+                               </div>
+                               <div className="text-right">
+                                  <p className="text-[10px] font-bold text-foreground">{match.time}</p>
+                                  <p className="text-[8px] text-muted-foreground font-mono">BD TIME</p>
+                               </div>
+                            </div>
+                            <Button variant="ghost" className="w-full h-8 mt-3 text-[9px] uppercase font-bold border-white/5 hover:bg-primary/10 hover:text-primary gap-2" asChild>
+                               <a href="https://www.tsports.com/live" target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="size-3" /> LIVE UPLINK
+                               </a>
+                            </Button>
+                         </div>
+                       ))}
                     </div>
-                    <Button variant="ghost" className="w-full text-[10px] uppercase font-bold tracking-widest h-11 border-white/5 hover:bg-white/5 group">
-                       Tactical Scoreboard <ChevronRight className="size-3 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
+                    <p className="text-[8px] italic text-muted-foreground text-center mt-2">
+                      * সময়ের কিছুটা পরিবর্তন হতে পারে। সঠিক সময়ের জন্য T Sports চেক করুন।
+                    </p>
                  </CardContent>
               </Card>
             </div>
