@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -272,7 +273,7 @@ export default function Home() {
                 <CardHeader>
                    <CardTitle className="text-xs uppercase font-bold text-destructive flex items-center gap-2">
                       <Terminal className="size-4" />
-                      Runtime Optimization
+                      Runtime & Build Protocol
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -280,6 +281,7 @@ export default function Home() {
                       <p className="text-primary">{"&gt;"} parallel_mode: incubating</p>
                       <p className="text-emerald-500">{"&gt;"} config_cache: hit</p>
                       <p className="text-amber-500">{"&gt;"} workers: {performance.workers} (max: 4)</p>
+                      <p className="text-primary/70">{"&gt;"} plugins: android, kotlin.compose, ksp</p>
                       <p className="animate-pulse">{"&gt;"} jvm_args: -Xmx4g -UTF-8</p>
                    </div>
                    <div className="flex flex-col gap-2">
