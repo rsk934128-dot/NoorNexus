@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
@@ -20,7 +21,8 @@ import {
   Maximize2,
   Send,
   Cpu,
-  Loader2
+  Loader2,
+  BarChart3
 } from "lucide-react"
 import {
   Dialog,
@@ -31,9 +33,20 @@ import {
 } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useCollection, useFirestore, useUser } from "@/firebase"
-import { collection, query, orderBy, limit, addDoc, serverTimestamp } from "firebase/firestore"
+import { collection, query, orderBy, limit, addDoc } from "firebase/firestore"
 import { getMatchInsight, type MatchInsightOutput } from "@/ai/flows/sports-insight-flow"
 import { useToast } from "@/hooks/use-toast"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+
+// Tactical Signal Data
+const SIGNAL_DATA = [
+  { time: '10:00', latency: 12, load: 45 },
+  { time: '10:05', latency: 15, load: 52 },
+  { time: '10:10', latency: 8, load: 48 },
+  { time: '10:15', latency: 11, load: 60 },
+  { time: '10:20', latency: 14, load: 55 },
+  { time: '10:25', latency: 9, load: 42 },
+]
 
 export default function WorldCupPage() {
   const { toast } = useToast()
@@ -44,10 +57,12 @@ export default function WorldCupPage() {
   const matchesQuery = useMemo(() => query(collection(db, "sports_matches"), orderBy("status")), [db])
   const serversQuery = useMemo(() => query(collection(db, "sports_servers")), [db])
   const chatQuery = useMemo(() => query(collection(db, "sports_chat"), orderBy("timestamp", "desc"), limit(50)), [db])
+  const newsQuery = useMemo(() => query(collection(db, "sports_news"), orderBy("timestamp", "desc"), limit(5)), [db])
 
   const { data: matches } = useCollection<any>(matchesQuery)
   const { data: servers } = useCollection<any>(serversQuery)
   const { data: chats } = useCollection<any>(chatQuery)
+  const { data: news } = useCollection<any>(newsQuery)
 
   const [activeMatch, setActiveMatch] = useState<any>(null)
   const [selectedServer, setSelectedServer] = useState<any>(null)
@@ -57,7 +72,6 @@ export default function WorldCupPage() {
   const [aiLoading, setAiLoading] = useState(false)
   const [aiInsight, setAiInsight] = useState<MatchInsightOutput | null>(null)
 
-  // Initialize selected server and match if not set
   useEffect(() => {
     if (servers.length > 0 && !selectedServer) setSelectedServer(servers[0])
     if (matches.length > 0 && !activeMatch) setActiveMatch(matches.find(m => m.status === 'LIVE') || matches[0])
@@ -122,7 +136,7 @@ export default function WorldCupPage() {
                   <Trophy className="size-6 text-primary animate-pulse" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-headline font-bold uppercase tracking-tight">GSMIFY SOVEREIGN SPORTS</h2>
+                  <h2 className="text-3xl font-headline font-bold uppercase tracking-tight text-primary">GSMIFY SOVEREIGN SPORTS</h2>
                   <p className="text-[10px] text-muted-foreground font-mono tracking-[0.4em] uppercase font-bold">MISSION 400 | OS v3.2 Intelligence</p>
                 </div>
               </div>
@@ -130,7 +144,7 @@ export default function WorldCupPage() {
             <div className="flex gap-4">
                <Badge className="bg-primary/10 text-primary border-primary/20 px-4 py-2 h-auto gap-2 font-bold">
                   <Activity className="size-4 animate-pulse" />
-                  MESH LATENCY: {selectedServer?.ping || "..."}
+                  MESH LATENCY: {selectedServer?.ping || "12ms"}
                </Badge>
                <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter">
                   SIGNAL: 98.4%
@@ -161,15 +175,19 @@ export default function WorldCupPage() {
                 </CardHeader>
                 <CardContent className="p-0 aspect-video bg-black relative flex items-center justify-center">
                   <div className="absolute inset-0 opacity-20 bg-[url('https://picsum.photos/seed/stadium/1200/800')] bg-cover" />
-                  <div className="relative z-10 flex flex-col items-center gap-6">
+                  <div className="relative z-10 flex flex-col items-center gap-6 text-center px-4">
                     <div className="size-24 rounded-full border-2 border-primary/30 flex items-center justify-center animate-spin-slow">
                       <PlayCircle className="size-12 text-primary/50" />
+                    </div>
+                    <div className="space-y-2">
+                       <h3 className="text-2xl font-headline font-bold text-white uppercase tracking-widest">Sovereign Uplink Gateway</h3>
+                       <p className="text-sm text-muted-foreground font-mono">ENCRYPTED STREAMING CHANNEL: GSMIFY_B_400</p>
                     </div>
                     <Button 
                       onClick={handleLaunchUplink}
                       className="bg-primary text-primary-foreground font-bold uppercase tracking-widest px-10 h-14 glow-primary"
                     >
-                      Establish Sovereign Uplink
+                      Establish Secure Handshake
                     </Button>
                   </div>
                 </CardContent>
@@ -177,7 +195,7 @@ export default function WorldCupPage() {
                   <div className="flex items-center gap-3">
                     <span className="text-[10px] font-bold text-muted-foreground uppercase">Server:</span>
                     <div className="flex gap-2">
-                      {servers.map(s => (
+                      {servers.length > 0 ? servers.map(s => (
                         <Button 
                           key={s.id}
                           variant={selectedServer?.id === s.id ? "default" : "outline"}
@@ -187,7 +205,9 @@ export default function WorldCupPage() {
                         >
                           {s.name}
                         </Button>
-                      ))}
+                      )) : (
+                        <Badge variant="outline" className="text-[10px] border-white/5 opacity-50">SYNCING SERVERS...</Badge>
+                      )}
                     </div>
                   </div>
                   <Button 
@@ -218,14 +238,14 @@ export default function WorldCupPage() {
                             <span>{activeMatch?.home}</span>
                             <span>{aiInsight.winProbability.home}%</span>
                           </div>
-                          <div className="h-1 bg-muted rounded-full">
+                          <div className="h-1 bg-muted rounded-full overflow-hidden">
                             <div className="h-full bg-primary" style={{ width: `${aiInsight.winProbability.home}%` }} />
                           </div>
                           <div className="flex justify-between text-xs">
                             <span>{activeMatch?.away}</span>
                             <span>{aiInsight.winProbability.away}%</span>
                           </div>
-                          <div className="h-1 bg-muted rounded-full">
+                          <div className="h-1 bg-muted rounded-full overflow-hidden">
                             <div className="h-full bg-amber-500" style={{ width: `${aiInsight.winProbability.away}%` }} />
                           </div>
                         </div>
@@ -247,25 +267,29 @@ export default function WorldCupPage() {
                 <Card className="glass-card">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2">
-                      <Monitor className="size-4" />
-                      Tactical Field View
+                      <BarChart3 className="size-4" />
+                      Mesh Performance Metrics
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="aspect-[4/3] bg-emerald-950/20 rounded-xl border border-emerald-500/20 relative overflow-hidden">
-                       <div className="absolute inset-4 border border-white/10 rounded-sm">
-                          <div className="absolute top-1/2 left-0 right-0 h-px bg-white/10" />
-                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-16 rounded-full border border-white/10" />
-                          <div className="absolute top-1/4 left-1/3 size-2 bg-primary rounded-full glow-primary animate-pulse" />
-                          <div className="absolute top-2/3 right-1/4 size-2 bg-amber-500 rounded-full animate-bounce" />
-                          <div className="absolute top-1/2 left-1/2 size-1.5 bg-white rounded-full" />
-                       </div>
-                    </div>
+                  <CardContent className="h-[250px] p-4">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={SIGNAL_DATA}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
+                        <XAxis dataKey="time" stroke="#444" fontSize={10} tickLine={false} axisLine={false} />
+                        <YAxis stroke="#444" fontSize={10} tickLine={false} axisLine={false} />
+                        <Tooltip contentStyle={{ backgroundColor: '#050505', border: '1px solid #222', fontSize: '10px' }} />
+                        <Line type="monotone" dataKey="latency" stroke="var(--primary)" strokeWidth={2} dot={false} />
+                        <Line type="monotone" dataKey="load" stroke="#fbbf24" strokeWidth={2} dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
                   </CardContent>
                 </Card>
                 <Card className="glass-card">
                    <CardHeader className="pb-2">
-                      <CardTitle className="text-xs uppercase font-bold text-muted-foreground">Network Load Matrix</CardTitle>
+                      <CardTitle className="text-xs uppercase font-bold text-muted-foreground flex items-center gap-2">
+                        <Monitor className="size-4" />
+                        Infrastructure Health
+                      </CardTitle>
                    </CardHeader>
                    <CardContent className="space-y-6">
                       <div className="space-y-2">
@@ -279,13 +303,16 @@ export default function WorldCupPage() {
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                          <div className="p-3 bg-white/5 rounded-lg border border-white/5">
-                            <p className="text-[8px] text-muted-foreground uppercase font-bold">Buffer Depth</p>
-                            <p className="text-xl font-headline font-bold text-emerald-500">12ms</p>
+                            <p className="text-[8px] text-muted-foreground uppercase font-bold">Signal Buffer</p>
+                            <p className="text-xl font-headline font-bold text-emerald-500">OPTIMAL</p>
                          </div>
                          <div className="p-3 bg-white/5 rounded-lg border border-white/5">
-                            <p className="text-[8px] text-muted-foreground uppercase font-bold">Packet Loss</p>
-                            <p className="text-xl font-headline font-bold text-primary">0.001%</p>
+                            <p className="text-[8px] text-muted-foreground uppercase font-bold">Sync Epoch</p>
+                            <p className="text-xl font-headline font-bold text-primary">#402</p>
                          </div>
+                      </div>
+                      <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg">
+                         <p className="text-[9px] font-mono text-primary/80 uppercase">Node SG-Core-01 Handshake: Verified</p>
                       </div>
                    </CardContent>
                 </Card>
@@ -293,13 +320,13 @@ export default function WorldCupPage() {
             </div>
 
             <div className="space-y-6">
-              <Card className="glass-card h-[600px] flex flex-col">
+              <Card className="glass-card h-[450px] flex flex-col">
                 <CardHeader className="pb-2 border-b border-white/5">
                   <CardTitle className="text-sm font-headline flex items-center gap-2">
                     <MessageSquare className="size-4 text-primary" />
-                    Live আড্ডা ও চ্যাট
+                    Imperial Mesh Chat
                   </CardTitle>
-                  <CardDescription className="text-[10px] uppercase font-bold">Global Mesh Community</CardDescription>
+                  <CardDescription className="text-[10px] uppercase font-bold">MISSION_400_COMMUNITY</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
                   <ScrollArea className="flex-1 p-4">
@@ -326,7 +353,7 @@ export default function WorldCupPage() {
                           value={chatInput}
                           onChange={(e) => setChatInput(e.target.value)}
                           onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                          placeholder="Send a tactical message..." 
+                          placeholder="Send tactical message..." 
                           className="w-full bg-background/50 border border-white/10 rounded-lg px-4 py-2.5 text-xs outline-none focus:ring-1 focus:ring-primary pr-12"
                         />
                         <Button 
@@ -342,11 +369,11 @@ export default function WorldCupPage() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-amber-500/20">
+              <Card className="glass-card border-white/5">
                 <CardHeader className="pb-2">
-                   <CardTitle className="text-xs uppercase font-bold text-amber-500 flex items-center gap-2">
+                   <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2">
                       <Clock className="size-4" />
-                      Fixture Intelligence
+                      Live Fixtures
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -354,7 +381,7 @@ export default function WorldCupPage() {
                      <div 
                        key={match.id} 
                        onClick={() => setActiveMatch(match)}
-                       className={`p-3 bg-white/5 rounded-xl border flex justify-between items-center group cursor-pointer transition-all ${activeMatch?.id === match.id ? 'border-primary bg-primary/5' : 'border-white/5 hover:border-primary/30'}`}
+                       className={`p-3 bg-white/5 rounded-xl border flex justify-between items-center group cursor-pointer transition-all ${activeMatch?.id === match.id ? 'border-primary bg-primary/5 shadow-[0_0_15px_rgba(0,150,255,0.1)]' : 'border-white/5 hover:border-primary/30'}`}
                       >
                         <div className="flex items-center gap-3">
                            <div className="text-[10px] font-bold">{match.home}</div>
@@ -369,6 +396,25 @@ export default function WorldCupPage() {
                    ))}
                 </CardContent>
               </Card>
+
+              <Card className="glass-card border-amber-500/20 bg-amber-500/5">
+                <CardHeader className="pb-2">
+                   <CardTitle className="text-xs uppercase font-bold text-amber-500 flex items-center gap-2">
+                      <Activity className="size-4" />
+                      Tactical Intel Feed
+                   </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                   {news.length > 0 ? news.map((item, i) => (
+                     <div key={i} className="space-y-1 p-2 border-l border-amber-500/30">
+                        <h4 className="text-[10px] font-bold text-amber-500 uppercase">{item.title}</h4>
+                        <p className="text-[9px] text-muted-foreground leading-tight italic">{item.content}</p>
+                     </div>
+                   )) : (
+                     <p className="text-[9px] text-muted-foreground italic">Syncing mission data...</p>
+                   )}
+                </CardContent>
+              </Card>
             </div>
           </div>
         </main>
@@ -381,6 +427,9 @@ export default function WorldCupPage() {
               <Lock className="size-5" />
               Sovereign Handshake Sequence
             </DialogTitle>
+            <DialogDescription className="text-[10px] font-mono uppercase text-muted-foreground">
+              ESTABLISHING VERIFIED ROUTE TO BROADCASATER
+            </DialogDescription>
           </DialogHeader>
 
           <div className="py-8 text-center space-y-6">
@@ -390,7 +439,7 @@ export default function WorldCupPage() {
               </div>
               <div className="space-y-2">
                 <p className="text-primary font-mono text-xs animate-pulse uppercase">
-                  Establishing Route... {handshakeProgress}%
+                  Routing Signal... {handshakeProgress}%
                 </p>
                 <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
                   <div className="h-full bg-primary transition-all duration-300" style={{ width: `${handshakeProgress}%` }} />
@@ -401,7 +450,7 @@ export default function WorldCupPage() {
             {handshakeProgress === 100 && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
                  <p className="text-[10px] text-muted-foreground font-mono leading-relaxed px-4">
-                    Sovereign Intelligence Layer has established a verified route to <strong>{selectedServer?.name || "Broadcaster"}</strong>.
+                    Sovereign Intelligence Layer has verified the signal route for <strong>{activeMatch?.home} vs {activeMatch?.away}</strong>.
                  </p>
                  <Button 
                     className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary"

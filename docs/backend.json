@@ -81,6 +81,18 @@
         "timestamp": { "type": "number" }
       },
       "required": ["user", "message", "timestamp"]
+    },
+    "SportsNews": {
+      "title": "Tactical Sports News",
+      "description": "Mission 400 related sports updates.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "severity": { "type": "string", "enum": ["INFO", "URGENT", "CRITICAL"] },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["title", "content", "timestamp"]
     }
   },
   "auth": {
@@ -110,6 +122,10 @@
     "/sports_chat/{chatId}": {
       "schema": "ChatMessage",
       "description": "Live community chat stream"
+    },
+    "/sports_news/{newsId}": {
+      "schema": "SportsNews",
+      "description": "Tactical news feed for Mission 400"
     }
   }
 }
