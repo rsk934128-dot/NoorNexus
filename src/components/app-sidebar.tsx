@@ -14,7 +14,8 @@ import {
   Radar,
   Lock,
   Trophy,
-  SlidersHorizontal
+  SlidersHorizontal,
+  ChevronRight
 } from "lucide-react"
 
 import {
@@ -77,14 +78,19 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="p-4">
         <div className="flex flex-col gap-2">
-          <SidebarMenuButton className="text-muted-foreground hover:text-primary">
-            <Terminal className="size-4" />
-            <span className="text-xs">Root Access Level 4</span>
-          </SidebarMenuButton>
-          <SidebarMenuButton asChild className={`hover:text-primary transition-colors ${pathname === '/ecosystem' ? 'text-primary' : 'text-muted-foreground'}`}>
+          <div className="flex items-center justify-between px-2 py-1 bg-primary/5 rounded border border-primary/20 mb-2">
+             <div className="flex items-center gap-2">
+                <Terminal className="size-3 text-primary" />
+                <span className="text-[9px] font-bold text-primary uppercase tracking-tighter">Root Access L4</span>
+             </div>
+             <div className="size-1.5 bg-primary rounded-full animate-pulse" />
+          </div>
+          
+          <SidebarMenuButton asChild className={`hover:text-primary transition-colors border border-white/5 ${pathname === '/ecosystem' ? 'bg-primary/10 text-primary border-primary/20' : 'text-muted-foreground'}`}>
             <Link href="/ecosystem">
               <Settings className="size-4" />
-              <span className="text-xs">Ecosystem Parameters</span>
+              <span className="text-xs font-bold uppercase tracking-widest">Ecosystem Parameters</span>
+              <ChevronRight className="size-3 ml-auto" />
             </Link>
           </SidebarMenuButton>
         </div>
