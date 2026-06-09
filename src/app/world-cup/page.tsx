@@ -33,13 +33,13 @@ import {
 const channels = [
   { 
     id: 1, 
-    name: "T Sports", 
+    name: "T Sports Live", 
     origin: "Bangladesh", 
     status: "Operational", 
     quality: "4K Native", 
     type: "Local", 
     freq: "12.4 GHz",
-    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" // Placeholder for actual stream
+    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC_p61_O_WkI_9yH_V_0zM9A" // Official Channel Embed Placeholder
   },
   { 
     id: 2, 
@@ -49,7 +49,7 @@ const channels = [
     quality: "HD+", 
     type: "Local", 
     freq: "11.2 GHz",
-    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UCoKj6uS9D1X5l_Yp9X_fXiw"
   },
   { 
     id: 3, 
@@ -59,27 +59,27 @@ const channels = [
     quality: "Ultra HD", 
     type: "Foreign", 
     freq: "14.1 GHz",
-    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+    streamUrl: "https://www.youtube.com/embed/4z958n8P1uE" // Representative Sports Video
   },
   { 
     id: 4, 
-    name: "Sony Sports Ten 1", 
+    name: "Sony Sports Network", 
     origin: "International", 
     status: "Operational", 
     quality: "HD", 
     type: "Foreign", 
     freq: "13.8 GHz",
-    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+    streamUrl: "https://www.youtube.com/embed/9XInD-eXvN0"
   },
   { 
     id: 5, 
-    name: "Willow TV", 
+    name: "Willow Cricket", 
     origin: "USA/Global", 
-    status: "Maintenance", 
+    status: "Operational", 
     quality: "HD", 
     type: "Foreign", 
     freq: "15.2 GHz",
-    streamUrl: ""
+    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLpA-pGst005YQWv0-eFmE4HqY13uHAnYn"
   },
   { 
     id: 6, 
@@ -89,27 +89,27 @@ const channels = [
     quality: "4K Native", 
     type: "Foreign", 
     freq: "12.9 GHz",
-    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC0O_h6r9N0Ww9pE-Y8C0z0A"
   },
   { 
     id: 7, 
-    name: "SuperSport", 
+    name: "SuperSport Live", 
     origin: "South Africa", 
     status: "Operational", 
     quality: "HD+", 
     type: "Foreign", 
     freq: "14.5 GHz",
-    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC8W0G2v-Lg7XmI-6Xp9Wp9A"
   },
   { 
     id: 8, 
-    name: "BTV World", 
+    name: "BTV Sports", 
     origin: "Bangladesh", 
     status: "Operational", 
     quality: "Standard", 
     type: "Local", 
     freq: "10.1 GHz",
-    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLvG2S5_G_lV-wXo9KInoYlU_0S1I0s0Xy"
   },
 ]
 
