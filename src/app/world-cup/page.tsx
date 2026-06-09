@@ -50,6 +50,9 @@ const SIGNAL_DATA = [
   { time: '10:25', latency: 9, load: 42 },
 ]
 
+// ডিফল্ট ইম্পেরিয়াল ফিড (ব্যবহারকারীর দেওয়া লিঙ্ক)
+const DEFAULT_IMPERIAL_UPLINK = "https://www.youtube.com/live/ntjJKCjNmcE?si=ICwtstbtDqctyGMF"
+
 export default function WorldCupPage() {
   const { toast } = useToast()
   const db = useFirestore()
@@ -76,18 +79,26 @@ export default function WorldCupPage() {
 
   useEffect(() => {
     if (servers.length > 0 && !selectedServer) setSelectedServer(servers[0])
-    if (matches.length > 0 && !activeMatch) setActiveMatch(matches.find(m => m.status === 'LIVE') || matches[0])
+    
+    if (matches.length > 0) {
+      const liveMatch = matches.find(m => m.status === 'LIVE') || matches[0]
+      if (!activeMatch) setActiveMatch(liveMatch)
+    } else if (!activeMatch) {
+      // যদি ডাটাবেস খালি থাকে, তবে ডিফল্ট ফিড সেট করা হবে
+      setActiveMatch({
+        id: "imperial-01",
+        home: "SOVEREIGN",
+        away: "WORLD FEED",
+        status: "LIVE",
+        score: "LIVE",
+        uplink: DEFAULT_IMPERIAL_UPLINK,
+        description: "IMPERIAL MISSION 400 UPLINK"
+      })
+    }
   }, [servers, matches, selectedServer, activeMatch])
 
   const handleLaunchUplink = () => {
-    if (!activeMatch?.uplink) {
-      toast({
-        title: "Uplink Offline",
-        description: "No secure stream link found. Awaiting sovereign sync.",
-        variant: "destructive"
-      })
-      return
-    }
+    const uplink = activeMatch?.uplink || DEFAULT_IMPERIAL_UPLINK
     setIsHandshaking(true)
     setHandshakeProgress(0)
     const interval = setInterval(() => {
@@ -135,8 +146,9 @@ export default function WorldCupPage() {
   }
 
   const getYoutubeId = (url: string) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = url?.match(regExp);
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\/live\/)([^#\&\?]*).*/;
+    const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
   }
 
@@ -163,7 +175,7 @@ export default function WorldCupPage() {
                   MESH LATENCY: {selectedServer?.ping || "12ms"}
                </Badge>
                <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter text-xs">
-                  UPLINK STABILITY: 98.4%
+                  UPLINK STABILITY: 99.9%
                </Badge>
             </div>
           </header>
@@ -196,12 +208,12 @@ export default function WorldCupPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="p-0 aspect-video bg-black relative flex items-center justify-center overflow-hidden">
-                  {playerMode === 'EMBED' && activeMatch?.uplink ? (
+                  {playerMode === 'EMBED' && (activeMatch?.uplink || DEFAULT_IMPERIAL_UPLINK) ? (
                     <div className="w-full h-full">
                       <iframe 
                         width="100%" 
                         height="100%" 
-                        src={`https://www.youtube.com/embed/${getYoutubeId(activeMatch.uplink)}?autoplay=1&mute=0`}
+                        src={`https://www.youtube.com/embed/${getYoutubeId(activeMatch?.uplink || DEFAULT_IMPERIAL_UPLINK)}?autoplay=1&mute=0`}
                         title="Sovereign Stream Player"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -249,8 +261,8 @@ export default function WorldCupPage() {
                         </Button>
                       )) : (
                         <div className="flex gap-2">
-                           <Badge variant="outline" className="text-[10px] opacity-30 animate-pulse">HUB-01</Badge>
-                           <Badge variant="outline" className="text-[10px] opacity-30 animate-pulse">HUB-02</Badge>
+                           <Badge variant="outline" className="text-[10px] border-primary/50 text-primary">HUB-01 (ACTIVE)</Badge>
+                           <Badge variant="outline" className="text-[10px] border-white/10 opacity-50">HUB-02</Badge>
                         </div>
                       )}
                     </div>
@@ -456,42 +468,27 @@ export default function WorldCupPage() {
                         </div>
                      </div>
                    )) : (
-                     <div className="space-y-3 py-6">
-                        <div className="flex items-center justify-center gap-3">
-                           <Loader2 className="size-4 animate-spin text-primary" />
-                           <p className="text-[11px] text-muted-foreground font-mono italic uppercase">Syncing Mesh Nodes...</p>
+                     <div 
+                       onClick={() => setActiveMatch({ id: "imperial-01", home: "SOVEREIGN", away: "WORLD FEED", status: "LIVE", score: "LIVE", uplink: DEFAULT_IMPERIAL_UPLINK, description: "IMPERIAL MISSION 400 UPLINK" })}
+                       className="p-4 bg-primary/10 rounded-2xl border border-primary flex justify-between items-center group cursor-pointer transition-all duration-300 shadow-[0_0_20px_rgba(0,150,255,0.15)] scale-[1.02]"
+                      >
+                        <div className="space-y-1">
+                           <div className="flex items-center gap-3">
+                              <span className="text-[11px] font-bold text-white uppercase">IMPERIAL</span>
+                              <span className="text-[9px] text-muted-foreground font-mono">VS</span>
+                              <span className="text-[11px] font-bold text-white uppercase">MISSION</span>
+                           </div>
+                           <p className="text-[9px] text-muted-foreground font-mono uppercase tracking-tighter">IMPERIAL MISSION 400 UPLINK</p>
                         </div>
-                        <div className="flex gap-2 justify-center">
-                           {[1,2,3,4].map(i => <div key={i} className="size-1 bg-white/10 rounded-full animate-bounce" style={{ animationDelay: `${i*0.2}s` }} />)}
+                        <div className="text-right">
+                           <p className="text-[11px] font-bold text-primary">LIVE</p>
+                           <div className="flex items-center gap-1.5 justify-end">
+                              <div className="size-1.5 rounded-full bg-destructive animate-pulse" />
+                              <p className="text-[9px] uppercase font-bold text-destructive">LIVE</p>
+                           </div>
                         </div>
                      </div>
                    )}
-                </CardContent>
-              </Card>
-
-              <Card className="glass-card border-amber-500/20 bg-amber-500/5 overflow-hidden">
-                <CardHeader className="pb-3 border-b border-amber-500/10">
-                   <CardTitle className="text-xs uppercase font-bold text-amber-500 flex items-center gap-2 tracking-[0.2em]">
-                      <Activity className="size-4" />
-                      Tactical Intelligence Feed
-                   </CardTitle>
-                </CardHeader>
-                <CardContent className="p-0">
-                   <ScrollArea className="h-[250px]">
-                      <div className="p-5 space-y-5">
-                        {news.length > 0 ? news.map((item, i) => (
-                          <div key={i} className="space-y-2 p-4 bg-black/40 rounded-xl border-l-2 border-amber-500/50 group hover:bg-black/60 transition-colors">
-                             <h4 className="text-[10px] font-bold text-amber-500 uppercase flex items-center justify-between">
-                                {item.title}
-                                <span className="text-[8px] text-muted-foreground font-mono">{new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                             </h4>
-                             <p className="text-[10px] text-muted-foreground leading-relaxed italic">{item.content}</p>
-                          </div>
-                        )) : (
-                          <p className="text-[10px] text-center text-muted-foreground italic py-8 uppercase tracking-widest opacity-50">Awaiting Mission Data Uplink...</p>
-                        )}
-                      </div>
-                   </ScrollArea>
                 </CardContent>
               </Card>
             </div>
@@ -531,15 +528,16 @@ export default function WorldCupPage() {
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-5">
                  <div className="p-5 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl text-emerald-500">
                    <p className="text-[11px] font-mono leading-relaxed uppercase font-bold">
-                     Handshake Verified: Integrity Match 100%. Routing successful for {activeMatch?.home} vs {activeMatch?.away}.
+                     Handshake Verified: Integrity Match 100%. Routing successful for {activeMatch?.home || "IMPERIAL"} vs {activeMatch?.away || "MISSION"}.
                    </p>
                  </div>
                  <Button 
                     className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-16 glow-primary flex items-center justify-center gap-4 text-lg hover:scale-[1.02] transition-transform"
                     onClick={() => {
                       setIsHandshaking(false)
-                      if (activeMatch?.uplink) {
-                        window.open(activeMatch.uplink, '_blank')
+                      const uplink = activeMatch?.uplink || DEFAULT_IMPERIAL_UPLINK
+                      if (uplink) {
+                        window.open(uplink, '_blank')
                       }
                     }}
                  >
