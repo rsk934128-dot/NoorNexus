@@ -42,6 +42,45 @@
         "liquidityHealth": { "type": "number" },
         "dailyThroughput": { "type": "number" }
       }
+    },
+    "SportsMatch": {
+      "title": "Sovereign Match",
+      "description": "Real-time football match data for Mission 400.",
+      "type": "object",
+      "properties": {
+        "home": { "type": "string" },
+        "away": { "type": "string" },
+        "time": { "type": "string" },
+        "score": { "type": "string" },
+        "status": { "type": "string", "enum": ["LIVE", "UPCOMING", "FINISHED"] },
+        "uplink": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["home", "away", "status"]
+    },
+    "SportsServer": {
+      "title": "Sports Relay Server",
+      "description": "Relay node status for sports broadcasting.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "status": { "type": "string" },
+        "ping": { "type": "string" },
+        "load": { "type": "string" }
+      },
+      "required": ["id", "name", "status"]
+    },
+    "ChatMessage": {
+      "title": "Imperial Chat",
+      "description": "Live community interaction messages.",
+      "type": "object",
+      "properties": {
+        "user": { "type": "string" },
+        "message": { "type": "string" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["user", "message", "timestamp"]
     }
   },
   "auth": {
@@ -59,6 +98,18 @@
     "/treasury/global": {
       "schema": "TreasuryStatus",
       "description": "Global treasury metrics"
+    },
+    "/sports_matches/{matchId}": {
+      "schema": "SportsMatch",
+      "description": "World Cup and Friendly match feed"
+    },
+    "/sports_servers/{serverId}": {
+      "schema": "SportsServer",
+      "description": "Streaming relay server status"
+    },
+    "/sports_chat/{chatId}": {
+      "schema": "ChatMessage",
+      "description": "Live community chat stream"
     }
   }
 }
