@@ -21,7 +21,8 @@ import {
   BarChart3,
   ChevronRight,
   Maximize2,
-  AlertCircle
+  AlertCircle,
+  ExternalLink
 } from "lucide-react"
 import {
   Dialog,
@@ -31,7 +32,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
-// Note: YouTube embed IDs for live channels often require the channel ID or a stable playlist
+// Optimized channel list with official IDs and stable stream references
 const channels = [
   { 
     id: 1, 
@@ -41,8 +42,9 @@ const channels = [
     quality: "4K Native", 
     type: "Local", 
     freq: "12.4 GHz",
-    // Official T-Sports highlights/live playlist for better embedding compatibility
-    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLpA-pGst005YQWv0-eFmE4HqY13uHAnYn"
+    // Official Channel ID fallback for live streams
+    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UCOTo6is_T_Iis6Vp6w7V6oA",
+    directUrl: "https://www.youtube.com/@TSports_bd/live"
   },
   { 
     id: 2, 
@@ -52,7 +54,8 @@ const channels = [
     quality: "HD+", 
     type: "Local", 
     freq: "11.2 GHz",
-    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLvG2S5_G_lV-wXo9KInoYlU_0S1I0s0Xy"
+    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLvG2S5_G_lV-wXo9KInoYlU_0S1I0s0Xy",
+    directUrl: "https://www.youtube.com/@GTVLive/live"
   },
   { 
     id: 3, 
@@ -62,17 +65,19 @@ const channels = [
     quality: "Ultra HD", 
     type: "Foreign", 
     freq: "14.1 GHz",
-    streamUrl: "https://www.youtube.com/embed/9XInD-eXvN0" 
+    streamUrl: "https://www.youtube.com/embed/9XInD-eXvN0",
+    directUrl: "https://www.starsports.com/"
   },
   { 
     id: 4, 
-    name: "Sony Sports Network", 
-    origin: "International", 
+    name: "Sky Sports Cricket", 
+    origin: "UK", 
     status: "Operational", 
-    quality: "HD", 
+    quality: "4K Native", 
     type: "Foreign", 
-    freq: "13.8 GHz",
-    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLpA-pGst005YQWv0-eFmE4HqY13uHAnYn"
+    freq: "12.9 GHz",
+    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC67f2SstIAnp6pUpE9_UQ8Q",
+    directUrl: "https://www.skysports.com/cricket"
   },
   { 
     id: 5, 
@@ -82,37 +87,19 @@ const channels = [
     quality: "HD", 
     type: "Foreign", 
     freq: "15.2 GHz",
-    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLpA-pGst005YQWv0-eFmE4HqY13uHAnYn"
+    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLpA-pGst005YQWv0-eFmE4HqY13uHAnYn",
+    directUrl: "https://www.willow.tv/"
   },
   { 
     id: 6, 
-    name: "Sky Sports Cricket", 
-    origin: "UK", 
-    status: "Operational", 
-    quality: "4K Native", 
-    type: "Foreign", 
-    freq: "12.9 GHz",
-    streamUrl: "https://www.youtube.com/embed/9XInD-eXvN0"
-  },
-  { 
-    id: 7, 
-    name: "SuperSport Live", 
-    origin: "South Africa", 
-    status: "Operational", 
-    quality: "HD+", 
-    type: "Foreign", 
-    freq: "14.5 GHz",
-    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLvG2S5_G_lV-wXo9KInoYlU_0S1I0s0Xy"
-  },
-  { 
-    id: 8, 
     name: "BTV Sports", 
     origin: "Bangladesh", 
     status: "Operational", 
     quality: "Standard", 
     type: "Local", 
     freq: "10.1 GHz",
-    streamUrl: "https://www.youtube.com/embed/9XInD-eXvN0"
+    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC8_2q3Yitp3o_tW2-uN8Jyw",
+    directUrl: "https://www.btv.gov.bd/"
   },
 ]
 
@@ -360,7 +347,7 @@ export default function WorldCupPage() {
             </div>
           </DialogHeader>
 
-          <div className="aspect-video bg-black relative flex items-center justify-center w-full">
+          <div className="aspect-video bg-black relative flex items-center justify-center w-full group">
             {decoding ? (
               <div className="text-center space-y-4">
                 <Lock className="size-12 text-amber-500 mx-auto animate-bounce" />
@@ -375,8 +362,8 @@ export default function WorldCupPage() {
               <div className="w-full h-full relative">
                 {selectedChannel && (
                   <iframe 
-                    src={`${selectedChannel.streamUrl}${selectedChannel.streamUrl.includes('?') ? '&' : '?'}autoplay=1&mute=0&rel=0&modestbranding=1`}
-                    className="w-full h-full absolute inset-0 border-0"
+                    src={`${selectedChannel.streamUrl}${selectedChannel.streamUrl.includes('?') ? '&' : '?'}autoplay=1&mute=0&rel=0&modestbranding=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
+                    className="w-full h-full absolute inset-0 border-0 z-10"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                     allowFullScreen
                     title={selectedChannel.name}
@@ -384,17 +371,30 @@ export default function WorldCupPage() {
                 )}
                 
                 {/* Visual fallback/Overlay for "Unavailable" scenarios */}
-                <div className="absolute inset-0 z-0 flex flex-col items-center justify-center bg-zinc-950 pointer-events-none">
-                    <AlertCircle className="size-12 text-zinc-800 mb-2" />
-                    <p className="text-zinc-600 font-mono text-[10px] uppercase">Attempting Signal Recovery...</p>
+                <div className="absolute inset-0 z-0 flex flex-col items-center justify-center bg-zinc-950 p-10 text-center">
+                    <AlertCircle className="size-16 text-zinc-800 mb-4 animate-pulse" />
+                    <h3 className="text-zinc-500 font-headline text-xl font-bold mb-2 uppercase">Signal Masked or Restricted</h3>
+                    <p className="text-zinc-600 font-mono text-xs max-w-md mx-auto mb-6">
+                      Sovereign mesh node detected encryption policy mismatch or source-site restriction. Direct uplink recommended for high-priority monitoring.
+                    </p>
+                    {selectedChannel && (
+                      <Button 
+                        asChild 
+                        className="bg-primary/20 hover:bg-primary/40 text-primary border border-primary/30 font-bold uppercase tracking-widest"
+                      >
+                        <a href={selectedChannel.directUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                          <ExternalLink className="size-4" /> Open Direct Uplink
+                        </a>
+                      </Button>
+                    )}
                 </div>
 
-                <div className="absolute top-4 right-4 z-20 flex gap-2 pointer-events-none">
+                <div className="absolute top-4 right-4 z-20 flex gap-2 pointer-events-none group-hover:opacity-100 opacity-0 transition-opacity">
                   <Badge variant="outline" className="bg-black/50 border-white/10 text-[9px] h-6 backdrop-blur-md">FPS: 60</Badge>
                   <Badge variant="outline" className="bg-black/50 border-white/10 text-[9px] h-6 backdrop-blur-md">LATENCY: 12MS</Badge>
                 </div>
 
-                <div className="absolute bottom-4 left-4 z-20 flex items-center gap-3 pointer-events-none">
+                <div className="absolute bottom-4 left-4 z-20 flex items-center gap-3 pointer-events-none group-hover:opacity-100 opacity-0 transition-opacity">
                    <div className="flex items-center gap-1.5 px-2 py-1 bg-red-600 rounded text-white font-bold text-[10px] animate-pulse">
                       <div className="size-1.5 bg-white rounded-full" />
                       LIVE
