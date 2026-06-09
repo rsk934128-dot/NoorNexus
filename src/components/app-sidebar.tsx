@@ -13,7 +13,8 @@ import {
   Globe,
   Radar,
   Lock,
-  Trophy
+  Trophy,
+  SlidersHorizontal
 } from "lucide-react"
 
 import {
@@ -80,9 +81,11 @@ export function AppSidebar() {
             <Terminal className="size-4" />
             <span className="text-xs">Root Access Level 4</span>
           </SidebarMenuButton>
-          <SidebarMenuButton className="text-muted-foreground hover:text-primary">
-            <Settings className="size-4" />
-            <span className="text-xs">Ecosystem Parameters</span>
+          <SidebarMenuButton asChild className={`hover:text-primary transition-colors ${pathname === '/ecosystem' ? 'text-primary' : 'text-muted-foreground'}`}>
+            <Link href="/ecosystem">
+              <Settings className="size-4" />
+              <span className="text-xs">Ecosystem Parameters</span>
+            </Link>
           </SidebarMenuButton>
         </div>
         <div className="mt-4 p-3 bg-muted/50 rounded-lg border border-white/5">
