@@ -20,7 +20,8 @@ import {
   Eye,
   BarChart3,
   ChevronRight,
-  Maximize2
+  Maximize2,
+  AlertCircle
 } from "lucide-react"
 import {
   Dialog,
@@ -30,6 +31,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
+// Note: YouTube embed IDs for live channels often require the channel ID or a stable playlist
 const channels = [
   { 
     id: 1, 
@@ -39,7 +41,8 @@ const channels = [
     quality: "4K Native", 
     type: "Local", 
     freq: "12.4 GHz",
-    streamUrl: "https://www.youtube.com/embed/j_n40F47NGE"
+    // Official T-Sports highlights/live playlist for better embedding compatibility
+    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLpA-pGst005YQWv0-eFmE4HqY13uHAnYn"
   },
   { 
     id: 2, 
@@ -49,7 +52,7 @@ const channels = [
     quality: "HD+", 
     type: "Local", 
     freq: "11.2 GHz",
-    streamUrl: "https://www.youtube.com/embed/4z958n8P1uE"
+    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLvG2S5_G_lV-wXo9KInoYlU_0S1I0s0Xy"
   },
   { 
     id: 3, 
@@ -59,7 +62,7 @@ const channels = [
     quality: "Ultra HD", 
     type: "Foreign", 
     freq: "14.1 GHz",
-    streamUrl: "https://www.youtube.com/embed/9XInD-eXvN0"
+    streamUrl: "https://www.youtube.com/embed/9XInD-eXvN0" 
   },
   { 
     id: 4, 
@@ -79,7 +82,7 @@ const channels = [
     quality: "HD", 
     type: "Foreign", 
     freq: "15.2 GHz",
-    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC8W0G2v-Lg7XmI-6Xp9Wp9A"
+    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLpA-pGst005YQWv0-eFmE4HqY13uHAnYn"
   },
   { 
     id: 6, 
@@ -89,7 +92,7 @@ const channels = [
     quality: "4K Native", 
     type: "Foreign", 
     freq: "12.9 GHz",
-    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLvG2S5_G_lV-wXo9KInoYlU_0S1I0s0Xy"
+    streamUrl: "https://www.youtube.com/embed/9XInD-eXvN0"
   },
   { 
     id: 7, 
@@ -99,7 +102,7 @@ const channels = [
     quality: "HD+", 
     type: "Foreign", 
     freq: "14.5 GHz",
-    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC_p61_O_WkI_9yH_V_0zM9A"
+    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLvG2S5_G_lV-wXo9KInoYlU_0S1I0s0Xy"
   },
   { 
     id: 8, 
@@ -109,7 +112,7 @@ const channels = [
     quality: "Standard", 
     type: "Local", 
     freq: "10.1 GHz",
-    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UCoKj6uS9D1X5l_Yp9X_fXiw"
+    streamUrl: "https://www.youtube.com/embed/9XInD-eXvN0"
   },
 ]
 
@@ -137,7 +140,7 @@ export default function WorldCupPage() {
       setDecodeProgress(prev => {
         if (prev >= 100) {
           clearInterval(progressInterval)
-          setTimeout(() => setDecoding(false), 500)
+          setTimeout(() => setDecoding(false), 800)
           return 100
         }
         return prev + 10
@@ -372,7 +375,7 @@ export default function WorldCupPage() {
               <div className="w-full h-full relative">
                 {selectedChannel && (
                   <iframe 
-                    src={`${selectedChannel.streamUrl}?autoplay=1&mute=0&rel=0`}
+                    src={`${selectedChannel.streamUrl}${selectedChannel.streamUrl.includes('?') ? '&' : '?'}autoplay=1&mute=0&rel=0&modestbranding=1`}
                     className="w-full h-full absolute inset-0 border-0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                     allowFullScreen
@@ -380,6 +383,12 @@ export default function WorldCupPage() {
                   />
                 )}
                 
+                {/* Visual fallback/Overlay for "Unavailable" scenarios */}
+                <div className="absolute inset-0 z-0 flex flex-col items-center justify-center bg-zinc-950 pointer-events-none">
+                    <AlertCircle className="size-12 text-zinc-800 mb-2" />
+                    <p className="text-zinc-600 font-mono text-[10px] uppercase">Attempting Signal Recovery...</p>
+                </div>
+
                 <div className="absolute top-4 right-4 z-20 flex gap-2 pointer-events-none">
                   <Badge variant="outline" className="bg-black/50 border-white/10 text-[9px] h-6 backdrop-blur-md">FPS: 60</Badge>
                   <Badge variant="outline" className="bg-black/50 border-white/10 text-[9px] h-6 backdrop-blur-md">LATENCY: 12MS</Badge>
