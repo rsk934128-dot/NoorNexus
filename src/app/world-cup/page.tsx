@@ -39,7 +39,7 @@ const channels = [
     quality: "4K Native", 
     type: "Local", 
     freq: "12.4 GHz",
-    streamUrl: "https://www.youtube.com/embed/j_n40F47NGE" // Example high-quality sports content
+    streamUrl: "https://www.youtube.com/embed/j_n40F47NGE"
   },
   { 
     id: 2, 
@@ -370,13 +370,15 @@ export default function WorldCupPage() {
               </div>
             ) : (
               <div className="w-full h-full relative">
-                <iframe 
-                  src={`${selectedChannel?.streamUrl}?autoplay=1&mute=0&rel=0`}
-                  className="w-full h-full absolute inset-0 border-0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                  allowFullScreen
-                  title={selectedChannel?.name}
-                />
+                {selectedChannel && (
+                  <iframe 
+                    src={`${selectedChannel.streamUrl}?autoplay=1&mute=0&rel=0`}
+                    className="w-full h-full absolute inset-0 border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowFullScreen
+                    title={selectedChannel.name}
+                  />
+                )}
                 
                 <div className="absolute top-4 right-4 z-20 flex gap-2 pointer-events-none">
                   <Badge variant="outline" className="bg-black/50 border-white/10 text-[9px] h-6 backdrop-blur-md">FPS: 60</Badge>
@@ -393,8 +395,8 @@ export default function WorldCupPage() {
               </div>
             )}
           </div>
-        </main>
-      </SidebarInset>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
