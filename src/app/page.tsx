@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Zap, Globe, Cpu, AlertTriangle, Activity, Database, Landmark, Radar, Lock, FileText, CheckCircle, AlertCircle, HardDrive, Terminal, Layers, Box } from "lucide-react"
+import { Shield, Zap, Globe, Cpu, AlertTriangle, Activity, Database, Landmark, Radar, Lock, FileText, CheckCircle, AlertCircle, HardDrive, Terminal, Layers, Box, TestTube, Microscope } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -27,6 +27,7 @@ export default function Home() {
   const [auditResult, setAuditResult] = useState<LedgerAuditOutput | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [performance, setPerformance] = useState({ cpu: 12, ram: 2.1, workers: 4 })
+  const [testStatus, setTestStatus] = useState("PENDING")
 
   useEffect(() => {
     const sequence = [
@@ -52,6 +53,11 @@ export default function Home() {
         workers: 4
       }))
     }, 2000)
+
+    // Simulate Automated Test Execution
+    setTimeout(() => setTestStatus("RUNNING"), 5000)
+    setTimeout(() => setTestStatus("PASSED"), 8000)
+
     return () => clearInterval(interval)
   }, [])
 
@@ -224,6 +230,46 @@ export default function Home() {
                     </CardContent>
                  </Card>
               </div>
+
+              <Card className="glass-card border-amber-500/20 bg-amber-500/5">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs uppercase font-bold text-amber-500 flex items-center gap-2">
+                    <Microscope className="size-4" />
+                    Automated Integrity Audit
+                  </CardTitle>
+                  <CardDescription className="text-[10px] uppercase">Robolectric Test Suite</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="p-4 bg-black/40 rounded-lg border border-white/5 space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] font-mono text-muted-foreground">ExampleRobolectricTest</span>
+                      <Badge variant={testStatus === "PASSED" ? "default" : testStatus === "RUNNING" ? "secondary" : "outline"} className={testStatus === "PASSED" ? "bg-emerald-500" : ""}>
+                        {testStatus}
+                      </Badge>
+                    </div>
+                    <div className="space-y-2 font-mono text-[9px]">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Target SDK:</span>
+                        <span className="text-primary">36</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Assertion:</span>
+                        <span className="text-white">context.getString(R.string.app_name)</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Expected:</span>
+                        <span className="text-emerald-500">"GSMIFY Sports"</span>
+                      </div>
+                    </div>
+                    {testStatus === "PASSED" && (
+                      <div className="pt-2 flex items-center gap-2 text-emerald-500 text-[10px] font-bold">
+                        <CheckCircle className="size-3" />
+                        IDENTITY VERIFIED: CONSISTENCY MATCH 100%
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             <div className="space-y-6">
@@ -258,8 +304,12 @@ export default function Home() {
                         <p className="text-white">v2.7.0</p>
                       </div>
                       <div className="p-2 bg-black/40 rounded border border-white/5">
-                        <p className="text-muted-foreground">Retrofit</p>
-                        <p className="text-white">v2.12.0</p>
+                        <p className="text-muted-foreground">Robolectric</p>
+                        <p className="text-white">v4.16.1</p>
+                      </div>
+                      <div className="p-2 bg-black/40 rounded border border-white/5">
+                        <p className="text-muted-foreground">Roborazzi</p>
+                        <p className="text-white">v1.59.0</p>
                       </div>
                    </div>
                 </CardContent>
@@ -274,11 +324,11 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-muted-foreground leading-relaxed">
-                      <p className="text-primary">{"&gt;"} parallel_mode: incubating</p>
-                      <p className="text-emerald-500">{"&gt;"} config_cache: hit</p>
-                      <p className="text-amber-500">{"&gt;"} workers: {performance.workers} (max: 4)</p>
-                      <p className="text-primary/70">{"&gt;"} libs: compose, room, media3</p>
-                      <p className="animate-pulse">{"&gt;"} jvm_args: -Xmx4g -UTF-8</p>
+                      <p className="text-primary">{`&gt;`} parallel_mode: incubating</p>
+                      <p className="text-emerald-500">{`&gt;`} config_cache: hit</p>
+                      <p className="text-amber-500">{`&gt;`} workers: {performance.workers} (max: 4)</p>
+                      <p className="text-primary/70">{`&gt;`} libs: compose, room, media3, robolectric</p>
+                      <p className="animate-pulse">{`&gt;`} jvm_args: -Xmx4g -UTF-8</p>
                    </div>
                    <div className="flex flex-col gap-2">
                       <div className="flex justify-between text-[10px] font-mono">
@@ -399,3 +449,4 @@ export default function Home() {
     </div>
   )
 }
+
