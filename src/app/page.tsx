@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Zap, Globe, Cpu, AlertTriangle, Activity, Database, Landmark, Radar, Lock, FileText, CheckCircle, AlertCircle, HardDrive, Terminal } from "lucide-react"
+import { Shield, Zap, Globe, Cpu, AlertTriangle, Activity, Database, Landmark, Radar, Lock, FileText, CheckCircle, AlertCircle, HardDrive, Terminal, Layers, Box } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -227,6 +227,71 @@ export default function Home() {
             </div>
 
             <div className="space-y-6">
+              <Card className="glass-card border-primary/20 bg-card/60">
+                <CardHeader className="pb-2">
+                   <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2">
+                      <Box className="size-4" />
+                      Imperial Tech Manifest
+                   </CardTitle>
+                   <CardDescription className="text-[9px] uppercase">Loaded Sovereign Modules</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                   <div className="grid grid-cols-2 gap-2 text-[9px] font-mono">
+                      <div className="p-2 bg-black/40 rounded border border-white/5">
+                        <p className="text-muted-foreground">Kotlin</p>
+                        <p className="text-white">v2.2.10</p>
+                      </div>
+                      <div className="p-2 bg-black/40 rounded border border-white/5">
+                        <p className="text-muted-foreground">AGP</p>
+                        <p className="text-white">v9.1.1</p>
+                      </div>
+                      <div className="p-2 bg-black/40 rounded border border-white/5">
+                        <p className="text-muted-foreground">Firebase</p>
+                        <p className="text-white">v34.12.0</p>
+                      </div>
+                      <div className="p-2 bg-black/40 rounded border border-white/5">
+                        <p className="text-muted-foreground">Media3</p>
+                        <p className="text-white">v1.3.1</p>
+                      </div>
+                      <div className="p-2 bg-black/40 rounded border border-white/5">
+                        <p className="text-muted-foreground">Room</p>
+                        <p className="text-white">v2.7.0</p>
+                      </div>
+                      <div className="p-2 bg-black/40 rounded border border-white/5">
+                        <p className="text-muted-foreground">Retrofit</p>
+                        <p className="text-white">v2.12.0</p>
+                      </div>
+                   </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card border-destructive/20 overflow-hidden relative">
+                <CardHeader>
+                   <CardTitle className="text-xs uppercase font-bold text-destructive flex items-center gap-2">
+                      <Terminal className="size-4" />
+                      Runtime & Build Protocol
+                   </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                   <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-muted-foreground leading-relaxed">
+                      <p className="text-primary">{"&gt;"} parallel_mode: incubating</p>
+                      <p className="text-emerald-500">{"&gt;"} config_cache: hit</p>
+                      <p className="text-amber-500">{"&gt;"} workers: {performance.workers} (max: 4)</p>
+                      <p className="text-primary/70">{"&gt;"} libs: compose, room, media3</p>
+                      <p className="animate-pulse">{"&gt;"} jvm_args: -Xmx4g -UTF-8</p>
+                   </div>
+                   <div className="flex flex-col gap-2">
+                      <div className="flex justify-between text-[10px] font-mono">
+                         <span className="text-muted-foreground">CORE STACK</span>
+                         <span className="text-primary">OPTIMIZED</span>
+                      </div>
+                      <div className="h-1 bg-muted rounded-full overflow-hidden">
+                         <div className="h-full bg-primary transition-all duration-500" style={{ width: `${performance.cpu}%` }} />
+                      </div>
+                   </div>
+                </CardContent>
+              </Card>
+
               <Card className="glass-card">
                 <CardHeader>
                   <CardTitle className="font-headline">Treasury Pulse</CardTitle>
@@ -266,33 +331,6 @@ export default function Home() {
                         ) : "Execute Ledger Audit"}
                      </Button>
                   </div>
-                </CardContent>
-              </Card>
-
-              <Card className="glass-card border-destructive/20 overflow-hidden relative">
-                <CardHeader>
-                   <CardTitle className="text-xs uppercase font-bold text-destructive flex items-center gap-2">
-                      <Terminal className="size-4" />
-                      Runtime & Build Protocol
-                   </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                   <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-muted-foreground leading-relaxed">
-                      <p className="text-primary">{"&gt;"} parallel_mode: incubating</p>
-                      <p className="text-emerald-500">{"&gt;"} config_cache: hit</p>
-                      <p className="text-amber-500">{"&gt;"} workers: {performance.workers} (max: 4)</p>
-                      <p className="text-primary/70">{"&gt;"} plugins: android, kotlin.compose, ksp</p>
-                      <p className="animate-pulse">{"&gt;"} jvm_args: -Xmx4g -UTF-8</p>
-                   </div>
-                   <div className="flex flex-col gap-2">
-                      <div className="flex justify-between text-[10px] font-mono">
-                         <span className="text-muted-foreground">CPU STACK</span>
-                         <span className="text-primary">{performance.cpu.toFixed(1)}%</span>
-                      </div>
-                      <div className="h-1 bg-muted rounded-full overflow-hidden">
-                         <div className="h-full bg-primary transition-all duration-500" style={{ width: `${performance.cpu}%` }} />
-                      </div>
-                   </div>
                 </CardContent>
               </Card>
             </div>
