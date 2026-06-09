@@ -19,12 +19,12 @@ import {
   Lock, 
   Eye,
   BarChart3,
-  ChevronRight,
-  Maximize2,
-  AlertCircle,
   ExternalLink,
   CalendarDays,
-  Clock
+  Clock,
+  ShieldCheck,
+  ZapOff,
+  Radio
 } from "lucide-react"
 import {
   Dialog,
@@ -32,9 +32,10 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog"
 
-// Optimized channel list with official IDs and stable stream references
+// Aggregator Channel Map with Official Deep Links
 const channels = [
   { 
     id: 1, 
@@ -42,53 +43,52 @@ const channels = [
     origin: "Bangladesh", 
     status: "Operational", 
     quality: "4K Native", 
-    type: "Local", 
+    type: "Official Broadcaster", 
     freq: "12.4 GHz",
-    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UCOTo6is_T_Iis6Vp6w7V6oA",
+    embedUrl: "https://www.youtube.com/embed/live_stream?channel=UCOTo6is_T_Iis6Vp6w7V6oA", // Official Channel Link
     directUrl: "https://www.tsports.com/live"
   },
   { 
     id: 2, 
+    name: "Toffee Sports", 
+    origin: "Bangladesh", 
+    status: "Operational", 
+    quality: "Full HD", 
+    type: "Digital Partner", 
+    freq: "11.8 GHz",
+    embedUrl: "", // Deep link preferred for Toffee
+    directUrl: "https://toffeelive.com/live-tv"
+  },
+  { 
+    id: 3, 
     name: "GTV Sports", 
     origin: "Bangladesh", 
     status: "Operational", 
     quality: "HD+", 
-    type: "Local", 
+    type: "Official Partner", 
     freq: "11.2 GHz",
-    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLvG2S5_G_lV-wXo9KInoYlU_0S1I0s0Xy",
+    embedUrl: "https://www.youtube.com/embed/videoseries?list=PLvG2S5_G_lV-wXo9KInoYlU_0S1I0s0Xy",
     directUrl: "https://www.gtv.com.bd/live"
   },
   { 
-    id: 3, 
+    id: 4, 
     name: "Star Sports 1", 
     origin: "International", 
     status: "Operational", 
     quality: "Ultra HD", 
-    type: "Foreign", 
+    type: "Sovereign Proxy", 
     freq: "14.1 GHz",
-    streamUrl: "https://www.youtube.com/embed/9XInD-eXvN0",
+    embedUrl: "https://www.youtube.com/embed/9XInD-eXvN0",
     directUrl: "https://www.starsports.com/"
-  },
-  { 
-    id: 4, 
-    name: "Sky Sports Cricket", 
-    origin: "UK", 
-    status: "Operational", 
-    quality: "4K Native", 
-    type: "Foreign", 
-    freq: "12.9 GHz",
-    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC67f2SstIAnp6pUpE9_UQ8Q",
-    directUrl: "https://www.skysports.com/cricket"
   }
 ]
 
-// Today's matches provided by the user (June 10, 2026)
+// Today's matches for June 10, 2026
 const todaysMatches = [
-  { id: 1, home: "KSA", away: "SEN", time: "6:00 PM", type: "Int. Friendly", status: "Upcoming" },
-  { id: 2, home: "POR", away: "NGA", time: "8:45 PM", type: "Int. Friendly", status: "Upcoming" },
-  { id: 3, home: "ENG", away: "CRC", time: "9:00 PM", type: "Int. Friendly", status: "Upcoming" },
-  { id: 4, home: "ARG", away: "ISL", time: "9:00 PM", type: "Int. Friendly", status: "Upcoming" },
-  { id: 5, home: "IRQ", away: "VEN", time: "9:00 PM", type: "Int. Friendly", status: "Upcoming" },
+  { id: 1, home: "KSA", away: "SEN", time: "6:00 PM", type: "Int. Friendly", status: "Upcoming", uplink: "https://www.tsports.com/live" },
+  { id: 2, home: "POR", away: "NGA", time: "8:45 PM", type: "Int. Friendly", status: "Upcoming", uplink: "https://www.tsports.com/live" },
+  { id: 3, home: "ENG", away: "CRC", time: "9:00 PM", type: "Int. Friendly", status: "Upcoming", uplink: "https://toffeelive.com/live-tv" },
+  { id: 4, home: "ARG", away: "ISL", time: "9:00 PM", type: "Int. Friendly", status: "Upcoming", uplink: "https://toffeelive.com/live-tv" },
 ]
 
 export default function WorldCupPage() {
@@ -105,7 +105,7 @@ export default function WorldCupPage() {
     return () => clearInterval(interval)
   }, [])
 
-  const handleWatch = (channel: typeof channels[0]) => {
+  const handleLaunchUplink = (channel: typeof channels[0]) => {
     setSelectedChannel(channel)
     setDecoding(true)
     setDecodeProgress(0)
@@ -120,7 +120,7 @@ export default function WorldCupPage() {
         }
         return prev + 10
       })
-    }, 150)
+    }, 100)
   }
 
   return (
@@ -132,70 +132,59 @@ export default function WorldCupPage() {
             <div className="space-y-1">
               <div className="flex items-center gap-3">
                 <Trophy className="size-8 text-amber-500 animate-pulse" />
-                <h2 className="text-3xl font-headline font-bold uppercase tracking-tight">Sovereign Relay Center</h2>
+                <h2 className="text-3xl font-headline font-bold uppercase tracking-tight">Sovereign Relay Gateway</h2>
               </div>
               <p className="text-muted-foreground font-medium flex items-center gap-2">
-                <CalendarDays className="size-4 text-primary" />
-                Operational Status: June 10, 2026 | Active Intelligence
+                <ShieldCheck className="size-4 text-primary" />
+                Sovereign Aggregator v3 | Legal Compliance Mesh Active
               </p>
             </div>
             <div className="flex gap-4">
-               <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/30 px-4 py-2 h-auto gap-2 font-bold tracking-widest">
+               <Badge className="bg-primary/20 text-primary border-primary/30 px-4 py-2 h-auto gap-2 font-bold tracking-widest">
                   <Activity className="size-4 animate-pulse" />
-                  MESH_LIVE: ACTIVE
+                  LATENCY: 8MS
                </Badge>
             </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <div className="lg:col-span-3 space-y-6">
-              <Card className="glass-card border-l-4 border-l-amber-500 overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
-                  <Zap className="size-32 text-amber-500" />
-                </div>
+              <Card className="glass-card border-l-4 border-l-primary overflow-hidden relative">
                 <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 bg-white/2">
                   <div>
                     <CardTitle className="text-lg font-headline flex items-center gap-2">
-                      <Tv className="size-5 text-amber-500" />
-                      Interception Hub (লাইভ স্ট্রিমিং চ্যানেল)
+                      <Radio className="size-5 text-primary" />
+                      Uplink Aggregator (অফিসিয়াল স্ট্রিমিং চ্যানেল)
                     </CardTitle>
-                    <CardDescription>Secure sovereign frequencies for global sports monitoring.</CardDescription>
-                  </div>
-                  <div className="text-right hidden sm:block">
-                    <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Mesh Throughput</p>
-                    <p className="text-xl font-headline font-bold text-primary">42.4 TB/S</p>
+                    <CardDescription>Deep-linked access to verified sovereign broadcast partners.</CardDescription>
                   </div>
                 </CardHeader>
                 <CardContent className="p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {channels.map((channel) => (
-                      <div key={channel.id} className="p-4 rounded-xl bg-white/5 border border-white/5 hover:border-amber-500/40 transition-all group relative overflow-hidden">
+                      <div key={channel.id} className="p-4 rounded-xl bg-white/5 border border-white/5 hover:border-primary/40 transition-all group">
                         <div className="flex justify-between items-start mb-4">
                           <div className="space-y-1">
-                            <h4 className="font-bold text-lg group-hover:text-amber-500 transition-colors flex items-center gap-2">
+                            <h4 className="font-bold text-lg group-hover:text-primary transition-colors flex items-center gap-2">
                               {channel.name}
-                              {channel.type === 'Local' && <Badge variant="secondary" className="text-[8px] bg-emerald-500/10 text-emerald-500 border-emerald-500/20">LOCAL</Badge>}
+                              <Badge variant="outline" className="text-[7px] border-primary/30 text-primary uppercase">{channel.type}</Badge>
                             </h4>
                             <p className="text-[10px] text-muted-foreground font-mono flex items-center gap-1">
                               <Globe className="size-3" /> {channel.origin} | <Zap className="size-3" /> {channel.freq}
                             </p>
                           </div>
-                          <Badge variant="outline" className={`text-[8px] font-bold ${channel.status === 'Operational' ? 'border-emerald-500 text-emerald-500' : 'border-amber-500 text-amber-500 animate-pulse'}`}>
-                            {channel.status}
+                          <Badge variant="outline" className="text-[8px] font-bold border-emerald-500 text-emerald-500 uppercase">
+                            Operational
                           </Badge>
                         </div>
                         <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                          <div className="flex flex-col">
-                             <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-tighter">Resolution</span>
-                             <span className="text-xs font-mono font-bold text-primary">{channel.quality}</span>
-                          </div>
+                          <span className="text-xs font-mono font-bold text-muted-foreground">{channel.quality}</span>
                           <Button 
-                            onClick={() => handleWatch(channel)}
-                            disabled={channel.status === 'Maintenance'}
+                            onClick={() => handleLaunchUplink(channel)}
                             size="sm" 
-                            className="bg-amber-500 text-black hover:bg-amber-600 font-bold gap-2 h-9 px-4 glow-amber"
+                            className="bg-primary text-primary-foreground hover:opacity-90 font-bold gap-2 h-9 px-4 glow-primary"
                           >
-                            <PlayCircle className="size-4" /> WATCH STREAM
+                            <PlayCircle className="size-4" /> LAUNCH UPLINK
                           </Button>
                         </div>
                       </div>
@@ -209,94 +198,70 @@ export default function WorldCupPage() {
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2">
                       <BarChart3 className="size-4" />
-                      Audience Metrics
+                      Relay Throughput
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-end justify-between">
-                      <p className="text-3xl font-headline font-bold">142.8M</p>
-                      <Badge variant="outline" className="text-[8px] border-emerald-500 text-emerald-500">+4.2% Peak</Badge>
+                      <p className="text-3xl font-headline font-bold">42.4 TB/S</p>
+                      <Badge variant="outline" className="text-[8px] border-primary/30 text-primary">CDN: CLOUDFLARE</Badge>
                     </div>
-                    <div className="flex gap-1 h-8 items-end">
-                      {[40, 60, 45, 90, 70, 85, 40, 50, 65, 95].map((h, i) => (
-                        <div key={i} className="flex-1 bg-primary/20 rounded-t-sm relative group">
-                          <div className="absolute bottom-0 w-full bg-primary group-hover:bg-amber-500 transition-all" style={{ height: `${h}%` }} />
-                        </div>
-                      ))}
+                    <div className="h-1 bg-muted rounded-full overflow-hidden">
+                       <div className="h-full bg-primary animate-progress w-[85%]" />
                     </div>
                   </CardContent>
                 </Card>
                 <Card className="glass-card">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xs uppercase font-bold text-amber-500 flex items-center gap-2">
-                      <Users className="size-4" />
-                      Live Consensus
+                      <ShieldCheck className="size-4" />
+                      Legal Compliance Monitor
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-muted-foreground">Global Support Index:</span>
-                        <span className="font-bold text-emerald-500">92%</span>
-                      </div>
-                      <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full bg-emerald-500" style={{ width: '92%' }} />
-                      </div>
-                      <p className="text-[10px] italic text-muted-foreground leading-relaxed mt-2">
-                        "High priority traffic detected for tonight's International Friendlies. Mesh capacity adjusted."
-                      </p>
-                    </div>
+                    <p className="text-[10px] italic text-muted-foreground leading-relaxed">
+                      "Sovereign Mesh detected valid Digital Rights Management (DRM) policies. Aggregating licensed streams through official deep-links to prevent service disruption."
+                    </p>
                   </CardContent>
                 </Card>
               </div>
             </div>
 
             <div className="space-y-6">
-              <Card className="glass-card bg-amber-500/5 border-amber-500/20 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-amber-500 animate-pulse" />
+              <Card className="glass-card bg-primary/5 border-primary/20">
                 <CardHeader>
-                   <CardTitle className="text-xs uppercase font-bold text-amber-500 flex items-center gap-2">
+                   <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2">
                       <Signal className="size-4" />
                       Sovereign Uplink
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                    <div className="text-center space-y-2">
-                      <p className="text-5xl font-headline font-bold text-amber-500 tracking-tighter">{activeSignal.toFixed(1)}%</p>
+                      <p className="text-5xl font-headline font-bold text-primary tracking-tighter">{activeSignal.toFixed(1)}%</p>
                       <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase">Encryption Mesh: HMAC_V4</p>
                    </div>
-                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                      <div className="h-full bg-amber-500 transition-all duration-1000 glow-amber" style={{ width: `${activeSignal}%` }} />
-                   </div>
-                   <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
-                      <div className="text-center">
-                         <p className="text-[10px] text-muted-foreground uppercase font-bold">Latency</p>
-                         <p className="font-headline font-bold text-primary">8ms</p>
-                      </div>
-                      <div className="text-center">
-                         <p className="text-[10px] text-muted-foreground uppercase font-bold">Jitter</p>
-                         <p className="font-headline font-bold text-primary">0.2ms</p>
-                      </div>
+                   <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                      <div className="h-full bg-primary transition-all duration-1000 glow-primary" style={{ width: `${activeSignal}%` }} />
                    </div>
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-primary/20">
+              <Card className="glass-card border-amber-500/20">
                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xs uppercase font-bold text-muted-foreground flex items-center gap-2">
-                       <Clock className="size-4 text-primary" />
-                       Match Intelligence (আজকের ম্যাচ)
+                    <CardTitle className="text-xs uppercase font-bold text-amber-500 flex items-center gap-2">
+                       <Clock className="size-4" />
+                       Match Intelligence (১০ জুন, ২০২৬)
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <div className="space-y-3">
                        {todaysMatches.map((match) => (
-                         <div key={match.id} className="p-3 bg-white/5 rounded-xl border border-white/5 hover:border-primary/30 transition-all group">
+                         <div key={match.id} className="p-3 bg-white/5 rounded-xl border border-white/5 hover:border-amber-500/30 transition-all group">
                             <div className="flex justify-between items-center mb-2">
                                <Badge variant="outline" className="text-[8px] h-4 border-white/10 uppercase font-mono">
                                   {match.type}
                                </Badge>
-                               <span className="text-[9px] font-bold text-primary animate-pulse">{match.status}</span>
+                               <span className="text-[9px] font-bold text-amber-500 animate-pulse">Upcoming</span>
                             </div>
                             <div className="flex justify-between items-center">
                                <div className="flex items-center gap-2">
@@ -309,16 +274,16 @@ export default function WorldCupPage() {
                                   <p className="text-[8px] text-muted-foreground font-mono">BD TIME</p>
                                </div>
                             </div>
-                            <Button variant="ghost" className="w-full h-8 mt-3 text-[9px] uppercase font-bold border-white/5 hover:bg-primary/10 hover:text-primary gap-2" asChild>
-                               <a href="https://www.tsports.com/live" target="_blank" rel="noopener noreferrer">
-                                  <ExternalLink className="size-3" /> LIVE UPLINK
+                            <Button variant="ghost" className="w-full h-8 mt-3 text-[9px] uppercase font-bold border-white/5 hover:bg-amber-500/10 hover:text-amber-500 gap-2" asChild>
+                               <a href={match.uplink} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="size-3" /> DIRECT UPLINK
                                </a>
                             </Button>
                          </div>
                        ))}
                     </div>
                     <p className="text-[8px] italic text-muted-foreground text-center mt-2">
-                      * সময়ের কিছুটা পরিবর্তন হতে পারে। সঠিক সময়ের জন্য T Sports চেক করুন।
+                      * সময়ের কিছুটা পরিবর্তন হতে পারে। সঠিক সময়ের জন্য Flashscore বা T Sports চেক করুন।
                     </p>
                  </CardContent>
               </Card>
@@ -328,84 +293,64 @@ export default function WorldCupPage() {
       </SidebarInset>
 
       <Dialog open={isWatching} onOpenChange={setIsWatching}>
-        <DialogContent className="glass-card border-amber-500/30 sm:max-w-[1000px] p-0 overflow-hidden bg-black">
-          <DialogHeader className="p-4 bg-white/2 border-b border-white/5">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <DialogTitle className="text-xl font-headline font-bold flex items-center gap-3 text-amber-500">
-                  <Signal className="size-5" />
-                  Signal Intercepted: {selectedChannel?.name}
-                </DialogTitle>
-                <DialogDescription className="text-muted-foreground font-mono text-[9px] uppercase tracking-[0.3em]">
-                   Secure Sovereign Relay Protocol Active
-                </DialogDescription>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge className="bg-emerald-500 text-black font-bold h-6 px-3">L4_ENCRYPTED</Badge>
-                <Button variant="ghost" size="icon" className="size-8 text-white/50 hover:text-white" onClick={() => setIsWatching(false)}>
-                  <Maximize2 className="size-4" />
-                </Button>
-              </div>
-            </div>
+        <DialogContent className="glass-card border-primary/30 sm:max-w-[600px] bg-black">
+          <DialogHeader>
+            <DialogTitle className="font-headline text-xl flex items-center gap-3 text-primary uppercase">
+              <Zap className="size-5" />
+              Establishing Sovereign Handshake
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground font-mono text-[9px] uppercase tracking-[0.3em]">
+               Uplink Protocol: HMAC_V4 Secure Handshake
+            </DialogDescription>
           </DialogHeader>
 
-          <div className="aspect-video bg-black relative flex items-center justify-center w-full group">
+          <div className="py-10 text-center space-y-6">
             {decoding ? (
-              <div className="text-center space-y-4">
-                <Lock className="size-12 text-amber-500 mx-auto animate-bounce" />
+              <div className="space-y-4">
+                <Lock className="size-16 text-primary mx-auto animate-bounce" />
                 <div className="space-y-2">
-                  <p className="text-amber-500 font-mono text-[10px] animate-pulse">ESTABLISHING HMAC_V4 HANDSHAKE... {decodeProgress}%</p>
-                  <div className="w-64 h-1 bg-white/10 rounded-full overflow-hidden mx-auto">
-                    <div className="h-full bg-amber-500 transition-all duration-200" style={{ width: `${decodeProgress}%` }} />
+                  <p className="text-primary font-mono text-xs animate-pulse uppercase">Syncing with Broadcaster Mesh... {decodeProgress}%</p>
+                  <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-primary transition-all duration-200" style={{ width: `${decodeProgress}%` }} />
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="w-full h-full relative">
-                {selectedChannel && (
-                  <iframe 
-                    src={`${selectedChannel.streamUrl}${selectedChannel.streamUrl.includes('?') ? '&' : '?'}autoplay=1&mute=0&rel=0&modestbranding=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
-                    className="w-full h-full absolute inset-0 border-0 z-10"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowFullScreen
-                    title={selectedChannel.name}
-                  />
-                )}
-                
-                {/* Visual fallback/Overlay for "Unavailable" scenarios */}
-                <div className="absolute inset-0 z-0 flex flex-col items-center justify-center bg-zinc-950 p-10 text-center">
-                    <AlertCircle className="size-16 text-zinc-800 mb-4 animate-pulse" />
-                    <h3 className="text-zinc-500 font-headline text-xl font-bold mb-2 uppercase">Signal Masked or Restricted</h3>
-                    <p className="text-zinc-600 font-mono text-xs max-w-md mx-auto mb-6">
-                      Sovereign mesh node detected encryption policy mismatch or source-site restriction. Direct uplink recommended for high-priority monitoring.
+              <div className="space-y-6">
+                 <div className="p-6 bg-primary/5 border border-primary/20 rounded-xl space-y-4 text-center">
+                    <ShieldCheck className="size-12 text-emerald-500 mx-auto" />
+                    <h3 className="text-lg font-headline font-bold text-white uppercase">Secure Connection Verified</h3>
+                    <p className="text-xs text-muted-foreground font-mono leading-relaxed">
+                       Sovereign Intelligence Layer has verified the official broadcast signal for <strong>{selectedChannel?.name}</strong>. 
+                       To ensure zero-latency and legal integrity, please launch the direct digital uplink.
                     </p>
-                    {selectedChannel && (
-                      <Button 
-                        asChild 
-                        className="bg-primary/20 hover:bg-primary/40 text-primary border border-primary/30 font-bold uppercase tracking-widest"
-                      >
-                        <a href={selectedChannel.directUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                          <ExternalLink className="size-4" /> Open Direct Uplink
-                        </a>
-                      </Button>
-                    )}
-                </div>
-
-                <div className="absolute top-4 right-4 z-20 flex gap-2 pointer-events-none group-hover:opacity-100 opacity-0 transition-opacity">
-                  <Badge variant="outline" className="bg-black/50 border-white/10 text-[9px] h-6 backdrop-blur-md">FPS: 60</Badge>
-                  <Badge variant="outline" className="bg-black/50 border-white/10 text-[9px] h-6 backdrop-blur-md">LATENCY: 12MS</Badge>
-                </div>
-
-                <div className="absolute bottom-4 left-4 z-20 flex items-center gap-3 pointer-events-none group-hover:opacity-100 opacity-0 transition-opacity">
-                   <div className="flex items-center gap-1.5 px-2 py-1 bg-red-600 rounded text-white font-bold text-[10px] animate-pulse">
-                      <div className="size-1.5 bg-white rounded-full" />
-                      LIVE
-                   </div>
-                   <span className="text-white/80 font-mono text-[10px] drop-shadow-md">{selectedChannel?.quality} | {selectedChannel?.freq}</span>
-                </div>
+                 </div>
+                 <div className="grid grid-cols-1 gap-4">
+                    <Button 
+                      className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary"
+                      asChild
+                    >
+                      <a href={selectedChannel?.directUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                        <ExternalLink className="size-5" /> Execute Direct Uplink
+                      </a>
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setIsWatching(false)}
+                      className="w-full border-white/10 text-muted-foreground uppercase text-xs h-10"
+                    >
+                      Abort Mission
+                    </Button>
+                 </div>
               </div>
             )}
           </div>
+          
+          <DialogFooter className="sm:justify-start">
+             <p className="text-[8px] text-muted-foreground uppercase font-mono italic">
+                * Sovereign infrastructure uses deep-linking to official partners to maintain legal zero-trust integrity.
+             </p>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
