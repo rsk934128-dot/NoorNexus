@@ -39,7 +39,7 @@ const channels = [
     quality: "4K Native", 
     type: "Local", 
     freq: "12.4 GHz",
-    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC_p61_O_WkI_9yH_V_0zM9A" // Official Channel Embed Placeholder
+    streamUrl: "https://www.youtube.com/embed/j_n40F47NGE" // Example high-quality sports content
   },
   { 
     id: 2, 
@@ -49,7 +49,7 @@ const channels = [
     quality: "HD+", 
     type: "Local", 
     freq: "11.2 GHz",
-    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UCoKj6uS9D1X5l_Yp9X_fXiw"
+    streamUrl: "https://www.youtube.com/embed/4z958n8P1uE"
   },
   { 
     id: 3, 
@@ -59,7 +59,7 @@ const channels = [
     quality: "Ultra HD", 
     type: "Foreign", 
     freq: "14.1 GHz",
-    streamUrl: "https://www.youtube.com/embed/4z958n8P1uE" // Representative Sports Video
+    streamUrl: "https://www.youtube.com/embed/9XInD-eXvN0"
   },
   { 
     id: 4, 
@@ -69,7 +69,7 @@ const channels = [
     quality: "HD", 
     type: "Foreign", 
     freq: "13.8 GHz",
-    streamUrl: "https://www.youtube.com/embed/9XInD-eXvN0"
+    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLpA-pGst005YQWv0-eFmE4HqY13uHAnYn"
   },
   { 
     id: 5, 
@@ -79,7 +79,7 @@ const channels = [
     quality: "HD", 
     type: "Foreign", 
     freq: "15.2 GHz",
-    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLpA-pGst005YQWv0-eFmE4HqY13uHAnYn"
+    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC8W0G2v-Lg7XmI-6Xp9Wp9A"
   },
   { 
     id: 6, 
@@ -89,7 +89,7 @@ const channels = [
     quality: "4K Native", 
     type: "Foreign", 
     freq: "12.9 GHz",
-    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC0O_h6r9N0Ww9pE-Y8C0z0A"
+    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLvG2S5_G_lV-wXo9KInoYlU_0S1I0s0Xy"
   },
   { 
     id: 7, 
@@ -99,7 +99,7 @@ const channels = [
     quality: "HD+", 
     type: "Foreign", 
     freq: "14.5 GHz",
-    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC8W0G2v-Lg7XmI-6Xp9Wp9A"
+    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UC_p61_O_WkI_9yH_V_0zM9A"
   },
   { 
     id: 8, 
@@ -109,7 +109,7 @@ const channels = [
     quality: "Standard", 
     type: "Local", 
     freq: "10.1 GHz",
-    streamUrl: "https://www.youtube.com/embed/videoseries?list=PLvG2S5_G_lV-wXo9KInoYlU_0S1I0s0Xy"
+    streamUrl: "https://www.youtube.com/embed/live_stream?channel=UCoKj6uS9D1X5l_Yp9X_fXiw"
   },
 ]
 
@@ -370,19 +370,13 @@ export default function WorldCupPage() {
               </div>
             ) : (
               <div className="w-full h-full relative">
-                {selectedChannel?.streamUrl ? (
-                  <iframe 
-                    src={selectedChannel.streamUrl} 
-                    className="w-full h-full absolute inset-0 border-0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowFullScreen
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full text-muted-foreground space-y-2">
-                    <Tv className="size-16 opacity-20" />
-                    <p className="font-mono text-xs">SIGNAL LOST: MAINTENANCE MODE ACTIVE</p>
-                  </div>
-                )}
+                <iframe 
+                  src={`${selectedChannel?.streamUrl}?autoplay=1&mute=0&rel=0`}
+                  className="w-full h-full absolute inset-0 border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  allowFullScreen
+                  title={selectedChannel?.name}
+                />
                 
                 <div className="absolute top-4 right-4 z-20 flex gap-2 pointer-events-none">
                   <Badge variant="outline" className="bg-black/50 border-white/10 text-[9px] h-6 backdrop-blur-md">FPS: 60</Badge>
@@ -399,8 +393,8 @@ export default function WorldCupPage() {
               </div>
             )}
           </div>
-        </DialogContent>
-      </Dialog>
+        </main>
+      </SidebarInset>
     </div>
   )
 }
