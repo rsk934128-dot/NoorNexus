@@ -19,7 +19,8 @@ import {
   Lock, 
   Eye,
   BarChart3,
-  ChevronRight
+  ChevronRight,
+  Maximize2
 } from "lucide-react"
 import {
   Dialog,
@@ -28,17 +29,88 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import Image from "next/image"
 
 const channels = [
-  { id: 1, name: "T Sports", origin: "Bangladesh", status: "Operational", quality: "4K Native", type: "Local", freq: "12.4 GHz" },
-  { id: 2, name: "GTV Sports", origin: "Bangladesh", status: "Operational", quality: "HD+", type: "Local", freq: "11.2 GHz" },
-  { id: 3, name: "Star Sports 1", origin: "International", status: "Operational", quality: "Ultra HD", type: "Foreign", freq: "14.1 GHz" },
-  { id: 4, name: "Sony Sports Ten 1", origin: "International", status: "Operational", quality: "HD", type: "Foreign", freq: "13.8 GHz" },
-  { id: 5, name: "Willow TV", origin: "USA/Global", status: "Maintenance", quality: "HD", type: "Foreign", freq: "15.2 GHz" },
-  { id: 6, name: "Sky Sports Cricket", origin: "UK", status: "Operational", quality: "4K Native", type: "Foreign", freq: "12.9 GHz" },
-  { id: 7, name: "SuperSport", origin: "South Africa", status: "Operational", quality: "HD+", type: "Foreign", freq: "14.5 GHz" },
-  { id: 8, name: "BTV World", origin: "Bangladesh", status: "Operational", quality: "Standard", type: "Local", freq: "10.1 GHz" },
+  { 
+    id: 1, 
+    name: "T Sports", 
+    origin: "Bangladesh", 
+    status: "Operational", 
+    quality: "4K Native", 
+    type: "Local", 
+    freq: "12.4 GHz",
+    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" // Placeholder for actual stream
+  },
+  { 
+    id: 2, 
+    name: "GTV Sports", 
+    origin: "Bangladesh", 
+    status: "Operational", 
+    quality: "HD+", 
+    type: "Local", 
+    freq: "11.2 GHz",
+    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+  },
+  { 
+    id: 3, 
+    name: "Star Sports 1", 
+    origin: "International", 
+    status: "Operational", 
+    quality: "Ultra HD", 
+    type: "Foreign", 
+    freq: "14.1 GHz",
+    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+  },
+  { 
+    id: 4, 
+    name: "Sony Sports Ten 1", 
+    origin: "International", 
+    status: "Operational", 
+    quality: "HD", 
+    type: "Foreign", 
+    freq: "13.8 GHz",
+    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+  },
+  { 
+    id: 5, 
+    name: "Willow TV", 
+    origin: "USA/Global", 
+    status: "Maintenance", 
+    quality: "HD", 
+    type: "Foreign", 
+    freq: "15.2 GHz",
+    streamUrl: ""
+  },
+  { 
+    id: 6, 
+    name: "Sky Sports Cricket", 
+    origin: "UK", 
+    status: "Operational", 
+    quality: "4K Native", 
+    type: "Foreign", 
+    freq: "12.9 GHz",
+    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+  },
+  { 
+    id: 7, 
+    name: "SuperSport", 
+    origin: "South Africa", 
+    status: "Operational", 
+    quality: "HD+", 
+    type: "Foreign", 
+    freq: "14.5 GHz",
+    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+  },
+  { 
+    id: 8, 
+    name: "BTV World", 
+    origin: "Bangladesh", 
+    status: "Operational", 
+    quality: "Standard", 
+    type: "Local", 
+    freq: "10.1 GHz",
+    streamUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+  },
 ]
 
 export default function WorldCupPage() {
@@ -65,12 +137,12 @@ export default function WorldCupPage() {
       setDecodeProgress(prev => {
         if (prev >= 100) {
           clearInterval(progressInterval)
-          setDecoding(false)
+          setTimeout(() => setDecoding(false), 500)
           return 100
         }
-        return prev + 5
+        return prev + 10
       })
-    }, 100)
+    }, 150)
   }
 
   return (
@@ -104,7 +176,7 @@ export default function WorldCupPage() {
                   <div>
                     <CardTitle className="text-lg font-headline flex items-center gap-2">
                       <Tv className="size-5 text-amber-500" />
-                      Interception Hub (দেশি ও বিদেশি চ্যানেল)
+                      Interception Hub (লাইভ স্ট্রিমিং চ্যানেল)
                     </CardTitle>
                     <CardDescription>Select a secure frequency to tap into the live transmission.</CardDescription>
                   </div>
@@ -258,88 +330,74 @@ export default function WorldCupPage() {
                     </Button>
                  </CardContent>
               </Card>
-
-              <Card className="glass-card border-primary/20 bg-primary/5">
-                <CardHeader>
-                  <CardTitle className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
-                    <Eye className="size-3" />
-                    System Logs
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2 font-mono text-[9px] text-primary/70">
-                  <p className="flex items-center gap-2">
-                    <span className="text-white/20">14:22:01</span> [OK] DECODING L4_STREAM
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <span className="text-white/20">14:22:05</span> [OK] HMAC_V4_HANDSHAKE_VALID
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <span className="text-white/20">14:22:12</span> [OK] REGION: SG-EDGE-01
-                  </p>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </main>
       </SidebarInset>
 
       <Dialog open={isWatching} onOpenChange={setIsWatching}>
-        <DialogContent className="glass-card border-amber-500/30 sm:max-w-[900px] p-0 overflow-hidden bg-black">
-          <DialogHeader className="p-6 bg-white/2 border-b border-white/5">
+        <DialogContent className="glass-card border-amber-500/30 sm:max-w-[1000px] p-0 overflow-hidden bg-black">
+          <DialogHeader className="p-4 bg-white/2 border-b border-white/5">
             <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <DialogTitle className="text-2xl font-headline font-bold flex items-center gap-3 text-amber-500">
-                  <Signal className="size-6" />
+              <div className="space-y-0.5">
+                <DialogTitle className="text-xl font-headline font-bold flex items-center gap-3 text-amber-500">
+                  <Signal className="size-5" />
                   Signal Intercepted: {selectedChannel?.name}
                 </DialogTitle>
-                <DialogDescription className="text-muted-foreground font-mono text-[10px] uppercase tracking-[0.3em]">
+                <DialogDescription className="text-muted-foreground font-mono text-[9px] uppercase tracking-[0.3em]">
                    Secure Sovereign Relay Protocol Active
                 </DialogDescription>
               </div>
-              <Badge className="bg-emerald-500 text-black font-bold h-6 px-3">L4_ENCRYPTED</Badge>
+              <div className="flex items-center gap-2">
+                <Badge className="bg-emerald-500 text-black font-bold h-6 px-3">L4_ENCRYPTED</Badge>
+                <Button variant="ghost" size="icon" className="size-8 text-white/50 hover:text-white" onClick={() => setIsWatching(false)}>
+                  <Maximize2 className="size-4" />
+                </Button>
+              </div>
             </div>
           </DialogHeader>
 
-          <div className="aspect-video bg-black relative flex items-center justify-center">
+          <div className="aspect-video bg-black relative flex items-center justify-center w-full">
             {decoding ? (
               <div className="text-center space-y-4">
-                <Lock className="size-16 text-amber-500 mx-auto animate-bounce" />
+                <Lock className="size-12 text-amber-500 mx-auto animate-bounce" />
                 <div className="space-y-2">
-                  <p className="text-amber-500 font-mono text-xs animate-pulse">DECODING SOVEREIGN SIGNAL... {decodeProgress}%</p>
+                  <p className="text-amber-500 font-mono text-[10px] animate-pulse">ESTABLISHING HMAC_V4 HANDSHAKE... {decodeProgress}%</p>
                   <div className="w-64 h-1 bg-white/10 rounded-full overflow-hidden mx-auto">
-                    <div className="h-full bg-amber-500 transition-all duration-100" style={{ width: `${decodeProgress}%` }} />
+                    <div className="h-full bg-amber-500 transition-all duration-200" style={{ width: `${decodeProgress}%` }} />
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="w-full h-full relative group">
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 opacity-60" />
-                <Image 
-                  src={`https://picsum.photos/seed/${selectedChannel?.id || 1}/1280/720`} 
-                  alt="Live Stream" 
-                  fill 
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity">
-                   <div className="size-20 bg-amber-500/80 rounded-full flex items-center justify-center text-black cursor-pointer glow-amber">
-                      <PlayCircle className="size-10" />
-                   </div>
+              <div className="w-full h-full relative">
+                {selectedChannel?.streamUrl ? (
+                  <iframe 
+                    src={selectedChannel.streamUrl} 
+                    className="w-full h-full absolute inset-0 border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowFullScreen
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full text-muted-foreground space-y-2">
+                    <Tv className="size-16 opacity-20" />
+                    <p className="font-mono text-xs">SIGNAL LOST: MAINTENANCE MODE ACTIVE</p>
+                  </div>
+                )}
+                
+                <div className="absolute top-4 right-4 z-20 flex gap-2 pointer-events-none">
+                  <Badge variant="outline" className="bg-black/50 border-white/10 text-[9px] h-6 backdrop-blur-md">FPS: 60</Badge>
+                  <Badge variant="outline" className="bg-black/50 border-white/10 text-[9px] h-6 backdrop-blur-md">LATENCY: 12MS</Badge>
                 </div>
-                <div className="absolute bottom-6 left-6 z-20 flex items-center gap-4">
-                   <div className="flex items-center gap-2">
-                      <div className="size-2 bg-red-500 rounded-full animate-pulse" />
-                      <span className="font-bold text-white text-sm">LIVE</span>
+
+                <div className="absolute bottom-4 left-4 z-20 flex items-center gap-3 pointer-events-none">
+                   <div className="flex items-center gap-1.5 px-2 py-1 bg-red-600 rounded text-white font-bold text-[10px] animate-pulse">
+                      <div className="size-1.5 bg-white rounded-full" />
+                      LIVE
                    </div>
-                   <div className="h-4 w-px bg-white/20" />
-                   <span className="text-white/80 font-mono text-xs">{selectedChannel?.quality} | {selectedChannel?.freq}</span>
+                   <span className="text-white/80 font-mono text-[10px] drop-shadow-md">{selectedChannel?.quality} | {selectedChannel?.freq}</span>
                 </div>
               </div>
             )}
-            
-            <div className="absolute top-4 right-4 z-20 flex gap-2">
-              <Badge variant="outline" className="bg-black/50 border-white/10 text-[10px] h-6">FPS: 60</Badge>
-              <Badge variant="outline" className="bg-black/50 border-white/10 text-[10px] h-6">LATENCY: 12MS</Badge>
-            </div>
           </div>
         </DialogContent>
       </Dialog>
