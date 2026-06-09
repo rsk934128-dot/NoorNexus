@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -10,15 +10,18 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useFirestore, useCollection } from "@/firebase"
-import { collection, addDoc, deleteDoc, doc, updateDoc, query, orderBy } from "firebase/firestore"
-import { Trophy, Server, Newspaper, Plus, Trash2, ShieldCheck, SlidersHorizontal, Lock, Zap } from "lucide-react"
+import { useFirestore, useCollection, useUser } from "@/firebase"
+import { collection, addDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore"
+import { Trophy, Server, Newspaper, Plus, Trash2, ShieldCheck, SlidersHorizontal, Lock, Zap, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Badge } from "@/components/ui/badge"
+import { useRouter } from "next/navigation"
 
 export default function EcosystemParametersPage() {
   const { toast } = useToast()
   const db = useFirestore()
+  const { user, loading: authLoading } = useUser()
+  const router = useRouter()
   
   // Real-time Collections
   const { data: matches } = useCollection<any>(collection(db, "sports_matches"))
@@ -29,6 +32,17 @@ export default function EcosystemParametersPage() {
   const [matchForm, setMatchForm] = useState({ home: "", away: "", status: "UPCOMING", uplink: "", score: "0-0", description: "" })
   const [serverForm, setServerForm] = useState({ name: "", status: "Operational", ping: "12ms", load: "15%" })
   const [newsForm, setNewsForm] = useState({ title: "", content: "", severity: "INFO" })
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      toast({
+        title: "Authentication Required",
+        description: "L4 clearance not detected. Redirecting to auth gateway.",
+        variant: "destructive"
+      })
+      router.push("/login")
+    }
+  }, [user, authLoading, router, toast])
 
   // Handlers
   const addMatch = async () => {
@@ -70,6 +84,15 @@ export default function EcosystemParametersPage() {
     toast({ title: "Parameter Rescinded" })
   }
 
+  if (authLoading || !user) {
+    return (
+      <div className="h-screen w-full flex flex-col items-center justify-center gap-4 bg-background cyber-grid">
+         <Loader2 className="size-10 text-primary animate-spin" />
+         <p className="text-xs font-mono uppercase tracking-[0.3em] text-muted-foreground">Authenticating L4 Credentials...</p>
+      </div>
+    )
+  }
+
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
@@ -95,8 +118,8 @@ export default function EcosystemParametersPage() {
                     <Lock className="size-4 text-primary" />
                   </div>
                   <div>
-                    <p className="text-[9px] font-bold text-muted-foreground uppercase">Access Protocol</p>
-                    <p className="text-xs font-mono text-primary font-bold tracking-widest">HMAC_V4_SECURED</p>
+                    <p className="text-[9px] font-bold text-muted-foreground uppercase">Commander</p>
+                    <p className="text-xs font-mono text-primary font-bold tracking-widest">{user?.displayName?.split(' ')[0].toUpperCase() || "ADMIN"}</p>
                   </div>
                </div>
             </div>

@@ -10,12 +10,12 @@ import {
   Send, 
   Terminal,
   Settings,
-  Globe,
-  Radar,
   Lock,
   Trophy,
-  SlidersHorizontal,
-  ChevronRight
+  Radar,
+  ChevronRight,
+  LogOut,
+  User as UserIcon
 } from "lucide-react"
 
 import {
@@ -29,7 +29,11 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { useAuth, useUser } from "@/firebase"
+import { signOutUser } from "@/firebase/auth/auth-service"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useToast } from "@/hooks/use-toast"
 
 const items = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
@@ -43,6 +47,27 @@ const items = [
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const auth = useAuth()
+  const { user } = useUser()
+  const { toast } = useToast()
+
+  const handleLogout = async () => {
+    try {
+      await signOutUser(auth)
+      toast({
+        title: "Session Terminated",
+        description: "Imperial handshake closed.",
+      })
+      router.push("/login")
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out.",
+        variant: "destructive"
+      })
+    }
+  }
 
   return (
     <Sidebar className="border-r border-white/5 bg-card/80 backdrop-blur-xl">
@@ -76,14 +101,48 @@ export function AppSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className="p-4">
+      <SidebarFooter className="p-4 space-y-4">
+        {user ? (
+          <div className="p-3 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
+            <div className="flex items-center gap-3">
+              <Avatar className="size-8 border border-primary/30">
+                <AvatarImage src={user.photoURL || ""} />
+                <AvatarFallback className="bg-primary/10 text-primary text-[10px] font-bold">
+                  {user.displayName?.substring(0, 2).toUpperCase() || "C"}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] font-bold truncate uppercase">{user.displayName || "Commander"}</p>
+                <div className="flex items-center gap-1">
+                   <div className="size-1 bg-emerald-500 rounded-full animate-pulse" />
+                   <p className="text-[8px] text-muted-foreground uppercase font-mono tracking-tighter">Root_L4 Session</p>
+                </div>
+              </div>
+            </div>
+            <button 
+              onClick={handleLogout}
+              className="w-full py-2 bg-white/5 rounded border border-white/5 text-[9px] uppercase font-bold text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 transition-all flex items-center justify-center gap-2"
+            >
+              <LogOut className="size-3" />
+              Terminate Handshake
+            </button>
+          </div>
+        ) : (
+          <SidebarMenuButton asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <Link href="/login">
+              <LogIn className="size-4" />
+              <span className="text-xs font-bold uppercase tracking-widest">Identity Authentication</span>
+            </Link>
+          </SidebarMenuButton>
+        )}
+
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between px-2 py-1 bg-primary/5 rounded border border-primary/20 mb-2">
              <div className="flex items-center gap-2">
                 <Terminal className="size-3 text-primary" />
-                <span className="text-[9px] font-bold text-primary uppercase tracking-tighter">Root Access L4</span>
+                <span className="text-[9px] font-bold text-primary uppercase tracking-tighter">Auth Gateway</span>
              </div>
-             <div className="size-1.5 bg-primary rounded-full animate-pulse" />
+             <div className={`size-1.5 rounded-full ${user ? 'bg-emerald-500' : 'bg-destructive'} animate-pulse`} />
           </div>
           
           <SidebarMenuButton asChild className={`hover:text-primary transition-colors border border-white/5 ${pathname === '/ecosystem' ? 'bg-primary/10 text-primary border-primary/20' : 'text-muted-foreground'}`}>
@@ -93,13 +152,6 @@ export function AppSidebar() {
               <ChevronRight className="size-3 ml-auto" />
             </Link>
           </SidebarMenuButton>
-        </div>
-        <div className="mt-4 p-3 bg-muted/50 rounded-lg border border-white/5">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-bold text-emerald-500 uppercase">Mesh: Active</span>
-          </div>
-          <p className="text-[10px] text-muted-foreground">Sirajganj-Edge-01 Live</p>
         </div>
       </SidebarFooter>
     </Sidebar>
