@@ -12,7 +12,8 @@ import {
   Settings,
   Globe,
   Radar,
-  Lock
+  Lock,
+  Trophy
 } from "lucide-react"
 
 import {
@@ -35,6 +36,7 @@ const items = [
   { title: "One Engine Ledger", url: "/ledger", icon: Layers },
   { title: "Node Watchtower", url: "/nodes", icon: Activity },
   { title: "SmartRemit P2P", url: "/remittance", icon: Send },
+  { title: "World Cup Relay", url: "/world-cup", icon: Trophy },
 ]
 
 export function AppSidebar() {
