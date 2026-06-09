@@ -23,7 +23,9 @@ import {
   Cpu,
   Loader2,
   BarChart3,
-  Youtube
+  Youtube,
+  Globe,
+  Radio
 } from "lucide-react"
 import {
   Dialog,
@@ -70,6 +72,7 @@ export default function WorldCupPage() {
   const [chatInput, setChatInput] = useState("")
   const [aiLoading, setAiLoading] = useState(false)
   const [aiInsight, setAiInsight] = useState<MatchInsightOutput | null>(null)
+  const [playerMode, setPlayerMode] = useState<'GATEWAY' | 'EMBED'>('GATEWAY')
 
   useEffect(() => {
     if (servers.length > 0 && !selectedServer) setSelectedServer(servers[0])
@@ -79,8 +82,8 @@ export default function WorldCupPage() {
   const handleLaunchUplink = () => {
     if (!activeMatch?.uplink) {
       toast({
-        title: "Uplink Unavailable",
-        description: "No secure stream link found for this match in the Sovereign Ledger.",
+        title: "Uplink Offline",
+        description: "No secure stream link found. Awaiting sovereign sync.",
         variant: "destructive"
       })
       return
@@ -122,13 +125,19 @@ export default function WorldCupPage() {
       setAiInsight(insight)
     } catch (error) {
       toast({
-        title: "AI Analysis Failed",
-        description: "Could not establish a neural link with Nora-AI.",
+        title: "Neural Link Failed",
+        description: "Nora-AI is currently optimizing mesh nodes. Try later.",
         variant: "destructive"
       })
     } finally {
       setAiLoading(false)
     }
+  }
+
+  const getYoutubeId = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url?.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
   }
 
   return (
@@ -139,22 +148,22 @@ export default function WorldCupPage() {
           <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-1">
               <div className="flex items-center gap-3">
-                <div className="size-10 bg-primary/20 rounded-xl flex items-center justify-center border border-primary/30 glow-primary">
-                  <Trophy className="size-6 text-primary animate-pulse" />
+                <div className="size-12 bg-primary/20 rounded-2xl flex items-center justify-center border border-primary/30 glow-primary">
+                  <Trophy className="size-7 text-primary animate-pulse" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-headline font-bold uppercase tracking-tight text-primary">GSMIFY SOVEREIGN SPORTS</h2>
-                  <p className="text-[10px] text-muted-foreground font-mono tracking-[0.4em] uppercase font-bold">MISSION 400 | WORLD CUP RELAY</p>
+                  <h2 className="text-4xl font-headline font-bold uppercase tracking-tight text-primary">GSMIFY SOVEREIGN SPORTS</h2>
+                  <p className="text-[11px] text-muted-foreground font-mono tracking-[0.5em] uppercase font-bold">MISSION 400 | WORLD CUP RELAY CENTER</p>
                 </div>
               </div>
             </div>
             <div className="flex gap-4">
-               <Badge className="bg-primary/10 text-primary border-primary/20 px-4 py-2 h-auto gap-2 font-bold">
-                  <Activity className="size-4 animate-pulse" />
+               <Badge className="bg-primary/10 text-primary border-primary/20 px-5 py-2.5 h-auto gap-2 font-bold text-sm">
+                  <Radio className="size-4 animate-pulse text-destructive" />
                   MESH LATENCY: {selectedServer?.ping || "12ms"}
                </Badge>
-               <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter">
-                  SIGNAL: 98.4%
+               <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter text-xs">
+                  UPLINK STABILITY: 98.4%
                </Badge>
             </div>
           </header>
@@ -162,46 +171,71 @@ export default function WorldCupPage() {
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div className="xl:col-span-3 space-y-6">
               <Card className="glass-card border-white/5 overflow-hidden relative group">
-                <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 bg-white/2 py-3 px-6">
+                <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 bg-white/2 py-4 px-6">
                   <div className="flex items-center gap-4">
-                    <Badge variant="outline" className="text-[10px] border-primary/50 text-primary font-bold uppercase">
+                    <Badge className={`text-[10px] font-bold uppercase ${activeMatch?.status === 'LIVE' ? 'bg-destructive animate-pulse' : 'bg-muted text-muted-foreground'}`}>
                       {activeMatch?.status || 'SELECT MATCH'}
                     </Badge>
-                    <span className="text-sm font-headline font-bold uppercase tracking-widest">
+                    <span className="text-lg font-headline font-bold uppercase tracking-widest text-white">
                       {activeMatch ? `${activeMatch.home} vs ${activeMatch.away}` : "AWAITING SELECTION"}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-primary">
-                      <Settings2 className="size-4" />
+                  <div className="flex items-center gap-3">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setPlayerMode(playerMode === 'GATEWAY' ? 'EMBED' : 'GATEWAY')}
+                      className="text-[10px] border-white/10 hover:border-primary/50 gap-2"
+                    >
+                      <Monitor className="size-3" />
+                      {playerMode === 'GATEWAY' ? "SWITCH TO EMBED" : "SWITCH TO GATEWAY"}
                     </Button>
                     <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-primary">
                       <Maximize2 className="size-4" />
                     </Button>
                   </div>
                 </CardHeader>
-                <CardContent className="p-0 aspect-video bg-black relative flex items-center justify-center">
-                  <div className="absolute inset-0 opacity-20 bg-[url('https://picsum.photos/seed/stadium/1200/800')] bg-cover" />
-                  <div className="relative z-10 flex flex-col items-center gap-6 text-center px-4">
-                    <div className="size-24 rounded-full border-2 border-primary/30 flex items-center justify-center animate-spin-slow">
-                      <Youtube className="size-12 text-primary/50" />
+                <CardContent className="p-0 aspect-video bg-black relative flex items-center justify-center overflow-hidden">
+                  {playerMode === 'EMBED' && activeMatch?.uplink ? (
+                    <div className="w-full h-full">
+                      <iframe 
+                        width="100%" 
+                        height="100%" 
+                        src={`https://www.youtube.com/embed/${getYoutubeId(activeMatch.uplink)}?autoplay=1&mute=0`}
+                        title="Sovereign Stream Player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      ></iframe>
                     </div>
-                    <div className="space-y-2">
-                       <h3 className="text-2xl font-headline font-bold text-white uppercase tracking-widest">Sovereign Stream Gateway</h3>
-                       <p className="text-sm text-muted-foreground font-mono">ENCRYPTED RELAY CHANNEL: MISSION_400_UPLINK</p>
-                    </div>
-                    <Button 
-                      onClick={handleLaunchUplink}
-                      className="bg-primary text-primary-foreground font-bold uppercase tracking-widest px-10 h-14 glow-primary flex items-center gap-3"
-                    >
-                      <Zap className="size-5" />
-                      Establish Secure Handshake
-                    </Button>
-                  </div>
+                  ) : (
+                    <>
+                      <div className="absolute inset-0 opacity-20 bg-[url('https://picsum.photos/seed/stadium-mesh/1200/800')] bg-cover scale-105" />
+                      <div className="relative z-10 flex flex-col items-center gap-8 text-center px-6">
+                        <div className="size-32 rounded-full border-4 border-primary/30 flex items-center justify-center animate-spin-slow bg-primary/5 backdrop-blur-sm">
+                          <Youtube className="size-16 text-primary/50" />
+                        </div>
+                        <div className="space-y-3">
+                           <h3 className="text-3xl font-headline font-bold text-white uppercase tracking-tighter">Imperial Stream Gateway</h3>
+                           <p className="text-sm text-muted-foreground font-mono uppercase tracking-widest">Target Channel: {activeMatch?.description || "Mission_400_Uplink"}</p>
+                        </div>
+                        <Button 
+                          onClick={handleLaunchUplink}
+                          className="bg-primary text-primary-foreground font-bold uppercase tracking-widest px-12 h-16 glow-primary flex items-center gap-4 text-lg hover:scale-105 transition-transform"
+                        >
+                          <Zap className="size-6" />
+                          Establish Secure Handshake
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </CardContent>
-                <div className="bg-muted/30 p-4 border-t border-white/5 flex flex-wrap gap-4 items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase">Target Node:</span>
+                <div className="bg-muted/30 p-5 border-t border-white/5 flex flex-wrap gap-5 items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <span className="text-[11px] font-bold text-muted-foreground uppercase flex items-center gap-2">
+                       <Globe className="size-3" />
+                       BROADCAST NODES:
+                    </span>
                     <div className="flex gap-2">
                       {servers.length > 0 ? servers.map(s => (
                         <Button 
@@ -209,63 +243,71 @@ export default function WorldCupPage() {
                           variant={selectedServer?.id === s.id ? "default" : "outline"}
                           size="sm"
                           onClick={() => setSelectedServer(s)}
-                          className="text-[10px] h-7 px-3 border-white/10"
+                          className={`text-[10px] h-8 px-4 border-white/10 ${selectedServer?.id === s.id ? 'bg-primary glow-primary' : ''}`}
                         >
                           {s.name}
                         </Button>
                       )) : (
-                        <Badge variant="outline" className="text-[10px] border-white/5 opacity-50">SYNCING...</Badge>
+                        <div className="flex gap-2">
+                           <Badge variant="outline" className="text-[10px] opacity-30 animate-pulse">HUB-01</Badge>
+                           <Badge variant="outline" className="text-[10px] opacity-30 animate-pulse">HUB-02</Badge>
+                        </div>
                       )}
                     </div>
                   </div>
                   <Button 
                     onClick={handleGetAiInsight}
                     disabled={aiLoading}
-                    className="bg-amber-500/20 text-amber-500 border border-amber-500/30 hover:bg-amber-500/30 text-[10px] h-7 gap-2"
+                    className="bg-amber-500/20 text-amber-500 border border-amber-500/30 hover:bg-amber-500/30 text-[11px] h-8 gap-3 font-bold"
                   >
-                    {aiLoading ? <Loader2 className="size-3 animate-spin" /> : <Cpu className="size-3" />}
-                    NORA-AI ANALYTICS
+                    {aiLoading ? <Loader2 className="size-4 animate-spin" /> : <Cpu className="size-4" />}
+                    NORA-AI TACTICAL REPORT
                   </Button>
                 </div>
               </Card>
 
               {aiInsight && (
-                <Card className="glass-card border-amber-500/20 animate-in fade-in slide-in-from-top-4">
+                <Card className="glass-card border-amber-500/20 animate-in fade-in slide-in-from-top-4 overflow-hidden">
+                  <div className="h-1 bg-amber-500" />
                   <CardHeader>
-                    <CardTitle className="text-sm font-headline text-amber-500 flex items-center gap-2">
-                      <Cpu className="size-4" />
-                      Tactical Intelligence Report
+                    <CardTitle className="text-md font-headline text-amber-500 flex items-center gap-2 uppercase tracking-widest">
+                      <Cpu className="size-5" />
+                      Imperial Tactical Intelligence
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="p-4 bg-black/40 rounded-xl border border-white/5">
-                        <p className="text-[10px] text-muted-foreground uppercase font-bold mb-2">Win Probability</p>
-                        <div className="space-y-2">
-                          <div className="flex justify-between text-xs">
-                            <span>{activeMatch?.home}</span>
-                            <span>{aiInsight.winProbability.home}%</span>
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="p-5 bg-black/50 rounded-2xl border border-white/5 space-y-4">
+                        <p className="text-[11px] text-muted-foreground uppercase font-bold tracking-widest">Win Probability Mesh</p>
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <div className="flex justify-between text-xs font-bold">
+                              <span>{activeMatch?.home}</span>
+                              <span className="text-primary">{aiInsight.winProbability.home}%</span>
+                            </div>
+                            <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                              <div className="h-full bg-primary glow-primary" style={{ width: `${aiInsight.winProbability.home}%` }} />
+                            </div>
                           </div>
-                          <div className="h-1 bg-muted rounded-full overflow-hidden">
-                            <div className="h-full bg-primary" style={{ width: `${aiInsight.winProbability.home}%` }} />
-                          </div>
-                          <div className="flex justify-between text-xs">
-                            <span>{activeMatch?.away}</span>
-                            <span>{aiInsight.winProbability.away}%</span>
-                          </div>
-                          <div className="h-1 bg-muted rounded-full overflow-hidden">
-                            <div className="h-full bg-amber-500" style={{ width: `${aiInsight.winProbability.away}%` }} />
+                          <div className="space-y-2">
+                            <div className="flex justify-between text-xs font-bold">
+                              <span>{activeMatch?.away}</span>
+                              <span className="text-amber-500">{aiInsight.winProbability.away}%</span>
+                            </div>
+                            <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                              <div className="h-full bg-amber-500" style={{ width: `${aiInsight.winProbability.away}%` }} />
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div className="md:col-span-2 p-4 bg-black/40 rounded-xl border border-white/5">
-                        <p className="text-[10px] text-muted-foreground uppercase font-bold mb-2">Tactical Summary</p>
-                        <p className="text-xs text-muted-foreground leading-relaxed">{aiInsight.tacticalAnalysis}</p>
+                      <div className="md:col-span-2 p-5 bg-black/50 rounded-2xl border border-white/5">
+                        <p className="text-[11px] text-muted-foreground uppercase font-bold mb-3 tracking-widest">Tactical Assessment</p>
+                        <p className="text-xs text-muted-foreground leading-relaxed font-mono italic">"{aiInsight.tacticalAnalysis}"</p>
                       </div>
                     </div>
-                    <div className="p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-lg flex gap-3 items-center">
-                       <ShieldCheck className="size-5 text-emerald-500" />
-                       <p className="text-[10px] font-mono italic text-emerald-500/80">{aiInsight.recommendation}</p>
+                    <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex gap-4 items-center">
+                       <ShieldCheck className="size-6 text-emerald-500" />
+                       <p className="text-[11px] font-mono font-bold text-emerald-500/90 uppercase">{aiInsight.recommendation}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -274,43 +316,57 @@ export default function WorldCupPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card className="glass-card">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2">
+                    <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2 tracking-widest">
                       <BarChart3 className="size-4" />
-                      Mesh Performance Metrics
+                      Uplink Performance Matrix
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="h-[250px] p-4">
+                  <CardContent className="h-[280px] p-5">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={SIGNAL_DATA}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
-                        <XAxis dataKey="time" stroke="#444" fontSize={10} tickLine={false} axisLine={false} />
-                        <YAxis stroke="#444" fontSize={10} tickLine={false} axisLine={false} />
-                        <Tooltip contentStyle={{ backgroundColor: '#050505', border: '1px solid #222', fontSize: '10px' }} />
-                        <Line type="monotone" dataKey="latency" stroke="var(--primary)" strokeWidth={2} dot={false} />
-                        <Line type="monotone" dataKey="load" stroke="#fbbf24" strokeWidth={2} dot={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#1a1a1a" vertical={false} />
+                        <XAxis dataKey="time" stroke="#444" fontSize={11} tickLine={false} axisLine={false} />
+                        <YAxis stroke="#444" fontSize={11} tickLine={false} axisLine={false} />
+                        <Tooltip contentStyle={{ backgroundColor: '#050505', border: '1px solid #222', fontSize: '11px', borderRadius: '8px' }} />
+                        <Line type="monotone" dataKey="latency" stroke="var(--primary)" strokeWidth={3} dot={false} animationDuration={2000} />
+                        <Line type="monotone" dataKey="load" stroke="#fbbf24" strokeWidth={3} dot={false} animationDuration={2500} />
                       </LineChart>
                     </ResponsiveContainer>
                   </CardContent>
                 </Card>
                 <Card className="glass-card">
                    <CardHeader className="pb-2">
-                      <CardTitle className="text-xs uppercase font-bold text-muted-foreground flex items-center gap-2">
+                      <CardTitle className="text-xs uppercase font-bold text-muted-foreground flex items-center gap-2 tracking-widest">
                         <Monitor className="size-4" />
-                        Infrastructure Health
+                        Mesh Infrastructure Health
                       </CardTitle>
                    </CardHeader>
-                   <CardContent className="space-y-6">
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-[10px] font-bold">
-                           <span>MESH THROUGHPUT</span>
-                           <span className="text-primary">42.4 TB/S</span>
+                   <CardContent className="space-y-6 pt-4">
+                      <div className="space-y-3">
+                        <div className="flex justify-between text-[11px] font-bold">
+                           <span className="text-muted-foreground uppercase">MESH THROUGHPUT (400G)</span>
+                           <span className="text-primary">342.4 TB/S</span>
                         </div>
-                        <div className="h-1 bg-muted rounded-full overflow-hidden">
-                           <div className="h-full bg-primary animate-progress" />
+                        <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                           <div className="h-full bg-primary animate-progress glow-primary" />
                         </div>
                       </div>
-                      <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg">
-                         <p className="text-[9px] font-mono text-primary/80 uppercase">Node SG-Core-01 Handshake: Verified</p>
+                      <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-2">
+                         <div className="flex items-center justify-between">
+                            <p className="text-[10px] font-mono text-primary uppercase">Handshake Status:</p>
+                            <Badge className="bg-emerald-500/20 text-emerald-500 border-emerald-500/30 text-[9px]">SECURE</Badge>
+                         </div>
+                         <p className="text-[9px] font-mono text-muted-foreground uppercase">NODE_IDENTITY: VERIFIED (HMAC_V4_L4)</p>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                         <div className="p-3 bg-white/5 rounded-lg border border-white/5">
+                            <p className="text-[9px] text-muted-foreground uppercase">ENCRYPTION</p>
+                            <p className="text-xs font-bold text-white uppercase">AES_256_GCM</p>
+                         </div>
+                         <div className="p-3 bg-white/5 rounded-lg border border-white/5">
+                            <p className="text-[9px] text-muted-foreground uppercase">RELAY MODE</p>
+                            <p className="text-xs font-bold text-white uppercase">MISSION_400</p>
+                         </div>
                       </div>
                    </CardContent>
                 </Card>
@@ -318,48 +374,51 @@ export default function WorldCupPage() {
             </div>
 
             <div className="space-y-6">
-              <Card className="glass-card h-[450px] flex flex-col">
-                <CardHeader className="pb-2 border-b border-white/5">
-                  <CardTitle className="text-sm font-headline flex items-center gap-2">
-                    <MessageSquare className="size-4 text-primary" />
+              <Card className="glass-card h-[500px] flex flex-col">
+                <CardHeader className="pb-3 border-b border-white/5">
+                  <CardTitle className="text-sm font-headline flex items-center gap-2 uppercase tracking-widest text-primary">
+                    <MessageSquare className="size-4" />
                     Imperial Mesh Chat
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
-                  <ScrollArea className="flex-1 p-4">
-                    <div className="space-y-4">
+                  <ScrollArea className="flex-1 p-5">
+                    <div className="space-y-5">
                       {chats.map((chat, i) => (
-                        <div key={i} className="space-y-1">
+                        <div key={i} className="space-y-2 group">
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-bold text-primary">{chat.user}</span>
-                            <span className="text-[8px] text-muted-foreground font-mono">
+                            <span className="text-[10px] font-bold text-primary flex items-center gap-2">
+                               <div className="size-1 bg-primary rounded-full animate-pulse" />
+                               {chat.user}
+                            </span>
+                            <span className="text-[9px] text-muted-foreground font-mono">
                               {chat.timestamp ? new Date(chat.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "..."}
                             </span>
                           </div>
-                          <p className="text-xs text-muted-foreground leading-snug bg-white/5 p-2 rounded border border-white/5">
+                          <p className="text-xs text-muted-foreground leading-snug bg-white/5 p-3 rounded-2xl border border-white/5 group-hover:border-primary/20 transition-colors">
                             {chat.message}
                           </p>
                         </div>
                       ))}
                     </div>
                   </ScrollArea>
-                  <div className="p-4 border-t border-white/5 bg-black/40">
+                  <div className="p-5 border-t border-white/5 bg-black/40">
                      <div className="relative">
                         <input 
                           type="text" 
                           value={chatInput}
                           onChange={(e) => setChatInput(e.target.value)}
                           onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                          placeholder="Send tactical message..." 
-                          className="w-full bg-background/50 border border-white/10 rounded-lg px-4 py-2.5 text-xs outline-none focus:ring-1 focus:ring-primary pr-12"
+                          placeholder="Broadcast tactical signal..." 
+                          className="w-full bg-background/50 border border-white/10 rounded-xl px-5 py-3.5 text-xs outline-none focus:ring-1 focus:ring-primary pr-14 font-mono"
                         />
                         <Button 
                           onClick={handleSendMessage}
                           variant="ghost" 
                           size="icon" 
-                          className="absolute right-1 top-1/2 -translate-y-1/2 text-primary"
+                          className="absolute right-1.5 top-1/2 -translate-y-1/2 text-primary hover:bg-primary/10"
                         >
-                          <Send className="size-4" />
+                          <Send className="size-5" />
                         </Button>
                      </div>
                   </div>
@@ -367,51 +426,72 @@ export default function WorldCupPage() {
               </Card>
 
               <Card className="glass-card border-white/5">
-                <CardHeader className="pb-2">
-                   <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2">
-                      <Clock className="size-4" />
-                      Live Fixtures
+                <CardHeader className="pb-3">
+                   <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2 tracking-[0.2em]">
+                      <Radio className="size-4" />
+                      Live Sovereign Feeds
                    </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
+                <CardContent className="space-y-4">
                    {matches.length > 0 ? matches.map(match => (
                      <div 
                        key={match.id} 
                        onClick={() => setActiveMatch(match)}
-                       className={`p-3 bg-white/5 rounded-xl border flex justify-between items-center group cursor-pointer transition-all ${activeMatch?.id === match.id ? 'border-primary bg-primary/5 shadow-[0_0_15px_rgba(0,150,255,0.1)]' : 'border-white/5 hover:border-primary/30'}`}
+                       className={`p-4 bg-white/5 rounded-2xl border flex justify-between items-center group cursor-pointer transition-all duration-300 ${activeMatch?.id === match.id ? 'border-primary bg-primary/10 shadow-[0_0_20px_rgba(0,150,255,0.15)] scale-[1.02]' : 'border-white/5 hover:border-primary/30'}`}
                       >
-                        <div className="flex items-center gap-3">
-                           <div className="text-[10px] font-bold">{match.home}</div>
-                           <div className="text-[8px] text-muted-foreground">vs</div>
-                           <div className="text-[10px] font-bold">{match.away}</div>
+                        <div className="space-y-1">
+                           <div className="flex items-center gap-3">
+                              <span className="text-[11px] font-bold text-white uppercase">{match.home}</span>
+                              <span className="text-[9px] text-muted-foreground font-mono">VS</span>
+                              <span className="text-[11px] font-bold text-white uppercase">{match.away}</span>
+                           </div>
+                           <p className="text-[9px] text-muted-foreground font-mono uppercase tracking-tighter">{match.description || "Uplink Active"}</p>
                         </div>
                         <div className="text-right">
-                           <p className="text-[10px] font-bold">{match.score || match.time}</p>
-                           <p className={`text-[8px] uppercase font-bold ${match.status === 'LIVE' ? 'text-primary animate-pulse' : 'text-muted-foreground'}`}>{match.status}</p>
+                           <p className="text-[11px] font-bold text-primary">{match.score || match.time}</p>
+                           <div className="flex items-center gap-1.5 justify-end">
+                              <div className={`size-1.5 rounded-full ${match.status === 'LIVE' ? 'bg-destructive animate-pulse' : 'bg-muted'}`} />
+                              <p className={`text-[9px] uppercase font-bold ${match.status === 'LIVE' ? 'text-destructive' : 'text-muted-foreground'}`}>{match.status}</p>
+                           </div>
                         </div>
                      </div>
                    )) : (
-                     <p className="text-[10px] text-center text-muted-foreground italic py-4">Syncing Ledger...</p>
+                     <div className="space-y-3 py-6">
+                        <div className="flex items-center justify-center gap-3">
+                           <Loader2 className="size-4 animate-spin text-primary" />
+                           <p className="text-[11px] text-muted-foreground font-mono italic uppercase">Syncing Mesh Nodes...</p>
+                        </div>
+                        <div className="flex gap-2 justify-center">
+                           {[1,2,3,4].map(i => <div key={i} className="size-1 bg-white/10 rounded-full animate-bounce" style={{ animationDelay: `${i*0.2}s` }} />)}
+                        </div>
+                     </div>
                    )}
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-amber-500/20 bg-amber-500/5">
-                <CardHeader className="pb-2">
-                   <CardTitle className="text-xs uppercase font-bold text-amber-500 flex items-center gap-2">
+              <Card className="glass-card border-amber-500/20 bg-amber-500/5 overflow-hidden">
+                <CardHeader className="pb-3 border-b border-amber-500/10">
+                   <CardTitle className="text-xs uppercase font-bold text-amber-500 flex items-center gap-2 tracking-[0.2em]">
                       <Activity className="size-4" />
-                      Tactical Intel Feed
+                      Tactical Intelligence Feed
                    </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
-                   {news.length > 0 ? news.map((item, i) => (
-                     <div key={i} className="space-y-1 p-2 border-l border-amber-500/30">
-                        <h4 className="text-[10px] font-bold text-amber-500 uppercase">{item.title}</h4>
-                        <p className="text-[9px] text-muted-foreground leading-tight italic">{item.content}</p>
-                     </div>
-                   )) : (
-                     <p className="text-[9px] text-muted-foreground italic">Awaiting mission data...</p>
-                   )}
+                <CardContent className="p-0">
+                   <ScrollArea className="h-[250px]">
+                      <div className="p-5 space-y-5">
+                        {news.length > 0 ? news.map((item, i) => (
+                          <div key={i} className="space-y-2 p-4 bg-black/40 rounded-xl border-l-2 border-amber-500/50 group hover:bg-black/60 transition-colors">
+                             <h4 className="text-[10px] font-bold text-amber-500 uppercase flex items-center justify-between">
+                                {item.title}
+                                <span className="text-[8px] text-muted-foreground font-mono">{new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                             </h4>
+                             <p className="text-[10px] text-muted-foreground leading-relaxed italic">{item.content}</p>
+                          </div>
+                        )) : (
+                          <p className="text-[10px] text-center text-muted-foreground italic py-8 uppercase tracking-widest opacity-50">Awaiting Mission Data Uplink...</p>
+                        )}
+                      </div>
+                   </ScrollArea>
                 </CardContent>
               </Card>
             </div>
@@ -420,41 +500,42 @@ export default function WorldCupPage() {
       </SidebarInset>
 
       <Dialog open={isHandshaking} onOpenChange={setIsHandshaking}>
-        <DialogContent className="glass-card border-primary/30 sm:max-w-[500px] bg-black">
+        <DialogContent className="glass-card border-primary/40 sm:max-w-[550px] bg-black/95 backdrop-blur-3xl p-10">
           <DialogHeader>
-            <DialogTitle className="font-headline text-xl flex items-center gap-3 text-primary uppercase">
-              <Lock className="size-5" />
-              Secure Stream Handshake
+            <DialogTitle className="font-headline text-2xl flex items-center gap-4 text-primary uppercase tracking-tighter">
+              <Lock className="size-6" />
+              Secure Sovereign Handshake
             </DialogTitle>
-            <DialogDescription className="text-[10px] font-mono uppercase text-muted-foreground">
-              ESTABLISHING UPLINK TO MISSION_400_BROADCASTER
+            <DialogDescription className="text-[11px] font-mono uppercase text-muted-foreground tracking-[0.3em] mt-2">
+              ESTABLISHING ENCRYPTED UPLINK TO MISSION_400_BROADCASTER
             </DialogDescription>
           </DialogHeader>
 
-          <div className="py-8 text-center space-y-6">
-            <div className="space-y-4">
-              <div className="size-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto relative">
-                <ShieldCheck className="size-8 text-primary animate-pulse" />
+          <div className="py-10 text-center space-y-8">
+            <div className="space-y-6">
+              <div className="size-24 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto relative border border-primary/20 glow-primary">
+                <ShieldCheck className="size-12 text-primary animate-pulse" />
+                <div className="absolute inset-0 border border-primary/10 rounded-3xl animate-ping" />
               </div>
-              <div className="space-y-2">
-                <p className="text-primary font-mono text-xs animate-pulse uppercase">
-                  Routing Signal Through {selectedServer?.name || "Mesh Hub"}... {handshakeProgress}%
+              <div className="space-y-4">
+                <p className="text-primary font-mono text-sm animate-pulse uppercase tracking-widest font-bold">
+                  Routing Signal Through {selectedServer?.name || "Global Mesh Hub"}... {handshakeProgress}%
                 </p>
-                <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-primary transition-all duration-300" style={{ width: `${handshakeProgress}%` }} />
+                <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                  <div className="h-full bg-primary glow-primary transition-all duration-300" style={{ width: `${handshakeProgress}%` }} />
                 </div>
               </div>
             </div>
 
             {handshakeProgress === 100 && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
-                 <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-lg text-emerald-500">
-                   <p className="text-[10px] font-mono leading-relaxed uppercase">
-                     <strong>Handshake Verified:</strong> Routing successful for {activeMatch?.home} vs {activeMatch?.away}. Signal integrity 100%.
+              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-5">
+                 <div className="p-5 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl text-emerald-500">
+                   <p className="text-[11px] font-mono leading-relaxed uppercase font-bold">
+                     Handshake Verified: Integrity Match 100%. Routing successful for {activeMatch?.home} vs {activeMatch?.away}.
                    </p>
                  </div>
                  <Button 
-                    className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary flex items-center justify-center gap-3"
+                    className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-16 glow-primary flex items-center justify-center gap-4 text-lg hover:scale-[1.02] transition-transform"
                     onClick={() => {
                       setIsHandshaking(false)
                       if (activeMatch?.uplink) {
@@ -462,8 +543,8 @@ export default function WorldCupPage() {
                       }
                     }}
                  >
-                    <Youtube className="size-5" />
-                    Launch Official Uplink
+                    <Youtube className="size-6" />
+                    Launch Imperial Uplink
                  </Button>
               </div>
             )}
