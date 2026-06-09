@@ -4,7 +4,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Zap, Globe, Cpu, AlertTriangle, Activity, Database, Landmark, Radar, Lock, FileText, CheckCircle, AlertCircle } from "lucide-react"
+import { Shield, Zap, Globe, Cpu, AlertTriangle, Activity, Database, Landmark, Radar, Lock, FileText, CheckCircle, AlertCircle, HardDrive, Terminal } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -25,6 +25,7 @@ export default function Home() {
   const [auditing, setAuditing] = useState(false)
   const [auditResult, setAuditResult] = useState<LedgerAuditOutput | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [performance, setPerformance] = useState({ cpu: 12, ram: 2.1, workers: 4 })
 
   useEffect(() => {
     const sequence = [
@@ -42,6 +43,15 @@ export default function Home() {
         if (i === sequence.length - 1) setLoading(false)
       }, step.time)
     })
+
+    const interval = setInterval(() => {
+      setPerformance(prev => ({
+        cpu: Math.min(100, Math.max(5, prev.cpu + (Math.random() * 4 - 2))),
+        ram: Math.min(4, Math.max(1, prev.ram + (Math.random() * 0.2 - 0.1))),
+        workers: 4
+      }))
+    }, 2000)
+    return () => clearInterval(interval)
   }, [])
 
   async function handleExecuteAudit() {
@@ -99,14 +109,14 @@ export default function Home() {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">Operational OS v3</Badge>
-                <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 glow-emerald uppercase tracking-tighter">Audit: L4_IMPERIAL</Badge>
+                <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 glow-emerald uppercase tracking-tighter">Mission 400 Active</Badge>
               </div>
               <h2 className="text-6xl font-headline font-bold tracking-tighter">Sovereign <span className="text-primary">Intelligence.</span></h2>
               <p className="text-muted-foreground max-w-2xl text-lg leading-relaxed">
-                Autonomous cryptographic defense and treasury mesh for the NoorAI digital empire. Built on <span className="text-white font-mono">HMAC_V4</span> Zero-Trust Mesh.
+                High-performance cryptographic defense and treasury mesh. Optimizing for <span className="text-white font-mono">Parallel Execution</span> and <span className="text-white font-mono">Xmx4G</span> allocation.
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="glass-card p-5 rounded-xl text-right border-l-4 border-l-primary">
                 <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Global Throughput</p>
                 <p className="text-3xl font-headline font-bold text-primary">1.4M <span className="text-xs font-mono">TX/H</span></p>
@@ -196,14 +206,19 @@ export default function Home() {
                  </Card>
                  <Card className="glass-card border-primary/20 bg-primary/5">
                     <CardHeader className="pb-2">
-                       <CardTitle className="text-xs font-bold text-primary uppercase">Identity Access</CardTitle>
+                       <CardTitle className="text-xs font-bold text-primary uppercase">Kernel Diagnostics</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                       <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                          "System wide Zero-Trust Mesh enabled. All sessions are signed with ephemeral sovereign tokens."
-                       </p>
-                       <div className="mt-4 flex items-center gap-2">
-                          <Badge variant="outline" className="text-[8px] border-primary/30 text-primary">IMPERIAL ROOT</Badge>
+                    <CardContent className="space-y-3">
+                       <div className="flex justify-between items-center text-[10px] font-mono">
+                          <span className="text-muted-foreground uppercase">Parallel Workers</span>
+                          <span className="text-primary font-bold">{performance.workers} Active</span>
+                       </div>
+                       <div className="flex justify-between items-center text-[10px] font-mono">
+                          <span className="text-muted-foreground uppercase">Daemon Memory</span>
+                          <span className="text-emerald-500 font-bold">{performance.ram.toFixed(1)}G / 4G</span>
+                       </div>
+                       <div className="h-1 bg-muted rounded-full overflow-hidden">
+                          <div className="h-full bg-emerald-500 transition-all duration-1000" style={{ width: `${(performance.ram / 4) * 100}%` }} />
                        </div>
                     </CardContent>
                  </Card>
@@ -253,25 +268,27 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-destructive/20">
+              <Card className="glass-card border-destructive/20 overflow-hidden relative">
                 <CardHeader>
                    <CardTitle className="text-xs uppercase font-bold text-destructive flex items-center gap-2">
-                      <AlertTriangle className="size-4" />
-                      Threat Analysis
+                      <Terminal className="size-4" />
+                      Runtime Optimization
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                   <div className="p-3 bg-destructive/10 rounded border border-destructive/10 flex gap-3">
-                      <div className="size-1.5 bg-destructive rounded-full mt-1 shrink-0 animate-pulse" />
-                      <p className="text-[10px] leading-relaxed text-muted-foreground italic">
-                        "Autonomous monitor flagged 4 suspicious signature patterns in the Singapore-Relay corridor. No breach detected."
-                      </p>
+                   <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-muted-foreground leading-relaxed">
+                      <p className="text-primary">{"&gt;"} parallel_mode: incubating</p>
+                      <p className="text-emerald-500">{"&gt;"} config_cache: hit</p>
+                      <p className="text-amber-500">{"&gt;"} workers: {performance.workers} (max: 4)</p>
+                      <p className="animate-pulse">{"&gt;"} jvm_args: -Xmx4g -UTF-8</p>
                    </div>
-                   <div className="aspect-square relative flex items-center justify-center p-4 bg-muted/10 rounded-xl">
-                      <div className="absolute inset-0 rounded-full border border-destructive/10 animate-spin-slow" />
-                      <Radar className="size-12 text-destructive opacity-20" />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                         <div className="text-[8px] font-mono text-destructive font-bold uppercase">Scanning...</div>
+                   <div className="flex flex-col gap-2">
+                      <div className="flex justify-between text-[10px] font-mono">
+                         <span className="text-muted-foreground">CPU STACK</span>
+                         <span className="text-primary">{performance.cpu.toFixed(1)}%</span>
+                      </div>
+                      <div className="h-1 bg-muted rounded-full overflow-hidden">
+                         <div className="h-full bg-primary transition-all duration-500" style={{ width: `${performance.cpu}%` }} />
                       </div>
                    </div>
                 </CardContent>
