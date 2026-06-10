@@ -6,17 +6,23 @@ import { useEffect, useRef, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { PhoneIncoming, ShieldCheck, Wifi } from "lucide-react"
+import { useSidebar } from "@/components/ui/sidebar"
 
 /**
- * @fileOverview Persistent Communication Node (V4.7 Emerald Sync)
- * নূরনেক্সাস সাম্রাজ্যের গ্লোবাল কলিং মেকানিজম। 
- * এখন এটি সবুজ (Emerald) থিমের কলিং বাটন সাপোর্ট করে।
+ * @fileOverview Global Persistent Communication Node (V5.0)
+ * এই কম্পোনেন্টটি নূরনেক্সাস সাম্রাজ্যের সকল কলিং চ্যানেলকে ব্যাকগ্রাউন্ডে সবসময় সচল রাখে।
+ * এটি রিলোড-মুক্ত কলিং রিসিভ নিশ্চিত করে।
  */
 export function PersistentCommNode() {
   const router = useRouter()
+  const pathname = usePathname()
   const { toast } = useToast()
+  const { open, isMobile } = useSidebar()
   const lastToastTime = useRef<number>(0)
   const [mounted, setMounted] = useState(false)
+
+  const isStandardActive = pathname === "/shurukkha-standard"
+  const isImperialActive = pathname === "/shurukkha-imperial"
 
   useEffect(() => {
     setMounted(true)
@@ -58,7 +64,7 @@ export function PersistentCommNode() {
           title: "🚨 ইনকামিং কল সিগন্যাল",
           description: "সার্বভৌম নেটওয়ার্কের দুটি চ্যানেল থেকেই কানেকশন রিকোয়েস্ট এসেছে।",
           variant: "default",
-          className: "border-emerald-500/50 bg-black/90 backdrop-blur-2xl",
+          className: "border-emerald-500/50 bg-black/90 backdrop-blur-2xl border-l-4",
           action: (
             <div className="flex flex-col gap-2">
               <Button 
@@ -96,20 +102,48 @@ export function PersistentCommNode() {
 
   if (!mounted) return null;
 
+  // Sidebar width logic
+  const sidebarWidth = isMobile ? '0px' : (open ? '16rem' : '3rem')
+
   return (
-    <div className="fixed bottom-0 right-0 w-1 h-1 opacity-0 pointer-events-none overflow-hidden z-[-1]">
-      <iframe 
-        src="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
-        title="Standard Persistent Listener"
-        allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
-        sandbox="allow-same-origin allow-scripts allow-popovers allow-forms"
-      />
-      <iframe 
-        src="https://shurukkha-hub.sirajganj.gov.bd/dashboard" 
-        title="Stable Persistent Listener"
-        allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
-        sandbox="allow-same-origin allow-scripts allow-popovers allow-forms"
-      />
-    </div>
+    <>
+      {/* 1. Persistent Standard Hub (ofzc.vercel.app) */}
+      <div 
+        className={`fixed top-0 bottom-0 right-0 z-[40] transition-all duration-300 overflow-hidden bg-white ${isStandardActive ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none w-1 h-1'}`}
+        style={{ left: isStandardActive ? sidebarWidth : '100%', top: isStandardActive ? '4.5rem' : '0' }}
+      >
+        <iframe 
+          src="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
+          className="w-full h-full border-0"
+          title="Standard Hub Node"
+          allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
+          sandbox="allow-same-origin allow-scripts allow-popovers allow-forms"
+        />
+      </div>
+
+      {/* 2. Persistent Imperial Hub (Sirajganj governmental node or Imperial Vercel) */}
+      <div 
+        className={`fixed top-0 bottom-0 right-0 z-[40] transition-all duration-300 overflow-hidden bg-white ${isImperialActive ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none w-1 h-1'}`}
+        style={{ left: isImperialActive ? sidebarWidth : '100%', top: isImperialActive ? '4.5rem' : '0' }}
+      >
+        <iframe 
+          src="https://shurukkha-hub-imperial-sovereign-in.vercel.app/dashboard" 
+          className="w-full h-full border-0"
+          title="Imperial Hub Node"
+          allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
+          sandbox="allow-same-origin allow-scripts allow-popovers allow-forms"
+        />
+      </div>
+
+      {/* 3. Hidden Background Stable Listener (gov.bd) */}
+      <div className="fixed bottom-0 right-0 w-1 h-1 opacity-0 pointer-events-none overflow-hidden z-[-1]">
+        <iframe 
+          src="https://shurukkha-hub.sirajganj.gov.bd/dashboard" 
+          title="Stable Persistent Listener"
+          allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
+          sandbox="allow-same-origin allow-scripts allow-popovers allow-forms"
+        />
+      </div>
+    </>
   )
 }
