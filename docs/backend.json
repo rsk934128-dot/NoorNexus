@@ -43,6 +43,20 @@
         "dailyThroughput": { "type": "number" }
       }
     },
+    "PaymentMethod": {
+      "title": "Payment Method",
+      "description": "Configuration for an ecosystem payment gateway.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "provider": { "type": "string" },
+        "status": { "type": "string", "enum": ["Active", "Deprecated", "Maintenance"] },
+        "volume": { "type": "string" },
+        "health": { "type": "string" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["name", "provider", "status"]
+    },
     "SportsMatch": {
       "title": "Sovereign Match",
       "description": "Real-time football match data for Mission 400.",
@@ -110,6 +124,10 @@
     "/treasury/global": {
       "schema": "TreasuryStatus",
       "description": "Global treasury metrics"
+    },
+    "/payment_methods/{methodId}": {
+      "schema": "PaymentMethod",
+      "description": "Configured payment gateways for the One Engine Ledger"
     },
     "/sports_matches/{matchId}": {
       "schema": "SportsMatch",
