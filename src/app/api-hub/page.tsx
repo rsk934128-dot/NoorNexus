@@ -12,15 +12,12 @@ import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
   Menu, MessageSquare, Cpu, BookOpen, Layers, Info, CheckCircle2,
-  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, RefreshCcw, Star, HeartPulse, Activity
+  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useFirestore } from "@/firebase"
-import { collection, addDoc, serverTimestamp } from "firebase/firestore"
-import { createSyncRoutine } from "@/services/mainframe-sync"
 
 const ENDPOINTS = [
   { method: "POST", path: "/openapi/v2/order/create", desc: "Create a prepay order via SHA256withRSA." },
@@ -44,26 +41,10 @@ interface Message {
 
 export default function ApiHubPage() {
   const { toast } = useToast()
-  const db = useFirestore()
   const [loading, setLoading] = useState(false)
   const [query, setQuery] = useState("")
   const [messages, setMessages] = useState<Message[]>([])
   const scrollRef = useRef<HTMLDivElement>(null)
-
-  // Playground State
-  const [playgroundLoading, setPlaygroundLoading] = useState(false)
-  const [playgroundResult, setPlaygroundResult] = useState<any>(null)
-  const [activeTab, setActiveTab] = useState("endpoints")
-  const [handshakeProgress, setHandshakeProgress] = useState(0)
-  const [isSynced, setIsSynced] = useState(false)
-  const [payload, setPayload] = useState(`{
-  "appId": "RUBELPAY-V3",
-  "action": "MAIN_SYNC",
-  "metadata": {
-    "region": "SG-EDGE-01",
-    "version": "1.0.4"
-  }
-}`)
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -82,7 +63,7 @@ export default function ApiHubPage() {
       const history = messages.map(m => ({ role: m.role, text: m.text }))
       const result = await noraIntegrationAssistant({
         query: userMsg,
-        context: "SDK_HEARTBEAT",
+        context: "GENERAL",
         history
       })
       
@@ -97,45 +78,6 @@ export default function ApiHubPage() {
       toast({ title: "AI Offline", description: e.message, variant: "destructive" })
     } finally {
       setLoading(false)
-    }
-  }
-
-  const executeHandshake = async () => {
-    setPlaygroundLoading(true)
-    setPlaygroundResult(null)
-    setHandshakeProgress(10)
-    
-    try {
-      const parsed = JSON.parse(payload)
-      const routine = createSyncRoutine(parsed.appId, parsed.metadata?.region);
-
-      // Simulate step-by-step handshake visualization
-      const steps = [25, 45, 75, 90, 100];
-      for (const step of steps) {
-        await new Promise(r => setTimeout(r, 300));
-        setHandshakeProgress(step);
-      }
-
-      const success = await routine.startSync(db);
-      
-      if (success) {
-        setIsSynced(true);
-        setPlaygroundResult({
-          status: "SUCCESS",
-          msg: "Imperial Heartbeat Sync Established",
-          data: {
-            session: "SHEIKH-SESS-" + Math.random().toString(16).substring(2, 10).toUpperCase(),
-            trust_level: "L4_TSBAC",
-            sync_interval: "4000ms",
-            mesh_status: "ACTIVE"
-          }
-        });
-        toast({ title: "Mainframe Connection Active" });
-      }
-    } catch (e: any) {
-      toast({ title: "Payload Error", description: "Invalid configuration.", variant: "destructive" });
-    } finally {
-      setPlaygroundLoading(false);
     }
   }
 
@@ -155,14 +97,11 @@ export default function ApiHubPage() {
                    Sovereign Connect Hub
                  </h2>
               </div>
-              <p className="text-muted-foreground">Phase 3: Unified Connect & Imperial SDK Management.</p>
+              <p className="text-muted-foreground">Phase 3: Unified Connect & Imperial SDK Management for TTPs.</p>
             </div>
             <div className="flex items-center gap-2">
-               <Badge variant="outline" className={`h-10 px-4 flex items-center gap-2 ${isSynced ? 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5' : 'border-primary/30 text-primary'}`}>
-                 <Activity className={`size-4 ${isSynced ? 'animate-pulse' : ''}`} /> {isSynced ? 'MESH_SYNC: ACTIVE' : 'MESH_SYNC: IDLE'}
-               </Badge>
                <Badge variant="outline" className="border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
-                 <HeartPulse className="size-4" /> HEARTBEAT ENABLED
+                 <Lock className="size-4" /> TSBAC_SECURITY_L4
                </Badge>
             </div>
           </header>
@@ -173,7 +112,7 @@ export default function ApiHubPage() {
                 <TabsList className="bg-white/5 border border-white/10 p-1">
                   <TabsTrigger value="sdk" className="gap-2"><Cpu className="size-4" /> Imperial SDK</TabsTrigger>
                   <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> REST API</TabsTrigger>
-                  <TabsTrigger value="playground" className="gap-2"><Terminal className="size-4" /> Sync Playground</TabsTrigger>
+                  <TabsTrigger value="security" className="gap-2"><ShieldCheck className="size-4" /> Security Protocol</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="endpoints" className="space-y-4">
@@ -238,62 +177,39 @@ export default function ApiHubPage() {
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="playground" className="space-y-4">
-                   <Card className="glass-card">
-                      <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase tracking-widest">Mainframe Sync Runner</CardTitle>
-                         <CardDescription>Simulate Heartbeat Handshake between Rubelpay and NoorNexus.</CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                         <div className="space-y-2">
-                            <Label className="text-[10px] font-bold text-muted-foreground">Sync Configuration (JSON)</Label>
-                            <textarea 
-                              className="w-full h-32 bg-background/50 border border-white/10 rounded-md p-3 font-mono text-xs focus:ring-1 focus:ring-primary outline-none" 
-                              value={payload}
-                              onChange={(e) => setPayload(e.target.value)}
-                            />
-                         </div>
-                         
-                         <Button 
-                          onClick={executeHandshake}
-                          disabled={playgroundLoading}
-                          className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary flex items-center justify-center"
-                        >
-                          {playgroundLoading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
-                          {isSynced ? "Restart Sync Routine" : "Initiate Handshake"}
-                        </Button>
-
-                         {playgroundLoading && (
-                           <div className="space-y-2 py-4">
-                             <div className="flex justify-between text-[10px] font-mono text-primary uppercase">
-                               <span>Establishing RSA Canal...</span>
-                               <span>{handshakeProgress}%</span>
-                             </div>
-                             <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                               <div className="h-full bg-primary transition-all duration-300" style={{ width: `${handshakeProgress}%` }} />
-                             </div>
-                           </div>
-                         )}
-
-                         {playgroundResult && (
-                           <div className="mt-6 space-y-4 animate-in fade-in zoom-in-95">
-                              <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
-                                <CheckCircle2 className="size-4 text-emerald-500" />
-                                <span className="text-[10px] font-bold text-emerald-500 uppercase">{playgroundResult.msg}</span>
-                              </div>
-                              <pre className="bg-black/40 p-4 rounded-lg font-mono text-[10px] border border-white/5 text-primary overflow-x-auto">
-                                {JSON.stringify(playgroundResult.data, null, 2)}
-                              </pre>
-                           </div>
-                         )}
-                      </CardContent>
-                   </Card>
+                <TabsContent value="security" className="space-y-4">
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <Card className="glass-card border-amber-500/20 bg-amber-500/5">
+                        <CardHeader>
+                          <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
+                             <Key className="size-4" /> RSA Handshake
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-[11px] text-muted-foreground leading-relaxed">
+                            All external requests must include an X-Imperial-Signature header, generated by signing the payload and timestamp with your node's RSA-2048 private key.
+                          </p>
+                        </CardContent>
+                      </Card>
+                      <Card className="glass-card border-primary/20 bg-primary/5">
+                        <CardHeader>
+                          <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
+                             <ShieldAlert className="size-4" /> Heartbeat Policy
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-[11px] text-muted-foreground leading-relaxed">
+                            To maintain TIER-3 (IMPERIAL) status, your application must emit a heartbeat every 4 seconds. Missing 3 consecutive pulses results in automated Trust Score devaluation.
+                          </p>
+                        </CardContent>
+                      </Card>
+                   </div>
                 </TabsContent>
               </Tabs>
             </div>
 
             <div className="space-y-6">
-              <Card className="glass-card border-l-4 border-l-amber-500 h-[700px] flex flex-col">
+              <Card className="glass-card border-l-4 border-l-amber-500 h-[600px] flex flex-col">
                 <CardHeader className="shrink-0">
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
                     <Cpu className="size-4" /> Nora-03 SDK Assistant

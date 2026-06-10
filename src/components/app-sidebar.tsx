@@ -53,7 +53,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { SovereignLogo } from "@/components/sovereign-logo"
-import { Badge } from "@/components/ui/badge"
 
 const items = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
