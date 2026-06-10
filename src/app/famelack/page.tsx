@@ -11,9 +11,9 @@ export default function FamelackPage() {
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
-      <SidebarInset>
-        <main className="flex flex-col h-screen w-full">
-          {/* Header with reduced padding for more space */}
+      <SidebarInset className="flex-1 w-full">
+        <main className="flex flex-col h-screen w-full max-w-none">
+          {/* Header with optimized space */}
           <header className="px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between border-b border-white/5 bg-background/50 backdrop-blur-md shrink-0">
             <div className="flex items-center gap-3">
               <div className="size-8 sm:size-10 bg-primary/20 rounded-lg sm:rounded-xl flex items-center justify-center border border-primary/30 glow-primary shrink-0">
@@ -43,9 +43,9 @@ export default function FamelackPage() {
             </div>
           </header>
 
-          {/* Optimized Display Area: Minimized padding for maximum iframe visibility */}
-          <div className="flex-1 p-1 sm:p-2 lg:p-4 overflow-hidden bg-black/20">
-            <Card className="glass-card border-white/5 h-full w-full overflow-hidden relative rounded-md sm:rounded-xl">
+          {/* Optimized Display Area: Removed max-width to allow full horizontal expansion on desktop */}
+          <div className="flex-1 p-1 sm:p-2 lg:p-0 overflow-hidden bg-black/20">
+            <Card className="glass-card border-white/5 h-full w-full overflow-hidden relative rounded-md lg:rounded-none">
               <div className="absolute inset-0 bg-primary/5 opacity-[0.02] pointer-events-none" />
               <CardContent className="p-0 h-full w-full">
                 <iframe 
