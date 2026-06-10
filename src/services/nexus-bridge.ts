@@ -1,8 +1,10 @@
-
 'use client';
+
 /**
- * @fileOverview NexusBridge Implementation.
+ * @fileOverview NexusBridge Implementation - Final Synthesis Edition.
  * Bridges the collaboration between Gemini and NoorNexus Mainframe.
+ * 
+ * [System Note]: কমান্ডারের লক্ষ্য পূরণ হলো সাম্রাজ্যের মূল শক্তি।
  */
 
 export interface HealthReport {
@@ -18,7 +20,6 @@ const SIMULATED_SK = 'sk_sov_nexus_alpha_v3';
 
 export const connectToGemini = async (action: string, payload: any = {}): Promise<any> => {
   try {
-    // In a real scenario, this would be a real URL. Here we use our internal API route.
     const response = await fetch('/api/gateway', {
       method: 'POST',
       headers: {

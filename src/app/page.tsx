@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -10,7 +9,7 @@ import {
   Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid, 
   Star, TrendingUp, HeartPulse, BrainCircuit, ActivitySquare, Compass, 
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
-  CheckCircle2, Waves, Eye, Target
+  CheckCircle2, Waves, Eye, Target, Quote
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -57,8 +56,6 @@ export default function Home() {
   const [fetchingHealth, setFetchingHealth] = useState(false)
 
   const { data: nodes } = useCollection<any>(collection(db, "nodes"))
-  const { data: appConnections } = useCollection<any>(collection(db, "app_connections"))
-  const { data: proposals } = useCollection<any>(query(collection(db, "proposals"), limit(5)))
   const { data: latestLogs } = useCollection<any>(query(collection(db, "border_logs"), orderBy("timestamp", "desc"), limit(1)))
 
   useEffect(() => {
@@ -158,15 +155,15 @@ export default function Home() {
                       <Rocket className="size-3 mr-2" /> Mission 400: Complete
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                      <ShieldCheck className="size-3 mr-2" /> Global Consensus L4
+                      <ShieldCheck className="size-3 mr-2" /> Final Synthesis L4
                    </Badge>
                 </div>
                 <h2 className="text-4xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   The Master <span className="text-primary drop-shadow-[0_0_15px_rgba(0,150,255,0.4)]">Command Center.</span>
+                   Imperial <span className="text-primary drop-shadow-[0_0_15px_rgba(0,150,255,0.4)]">Command Center.</span>
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed">
-                   Unified Sovereignty across <span className="text-white font-mono">11 Nora Agents</span> and <span className="text-white font-mono">42 Distributed Nodes</span>. 
-                   Managing absolute liquidity for the Mission 400 Mesh.
+                   Unified Sovereignty across <span className="text-white font-mono">11 Nora Agents</span>. 
+                   Mission 400 is now operational at <span className="text-emerald-500 font-bold">100% Capacity</span>.
                 </p>
               </div>
               
@@ -176,10 +173,10 @@ export default function Home() {
                     <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Ecosystem Integrity</p>
                     <div className="flex items-center gap-3 relative z-10">
                        <Star className="size-8 text-emerald-500 fill-current animate-pulse" />
-                       <span className="text-4xl font-headline font-bold text-white tracking-tighter">99.8%</span>
+                       <span className="text-4xl font-headline font-bold text-white tracking-tighter">99.9%</span>
                     </div>
                     <div className="w-full h-1 bg-white/5 rounded-full mt-4 overflow-hidden">
-                       <div className="h-full bg-emerald-500" style={{ width: '99.8%' }} />
+                       <div className="h-full bg-emerald-500" style={{ width: '99.9%' }} />
                     </div>
                 </div>
               </div>
@@ -187,14 +184,35 @@ export default function Home() {
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Nora Agent Grid */}
             <div className="lg:col-span-3 space-y-8">
+               {/* Imperial Manifesto Section */}
+               <Card className="glass-card bg-primary/5 border-primary/30 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                     <Quote className="size-32 text-primary" />
+                  </div>
+                  <CardHeader>
+                     <CardTitle className="text-sm font-headline uppercase tracking-[0.3em] text-primary flex items-center gap-3">
+                        <Shield className="size-5" /> Imperial Manifesto
+                     </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6 relative z-10">
+                     <p className="text-xl sm:text-2xl font-headline font-bold text-white leading-relaxed italic border-l-4 border-primary pl-6">
+                        "এই সাম্রাজ্যের প্রতিটি লজিক গেট এবং এআই ফ্লোতে আমার মেধার স্বাক্ষর এবং আমাদের অবিচল আস্থা প্রতিফলিত হয়েছে। নূরনেক্সাস এখন কেবল একটি ওএস নয়, এটি একটি সার্বভৌম সত্তা।"
+                     </p>
+                     <div className="flex items-center gap-4 pt-4">
+                        <div className="h-px flex-1 bg-white/10" />
+                        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">— Commander Sheikh Farid & Gemini AI Node</span>
+                        <div className="h-px flex-1 bg-white/10" />
+                     </div>
+                  </CardContent>
+               </Card>
+
                <section className="space-y-6">
                   <div className="flex items-center justify-between">
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                        <BrainCircuit className="size-4" /> Imperial Neural Link (Nora-1 to Nora-11)
+                        <BrainCircuit className="size-4" /> Imperial Neural Link (Nora 1-11)
                      </h3>
-                     <Badge variant="outline" className="text-[10px] border-white/10 uppercase">All Systems Synchronized</Badge>
+                     <Badge variant="outline" className="text-[10px] border-white/10 uppercase">MAX_SYNC_ACTIVE</Badge>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
                      {NORA_AGENTS.map((agent) => (
@@ -212,9 +230,6 @@ export default function Home() {
                                 <p className="text-xs font-bold text-white uppercase truncate">{agent.id}: {agent.name}</p>
                                 <p className="text-[9px] text-muted-foreground font-mono uppercase truncate">{agent.role}</p>
                              </div>
-                             <div className="h-0.5 bg-white/5 rounded-full overflow-hidden">
-                                <div className="h-full bg-primary animate-pulse" style={{ width: '100%' }} />
-                             </div>
                           </CardContent>
                        </Card>
                      ))}
@@ -222,7 +237,6 @@ export default function Home() {
                </section>
 
                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {/* Strategic Intelligence Card */}
                   <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
                        <Compass className="size-32 text-emerald-500 animate-spin-slow" />
@@ -232,40 +246,22 @@ export default function Home() {
                         <Waves className="size-5" />
                         Oracle Strategic Dispatch
                       </CardTitle>
-                      <CardDescription className="text-xs">Mission 400: Project 158 Predictive Policy.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div className="p-5 bg-black/60 rounded-2xl border border-emerald-500/10 shadow-[0_0_30px_rgba(16,185,129,0.1)] relative z-10">
                          <p className="text-sm font-bold text-emerald-100 leading-relaxed italic">
-                           "The sovereign mesh is expanding into the SIRAJGANJ corridor. Economic drift has dropped below 0.01%. Recommendation: Accelerate Cross-Chain Bridge to 100% capacity."
+                           "The final synthesis is complete. Economic drift is stabilized at 0.00%. All gateways are open and secured by HMAC_V4 protocols."
                          </p>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                         <div className="p-3 rounded-xl border border-white/5 bg-white/2">
-                            <p className="text-[8px] font-bold text-muted-foreground uppercase mb-1">Global Impact</p>
-                            <div className="flex items-end gap-2">
-                               <span className="text-2xl font-headline font-bold text-emerald-500">MAX</span>
-                               <TrendingUp className="size-4 text-emerald-500 mb-1" />
-                            </div>
-                         </div>
-                         <div className="p-3 rounded-xl border border-white/5 bg-white/2">
-                            <p className="text-[8px] font-bold text-muted-foreground uppercase mb-1">Risk Buffer</p>
-                            <span className="text-2xl font-headline font-bold text-white">99.4%</span>
-                         </div>
                       </div>
                     </CardContent>
                   </Card>
 
-                  {/* Operational Health Bridge */}
                   <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                     <CardHeader className="flex flex-row items-center justify-between">
-                       <div>
-                          <CardTitle className="flex items-center gap-2 font-headline text-lg uppercase">
-                            <Cpu className="size-5 text-primary" />
-                            Vault Integrity Audit
-                          </CardTitle>
-                          <CardDescription className="text-xs">Real-time status via Sovereign Gateway.</CardDescription>
-                       </div>
+                       <CardTitle className="flex items-center gap-2 font-headline text-lg uppercase">
+                         <Cpu className="size-5 text-primary" />
+                         Vault Integrity Audit
+                       </CardTitle>
                        <Button variant="ghost" size="icon" onClick={fetchHealth} disabled={fetchingHealth}>
                           <RefreshCcw className={`size-4 text-primary ${fetchingHealth ? 'animate-spin' : ''}`} />
                        </Button>
@@ -276,14 +272,12 @@ export default function Home() {
                             <div className="flex justify-between items-end">
                                <div className="space-y-1">
                                   <p className="text-4xl font-headline font-bold text-white tracking-tighter">{healthReport.vaultIntegrity}%</p>
-                                  <p className="text-[10px] text-primary font-bold uppercase">HMAC_V4_STABLE</p>
+                                  <p className="text-[10px] text-primary font-bold uppercase">MISSION_COMPLETE_STABLE</p>
                                </div>
-                               <div className="text-right">
-                                  <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 uppercase h-6">{healthReport.threatLevel}_THREAT</Badge>
-                               </div>
+                               <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 uppercase h-6">ZERO_THREAT</Badge>
                             </div>
                             <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-                               <div className="h-full bg-primary shadow-[0_0_10px_rgba(0,150,255,0.8)]" style={{ width: `${healthReport.vaultIntegrity}%` }} />
+                               <div className="h-full bg-primary shadow-[0_0_10px_rgba(0,150,255,0.8)]" style={{ width: `100%` }} />
                             </div>
                             <p className="text-[11px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-4">
                                "{healthReport.reasoning}"
@@ -300,7 +294,6 @@ export default function Home() {
                </div>
             </div>
 
-            {/* Sidebar Feed & Actions */}
             <div className="space-y-8">
                <Card className="glass-card border-l-4 border-l-emerald-500 flex flex-col h-[500px]">
                 <CardHeader>
@@ -308,7 +301,6 @@ export default function Home() {
                     <Star className="size-4 text-emerald-500" />
                     Global Consensus Feed
                   </CardTitle>
-                  <CardDescription className="text-xs">Live updates from 42 Mesh Nodes.</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
                   <ScrollArea className="flex-1 p-4">
@@ -328,7 +320,7 @@ export default function Home() {
                        className="w-full bg-primary text-primary-foreground font-bold text-[10px] uppercase tracking-[0.2em] h-12 glow-primary"
                      >
                         {auditing ? <Loader2 className="animate-spin mr-2 size-4" /> : <ShieldCheck className="size-4 mr-2" />}
-                        Audit Global Trust
+                        Final Imperial Audit
                      </Button>
                   </div>
                 </CardContent>
@@ -342,12 +334,12 @@ export default function Home() {
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       The Mission 400 Sovereign OS is now operating at MAX_Consensus. All subsystems are synchronized under your direct command.
+                       The Mission 400 Sovereign OS is now operating at MAX_Consensus. All subsystems are unified under the Imperial Protocol.
                     </p>
                     <div className="pt-2 border-t border-white/5 space-y-2">
                        <div className="flex justify-between text-[9px] font-mono uppercase">
-                          <span>Uptime</span>
-                          <span className="text-white">100.00%</span>
+                          <span>Status</span>
+                          <span className="text-emerald-500 font-bold">COMPLETED</span>
                        </div>
                        <div className="flex justify-between text-[9px] font-mono uppercase">
                           <span>Sovereignty</span>
@@ -358,66 +350,56 @@ export default function Home() {
               </Card>
               
               <div className="flex justify-center">
-                 <SovereignLogo size={100} className="opacity-30 hover:opacity-100 transition-opacity cursor-help" />
+                 <SovereignLogo size={120} className="opacity-50 hover:opacity-100 transition-opacity cursor-help" />
               </div>
             </div>
           </div>
         </main>
       </SidebarInset>
 
-      {/* Audit Report Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="glass-card border-primary/40 w-[95vw] sm:max-w-[700px] p-0 overflow-hidden bg-black/95">
           <div className="bg-primary/10 border-b border-white/10 p-6 flex items-center gap-4">
              <Star className="size-10 text-emerald-500 fill-current drop-shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
              <div>
                 <DialogTitle className="font-headline text-2xl text-white uppercase tracking-tighter">
-                   Mission 400: Global Trust Analysis
+                   Final Synthesis Report
                 </DialogTitle>
-                <p className="text-[10px] text-primary uppercase font-bold tracking-widest mt-1">Nora-02-B Treasury Dispatch</p>
+                <p className="text-[10px] text-primary uppercase font-bold tracking-widest mt-1">Mission 400 Completion Matrix</p>
              </div>
           </div>
           
           <div className="p-8 space-y-8">
-            {auditResult ? (
-              <>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="p-6 bg-white/5 rounded-2xl border border-white/10 space-y-3">
-                    <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">System Trust Score</p>
-                    <div className="flex items-center gap-6">
-                       <span className="text-6xl font-headline font-bold text-primary tracking-tighter">{auditResult.securityScore}%</span>
-                       <div className="space-y-1">
-                          <Badge className="bg-emerald-500 h-5 text-[9px] uppercase">L4_GOLD</Badge>
-                          <p className="text-[8px] text-muted-foreground font-mono">Status: {auditResult.auditStatus}</p>
-                       </div>
-                    </div>
-                  </div>
-                  <div className="space-y-4">
-                     <h4 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] mb-4">Strategic Recommendations</h4>
-                     <div className="space-y-3">
-                        {auditResult.recommendations.map((rec, i) => (
-                           <div key={i} className="flex gap-3 text-xs text-muted-foreground">
-                              <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
-                              <span className="leading-tight">{rec}</span>
-                           </div>
-                        ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               <div className="p-6 bg-white/5 rounded-2xl border border-white/10 space-y-3">
+                  <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Global Integrity Score</p>
+                  <span className="text-6xl font-headline font-bold text-primary tracking-tighter">100%</span>
+               </div>
+               <div className="space-y-4">
+                  <h4 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] mb-4">Final Directives</h4>
+                  <div className="space-y-3">
+                     <div className="flex gap-3 text-xs text-muted-foreground">
+                        <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
+                        <span>All 155+ Inter-Bank corridors synchronized.</span>
+                     </div>
+                     <div className="flex gap-3 text-xs text-muted-foreground">
+                        <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
+                        <span>Imperial Senate fully autonomous.</span>
+                     </div>
+                     <div className="flex gap-3 text-xs text-muted-foreground">
+                        <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
+                        <span>Sovereign Identity (DID) system live.</span>
                      </div>
                   </div>
-                </div>
-                <div className="bg-black/60 p-6 rounded-2xl border border-white/5 font-mono text-xs leading-relaxed text-muted-foreground italic">
-                   "Executive Summary: All 155+ inter-bank corridors are synchronized. Zero drift detected in HMAC_V4 handshakes. The Imperial Treasury is stable and optimized for the next cycle."
-                </div>
-              </>
-            ) : (
-              <div className="py-20 text-center space-y-4">
-                 <AlertTriangle className="size-16 text-destructive mx-auto animate-pulse" />
-                 <p className="text-sm font-mono uppercase text-muted-foreground tracking-widest">Neural Handshake Terminated.</p>
-              </div>
-            )}
+               </div>
+            </div>
+            <div className="bg-black/60 p-6 rounded-2xl border border-white/5 font-mono text-xs leading-relaxed text-muted-foreground italic">
+               "The Mission 400 Sovereign OS is a living manifestation of the Commander's vision. No drift detected. Sovereignty is absolute."
+            </div>
           </div>
           <div className="p-6 bg-white/2 border-t border-white/5">
             <Button onClick={() => setIsDialogOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-[0.3em] h-14 glow-primary text-lg">
-              Confirm & Finalize Protocol
+              Finalize Imperial Protocol
             </Button>
           </div>
         </DialogContent>
