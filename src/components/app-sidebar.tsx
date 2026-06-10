@@ -28,7 +28,8 @@ import {
   Users,
   Link as LinkIcon,
   Fingerprint,
-  Gavel
+  Gavel,
+  Landmark
 } from "lucide-react"
 
 import {
@@ -56,6 +57,7 @@ const items = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Identity Hub", url: "/identity", icon: Fingerprint },
   { title: "Imperial Senate", url: "/governance", icon: Gavel },
+  { title: "Trade Protocol", url: "/settlement", icon: Landmark },
   { title: "Merchant Onboarding", url: "/onboarding", icon: UserPlus },
   { title: "Merchant Lifecycle", url: "/merchants", icon: Users },
   { title: "Cross-Chain Gateway", url: "/cross-chain", icon: LinkIcon },
@@ -202,7 +204,7 @@ export function AppSidebar() {
                 </Avatar>
                 {isAdmin && (
                   <div className="absolute -top-1 -right-1 size-3 bg-primary rounded-full flex items-center justify-center border-2 border-background">
-                    <Crown className="size-1.5 text-background fill-current" />
+                    <Crown className="size-1.5 text-background font-bold fill-current" />
                   </div>
                 )}
               </div>

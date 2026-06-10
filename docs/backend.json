@@ -42,6 +42,23 @@
         "timestamp": { "type": "number" }
       }
     },
+    "InterBankSettlement": {
+      "title": "Inter-Bank Trade Settlement",
+      "description": "Atomic cross-border trade protocol between sovereign banks.",
+      "type": "object",
+      "properties": {
+        "settlementId": { "type": "string" },
+        "sourceBank": { "type": "string" },
+        "targetBank": { "type": "string" },
+        "amount": { "type": "number" },
+        "asset": { "type": "string" },
+        "escrowStatus": { "type": "string", "enum": ["PENDING", "LOCKED", "RELEASED", "DISPUTED"] },
+        "conditions": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "noraForensicScore": { "type": "number" }
+      },
+      "required": ["settlementId", "sourceBank", "targetBank", "amount", "asset", "escrowStatus"]
+    },
     "WebhookLog": {
       "title": "Webhook Event",
       "description": "Logs of incoming and outgoing Open Banking events.",
@@ -167,6 +184,10 @@
     "/compliance_records/{logId}": {
       "schema": "TaxComplianceRecord",
       "description": "Audit-ready tax and compliance logs"
+    },
+    "/inter_bank_settlements/{logId}": {
+      "schema": "InterBankSettlement",
+      "description": "Sovereign trade settlement records"
     },
     "/webhook_logs/{logId}": {
       "schema": "WebhookLog",
