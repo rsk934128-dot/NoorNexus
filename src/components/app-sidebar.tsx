@@ -32,7 +32,8 @@ import {
   Landmark,
   Scale,
   Compass,
-  Award
+  Award,
+  ShieldAlert
 } from "lucide-react"
 
 import {
@@ -44,7 +45,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
-  useSidebar
+  useSidebar,
+  SidebarGroup,
+  SidebarGroupLabel
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -55,32 +58,35 @@ import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { SovereignLogo } from "@/components/sovereign-logo"
 
-const items = [
+const ADMIN_EMAIL = "rubels1k994@gmail.com"
+
+const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
-  { title: "Imperial Oracle", url: "/oracle", icon: Compass },
-  { title: "Strategic Assessment", url: "/assessment", icon: Award },
   { title: "Identity Hub", url: "/identity", icon: Fingerprint },
   { title: "Imperial Senate", url: "/governance", icon: Gavel },
   { title: "Trade Protocol", url: "/settlement", icon: Landmark },
-  { title: "Arbitration Chamber", url: "/arbitration", icon: Scale },
   { title: "Merchant Onboarding", url: "/onboarding", icon: UserPlus },
-  { title: "Merchant Lifecycle", url: "/merchants", icon: Users },
   { title: "Cross-Chain Gateway", url: "/cross-chain", icon: LinkIcon },
-  { title: "Border Monitor", url: "/border-monitor", icon: Radar },
-  { title: "Compliance Agent", url: "/compliance", icon: ShieldCheck },
-  { title: "Sovereign Treasury", url: "/treasury", icon: Wallet },
-  { title: "One Engine Ledger", url: "/ledger", icon: Layers },
-  { title: "Node Watchtower", url: "/nodes", icon: Activity },
   { title: "SmartRemit P2P", url: "/remittance", icon: Send },
   { title: "Merchant P2C Hub", url: "/p2c", icon: Building2 },
   { title: "Open Banking Hub", url: "/api-hub", icon: Code2 },
-  { title: "Investor Hub", url: "/investors", icon: TrendingUp },
   { title: "Sovereign Charter", url: "/docs", icon: BookOpen },
   { title: "World Cup Relay", url: "/world-cup", icon: Trophy },
   { title: "Famelack Hub", url: "/famelack", icon: Globe },
 ]
 
-const ADMIN_EMAIL = "rubels1k994@gmail.com"
+const ADMIN_ITEMS = [
+  { title: "Imperial Oracle", url: "/oracle", icon: Compass },
+  { title: "Strategic Assessment", url: "/assessment", icon: Award },
+  { title: "Merchant Lifecycle", url: "/merchants", icon: Users },
+  { title: "Arbitration Chamber", url: "/arbitration", icon: Scale },
+  { title: "Border Monitor", url: "/border-monitor", icon: Radar },
+  { title: "Compliance Agent", url: "/compliance", icon: ShieldCheck },
+  { title: "Sovereign Treasury", url: "/treasury", icon: Wallet },
+  { title: "One Engine Ledger", url: "/ledger", icon: Layers },
+  { title: "Node Watchtower", url: "/nodes", icon: Activity },
+  { title: "Imperial Parameters", url: "/ecosystem", icon: Settings },
+]
 
 export function AppSidebar() {
   const pathname = usePathname()
@@ -96,49 +102,22 @@ export function AppSidebar() {
   const handleLogout = async () => {
     try {
       await signOutUser(auth)
-      toast({
-        title: "Session Terminated",
-        description: "Imperial handshake closed.",
-      })
+      toast({ title: "Session Terminated", description: "Imperial handshake closed." })
       router.push("/login")
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to sign out.",
-        variant: "destructive"
-      })
+      toast({ title: "Error", description: "Failed to sign out.", variant: "destructive" })
     }
   }
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch((e) => {
-        toast({
-          title: "Fullscreen Error",
-          description: e.message,
-          variant: "destructive"
-        })
-      })
+      document.documentElement.requestFullscreen().catch((e) => toast({ title: "Fullscreen Error", description: e.message, variant: "destructive" }))
       setIsFullscreen(true)
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen()
         setIsFullscreen(false)
       }
-    }
-  }
-
-  React.useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement)
-    }
-    document.addEventListener("fullscreenchange", handleFullscreenChange)
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange)
-  }, [])
-
-  const handleLinkClick = () => {
-    if (isMobile) {
-      setOpenMobile(false)
     }
   }
 
@@ -159,98 +138,79 @@ export function AppSidebar() {
         )}
       </SidebarHeader>
       <SidebarSeparator />
+      
       <SidebarContent>
-        <SidebarMenu className="px-2 pt-4">
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton 
-                asChild 
-                isActive={pathname === item.url}
-                className="hover:bg-primary/10 hover:text-primary transition-all duration-200 h-11"
-              >
-                <Link href={item.url} onClick={handleLinkClick}>
-                  <item.icon className={`size-5 ${item.title === 'Imperial Oracle' ? 'text-emerald-500' : item.title === 'Strategic Assessment' ? 'text-amber-500' : ''}`} />
-                  <span className={`font-medium text-sm ${item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : item.title === 'Strategic Assessment' ? 'text-amber-500 font-bold' : ''}`}>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-muted-foreground px-4 mb-2">Mesh Services</SidebarGroupLabel>
+          <SidebarMenu className="px-2">
+            {USER_ITEMS.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton asChild isActive={pathname === item.url} className="h-11">
+                  <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
+                    <item.icon className="size-5" />
+                    <span className="font-medium text-sm">{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+
+        {isAdmin && (
+          <SidebarGroup className="mt-4">
+            <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-primary px-4 mb-2 flex items-center gap-2">
+              <ShieldAlert className="size-3" /> Sovereign Commands
+            </SidebarGroupLabel>
+            <SidebarMenu className="px-2">
+              {ADMIN_ITEMS.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild isActive={pathname === item.url} className="h-11 hover:bg-primary/10">
+                    <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
+                      <item.icon className={`size-5 ${item.title === 'Imperial Oracle' ? 'text-emerald-500' : item.title === 'Strategic Assessment' ? 'text-amber-500' : 'text-primary'}`} />
+                      <span className={`font-medium text-sm ${item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : item.title === 'Strategic Assessment' ? 'text-amber-500 font-bold' : ''}`}>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
+        )}
       </SidebarContent>
+
       <SidebarFooter className="p-4 space-y-4">
-        <div className="space-y-2">
-          <button 
-            onClick={toggleFullscreen}
-            className="w-full py-2.5 bg-primary/5 rounded border border-primary/20 text-[9px] uppercase font-bold text-primary hover:bg-primary/10 transition-all flex items-center justify-center gap-2 group"
-          >
-            {isFullscreen ? (
-              <>
-                <Minimize2 className="size-3 group-hover:scale-110 transition-transform" />
-                Exit Fullscreen
-              </>
-            ) : (
-              <>
-                <Maximize2 className="size-3 group-hover:scale-110 transition-transform" />
-                Go Fullscreen
-              </>
-            )}
-          </button>
-        </div>
+        <button onClick={toggleFullscreen} className="w-full py-2.5 bg-primary/5 rounded border border-primary/20 text-[9px] uppercase font-bold text-primary hover:bg-primary/10 transition-all flex items-center justify-center gap-2 group">
+          {isFullscreen ? <><Minimize2 className="size-3" /> Exit Fullscreen</> : <><Maximize2 className="size-3" /> Go Fullscreen</>}
+        </button>
 
         {user ? (
-          <div className={`p-3 rounded-xl border space-y-3 transition-all ${isAdmin ? 'bg-primary/10 border-primary/40 shadow-[0_0_15px_rgba(0,150,255,0.2)]' : 'bg-primary/5 border-primary/20'}`}>
+          <div className={`p-3 rounded-xl border space-y-3 transition-all ${isAdmin ? 'bg-primary/10 border-primary/40' : 'bg-primary/5 border-primary/20'}`}>
             <div className="flex items-center gap-3">
-              <div className="relative">
-                <Avatar className={`size-8 border ${isAdmin ? 'border-primary' : 'border-primary/30'}`}>
-                  <AvatarImage src={user.photoURL || ""} />
-                  <AvatarFallback className="bg-primary/10 text-primary text-[10px] font-bold">
-                    {user.displayName?.substring(0, 2).toUpperCase() || "C"}
-                  </AvatarFallback>
-                </Avatar>
-                {isAdmin && (
-                  <div className="absolute -top-1 -right-1 size-3 bg-primary rounded-full flex items-center justify-center border-2 border-background">
-                    <Crown className="size-1.5 text-background font-bold fill-current" />
-                  </div>
-                )}
-              </div>
+              <Avatar className={`size-8 border ${isAdmin ? 'border-primary' : 'border-primary/30'}`}>
+                <AvatarImage src={user.photoURL || ""} />
+                <AvatarFallback>{user.displayName?.substring(0, 2).toUpperCase() || "C"}</AvatarFallback>
+              </Avatar>
               <div className="flex-1 min-w-0">
                 <p className={`text-[10px] font-bold truncate uppercase ${isAdmin ? 'text-primary' : ''}`}>
                   {isAdmin ? "Imperial Admin" : (user.displayName || "Commander")}
                 </p>
                 <div className="flex items-center gap-1">
                    <div className={`size-1 rounded-full animate-pulse ${isAdmin ? 'bg-primary' : 'bg-emerald-500'}`} />
-                   <p className="text-[8px] text-muted-foreground uppercase font-mono tracking-tighter">
-                     {isAdmin ? "ROOT_L4_SUPERUSER" : "Root_L4 Session"}
-                   </p>
+                   <p className="text-[8px] text-muted-foreground uppercase font-mono">{isAdmin ? "ROOT_L4_SUPERUSER" : "Active Session"}</p>
                 </div>
               </div>
             </div>
-            <button 
-              onClick={handleLogout}
-              className="w-full py-2.5 bg-white/5 rounded border border-white/5 text-[9px] uppercase font-bold text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 transition-all flex items-center justify-center gap-2"
-            >
-              <LogOut className="size-3" />
-              Terminate Handshake
+            <button onClick={handleLogout} className="w-full py-2 bg-white/5 rounded border border-white/5 text-[9px] uppercase font-bold text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all flex items-center justify-center gap-2">
+              <LogOut className="size-3" /> Terminate
             </button>
           </div>
         ) : (
-          <SidebarMenuButton asChild className="bg-primary text-primary-foreground hover:bg-primary/90 h-11">
-            <Link href="/login" onClick={handleLinkClick}>
+          <SidebarMenuButton asChild className="bg-primary text-primary-foreground h-11">
+            <Link href="/login">
               <LogIn className="size-4" />
-              <span className="text-xs font-bold uppercase tracking-widest">Identity Authentication</span>
+              <span className="text-xs font-bold uppercase tracking-widest">Identify</span>
             </Link>
           </SidebarMenuButton>
         )}
-
-        <div className="flex flex-col gap-2">
-          <SidebarMenuButton asChild className={`hover:text-primary transition-colors border border-white/5 h-11 ${pathname === '/ecosystem' ? 'bg-primary/10 text-primary border-primary/20' : 'text-muted-foreground'}`}>
-            <Link href="/ecosystem" onClick={handleLinkClick}>
-              <Settings className="size-4" />
-              <span className="text-xs font-bold uppercase tracking-widest">Parameters</span>
-              <ChevronRight className="size-3 ml-auto" />
-            </Link>
-          </SidebarMenuButton>
-        </div>
       </SidebarFooter>
     </Sidebar>
   )
