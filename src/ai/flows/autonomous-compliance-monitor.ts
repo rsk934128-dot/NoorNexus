@@ -67,6 +67,7 @@ const verifyHmacV4Signature = ai.defineTool(
 
 const autonomousComplianceMonitorPrompt = ai.definePrompt({
   name: 'autonomousComplianceMonitorPrompt',
+  model: 'googleai/gemini-1.5-flash',
   tools: [verifyHmacV4Signature],
   input: {schema: AutonomousComplianceMonitorInputSchema},
   output: {schema: AutonomousComplianceMonitorOutputSchema},
@@ -86,7 +87,7 @@ export async function autonomousComplianceMonitor(
 ): Promise<AutonomousComplianceMonitorOutput> {
   try {
     const {output} = await autonomousComplianceMonitorPrompt(input);
-    if (!output) throw new Error('AI Agent produced no output.');
+    if (!output) throw new Error('AI failed to generate compliance assessment.');
     return output;
   } catch (error: any) {
     console.error('Compliance Flow Error:', error);

@@ -26,6 +26,7 @@ export type LedgerAuditOutput = z.infer<typeof LedgerAuditOutputSchema>;
 
 const auditPrompt = ai.definePrompt({
   name: 'ledgerAuditPrompt',
+  model: 'googleai/gemini-1.5-flash',
   input: {schema: LedgerAuditInputSchema},
   output: {schema: LedgerAuditOutputSchema},
   prompt: `You are the Imperial Treasury Auditor. Analyze these metrics for signs of cryptographic drift or liquidity drain.
@@ -41,7 +42,7 @@ const auditPrompt = ai.definePrompt({
 export async function ledgerAudit(input: LedgerAuditInput): Promise<LedgerAuditOutput> {
   try {
     const {output} = await auditPrompt(input);
-    if (!output) throw new Error('Audit Agent produced no output.');
+    if (!output) throw new Error('AI failed to generate ledger audit report.');
     return output;
   } catch (error: any) {
     console.error('Ledger Audit Error:', error);
