@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 /**
  * @fileOverview Shurukkha Hub Standard Edition (Sovereign Cloud Node)
  * এটি আপনার স্ট্যান্ডার্ড নোড হিসেবে সফলভাবে ইন্টিগ্রেট করা হয়েছে।
+ * এখন এটি সবুজ (Emerald) সিগন্যাল দ্বারা চিহ্নিত।
  */
 export default function ShurukkhaStandardPage() {
   const refreshFrame = () => {
@@ -40,9 +41,9 @@ export default function ShurukkhaStandardPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Badge variant="outline" className="hidden sm:flex border-primary/50 text-primary uppercase items-center gap-1.5 h-7">
+              <Badge variant="outline" className="hidden sm:flex border-emerald-500/50 text-emerald-500 uppercase items-center gap-1.5 h-7 bg-emerald-500/5">
                 <ShieldCheck className="size-3.5" />
-                <span className="text-[10px]">Active Cloud Uplink</span>
+                <span className="text-[10px] font-bold">Active Cloud Uplink</span>
               </Badge>
               <Button 
                 variant="ghost" 
@@ -56,7 +57,7 @@ export default function ShurukkhaStandardPage() {
                 href="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-xs font-bold text-muted-foreground hover:text-emerald-500 transition-colors bg-white/5 px-4 py-2 rounded-md border border-white/10"
+                className="flex items-center gap-2 text-xs font-bold text-emerald-500 hover:bg-emerald-500/10 transition-colors bg-white/5 px-4 py-2 rounded-md border border-emerald-500/10"
               >
                 <span className="hidden sm:inline uppercase tracking-widest text-[10px]">External View</span>
                 <ExternalLink className="size-3.5" />
@@ -83,7 +84,7 @@ export default function ShurukkhaStandardPage() {
           </div>
           
           <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full">
-            <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.4em]">
+            <p className="text-[9px] font-mono text-emerald-500/60 uppercase tracking-[0.4em]">
               NoorNexus OS Integrated Cloud Node | Endpoint: shurukkha-hub-ofzc
             </p>
           </footer>
