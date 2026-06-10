@@ -1,3 +1,4 @@
+
 # 🌌 NOORNEXUS | Sovereign OS v3
 ### **Mission 400: The Imperial Digital Infrastructure**
 > **Lead Architect:** Sheikh Farid | **Admin:** Imperial_Rubel
@@ -22,6 +23,12 @@
 - **Payments:** Sovereign Connect (USDC/USDT Native)
 - **Compliance:** Real-time On-Chain Wallet Screening & Proactive Adaptive Defense
 - **Optimization:** Project 151 - Global Liquidity Rebalancer (Nora-02-B)
+
+## 🌐 Infrastructure Validation
+**Domain Ownership Token (DNS TXT):**
+- **Host:** `@`
+- **Value:** `sovereign-hub-verify=src6w425f3g`
+- **TTL:** `3600`
 
 ## ⚠️ Risk Mitigation & Criticality
 1. **Cryptographic Drift:** Continuous signature audits by Nora-01.

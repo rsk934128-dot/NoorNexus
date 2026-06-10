@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -8,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
   BookOpen, FileText, ShieldAlert, Zap, Loader2, Target, 
-  AlertTriangle, CheckCircle2, ChevronRight, Menu, Cpu, Code2, ShieldCheck, Star
+  AlertTriangle, CheckCircle2, ChevronRight, Menu, Cpu, Code2, ShieldCheck, Star, Globe, Copy
 } from "lucide-react"
 import { analyzeProtocol, ProtocolArchitectOutput } from "@/ai/flows/protocol-architect-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -35,6 +36,8 @@ export default function DocsPage() {
       setLoading(false)
     }
   }
+
+  const dnsToken = "sovereign-hub-verify=src6w425f3g";
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -66,6 +69,37 @@ export default function DocsPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
+              <section className="space-y-4">
+                <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
+                  <Globe className="size-4" /> Domain Validation (DNS)
+                </h3>
+                <Card className="glass-card bg-black/40 border-primary/20">
+                  <CardContent className="p-6 space-y-4">
+                    <div className="flex justify-between items-center">
+                       <p className="text-[10px] text-muted-foreground uppercase font-bold">Registry Verification Token</p>
+                       <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500 h-4">STABLE_DNS</Badge>
+                    </div>
+                    <div className="p-4 bg-primary/5 border border-primary/10 rounded-xl font-mono text-[10px] space-y-2 relative group overflow-hidden">
+                      <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-100 transition-opacity">
+                         <Button variant="ghost" size="icon" className="size-6" onClick={() => {
+                           navigator.clipboard.writeText(dnsToken);
+                           toast({ title: "Token Copied" });
+                         }}>
+                           <Copy className="size-3" />
+                         </Button>
+                      </div>
+                      <p><span className="text-primary font-bold">TYPE:</span> TXT</p>
+                      <p><span className="text-primary font-bold">HOST:</span> @</p>
+                      <p><span className="text-primary font-bold">VALUE:</span> {dnsToken}</p>
+                      <p><span className="text-primary font-bold">TTL:</span> 3600</p>
+                    </div>
+                    <p className="text-[9px] text-muted-foreground italic leading-relaxed">
+                      Confirming ডোমেইন মালিকানা with this TXT record establishes the sovereign authority of the NoorNexus Hub over its root infrastructure.
+                    </p>
+                  </CardContent>
+                </Card>
+              </section>
+
               <section className="space-y-4">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
                   <Star className="size-4" /> Phase 3: Trust-Based Access (TSBAC)
