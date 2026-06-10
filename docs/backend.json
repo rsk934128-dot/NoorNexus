@@ -115,6 +115,22 @@
         "noraAssessment": { "type": "string" }
       },
       "required": ["businessName", "businessType", "region", "status"]
+    },
+    "SovereignIdentity": {
+      "title": "Sovereign Identity (DID)",
+      "description": "Cross-chain reputation passport for merchants and users.",
+      "type": "object",
+      "properties": {
+        "did": { "type": "string" },
+        "owner": { "type": "string" },
+        "trustScore": { "type": "number" },
+        "reputationTier": { "type": "string", "enum": ["NOVICE", "VERIFIED", "ELITE", "IMPERIAL"] },
+        "linkedAddresses": { "type": "array", "items": { "type": "string" } },
+        "issuanceDate": { "type": "number" },
+        "lastUpdate": { "type": "number" },
+        "metadata": { "type": "string" }
+      },
+      "required": ["did", "owner", "trustScore"]
     }
   },
   "auth": {
@@ -152,6 +168,10 @@
     "/merchant_onboarding_requests/{reqId}": {
       "schema": "MerchantOnboarding",
       "description": "Merchant onboarding and vetting records"
+    },
+    "/identities/{did}": {
+      "schema": "SovereignIdentity",
+      "description": "Global reputation registry for the mesh"
     }
   }
 }

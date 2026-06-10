@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -25,7 +26,8 @@ import {
   Wallet,
   UserPlus,
   Users,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Fingerprint
 } from "lucide-react"
 
 import {
@@ -51,6 +53,7 @@ import { Badge } from "@/components/ui/badge"
 
 const items = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
+  { title: "Identity Hub", url: "/identity", icon: Fingerprint },
   { title: "Merchant Onboarding", url: "/onboarding", icon: UserPlus },
   { title: "Merchant Lifecycle", url: "/merchants", icon: Users },
   { title: "Cross-Chain Gateway", url: "/cross-chain", icon: LinkIcon },
