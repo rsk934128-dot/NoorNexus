@@ -131,6 +131,24 @@
         "metadata": { "type": "string" }
       },
       "required": ["did", "owner", "trustScore"]
+    },
+    "ImperialProposal": {
+      "title": "Imperial Senate Proposal",
+      "description": "A governance proposal for the NoorNexus Empire.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string", "enum": ["PROTOCOL", "TREASURY", "FEATURE", "EMERGENCY"] },
+        "status": { "type": "string", "enum": ["OPEN", "APPROVED", "REJECTED", "EXECUTED"] },
+        "creatorDID": { "type": "string" },
+        "votesFor": { "type": "number" },
+        "votesAgainst": { "type": "number" },
+        "deadline": { "type": "number" },
+        "createdAt": { "type": "number" },
+        "noraStrategicAnalysis": { "type": "string" }
+      },
+      "required": ["title", "description", "category", "status", "creatorDID"]
     }
   },
   "auth": {
@@ -172,6 +190,10 @@
     "/identities/{did}": {
       "schema": "SovereignIdentity",
       "description": "Global reputation registry for the mesh"
+    },
+    "/proposals/{proposalId}": {
+      "schema": "ImperialProposal",
+      "description": "Governance proposals for the Senate"
     }
   }
 }

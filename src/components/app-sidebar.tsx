@@ -27,7 +27,8 @@ import {
   UserPlus,
   Users,
   Link as LinkIcon,
-  Fingerprint
+  Fingerprint,
+  Gavel
 } from "lucide-react"
 
 import {
@@ -54,6 +55,7 @@ import { Badge } from "@/components/ui/badge"
 const items = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Identity Hub", url: "/identity", icon: Fingerprint },
+  { title: "Imperial Senate", url: "/governance", icon: Gavel },
   { title: "Merchant Onboarding", url: "/onboarding", icon: UserPlus },
   { title: "Merchant Lifecycle", url: "/merchants", icon: Users },
   { title: "Cross-Chain Gateway", url: "/cross-chain", icon: LinkIcon },
