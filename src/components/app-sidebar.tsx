@@ -16,7 +16,8 @@ import {
   LogIn,
   X,
   Globe,
-  Crown
+  Crown,
+  Building2
 } from "lucide-react"
 
 import {
@@ -47,6 +48,7 @@ const items = [
   { title: "One Engine Ledger", url: "/ledger", icon: Layers },
   { title: "Node Watchtower", url: "/nodes", icon: Activity },
   { title: "SmartRemit P2P", url: "/remittance", icon: Send },
+  { title: "Merchant P2C Hub", url: "/p2c", icon: Building2 },
   { title: "World Cup Relay", url: "/world-cup", icon: Trophy },
   { title: "Famelack Hub", url: "/famelack", icon: Globe },
 ]

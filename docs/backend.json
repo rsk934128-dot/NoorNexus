@@ -57,6 +57,21 @@
       },
       "required": ["name", "provider", "status"]
     },
+    "P2CTransaction": {
+      "title": "P2C Settlement",
+      "description": "Corporate to Consumer disbursement log.",
+      "type": "object",
+      "properties": {
+        "merchantId": { "type": "string" },
+        "consumerId": { "type": "string" },
+        "amount": { "type": "number" },
+        "asset": { "type": "string" },
+        "status": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "hmacSignature": { "type": "string" }
+      },
+      "required": ["merchantId", "consumerId", "amount", "status"]
+    },
     "SportsMatch": {
       "title": "Sovereign Match",
       "description": "Real-time football match data for Mission 400.",
@@ -128,6 +143,10 @@
     "/payment_methods/{methodId}": {
       "schema": "PaymentMethod",
       "description": "Configured payment gateways for the One Engine Ledger"
+    },
+    "/p2c_transactions/{txId}": {
+      "schema": "P2CTransaction",
+      "description": "Corporate settlement history"
     },
     "/sports_matches/{matchId}": {
       "schema": "SportsMatch",
