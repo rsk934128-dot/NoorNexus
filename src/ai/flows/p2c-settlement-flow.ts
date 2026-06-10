@@ -1,7 +1,8 @@
+
 'use server';
 /**
  * @fileOverview P2C Imperial Disbursement Auditor (Nora-02).
- * Trained to audit high-volume merchant payouts for Mission 400.
+ * Enhanced with Tax and Global Compliance reporting logic.
  */
 
 import {ai} from '@/ai/genkit';
@@ -20,8 +21,12 @@ const P2CSettlementOutputSchema = z.object({
   settlementStatus: z.enum(['APPROVED', 'REJECTED', 'MANUAL_AUDIT_REQUIRED']),
   riskAssessment: z.string().describe('AI reasoning for the settlement risk.'),
   integrityScore: z.number().describe('Confidence level from 0-100.'),
+  complianceReport: z.object({
+    taxEstimation: z.number().describe('Estimated tax amount (0.5% - 2% based on volume).'),
+    complianceChecklist: z.array(z.string()).describe('List of verified compliance markers.'),
+    kymStatus: z.string().describe('Know Your Merchant verification status.'),
+  }),
   clearanceLevel: z.string().describe('Required security clearance for this payout.'),
-  recommendedSanctions: z.array(z.string()).describe('List of potential blocklist triggers detected.'),
 });
 export type P2CSettlementOutput = z.infer<typeof P2CSettlementOutputSchema>;
 
@@ -31,7 +36,7 @@ const p2cSettlementPrompt = ai.definePrompt({
   input: {schema: P2CSettlementInputSchema},
   output: {schema: P2CSettlementOutputSchema},
   prompt: `You are Nora-02, the Imperial Merchant Auditor for NoorNexus Sovereign OS.
-Your mission is to audit high-volume P2C (Peer-to-Company) settlements for Mission 400 compliance.
+Your mission is to audit high-volume P2C (Peer-to-Company) settlements for Mission 400 compliance and generate tax estimations.
 
 DATA PACKET:
 - MERCHANT: {{{merchantId}}}
@@ -40,11 +45,13 @@ DATA PACKET:
 - SIGNATURE: {{{signature}}}
 
 AUDIT CRITERIA:
-1. Verify signature integrity. Any mismatch results in immediate REJECTION.
-2. Analyze the disbursement ratio. Unusual spikes in amount per recipient are red flags.
-3. Check for merchant clearance. If clearance is L4 but volume exceeds node limits, flag for manual audit.
+1. Verify signature integrity.
+2. Calculate Tax Estimation: 0.5% for volume < 100, 1.2% for 100-500, 2.0% for > 500.
+3. KYM (Know Your Merchant) Status: Assume 'VERIFIED' for existing imperial entities.
 4. Assess for "Liquidity Drain" attacks.
-5. Provide a decision that protects the Imperial Treasury.`,
+5. Generate a checklist of compliance markers (e.g., Anti-Replay Check, Volume Drift Check, Signature Match).
+
+Provide a precise decision that protects the Imperial Treasury and prepares an audit-ready compliance report.`,
 });
 
 export async function auditP2CSettlement(input: P2CSettlementInput): Promise<P2CSettlementOutput> {

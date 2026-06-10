@@ -28,6 +28,20 @@
         "latency": { "type": "number" }
       }
     },
+    "TaxComplianceRecord": {
+      "title": "Tax & Compliance Record",
+      "description": "Digital audit trail for cross-border settlements.",
+      "type": "object",
+      "properties": {
+        "txId": { "type": "string" },
+        "amount": { "type": "number" },
+        "taxAmount": { "type": "number" },
+        "complianceScore": { "type": "number" },
+        "status": { "type": "string" },
+        "region": { "type": "string" },
+        "timestamp": { "type": "number" }
+      }
+    },
     "WebhookLog": {
       "title": "Webhook Event",
       "description": "Logs of incoming and outgoing Open Banking events.",
@@ -80,17 +94,6 @@
         "liquidityHealth": { "type": "number" },
         "dailyThroughput": { "type": "number" }
       }
-    },
-    "VaultHealth": {
-      "title": "Imperial Vault Health",
-      "description": "Consolidated health report of the sovereign vault system.",
-      "type": "object",
-      "properties": {
-        "integrity": { "type": "number" },
-        "activeNodes": { "type": "number" },
-        "threatLevel": { "type": "string" },
-        "lastAudit": { "type": "number" }
-      }
     }
   },
   "auth": {
@@ -104,6 +107,10 @@
     "/api_keys/{keyId}": {
       "schema": "ApiKey",
       "description": "Gateway access credentials"
+    },
+    "/compliance_records/{logId}": {
+      "schema": "TaxComplianceRecord",
+      "description": "Audit-ready tax and compliance logs"
     },
     "/webhook_logs/{logId}": {
       "schema": "WebhookLog",

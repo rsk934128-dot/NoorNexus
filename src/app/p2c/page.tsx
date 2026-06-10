@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { 
   Building2, Users, ShieldAlert, Zap, Loader2, FileCheck, 
-  Landmark, Globe, Coins, ShieldCheck, ArrowRightLeft, Lock, Menu, CheckCircle2, AlertCircle
+  Landmark, Globe, Coins, ShieldCheck, ArrowRightLeft, Lock, Menu, CheckCircle2, AlertCircle, FileText, Download, TrendingDown
 } from "lucide-react"
 import { auditP2CSettlement, P2CSettlementOutput } from "@/ai/flows/p2c-settlement-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -37,34 +37,28 @@ export default function P2CSettlementPage() {
     setLoading(true)
     setBridgeResult(null)
     try {
-      // Execute the Joint Handshake with Gemini and PayBridge
       const result = await executeSovereignPayout(form.amount, form.asset, form.merchantId);
       setBridgeResult(result);
       
-      if (result.status === 'APPROVED') {
-        await addDoc(collection(db, "p2c_transactions"), {
+      if (result.status === 'APPROVED' || result.status === 'AI_RE-VERIFICATION') {
+        await addDoc(collection(db, "compliance_records"), {
           ...form,
-          status: "APPROVED",
           txId: result.txId,
-          type: "BRIDGE_SETTLEMENT",
+          status: result.status,
+          taxAmount: result.complianceReport?.taxEstimation || 0,
+          complianceScore: result.complianceReport?.complianceScore || 100,
           timestamp: Date.now()
         });
         
         toast({
-          title: "Disbursement Authorized",
-          description: "Pay-Bridge handshake successful.",
-        });
-      } else if (result.status === 'PENDING_SOVEREIGN_SEAL') {
-        toast({
-          title: "Sovereign Seal Required",
-          description: "Transaction held for your direct command.",
-          variant: "destructive"
+          title: "Handshake Finalized",
+          description: "Digital Compliance Record generated.",
         });
       }
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Pay-Bridge Error",
+        title: "Bridge Handshake Failed",
         description: error.message
       });
     } finally {
@@ -83,21 +77,21 @@ export default function P2CSettlementPage() {
                  <SidebarTrigger className="md:hidden text-primary">
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
-                 <h2 className="text-3xl font-headline font-bold flex items-center gap-3">
+                 <h2 className="text-3xl font-headline font-bold flex items-center gap-3 uppercase">
                    <Building2 className="size-8 text-primary" />
                    Sovereign P2C Hub
                  </h2>
               </div>
               <p className="text-muted-foreground">
-                Phase 3: Merchant Stablecoin Bridge & Pay-Bridge Integration.
+                Phase 3: Merchant Payouts & Automated Compliance Receipts.
               </p>
             </div>
             <div className="flex gap-4">
                <Badge className="bg-emerald-500/20 text-emerald-500 border-emerald-500/30 h-10 px-4 flex items-center gap-2">
-                 <ShieldCheck className="size-4" /> ATOMIC SETTLEMENT
+                 <ShieldCheck className="size-4" /> COMPLIANCE ACTIVE
                </Badge>
                <Badge className="bg-primary/20 text-primary border-primary/30 h-10 px-4 flex items-center gap-2">
-                 <ArrowRightLeft className="size-4" /> PAY-BRIDGE ACTIVE
+                 <ArrowRightLeft className="size-4" /> PAY-BRIDGE SYNCED
                </Badge>
             </div>
           </header>
@@ -131,10 +125,7 @@ export default function P2CSettlementPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                       <Label className="text-[10px] uppercase font-bold text-muted-foreground">Volume ($)</Label>
-                       <span className="text-[8px] font-mono text-primary uppercase">Tier: {form.amount > 500 ? 'L4_MANUAL' : form.amount > 100 ? 'L3_AI' : 'L1_AUTO'}</span>
-                    </div>
+                    <Label className="text-[10px] uppercase font-bold text-muted-foreground">Volume ($)</Label>
                     <Input 
                       type="number"
                       value={form.amount} 
@@ -145,19 +136,15 @@ export default function P2CSettlementPage() {
                 </div>
 
                 <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
-                   <h4 className="text-[10px] font-bold uppercase text-primary tracking-widest">Risk Shield Parameters</h4>
+                   <h4 className="text-[10px] font-bold uppercase text-primary tracking-widest">Digital Audit parameters</h4>
                    <div className="space-y-1">
                       <div className="flex justify-between text-[9px] font-mono">
-                        <span>Auto-Approve:</span>
-                        <span className="text-emerald-500">&le; $100</span>
+                        <span>Tax Deduction:</span>
+                        <span className="text-emerald-500">0.5% - 2.0%</span>
                       </div>
                       <div className="flex justify-between text-[9px] font-mono">
-                        <span>AI Forensics:</span>
-                        <span className="text-amber-500">$101 - $500</span>
-                      </div>
-                      <div className="flex justify-between text-[9px] font-mono">
-                        <span>Sovereign Seal:</span>
-                        <span className="text-destructive">&gt; $500</span>
+                        <span>Audit Status:</span>
+                        <span className="text-amber-500">REAL-TIME</span>
                       </div>
                    </div>
                 </div>
@@ -168,68 +155,78 @@ export default function P2CSettlementPage() {
                   className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary"
                 >
                   {loading ? <Loader2 className="size-5 animate-spin mr-2" /> : <Zap className="size-5 mr-2" />}
-                  Authorize Pay-Bridge
+                  Authorize & Audit
                 </Button>
               </CardContent>
             </Card>
 
             <div className="space-y-6">
               <Card className={`glass-card transition-all duration-500 border-t-4 ${bridgeResult ? (bridgeResult.status === 'APPROVED' ? 'border-t-emerald-500' : 'border-t-destructive') : 'border-t-primary'}`}>
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle className="text-sm font-headline uppercase tracking-widest flex items-center gap-2">
-                    <FileCheck className="size-4" /> Pay-Bridge Handshake Report
+                    <FileCheck className="size-4" /> Handshake Report
                   </CardTitle>
+                  {bridgeResult?.status === 'APPROVED' && (
+                    <Button variant="ghost" size="icon" className="text-primary">
+                      <Download className="size-4" />
+                    </Button>
+                  )}
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {bridgeResult ? (
                     <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <p className="text-[10px] text-muted-foreground uppercase font-bold">Bridge Status</p>
-                          <Badge variant={bridgeResult.status === 'APPROVED' ? 'default' : 'destructive'} className={bridgeResult.status === 'APPROVED' ? 'bg-emerald-500' : ''}>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="p-3 bg-white/5 rounded-lg border border-white/5">
+                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Bridge Status</p>
+                          <Badge className={bridgeResult.status === 'APPROVED' ? 'bg-emerald-500' : 'bg-destructive'}>
                              {bridgeResult.status}
                           </Badge>
                         </div>
-                        <div className="text-right">
-                          <p className="text-[10px] text-muted-foreground uppercase font-bold">Fraud Score</p>
-                          <p className={`text-3xl font-headline font-bold ${bridgeResult.riskScore > 50 ? 'text-destructive' : 'text-primary'}`}>{bridgeResult.riskScore}%</p>
+                        <div className="p-3 bg-white/5 rounded-lg border border-white/5 text-right">
+                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Fraud Score</p>
+                          <p className={`text-xl font-headline font-bold ${bridgeResult.riskScore > 50 ? 'text-destructive' : 'text-primary'}`}>{bridgeResult.riskScore}%</p>
                         </div>
                       </div>
 
-                      <div className="p-4 bg-black/40 rounded border border-white/5 space-y-3">
-                        <p className="text-[11px] font-mono text-muted-foreground leading-relaxed italic">
+                      {bridgeResult.complianceReport && (
+                        <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-4">
+                           <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                              <h4 className="text-[10px] font-bold uppercase text-primary flex items-center gap-2">
+                                <FileText className="size-3" /> Compliance Receipt
+                              </h4>
+                              <span className="text-[8px] font-mono text-muted-foreground">ID: {bridgeResult.txId}</span>
+                           </div>
+                           <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-1">
+                                 <p className="text-[8px] text-muted-foreground uppercase">Estimated Tax</p>
+                                 <p className="text-lg font-headline font-bold text-emerald-500">${bridgeResult.complianceReport.taxEstimation.toFixed(2)}</p>
+                              </div>
+                              <div className="space-y-1 text-right">
+                                 <p className="text-[8px] text-muted-foreground uppercase">Integrity Score</p>
+                                 <p className="text-lg font-headline font-bold text-primary">{bridgeResult.complianceReport.complianceScore}%</p>
+                              </div>
+                           </div>
+                           <div className="space-y-2">
+                              <p className="text-[8px] text-muted-foreground uppercase font-bold">Verification Markers</p>
+                              <div className="flex flex-wrap gap-2">
+                                 {bridgeResult.complianceReport.checklist.map((item, i) => (
+                                    <Badge key={i} variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500 py-0">{item}</Badge>
+                                 ))}
+                              </div>
+                           </div>
+                        </div>
+                      )}
+
+                      <div className="p-3 bg-black/40 rounded border border-white/5">
+                        <p className="text-[10px] font-mono text-muted-foreground leading-relaxed italic">
                            "{bridgeResult.message}"
                         </p>
-                        {bridgeResult.txId && (
-                           <div className="pt-2 border-t border-white/5">
-                              <p className="text-[8px] uppercase text-muted-foreground font-bold">Transaction ID</p>
-                              <code className="text-[10px] text-primary">{bridgeResult.txId}</code>
-                           </div>
-                        )}
                       </div>
-
-                      {bridgeResult.status === 'PENDING_SOVEREIGN_SEAL' && (
-                        <div className="p-3 bg-destructive/10 border border-destructive/30 rounded-lg flex items-center gap-3">
-                           <Lock className="size-5 text-destructive" />
-                           <p className="text-[9px] uppercase font-bold text-destructive tracking-tighter">
-                              Awaiting L4 Master Override from Command Center.
-                           </p>
-                        </div>
-                      )}
-                      
-                      {bridgeResult.status === 'APPROVED' && (
-                        <div className="p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-lg flex items-center gap-3">
-                           <CheckCircle2 className="size-5 text-emerald-500" />
-                           <p className="text-[9px] uppercase font-bold text-emerald-500 tracking-tighter">
-                              Handshake Complete. Funds indexed in Treasury Ledger.
-                           </p>
-                        </div>
-                      )}
                     </div>
                   ) : (
                     <div className="h-[250px] flex flex-col items-center justify-center gap-4 text-center opacity-40">
                       <ShieldAlert className="size-12" />
-                      <p className="text-xs font-mono uppercase tracking-widest">Awaiting Bridge Handshake</p>
+                      <p className="text-xs font-mono uppercase tracking-widest">Awaiting Payout Execution</p>
                     </div>
                   )}
                 </CardContent>
@@ -238,19 +235,14 @@ export default function P2CSettlementPage() {
               <Card className="glass-card bg-primary/5">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
-                       <ArrowRightLeft className="size-3" />
-                       Treasury Payout Status
+                       <TrendingDown className="size-3" />
+                       Treasury Leakage Prevention
                     </CardTitle>
                  </CardHeader>
-                 <CardContent className="space-y-2">
-                    <div className="flex justify-between text-[9px] font-mono">
-                       <span>Settlement Cycle:</span>
-                       <span className="text-emerald-500 font-bold uppercase">T+1 Standard</span>
-                    </div>
-                    <div className="flex justify-between text-[9px] font-mono">
-                       <span>FX Spread (Stable):</span>
-                       <span className="text-primary">0.15% (Optimized)</span>
-                    </div>
+                 <CardContent>
+                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                       Every handshake triggers an atomic tax capture. No manual reconciliation required for the end-of-cycle audit.
+                    </p>
                  </CardContent>
               </Card>
             </div>

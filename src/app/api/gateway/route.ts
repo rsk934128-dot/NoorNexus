@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 /**
  * @fileOverview Sovereign Gateway API Simulation.
- * Handles requests from the NexusBridge with Imperial Key verification.
+ * Enhanced to handle compliance reporting and tax estimation logic.
  */
 
 const AUTHORIZED_KEY = 'sk_sov_nexus_alpha_v3';
@@ -37,17 +37,21 @@ export async function POST(request: Request) {
       });
 
     case 'EXECUTE_PAYOUT':
-      // Forensics and Tiered Logic Simulation
       const amount = payload?.amount || 0;
       let status = 'APPROVED';
       let message = 'Transaction Handshake Successful';
+      
+      // Compliance & Tax Logic
+      const taxRate = amount > 500 ? 0.02 : amount > 100 ? 0.012 : 0.005;
+      const taxAmount = amount * taxRate;
+      const complianceScore = 100 - (amount > 500 ? 15 : amount > 100 ? 5 : 0);
 
       if (amount > 500) {
         status = 'PENDING_SOVEREIGN_SEAL';
         message = 'Volume exceeds automated limits. Master Override required.';
       } else if (amount > 100) {
         status = 'AI_RE-VERIFICATION';
-        message = 'High-risk pattern detected. Nora-02-B performing secondary audit.';
+        message = 'High-risk pattern detected. Nora-02 performing secondary audit.';
       }
 
       return NextResponse.json({
@@ -55,7 +59,16 @@ export async function POST(request: Request) {
         message,
         txId: 'SOV-TX-' + Math.random().toString(36).substring(2, 12).toUpperCase(),
         timestamp: Date.now(),
-        riskScore: amount > 500 ? 85 : amount > 100 ? 45 : 5
+        riskScore: amount > 500 ? 85 : amount > 100 ? 45 : 5,
+        complianceReport: {
+          taxEstimation: taxAmount,
+          complianceScore: complianceScore,
+          checklist: [
+            "HMAC_V4_SIGNATURE_VERIFIED",
+            "KYM_STATUS_STABLE",
+            "AML_ON_CHAIN_PASSED"
+          ]
+        }
       });
 
     default:
