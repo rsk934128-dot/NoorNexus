@@ -188,7 +188,7 @@ export default function Home() {
                       <Sparkles className="size-3 mr-2" /> Mission 400: Synthesized
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <ShieldCheck className="size-3 mr-2" /> {isAdmin ? 'IMPERIAL_ADMIN_ROOT' : 'MESH_PARTICIPANT'}
+                      <ShieldCheck className="size-3 mr-2" /> ETHICAL_INTEGRITY_VERIFIED
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
@@ -351,7 +351,7 @@ export default function Home() {
                 <CardContent className="space-y-6 p-6 pt-0">
                    <div className="space-y-2">
                       <p className="text-4xl font-headline font-bold text-white tracking-tighter">{healthReport?.vaultIntegrity || 100}%</p>
-                      <p className="text-[10px] text-primary font-bold uppercase">ETHICAL_INTEGRITY_VERIFIED</p>
+                      <p className="text-[10px] text-primary font-bold uppercase">CIVILIZATIONAL_MATURITY_L4</p>
                       <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
                          <div className="h-full bg-primary" style={{ width: `100%` }} />
                       </div>
@@ -387,7 +387,7 @@ export default function Home() {
               <div className="bg-emerald-500/5 p-6 rounded-2xl border border-emerald-500/20 space-y-3">
                  <div className="flex items-center gap-3 text-emerald-500">
                     <TrendingUp className="size-5" />
-                    <span className="text-xs font-bold uppercase tracking-widest">Growth & Stability</span>
+                    <span className="text-xs font-bold uppercase tracking-widest">Accountability & Stability</span>
                  </div>
                  <p className="text-sm font-mono text-emerald-100 italic leading-relaxed">
                    "আজকের মোট ইনকাম ${dailySummary?.revenue.total.toLocaleString()}। নেটওয়ার্ক {dailySummary?.networkGrowth} স্থিতিশীলতার সাথে বৃদ্ধি পাচ্ছে।"

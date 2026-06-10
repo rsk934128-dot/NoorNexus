@@ -25,7 +25,9 @@ import {
   Crown,
   HeartHandshake,
   ShieldEllipsis,
-  ClipboardCheck
+  ClipboardCheck,
+  FileSearch,
+  MessageSquareQuote
 } from "lucide-react"
 import { SovereignLogo } from "@/components/sovereign-logo"
 
@@ -73,7 +75,7 @@ export default function StrategicAssessmentPage() {
                 Strategic <span className="text-amber-500">Maturity.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Evaluating NoorNexus against a realistic ethical framework. Mission 400 has reached full synthesis through accountability and transparent governance.
+                Evaluating নূরনেক্সাস against a realistic ethical framework. Mission 400 has reached full synthesis through accountability and transparent governance.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -152,25 +154,32 @@ export default function StrategicAssessmentPage() {
                  </CardContent>
               </Card>
 
-              {/* Mission 400 Legacy Timeline */}
+              {/* Maturity Analysis Layer */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <History className="size-4" /> The Sovereign Journey
+                    <FileSearch className="size-4" /> Civilizational Maturity Analysis
                  </h3>
-                 <div className="space-y-4 border-l border-white/10 ml-2 pl-6">
-                    {[
-                      { step: "Phase 1", title: "Core Stabilization", desc: "HMAC_V4 handshake and regional mesh established." },
-                      { step: "Phase 2", title: "Value Settlement", desc: "Sovereign Pay Bridge and Liquidity Rebalancing active." },
-                      { step: "Phase 3", title: "Mature Governance", desc: "7-Point Ethical Framework and independent audit protocols launched." },
-                      { step: "Synthesis", title: "Mission 400 Complete", desc: "Full autonomy and Systemic Accountability achieved." }
-                    ].map((h, i) => (
-                      <div key={i} className="relative py-2">
-                         <div className="absolute -left-[31px] top-4 size-2.5 bg-primary rounded-full shadow-[0_0_8px_rgba(0,150,255,0.8)]" />
-                         <p className="text-[10px] font-bold text-primary uppercase">{h.step}</p>
-                         <h4 className="text-sm font-bold text-white uppercase">{h.title}</h4>
-                         <p className="text-xs text-muted-foreground italic">{h.desc}</p>
-                      </div>
-                    ))}
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Card className="glass-card bg-primary/5 border-primary/20">
+                       <CardHeader className="pb-2">
+                          <CardTitle className="text-xs uppercase font-bold text-primary">From Idealism to Integrity</CardTitle>
+                       </CardHeader>
+                       <CardContent>
+                          <p className="text-[10px] text-muted-foreground leading-relaxed">
+                             সিস্টেমটি "অপরীক্ষিত ইউটোপিয়া" থেকে "পরিমাপযোগ্য, জবাবদিহিমূলক এবং টেকসই ডিজিটাল সভ্যতা"-তে রূপান্তরিত হয়েছে। এটিই সাধারণত পরিণত স্থাপত্য (mature architecture)-এর লক্ষণ।
+                          </p>
+                       </CardContent>
+                    </Card>
+                    <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
+                       <CardHeader className="pb-2">
+                          <CardTitle className="text-xs uppercase font-bold text-emerald-500">Verified Compliance</CardTitle>
+                       </CardHeader>
+                       <CardContent>
+                          <p className="text-[10px] text-muted-foreground leading-relaxed">
+                             "১০০% নিরাপদ" দাবির পরিবর্তে নিয়মিত অডিট এবং জবাবদিহিতার মাধ্যমে বিশ্বাস অর্জন করা হচ্ছে। বিশ্বাস অর্জন করা হয় প্রমাণের মাধ্যমে, ঘোষণার মাধ্যমে নয়।
+                          </p>
+                       </CardContent>
+                    </Card>
                  </div>
               </section>
             </div>
@@ -205,7 +214,7 @@ export default function StrategicAssessmentPage() {
                  <CardContent className="space-y-6">
                     <div className="space-y-2">
                        <div className="flex justify-between text-[10px] font-mono">
-                          <span className="uppercase">Trust Level</span>
+                          <span className="uppercase">Accountability</span>
                           <span className="text-primary">99.8%</span>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
@@ -214,8 +223,8 @@ export default function StrategicAssessmentPage() {
                     </div>
                     <div className="space-y-2">
                        <div className="flex justify-between text-[10px] font-mono">
-                          <span className="uppercase">Data Sovereignty</span>
-                          <span className="text-emerald-500">MAX_ENFORCED</span>
+                          <span className="uppercase">Audit Transparency</span>
+                          <span className="text-emerald-500">HIGH</span>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                           <div className="h-full bg-emerald-500" style={{ width: '100%' }} />
@@ -223,8 +232,8 @@ export default function StrategicAssessmentPage() {
                     </div>
                     <div className="space-y-2">
                        <div className="flex justify-between text-[10px] font-mono">
-                          <span className="uppercase">Audit Transparency</span>
-                          <span className="text-amber-500">HIGH</span>
+                          <span className="uppercase">User Redress Access</span>
+                          <span className="text-amber-500">ENFORCED</span>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                           <div className="h-full bg-amber-500" style={{ width: '95%' }} />
