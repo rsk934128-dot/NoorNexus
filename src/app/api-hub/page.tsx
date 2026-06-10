@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useRef, useEffect } from "react"
@@ -11,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
-  ChevronRight, Menu, MessageSquare, Cpu, BookOpen, AlertCircle 
+  ChevronRight, Menu, MessageSquare, Cpu, BookOpen, AlertCircle, CheckCircle2
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -36,6 +37,15 @@ export default function ApiHubPage() {
   const [query, setQuery] = useState("")
   const [messages, setMessages] = useState<Message[]>([])
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  // Playground State
+  const [playgroundLoading, setPlaygroundLoading] = useState(false)
+  const [playgroundResult, setPlaygroundResult] = useState<any>(null)
+  const [payload, setPayload] = useState(`{
+  "action": "ping",
+  "node": "Sirajganj-01",
+  "timestamp": ${Math.floor(Date.now() / 1000)}
+}`)
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -70,6 +80,28 @@ export default function ApiHubPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const executeHandshake = async () => {
+    setPlaygroundLoading(true)
+    setPlaygroundResult(null)
+    
+    // Simulate HMAC_V4 Handshake Process
+    setTimeout(() => {
+      const mockSignature = "0x" + Math.random().toString(16).substring(2, 42)
+      setPlaygroundResult({
+        status: 200,
+        message: "Sovereign Handshake Accepted",
+        x_sovereign_signature: mockSignature,
+        node_response: "SIRAJGANJ_EDGE_01_ACK",
+        security_clearance: "L4_STABLE"
+      })
+      setPlaygroundLoading(false)
+      toast({
+        title: "Handshake Successful",
+        description: "Cryptographic session established.",
+      })
+    }, 1500)
   }
 
   return (
@@ -153,11 +185,32 @@ export default function ApiHubPage() {
                       <CardContent className="space-y-4">
                          <div className="space-y-2">
                             <Label className="text-[10px] font-bold text-muted-foreground">Payload (JSON)</Label>
-                            <textarea className="w-full h-32 bg-background/50 border border-white/10 rounded-md p-3 font-mono text-xs focus:ring-1 focus:ring-primary outline-none" defaultValue={`{"action": "ping", "node": "Sirajganj-01"}`} />
+                            <textarea 
+                              className="w-full h-32 bg-background/50 border border-white/10 rounded-md p-3 font-mono text-xs focus:ring-1 focus:ring-primary outline-none" 
+                              value={payload}
+                              onChange={(e) => setPayload(e.target.value)}
+                            />
                          </div>
-                         <Button className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12">
+                         <Button 
+                          onClick={executeHandshake}
+                          disabled={playgroundLoading}
+                          className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary"
+                        >
+                            {playgroundLoading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
                             Execute Test Handshake
                          </Button>
+
+                         {playgroundResult && (
+                           <div className="mt-6 space-y-4 animate-in fade-in zoom-in-95">
+                              <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                                <CheckCircle2 className="size-4 text-emerald-500" />
+                                <span className="text-[10px] font-bold text-emerald-500 uppercase">Response: 200 OK</span>
+                              </div>
+                              <pre className="bg-black/40 p-4 rounded-lg font-mono text-[10px] border border-white/5 text-primary overflow-x-auto">
+                                {JSON.stringify(playgroundResult, null, 2)}
+                              </pre>
+                           </div>
+                         )}
                       </CardContent>
                    </Card>
                 </TabsContent>
