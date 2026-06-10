@@ -2,7 +2,7 @@
 'use client';
 /**
  * @fileOverview Sovereign Pay Bridge Integration.
- * Enhanced with Tax Compliance Reporting.
+ * Enhanced with Tax Compliance Reporting and Discovery Protocol Branding.
  */
 
 import { connectToGemini } from './nexus-bridge';
@@ -17,10 +17,11 @@ export interface PayoutResult {
     complianceScore: number;
     checklist: string[];
   };
+  attestation?: string; // NoorNexus Discovery Protocol Attestation
 }
 
 /**
- * Executes a sovereign payout with Tiered Risk Approval and Compliance logic.
+ * Executes a sovereign payout with Tiered Risk Approval, Compliance logic, and Global Branding.
  */
 export const executeSovereignPayout = async (amount: number, currency: string, merchantId: string): Promise<PayoutResult> => {
   try {
@@ -37,11 +38,15 @@ export const executeSovereignPayout = async (amount: number, currency: string, m
       destination: "WISE_SOVEREIGN_NODE",
       meta: {
         node_signature: "rsa_v2_sig_active_42",
-        failover: "enabled"
+        failover: "enabled",
+        protocol: "Imperial_Mission_400"
       }
     });
 
-    return response as PayoutResult;
+    return {
+      ...response,
+      attestation: "NOORNEXUS_ATTESTATION: Integrity through Intelligence. Signed by Commander Sheikh Farid."
+    } as PayoutResult;
   } catch (error: any) {
     console.error('[PayBridge] Settlement Failure:', error);
     return {

@@ -1,7 +1,7 @@
 
 /**
  * @fileOverview Imperial SDK Core Mock (@sheikh/core)
- * Internal utility for Sovereign Mesh Synchronization and Trust Escallation.
+ * Internal utility for Sovereign Mesh Synchronization and Global Discovery.
  */
 
 export interface SheikhConfig {
@@ -57,9 +57,17 @@ export class SheikhHub {
    * Synchronizes local state with the Collective Immune System.
    */
   async sync(data: any): Promise<boolean> {
-    // Logic for encrypting and broadcasting data to nodes
     console.log(`[SDK] Syncing payload for ${this.config.appId}...`, data);
     return true;
+  }
+
+  /**
+   * Broadcasts the Discovery Protocol Manifesto to external nodes.
+   * Project 160: The Imperial Discovery.
+   */
+  async broadcastManifesto(): Promise<string> {
+    if (!this.isActive) throw new Error("SDK_NOT_INITIALIZED");
+    return "DISCOVERY_SIGNAL_DISPATCHED: NoorNexus Sovereign OS is now recognized by this node.";
   }
 
   /**

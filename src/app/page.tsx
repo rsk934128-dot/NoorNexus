@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -9,7 +10,7 @@ import {
   Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid, 
   Star, TrendingUp, HeartPulse, BrainCircuit, ActivitySquare, Compass, 
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
-  CheckCircle2, Waves, Eye, Target, Quote
+  CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -51,12 +52,12 @@ export default function Home() {
   const [auditResult, setAuditResult] = useState<LedgerAuditOutput | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [borderFeed, setBorderFeed] = useState<string[]>([])
+  const [discoveryPulse, setDiscoveryPulse] = useState<number>(0)
   
   const [healthReport, setHealthReport] = useState<HealthReport | null>(null)
   const [fetchingHealth, setFetchingHealth] = useState(false)
 
   const { data: nodes } = useCollection<any>(collection(db, "nodes"))
-  const { data: latestLogs } = useCollection<any>(query(collection(db, "border_logs"), orderBy("timestamp", "desc"), limit(1)))
 
   useEffect(() => {
     const sequence = [
@@ -76,15 +77,16 @@ export default function Home() {
 
     const interval = setInterval(() => {
       const logs = [
-        "ORACLE_SYNC: Future Drift 0.02%",
-        "SENATE_EXECUTIVE: Proposal #42 EXECUTED",
-        "CROSS_CHAIN: ETH-Mesh Bridge SECURE",
-        "IDENTITY_ATTESTATION: did:noornexus:9a6c22bb",
-        "ARBITRATION: Conflict Resolved (BD-AE)",
-        "SDK_HEARTBEAT: Rubelpay -> TIER_3"
+        "DISCOVERY: Node broadcast to LONDON-HUB-01",
+        "PROTOCOL: Project 160 Identity Signed",
+        "SDK: New Heartbeat from rubelpay.com",
+        "ORACLE: Market Drift 0.01% Prediction",
+        "SENATE: Edict Execution Successful",
+        "IDENTITY: did:noornexus verified at SG-EDGE-01"
       ]
       const log = logs[Math.floor(Math.random() * logs.length)]
-      setBorderFeed(prev => [log, ...prev].slice(0, 8))
+      setBorderFeed(prev => [log, ...prev].slice(0, 10))
+      setDiscoveryPulse(prev => (prev + 1) % 100)
     }, 3000)
 
     fetchHealth();
@@ -155,28 +157,27 @@ export default function Home() {
                       <Rocket className="size-3 mr-2" /> Mission 400: Complete
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                      <ShieldCheck className="size-3 mr-2" /> Final Synthesis L4
+                      <ShieldCheck className="size-3 mr-2" /> Project 160: Discovery Active
                    </Badge>
                 </div>
                 <h2 className="text-4xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
                    Imperial <span className="text-primary drop-shadow-[0_0_15px_rgba(0,150,255,0.4)]">Command Center.</span>
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed">
-                   Unified Sovereignty across <span className="text-white font-mono">11 Nora Agents</span>. 
-                   Mission 400 is now operational at <span className="text-emerald-500 font-bold">100% Capacity</span>.
+                   Mission 400 is broadcasted. <span className="text-primary font-bold italic">Integrity through Intelligence</span> is now the global standard.
                 </p>
               </div>
               
               <div className="flex flex-col items-center gap-4">
                 <div className="glass-card p-6 rounded-2xl border border-primary/20 flex flex-col items-center min-w-[200px] relative overflow-hidden group">
                     <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Ecosystem Integrity</p>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Global Awareness Pulse</p>
                     <div className="flex items-center gap-3 relative z-10">
-                       <Star className="size-8 text-emerald-500 fill-current animate-pulse" />
-                       <span className="text-4xl font-headline font-bold text-white tracking-tighter">99.9%</span>
+                       <Radio className="size-8 text-primary animate-pulse" />
+                       <span className="text-4xl font-headline font-bold text-white tracking-tighter">{discoveryPulse}%</span>
                     </div>
                     <div className="w-full h-1 bg-white/5 rounded-full mt-4 overflow-hidden">
-                       <div className="h-full bg-emerald-500" style={{ width: '99.9%' }} />
+                       <div className="h-full bg-primary" style={{ width: `${discoveryPulse}%` }} />
                     </div>
                 </div>
               </div>
@@ -197,7 +198,7 @@ export default function Home() {
                   </CardHeader>
                   <CardContent className="space-y-6 relative z-10">
                      <p className="text-xl sm:text-2xl font-headline font-bold text-white leading-relaxed italic border-l-4 border-primary pl-6">
-                        "এই সাম্রাজ্যের প্রতিটি লজিক গেট এবং এআই ফ্লোতে আমার মেধার স্বাক্ষর এবং আমাদের অবিচল আস্থা প্রতিফলিত হয়েছে। নূরনেক্সাস এখন কেবল একটি ওএস নয়, এটি একটি সার্বভৌম সত্তা।"
+                        "নূরনেক্সাস এখন বিশ্বকে তার অস্তিত্বের কথা জানান দিচ্ছে। আমাদের মেধা ও শক্তির পরিচিতি হবে গতির মাধ্যমে—শব্দে নয়। Integrity through Intelligence."
                      </p>
                      <div className="flex items-center gap-4 pt-4">
                         <div className="h-px flex-1 bg-white/10" />
@@ -250,7 +251,7 @@ export default function Home() {
                     <CardContent className="space-y-6">
                       <div className="p-5 bg-black/60 rounded-2xl border border-emerald-500/10 shadow-[0_0_30px_rgba(16,185,129,0.1)] relative z-10">
                          <p className="text-sm font-bold text-emerald-100 leading-relaxed italic">
-                           "The final synthesis is complete. Economic drift is stabilized at 0.00%. All gateways are open and secured by HMAC_V4 protocols."
+                           "The discovery protocol is broadcasted. 100% of mesh nodes are synchronized with the Imperial Discovery Brief."
                          </p>
                       </div>
                     </CardContent>
@@ -298,8 +299,8 @@ export default function Home() {
                <Card className="glass-card border-l-4 border-l-emerald-500 flex flex-col h-[500px]">
                 <CardHeader>
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
-                    <Star className="size-4 text-emerald-500" />
-                    Global Consensus Feed
+                    <Radio className="size-4 text-emerald-500" />
+                    Global Discovery Feed
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
@@ -329,21 +330,21 @@ export default function Home() {
               <Card className="glass-card border-amber-500/20 bg-amber-500/5">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[11px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                       <ShieldCheck className="size-4" /> Sovereign Seal
+                       <BellRing className="size-4" /> Launch Sequence
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       The Mission 400 Sovereign OS is now operating at MAX_Consensus. All subsystems are unified under the Imperial Protocol.
+                       The official NoorNexus debut is scheduled. Global recognition protocol is in effect. 
                     </p>
                     <div className="pt-2 border-t border-white/5 space-y-2">
                        <div className="flex justify-between text-[9px] font-mono uppercase">
-                          <span>Status</span>
-                          <span className="text-emerald-500 font-bold">COMPLETED</span>
+                          <span>Visibility</span>
+                          <span className="text-emerald-500 font-bold">MAX_EXPOSURE</span>
                        </div>
                        <div className="flex justify-between text-[9px] font-mono uppercase">
                           <span>Sovereignty</span>
-                          <span className="text-primary font-bold">ABSOLUTE</span>
+                          <span className="text-primary font-bold">RECOGNIZED</span>
                        </div>
                     </div>
                  </CardContent>
@@ -384,7 +385,7 @@ export default function Home() {
                      </div>
                      <div className="flex gap-3 text-xs text-muted-foreground">
                         <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
-                        <span>Imperial Senate fully autonomous.</span>
+                        <span>Discovery Protocol Broadcasted Globally.</span>
                      </div>
                      <div className="flex gap-3 text-xs text-muted-foreground">
                         <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />

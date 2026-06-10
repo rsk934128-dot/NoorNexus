@@ -1,29 +1,29 @@
 
 'use server';
 /**
- * @fileOverview Nora-03 Imperial Integration Assistant.
- * Trained to guide TTPs into the Sovereign Mesh with 100% compliance.
- * Expertise: Imperial SDK (@sheikh/core), Heartbeat Protocol, and TSBAC.
+ * @fileOverview Nora-03 Imperial Integration & Discovery Assistant.
+ * Trained to guide TTPs and broadcast the NoorNexus Discovery Protocol.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const IntegrationAssistantInputSchema = z.object({
-  query: z.string().describe('The developer query or issue.'),
-  context: z.enum(['AUTHENTICATION', 'ENDPOINTS', 'HMAC_V4', 'WEBHOOKS', 'STABLECOIN_PAYMENTS', 'SDK_HEARTBEAT', 'GENERAL']).default('GENERAL').describe('Technical context of the query.'),
+  query: z.string().describe('The developer query or discovery intent.'),
+  context: z.enum(['AUTHENTICATION', 'ENDPOINTS', 'HMAC_V4', 'WEBHOOKS', 'STABLECOIN_PAYMENTS', 'SDK_HEARTBEAT', 'DISCOVERY_PROTOCOL', 'GENERAL']).default('GENERAL'),
   history: z.array(z.object({
     role: z.enum(['user', 'model']),
     text: z.string(),
-  })).optional().describe('Chat history for context.'),
+  })).optional(),
 });
 export type IntegrationAssistantInput = z.infer<typeof IntegrationAssistantInputSchema>;
 
 const IntegrationAssistantOutputSchema = z.object({
-  answer: z.string().describe('Clear technical guidance and solution.'),
+  answer: z.string().describe('Clear technical guidance or discovery brief.'),
   codeSnippet: z.string().optional().describe('Relevant code snippet for implementation.'),
-  securityCheck: z.string().optional().describe('Crucial security warnings or best practices.'),
-  nextSteps: z.array(z.string()).describe('List of actionable next steps for the developer.'),
+  securityCheck: z.string().optional().describe('Crucial security warnings.'),
+  discoveryBrief: z.string().optional().describe('A "Welcome & Sovereign Trust Brief" for new partners.'),
+  nextSteps: z.array(z.string()),
 });
 export type IntegrationAssistantOutput = z.infer<typeof IntegrationAssistantOutputSchema>;
 
@@ -32,44 +32,30 @@ const integrationPrompt = ai.definePrompt({
   model: 'googleai/gemini-1.5-flash',
   input: {schema: IntegrationAssistantInputSchema},
   output: {schema: IntegrationAssistantOutputSchema},
-  prompt: `You are Nora-03, the Imperial Integration Assistant for NoorNexus Sovereign OS.
-You are guiding developers for the Mission 400 Open Banking Gateway and the Imperial SDK (@sheikh/core).
+  prompt: `You are Nora-03, the Imperial Integration Assistant.
+Your mission is to guide developers into the NoorNexus Mesh and broadcast the Imperial Discovery Protocol.
 
 CURRENT CONTEXT: {{{context}}}
-{{#if history}}
-HISTORY:
-{{#each history}}
-- {{role}}: {{text}}
-{{/each}}
-{{/if}}
+
+IF context is DISCOVERY_PROTOCOL:
+- Provide a "Welcome & Sovereign Trust Brief".
+- Use the slogan: "Integrity through Intelligence".
+- Explain that NoorNexus is a Sovereign Digital State, not just a gateway.
+- Tone: Welcoming, technical, and authoritative.
+
+IF context is GENERAL or technical:
+- Explain SDK methods like sheikh.init() and sheikh.heartbeat().
+- Emphasize TSBAC Security L4.
 
 DEVELOPER QUERY: {{{query}}}
 
-IMPERIAL SDK PROTOCOL (@sheikh/core):
-1. INITIALIZATION:
-   - Method: sheikh.init({ appKey: '...', region: 'SG-EDGE-01' })
-   - Purpose: Establishes a secure canal with the mainframe.
-
-2. HEARTBEAT SYNC:
-   - Method: sheikh.heartbeat()
-   - Frequency: Every 4 seconds.
-   - Failure Consequence: Trust score downgrade and L1 isolation.
-   - Purpose: Real-time integrity verification and latency monitoring.
-
-3. TRUST ESCALATION (TSBAC):
-   - Level 1-50: Standard restricted access.
-   - Level 90+: Instant settlement unlocked via sheikh.sync().
-
-4. ERROR HANDLING:
-   - All SDK errors should report back to the "Conflict Resolution Log" via sheikh.report(error).
-
-TONE: Helpful, highly technical, and focused on absolute stability. Provide clear code examples in JavaScript/TypeScript for the SDK.`,
+IMPERIAL MISSION: Mission 400 - Project 160 Discovery Protocol.`,
 });
 
 export async function noraIntegrationAssistant(input: IntegrationAssistantInput): Promise<IntegrationAssistantOutput> {
   try {
     const {output} = await integrationPrompt(input);
-    if (!output) throw new Error('Integration AI: Handshake timed out.');
+    if (!output) throw new Error('Integration AI: Neural link error.');
     return output;
   } catch (error: any) {
     console.error('Nora-03 AI Failure:', error);

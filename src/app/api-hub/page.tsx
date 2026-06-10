@@ -12,12 +12,13 @@ import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
   Menu, MessageSquare, Cpu, BookOpen, Layers, Info, CheckCircle2,
-  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing
+  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, Rocket, Copy, Star
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { SovereignLogo } from "@/components/sovereign-logo"
 
 const ENDPOINTS = [
   { method: "POST", path: "/openapi/v2/order/create", desc: "Create a prepay order via SHA256withRSA." },
@@ -37,6 +38,7 @@ interface Message {
   role: 'user' | 'model'
   text: string
   code?: string
+  brief?: string
 }
 
 export default function ApiHubPage() {
@@ -63,14 +65,15 @@ export default function ApiHubPage() {
       const history = messages.map(m => ({ role: m.role, text: m.text }))
       const result = await noraIntegrationAssistant({
         query: userMsg,
-        context: "GENERAL",
+        context: query.toLowerCase().includes('discovery') ? "DISCOVERY_PROTOCOL" : "GENERAL",
         history
       })
       
       setMessages(prev => [...prev, { 
         role: 'model', 
         text: result.answer, 
-        code: result.codeSnippet 
+        code: result.codeSnippet,
+        brief: result.discoveryBrief
       }])
       
       toast({ title: "Nora-03 Dispatched Guidance" })
@@ -80,6 +83,8 @@ export default function ApiHubPage() {
       setLoading(false)
     }
   }
+
+  const badgeSnippet = `<script src="https://cdn.noornexus.mesh/badge.js"></script>\n<div id="noornexus-badge" data-theme="dark"></div>`;
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -97,11 +102,11 @@ export default function ApiHubPage() {
                    Sovereign Connect Hub
                  </h2>
               </div>
-              <p className="text-muted-foreground">Phase 3: Unified Connect & Imperial SDK Management for TTPs.</p>
+              <p className="text-muted-foreground">Project 160: Global Discovery & Imperial SDK Integration.</p>
             </div>
             <div className="flex items-center gap-2">
                <Badge variant="outline" className="border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
-                 <Lock className="size-4" /> TSBAC_SECURITY_L4
+                 <Globe className="size-4 animate-spin-slow" /> DISCOVERY_PROTOCOL_ACTIVE
                </Badge>
             </div>
           </header>
@@ -111,9 +116,47 @@ export default function ApiHubPage() {
               <Tabs defaultValue="sdk" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
                   <TabsTrigger value="sdk" className="gap-2"><Cpu className="size-4" /> Imperial SDK</TabsTrigger>
+                  <TabsTrigger value="discovery" className="gap-2"><Rocket className="size-4" /> Discovery Protocol</TabsTrigger>
                   <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> REST API</TabsTrigger>
-                  <TabsTrigger value="security" className="gap-2"><ShieldCheck className="size-4" /> Security Protocol</TabsTrigger>
                 </TabsList>
+
+                <TabsContent value="discovery" className="space-y-4">
+                   <Card className="glass-card border-l-4 border-l-primary">
+                     <CardHeader>
+                       <CardTitle className="text-lg font-headline uppercase text-primary flex items-center gap-2">
+                         <Star className="size-5" /> The Imperial Badge
+                       </CardTitle>
+                       <CardDescription>Embed our story on your platform to join the mission.</CardDescription>
+                     </CardHeader>
+                     <CardContent className="space-y-6">
+                        <div className="flex justify-center p-8 bg-black/40 rounded-2xl border border-white/5 relative overflow-hidden">
+                           <SovereignLogo size={80} className="animate-pulse" />
+                           <div className="absolute bottom-4 text-center">
+                              <p className="text-[8px] font-mono text-primary uppercase tracking-[0.4em]">Integrity through Intelligence</p>
+                           </div>
+                        </div>
+                        <div className="space-y-3">
+                           <Label className="text-[10px] uppercase font-bold text-muted-foreground">Embed Snippet</Label>
+                           <div className="relative">
+                              <pre className="p-4 bg-black/60 rounded-lg text-[10px] font-mono text-emerald-500 overflow-x-auto border border-white/5">
+                                {badgeSnippet}
+                              </pre>
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                onClick={() => {
+                                  navigator.clipboard.writeText(badgeSnippet);
+                                  toast({ title: "Snippet Copied" });
+                                }}
+                                className="absolute top-2 right-2 hover:bg-white/10"
+                              >
+                                <Copy className="size-3" />
+                              </Button>
+                           </div>
+                        </div>
+                     </CardContent>
+                   </Card>
+                </TabsContent>
 
                 <TabsContent value="endpoints" className="space-y-4">
                   <Card className="glass-card">
@@ -176,35 +219,6 @@ export default function ApiHubPage() {
                     </CardContent>
                   </Card>
                 </TabsContent>
-
-                <TabsContent value="security" className="space-y-4">
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <Card className="glass-card border-amber-500/20 bg-amber-500/5">
-                        <CardHeader>
-                          <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                             <Key className="size-4" /> RSA Handshake
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-[11px] text-muted-foreground leading-relaxed">
-                            All external requests must include an X-Imperial-Signature header, generated by signing the payload and timestamp with your node's RSA-2048 private key.
-                          </p>
-                        </CardContent>
-                      </Card>
-                      <Card className="glass-card border-primary/20 bg-primary/5">
-                        <CardHeader>
-                          <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
-                             <ShieldAlert className="size-4" /> Heartbeat Policy
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-[11px] text-muted-foreground leading-relaxed">
-                            To maintain TIER-3 (IMPERIAL) status, your application must emit a heartbeat every 4 seconds. Missing 3 consecutive pulses results in automated Trust Score devaluation.
-                          </p>
-                        </CardContent>
-                      </Card>
-                   </div>
-                </TabsContent>
               </Tabs>
             </div>
 
@@ -221,7 +235,7 @@ export default function ApiHubPage() {
                       {messages.length === 0 && (
                         <div className="text-center py-10 space-y-3">
                           <MessageSquare className="size-10 text-muted-foreground/20 mx-auto" />
-                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting SDK query...</p>
+                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting SDK query or Discovery intent...</p>
                         </div>
                       )}
                       {messages.map((msg, i) => (
@@ -229,6 +243,11 @@ export default function ApiHubPage() {
                           <div className={`max-w-[90%] p-3 rounded-xl text-xs font-mono leading-relaxed ${msg.role === 'user' ? 'bg-primary/20 border border-primary/20 text-primary-foreground' : 'bg-white/5 border border-white/5 text-muted-foreground'}`}>
                             {msg.text}
                           </div>
+                          {msg.brief && (
+                             <div className="mt-2 p-3 bg-primary/10 border border-primary/30 rounded-xl text-[10px] text-primary italic">
+                                {msg.brief}
+                             </div>
+                          )}
                           {msg.code && (
                             <div className="mt-2 w-full max-w-[95%] bg-black/40 p-2 rounded border border-white/5 overflow-x-auto">
                               <pre className="text-[9px] text-primary">{msg.code}</pre>
@@ -243,7 +262,7 @@ export default function ApiHubPage() {
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <input 
-                         placeholder="How to integrate Heartbeat?" 
+                         placeholder="How to join Discovery Protocol?" 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}
