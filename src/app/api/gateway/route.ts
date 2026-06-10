@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { action } = body;
+  const { action, payload } = body;
 
   switch (action) {
     case 'GET_VAULT_STATUS':
@@ -25,6 +25,7 @@ export async function POST(request: Request) {
         activeNodes: 42,
         threatLevel: 'LOW',
         reasoning: "HMSC_V4 clusters report zero drift. Sirajganj-Edge nodes synchronized.",
+        status: 'OPTIMAL',
         timestamp: Date.now()
       });
     
@@ -33,6 +34,28 @@ export async function POST(request: Request) {
         status: 'SUCCESS',
         msg: 'Data packet indexed in Sovereign Grid',
         txHash: '0x' + Math.random().toString(16).substring(2, 32)
+      });
+
+    case 'EXECUTE_PAYOUT':
+      // Forensics and Tiered Logic Simulation
+      const amount = payload?.amount || 0;
+      let status = 'APPROVED';
+      let message = 'Transaction Handshake Successful';
+
+      if (amount > 500) {
+        status = 'PENDING_SOVEREIGN_SEAL';
+        message = 'Volume exceeds automated limits. Master Override required.';
+      } else if (amount > 100) {
+        status = 'AI_RE-VERIFICATION';
+        message = 'High-risk pattern detected. Nora-02-B performing secondary audit.';
+      }
+
+      return NextResponse.json({
+        status,
+        message,
+        txId: 'SOV-TX-' + Math.random().toString(36).substring(2, 12).toUpperCase(),
+        timestamp: Date.now(),
+        riskScore: amount > 500 ? 85 : amount > 100 ? 45 : 5
       });
 
     default:
