@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useRef, useEffect } from "react"
@@ -6,18 +7,18 @@ import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/badge"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
   Menu, MessageSquare, Cpu, BookOpen, Layers, Info, CheckCircle2,
-  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, RefreshCcw, Star
+  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, RefreshCcw, Star, HeartPulse
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useFirestore } from "@/firebase"
+import { collection, addDoc, serverTimestamp } from "firebase/firestore"
 
 const ENDPOINTS = [
   { method: "POST", path: "/openapi/v2/order/create", desc: "Create a prepay order and get a payment link or SN." },
@@ -26,20 +27,11 @@ const ENDPOINTS = [
   { method: "POST", path: "/openapi/v2/auth/handshake", desc: "Initiate SHA256withRSA cryptographic session." }
 ]
 
-const REQUIRED_HEADERS = [
-  { name: "X-R-AK", desc: "Merchant appKey for identification.", required: "Yes", example: "4CA7B705-..." },
-  { name: "X-R-TS", desc: "Unix timestamp in milliseconds.", required: "Yes", example: "1763555087656" },
-  { name: "X-R-KEY-VERSION", desc: "Key pair version used for signing.", required: "Yes", example: "1" },
-  { name: "X-R-Signature", desc: "SHA256withRSA digital signature.", required: "Yes*", example: "ZxAmLpV..." }
-]
-
-const WEBHOOK_FIELDS = [
-  { name: "orderSn", type: "String", desc: "Payment serial number." },
-  { name: "outerOrderSn", type: "String", desc: "Merchant's original order ID." },
-  { name: "orderStatus", type: "Int", desc: "1=Paying; 2=Success; 3=Failed; 4=Closed" },
-  { name: "paymentTime", type: "Long", desc: "Completion timestamp (ms)." },
-  { name: "orderAmount", type: "Decimal", desc: "Total fiat amount." },
-  { name: "coin", type: "String", desc: "Crypto asset used (e.g. USDT)." }
+const SDK_METHODS = [
+  { name: "sheikh.init()", desc: "Initialize connection with NoorNexus Mainframe.", params: "appKey, region" },
+  { name: "sheikh.sync()", desc: "Synchronize local state with Collective Immune System.", params: "payload" },
+  { name: "sheikh.heartbeat()", desc: "Send 4s integrity pulse to maintain L4 privileges.", params: "signature" },
+  { name: "sheikh.audit()", desc: "Request an immediate Nora-01 protocol audit.", params: "packetId" }
 ]
 
 interface Message {
@@ -50,6 +42,7 @@ interface Message {
 
 export default function ApiHubPage() {
   const { toast } = useToast()
+  const db = useFirestore()
   const [loading, setLoading] = useState(false)
   const [query, setQuery] = useState("")
   const [messages, setMessages] = useState<Message[]>([])
@@ -58,10 +51,11 @@ export default function ApiHubPage() {
   // Playground State
   const [playgroundLoading, setPlaygroundLoading] = useState(false)
   const [playgroundResult, setPlaygroundResult] = useState<any>(null)
+  const [activeTab, setActiveTab] = useState("endpoints")
   const [payload, setPayload] = useState(`{
-  "orderId": "ORD-${Math.random().toString(36).substring(7).toUpperCase()}",
-  "amount": "88.88",
-  "currency": "USD"
+  "appId": "RUBELPAY-V3",
+  "action": "HEARTBEAT_SYNC",
+  "trust_nonce": "${Math.random().toString(36).substring(7)}"
 }`)
 
   useEffect(() => {
@@ -103,29 +97,42 @@ export default function ApiHubPage() {
     setPlaygroundLoading(true)
     setPlaygroundResult(null)
     
-    setTimeout(() => {
-      const mockSignature = "ZxAmLpVy" + Math.random().toString(16).substring(2, 32)
-      setPlaygroundResult({
-        code: "SUCCESS",
-        msg: null,
-        data: {
-          orderSn: "P2025" + Math.random().toString(10).substring(2, 16),
-          outerOrder: JSON.parse(payload).orderId,
-          h5Url: "https://pay.noornexus.mesh/checkout/0x...auth",
-          headers_used: {
-            "X-R-AK": "4CA7B705-8EF5-4AC3-A0B6-9A4B84EF13B6",
-            "X-R-KEY-VERSION": "1",
-            "X-R-Signature": mockSignature
-          },
-          trust_escalation: "PENDING_TSBAC_AUDIT"
-        }
-      })
+    try {
+      const parsed = JSON.parse(payload)
+      
+      // Simulate Imperial SDK Heartbeat
+      if (parsed.action === "HEARTBEAT_SYNC") {
+        await addDoc(collection(db, "app_connections"), {
+          appId: parsed.appId,
+          name: parsed.appId,
+          trustScore: 90 + Math.floor(Math.random() * 10),
+          status: "SYNCHRONIZED",
+          lastHeartbeat: Date.now(),
+          latency: Math.floor(Math.random() * 20) + 5
+        })
+      }
+
+      setTimeout(() => {
+        setPlaygroundResult({
+          code: "SUCCESS",
+          msg: "Imperial SDK Handshake Verified",
+          data: {
+            session_id: "SHEIKH-SESS-" + Math.random().toString(16).substring(2, 10).toUpperCase(),
+            trust_escalation: "L4_TSBAC_ACTIVE",
+            heartbeat_interval: "4000ms",
+            mesh_sync: "COMPLETED"
+          }
+        })
+        setPlaygroundLoading(false)
+        toast({
+          title: "Sovereign Handshake Successful",
+          description: "Imperial SDK is now heartbeat-synced with the mainframe.",
+        })
+      }, 1500)
+    } catch (e: any) {
       setPlaygroundLoading(false)
-      toast({
-        title: "RESTful Handshake Successful",
-        description: "API 2.0 SHA256withRSA verified. Trust escalation pending.",
-      })
-    }, 1500)
+      toast({ title: "Payload Error", description: "Invalid JSON format.", variant: "destructive" })
+    }
   }
 
   return (
@@ -137,21 +144,21 @@ export default function ApiHubPage() {
             <div className="space-y-1">
               <div className="flex items-center gap-3">
                  <SidebarTrigger className="md:hidden text-primary">
-                    <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
+                    <Button variant="ghost" size="icon" asChild><div className="size-10 flex items-center justify-center"><Menu className="size-6" /></div></Button>
                  </SidebarTrigger>
                  <h2 className="text-2xl sm:text-4xl font-headline font-bold flex items-center gap-3 uppercase">
                    <Code2 className="size-10 text-primary" />
                    Sovereign Connect Hub
                  </h2>
               </div>
-              <p className="text-muted-foreground">Phase 3: Unified Connect with Trust Score-Based Access (TSBAC).</p>
+              <p className="text-muted-foreground">Phase 3: Unified Connect & Imperial SDK Management.</p>
             </div>
             <div className="flex items-center gap-2">
                <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2 bg-emerald-500/5">
                  <Star className="size-4 fill-current" /> TRUST LEVEL: L4
                </Badge>
                <Badge variant="outline" className="border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
-                 <Lock className="size-4" /> RSA AUTH ENABLED
+                 <HeartPulse className="size-4" /> SDK HEARTBEAT ENABLED
                </Badge>
             </div>
           </header>
@@ -161,40 +168,12 @@ export default function ApiHubPage() {
               <Tabs defaultValue="endpoints" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
                   <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> API Docs</TabsTrigger>
-                  <TabsTrigger value="flows" className="gap-2"><Layers className="size-4" /> Integration</TabsTrigger>
+                  <TabsTrigger value="sdk" className="gap-2"><Cpu className="size-4" /> Imperial SDK</TabsTrigger>
                   <TabsTrigger value="security" className="gap-2"><ShieldAlert className="size-4" /> Security</TabsTrigger>
-                  <TabsTrigger value="webhooks" className="gap-2"><BellRing className="size-4" /> Webhooks</TabsTrigger>
-                  <TabsTrigger value="playground" className="gap-2"><Terminal className="size-4" /> Playground</TabsTrigger>
+                  <TabsTrigger value="playground" className="gap-2"><Terminal className="size-4" /> SDK Playground</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="endpoints" className="space-y-4">
-                  <Card className="glass-card">
-                    <CardHeader>
-                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Required Request Headers</CardTitle>
-                      <CardDescription>Authentication and SHA256withRSA signature validation headers.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                      <Table>
-                        <TableHeader className="bg-white/5">
-                          <TableRow>
-                            <TableHead className="text-[10px] uppercase">Header Name</TableHead>
-                            <TableHead className="text-[10px] uppercase">Description</TableHead>
-                            <TableHead className="text-[10px] uppercase">Example</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody className="text-[11px]">
-                          {REQUIRED_HEADERS.map((h, i) => (
-                            <TableRow key={i}>
-                              <TableCell className="font-mono text-primary font-bold">{h.name}</TableCell>
-                              <TableCell className="text-muted-foreground">{h.desc}</TableCell>
-                              <TableCell className="font-mono text-[9px]">{h.example}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </CardContent>
-                  </Card>
-
                   <Card className="glass-card">
                     <CardHeader>
                       <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Sovereign API 2.0 Endpoints</CardTitle>
@@ -216,222 +195,55 @@ export default function ApiHubPage() {
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="flows" className="space-y-8">
-                  <div className="grid grid-cols-1 gap-6">
-                    <Card className="glass-card border-l-4 border-l-primary">
-                      <CardHeader>
-                        <CardTitle className="text-lg font-headline flex items-center gap-2 uppercase tracking-tight">
-                          <Info className="size-5 text-primary" />
-                          Trust-Based Privilege Levels
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
+                <TabsContent value="sdk" className="space-y-6">
+                  <Card className="glass-card border-l-4 border-l-primary">
+                    <CardHeader>
+                      <CardTitle className="text-lg font-headline flex items-center gap-2 uppercase">
+                        <Cpu className="size-5 text-primary" />
+                        Imperial SDK (@sheikh/core)
+                      </CardTitle>
+                      <CardDescription>The official NoorNexus bridge for ecosystem applications.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-3">
+                         <h4 className="text-xs font-bold text-primary uppercase">Quick Installation</h4>
+                         <code className="text-[10px] font-mono text-emerald-500">npm install @sheikh/core --registry https://npm.noornexus.mesh</code>
+                      </div>
+
+                      <div className="space-y-4">
+                        <h4 className="text-sm font-bold uppercase text-white">Core Methods</h4>
                         <Table>
                           <TableHeader className="bg-white/5">
                             <TableRow>
-                              <TableHead className="w-[150px] text-[10px] uppercase font-bold">Trust Level</TableHead>
-                              <TableHead className="text-[10px] uppercase font-bold text-primary">Privilege Description</TableHead>
-                              <TableHead className="text-[10px] uppercase font-bold text-emerald-500">Access Type</TableHead>
+                              <TableHead className="text-[10px] uppercase">Method</TableHead>
+                              <TableHead className="text-[10px] uppercase">Description</TableHead>
+                              <TableHead className="text-[10px] uppercase">Parameters</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody className="text-[11px]">
-                            <TableRow>
-                              <TableCell className="font-bold">L1-L20 (New)</TableCell>
-                              <TableCell>Standard monitoring, lower limits.</TableCell>
-                              <TableCell>RESTRICTED</TableCell>
-                            </TableRow>
-                            <TableRow>
-                              <TableCell className="font-bold">L90+ (Sovereign)</TableCell>
-                              <TableCell>Instant settlement, L4 Shield Priority.</TableCell>
-                              <TableCell className="text-emerald-500 font-bold">UNRESTRICTED</TableCell>
-                            </TableRow>
+                            {SDK_METHODS.map((m, i) => (
+                              <TableRow key={i}>
+                                <TableCell className="font-mono text-primary font-bold">{m.name}</TableCell>
+                                <TableCell className="text-muted-foreground">{m.desc}</TableCell>
+                                <TableCell className="font-mono text-[9px]">{m.params}</TableCell>
+                              </TableRow>
+                            ))}
                           </TableBody>
                         </Table>
-                      </CardContent>
-                    </Card>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <Card className="glass-card border-t-2 border-t-primary">
-                        <CardHeader><CardTitle className="text-sm font-headline uppercase text-primary">1. Payment via Paylink</CardTitle></CardHeader>
-                        <CardContent className="space-y-3">
-                           <ol className="space-y-3">
-                             {[
-                               "User submits order on merchant site.",
-                               "Server calls /openapi/v2/order/create.",
-                               "Receive payment link in response.",
-                               "Redirect user to the hosted payment page.",
-                               "User pays, redirects back to redirectUrl."
-                             ].map((step, i) => (
-                               <li key={i} className="flex gap-3 text-[11px] leading-relaxed">
-                                 <span className="size-5 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 font-bold">{i+1}</span>
-                                 {step}
-                               </li>
-                             ))}
-                           </ol>
-                        </CardContent>
-                      </Card>
-
-                      <Card className="glass-card border-t-2 border-t-emerald-500">
-                        <CardHeader><CardTitle className="text-sm font-headline uppercase text-emerald-500">2. Payment via Open-API</CardTitle></CardHeader>
-                        <CardContent className="space-y-3">
-                           <ol className="space-y-3">
-                             {[
-                               "Server creates order with manual=true.",
-                               "Call /order/payment-method with SN.",
-                               "Receive raw QR data or DeepLink URL.",
-                               "Display QR/Deeplink in custom UI.",
-                               "User completes payment in wallet app."
-                             ].map((step, i) => (
-                               <li key={i} className="flex gap-3 text-[11px] leading-relaxed">
-                                 <span className="size-5 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 font-bold">{i+1}</span>
-                                 {step}
-                               </li>
-                             ))}
-                           </ol>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="security" className="space-y-6">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div className="lg:col-span-2 space-y-6">
-                      <Card className="glass-card border-l-4 border-l-primary">
-                        <CardHeader>
-                          <CardTitle className="text-lg font-headline flex items-center gap-2 uppercase">
-                            <Lock className="size-5 text-primary" />
-                            SHA256withRSA Signature Guide
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                          <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg flex gap-3">
-                            <AlertTriangle className="size-5 text-amber-500 shrink-0" />
-                            <p className="text-[10px] text-amber-200">
-                              <b>Imperial Protocol:</b> Requests must be signed with your 2048-bit RSA Private Key. High Trust scores require 100% signature accuracy.
-                            </p>
-                          </div>
-
-                          <div className="space-y-4">
-                            <h4 className="text-sm font-bold uppercase text-white">Step 1: Construct String to Sign</h4>
-                            <div className="p-4 bg-black/40 rounded-lg font-mono text-[10px] text-muted-foreground border border-white/5">
-                              {`{http-method} {http-uri}\\n{appKey}.{timestamp}.{requestBody}`}
-                            </div>
-                          </div>
-
-                          <div className="space-y-4">
-                            <h4 className="text-sm font-bold uppercase text-white">Step 2: Generate Signature</h4>
-                            <div className="p-4 bg-black/40 rounded-lg font-mono text-[10px] text-primary border border-white/5">
-                              {`signature = base64Encode(sha256withRSA(stringToSign, privateKey))`}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-
-                    <div className="space-y-6">
-                      <Card className="glass-card h-fit">
-                        <CardHeader>
-                          <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                            <Terminal className="size-4" /> RSA Key Gen
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                          <pre className="p-2 bg-black/40 rounded border border-white/5 text-[9px] font-mono text-muted-foreground whitespace-pre-wrap">
-                            {`openssl genrsa -out private_key.pem 2048\nopenssl rsa -in private_key.pem -pubout -out public_key.pem`}
-                          </pre>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="webhooks" className="space-y-6">
-                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                    <div className="lg:col-span-3 space-y-6">
-                      <Card className="glass-card border-l-4 border-l-emerald-500">
-                        <CardHeader>
-                          <CardTitle className="text-lg font-headline flex items-center gap-2 uppercase">
-                            <BellRing className="size-5 text-emerald-500" />
-                            Webhook Notifications
-                          </CardTitle>
-                          <CardDescription>Asynchronous result notifications for payments and refunds.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                             <div className="space-y-4">
-                               <h4 className="text-xs font-bold uppercase text-white">Verification Rules</h4>
-                               <p className="text-[10px] text-muted-foreground leading-relaxed">
-                                 Webhooks are signed using NoorNexus Private RSA Key. Verify the <code>X-R-Signature</code> using the NoorNexus Public Key.
-                               </p>
-                               <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[10px] text-primary">
-                                 {`String to Verify: {appKey}.{timestamp}.{requestBody}`}
-                               </div>
-                             </div>
-                             <div className="space-y-4">
-                               <h4 className="text-xs font-bold uppercase text-white">Retry Policy</h4>
-                               <div className="space-y-2">
-                                 <div className="flex justify-between text-[10px]">
-                                   <span className="text-muted-foreground">Max Retries</span>
-                                   <span className="text-white">3 Attempts</span>
-                                 </div>
-                               </div>
-                             </div>
-                           </div>
-
-                           <div className="space-y-4 pt-6 border-t border-white/5">
-                             <h4 className="text-sm font-bold uppercase text-white">Payment Webhook Fields</h4>
-                             <Table>
-                               <TableHeader className="bg-white/5">
-                                 <TableRow>
-                                   <TableHead className="text-[10px] uppercase">Field</TableHead>
-                                   <TableHead className="text-[10px] uppercase">Type</TableHead>
-                                   <TableHead className="text-[10px] uppercase">Description</TableHead>
-                                 </TableRow>
-                               </TableHeader>
-                               <TableBody className="text-[11px]">
-                                 {WEBHOOK_FIELDS.map((f, i) => (
-                                   <TableRow key={i}>
-                                     <TableCell className="font-mono text-primary">{f.name}</TableCell>
-                                     <TableCell className="text-muted-foreground">{f.type}</TableCell>
-                                     <TableCell className="text-muted-foreground">{f.desc}</TableCell>
-                                   </TableRow>
-                                 ))}
-                               </TableBody>
-                             </Table>
-                           </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-
-                    <div className="space-y-6">
-                      <Card className="glass-card">
-                        <CardHeader>
-                          <CardTitle className="text-xs font-headline uppercase text-emerald-500">Expected Response</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                          <p className="text-[10px] text-muted-foreground">Your server must return <code>SUCCESS</code>.</p>
-                          <pre className="p-3 bg-black/40 rounded border border-white/5 text-[9px] font-mono text-primary">
-{`{
-  "code": "SUCCESS",
-  "requestId": "uuid-..."
-}`}
-                          </pre>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </TabsContent>
 
                 <TabsContent value="playground" className="space-y-4">
                    <Card className="glass-card">
                       <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase tracking-widest">API 2.0 Test Runner</CardTitle>
-                         <CardDescription>Sandbox with TSBAC Integration</CardDescription>
+                         <CardTitle className="text-sm font-headline uppercase tracking-widest">Imperial SDK Test Runner</CardTitle>
+                         <CardDescription>Sandbox for Heartbeat Handshake & Trust Sync</CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-4">
                          <div className="space-y-2">
-                            <Label className="text-[10px] font-bold text-muted-foreground">Request Payload (JSON)</Label>
+                            <Label className="text-[10px] font-bold text-muted-foreground">Sync Payload (JSON)</Label>
                             <textarea 
                               className="w-full h-32 bg-background/50 border border-white/10 rounded-md p-3 font-mono text-xs focus:ring-1 focus:ring-primary outline-none" 
                               value={payload}
@@ -441,17 +253,19 @@ export default function ApiHubPage() {
                          <Button 
                           onClick={executeHandshake}
                           disabled={playgroundLoading}
-                          className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary"
+                          asChild
                         >
+                          <div className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary flex items-center justify-center cursor-pointer">
                             {playgroundLoading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
-                            Run TSBAC Handshake
+                            Execute SDK Handshake
+                          </div>
                          </Button>
 
                          {playgroundResult && (
                            <div className="mt-6 space-y-4 animate-in fade-in zoom-in-95">
                               <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
                                 <CheckCircle2 className="size-4 text-emerald-500" />
-                                <span className="text-[10px] font-bold text-emerald-500 uppercase">Status: {playgroundResult.code}</span>
+                                <span className="text-[10px] font-bold text-emerald-500 uppercase">Handshake: {playgroundResult.code}</span>
                               </div>
                               <pre className="bg-black/40 p-4 rounded-lg font-mono text-[10px] border border-white/5 text-primary overflow-x-auto">
                                 {JSON.stringify(playgroundResult, null, 2)}
@@ -468,7 +282,7 @@ export default function ApiHubPage() {
               <Card className="glass-card border-l-4 border-l-amber-500 h-[700px] flex flex-col">
                 <CardHeader className="shrink-0">
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
-                    <Cpu className="size-4" /> Nora-03 Integration AI
+                    <Cpu className="size-4" /> Nora-03 SDK Assistant
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col min-h-0 overflow-hidden space-y-4">
@@ -477,7 +291,7 @@ export default function ApiHubPage() {
                       {messages.length === 0 && (
                         <div className="text-center py-10 space-y-3">
                           <MessageSquare className="size-10 text-muted-foreground/20 mx-auto" />
-                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting TSBAC query...</p>
+                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting SDK query...</p>
                         </div>
                       )}
                       {messages.map((msg, i) => (
@@ -498,38 +312,23 @@ export default function ApiHubPage() {
 
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
-                       <Input 
-                         placeholder="How to increase trust score?" 
+                       <input 
+                         placeholder="How to integrate Heartbeat?" 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}
-                         className="bg-background/50 border-white/10 text-xs h-12 pr-12"
+                         className="w-full bg-background/50 border border-white/10 text-xs h-12 pr-12 pl-4 rounded-md outline-none focus:ring-1 focus:ring-primary"
                          disabled={loading}
                        />
-                       <Button 
+                       <div 
                          onClick={askNora} 
-                         disabled={loading || !query.trim()}
-                         size="icon" 
-                         className="absolute right-1 top-1 text-primary hover:bg-primary/20 bg-transparent"
+                         className={`absolute right-1 top-1 text-primary hover:bg-primary/20 bg-transparent size-10 flex items-center justify-center cursor-pointer ${loading || !query.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}
                        >
                          {loading ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
-                       </Button>
+                       </div>
                     </div>
                   </div>
                 </CardContent>
-              </Card>
-
-              <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
-                 <CardHeader className="pb-2">
-                    <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
-                       <Star className="size-3 fill-current" /> Trust Rewards
-                    </CardTitle>
-                 </CardHeader>
-                 <CardContent>
-                    <p className="text-[10px] text-muted-foreground leading-relaxed">
-                       Maintain Level 90+ trust for 30 days to unlock <b>Instant Settlement</b> across all regional nodes.
-                    </p>
-                 </CardContent>
               </Card>
             </div>
           </div>

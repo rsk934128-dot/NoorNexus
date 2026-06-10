@@ -1,10 +1,11 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid, Star, TrendingUp } from "lucide-react"
+import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid, Star, TrendingUp, HeartPulse } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -32,11 +33,11 @@ export default function Home() {
 
   // Real-time infrastructure and security data
   const { data: nodes } = useCollection<any>(collection(db, "nodes"))
+  const { data: appConnections } = useCollection<any>(collection(db, "app_connections"))
   const { data: latestLogs } = useCollection<any>(query(collection(db, "border_logs"), orderBy("timestamp", "desc"), limit(1)))
 
   const activeTier = latestLogs[0]?.securityTier || 'L1_NORMAL'
-  const keyRotation = latestLogs[0]?.keyRotationInterval || 3600
-
+  
   useEffect(() => {
     const sequence = [
       { text: "INITIALIZING HMAC_V4 BORDER...", time: 800 },
@@ -57,7 +58,7 @@ export default function Home() {
       const logs = [
         "TRUST SYNC: Rubelpay -> Level 98",
         "SIGNATURE VERIFIED: SG-EDGE-01",
-        "TRUST SYNC: SovereignPay -> Level 92",
+        "HEARTBEAT: SovereignPay -> ACTIVE",
         "PRIVILEGE ESCALATION: Rubelpay L4",
         "ADAPTIVE SHIELD: SCANNING MESH...",
         "TSBAC HANDSHAKE: COLLECTIVE_OK"
@@ -136,11 +137,11 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="hidden md:flex items-center gap-2">
                   <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">PHASE 3: UNIFIED CONNECT</Badge>
-                  <Badge variant="outline" className="border-amber-500/50 text-amber-500 glow-emerald uppercase tracking-tighter">Trust Score-Based Access Enabled</Badge>
+                  <Badge variant="outline" className="border-amber-500/50 text-amber-500 glow-emerald uppercase tracking-tighter">Imperial SDK Heartbeat Active</Badge>
                 </div>
                 <h2 className="text-3xl sm:text-4xl lg:text-6xl font-headline font-bold tracking-tighter uppercase">Command <span className="text-primary">Center.</span></h2>
                 <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                  Managing <span className="text-white font-mono">12</span> applications via Phase 3 TSBAC Protocol. 
+                  Managing <span className="text-white font-mono">{appConnections.length || 12}</span> applications via Phase 3 TSBAC Protocol. 
                   Avg Ecosystem Trust: <span className="text-emerald-500 font-bold">95.4%</span>.
                 </p>
               </div>
@@ -160,8 +161,8 @@ export default function Home() {
             {[
               { label: "Active Nodes", value: activeNodes, sub: "Mission 400 Ready", icon: Server, color: "text-primary" },
               { label: "Trust Score", value: "95.4%", sub: "TSBAC Protocol", icon: Star, color: "text-emerald-500" },
-              { label: "Unified Apps", value: "12", sub: "Phase 3 Connected", icon: LayoutGrid, color: "text-primary" },
-              { label: "Settlement Rate", value: "FAST", sub: "Trust Escalated", icon: TrendingUp, color: "text-primary" },
+              { label: "Unified Apps", value: appConnections.length || "12", sub: "Phase 3 Connected", icon: LayoutGrid, color: "text-primary" },
+              { label: "Heartbeat Status", value: "HEALTHY", sub: "Sync Pulse: 4s", icon: HeartPulse, color: "text-emerald-500" },
             ].map((stat, i) => (
               <Card key={i} className="glass-card hover:border-primary/30 transition-all duration-300 group">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -178,26 +179,65 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
             <div className="lg:col-span-2 space-y-6">
-              <Card className="glass-card border-l-4 border-l-primary scan-effect relative overflow-hidden h-[300px] sm:h-[400px]">
+              <Card className="glass-card border-l-4 border-l-primary relative overflow-hidden h-fit">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 font-headline text-base uppercase">
+                    <HeartPulse className="size-5 text-primary" />
+                    Imperial SDK Heartbeat Grid
+                  </CardTitle>
+                  <CardDescription className="text-xs">Real-time pulse monitoring of connected sovereign apps.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {(appConnections.length > 0 ? appConnections : [
+                      { name: "Rubelpay", status: "SYNCHRONIZED", trustScore: 98, latency: 12 },
+                      { name: "SovereignPay", status: "SYNCHRONIZED", trustScore: 92, latency: 18 },
+                      { name: "Famelack Hub", status: "SYNCHRONIZED", trustScore: 95, latency: 15 },
+                      { name: "Sovereign P2P", status: "SYNCHRONIZED", trustScore: 99, latency: 8 },
+                      { name: "Imperial Vault", status: "SYNCHRONIZED", trustScore: 100, latency: 5 },
+                      { name: "Mesh Relay", status: "DRIFT_DETECTED", trustScore: 75, latency: 120 }
+                    ]).map((app: any, i: number) => (
+                      <div key={i} className={`p-4 rounded-xl border border-white/5 bg-white/2 flex flex-col gap-3 transition-all ${app.status === 'DRIFT_DETECTED' ? 'border-destructive/30 bg-destructive/5' : 'hover:bg-white/5'}`}>
+                         <div className="flex justify-between items-start">
+                            <p className="text-xs font-bold uppercase truncate">{app.name}</p>
+                            <div className={`size-2 rounded-full ${app.status === 'DRIFT_DETECTED' ? 'bg-destructive animate-pulse' : 'bg-emerald-500 animate-pulse'}`} />
+                         </div>
+                         <div className="space-y-1">
+                            <div className="flex justify-between text-[9px] text-muted-foreground uppercase font-mono">
+                               <span>Trust</span>
+                               <span className={app.trustScore > 90 ? 'text-emerald-500' : 'text-amber-500'}>{app.trustScore}%</span>
+                            </div>
+                            <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                               <div className={`h-full ${app.trustScore > 90 ? 'bg-emerald-500' : 'bg-amber-500'}`} style={{ width: `${app.trustScore}%` }} />
+                            </div>
+                         </div>
+                         <p className="text-[8px] text-muted-foreground font-mono uppercase truncate">Latency: {app.latency}ms</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card border-l-4 border-l-primary scan-effect relative overflow-hidden h-[300px]">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 font-headline text-base uppercase">
                     <Globe className="size-5 text-primary" />
-                    Cross-App Trust Topology
+                    Global Sync Topology
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="h-full relative overflow-hidden">
                   <div className="relative z-10 w-full h-full flex items-center justify-center">
-                    <div className="size-48 sm:size-64 rounded-full border border-primary/20 animate-spin-slow absolute" />
+                    <div className="size-48 rounded-full border border-primary/20 animate-spin-slow absolute" />
                     {nodes.map((node: any, i: number) => (
                       <div 
                         key={node.id}
-                        className={`absolute size-2 sm:size-3 rounded-full glow-primary transition-all duration-1000 ${node.load < 50 ? 'bg-emerald-500' : 'bg-primary'}`}
+                        className={`absolute size-2 rounded-full glow-primary transition-all duration-1000 ${node.load < 50 ? 'bg-emerald-500' : 'bg-primary'}`}
                         style={{ 
-                          transform: `rotate(${(360 / (nodes.length || 1)) * i}deg) translateY(-80px) sm:translateY(-120px)` 
+                          transform: `rotate(${(360 / (nodes.length || 1)) * i}deg) translateY(-80px)` 
                         }}
                       />
                     ))}
-                    <div className="size-3 sm:size-4 bg-primary rounded-full animate-ping shadow-[0_0_20px_rgba(0,150,255,0.8)]" />
+                    <div className="size-3 bg-primary rounded-full animate-ping shadow-[0_0_20px_rgba(0,150,255,0.8)]" />
                   </div>
                 </CardContent>
               </Card>
@@ -231,6 +271,19 @@ export default function Home() {
                   </div>
                 </CardContent>
               </Card>
+
+              <Card className="glass-card border-amber-500/20 bg-amber-500/5">
+                 <CardHeader>
+                    <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
+                       <HeartPulse className="size-3" /> Heartbeat Policy
+                    </CardTitle>
+                 </CardHeader>
+                 <CardContent>
+                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                       Apps failing to send a heartbeat for more than 60s will be automatically downgraded to L1 Trust Tier for re-verification.
+                    </p>
+                 </CardContent>
+              </Card>
             </div>
           </div>
         </main>
@@ -260,7 +313,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="bg-black/40 p-4 rounded border border-white/5 font-mono text-[10px] sm:text-xs leading-relaxed text-muted-foreground max-h-[200px] overflow-y-auto">
-                Ecosystem Trust Summary: Rubelpay and SovereignPay have maintained 100% signature consistency over the last 24 hours. Privilege escalation for Rubelpay to "Elite TSBAC" is recommended for zero-latency settlement.
+                Ecosystem Trust Summary: Rubelpay and SovereignPay have maintained 100% heartbeat and signature consistency. Heartbeat sync latency is at an optimal 12ms.
               </div>
             </div>
           ) : (

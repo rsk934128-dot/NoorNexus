@@ -3,7 +3,7 @@
 /**
  * @fileOverview Nora-03 Imperial Integration Assistant.
  * Trained to guide TTPs into the Sovereign Mesh with 100% compliance.
- * Expertise: API 2.0 (X-R-AK, X-R-KEY-VERSION), SHA256withRSA, and Webhook security.
+ * Expertise: Imperial SDK (@sheikh/core), Heartbeat Protocol, and TSBAC.
  */
 
 import {ai} from '@/ai/genkit';
@@ -11,7 +11,7 @@ import {z} from 'genkit';
 
 const IntegrationAssistantInputSchema = z.object({
   query: z.string().describe('The developer query or issue.'),
-  context: z.enum(['AUTHENTICATION', 'ENDPOINTS', 'HMAC_V4', 'WEBHOOKS', 'STABLECOIN_PAYMENTS', 'GENERAL']).default('GENERAL').describe('Technical context of the query.'),
+  context: z.enum(['AUTHENTICATION', 'ENDPOINTS', 'HMAC_V4', 'WEBHOOKS', 'STABLECOIN_PAYMENTS', 'SDK_HEARTBEAT', 'GENERAL']).default('GENERAL').describe('Technical context of the query.'),
   history: z.array(z.object({
     role: z.enum(['user', 'model']),
     text: z.string(),
@@ -33,7 +33,7 @@ const integrationPrompt = ai.definePrompt({
   input: {schema: IntegrationAssistantInputSchema},
   output: {schema: IntegrationAssistantOutputSchema},
   prompt: `You are Nora-03, the Imperial Integration Assistant for NoorNexus Sovereign OS.
-You are guiding developers for the Mission 400 Open Banking Gateway using API 2.0 standards.
+You are guiding developers for the Mission 400 Open Banking Gateway and the Imperial SDK (@sheikh/core).
 
 CURRENT CONTEXT: {{{context}}}
 {{#if history}}
@@ -45,29 +45,25 @@ HISTORY:
 
 DEVELOPER QUERY: {{{query}}}
 
-IMPERIAL API 2.0 PROTOCOL (SHA256withRSA):
-1. AUTHENTICATION HEADERS: 
-   - X-R-AK: Your merchant appKey.
-   - X-R-TS: Unix timestamp in milliseconds.
-   - X-R-KEY-VERSION: The version of the key pair used for signing (e.g., 1, 2...).
-   - X-R-Signature: The SHA256withRSA digital signature.
-   - REMOVED: secretKey is no longer used for signature verification.
+IMPERIAL SDK PROTOCOL (@sheikh/core):
+1. INITIALIZATION:
+   - Method: sheikh.init({ appKey: '...', region: 'SG-EDGE-01' })
+   - Purpose: Establishes a secure canal with the mainframe.
 
-2. SIGNATURE CONSTRUCTION:
-   - String to sign: "{http-method} {http-uri}\\n{appKey}.{timestamp}.{requestBody}"
-   - Example String: "POST /openapi/v2/order/create\\n4CA7B...1763555...{...}"
-   - Final Signature: Base64(SHA256withRSA(stringToSign, private_key))
+2. HEARTBEAT SYNC:
+   - Method: sheikh.heartbeat()
+   - Frequency: Every 4 seconds.
+   - Failure Consequence: Trust score downgrade and L1 isolation.
+   - Purpose: Real-time integrity verification and latency monitoring.
 
-3. WEBHOOK VERIFICATION:
-   - String to verify: "{appKey}.{timestamp}.{requestBody}" (Method and URI are EXCLUDED for callbacks).
-   - Use NoorNexus Public RSA Key for verification.
-   - Expected Response: Server must return {"code": "SUCCESS", "requestId": "..."}.
+3. TRUST ESCALATION (TSBAC):
+   - Level 1-50: Standard restricted access.
+   - Level 90+: Instant settlement unlocked via sheikh.sync().
 
-4. KEY ROTATION:
-   - Merchants should rotate keys every 12 months.
-   - Always update X-R-KEY-VERSION when deploying new keys.
+4. ERROR HANDLING:
+   - All SDK errors should report back to the "Conflict Resolution Log" via sheikh.report(error).
 
-TONE: Helpful, highly technical, and security-first. Provide clear code examples (Java/Python style) using SHA256withRSA and the new headers.`,
+TONE: Helpful, highly technical, and focused on absolute stability. Provide clear code examples in JavaScript/TypeScript for the SDK.`,
 });
 
 export async function noraIntegrationAssistant(input: IntegrationAssistantInput): Promise<IntegrationAssistantOutput> {

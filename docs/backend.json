@@ -15,6 +15,19 @@
       },
       "required": ["clientId", "clientSecret", "owner", "status"]
     },
+    "AppConnection": {
+      "title": "Imperial App Connection",
+      "description": "Registered application heartbeat and sync status.",
+      "type": "object",
+      "properties": {
+        "appId": { "type": "string" },
+        "name": { "type": "string" },
+        "trustScore": { "type": "number" },
+        "status": { "type": "string", "enum": ["SYNCHRONIZED", "DRIFT_DETECTED", "OFFLINE"] },
+        "lastHeartbeat": { "type": "number" },
+        "latency": { "type": "number" }
+      }
+    },
     "WebhookLog": {
       "title": "Webhook Event",
       "description": "Logs of incoming and outgoing Open Banking events.",
@@ -80,73 +93,16 @@
         "health": { "type": "string" },
         "timestamp": { "type": "number" }
       }
-    },
-    "P2CTransaction": {
-      "title": "P2C Settlement",
-      "description": "Corporate to Consumer disbursement log.",
-      "type": "object",
-      "properties": {
-        "merchantId": { "type": "string" },
-        "consumerId": { "type": "string" },
-        "amount": { "type": "number" },
-        "asset": { "type": "string" },
-        "status": { "type": "string" },
-        "timestamp": { "type": "number" },
-        "hmacSignature": { "type": "string" }
-      }
-    },
-    "SportsMatch": {
-      "title": "Sovereign Match",
-      "description": "Real-time football match data for Mission 400.",
-      "type": "object",
-      "properties": {
-        "home": { "type": "string" },
-        "away": { "type": "string" },
-        "time": { "type": "string" },
-        "score": { "type": "string" },
-        "status": { "type": "string", "enum": ["LIVE", "UPCOMING", "FINISHED"] },
-        "uplink": { "type": "string" },
-        "description": { "type": "string" }
-      }
-    },
-    "SportsServer": {
-      "title": "Sports Relay Server",
-      "description": "Relay node status for sports broadcasting.",
-      "type": "object",
-      "properties": {
-        "id": { "type": "string" },
-        "name": { "type": "string" },
-        "status": { "type": "string" },
-        "ping": { "type": "string" },
-        "load": { "type": "string" }
-      }
-    },
-    "ChatMessage": {
-      "title": "Imperial Chat",
-      "description": "Live community interaction messages.",
-      "type": "object",
-      "properties": {
-        "user": { "type": "string" },
-        "message": { "type": "string" },
-        "timestamp": { "type": "number" }
-      }
-    },
-    "SportsNews": {
-      "title": "Tactical Sports News",
-      "description": "Mission 400 related sports updates.",
-      "type": "object",
-      "properties": {
-        "title": { "type": "string" },
-        "content": { "type": "string" },
-        "severity": { "type": "string", "enum": ["INFO", "URGENT", "CRITICAL"] },
-        "timestamp": { "type": "number" }
-      }
     }
   },
   "auth": {
     "providers": ["google.com"]
   },
   "firestore": {
+    "/app_connections/{connId}": {
+      "schema": "AppConnection",
+      "description": "Imperial SDK heartbeat registry"
+    },
     "/api_keys/{keyId}": {
       "schema": "ApiKey",
       "description": "Gateway access credentials"
@@ -166,30 +122,6 @@
     "/treasury/global": {
       "schema": "TreasuryStatus",
       "description": "Global treasury metrics"
-    },
-    "/payment_methods/{methodId}": {
-      "schema": "PaymentMethod",
-      "description": "Configured payment gateways"
-    },
-    "/p2c_transactions/{txId}": {
-      "schema": "P2CTransaction",
-      "description": "Corporate settlement history"
-    },
-    "/sports_matches/{matchId}": {
-      "schema": "SportsMatch",
-      "description": "World Cup match feed"
-    },
-    "/sports_servers/{serverId}": {
-      "schema": "SportsServer",
-      "description": "Streaming relay server status"
-    },
-    "/sports_chat/{chatId}": {
-      "schema": "ChatMessage",
-      "description": "Live community chat"
-    },
-    "/sports_news/{newsId}": {
-      "schema": "SportsNews",
-      "description": "Tactical news feed"
     }
   }
 }
