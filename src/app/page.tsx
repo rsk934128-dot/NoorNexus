@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2 } from "lucide-react"
+import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -168,12 +168,12 @@ export default function Home() {
                   <div className="relative z-10 w-full h-full flex items-center justify-center">
                     <div className="size-64 rounded-full border border-primary/20 animate-spin-slow absolute" />
                     <div className="size-48 rounded-full border border-primary/10 absolute" />
-                    {nodes.map((node, i) => (
+                    {nodes.map((node: any, i: number) => (
                       <div 
                         key={node.id}
                         className={`absolute size-3 rounded-full glow-primary transition-all duration-1000 ${node.status === 'Operational' ? 'bg-primary' : 'bg-destructive'}`}
                         style={{ 
-                          transform: `rotate(${(360 / nodes.length) * i}deg) translateY(-120px)` 
+                          transform: `rotate(${(360 / (nodes.length || 1)) * i}deg) translateY(-120px)` 
                         }}
                       />
                     ))}
