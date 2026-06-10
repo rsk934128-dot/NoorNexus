@@ -7,11 +7,12 @@ import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
   Menu, MessageSquare, Cpu, BookOpen, Layers, Info, CheckCircle2,
-  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, RefreshCcw, Star, HeartPulse
+  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, RefreshCcw, Star, HeartPulse, Activity
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -19,19 +20,20 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useFirestore } from "@/firebase"
 import { collection, addDoc, serverTimestamp } from "firebase/firestore"
+import { createSyncRoutine } from "@/services/mainframe-sync"
 
 const ENDPOINTS = [
-  { method: "POST", path: "/openapi/v2/order/create", desc: "Create a prepay order and get a payment link or SN." },
-  { method: "POST", path: "/openapi/v2/order/payment-method", desc: "Retrieve specific payment info (URL/QR) for an order." },
-  { method: "GET", path: "/openapi/v2/order/query", desc: "Check the current status of a payment order." },
-  { method: "POST", path: "/openapi/v2/auth/handshake", desc: "Initiate SHA256withRSA cryptographic session." }
+  { method: "POST", path: "/openapi/v2/order/create", desc: "Create a prepay order via SHA256withRSA." },
+  { method: "POST", path: "/openapi/v2/order/payment-method", desc: "Fetch URL/QR for specific method." },
+  { method: "GET", path: "/openapi/v2/order/query", desc: "Poll transaction status." },
+  { method: "POST", path: "/openapi/v2/webhook/callback", desc: "Inbound notification receiver." }
 ]
 
 const SDK_METHODS = [
-  { name: "sheikh.init()", desc: "Initialize connection with NoorNexus Mainframe.", params: "appKey, region" },
-  { name: "sheikh.sync()", desc: "Synchronize local state with Collective Immune System.", params: "payload" },
-  { name: "sheikh.heartbeat()", desc: "Send 4s integrity pulse to maintain L4 privileges.", params: "signature" },
-  { name: "sheikh.audit()", desc: "Request an immediate Nora-01 protocol audit.", params: "packetId" }
+  { name: "sheikh.init()", desc: "Initializes RSA-signed session.", params: "appKey, region" },
+  { name: "sheikh.heartbeat()", desc: "Sends 4s integrity pulse (L4 Maintenance).", params: "none" },
+  { name: "sheikh.sync()", desc: "Broadcasts payload to 400 nodes.", params: "payload" },
+  { name: "sheikh.report()", desc: "Logs anomaly to Conflict Resolution.", params: "error" }
 ]
 
 interface Message {
@@ -52,10 +54,15 @@ export default function ApiHubPage() {
   const [playgroundLoading, setPlaygroundLoading] = useState(false)
   const [playgroundResult, setPlaygroundResult] = useState<any>(null)
   const [activeTab, setActiveTab] = useState("endpoints")
+  const [handshakeProgress, setHandshakeProgress] = useState(0)
+  const [isSynced, setIsSynced] = useState(false)
   const [payload, setPayload] = useState(`{
   "appId": "RUBELPAY-V3",
-  "action": "HEARTBEAT_SYNC",
-  "trust_nonce": "${Math.random().toString(36).substring(7)}"
+  "action": "MAIN_SYNC",
+  "metadata": {
+    "region": "SG-EDGE-01",
+    "version": "1.0.4"
+  }
 }`)
 
   useEffect(() => {
@@ -75,7 +82,7 @@ export default function ApiHubPage() {
       const history = messages.map(m => ({ role: m.role, text: m.text }))
       const result = await noraIntegrationAssistant({
         query: userMsg,
-        context: "STABLECOIN_PAYMENTS",
+        context: "SDK_HEARTBEAT",
         history
       })
       
@@ -96,42 +103,39 @@ export default function ApiHubPage() {
   const executeHandshake = async () => {
     setPlaygroundLoading(true)
     setPlaygroundResult(null)
+    setHandshakeProgress(10)
     
     try {
       const parsed = JSON.parse(payload)
-      
-      // Simulate Imperial SDK Heartbeat
-      if (parsed.action === "HEARTBEAT_SYNC") {
-        await addDoc(collection(db, "app_connections"), {
-          appId: parsed.appId,
-          name: parsed.appId,
-          trustScore: 90 + Math.floor(Math.random() * 10),
-          status: "SYNCHRONIZED",
-          lastHeartbeat: Date.now(),
-          latency: Math.floor(Math.random() * 20) + 5
-        })
+      const routine = createSyncRoutine(parsed.appId, parsed.metadata?.region);
+
+      // Simulate step-by-step handshake visualization
+      const steps = [25, 45, 75, 90, 100];
+      for (const step of steps) {
+        await new Promise(r => setTimeout(r, 300));
+        setHandshakeProgress(step);
       }
 
-      setTimeout(() => {
+      const success = await routine.startSync(db);
+      
+      if (success) {
+        setIsSynced(true);
         setPlaygroundResult({
-          code: "SUCCESS",
-          msg: "Imperial SDK Handshake Verified",
+          status: "SUCCESS",
+          msg: "Imperial Heartbeat Sync Established",
           data: {
-            session_id: "SHEIKH-SESS-" + Math.random().toString(16).substring(2, 10).toUpperCase(),
-            trust_escalation: "L4_TSBAC_ACTIVE",
-            heartbeat_interval: "4000ms",
-            mesh_sync: "COMPLETED"
+            session: "SHEIKH-SESS-" + Math.random().toString(16).substring(2, 10).toUpperCase(),
+            trust_level: "L4_TSBAC",
+            sync_interval: "4000ms",
+            mesh_status: "ACTIVE"
           }
-        })
-        setPlaygroundLoading(false)
-        toast({
-          title: "Sovereign Handshake Successful",
-          description: "Imperial SDK is now heartbeat-synced with the mainframe.",
-        })
-      }, 1500)
+        });
+        toast({ title: "Mainframe Connection Active" });
+      }
     } catch (e: any) {
-      setPlaygroundLoading(false)
-      toast({ title: "Payload Error", description: "Invalid JSON format.", variant: "destructive" })
+      toast({ title: "Payload Error", description: "Invalid configuration.", variant: "destructive" });
+    } finally {
+      setPlaygroundLoading(false);
     }
   }
 
@@ -144,7 +148,7 @@ export default function ApiHubPage() {
             <div className="space-y-1">
               <div className="flex items-center gap-3">
                  <SidebarTrigger className="md:hidden text-primary">
-                    <Button variant="ghost" size="icon" asChild><div className="size-10 flex items-center justify-center"><Menu className="size-6" /></div></Button>
+                    <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <h2 className="text-2xl sm:text-4xl font-headline font-bold flex items-center gap-3 uppercase">
                    <Code2 className="size-10 text-primary" />
@@ -154,30 +158,29 @@ export default function ApiHubPage() {
               <p className="text-muted-foreground">Phase 3: Unified Connect & Imperial SDK Management.</p>
             </div>
             <div className="flex items-center gap-2">
-               <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2 bg-emerald-500/5">
-                 <Star className="size-4 fill-current" /> TRUST LEVEL: L4
+               <Badge variant="outline" className={`h-10 px-4 flex items-center gap-2 ${isSynced ? 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5' : 'border-primary/30 text-primary'}`}>
+                 <Activity className={`size-4 ${isSynced ? 'animate-pulse' : ''}`} /> {isSynced ? 'MESH_SYNC: ACTIVE' : 'MESH_SYNC: IDLE'}
                </Badge>
                <Badge variant="outline" className="border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
-                 <HeartPulse className="size-4" /> SDK HEARTBEAT ENABLED
+                 <HeartPulse className="size-4" /> HEARTBEAT ENABLED
                </Badge>
             </div>
           </header>
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
             <div className="xl:col-span-3 space-y-6">
-              <Tabs defaultValue="endpoints" className="space-y-6">
+              <Tabs defaultValue="sdk" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
-                  <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> API Docs</TabsTrigger>
                   <TabsTrigger value="sdk" className="gap-2"><Cpu className="size-4" /> Imperial SDK</TabsTrigger>
-                  <TabsTrigger value="security" className="gap-2"><ShieldAlert className="size-4" /> Security</TabsTrigger>
-                  <TabsTrigger value="playground" className="gap-2"><Terminal className="size-4" /> SDK Playground</TabsTrigger>
+                  <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> REST API</TabsTrigger>
+                  <TabsTrigger value="playground" className="gap-2"><Terminal className="size-4" /> Sync Playground</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="endpoints" className="space-y-4">
                   <Card className="glass-card">
                     <CardHeader>
                       <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Sovereign API 2.0 Endpoints</CardTitle>
-                      <CardDescription>Direct RESTful integration for high-throughput merchants.</CardDescription>
+                      <CardDescription>Direct integration via SHA256withRSA for high-throughput nodes.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-0">
                       <div className="divide-y divide-white/5">
@@ -238,37 +241,48 @@ export default function ApiHubPage() {
                 <TabsContent value="playground" className="space-y-4">
                    <Card className="glass-card">
                       <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase tracking-widest">Imperial SDK Test Runner</CardTitle>
-                         <CardDescription>Sandbox for Heartbeat Handshake & Trust Sync</CardDescription>
+                         <CardTitle className="text-sm font-headline uppercase tracking-widest">Mainframe Sync Runner</CardTitle>
+                         <CardDescription>Simulate Heartbeat Handshake between Rubelpay and NoorNexus.</CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-4">
                          <div className="space-y-2">
-                            <Label className="text-[10px] font-bold text-muted-foreground">Sync Payload (JSON)</Label>
+                            <Label className="text-[10px] font-bold text-muted-foreground">Sync Configuration (JSON)</Label>
                             <textarea 
                               className="w-full h-32 bg-background/50 border border-white/10 rounded-md p-3 font-mono text-xs focus:ring-1 focus:ring-primary outline-none" 
                               value={payload}
                               onChange={(e) => setPayload(e.target.value)}
                             />
                          </div>
+                         
                          <Button 
                           onClick={executeHandshake}
                           disabled={playgroundLoading}
-                          asChild
+                          className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary flex items-center justify-center"
                         >
-                          <div className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary flex items-center justify-center cursor-pointer">
-                            {playgroundLoading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
-                            Execute SDK Handshake
-                          </div>
-                         </Button>
+                          {playgroundLoading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
+                          {isSynced ? "Restart Sync Routine" : "Initiate Handshake"}
+                        </Button>
+
+                         {playgroundLoading && (
+                           <div className="space-y-2 py-4">
+                             <div className="flex justify-between text-[10px] font-mono text-primary uppercase">
+                               <span>Establishing RSA Canal...</span>
+                               <span>{handshakeProgress}%</span>
+                             </div>
+                             <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                               <div className="h-full bg-primary transition-all duration-300" style={{ width: `${handshakeProgress}%` }} />
+                             </div>
+                           </div>
+                         )}
 
                          {playgroundResult && (
                            <div className="mt-6 space-y-4 animate-in fade-in zoom-in-95">
                               <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
                                 <CheckCircle2 className="size-4 text-emerald-500" />
-                                <span className="text-[10px] font-bold text-emerald-500 uppercase">Handshake: {playgroundResult.code}</span>
+                                <span className="text-[10px] font-bold text-emerald-500 uppercase">{playgroundResult.msg}</span>
                               </div>
                               <pre className="bg-black/40 p-4 rounded-lg font-mono text-[10px] border border-white/5 text-primary overflow-x-auto">
-                                {JSON.stringify(playgroundResult, null, 2)}
+                                {JSON.stringify(playgroundResult.data, null, 2)}
                               </pre>
                            </div>
                          )}
