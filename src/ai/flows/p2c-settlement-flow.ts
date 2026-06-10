@@ -1,7 +1,6 @@
-
 'use server';
 /**
- * @fileOverview P2C Imperial Disbursement Auditor.
+ * @fileOverview P2C Imperial Disbursement Auditor using Gemini 1.5 Flash.
  * Evaluates high-volume merchant payouts for Mission 400.
  */
 

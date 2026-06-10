@@ -1,11 +1,10 @@
-
 'use server';
 /**
- * @fileOverview GSMIFY Sovereign Sports AI Analyst.
+ * @fileOverview GSMIFY Sovereign Sports AI Analyst using Gemini 1.5 Flash.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {z} from 'z';
 
 const MatchInsightInputSchema = z.object({
   homeTeam: z.string(),

@@ -1,7 +1,6 @@
-
 'use server';
 /**
- * @fileOverview Nora-03 API Integration Assistant.
+ * @fileOverview Nora-03 API Integration Assistant using Gemini 1.5 Flash.
  * Helps third-party developers connect to the NoorNexus OS.
  */
 

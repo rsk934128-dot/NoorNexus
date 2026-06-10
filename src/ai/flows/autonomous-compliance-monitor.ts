@@ -1,8 +1,7 @@
-
 'use server';
 /**
  * @fileOverview NoorNexus Autonomous Compliance Agent.
- * Monitors border anomalies and evaluates security risks.
+ * Monitors border anomalies and evaluates security risks using Gemini 1.5 Flash.
  */
 
 import {ai} from '@/ai/genkit';

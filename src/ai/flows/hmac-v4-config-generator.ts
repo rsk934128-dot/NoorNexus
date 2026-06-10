@@ -1,11 +1,6 @@
-
 'use server';
 /**
- * @fileOverview This file defines the Genkit flow for generating HMAC_V4 security handshake configurations.
- *
- * - generateHmacV4Config - A function that handles the generation of HMAC_V4 configurations.
- * - HmacV4ConfigGeneratorInput - The input type for the generateHmacV4Config function.
- * - HmacV4ConfigGeneratorOutput - The return type for the generateHmacV4Config function.
+ * @fileOverview HMAC_V4 security handshake configuration generator using Gemini 1.5 Flash.
  */
 
 import {ai} from '@/ai/genkit';
@@ -30,28 +25,23 @@ export type HmacV4ConfigGeneratorOutput = z.infer<typeof HmacV4ConfigGeneratorOu
 
 const hmacV4ConfigGeneratorPrompt = ai.definePrompt({
   name: 'hmacV4ConfigGeneratorPrompt',
+  model: 'googleai/gemini-1.5-flash',
   input: {schema: HmacV4ConfigGeneratorInputSchema},
   output: {schema: HmacV4ConfigGeneratorOutputSchema},
-  prompt: `You are an expert in Sovereign Digital Infrastructure and HMAC_V4 cryptographic protocols. Your task is to generate a security handshake configuration for a new distributed ledger node based on the provided details.
+  prompt: `You are an expert in Sovereign Digital Infrastructure and HMAC_V4 cryptographic protocols. Generate a security handshake configuration.
 
 Node Name: {{{nodeName}}}
 Region: {{{region}}}
 Security Protocol Status: {{{securityProtocolStatus}}}
-Time Window for Verification: {{{timeWindowMinutes}}} minutes
+Time Window: {{{timeWindowMinutes}}} minutes
 
-Generate a suitable master key (a placeholder, e.g., GSM_SK_ followed by a random-looking hex string of 12 characters, indicating a secure but simulated key).
-Describe the security handshake logic for this configuration, explicitly mentioning the time-window and timingSafeEqual verification.
-Provide a concise summary description of the entire generated HMAC_V4 configuration.
-
-Ensure the output strictly adheres to the JSON schema for HmacV4ConfigGeneratorOutput.`,
+Generate a suitable master key, describe the logic, and summarize the config.`,
 });
 
 export async function generateHmacV4Config(input: HmacV4ConfigGeneratorInput): Promise<HmacV4ConfigGeneratorOutput> {
   try {
     const {output} = await hmacV4ConfigGeneratorPrompt(input);
-    if (!output) {
-      throw new Error('Failed to generate HMAC_V4 configuration output.');
-    }
+    if (!output) throw new Error('Failed to generate HMAC_V4 configuration output.');
     return output;
   } catch (error: any) {
     console.error('Config Generator Error:', error);

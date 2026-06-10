@@ -1,7 +1,6 @@
-
 'use server';
 /**
- * @fileOverview Imperial Treasury Auditor Flow.
+ * @fileOverview Imperial Treasury Auditor Flow using Gemini 1.5 Flash.
  * Verifies multi-ledger integrity and liquidity health.
  */
 
