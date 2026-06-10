@@ -1,25 +1,30 @@
+
 "use client"
 
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
-import { PhoneIncoming, ShieldAlert, BellRing } from "lucide-react"
+import { PhoneIncoming } from "lucide-react"
 
 /**
  * @fileOverview Persistent Communication Node (V3 Reinforced)
  * এই কম্পোনেন্টটি ব্যাকগ্রাউন্ডে সুরক্ষা হাবকে সচল রাখে এবং কলের সিগন্যাল খুঁজে বের করে।
+ * Deferring render until mount to avoid hydration errors.
  */
 export function PersistentCommNode() {
   const pathname = usePathname()
   const router = useRouter()
   const { toast } = useToast()
   const lastToastTime = useRef<number>(0)
+  const [mounted, setMounted] = useState(false)
   
   const isShurukkhaPage = pathname === "/shurukkha"
 
   useEffect(() => {
+    setMounted(true)
+    
     // ১. নোটিফিকেশন পারমিশন চেক
     if (typeof window !== "undefined" && "Notification" in window) {
       if (Notification.permission !== "granted") {
@@ -29,31 +34,22 @@ export function PersistentCommNode() {
 
     // ২. শক্তিশালী মেসেজ লিসেনার
     const handleMessage = (event: MessageEvent) => {
-      // ডিব্যাগিংয়ের জন্য কনসোলে প্রিন্ট করা হবে
-      console.log("[NoorNexus-Sync] Message Received from Node:", event.data);
-
       const data = event.data;
       if (!data) return;
 
-      // মেসেজটিকে স্ট্রিংয়ে রূপান্তর করে সার্চ করা হবে
       const msgStr = typeof data === 'string' ? data : JSON.stringify(data);
-      
-      // কলের জন্য কি-ওয়ার্ড সার্চ (Broad Pattern Matching)
       const callKeywords = /incoming|call|ring|dial|offer|invite|request_access|peer/i;
       const isCallSignal = callKeywords.test(msgStr);
 
       if (isCallSignal) {
-        // স্প্যাম রোধ করতে ১০ সেকেন্ডের গ্যাপ রাখা হয়েছে
         if (Date.now() - lastToastTime.current < 10000) return;
         lastToastTime.current = Date.now();
 
-        // এলার্ট সাউন্ড (যদি সম্ভব হয়)
         try {
           const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
-          audio.play().catch(() => {/* Browser blocked autoplay */});
+          audio.play().catch(() => {});
         } catch (e) {}
 
-        // ক. ওএস লেভেল নোটিফিকেশন
         if ("Notification" in window && Notification.permission === "granted") {
           new Notification("NoorNexus | IMPERIAL CALL", {
             body: "A secure communication link is ringing. Open Shurukkha Hub now.",
@@ -62,7 +58,6 @@ export function PersistentCommNode() {
           });
         }
 
-        // খ. ইন-অ্যাপ টোস্ট নোটিফিকেশন (যদি অন্য পেজে থাকেন)
         if (!isShurukkhaPage) {
           toast({
             title: "CRITICAL CALL SIGNAL DETECTED",
@@ -90,6 +85,8 @@ export function PersistentCommNode() {
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
   }, [isShurukkhaPage, router, toast]);
+
+  if (!mounted) return null;
 
   return (
     <div 

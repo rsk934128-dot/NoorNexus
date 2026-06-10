@@ -17,8 +17,10 @@ export default function LoginPage() {
   const router = useRouter()
   const { toast } = useToast()
   const [signingIn, setSigningIn] = useState(false)
+  const [systemId, setSystemId] = useState("")
 
   useEffect(() => {
+    setSystemId(Math.random().toString(16).substring(2, 10).toUpperCase())
     if (!loading && user) {
       router.push("/")
     }
@@ -33,7 +35,6 @@ export default function LoginPage() {
         description: "HMAC_V4 Handshake Successful. Welcome, Commander.",
       })
     } catch (error: any) {
-      // Don't show destructive toast if user simply closed the popup
       if (error.code === 'auth/popup-closed-by-user') {
         setSigningIn(false)
         return
@@ -94,7 +95,7 @@ export default function LoginPage() {
         </Card>
         
         <p className="text-center text-[9px] text-muted-foreground uppercase font-mono tracking-widest">
-          Authorized Personnel Only | System ID: {Math.random().toString(16).substring(2, 10).toUpperCase()}
+          Authorized Personnel Only | System ID: {systemId || "INITIALIZING..."}
         </p>
       </div>
     </div>
