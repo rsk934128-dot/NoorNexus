@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { 
   ShieldCheck, Terminal, AlertCircle, CheckCircle2, Cpu, Activity, Zap, 
-  Menu, History, Loader2, ShieldAlert, Lock, ShieldEllipsis, RefreshCcw 
+  Menu, History, Loader2, ShieldAlert, Lock, ShieldEllipsis, RefreshCcw, LayoutGrid
 } from "lucide-react"
 import { autonomousComplianceMonitor, AutonomousComplianceMonitorOutput } from "@/ai/flows/autonomous-compliance-monitor"
 import { useToast } from "@/hooks/use-toast"
@@ -27,7 +27,7 @@ export default function CompliancePage() {
   const [typing, setTyping] = useState(false)
   const [sovereignOverride, setSovereignOverride] = useState(true)
 
-  const { data: auditHistory, loading: historyLoading } = useCollection<any>(
+  const { data: auditHistory } = useCollection<any>(
     query(collection(db, "border_logs"), orderBy("timestamp", "desc"), limit(5))
   )
 
@@ -98,10 +98,10 @@ export default function CompliancePage() {
                   <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                 </SidebarTrigger>
                 <ShieldCheck className="size-8 text-primary" />
-                <h2 className="text-2xl sm:text-3xl font-headline font-bold uppercase">Adaptive Sovereign Shield</h2>
+                <h2 className="text-2xl sm:text-3xl font-headline font-bold uppercase">Collective Immune System</h2>
               </div>
               <p className="text-muted-foreground text-sm sm:text-base">
-                Project 150: Collective Immune System Architecture.
+                Project 150: Managing Shield Integrations for Rubelpay & SovereignPay.
               </p>
             </div>
             <div className="flex flex-col items-end gap-3">
@@ -114,131 +114,97 @@ export default function CompliancePage() {
                   className="data-[state=checked]:bg-primary"
                  />
                </div>
-               <div className="flex gap-2">
-                  <Badge variant="outline" className="text-emerald-500 border-emerald-500/30 h-8 px-3">SHIELD: ACTIVE</Badge>
-                  <Badge variant="outline" className="text-primary border-primary/30 h-8 px-3 uppercase">Tier: {results?.suggestedSecurityTier || 'L1_NORMAL'}</Badge>
-               </div>
             </div>
           </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="space-y-6">
-              <Card className="glass-card">
-                <CardHeader>
-                  <CardTitle className="font-headline text-lg flex items-center gap-2">
-                    <Terminal className="size-4" />
-                    Security Packet Entry
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">HMAC_V4 Signature</Label>
-                      <Input value={formData.signature} onChange={e => setFormData({...formData, signature: e.target.value})} className="bg-background/50 font-mono text-xs" />
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <Card className="glass-card bg-primary/5 border-primary/20 lg:col-span-1">
+              <CardHeader>
+                <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
+                  <LayoutGrid className="size-4" /> Connected Apps
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {[
+                  { name: "Rubelpay", status: "Protected", tier: "L4", health: "100%" },
+                  { name: "SovereignPay", status: "Protected", tier: "L2", health: "98%" },
+                  { name: "NoorNexus Core", status: "Master", tier: "L4", health: "100%" }
+                ].map((app, i) => (
+                  <div key={i} className="p-3 bg-white/5 rounded border border-white/5 flex justify-between items-center">
+                    <div className="space-y-0.5">
+                      <p className="text-xs font-bold text-white">{app.name}</p>
+                      <p className="text-[8px] text-muted-foreground font-mono uppercase">{app.tier} Shield Active</p>
                     </div>
-                    <div className="space-y-2">
-                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">Payload Environment</Label>
-                      <textarea className="w-full min-h-[100px] bg-background/50 border border-white/10 rounded-md p-3 font-mono text-xs outline-none focus:ring-1 focus:ring-primary" value={formData.payload} onChange={e => setFormData({...formData, payload: e.target.value})} />
+                    <div className="text-right">
+                      <p className="text-[9px] font-bold text-emerald-500">{app.health}</p>
+                      <Badge variant="outline" className="text-[7px] h-3 border-emerald-500/20 text-emerald-500 p-0 px-1">{app.status}</Badge>
                     </div>
                   </div>
-                  <Button onClick={runMonitor} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary" disabled={loading}>
-                    {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
-                    Analyze & Pulse Mesh
-                  </Button>
-                </CardContent>
-              </Card>
+                ))}
+              </CardContent>
+            </Card>
 
-              {results && (
-                <div className="grid grid-cols-2 gap-4">
-                  <Card className="glass-card bg-primary/5 border-primary/20">
-                    <CardHeader className="py-3">
-                       <CardTitle className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
-                         <RefreshCcw className="size-3" /> Key Hardening
-                       </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                       <p className="text-xl font-headline font-bold">{results.keyRotationIntervalSeconds}s</p>
-                       <p className="text-[8px] text-muted-foreground uppercase font-mono">Rotation Interval</p>
-                    </CardContent>
-                  </Card>
-                  <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
-                    <CardHeader className="py-3">
-                       <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
-                         <ShieldEllipsis className="size-3" /> Mesh Consensus
-                       </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                       <p className="text-xl font-headline font-bold">400/400</p>
-                       <p className="text-[8px] text-muted-foreground uppercase font-mono">Nodes Updated</p>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-6">
-              <Card className={`glass-card min-h-[400px] border-t-4 transition-all duration-500 ${results ? (results.anomalyDetected ? 'border-t-destructive' : 'border-t-emerald-500') : 'border-t-primary'}`}>
-                <CardHeader>
-                  <CardTitle className="font-headline text-lg flex items-center gap-2 uppercase tracking-tighter">
-                     <Cpu className="size-4 text-primary" />
-                     Shield Reasoning Engine
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="bg-black/40 p-5 rounded-xl border border-white/5 font-mono text-xs min-h-[150px] relative overflow-hidden">
-                     {typing && <div className="absolute top-0 left-0 w-full h-0.5 bg-primary animate-progress" />}
-                     <p className="leading-relaxed text-muted-foreground whitespace-pre-wrap">
-                        {reasoningStream || (loading ? "Simulating collective immune response..." : "Awaiting protocol packet for analysis...")}
-                     </p>
-                  </div>
-
-                  {results && (
-                    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
-                      <div className="grid grid-cols-2 gap-4">
-                         <div className={`p-3 rounded-lg flex items-center gap-3 ${results.anomalyDetected ? 'bg-destructive/10' : 'bg-emerald-500/10'}`}>
-                           {results.anomalyDetected ? <AlertCircle className="size-5 text-destructive" /> : <CheckCircle2 className="size-5 text-emerald-500" />}
-                           <span className="text-xs font-bold uppercase">{results.anomalyDetected ? results.anomalyType : "VERIFIED"}</span>
-                         </div>
-                         <div className={`p-3 rounded-lg flex items-center gap-3 bg-primary/10`}>
-                           <Lock className="size-5 text-primary" />
-                           <span className="text-xs font-bold uppercase">{results.suggestedSecurityTier}</span>
-                         </div>
-                      </div>
-
-                      {results.nodeIsolationRequired && (
-                         <div className={`p-4 rounded-lg flex items-center gap-4 transition-all ${sovereignOverride ? 'bg-amber-500/20 border border-amber-500/30' : 'bg-destructive/20 border border-destructive/30 animate-pulse'}`}>
-                            {sovereignOverride ? <ShieldAlert className="size-8 text-amber-500" /> : <ShieldAlert className="size-8 text-destructive" />}
-                            <div>
-                               <p className="text-xs font-bold uppercase">
-                                 {sovereignOverride ? 'Isolation Recommendation' : 'Node Isolation Active'}
-                               </p>
-                               <p className="text-[10px] opacity-80">
-                                 {sovereignOverride 
-                                   ? `Awaiting Sovereign Seal for node ${formData.sourceNode} isolation.` 
-                                   : `Immediate quarantine of ${formData.sourceNode} executed.`}
-                               </p>
-                               {sovereignOverride && (
-                                 <Button size="sm" className="mt-2 h-7 text-[9px] bg-amber-500 text-white font-bold uppercase px-3">
-                                   Seal Isolation
-                                 </Button>
-                               )}
-                            </div>
-                         </div>
-                      )}
-                      
+            <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="space-y-6">
+                <Card className="glass-card">
+                  <CardHeader>
+                    <CardTitle className="font-headline text-lg flex items-center gap-2">
+                      <Terminal className="size-4" />
+                      Protocol Packet Entry
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="space-y-4">
                       <div className="space-y-2">
-                        <p className="text-[10px] uppercase font-bold text-primary tracking-widest">Adaptive Defense Recommendations</p>
-                        {results.recommendedActions.map((action, i) => (
-                          <div key={i} className="text-[10px] p-2 bg-white/5 rounded border border-white/5 flex items-center gap-2">
-                            <div className="size-1 bg-primary rounded-full" />
-                            {action}
-                          </div>
-                        ))}
+                        <Label className="text-[10px] uppercase font-bold text-muted-foreground">HMAC_V4 Signature</Label>
+                        <Input value={formData.signature} onChange={e => setFormData({...formData, signature: e.target.value})} className="bg-background/50 font-mono text-xs" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-[10px] uppercase font-bold text-muted-foreground">Target App / Environment</Label>
+                        <textarea className="w-full min-h-[100px] bg-background/50 border border-white/10 rounded-md p-3 font-mono text-xs outline-none focus:ring-1 focus:ring-primary" value={formData.payload} onChange={e => setFormData({...formData, payload: e.target.value})} />
                       </div>
                     </div>
-                  )}
-                </CardContent>
-              </Card>
+                    <Button onClick={runMonitor} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary" disabled={loading}>
+                      {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
+                      Pulse Global Mesh
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="space-y-6">
+                <Card className={`glass-card min-h-[400px] border-t-4 transition-all duration-500 ${results ? (results.anomalyDetected ? 'border-t-destructive' : 'border-t-emerald-500') : 'border-t-primary'}`}>
+                  <CardHeader>
+                    <CardTitle className="font-headline text-lg flex items-center gap-2 uppercase tracking-tighter">
+                      <Cpu className="size-4 text-primary" />
+                      Shield Reasoning Engine
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="bg-black/40 p-5 rounded-xl border border-white/5 font-mono text-xs min-h-[150px] relative overflow-hidden">
+                      {typing && <div className="absolute top-0 left-0 w-full h-0.5 bg-primary animate-progress" />}
+                      <p className="leading-relaxed text-muted-foreground whitespace-pre-wrap">
+                        {reasoningStream || (loading ? "Coordinating mesh-wide immune response..." : "Awaiting protocol packet for analysis...")}
+                      </p>
+                    </div>
+
+                    {results && (
+                      <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
+                        <div className="grid grid-cols-2 gap-4">
+                           <div className={`p-3 rounded-lg flex items-center gap-3 ${results.anomalyDetected ? 'bg-destructive/10' : 'bg-emerald-500/10'}`}>
+                             {results.anomalyDetected ? <AlertCircle className="size-5 text-destructive" /> : <CheckCircle2 className="size-5 text-emerald-500" />}
+                             <span className="text-xs font-bold uppercase">{results.anomalyDetected ? results.anomalyType : "VERIFIED"}</span>
+                           </div>
+                           <div className={`p-3 rounded-lg flex items-center gap-3 bg-primary/10`}>
+                             <Lock className="size-5 text-primary" />
+                             <span className="text-xs font-bold uppercase">{results.suggestedSecurityTier}</span>
+                           </div>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </main>

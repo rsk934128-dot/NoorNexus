@@ -4,7 +4,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw } from "lucide-react"
+import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -55,12 +55,12 @@ export default function Home() {
 
     const interval = setInterval(() => {
       const logs = [
+        "SHIELD SYNC: Rubelpay -> Secured",
         "SIGNATURE VERIFIED: SG-EDGE-01",
+        "SHIELD SYNC: SovereignPay -> Secured",
         "P2P HANDSHAKE: Sirajganj -> UAE",
-        "STABLECOIN SYNC: USDC -> MESH",
-        "ADAPTIVE SHIELD: SCANNING...",
-        "KEY ROTATION: SUCCESS",
-        "NODE HEARTBEAT: SIRAJGANJ_OK"
+        "ADAPTIVE SHIELD: SCANNING MESH...",
+        "NODE HEARTBEAT: COLLECTIVE_OK"
       ]
       const log = logs[Math.floor(Math.random() * logs.length)]
       setBorderFeed(prev => [log, ...prev].slice(0, 5))
@@ -82,7 +82,7 @@ export default function Home() {
       setAuditResult(result)
       setIsDialogOpen(true)
       toast({
-        title: "Audit Complete",
+        title: "Global Mesh Audit Complete",
         description: `Status: ${result.auditStatus} | Score: ${result.securityScore}`,
       })
     } catch (error: any) {
@@ -130,19 +130,19 @@ export default function Home() {
                   <Menu className="size-6" />
                 </Button>
               </SidebarTrigger>
-              <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter">PHASE 2 ACTIVE</Badge>
+              <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter">COLLECTIVE IMMUNITY</Badge>
             </div>
             
             <div className="flex flex-col sm:flex-row justify-between items-start gap-6">
               <div className="space-y-4">
                 <div className="hidden md:flex items-center gap-2">
                   <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">Operational OS v3</Badge>
-                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 glow-emerald uppercase tracking-tighter">Adaptive Sovereign Shield Active</Badge>
+                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 glow-emerald uppercase tracking-tighter">Collective Immune System Active</Badge>
                 </div>
                 <h2 className="text-3xl sm:text-4xl lg:text-6xl font-headline font-bold tracking-tighter uppercase">Command <span className="text-primary">Center.</span></h2>
                 <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                  Project 150: Collective Immune System is monitoring <span className="text-white font-mono">{nodes.length}</span> nodes. 
-                  Defense Tier: <span className={`font-bold ${activeTier === 'L4_LOCKDOWN' ? 'text-destructive' : 'text-primary'}`}>{activeTier}</span>.
+                  Managing <span className="text-white font-mono">12</span> sovereign applications via Project 150 Shield SDK. 
+                  Global Immunity Level: <span className="text-emerald-500 font-bold">99.99%</span>.
                 </p>
               </div>
               <div className="flex gap-4">
@@ -160,9 +160,9 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { label: "Active Nodes", value: activeNodes, sub: `of ${nodes.length} Provisoned`, icon: Server, color: "text-primary" },
-              { label: "Shield Health", value: "99.9%", sub: "Adaptive Pulse OK", icon: ShieldCheck, color: "text-emerald-500" },
-              { label: "Key Entropy", value: "MAX", sub: "HMAC_V4 Hardened", icon: Zap, color: "text-primary" },
-              { label: "Threat Matrix", value: "STABLE", sub: "Zero-Trust Active", icon: Radar, color: "text-primary" },
+              { label: "Mesh Immunity", value: "99.99%", sub: "12 Apps Integrated", icon: ShieldCheck, color: "text-emerald-500" },
+              { label: "App Key Version", value: "v2.0", sub: "SHA256withRSA", icon: LayoutGrid, color: "text-primary" },
+              { label: "Threat Matrix", value: "STABLE", sub: "Collective Pulse OK", icon: Radar, color: "text-primary" },
             ].map((stat, i) => (
               <Card key={i} className="glass-card hover:border-primary/30 transition-all duration-300 group">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -183,7 +183,7 @@ export default function Home() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 font-headline text-base uppercase">
                     <Globe className="size-5 text-primary" />
-                    Mesh Network Topology
+                    Collective Mesh Topology
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="h-full relative overflow-hidden">
@@ -210,9 +210,9 @@ export default function Home() {
                 <CardHeader>
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
                     <Zap className="size-4 text-emerald-500" />
-                    Shield Border Feed
+                    Immune System Feed
                   </CardTitle>
-                  <CardDescription className="text-xs">Live adaptive heartbeat.</CardDescription>
+                  <CardDescription className="text-xs">Live collective heartbeat.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {borderFeed.map((log, i) => (
@@ -228,7 +228,7 @@ export default function Home() {
                        className="w-full bg-primary text-primary-foreground py-3 rounded font-bold text-[10px] uppercase tracking-widest h-auto glow-primary"
                      >
                         {auditing ? <Loader2 className="animate-spin mr-2 size-3" /> : <Shield className="size-3 mr-2" />}
-                        {auditing ? "Analyzing Shield..." : "Execute Shield Audit"}
+                        {auditing ? "Analyzing Collective Mesh..." : "Audit Collective Mesh"}
                      </Button>
                   </div>
                 </CardContent>
@@ -243,7 +243,7 @@ export default function Home() {
           <DialogHeader>
             <DialogTitle className="font-headline text-xl sm:text-2xl flex items-center gap-2 text-primary uppercase">
               <ShieldCheck className="size-6" />
-              Shield Integrity Report
+              Global Immunity Report
             </DialogTitle>
           </DialogHeader>
           
@@ -257,7 +257,7 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="p-4 bg-white/5 rounded-lg border border-white/5 text-right">
-                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Shield Score</p>
+                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Mesh-Wide Score</p>
                   <p className="text-2xl sm:text-3xl font-headline font-bold text-primary">{auditResult.securityScore}%</p>
                 </div>
               </div>
@@ -268,12 +268,12 @@ export default function Home() {
           ) : (
             <div className="py-10 text-center space-y-4">
                <AlertTriangle className="size-12 text-destructive mx-auto animate-pulse" />
-               <p className="text-xs font-mono uppercase text-muted-foreground">Shield Neural Handshake Terminated.</p>
+               <p className="text-xs font-mono uppercase text-muted-foreground">Neural Handshake Terminated.</p>
             </div>
           )}
           <DialogFooter>
             <Button onClick={() => setIsDialogOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12">
-              Seal & Re-Hardened
+              Seal & Re-Hardened Mesh
             </Button>
           </DialogFooter>
         </DialogContent>
