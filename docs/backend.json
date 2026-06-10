@@ -162,6 +162,23 @@
         "noraStrategicAnalysis": { "type": "string" }
       },
       "required": ["title", "description", "category", "status", "creatorDID"]
+    },
+    "WithdrawalRecord": {
+      "title": "Sovereign Withdrawal Record",
+      "description": "A record of off-ramping digital assets to fiat or external accounts.",
+      "type": "object",
+      "properties": {
+        "withdrawalId": { "type": "string" },
+        "amount": { "type": "number" },
+        "currency": { "type": "string" },
+        "method": { "type": "string", "enum": ["BANK_TRANSFER", "MOBILE_BANKING", "DIGITAL_CARD", "BILL_PAY"] },
+        "destination": { "type": "string" },
+        "status": { "type": "string", "enum": ["PENDING", "PROCESSING", "COMPLETED", "FAILED"] },
+        "timestamp": { "type": "number" },
+        "signature": { "type": "string" },
+        "reasoning": { "type": "string" }
+      },
+      "required": ["withdrawalId", "amount", "method", "status"]
     }
   },
   "auth": {
@@ -203,6 +220,10 @@
     "/proposals/{proposalId}": {
       "schema": "ImperialProposal",
       "description": "Governance proposals for the Senate"
+    },
+    "/withdrawals/{id}": {
+      "schema": "WithdrawalRecord",
+      "description": "Treasury off-ramp and withdrawal records"
     }
   }
 }
