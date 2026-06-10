@@ -94,6 +94,23 @@
         "liquidityHealth": { "type": "number" },
         "dailyThroughput": { "type": "number" }
       }
+    },
+    "MerchantOnboarding": {
+      "title": "Merchant Onboarding Request",
+      "description": "Onboarding application and trust assessment for new merchants.",
+      "type": "object",
+      "properties": {
+        "businessName": { "type": "string" },
+        "businessType": { "type": "string" },
+        "region": { "type": "string" },
+        "estimatedVolume": { "type": "number" },
+        "status": { "type": "string", "enum": ["PENDING", "VERIFIED", "REJECTED"] },
+        "assignedTier": { "type": "string", "enum": ["TIER_1", "TIER_2", "TIER_3"] },
+        "trustScore": { "type": "number" },
+        "submissionDate": { "type": "number" },
+        "noraAssessment": { "type": "string" }
+      },
+      "required": ["businessName", "businessType", "region", "status"]
     }
   },
   "auth": {
@@ -127,6 +144,10 @@
     "/treasury/global": {
       "schema": "TreasuryStatus",
       "description": "Global treasury metrics"
+    },
+    "/merchant_onboarding_requests/{reqId}": {
+      "schema": "MerchantOnboarding",
+      "description": "Merchant onboarding and vetting records"
     }
   }
 }

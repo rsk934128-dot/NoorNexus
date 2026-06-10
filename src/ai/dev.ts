@@ -10,3 +10,4 @@ import '@/ai/flows/p2c-settlement-flow.ts';
 import '@/ai/flows/integration-assistant-flow.ts';
 import '@/ai/flows/protocol-architect-flow.ts';
 import '@/ai/flows/investor-pitch-flow.ts';
+import '@/ai/flows/merchant-onboarding-flow.ts';

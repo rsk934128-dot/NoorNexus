@@ -23,7 +23,8 @@ import {
   TrendingUp,
   Maximize2,
   Minimize2,
-  Wallet
+  Wallet,
+  UserPlus
 } from "lucide-react"
 
 import {
@@ -49,6 +50,7 @@ import { Badge } from "@/components/ui/badge"
 
 const items = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
+  { title: "Merchant Onboarding", url: "/onboarding", icon: UserPlus },
   { title: "Border Monitor", url: "/border-monitor", icon: Radar },
   { title: "Compliance Agent", url: "/compliance", icon: ShieldCheck },
   { title: "Sovereign Treasury", url: "/treasury", icon: Wallet },
