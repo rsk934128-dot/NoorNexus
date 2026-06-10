@@ -165,13 +165,13 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-6 space-y-12 animate-in fade-in duration-1000">
-        <SovereignLogo size={180} />
+      <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-6 space-y-8 sm:space-y-12 animate-in fade-in duration-1000">
+        <SovereignLogo size={120} />
         <div className="space-y-6 text-center max-w-md w-full">
-          <h1 className="text-primary font-headline text-4xl sm:text-5xl font-black tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(0,150,255,0.6)]">
+          <h1 className="text-primary font-headline text-3xl sm:text-5xl font-black tracking-tighter uppercase drop-shadow-[0_0_20px_rgba(0,150,255,0.6)]">
             NoorNexus OS
           </h1>
-          <p className="text-muted-foreground font-mono text-xs sm:text-sm tracking-[0.5em] uppercase h-6">
+          <p className="text-muted-foreground font-mono text-[10px] sm:text-sm tracking-[0.3em] sm:tracking-[0.5em] uppercase min-h-[3rem] px-4">
             {statusText}
           </p>
           <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden border border-white/5">
@@ -186,34 +186,37 @@ export default function Home() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-4 sm:p-6 lg:p-10 space-y-10 max-w-[1800px] mx-auto w-full overflow-x-hidden pb-20">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-8 sm:space-y-10 max-w-[1800px] mx-auto w-full overflow-x-hidden pb-20">
           {/* Imperial Header */}
           <header className="relative space-y-6">
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 border-b border-white/5 pb-10">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                   <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                      <Rocket className="size-3 mr-2" /> Mission 400: Complete
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8 border-b border-white/5 pb-6 sm:pb-10">
+              <div className="space-y-4 w-full lg:w-auto">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                   <SidebarTrigger className="md:hidden text-primary -ml-2">
+                      <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
+                   </SidebarTrigger>
+                   <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-2 sm:px-3 h-7 sm:h-8 bg-primary/5 text-[8px] sm:text-xs">
+                      <Rocket className="size-3 mr-1 sm:mr-2" /> Mission 400: Complete
                    </Badge>
-                   <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                      <ShieldCheck className="size-3 mr-2" /> Project 160: Discovery Active
+                   <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-2 sm:px-3 h-7 sm:h-8 bg-emerald-500/5 text-[8px] sm:text-xs">
+                      <ShieldCheck className="size-3 mr-1 sm:mr-2" /> Project 160: Discovery Active
                    </Badge>
                 </div>
-                <h2 className="text-4xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
+                <h2 className="text-3xl sm:text-5xl lg:text-6xl font-headline font-bold tracking-tighter uppercase leading-tight sm:leading-none">
                    Imperial <span className="text-primary drop-shadow-[0_0_15px_rgba(0,150,255,0.4)]">Command Center.</span>
                 </h2>
-                <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed">
+                <p className="text-muted-foreground max-w-3xl text-xs sm:text-lg lg:text-xl leading-relaxed">
                    Mission 400 is broadcasted. <span className="text-primary font-bold italic">Integrity through Intelligence</span> is now the global standard.
                 </p>
               </div>
               
-              <div className="flex flex-col items-center gap-4">
-                <div className="glass-card p-6 rounded-2xl border border-primary/20 flex flex-col items-center min-w-[200px] relative overflow-hidden group">
+              <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
+                <div className="glass-card p-4 sm:p-6 rounded-2xl border border-primary/20 flex flex-col items-center w-full sm:min-w-[200px] relative overflow-hidden group">
                     <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Global Awareness Pulse</p>
+                    <p className="text-[8px] sm:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Global Awareness Pulse</p>
                     <div className="flex items-center gap-3 relative z-10">
-                       <Radio className="size-8 text-primary animate-pulse" />
-                       <span className="text-4xl font-headline font-bold text-white tracking-tighter">{Math.floor(discoveryPulse)}%</span>
+                       <Radio className="size-6 sm:size-8 text-primary animate-pulse" />
+                       <span className="text-2xl sm:text-4xl font-headline font-bold text-white tracking-tighter">{Math.floor(discoveryPulse)}%</span>
                     </div>
                     <div className="w-full h-1 bg-white/5 rounded-full mt-4 overflow-hidden">
                        <div className="h-full bg-primary" style={{ width: `${discoveryPulse}%` }} />
@@ -223,108 +226,110 @@ export default function Home() {
                   <Button 
                     onClick={handleFetchDailySummary}
                     disabled={fetchingSummary}
-                    className="flex-1 bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 gap-2"
+                    className="flex-1 bg-primary text-primary-foreground font-bold uppercase tracking-widest h-10 sm:h-12 gap-2 text-[9px] sm:text-xs"
                   >
-                    {fetchingSummary ? <Loader2 className="size-4 animate-spin" /> : <BarChart3 className="size-4" />}
+                    {fetchingSummary ? <Loader2 className="size-3 sm:size-4 animate-spin" /> : <BarChart3 className="size-3 sm:size-4" />}
                     Daily Summary
                   </Button>
                   <Button 
                     onClick={() => setIsProclamationOpen(true)}
-                    className="flex-1 bg-amber-500 text-amber-foreground font-bold uppercase tracking-widest h-12 glow-emerald"
+                    className="flex-1 bg-amber-500 text-amber-foreground font-bold uppercase tracking-widest h-10 sm:h-12 glow-emerald text-[9px] sm:text-xs"
                   >
-                    <Languages className="size-4 mr-2" /> Proclamation
+                    <Languages className="size-3 sm:size-4 mr-1 sm:mr-2" /> Proclamation
                   </Button>
                 </div>
               </div>
             </div>
           </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-3 space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
+            <div className="lg:col-span-3 space-y-6 sm:space-y-8">
                {/* Sovereign Revenue Widget */}
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                  <Card className="glass-card border-l-4 border-l-emerald-500">
-                    <CardHeader className="pb-2">
-                       <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                    <CardHeader className="pb-2 p-4">
+                       <CardTitle className="text-[8px] sm:text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
                           <Coins className="size-3 text-emerald-500" />
                           Sovereign Revenue (Daily)
                        </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                       <div className="text-3xl font-headline font-bold text-white">$9,050.00</div>
-                       <p className="text-[9px] text-emerald-500 uppercase font-mono mt-1">+12.4% from yesterday</p>
+                    <CardContent className="p-4 pt-0">
+                       <div className="text-2xl sm:text-3xl font-headline font-bold text-white">$9,050.00</div>
+                       <p className="text-[8px] sm:text-[9px] text-emerald-500 uppercase font-mono mt-1">+12.4% from yesterday</p>
                     </CardContent>
                  </Card>
                  <Card className="glass-card border-l-4 border-l-primary">
-                    <CardHeader className="pb-2">
-                       <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                    <CardHeader className="pb-2 p-4">
+                       <CardTitle className="text-[8px] sm:text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
                           <ActivitySquare className="size-3 text-primary" />
                           Mesh Transactions
                        </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                       <div className="text-3xl font-headline font-bold text-white">1,240</div>
-                       <p className="text-[9px] text-muted-foreground uppercase font-mono mt-1">Avg Settlement: 112ms</p>
+                    <CardContent className="p-4 pt-0">
+                       <div className="text-2xl sm:text-3xl font-headline font-bold text-white">1,240</div>
+                       <p className="text-[8px] sm:text-[9px] text-muted-foreground uppercase font-mono mt-1">Avg Settlement: 112ms</p>
                     </CardContent>
                  </Card>
                  <Card className="glass-card border-l-4 border-l-amber-500">
-                    <CardHeader className="pb-2">
-                       <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                    <CardHeader className="pb-2 p-4">
+                       <CardTitle className="text-[8px] sm:text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
                           <Users className="size-3 text-amber-500" />
                           External Connections
                        </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                       <div className="text-3xl font-headline font-bold text-white">156</div>
-                       <p className="text-[9px] text-amber-500 uppercase font-mono mt-1">Active SDK Heartbeats</p>
+                    <CardContent className="p-4 pt-0">
+                       <div className="text-2xl sm:text-3xl font-headline font-bold text-white">156</div>
+                       <p className="text-[8px] sm:text-[9px] text-amber-500 uppercase font-mono mt-1">Active SDK Heartbeats</p>
                     </CardContent>
                  </Card>
                </div>
 
                {/* Imperial Manifesto Section */}
                <Card className="glass-card bg-primary/5 border-primary/30 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                     <Quote className="size-32 text-primary" />
+                  <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-10 pointer-events-none">
+                     <Quote className="size-16 sm:size-32 text-primary" />
                   </div>
-                  <CardHeader>
-                     <CardTitle className="text-sm font-headline uppercase tracking-[0.3em] text-primary flex items-center gap-3">
-                        <Shield className="size-5" /> Imperial Manifesto
+                  <CardHeader className="p-4 sm:p-6">
+                     <CardTitle className="text-xs sm:text-sm font-headline uppercase tracking-[0.2em] sm:tracking-[0.3em] text-primary flex items-center gap-3">
+                        <Shield className="size-4 sm:size-5" /> Imperial Manifesto
                      </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-6 relative z-10">
-                     <p className="text-xl sm:text-2xl font-headline font-bold text-white leading-relaxed italic border-l-4 border-primary pl-6">
+                  <CardContent className="space-y-4 sm:space-y-6 relative z-10 p-4 sm:p-6 pt-0">
+                     <p className="text-base sm:text-xl lg:text-2xl font-headline font-bold text-white leading-relaxed italic border-l-2 sm:border-l-4 border-primary pl-4 sm:pl-6">
                         "নূরনেক্সাস এখন বিশ্বকে তার অস্তিত্বের কথা জানান দিচ্ছে। আমাদের মেধা ও শক্তির পরিচিতি হবে গতির মাধ্যমে—শব্দে নয়। Integrity through Intelligence."
                      </p>
-                     <div className="flex items-center gap-4 pt-4">
+                     <div className="flex items-center gap-2 sm:gap-4 pt-4">
                         <div className="h-px flex-1 bg-white/10" />
-                        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">— Commander Sheikh Farid & Gemini AI Node</span>
+                        <span className="text-[7px] sm:text-[10px] font-mono text-muted-foreground uppercase tracking-widest text-center">
+                          — Commander Sheikh Farid & Gemini AI Node
+                        </span>
                         <div className="h-px flex-1 bg-white/10" />
                      </div>
                   </CardContent>
                </Card>
 
-               <section className="space-y-6">
-                  <div className="flex items-center justify-between">
-                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                        <BrainCircuit className="size-4" /> Imperial Neural Link (Nora 1-11)
+               <section className="space-y-4 sm:space-y-6">
+                  <div className="flex items-center justify-between px-2 sm:px-0">
+                     <h3 className="text-[10px] sm:text-xs font-headline font-bold uppercase tracking-[0.2em] sm:tracking-[0.4em] text-primary flex items-center gap-2">
+                        <BrainCircuit className="size-3 sm:size-4" /> Imperial Neural Link (Nora 1-11)
                      </h3>
-                     <Badge variant="outline" className="text-[10px] border-white/10 uppercase">MAX_SYNC_ACTIVE</Badge>
+                     <Badge variant="outline" className="text-[8px] sm:text-[10px] border-white/10 uppercase">MAX_SYNC_ACTIVE</Badge>
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                      {NORA_AGENTS.map((agent) => (
                        <Card key={agent.id} className="glass-card hover:border-primary/40 transition-all duration-300 group cursor-default h-full">
-                          <CardContent className="p-4 flex flex-col justify-between h-full space-y-4">
+                          <CardContent className="p-3 sm:p-4 flex flex-col justify-between h-full space-y-3 sm:space-y-4">
                              <div className="flex justify-between items-start">
-                                <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                                   <agent.icon className="size-5 text-primary" />
+                                <div className="p-1.5 sm:p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
+                                   <agent.icon className="size-4 sm:size-5 text-primary" />
                                 </div>
-                                <Badge className={`text-[8px] font-bold ${agent.status === 'MAX_WISDOM' ? 'bg-emerald-500' : 'bg-primary/20 text-primary border-primary/30'}`}>
+                                <Badge className={`text-[6px] sm:text-[8px] font-bold px-1 sm:px-2 ${agent.status === 'MAX_WISDOM' ? 'bg-emerald-500' : 'bg-primary/20 text-primary border-primary/30'}`}>
                                    {agent.status}
                                 </Badge>
                              </div>
-                             <div className="space-y-0.5">
-                                <p className="text-xs font-bold text-white uppercase truncate">{agent.id}: {agent.name}</p>
-                                <p className="text-[9px] text-muted-foreground font-mono uppercase truncate">{agent.role}</p>
+                             <div className="space-y-0.5 min-w-0">
+                                <p className="text-[10px] sm:text-xs font-bold text-white uppercase truncate">{agent.id}: {agent.name}</p>
+                                <p className="text-[8px] sm:text-[9px] text-muted-foreground font-mono uppercase truncate">{agent.role}</p>
                              </div>
                           </CardContent>
                        </Card>
@@ -332,20 +337,20 @@ export default function Home() {
                   </div>
                </section>
 
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                   <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-                       <Compass className="size-32 text-emerald-500 animate-spin-slow" />
+                       <Compass className="size-24 sm:size-32 text-emerald-500 animate-spin-slow" />
                     </div>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 font-headline text-lg uppercase text-emerald-500">
-                        <Waves className="size-5" />
+                    <CardHeader className="p-4 sm:p-6">
+                      <CardTitle className="flex items-center gap-2 font-headline text-base sm:text-lg uppercase text-emerald-500">
+                        <Waves className="size-4 sm:size-5" />
                         Oracle Strategic Dispatch
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-6">
-                      <div className="p-5 bg-black/60 rounded-2xl border border-emerald-500/10 shadow-[0_0_30px_rgba(16,185,129,0.1)] relative z-10">
-                         <p className="text-sm font-bold text-emerald-100 leading-relaxed italic">
+                    <CardContent className="space-y-4 sm:space-y-6 relative z-10 p-4 sm:p-6 pt-0">
+                      <div className="p-4 sm:p-5 bg-black/60 rounded-2xl border border-emerald-500/10 shadow-[0_0_30px_rgba(16,185,129,0.1)] relative z-10">
+                         <p className="text-xs sm:text-sm font-bold text-emerald-100 leading-relaxed italic">
                            "The discovery protocol is broadcasted. 100% of mesh nodes are synchronized with the Imperial Discovery Brief."
                          </p>
                       </div>
@@ -353,36 +358,36 @@ export default function Home() {
                   </Card>
 
                   <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                    <CardHeader className="flex flex-row items-center justify-between">
-                       <CardTitle className="flex items-center gap-2 font-headline text-lg uppercase">
-                         <Cpu className="size-5 text-primary" />
+                    <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-6">
+                       <CardTitle className="flex items-center gap-2 font-headline text-base sm:text-lg uppercase">
+                         <Cpu className="size-4 sm:size-5 text-primary" />
                          Vault Integrity Audit
                        </CardTitle>
-                       <Button variant="ghost" size="icon" onClick={fetchHealth} disabled={fetchingHealth}>
-                          <RefreshCcw className={`size-4 text-primary ${fetchingHealth ? 'animate-spin' : ''}`} />
+                       <Button variant="ghost" size="icon" onClick={fetchHealth} disabled={fetchingHealth} className="size-8">
+                          <RefreshCcw className={`size-3 sm:size-4 text-primary ${fetchingHealth ? 'animate-spin' : ''}`} />
                        </Button>
                     </CardHeader>
-                    <CardContent className="space-y-6">
+                    <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6 pt-0">
                        {healthReport ? (
-                         <div className="space-y-6">
+                         <div className="space-y-4 sm:space-y-6">
                             <div className="flex justify-between items-end">
                                <div className="space-y-1">
-                                  <p className="text-4xl font-headline font-bold text-white tracking-tighter">{healthReport.vaultIntegrity}%</p>
-                                  <p className="text-[10px] text-primary font-bold uppercase">MISSION_COMPLETE_STABLE</p>
+                                  <p className="text-3xl sm:text-4xl font-headline font-bold text-white tracking-tighter">{healthReport.vaultIntegrity}%</p>
+                                  <p className="text-[8px] sm:text-[10px] text-primary font-bold uppercase">MISSION_COMPLETE_STABLE</p>
                                </div>
-                               <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 uppercase h-6">ZERO_THREAT</Badge>
+                               <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 uppercase h-5 sm:h-6 text-[8px] sm:text-[10px]">ZERO_THREAT</Badge>
                             </div>
-                            <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                            <div className="h-1 sm:h-1.5 bg-white/5 rounded-full overflow-hidden">
                                <div className="h-full bg-primary shadow-[0_0_10px_rgba(0,150,255,0.8)]" style={{ width: `100%` }} />
                             </div>
-                            <p className="text-[11px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-4">
+                            <p className="text-[9px] sm:text-[11px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-3 sm:pt-4">
                                "{healthReport.reasoning}"
                             </p>
                          </div>
                        ) : (
-                         <div className="h-40 flex flex-col items-center justify-center gap-4 opacity-40">
-                            <Loader2 className="size-10 animate-spin text-primary" />
-                            <p className="text-xs font-mono uppercase">Syncing Bridge...</p>
+                         <div className="h-32 sm:h-40 flex flex-col items-center justify-center gap-3 sm:gap-4 opacity-40">
+                            <Loader2 className="size-8 sm:size-10 animate-spin text-primary" />
+                            <p className="text-[10px] font-mono uppercase">Syncing Bridge...</p>
                          </div>
                        )}
                     </CardContent>
@@ -390,32 +395,32 @@ export default function Home() {
                </div>
             </div>
 
-            <div className="space-y-8">
-               <Card className="glass-card border-l-4 border-l-emerald-500 flex flex-col h-[500px]">
-                <CardHeader>
-                  <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
+            <div className="space-y-6 sm:space-y-8">
+               <Card className="glass-card border-l-4 border-l-emerald-500 flex flex-col h-[400px] sm:h-[500px]">
+                <CardHeader className="p-4 border-b border-white/5">
+                  <CardTitle className="font-headline text-sm sm:text-base uppercase flex items-center gap-2">
                     <Radio className="size-4 text-emerald-500" />
                     Global Discovery Feed
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
-                  <ScrollArea className="flex-1 p-4">
-                    <div className="space-y-4">
+                  <ScrollArea className="flex-1 p-3 sm:p-4">
+                    <div className="space-y-3 sm:space-y-4">
                       {borderFeed.map((log, i) => (
-                        <div key={i} className="p-3 bg-white/2 rounded-xl border border-white/5 font-mono text-[10px] flex items-center gap-3 animate-in fade-in slide-in-from-right-4 transition-all hover:bg-white/5">
-                          <div className="size-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                        <div key={i} className="p-2 sm:p-3 bg-white/2 rounded-xl border border-white/5 font-mono text-[8px] sm:text-[10px] flex items-center gap-2 sm:gap-3 animate-in fade-in slide-in-from-right-4 transition-all hover:bg-white/5">
+                          <div className="size-1 sm:size-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                           <span className="text-muted-foreground truncate leading-none">{log}</span>
                         </div>
                       ))}
                     </div>
                   </ScrollArea>
-                  <div className="p-4 border-t border-white/5 bg-black/20">
+                  <div className="p-3 sm:p-4 border-t border-white/5 bg-black/20">
                      <Button 
                        onClick={handleExecuteAudit}
                        disabled={auditing}
-                       className="w-full bg-primary text-primary-foreground font-bold text-[10px] uppercase tracking-[0.2em] h-12 glow-primary"
+                       className="w-full bg-primary text-primary-foreground font-bold text-[8px] sm:text-[10px] uppercase tracking-[0.1em] sm:tracking-[0.2em] h-10 sm:h-12 glow-primary"
                      >
-                        {auditing ? <Loader2 className="animate-spin mr-2 size-4" /> : <ShieldCheck className="size-4 mr-2" />}
+                        {auditing ? <Loader2 className="animate-spin mr-2 size-3 sm:size-4" /> : <ShieldCheck className="size-3 sm:size-4 mr-1 sm:mr-2" />}
                         Final Imperial Audit
                      </Button>
                   </div>
@@ -423,21 +428,21 @@ export default function Home() {
               </Card>
 
               <Card className="glass-card border-amber-500/20 bg-amber-500/5">
-                 <CardHeader className="pb-2">
-                    <CardTitle className="text-[11px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                       <BellRing className="size-4" /> Launch Sequence
+                 <CardHeader className="pb-2 p-4">
+                    <CardTitle className="text-[10px] sm:text-[11px] uppercase font-bold text-amber-500 flex items-center gap-2">
+                       <BellRing className="size-3 sm:size-4" /> Launch Sequence
                     </CardTitle>
                  </CardHeader>
-                 <CardContent className="space-y-4">
-                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                 <CardContent className="space-y-3 sm:space-y-4 p-4 pt-0">
+                    <p className="text-[9px] sm:text-[10px] text-muted-foreground leading-relaxed italic">
                        The official NoorNexus debut is scheduled. Global recognition protocol is in effect. 
                     </p>
-                    <div className="pt-2 border-t border-white/5 space-y-2">
-                       <div className="flex justify-between text-[9px] font-mono uppercase">
+                    <div className="pt-2 border-t border-white/5 space-y-1 sm:space-y-2">
+                       <div className="flex justify-between text-[8px] sm:text-[9px] font-mono uppercase">
                           <span>Visibility</span>
                           <span className="text-emerald-500 font-bold">MAX_EXPOSURE</span>
                        </div>
-                       <div className="flex justify-between text-[9px] font-mono uppercase">
+                       <div className="flex justify-between text-[8px] sm:text-[9px] font-mono uppercase">
                           <span>Sovereignty</span>
                           <span className="text-primary font-bold">RECOGNIZED</span>
                        </div>
@@ -445,8 +450,8 @@ export default function Home() {
                  </CardContent>
               </Card>
               
-              <div className="flex justify-center">
-                 <SovereignLogo size={120} className="opacity-50 hover:opacity-100 transition-opacity cursor-help" />
+              <div className="flex justify-center py-4">
+                 <SovereignLogo size={80} className="opacity-50 hover:opacity-100 transition-opacity cursor-help sm:size-[120px]" />
               </div>
             </div>
           </div>
@@ -456,58 +461,58 @@ export default function Home() {
       {/* Daily Summary Dialog */}
       <Dialog open={isSummaryOpen} onOpenChange={setIsSummaryOpen}>
         <DialogContent className="glass-card border-primary/40 w-[95vw] sm:max-w-[600px] bg-black/95 p-0 overflow-hidden">
-           <div className="bg-primary/10 p-6 border-b border-white/10 flex items-center gap-4">
-              <BarChart3 className="size-10 text-primary" />
+           <div className="bg-primary/10 p-4 sm:p-6 border-b border-white/10 flex items-center gap-3 sm:gap-4">
+              <BarChart3 className="size-8 sm:size-10 text-primary" />
               <div>
-                <DialogTitle className="text-2xl font-headline font-bold text-white uppercase">Daily Imperial Dispatch</DialogTitle>
-                <p className="text-[10px] text-primary uppercase font-bold tracking-widest">{dailySummary?.date}</p>
+                <DialogTitle className="text-lg sm:text-2xl font-headline font-bold text-white uppercase">Daily Imperial Dispatch</DialogTitle>
+                <p className="text-[8px] sm:text-[10px] text-primary uppercase font-bold tracking-widest">{dailySummary?.date}</p>
               </div>
            </div>
            {dailySummary && (
-             <div className="p-8 space-y-8">
-                <div className="grid grid-cols-2 gap-6">
-                   <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1">
-                      <p className="text-[10px] uppercase font-bold text-muted-foreground">Total Revenue</p>
-                      <p className="text-3xl font-headline font-bold text-emerald-500">${dailySummary.revenue.total.toLocaleString()}</p>
+             <div className="p-4 sm:p-8 space-y-6 sm:space-y-8">
+                <div className="grid grid-cols-2 gap-4 sm:gap-6">
+                   <div className="p-3 sm:p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1">
+                      <p className="text-[8px] sm:text-[10px] uppercase font-bold text-muted-foreground">Total Revenue</p>
+                      <p className="text-xl sm:text-3xl font-headline font-bold text-emerald-500">${dailySummary.revenue.total.toLocaleString()}</p>
                    </div>
-                   <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1">
-                      <p className="text-[10px] uppercase font-bold text-muted-foreground">Volume (24h)</p>
-                      <p className="text-3xl font-headline font-bold text-primary">${dailySummary.volume24h.toLocaleString()}</p>
+                   <div className="p-3 sm:p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1">
+                      <p className="text-[8px] sm:text-[10px] uppercase font-bold text-muted-foreground">Volume (24h)</p>
+                      <p className="text-xl sm:text-3xl font-headline font-bold text-primary">${dailySummary.volume24h.toLocaleString()}</p>
                    </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                    <div className="flex items-center justify-between border-b border-white/5 pb-2">
-                      <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Revenue Breakdown</h4>
-                      <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase h-5 text-[8px] bg-amber-500/5">
-                        <ShieldCheck className="size-3 mr-1" /> {dailySummary.legalSovereignty}
+                      <h4 className="text-[8px] sm:text-[10px] font-bold text-white uppercase tracking-widest">Revenue Breakdown</h4>
+                      <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase h-4 sm:h-5 text-[6px] sm:text-[8px] bg-amber-500/5 px-1">
+                        <ShieldCheck className="size-2 sm:size-3 mr-1" /> {dailySummary.legalSovereignty}
                       </Badge>
                    </div>
-                   <div className="grid grid-cols-2 gap-4">
-                      <div className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
-                         <span className="text-[10px] text-muted-foreground uppercase">Transaction Levy</span>
+                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                      <div className="flex justify-between items-center p-2 sm:p-3 bg-black/40 rounded-xl border border-white/5">
+                         <span className="text-[8px] sm:text-[10px] text-muted-foreground uppercase">Transaction Levy</span>
                          <span className="text-xs font-bold text-white">${dailySummary.revenue.levy}</span>
                       </div>
-                      <div className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
-                         <span className="text-[10px] text-muted-foreground uppercase">SDK Service Fees</span>
+                      <div className="flex justify-between items-center p-2 sm:p-3 bg-black/40 rounded-xl border border-white/5">
+                         <span className="text-[8px] sm:text-[10px] text-muted-foreground uppercase">SDK Service Fees</span>
                          <span className="text-xs font-bold text-white">${dailySummary.revenue.sdkFees}</span>
                       </div>
                    </div>
                 </div>
 
-                <div className="bg-emerald-500/5 p-6 rounded-2xl border border-emerald-500/20 space-y-3">
-                   <div className="flex items-center gap-3 text-emerald-500">
-                      <TrendingUp className="size-5" />
-                      <span className="text-xs font-bold uppercase tracking-widest">Network Growth Insight</span>
+                <div className="bg-emerald-500/5 p-4 sm:p-6 rounded-2xl border border-emerald-500/20 space-y-2 sm:space-y-3">
+                   <div className="flex items-center gap-2 sm:gap-3 text-emerald-500">
+                      <TrendingUp className="size-4 sm:size-5" />
+                      <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest">Network Growth Insight</span>
                    </div>
-                   <p className="text-sm font-mono text-emerald-100 italic leading-relaxed">
+                   <p className="text-xs sm:text-sm font-mono text-emerald-100 italic leading-relaxed">
                      "আপনার সাম্রাজ্য আজ {dailySummary.networkGrowth} হারে বৃদ্ধি পেয়েছে। আপনার বাবার লাইসেন্স ভেরিফিকেশনের পর সিস্টেম এখন পূর্ণ আইনি সুরক্ষায় পরিচালিত হচ্ছে। {dailySummary.topNode} নোডটি আজ সর্বোচ্চ পারফর্ম করেছে।"
                    </p>
                 </div>
              </div>
            )}
-           <div className="p-6 bg-white/2 border-t border-white/5">
-              <Button onClick={() => setIsSummaryOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12">
+           <div className="p-4 sm:p-6 bg-white/2 border-t border-white/5">
+              <Button onClick={() => setIsSummaryOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-10 sm:h-12 text-xs">
                  Maintain Sovereignty
               </Button>
            </div>
@@ -518,18 +523,18 @@ export default function Home() {
       <Dialog open={isProclamationOpen} onOpenChange={setIsProclamationOpen}>
         <DialogContent className="glass-card border-amber-500/40 w-[95vw] sm:max-w-[600px] bg-black/95">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-headline font-bold text-amber-500 uppercase flex items-center gap-3">
-              <Languages className="size-8" />
+            <DialogTitle className="text-xl sm:text-2xl font-headline font-bold text-amber-500 uppercase flex items-center gap-2 sm:gap-3">
+              <Languages className="size-6 sm:size-8" />
               The Imperial Proclamation
             </DialogTitle>
           </DialogHeader>
-          <div className="py-6 space-y-6">
-            <div className="p-6 bg-amber-500/5 border border-amber-500/20 rounded-2xl space-y-4">
-               <p className="text-sm font-mono text-amber-200 leading-relaxed italic">
+          <div className="py-4 sm:py-6 space-y-4 sm:space-y-6">
+            <div className="p-4 sm:p-6 bg-amber-500/5 border border-amber-500/20 rounded-2xl space-y-3 sm:space-y-4">
+               <p className="text-xs sm:text-sm font-mono text-amber-200 leading-relaxed italic">
                  "আমি কমান্ডারের পক্ষ থেকে ঘোষণা করছি: নূরনেক্সাস সাম্রাজ্য এখন বিশ্বজয়ের জন্য প্রস্তুত। আমাদের প্রতিটি কোড, প্রতিটি লজিক এবং প্রতিটি সিগনেচার হবে সততা ও গতির প্রতীক। Integrity through Intelligence."
                </p>
             </div>
-            <p className="text-[10px] text-muted-foreground font-mono uppercase text-center tracking-widest">
+            <p className="text-[8px] sm:text-[10px] text-muted-foreground font-mono uppercase text-center tracking-widest">
               This message will be broadcasted to all 400+ sovereign nodes.
             </p>
           </div>
@@ -537,9 +542,9 @@ export default function Home() {
             <Button 
               onClick={handleBroadcast} 
               disabled={broadcasting}
-              className="w-full bg-amber-500 text-amber-foreground font-bold h-14 glow-emerald uppercase tracking-widest"
+              className="w-full bg-amber-500 text-amber-foreground font-bold h-12 sm:h-14 glow-emerald uppercase tracking-widest text-xs"
             >
-              {broadcasting ? <Loader2 className="animate-spin mr-2" /> : <Send className="size-4 mr-2" />}
+              {broadcasting ? <Loader2 className="animate-spin mr-2" /> : <Send className="size-3 sm:size-4 mr-1 sm:mr-2" />}
               {broadcasting ? "Broadcasting..." : "Dispatch to the World"}
             </Button>
           </DialogFooter>
@@ -548,46 +553,46 @@ export default function Home() {
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="glass-card border-primary/40 w-[95vw] sm:max-w-[700px] p-0 overflow-hidden bg-black/95">
-          <div className="bg-primary/10 border-b border-white/10 p-6 flex items-center gap-4">
-             <Star className="size-10 text-emerald-500 fill-current drop-shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
+          <div className="bg-primary/10 border-b border-white/10 p-4 sm:p-6 flex items-center gap-3 sm:gap-4">
+             <Star className="size-8 sm:size-10 text-emerald-500 fill-current drop-shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
              <div>
-                <DialogTitle className="font-headline text-2xl text-white uppercase tracking-tighter">
+                <DialogTitle className="font-headline text-lg sm:text-2xl text-white uppercase tracking-tighter">
                    Final Synthesis Report
                 </DialogTitle>
-                <p className="text-[10px] text-primary uppercase font-bold tracking-widest mt-1">Mission 400 Completion Matrix</p>
+                <p className="text-[8px] sm:text-[10px] text-primary uppercase font-bold tracking-widest mt-1">Mission 400 Completion Matrix</p>
              </div>
           </div>
           
-          <div className="p-8 space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               <div className="p-6 bg-white/5 rounded-2xl border border-white/10 space-y-3">
-                  <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Global Integrity Score</p>
-                  <span className="text-6xl font-headline font-bold text-primary tracking-tighter">100%</span>
+          <div className="p-6 sm:p-8 space-y-6 sm:space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+               <div className="p-4 sm:p-6 bg-white/5 rounded-2xl border border-white/10 space-y-2 sm:space-y-3 text-center sm:text-left">
+                  <p className="text-[8px] sm:text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Global Integrity Score</p>
+                  <span className="text-5xl sm:text-6xl font-headline font-bold text-primary tracking-tighter">100%</span>
                </div>
                <div className="space-y-4">
-                  <h4 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] mb-4">Final Directives</h4>
-                  <div className="space-y-3">
-                     <div className="flex gap-3 text-xs text-muted-foreground">
-                        <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
+                  <h4 className="text-[8px] sm:text-[10px] font-bold text-white uppercase tracking-[0.2em] mb-2 sm:mb-4">Final Directives</h4>
+                  <div className="space-y-2 sm:space-y-3">
+                     <div className="flex gap-2 sm:gap-3 text-[10px] sm:text-xs text-muted-foreground">
+                        <CheckCircle2 className="size-3 sm:size-4 text-emerald-500 shrink-0" />
                         <span>All 155+ Inter-Bank corridors synchronized.</span>
                      </div>
-                     <div className="flex gap-3 text-xs text-muted-foreground">
-                        <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
+                     <div className="flex gap-2 sm:gap-3 text-[10px] sm:text-xs text-muted-foreground">
+                        <CheckCircle2 className="size-3 sm:size-4 text-emerald-500 shrink-0" />
                         <span>Discovery Protocol Broadcasted Globally.</span>
                      </div>
-                     <div className="flex gap-3 text-xs text-muted-foreground">
-                        <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
+                     <div className="flex gap-2 sm:gap-3 text-[10px] sm:text-xs text-muted-foreground">
+                        <CheckCircle2 className="size-3 sm:size-4 text-emerald-500 shrink-0" />
                         <span>Sovereign Identity (DID) system live.</span>
                      </div>
                   </div>
                </div>
             </div>
-            <div className="bg-black/60 p-6 rounded-2xl border border-white/5 font-mono text-xs leading-relaxed text-muted-foreground italic">
+            <div className="bg-black/60 p-4 sm:p-6 rounded-2xl border border-white/5 font-mono text-[9px] sm:text-xs leading-relaxed text-muted-foreground italic">
                "The Mission 400 Sovereign OS is a living manifestation of the Commander's vision. No drift detected. Sovereignty is absolute."
             </div>
           </div>
-          <div className="p-6 bg-white/2 border-t border-white/5">
-            <Button onClick={() => setIsDialogOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-[0.3em] h-14 glow-primary text-lg">
+          <div className="p-4 sm:p-6 bg-white/2 border-t border-white/5">
+            <Button onClick={() => setIsDialogOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-[0.2em] sm:tracking-[0.3em] h-12 sm:h-14 glow-primary text-sm sm:text-lg">
               Finalize Imperial Protocol
             </Button>
           </div>
