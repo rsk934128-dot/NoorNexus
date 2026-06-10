@@ -77,18 +77,20 @@
       },
       "required": ["disputeId", "settlementId", "complainant", "status"]
     },
-    "WebhookLog": {
-      "title": "Webhook Event",
-      "description": "Logs of incoming and outgoing Open Banking events.",
+    "OraclePolicy": {
+      "title": "Imperial Oracle Policy",
+      "description": "Predictive strategic policy for global empire management.",
       "type": "object",
       "properties": {
-        "eventId": { "type": "string" },
-        "type": { "type": "string" },
-        "payload": { "type": "string" },
-        "targetUrl": { "type": "string" },
-        "status": { "type": "string" },
+        "policyId": { "type": "string" },
+        "title": { "type": "string" },
+        "marketTrend": { "type": "string" },
+        "predictedImpact": { "type": "string" },
+        "strategicRecommendation": { "type": "string" },
+        "confidenceScore": { "type": "number" },
         "timestamp": { "type": "number" }
-      }
+      },
+      "required": ["policyId", "title", "strategicRecommendation"]
     },
     "NodeStatus": {
       "title": "Node Status",
@@ -103,31 +105,6 @@
         "successRate": { "type": "number" },
         "integrity": { "type": "string", "enum": ["Verified", "Untrusted"] },
         "lastSeen": { "type": "string", "format": "date-time" }
-      }
-    },
-    "BorderLog": {
-      "title": "HMAC_V4 Border Log",
-      "description": "Incoming request logs at the digital border.",
-      "type": "object",
-      "properties": {
-        "timestamp": { "type": "number" },
-        "signature": { "type": "string" },
-        "origin": { "type": "string" },
-        "path": { "type": "string" },
-        "result": { "type": "string", "enum": ["ACCEPTED", "REJECTED", "WARNING"] },
-        "reason": { "type": "string" },
-        "riskScore": { "type": "number" }
-      }
-    },
-    "TreasuryStatus": {
-      "title": "Sovereign Treasury Overview",
-      "description": "Multi-ledger balances and liquidity health.",
-      "type": "object",
-      "properties": {
-        "totalVolume": { "type": "number" },
-        "settlementQueue": { "type": "number" },
-        "liquidityHealth": { "type": "number" },
-        "dailyThroughput": { "type": "number" }
       }
     },
     "MerchantOnboarding": {
@@ -195,10 +172,6 @@
       "schema": "AppConnection",
       "description": "Imperial SDK heartbeat registry"
     },
-    "/api_keys/{keyId}": {
-      "schema": "ApiKey",
-      "description": "Gateway access credentials"
-    },
     "/compliance_records/{logId}": {
       "schema": "TaxComplianceRecord",
       "description": "Audit-ready tax and compliance logs"
@@ -211,21 +184,13 @@
       "schema": "TradeDispute",
       "description": "Sovereign trade dispute and arbitration records"
     },
-    "/webhook_logs/{logId}": {
-      "schema": "WebhookLog",
-      "description": "Event synchronization logs"
+    "/oracle_policies/{policyId}": {
+      "schema": "OraclePolicy",
+      "description": "Strategic oracle policy records"
     },
     "/nodes/{nodeId}": {
       "schema": "NodeStatus",
       "description": "Distributed node metrics"
-    },
-    "/border_logs/{logId}": {
-      "schema": "BorderLog",
-      "description": "Border entry monitoring"
-    },
-    "/treasury/global": {
-      "schema": "TreasuryStatus",
-      "description": "Global treasury metrics"
     },
     "/merchant_onboarding_requests/{reqId}": {
       "schema": "MerchantOnboarding",
