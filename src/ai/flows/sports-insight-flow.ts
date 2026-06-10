@@ -4,7 +4,7 @@
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'z';
+import {z} from 'genkit';
 
 const MatchInsightInputSchema = z.object({
   homeTeam: z.string(),
