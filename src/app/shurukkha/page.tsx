@@ -52,8 +52,9 @@ export default function ShurukkhaPage() {
                   src="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
                   className="w-full h-full border-0 bg-white"
                   title="Shurukkha External Integration"
-                  allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture;"
-                  sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals"
+                  allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                  sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation allow-orientation-lock"
+                  allowFullScreen
                 />
               </CardContent>
             </Card>
