@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An autonomous AI compliance agent that monitors cryptographic anomalies
@@ -85,10 +86,10 @@ export async function autonomousComplianceMonitor(
 ): Promise<AutonomousComplianceMonitorOutput> {
   try {
     const {output} = await autonomousComplianceMonitorPrompt(input);
-    if (!output) throw new Error('AI failed to generate compliance assessment.');
+    if (!output) throw new Error('AI Agent produced no output.');
     return output;
   } catch (error: any) {
     console.error('Compliance Flow Error:', error);
-    throw new Error(error.message || 'AI Infrastructure Error');
+    throw new Error(error.message || 'AI Infrastructure Handshake Error');
   }
 }

@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A sports intelligence AI agent for GSMIFY Sports.
@@ -45,10 +46,10 @@ Provide tactical analysis, win probabilities, key performers, and recommendation
 export async function getMatchInsight(input: MatchInsightInput): Promise<MatchInsightOutput> {
   try {
     const {output} = await sportsInsightPrompt(input);
-    if (!output) throw new Error('AI failed to generate sports insight.');
+    if (!output) throw new Error('Sports Agent produced no output.');
     return output;
   } catch (error: any) {
     console.error('Sports Insight Error:', error);
-    throw new Error(error.message || 'Sports AI Infrastructure Error');
+    throw new Error(error.message || 'Sports AI Handshake Error');
   }
 }

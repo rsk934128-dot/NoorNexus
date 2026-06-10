@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A sovereign treasury auditing AI agent that verifies multi-ledger integrity.
@@ -40,10 +41,10 @@ const auditPrompt = ai.definePrompt({
 export async function ledgerAudit(input: LedgerAuditInput): Promise<LedgerAuditOutput> {
   try {
     const {output} = await auditPrompt(input);
-    if (!output) throw new Error('Imperial Treasury AI failed to generate audit output.');
+    if (!output) throw new Error('Audit Agent produced no output.');
     return output;
   } catch (error: any) {
     console.error('Ledger Audit Error:', error);
-    throw new Error(error.message || 'Audit Infrastructure Error');
+    throw new Error(error.message || 'Treasury AI Handshake Error');
   }
 }
