@@ -1,4 +1,3 @@
-
 import { NextResponse } from 'next/server';
 
 /**
@@ -41,7 +40,8 @@ export async function POST(request: Request) {
         },
         networkGrowth: "+1.2%",
         agentStatus: "ALL_ACTIVE",
-        topNode: "SIRAJGANJ-EDGE-01"
+        topNode: "SIRAJGANJ-EDGE-01",
+        legalSovereignty: "VERIFIED_FAMILY_SHIELD" // Highlighting the legal standing
       });
 
     case 'SETTLE_INTER_BANK':
@@ -95,7 +95,8 @@ export async function POST(request: Request) {
           checklist: [
             "HMAC_V4_SIGNATURE_VERIFIED",
             "KYM_STATUS_STABLE",
-            "AML_ON_CHAIN_PASSED"
+            "AML_ON_CHAIN_PASSED",
+            "LEGAL_TRADE_LICENSE_ACTIVE" // Added: Reflection of legal status in payouts
           ]
         }
       });

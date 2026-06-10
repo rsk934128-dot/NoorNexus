@@ -1,4 +1,3 @@
-
 'use client';
 
 /**
@@ -27,6 +26,7 @@ export interface DailySummary {
   networkGrowth: string;
   agentStatus: string;
   topNode: string;
+  legalSovereignty: string; // New: To show the legal standing
 }
 
 const SIMULATED_SK = 'sk_sov_nexus_alpha_v3';

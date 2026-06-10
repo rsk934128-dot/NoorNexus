@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -11,7 +10,7 @@ import {
   Star, TrendingUp, HeartPulse, BrainCircuit, ActivitySquare, Compass, 
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
   CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages,
-  Coins, Briefcase, BarChart3, Clock, Users
+  Coins, Briefcase, BarChart3, Clock, Users, Fingerprint as FingerprintIcon
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -36,7 +35,7 @@ const NORA_AGENTS = [
   { id: "Nora-02", name: "Merchant Auditor", role: "P2C Payouts", status: "ACTIVE", icon: Building2 },
   { id: "Nora-03", name: "Integration Assistant", role: "SDK Support", status: "STABLE", icon: Code2 },
   { id: "Nora-05", name: "Bridge Architect", role: "Cross-Chain Swap", status: "STABLE", icon: LinkIcon },
-  { id: "Nora-06", name: "Identity Registrar", role: "DID Management", status: "ACTIVE", icon: Fingerprint },
+  { id: "Nora-06", name: "Identity Registrar", role: "DID Management", status: "ACTIVE", icon: FingerprintIcon },
   { id: "Nora-07", name: "Senate Strategist", role: "Governance", status: "ACTIVE", icon: Gavel },
   { id: "Nora-08", name: "Executive Agent", role: "Edict Execution", status: "STABLE", icon: Zap },
   { id: "Nora-09", name: "Trade Architect", role: "Inter-Bank Trade", status: "ACTIVE", icon: Landmark },
@@ -88,7 +87,8 @@ export default function Home() {
         "SDK: New Heartbeat from rubelpay.com",
         "ORACLE: Market Drift 0.01% Prediction",
         "SENATE: Edict Execution Successful",
-        "IDENTITY: did:noornexus verified at SG-EDGE-01"
+        "IDENTITY: did:noornexus verified at SG-EDGE-01",
+        "LEGAL: Family License Shield Active"
       ]
       const log = logs[Math.floor(Math.random() * logs.length)]
       setBorderFeed(prev => [log, ...prev].slice(0, 10))
@@ -477,7 +477,12 @@ export default function Home() {
                 </div>
 
                 <div className="space-y-4">
-                   <h4 className="text-[10px] font-bold text-white uppercase tracking-widest border-b border-white/5 pb-2">Revenue Breakdown</h4>
+                   <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                      <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Revenue Breakdown</h4>
+                      <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase h-5 text-[8px] bg-amber-500/5">
+                        <ShieldCheck className="size-3 mr-1" /> {dailySummary.legalSovereignty}
+                      </Badge>
+                   </div>
                    <div className="grid grid-cols-2 gap-4">
                       <div className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
                          <span className="text-[10px] text-muted-foreground uppercase">Transaction Levy</span>
@@ -496,7 +501,7 @@ export default function Home() {
                       <span className="text-xs font-bold uppercase tracking-widest">Network Growth Insight</span>
                    </div>
                    <p className="text-sm font-mono text-emerald-100 italic leading-relaxed">
-                     "আপনার সাম্রাজ্য আজ {dailySummary.networkGrowth} হারে বৃদ্ধি পেয়েছে। সকল এআই এজেন্ট নিরবচ্ছিন্নভাবে কাজ করছে এবং {dailySummary.topNode} নোডটি আজ সর্বোচ্চ পারফর্ম করেছে।"
+                     "আপনার সাম্রাজ্য আজ {dailySummary.networkGrowth} হারে বৃদ্ধি পেয়েছে। আপনার বাবার লাইসেন্স ভেরিফিকেশনের পর সিস্টেম এখন পূর্ণ আইনি সুরক্ষায় পরিচালিত হচ্ছে। {dailySummary.topNode} নোডটি আজ সর্বোচ্চ পারফর্ম করেছে।"
                    </p>
                 </div>
              </div>
