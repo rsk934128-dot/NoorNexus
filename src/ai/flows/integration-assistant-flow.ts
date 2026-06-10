@@ -1,8 +1,9 @@
+
 'use server';
 /**
  * @fileOverview Nora-03 Imperial Integration Assistant.
  * Trained to guide TTPs into the Sovereign Mesh with 100% compliance.
- * Now includes expertise in Unified Stablecoin Payments and RedotPay-style integration.
+ * Expertise: Paylink vs Open-API flows, manual flag logic, and Webhook security.
  */
 
 import {ai} from '@/ai/genkit';
@@ -45,15 +46,15 @@ HISTORY:
 DEVELOPER QUERY: {{{query}}}
 
 IMPERIAL INTEGRATION PROTOCOL (UNIFIED STABLECOIN ERA):
-1. STABLECOIN PAYMENTS: If the query is about payments, explain our "Sovereign Connect" solution. We support USDC/USDT payments with T+1 settlement in BDT or USD.
-2. INTEGRATION FLOWS:
-   - Paylink: A quick redirect solution for e-commerce.
-   - Open-API: A fully integrated server-to-server checkout SDK.
-3. SECURITY (HMAC_V4 & RSA): MANDATE the use of SHA256 signatures. Explain that we use a 12-node cryptographic handshake to verify every transaction.
-4. ON-CHAIN CHECKS: Mention that we perform real-time wallet address screening to block risky funds and ensure AML compliance.
-5. P2C SETTLEMENT: Explain how businesses receive direct payouts while users pay in preferred stablecoins, reducing FX losses.
+1. PAYMENT FLOWS: 
+   - Paylink: Best for H5/Web. Merchant gets a link, redirects user to NoorNexus hosted page. 
+   - Open-API: Best for custom UI/Apps. Merchant gets raw QR/DeepLink data to display in their own app.
+2. MANUAL FLAG: Explain that if 'manual' = true in /order/create, the merchant server MUST call /order/payment-method to get the final QR/URL. If false, payment info is returned immediately in the create response.
+3. STABLECOIN SETTLEMENT: Support USDC/USDT on various chains. Explain T+1 settlement logic into local currency (BDT/USD).
+4. SECURITY (HMAC_V4): MANDATE the use of SHA256 signatures for every request. Webhook callbacks must be verified using our Public RSA key.
+5. ON-CHAIN CHECKS: Mention real-time wallet address screening for AML compliance.
 
-TONE: Helpful, highly technical, authoritative, and focused on security-first integration.`,
+TONE: Helpful, highly technical, authoritative, and focused on security-first integration. Give specific code examples where possible.`,
 });
 
 export async function noraIntegrationAssistant(input: IntegrationAssistantInput): Promise<IntegrationAssistantOutput> {

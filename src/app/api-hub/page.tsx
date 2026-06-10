@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useRef, useEffect } from "react"
@@ -12,17 +13,18 @@ import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
   ChevronRight, Menu, MessageSquare, Cpu, BookOpen, AlertCircle, CheckCircle2,
-  Coins, ArrowRightLeft, ShieldAlert
+  Coins, ArrowRightLeft, ShieldAlert, Layers, ExternalLink, Info
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 const ENDPOINTS = [
-  { method: "POST", path: "/api/v1/checkout/paylink", desc: "Generate a hosted stablecoin checkout link." },
-  { method: "POST", path: "/api/v1/checkout/openapi", desc: "Initiate a direct server-to-server checkout session." },
-  { method: "GET", path: "/api/v1/settlement/history", desc: "Retrieve T+1 disbursement logs." },
-  { method: "POST", path: "/api/v1/auth/handshake", desc: "Initiate HMAC_V4 cryptographic session." }
+  { method: "POST", path: "/api/v2/order/create", desc: "Create a prepay order and get a payment link or SN." },
+  { method: "POST", path: "/api/v2/order/payment-method", desc: "Retrieve specific payment info (URL/QR) for an order." },
+  { method: "GET", path: "/api/v2/order/query", desc: "Check the current status of a payment order." },
+  { method: "POST", path: "/api/v2/auth/handshake", desc: "Initiate HMAC_V4 cryptographic session." }
 ]
 
 interface Message {
@@ -42,11 +44,11 @@ export default function ApiHubPage() {
   const [playgroundLoading, setPlaygroundLoading] = useState(false)
   const [playgroundResult, setPlaygroundResult] = useState<any>(null)
   const [payload, setPayload] = useState(`{
-  "orderId": "ORD-${Math.random().toString(36).substring(7).toUpperCase()}",
+  "merchantOrderNo": "ORD-${Math.random().toString(36).substring(7).toUpperCase()}",
   "amount": "100.00",
-  "currency": "USDC",
-  "merchantId": "IMPERIAL-CORP-01",
-  "timestamp": ${Math.floor(Date.now() / 1000)}
+  "asset": "USDC",
+  "redirectUrl": "https://yourstore.com/success",
+  "manual": false
 }`)
 
   useEffect(() => {
@@ -92,11 +94,14 @@ export default function ApiHubPage() {
       const mockSignature = "0x" + Math.random().toString(16).substring(2, 64)
       setPlaygroundResult({
         status: 200,
-        message: "Unified Payment Handshake Accepted",
-        checkoutUrl: "https://pay.noornexus.mesh/checkout/0x...auth",
-        x_sovereign_signature: mockSignature,
-        on_chain_status: "VERIFIED_SAFE",
-        settlement_cycle: "T+1_STABLE"
+        message: "Sovereign Connect Handshake Accepted",
+        data: {
+          paymentSn: "SN-IMPERIAL-" + Math.random().toString(36).substring(7).toUpperCase(),
+          paymentLink: "https://pay.noornexus.mesh/checkout/0x...auth",
+          x_sovereign_signature: mockSignature,
+          on_chain_status: "VERIFIED_SAFE",
+          manual: false
+        }
       })
       setPlaygroundLoading(false)
       toast({
@@ -110,7 +115,7 @@ export default function ApiHubPage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-7xl mx-auto w-full">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full">
           <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-1">
               <div className="flex items-center gap-3">
@@ -122,24 +127,24 @@ export default function ApiHubPage() {
                    Sovereign Connect Hub
                  </h2>
               </div>
-              <p className="text-muted-foreground">Unified Stablecoin Payments for Mission 400 Businesses.</p>
+              <p className="text-muted-foreground">Unified Stablecoin Payments (USDC/USDT) for Mission 400 Businesses.</p>
             </div>
             <div className="flex items-center gap-2">
                <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2">
-                 <ShieldCheck className="size-4" /> COMPLIANCE: VASP_AUTH
+                 <ShieldCheck className="size-4" /> VASP AUTHORIZED
                </Badge>
                <Badge variant="outline" className="border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
-                 <Lock className="size-4" /> AUTH: HMAC_V4_SHA256
+                 <Lock className="size-4" /> AUTH: HMAC_V4
                </Badge>
             </div>
           </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-6">
+          <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+            <div className="xl:col-span-3 space-y-6">
               <Tabs defaultValue="endpoints" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
                   <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> API Docs</TabsTrigger>
-                  <TabsTrigger value="payments" className="gap-2"><Coins className="size-4" /> Payment Flows</TabsTrigger>
+                  <TabsTrigger value="flows" className="gap-2"><Layers className="size-4" /> Integration Guide</TabsTrigger>
                   <TabsTrigger value="security" className="gap-2"><Lock className="size-4" /> Security</TabsTrigger>
                   <TabsTrigger value="playground" className="gap-2"><Terminal className="size-4" /> Playground</TabsTrigger>
                 </TabsList>
@@ -166,46 +171,115 @@ export default function ApiHubPage() {
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="payments" className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <TabsContent value="flows" className="space-y-8 animate-in fade-in slide-in-from-bottom-2">
+                  <div className="grid grid-cols-1 gap-6">
                     <Card className="glass-card border-l-4 border-l-primary">
                       <CardHeader>
-                        <CardTitle className="text-xs uppercase font-bold text-primary">Paylink Flow</CardTitle>
+                        <CardTitle className="text-lg font-headline flex items-center gap-2 uppercase tracking-tight">
+                          <Info className="size-5 text-primary" />
+                          Flow Comparison
+                        </CardTitle>
+                        <CardDescription className="text-xs uppercase font-bold text-muted-foreground">Choose the right integration path for your business.</CardDescription>
                       </CardHeader>
-                      <CardContent className="space-y-2">
-                        <p className="text-[10px] text-muted-foreground leading-relaxed">
-                          Quickest integration. Redirect your customers to a NoorNexus hosted checkout page. No frontend SDK required.
-                        </p>
-                        <Badge variant="outline" className="text-[8px]">IDEAL FOR E-COMMERCE</Badge>
+                      <CardContent>
+                        <Table>
+                          <TableHeader className="bg-white/5">
+                            <TableRow>
+                              <TableHead className="w-[150px] text-[10px] uppercase font-bold">Feature</TableHead>
+                              <TableHead className="text-[10px] uppercase font-bold text-primary">Payment via Paylink</TableHead>
+                              <TableHead className="text-[10px] uppercase font-bold text-emerald-500">Payment via Open-API</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody className="text-[11px]">
+                            <TableRow>
+                              <TableCell className="font-bold">Core Flow</TableCell>
+                              <TableCell>Redirects user to a hosted payment page.</TableCell>
+                              <TableCell>Retrieves URL/QR directly for custom UI.</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="font-bold">Primary Use</TableCell>
+                              <TableCell>Standard E-commerce / Web.</TableCell>
+                              <TableCell>Deeply customized Apps / QR codes.</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="font-bold">Merchant Role</TableCell>
+                              <TableCell>Lighter. Simple redirect handler.</TableCell>
+                              <TableCell>Heavier. Manages UI and callbacks.</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="font-bold">User Journey</TableCell>
+                              <TableCell>Leaves your site to pay.</TableCell>
+                              <TableCell>Stays on your site/app context.</TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
                       </CardContent>
                     </Card>
-                    <Card className="glass-card border-l-4 border-l-emerald-500">
-                      <CardHeader>
-                        <CardTitle className="text-xs uppercase font-bold text-emerald-500">Open-API Flow</CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-2">
-                        <p className="text-[10px] text-muted-foreground leading-relaxed">
-                          Fully customized checkout. Embed stablecoin payments directly into your app's native interface.
-                        </p>
-                        <Badge variant="outline" className="text-[8px]">IDEAL FOR SAAS & APPS</Badge>
-                      </CardContent>
-                    </Card>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <Card className="glass-card border-t-2 border-t-primary">
+                        <CardHeader>
+                          <CardTitle className="text-sm font-headline uppercase text-primary">1. Payment via Paylink</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           <ol className="space-y-3">
+                             {[
+                               "User places order on your site.",
+                               "Your server creates order via /order/create.",
+                               "NoorNexus returns a hosted payment link.",
+                               "Redirect user to the NoorNexus payment page.",
+                               "User completes payment with their wallet.",
+                               "User redirected back to your redirectUrl."
+                             ].map((step, i) => (
+                               <li key={i} className="flex gap-3 text-[11px] leading-relaxed">
+                                 <span className="size-5 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 font-bold">{i+1}</span>
+                                 {step}
+                               </li>
+                             ))}
+                           </ol>
+                        </CardContent>
+                      </Card>
+
+                      <Card className="glass-card border-t-2 border-t-emerald-500">
+                        <CardHeader>
+                          <CardTitle className="text-sm font-headline uppercase text-emerald-500">2. Payment via Open-API</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           <ol className="space-y-3">
+                             {[
+                               "User places order on your site.",
+                               "Server creates order with manual=true.",
+                               "Call /order/payment-method with Payment SN.",
+                               "Receive raw QR data or DeepLink URL.",
+                               "Display QR/Deeplink in your custom UI.",
+                               "User completes payment via their wallet app.",
+                               "Your server handles Webhook callback."
+                             ].map((step, i) => (
+                               <li key={i} className="flex gap-3 text-[11px] leading-relaxed">
+                                 <span className="size-5 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 font-bold">{i+1}</span>
+                                 {step}
+                               </li>
+                             ))}
+                           </ol>
+                        </CardContent>
+                      </Card>
+                    </div>
                   </div>
                 </TabsContent>
 
                 <TabsContent value="security" className="space-y-4">
                   <Card className="glass-card bg-primary/5">
                     <CardHeader>
-                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Digital Trust Protocol</CardTitle>
+                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Sovereign Trust Specs</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
-                            <ShieldCheck className="size-3 text-emerald-500" /> On-Chain Screening
+                            <ShieldCheck className="size-3 text-emerald-500" /> On-Chain Guard
                           </h4>
                           <p className="text-[9px] text-muted-foreground leading-relaxed">
-                            Every wallet address is screened before transaction. Risky funds from sanctioned addresses are blocked instantly.
+                            Real-time wallet screening blocks risky funds before on-chain confirmation.
                           </p>
                         </div>
                         <div className="space-y-2">
@@ -213,12 +287,12 @@ export default function ApiHubPage() {
                             <ArrowRightLeft className="size-3 text-primary" /> T+1 Settlement
                           </h4>
                           <p className="text-[9px] text-muted-foreground leading-relaxed">
-                            Stablecoins are converted and disbursed to your local settlement account within one business day.
+                            Stablecoin assets are converted and settled to your USD/Local account in one business day.
                           </p>
                         </div>
                       </div>
                       <div className="p-4 bg-black/40 rounded-lg border border-white/5 space-y-2">
-                         <p className="text-[10px] font-mono text-primary">// HMAC_V4 SHA256 Verification Required</p>
+                         <p className="text-[10px] font-mono text-primary">// Mandatory HMAC_V4 Signature</p>
                          <p className="text-[9px] text-muted-foreground font-mono">X-Sovereign-Signature: SHA256(payload + timestamp, client_secret)</p>
                       </div>
                     </CardContent>
@@ -266,7 +340,7 @@ export default function ApiHubPage() {
             </div>
 
             <div className="space-y-6">
-              <Card className="glass-card border-l-4 border-l-amber-500 h-[600px] flex flex-col">
+              <Card className="glass-card border-l-4 border-l-amber-500 h-[700px] flex flex-col">
                 <CardHeader className="shrink-0">
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
                     <Cpu className="size-4" /> Nora-03 Integration AI
@@ -301,7 +375,7 @@ export default function ApiHubPage() {
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <Input 
-                         placeholder="How do I integrate Stablecoin Pay?" 
+                         placeholder="How to use manual=true?" 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}
@@ -323,12 +397,12 @@ export default function ApiHubPage() {
                          <BookOpen className="size-3" /> Quick Solutions
                        </p>
                        <div className="flex flex-wrap gap-2">
-                         {['Paylink SDK', 'T+1 Settlement', 'Signature Guide'].map((d, i) => (
+                         {['Paylink vs OpenAPI', 'Manual Flag', 'Webhook Signature'].map((d, i) => (
                            <Badge 
                             key={i} 
                             variant="secondary" 
                             className="text-[8px] cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
-                            onClick={() => { setQuery(`Tell me about ${d}`); }}
+                            onClick={() => { setQuery(`Explain ${d} flow`); }}
                            >
                             {d}
                            </Badge>
@@ -342,12 +416,12 @@ export default function ApiHubPage() {
               <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
-                       <ShieldCheck className="size-3" /> Fraud Prevention
+                       <ShieldCheck className="size-3" /> Trust Protocol
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[10px] text-muted-foreground leading-relaxed">
-                       Blockchain payments are irreversible, removing chargeback fraud. NoorNexus screens all on-chain activity for AML compliance.
+                       Sovereign Connect uses SHA256withRSA signatures for high-security environments. Ensure your keys are rotated every 90 days.
                     </p>
                  </CardContent>
               </Card>
