@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
   Menu, MessageSquare, Cpu, BookOpen, Layers, Info, CheckCircle2,
-  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, Rocket, Copy, Star, ShieldPlus, DatabaseZap
+  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, Rocket, Copy, Star, ShieldPlus, DatabaseZap, ReceiptText
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -20,7 +20,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { SovereignLogo } from "@/components/sovereign-logo"
 
 const ENDPOINTS = [
-  { method: "POST", path: "/openapi/v2/order/create", desc: "Create a prepay order via SHA256withRSA." },
+  { method: "POST", path: "/openapi/v2/order/create", desc: "Create a V2 order with RSA signature." },
   { method: "POST", path: "/openapi/v2/order/payment-method", desc: "Fetch URL/QR for specific method." },
   { method: "GET", path: "/openapi/v2/order/query", desc: "Poll transaction status." },
   { method: "POST", path: "/openapi/v2/webhook/callback", desc: "Inbound notification receiver." }
@@ -83,7 +83,32 @@ export default function ApiHubPage() {
     }
   }
 
-  const badgeSnippet = `<script src="https://cdn.noornexus.mesh/badge.js"></script>\n<div id="noornexus-badge" data-theme="dark"></div>`;
+  const v2Payload = `{
+  "outerOrderSn": "RD-V2-H4DB1RWI",
+  "outerUid": "SF-ARCHITECT-001",
+  "orderAmount": "100.00",
+  "orderCurrency": "USD",
+  "orderDesc": "Sovereign Grid Access Phase 42-B License",
+  "env": "WEB",
+  "goods": [
+    { "id": "PROJ-42-NODE", "name": "Sovereign Node Auth", "quantity": 1, "price": "100.00" }
+  ],
+  "redirectUrl": "https://shurukkha-hub.sirajganj.gov.bd/dashboard"
+}`
+
+  const v2Response = `{
+  "code": "SUCCESS",
+  "msg": null,
+  "requestId": "94012d08-9945-4f45-85c7-6276da3e6d45",
+  "data": {
+    "orderSn": "P1781129258404772",
+    "outerOrderSn": "RD-V2-H4DB1RWI",
+    "webUrl": "https://pay.redotpay.com/checkout/RD-V2-H4DB1RWI",
+    "h5Url": "https://pay.redotpay.com/h5/RD-V2-H4DB1RWI",
+    "appUrl": "redotpay://payment/RD-V2-H4DB1RWI",
+    "paymentMethods": ["USDT", "USDC", "BTC"]
+  }
+}`
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -112,49 +137,60 @@ export default function ApiHubPage() {
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
             <div className="xl:col-span-3 space-y-6">
-              <Tabs defaultValue="sdk" className="space-y-6">
+              <Tabs defaultValue="v2" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
+                  <TabsTrigger value="v2" className="gap-2"><ReceiptText className="size-4" /> V2 Protocol</TabsTrigger>
                   <TabsTrigger value="sdk" className="gap-2"><Cpu className="size-4" /> Imperial SDK</TabsTrigger>
-                  <TabsTrigger value="discovery" className="gap-2"><Rocket className="size-4" /> Discovery Protocol</TabsTrigger>
                   <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> REST API</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="discovery" className="space-y-4">
-                   <Card className="glass-card border-l-4 border-l-primary">
-                     <CardHeader>
-                       <CardTitle className="text-lg font-headline uppercase text-primary flex items-center gap-2">
-                         <Star className="size-5" /> The Imperial Badge
-                       </CardTitle>
-                       <CardDescription>Embed our story on your platform to join the mission.</CardDescription>
-                     </CardHeader>
-                     <CardContent className="space-y-6">
-                        <div className="flex justify-center p-8 bg-black/40 rounded-2xl border border-white/5 relative overflow-hidden">
-                           <SovereignLogo size={80} className="animate-pulse" />
-                           <div className="absolute bottom-4 text-center">
-                              <p className="text-[8px] font-mono text-primary uppercase tracking-[0.4em]">Integrity through Intelligence</p>
-                           </div>
-                        </div>
-                        <div className="space-y-3">
-                           <Label className="text-[10px] uppercase font-bold text-muted-foreground">Embed Snippet</Label>
-                           <div className="relative">
-                              <pre className="p-4 bg-black/60 rounded-lg text-[10px] font-mono text-emerald-500 overflow-x-auto border border-white/5">
-                                {badgeSnippet}
-                              </pre>
-                              <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                onClick={() => {
-                                  navigator.clipboard.writeText(badgeSnippet);
-                                  toast({ title: "Snippet Copied" });
-                                }}
-                                className="absolute top-2 right-2 hover:bg-white/10"
-                              >
-                                <Copy className="size-3" />
-                              </Button>
-                           </div>
-                        </div>
-                     </CardContent>
-                   </Card>
+                <TabsContent value="v2" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <Card className="glass-card border-l-4 border-l-primary">
+                         <CardHeader>
+                            <CardTitle className="text-sm font-headline uppercase text-primary">Request Specification</CardTitle>
+                            <CardDescription>POST /openapi/v2/order/create</CardDescription>
+                         </CardHeader>
+                         <CardContent className="space-y-4">
+                            <div className="grid grid-cols-2 gap-3">
+                               <div className="p-3 bg-white/5 rounded-lg border border-white/10">
+                                  <p className="text-[8px] uppercase font-bold text-muted-foreground">X-R-TS (Timestamp)</p>
+                                  <p className="text-xs font-mono text-white mt-1">1781129258404</p>
+                               </div>
+                               <div className="p-3 bg-white/5 rounded-lg border border-white/10">
+                                  <p className="text-[8px] uppercase font-bold text-muted-foreground">X-R-Signature</p>
+                                  <p className="text-xs font-mono text-primary mt-1">bGJjeXVvMTc4MTEy...</p>
+                               </div>
+                            </div>
+                            <div className="space-y-2">
+                               <Label className="text-[10px] uppercase font-bold text-muted-foreground">Example Payload</Label>
+                               <pre className="p-4 bg-black/60 rounded-xl text-[10px] font-mono text-emerald-400 overflow-x-auto border border-white/5">
+                                  {v2Payload}
+                               </pre>
+                            </div>
+                         </CardContent>
+                      </Card>
+
+                      <Card className="glass-card border-l-4 border-l-emerald-500">
+                         <CardHeader>
+                            <CardTitle className="text-sm font-headline uppercase text-emerald-500">Unified Response (V2)</CardTitle>
+                            <CardDescription>Standard wrapper for all sovereign responses.</CardDescription>
+                         </CardHeader>
+                         <CardContent className="space-y-4">
+                            <div className="p-3 bg-emerald-500/5 rounded-lg border border-emerald-500/10">
+                               <p className="text-[9px] text-emerald-200 leading-relaxed italic">
+                                  "The V2 wrapper provides a predictable structure with atomic requestId tracking."
+                               </p>
+                            </div>
+                            <div className="space-y-2">
+                               <Label className="text-[10px] uppercase font-bold text-muted-foreground">JSON Response</Label>
+                               <pre className="p-4 bg-black/60 rounded-xl text-[10px] font-mono text-primary overflow-x-auto border border-white/5">
+                                  {v2Response}
+                               </pre>
+                            </div>
+                         </CardContent>
+                      </Card>
+                   </div>
                 </TabsContent>
 
                 <TabsContent value="endpoints" className="space-y-4">
