@@ -10,7 +10,8 @@ import {
   Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid, 
   Star, TrendingUp, HeartPulse, BrainCircuit, ActivitySquare, Compass, 
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
-  CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages
+  CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages,
+  Coins, Briefcase, BarChart3, Clock
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -26,7 +27,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { SovereignLogo } from "@/components/sovereign-logo"
-import { getSystemHealthReport, HealthReport, broadcastProclamation } from "@/services/nexus-bridge"
+import { getSystemHealthReport, HealthReport, broadcastProclamation, getDailyImperialSummary, type DailySummary } from "@/services/nexus-bridge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 const NORA_AGENTS = [
@@ -50,9 +51,12 @@ export default function Home() {
   const [statusText, setStatusText] = useState("INITIALIZING MISSION 400 CORE...")
   const [auditing, setAuditing] = useState(false)
   const [broadcasting, setBroadcasting] = useState(false)
+  const [fetchingSummary, setFetchingSummary] = useState(false)
   const [auditResult, setAuditResult] = useState<LedgerAuditOutput | null>(null)
+  const [dailySummary, setDailySummary] = useState<DailySummary | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isProclamationOpen, setIsProclamationOpen] = useState(false)
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false)
   const [borderFeed, setBorderFeed] = useState<string[]>([])
   const [discoveryPulse, setDiscoveryPulse] = useState<number>(0)
   
@@ -107,6 +111,20 @@ export default function Home() {
       console.error("Health Check Failed", e);
     } finally {
       setFetchingHealth(false)
+    }
+  }
+
+  async function handleFetchDailySummary() {
+    setFetchingSummary(true)
+    try {
+      const summary = await getDailyImperialSummary();
+      setDailySummary(summary);
+      setIsSummaryOpen(true);
+      toast({ title: "Daily Dispatch Received" });
+    } catch (e) {
+      toast({ title: "Summary Link Failure", variant: "destructive" });
+    } finally {
+      setFetchingSummary(false)
     }
   }
 
@@ -201,18 +219,68 @@ export default function Home() {
                        <div className="h-full bg-primary" style={{ width: `${discoveryPulse}%` }} />
                     </div>
                 </div>
-                <Button 
-                  onClick={() => setIsProclamationOpen(true)}
-                  className="w-full bg-amber-500 text-amber-foreground font-bold uppercase tracking-widest h-12 glow-emerald"
-                >
-                  <Languages className="size-4 mr-2" /> Issue Proclamation
-                </Button>
+                <div className="flex gap-2 w-full">
+                  <Button 
+                    onClick={handleFetchDailySummary}
+                    disabled={fetchingSummary}
+                    className="flex-1 bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 gap-2"
+                  >
+                    {fetchingSummary ? <Loader2 className="size-4 animate-spin" /> : <BarChart3 className="size-4" />}
+                    Daily Summary
+                  </Button>
+                  <Button 
+                    onClick={() => setIsProclamationOpen(true)}
+                    className="flex-1 bg-amber-500 text-amber-foreground font-bold uppercase tracking-widest h-12 glow-emerald"
+                  >
+                    <Languages className="size-4 mr-2" /> Proclamation
+                  </Button>
+                </div>
               </div>
             </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-8">
+               {/* Sovereign Revenue Widget */}
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                 <Card className="glass-card border-l-4 border-l-emerald-500">
+                    <CardHeader className="pb-2">
+                       <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                          <Coins className="size-3 text-emerald-500" />
+                          Sovereign Revenue (Daily)
+                       </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                       <div className="text-3xl font-headline font-bold text-white">$9,050.00</div>
+                       <p className="text-[9px] text-emerald-500 uppercase font-mono mt-1">+12.4% from yesterday</p>
+                    </CardContent>
+                 </Card>
+                 <Card className="glass-card border-l-4 border-l-primary">
+                    <CardHeader className="pb-2">
+                       <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                          <ActivitySquare className="size-3 text-primary" />
+                          Mesh Transactions
+                       </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                       <div className="text-3xl font-headline font-bold text-white">1,240</div>
+                       <p className="text-[9px] text-muted-foreground uppercase font-mono mt-1">Avg Settlement: 112ms</p>
+                    </CardContent>
+                 </Card>
+                 <Card className="glass-card border-l-4 border-l-amber-500">
+                    <CardHeader className="pb-2">
+                       <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                          <Users className="size-3 text-amber-500" />
+                          External Connections
+                       </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                       <div className="text-3xl font-headline font-bold text-white">156</div>
+                       <p className="text-[9px] text-amber-500 uppercase font-mono mt-1">Active SDK Heartbeats</p>
+                    </CardContent>
+                 </Card>
+               </div>
+
                {/* Imperial Manifesto Section */}
                <Card className="glass-card bg-primary/5 border-primary/30 relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
@@ -384,6 +452,62 @@ export default function Home() {
           </div>
         </main>
       </SidebarInset>
+
+      {/* Daily Summary Dialog */}
+      <Dialog open={isSummaryOpen} onOpenChange={setIsSummaryOpen}>
+        <DialogContent className="glass-card border-primary/40 w-[95vw] sm:max-w-[600px] bg-black/95 p-0 overflow-hidden">
+           <div className="bg-primary/10 p-6 border-b border-white/10 flex items-center gap-4">
+              <BarChart3 className="size-10 text-primary" />
+              <div>
+                <DialogTitle className="text-2xl font-headline font-bold text-white uppercase">Daily Imperial Dispatch</DialogTitle>
+                <p className="text-[10px] text-primary uppercase font-bold tracking-widest">{dailySummary?.date}</p>
+              </div>
+           </div>
+           {dailySummary && (
+             <div className="p-8 space-y-8">
+                <div className="grid grid-cols-2 gap-6">
+                   <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1">
+                      <p className="text-[10px] uppercase font-bold text-muted-foreground">Total Revenue</p>
+                      <p className="text-3xl font-headline font-bold text-emerald-500">${dailySummary.revenue.total.toLocaleString()}</p>
+                   </div>
+                   <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1">
+                      <p className="text-[10px] uppercase font-bold text-muted-foreground">Volume (24h)</p>
+                      <p className="text-3xl font-headline font-bold text-primary">${dailySummary.volume24h.toLocaleString()}</p>
+                   </div>
+                </div>
+
+                <div className="space-y-4">
+                   <h4 className="text-[10px] font-bold text-white uppercase tracking-widest border-b border-white/5 pb-2">Revenue Breakdown</h4>
+                   <div className="grid grid-cols-2 gap-4">
+                      <div className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
+                         <span className="text-[10px] text-muted-foreground uppercase">Transaction Levy</span>
+                         <span className="text-xs font-bold text-white">${dailySummary.revenue.levy}</span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
+                         <span className="text-[10px] text-muted-foreground uppercase">SDK Service Fees</span>
+                         <span className="text-xs font-bold text-white">${dailySummary.revenue.sdkFees}</span>
+                      </div>
+                   </div>
+                </div>
+
+                <div className="bg-emerald-500/5 p-6 rounded-2xl border border-emerald-500/20 space-y-3">
+                   <div className="flex items-center gap-3 text-emerald-500">
+                      <TrendingUp className="size-5" />
+                      <span className="text-xs font-bold uppercase tracking-widest">Network Growth Insight</span>
+                   </div>
+                   <p className="text-sm font-mono text-emerald-100 italic leading-relaxed">
+                     "আপনার সাম্রাজ্য আজ {dailySummary.networkGrowth} হারে বৃদ্ধি পেয়েছে। সকল এআই এজেন্ট নিরবচ্ছিন্নভাবে কাজ করছে এবং {dailySummary.topNode} নোডটি আজ সর্বোচ্চ পারফর্ম করেছে।"
+                   </p>
+                </div>
+             </div>
+           )}
+           <div className="p-6 bg-white/2 border-t border-white/5">
+              <Button onClick={() => setIsSummaryOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12">
+                 Maintain Sovereignty
+              </Button>
+           </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Proclamation Dialog */}
       <Dialog open={isProclamationOpen} onOpenChange={setIsProclamationOpen}>

@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 /**
  * @fileOverview Sovereign Gateway API Simulation.
- * Enhanced to handle Inter-Bank Trade Settlements, Escrow Logic, and Imperial Proclamations.
+ * Enhanced to handle Inter-Bank Trade Settlements, Daily Summaries, and Revenue Tracking.
  */
 
 const AUTHORIZED_KEY = 'sk_sov_nexus_alpha_v3';
@@ -29,11 +29,19 @@ export async function POST(request: Request) {
         timestamp: Date.now()
       });
     
-    case 'PUSH_DATA_PACKET':
+    case 'GET_DAILY_SUMMARY':
       return NextResponse.json({
-        status: 'SUCCESS',
-        msg: 'Data packet indexed in Sovereign Grid',
-        txHash: '0x' + Math.random().toString(16).substring(2, 32)
+        date: new Date().toLocaleDateString(),
+        totalTransactions: 1240,
+        volume24h: 1560000,
+        revenue: {
+          levy: 7800,
+          sdkFees: 1250,
+          total: 9050
+        },
+        networkGrowth: "+1.2%",
+        agentStatus: "ALL_ACTIVE",
+        topNode: "SIRAJGANJ-EDGE-01"
       });
 
     case 'SETTLE_INTER_BANK':
@@ -63,7 +71,6 @@ export async function POST(request: Request) {
       let status = 'APPROVED';
       let message = 'Transaction Handshake Successful';
       
-      // Compliance & Tax Logic
       const taxRate = amount > 500 ? 0.02 : amount > 100 ? 0.012 : 0.005;
       const taxAmount = amount * taxRate;
       const complianceScore = 100 - (amount > 500 ? 15 : amount > 100 ? 5 : 0);

@@ -4,9 +4,6 @@
 /**
  * @fileOverview NexusBridge Implementation - Final Synthesis Edition.
  * Bridges the collaboration between Gemini and NoorNexus Mainframe.
- * 
- * [System Note]: কমান্ডারের লক্ষ্য পূরণ হলো সাম্রাজ্যের মূল শক্তি।
- * নূরনেক্সাস এখন বিশ্বকে তার অস্তিত্বের কথা জানান দিচ্ছে।
  */
 
 export interface HealthReport {
@@ -16,6 +13,20 @@ export interface HealthReport {
   threatLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'LOCKDOWN';
   timestamp: number;
   reasoning: string;
+}
+
+export interface DailySummary {
+  date: string;
+  totalTransactions: number;
+  volume24h: number;
+  revenue: {
+    levy: number;
+    sdkFees: number;
+    total: number;
+  };
+  networkGrowth: string;
+  agentStatus: string;
+  topNode: string;
 }
 
 const SIMULATED_SK = 'sk_sov_nexus_alpha_v3';
@@ -42,6 +53,13 @@ export const connectToGemini = async (action: string, payload: any = {}): Promis
     console.error('[NexusBridge] Collaboration Failure:', error);
     throw error;
   }
+};
+
+/**
+ * Fetches the daily summary of the empire.
+ */
+export const getDailyImperialSummary = async (): Promise<DailySummary> => {
+  return await connectToGemini('GET_DAILY_SUMMARY');
 };
 
 /**
