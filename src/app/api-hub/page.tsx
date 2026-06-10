@@ -12,8 +12,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
-  ChevronRight, Menu, MessageSquare, Cpu, BookOpen, AlertCircle, CheckCircle2,
-  Coins, ArrowRightLeft, ShieldAlert, Layers, ExternalLink, Info
+  Menu, MessageSquare, Cpu, BookOpen, Layers, Info, CheckCircle2,
+  ArrowRightLeft, AlertTriangle
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -21,10 +21,17 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 const ENDPOINTS = [
-  { method: "POST", path: "/api/v2/order/create", desc: "Create a prepay order and get a payment link or SN." },
-  { method: "POST", path: "/api/v2/order/payment-method", desc: "Retrieve specific payment info (URL/QR) for an order." },
-  { method: "GET", path: "/api/v2/order/query", desc: "Check the current status of a payment order." },
-  { method: "POST", path: "/api/v2/auth/handshake", desc: "Initiate HMAC_V4 cryptographic session." }
+  { method: "POST", path: "/openapi/v2/order/create", desc: "Create a prepay order and get a payment link or SN." },
+  { method: "POST", path: "/openapi/v2/order/payment-method", desc: "Retrieve specific payment info (URL/QR) for an order." },
+  { method: "GET", path: "/openapi/v2/order/query", desc: "Check the current status of a payment order." },
+  { method: "POST", path: "/openapi/v2/auth/handshake", desc: "Initiate SHA256withRSA cryptographic session." }
+]
+
+const REQUIRED_HEADERS = [
+  { name: "X-R-AK", desc: "Merchant appKey for identification.", required: "Yes", example: "4CA7B705-..." },
+  { name: "X-R-TS", desc: "Unix timestamp in milliseconds.", required: "Yes", example: "1763555087656" },
+  { name: "X-R-KEY-VERSION", desc: "Key pair version used for signing.", required: "Yes", example: "1" },
+  { name: "X-R-Signature", desc: "SHA256withRSA digital signature.", required: "Yes*", example: "ZxAmLpV..." }
 ]
 
 interface Message {
@@ -44,11 +51,9 @@ export default function ApiHubPage() {
   const [playgroundLoading, setPlaygroundLoading] = useState(false)
   const [playgroundResult, setPlaygroundResult] = useState<any>(null)
   const [payload, setPayload] = useState(`{
-  "merchantOrderNo": "ORD-${Math.random().toString(36).substring(7).toUpperCase()}",
-  "amount": "100.00",
-  "asset": "USDC",
-  "redirectUrl": "https://yourstore.com/success",
-  "manual": false
+  "orderId": "ORD-${Math.random().toString(36).substring(7).toUpperCase()}",
+  "amount": "88.88",
+  "currency": "USD"
 }`)
 
   useEffect(() => {
@@ -91,22 +96,25 @@ export default function ApiHubPage() {
     setPlaygroundResult(null)
     
     setTimeout(() => {
-      const mockSignature = "0x" + Math.random().toString(16).substring(2, 64)
+      const mockSignature = "ZxAmLpVy" + Math.random().toString(16).substring(2, 32)
       setPlaygroundResult({
-        status: 200,
-        message: "Sovereign Connect Handshake Accepted",
+        code: "SUCCESS",
+        msg: null,
         data: {
-          paymentSn: "SN-IMPERIAL-" + Math.random().toString(36).substring(7).toUpperCase(),
-          paymentLink: "https://pay.noornexus.mesh/checkout/0x...auth",
-          x_sovereign_signature: mockSignature,
-          on_chain_status: "VERIFIED_SAFE",
-          manual: false
+          orderSn: "P2025" + Math.random().toString(10).substring(2, 16),
+          outerOrder: JSON.parse(payload).orderId,
+          h5Url: "https://pay.noornexus.mesh/checkout/0x...auth",
+          headers_used: {
+            "X-R-AK": "4CA7B705-8EF5-4AC3-A0B6-9A4B84EF13B6",
+            "X-R-KEY-VERSION": "1",
+            "X-R-Signature": mockSignature
+          }
         }
       })
       setPlaygroundLoading(false)
       toast({
-        title: "Handshake Successful",
-        description: "Secure payment channel initialized.",
+        title: "RESTful Handshake Successful",
+        description: "API 2.0 Headers verified.",
       })
     }, 1500)
   }
@@ -127,14 +135,14 @@ export default function ApiHubPage() {
                    Sovereign Connect Hub
                  </h2>
               </div>
-              <p className="text-muted-foreground">Unified Stablecoin Payments (USDC/USDT) for Mission 400 Businesses.</p>
+              <p className="text-muted-foreground">RESTful API 2.0 with SHA256withRSA Security Standard.</p>
             </div>
             <div className="flex items-center gap-2">
                <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2">
                  <ShieldCheck className="size-4" /> VASP AUTHORIZED
                </Badge>
                <Badge variant="outline" className="border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
-                 <Lock className="size-4" /> AUTH: HMAC_V4
+                 <Lock className="size-4" /> AUTH: X-R-AK + RSA
                </Badge>
             </div>
           </header>
@@ -152,8 +160,35 @@ export default function ApiHubPage() {
                 <TabsContent value="endpoints" className="space-y-4">
                   <Card className="glass-card">
                     <CardHeader>
-                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Sovereign API 2.0</CardTitle>
-                      <CardDescription>Direct integration endpoints for high-throughput merchants.</CardDescription>
+                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Required Request Headers</CardTitle>
+                      <CardDescription>Authentication and signature validation headers for all API 2.0 requests.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      <Table>
+                        <TableHeader className="bg-white/5">
+                          <TableRow>
+                            <TableHead className="text-[10px] uppercase">Header Name</TableHead>
+                            <TableHead className="text-[10px] uppercase">Description</TableHead>
+                            <TableHead className="text-[10px] uppercase">Example</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody className="text-[11px]">
+                          {REQUIRED_HEADERS.map((h, i) => (
+                            <TableRow key={i}>
+                              <TableCell className="font-mono text-primary font-bold">{h.name}</TableCell>
+                              <TableCell className="text-muted-foreground">{h.desc}</TableCell>
+                              <TableCell className="font-mono text-[9px]">{h.example}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="glass-card">
+                    <CardHeader>
+                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Sovereign API 2.0 Endpoints</CardTitle>
+                      <CardDescription>Direct RESTful integration for high-throughput merchants.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-0">
                       <div className="divide-y divide-white/5">
@@ -171,7 +206,7 @@ export default function ApiHubPage() {
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="flows" className="space-y-8 animate-in fade-in slide-in-from-bottom-2">
+                <TabsContent value="flows" className="space-y-8">
                   <div className="grid grid-cols-1 gap-6">
                     <Card className="glass-card border-l-4 border-l-primary">
                       <CardHeader>
@@ -179,37 +214,26 @@ export default function ApiHubPage() {
                           <Info className="size-5 text-primary" />
                           Flow Comparison
                         </CardTitle>
-                        <CardDescription className="text-xs uppercase font-bold text-muted-foreground">Choose the right integration path for your business.</CardDescription>
                       </CardHeader>
                       <CardContent>
                         <Table>
                           <TableHeader className="bg-white/5">
                             <TableRow>
                               <TableHead className="w-[150px] text-[10px] uppercase font-bold">Feature</TableHead>
-                              <TableHead className="text-[10px] uppercase font-bold text-primary">Payment via Paylink</TableHead>
-                              <TableHead className="text-[10px] uppercase font-bold text-emerald-500">Payment via Open-API</TableHead>
+                              <TableHead className="text-[10px] uppercase font-bold text-primary">Paylink Flow</TableHead>
+                              <TableHead className="text-[10px] uppercase font-bold text-emerald-500">Open-API Flow</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody className="text-[11px]">
                             <TableRow>
                               <TableCell className="font-bold">Core Flow</TableCell>
-                              <TableCell>Redirects user to a hosted payment page.</TableCell>
-                              <TableCell>Retrieves URL/QR directly for custom UI.</TableCell>
+                              <TableCell>Redirects to hosted page.</TableCell>
+                              <TableCell>Retrieves raw URL/QR directly.</TableCell>
                             </TableRow>
                             <TableRow>
                               <TableCell className="font-bold">Primary Use</TableCell>
-                              <TableCell>Standard E-commerce / Web.</TableCell>
-                              <TableCell>Deeply customized Apps / QR codes.</TableCell>
-                            </TableRow>
-                            <TableRow>
-                              <TableCell className="font-bold">Merchant Role</TableCell>
-                              <TableCell>Lighter. Simple redirect handler.</TableCell>
-                              <TableCell>Heavier. Manages UI and callbacks.</TableCell>
-                            </TableRow>
-                            <TableRow>
-                              <TableCell className="font-bold">User Journey</TableCell>
-                              <TableCell>Leaves your site to pay.</TableCell>
-                              <TableCell>Stays on your site/app context.</TableCell>
+                              <TableCell>Standard E-commerce.</TableCell>
+                              <TableCell>Deeply customized Apps.</TableCell>
                             </TableRow>
                           </TableBody>
                         </Table>
@@ -218,18 +242,15 @@ export default function ApiHubPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <Card className="glass-card border-t-2 border-t-primary">
-                        <CardHeader>
-                          <CardTitle className="text-sm font-headline uppercase text-primary">1. Payment via Paylink</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
+                        <CardHeader><CardTitle className="text-sm font-headline uppercase text-primary">1. Payment via Paylink</CardTitle></CardHeader>
+                        <CardContent className="space-y-3">
                            <ol className="space-y-3">
                              {[
-                               "User places order on your site.",
-                               "Your server creates order via /order/create.",
-                               "NoorNexus returns a hosted payment link.",
-                               "Redirect user to the NoorNexus payment page.",
-                               "User completes payment with their wallet.",
-                               "User redirected back to your redirectUrl."
+                               "User submits order on merchant site.",
+                               "Server calls /openapi/v2/order/create.",
+                               "Receive payment link in response.",
+                               "Redirect user to the hosted payment page.",
+                               "User pays, redirects back to redirectUrl."
                              ].map((step, i) => (
                                <li key={i} className="flex gap-3 text-[11px] leading-relaxed">
                                  <span className="size-5 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 font-bold">{i+1}</span>
@@ -241,19 +262,15 @@ export default function ApiHubPage() {
                       </Card>
 
                       <Card className="glass-card border-t-2 border-t-emerald-500">
-                        <CardHeader>
-                          <CardTitle className="text-sm font-headline uppercase text-emerald-500">2. Payment via Open-API</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
+                        <CardHeader><CardTitle className="text-sm font-headline uppercase text-emerald-500">2. Payment via Open-API</CardTitle></CardHeader>
+                        <CardContent className="space-y-3">
                            <ol className="space-y-3">
                              {[
-                               "User places order on your site.",
                                "Server creates order with manual=true.",
-                               "Call /order/payment-method with Payment SN.",
+                               "Call /order/payment-method with SN.",
                                "Receive raw QR data or DeepLink URL.",
-                               "Display QR/Deeplink in your custom UI.",
-                               "User completes payment via their wallet app.",
-                               "Your server handles Webhook callback."
+                               "Display QR/Deeplink in custom UI.",
+                               "User completes payment in wallet app."
                              ].map((step, i) => (
                                <li key={i} className="flex gap-3 text-[11px] leading-relaxed">
                                  <span className="size-5 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 font-bold">{i+1}</span>
@@ -267,33 +284,47 @@ export default function ApiHubPage() {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="security" className="space-y-4">
+                <TabsContent value="security" className="space-y-6">
                   <Card className="glass-card bg-primary/5">
                     <CardHeader>
-                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Sovereign Trust Specs</CardTitle>
+                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">SHA256withRSA Security Guide</CardTitle>
+                      <CardDescription>We have removed secretKey in favor of robust RSA signatures.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
+                      <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg flex gap-3">
+                         <AlertTriangle className="size-5 text-amber-500 shrink-0" />
+                         <p className="text-[10px] text-amber-200">
+                           <b>Key Update:</b> The <code>secretKey</code> is no longer used for signature verification. All requests must be signed using your RSA Private Key.
+                         </p>
+                      </div>
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
-                            <ShieldCheck className="size-3 text-emerald-500" /> On-Chain Guard
+                            <ShieldCheck className="size-3 text-emerald-500" /> RSA Key Pair
                           </h4>
                           <p className="text-[9px] text-muted-foreground leading-relaxed">
-                            Real-time wallet screening blocks risky funds before on-chain confirmation.
+                            Generate a 2048-bit RSA key pair. Upload your public key to the NoorNexus Developer Portal to obtain your <code>appKey</code>.
                           </p>
                         </div>
                         <div className="space-y-2">
                           <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
-                            <ArrowRightLeft className="size-3 text-primary" /> T+1 Settlement
+                            <ArrowRightLeft className="size-3 text-primary" /> Key Rotation
                           </h4>
                           <p className="text-[9px] text-muted-foreground leading-relaxed">
-                            Stablecoin assets are converted and settled to your USD/Local account in one business day.
+                            Use the <code>X-R-KEY-VERSION</code> header to indicate which key version was used for signing, allowing for seamless rotation.
                           </p>
                         </div>
                       </div>
+                      
                       <div className="p-4 bg-black/40 rounded-lg border border-white/5 space-y-2">
-                         <p className="text-[10px] font-mono text-primary">// Mandatory HMAC_V4 Signature</p>
-                         <p className="text-[9px] text-muted-foreground font-mono">X-Sovereign-Signature: SHA256(payload + timestamp, client_secret)</p>
+                         <p className="text-[10px] font-mono text-primary">// Mandatory Auth Headers</p>
+                         <div className="text-[9px] text-muted-foreground font-mono space-y-1">
+                            <p>X-R-AK: YOUR_APP_KEY</p>
+                            <p>X-R-TS: CURRENT_TIMESTAMP_MS</p>
+                            <p>X-R-KEY-VERSION: 1</p>
+                            <p>X-R-Signature: BASE64(SHA256withRSA(payload, private_key))</p>
+                         </div>
                       </div>
                     </CardContent>
                   </Card>
@@ -302,7 +333,8 @@ export default function ApiHubPage() {
                 <TabsContent value="playground" className="space-y-4">
                    <Card className="glass-card">
                       <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase tracking-widest">Connect Playground</CardTitle>
+                         <CardTitle className="text-sm font-headline uppercase tracking-widest">API 2.0 Test Runner</CardTitle>
+                         <CardDescription>Sandbox URL: <code>https://api-sandbox.noornexus.mesh</code></CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-4">
                          <div className="space-y-2">
@@ -319,14 +351,14 @@ export default function ApiHubPage() {
                           className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary"
                         >
                             {playgroundLoading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
-                            Execute Test Payment Handshake
+                            Run RESTful API Test
                          </Button>
 
                          {playgroundResult && (
                            <div className="mt-6 space-y-4 animate-in fade-in zoom-in-95">
                               <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
                                 <CheckCircle2 className="size-4 text-emerald-500" />
-                                <span className="text-[10px] font-bold text-emerald-500 uppercase">Status: 200 SUCCESS</span>
+                                <span className="text-[10px] font-bold text-emerald-500 uppercase">Status: {playgroundResult.code}</span>
                               </div>
                               <pre className="bg-black/40 p-4 rounded-lg font-mono text-[10px] border border-white/5 text-primary overflow-x-auto">
                                 {JSON.stringify(playgroundResult, null, 2)}
@@ -345,7 +377,6 @@ export default function ApiHubPage() {
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
                     <Cpu className="size-4" /> Nora-03 Integration AI
                   </CardTitle>
-                  <CardDescription className="text-[9px] uppercase font-bold text-muted-foreground">Expert Payment Integration Guidance</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col min-h-0 overflow-hidden space-y-4">
                   <ScrollArea className="flex-1 pr-4">
@@ -353,7 +384,7 @@ export default function ApiHubPage() {
                       {messages.length === 0 && (
                         <div className="text-center py-10 space-y-3">
                           <MessageSquare className="size-10 text-muted-foreground/20 mx-auto" />
-                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting developer query...</p>
+                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting API 2.0 query...</p>
                         </div>
                       )}
                       {messages.map((msg, i) => (
@@ -375,7 +406,7 @@ export default function ApiHubPage() {
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <Input 
-                         placeholder="How to use manual=true?" 
+                         placeholder="How to sign with RSA?" 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}
@@ -391,24 +422,6 @@ export default function ApiHubPage() {
                          {loading ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
                        </Button>
                     </div>
-
-                    <div className="space-y-2">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-2">
-                         <BookOpen className="size-3" /> Quick Solutions
-                       </p>
-                       <div className="flex flex-wrap gap-2">
-                         {['Paylink vs OpenAPI', 'Manual Flag', 'Webhook Signature'].map((d, i) => (
-                           <Badge 
-                            key={i} 
-                            variant="secondary" 
-                            className="text-[8px] cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
-                            onClick={() => { setQuery(`Explain ${d} flow`); }}
-                           >
-                            {d}
-                           </Badge>
-                         ))}
-                       </div>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -416,12 +429,12 @@ export default function ApiHubPage() {
               <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
-                       <ShieldCheck className="size-3" /> Trust Protocol
+                       <ShieldCheck className="size-3" /> API 2.0 Trust
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[10px] text-muted-foreground leading-relaxed">
-                       Sovereign Connect uses SHA256withRSA signatures for high-security environments. Ensure your keys are rotated every 90 days.
+                       <code>X-R-AK</code> and <code>X-R-KEY-VERSION</code> are now required. <code>secretKey</code> is deprecated. Ensure you use SHA256withRSA.
                     </p>
                  </CardContent>
               </Card>
