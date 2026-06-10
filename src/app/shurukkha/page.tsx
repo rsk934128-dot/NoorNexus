@@ -9,16 +9,17 @@ import { Badge } from "@/components/ui/badge"
 /**
  * @fileOverview Shurukkha Hub Page (Window View)
  * This page acts as the viewing window for the persistent communication node.
- * The actual iframe is managed in RootLayout to prevent call drops during navigation.
+ * The actual iframe is managed in PersistentCommNode to prevent call drops.
+ * Fixed: Ensured absolute transparency and pass-through for interactions.
  */
 export default function ShurukkhaPage() {
   return (
-    <div className="flex min-h-screen bg-background cyber-grid">
+    <div className="flex min-h-screen bg-transparent">
       <AppSidebar />
       <SidebarInset className="flex-1 w-full flex flex-col min-w-0 p-0 m-0 bg-transparent">
-        <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0 relative">
-          {/* Transparent Placeholder to let the persistent iframe show through */}
-          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/80 backdrop-blur-md shrink-0 w-full z-10">
+        <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0 relative bg-transparent">
+          {/* Transparent Header */}
+          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/95 backdrop-blur-md shrink-0 w-full z-20">
             <div className="flex items-center gap-3">
               <div className="size-10 bg-primary/20 rounded-xl flex items-center justify-center border border-primary/30 glow-primary shrink-0">
                 <Shield className="size-6 text-primary" />
@@ -47,11 +48,11 @@ export default function ShurukkhaPage() {
             </div>
           </header>
 
-          {/* The space below the header is intentionally empty in this page component 
-              because the PersistentCommNode iframe is positioned here via layout.tsx */}
+          {/* This area must be completely interactive for the iframe below it */}
           <div className="flex-1 bg-transparent pointer-events-none" />
           
-          <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-10">
+          {/* Transparent Footer */}
+          <footer className="py-2 border-t border-white/5 bg-background/90 shrink-0 text-center w-full z-20">
             <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.4em]">
               NoorNexus OS Persistent Comm-Link | Node: shurukkha-hub
             </p>

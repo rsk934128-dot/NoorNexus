@@ -3,12 +3,12 @@
 
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { ShieldCheck } from "lucide-react"
 
 /**
  * @fileOverview Persistent Communication Node
  * This component keeps the Shurukkha Hub active in the background 
  * across the entire application session to ensure calls are never missed.
+ * Updated: Fixed z-index and pointer-events for full control.
  */
 export function PersistentCommNode() {
   const pathname = usePathname()
@@ -17,15 +17,17 @@ export function PersistentCommNode() {
   return (
     <div 
       className={cn(
-        "transition-all duration-500 ease-in-out",
-        isShurukkhaPage 
-          ? "fixed inset-0 z-0 md:left-[16rem] lg:left-[16rem]" 
-          : "fixed -z-50 opacity-0 pointer-events-none w-px h-px overflow-hidden"
+        "fixed inset-0 transition-opacity duration-500 ease-in-out pointer-events-none",
+        isShurukkhaPage ? "opacity-100 z-10" : "opacity-0 -z-50"
       )}
     >
-      <div className="w-full h-full flex flex-col bg-background">
-        {/* Only show the iframe UI when on the specific route, 
-            but keep the iframe element MOUNTED at all times */}
+      <div className={cn(
+        "w-full h-full flex flex-col bg-background transition-all duration-300",
+        isShurukkhaPage ? "pointer-events-auto" : "pointer-events-none",
+        // Offset the content area on desktop to make room for the sidebar
+        "md:pl-64" 
+      )}>
+        {/* Only the iframe inside this div gets pointer-events when on the page */}
         <iframe 
           src="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
           className="w-full h-full border-0 bg-white"
