@@ -12,10 +12,12 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useFirestore, useCollection, useUser } from "@/firebase"
 import { collection, addDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore"
-import { Trophy, Server, Newspaper, Plus, Trash2, ShieldCheck, SlidersHorizontal, Lock, Zap, Loader2 } from "lucide-react"
+import { Trophy, Server, Newspaper, Plus, Trash2, ShieldCheck, SlidersHorizontal, Lock, Zap, Loader2, Crown } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
+
+const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
 export default function EcosystemParametersPage() {
   const { toast } = useToast()
@@ -23,6 +25,8 @@ export default function EcosystemParametersPage() {
   const { user, loading: authLoading } = useUser()
   const router = useRouter()
   
+  const isAdmin = user?.email === ADMIN_EMAIL
+
   // Real-time Collections
   const { data: matches } = useCollection<any>(collection(db, "sports_matches"))
   const { data: servers } = useCollection<any>(collection(db, "sports_servers"))
@@ -106,20 +110,22 @@ export default function EcosystemParametersPage() {
               </h2>
               <div className="flex items-center gap-3">
                  <p className="text-muted-foreground uppercase text-[10px] tracking-[0.3em] font-mono">Mission 400 | Digital Sovereign Infrastructure</p>
-                 <Badge variant="outline" className="border-primary/30 text-primary flex items-center gap-1.5 h-5">
+                 <Badge variant="outline" className={`border-primary/30 text-primary flex items-center gap-1.5 h-5 ${isAdmin ? 'bg-primary/10' : ''}`}>
                     <ShieldCheck className="size-3" />
-                    <span className="text-[8px] font-bold">CLEARANCE: ROOT_L4</span>
+                    <span className="text-[8px] font-bold">CLEARANCE: {isAdmin ? 'ROOT_L4_ADMIN' : 'ROOT_L4'}</span>
                  </Badge>
               </div>
             </div>
             <div className="flex gap-4">
-               <div className="p-3 bg-black/40 rounded-xl border border-primary/20 flex items-center gap-3">
-                  <div className="size-8 rounded bg-primary/10 flex items-center justify-center">
-                    <Lock className="size-4 text-primary" />
+               <div className={`p-3 rounded-xl border flex items-center gap-3 transition-all ${isAdmin ? 'bg-primary/20 border-primary shadow-[0_0_20px_rgba(0,150,255,0.3)]' : 'bg-black/40 border-primary/20'}`}>
+                  <div className={`size-8 rounded flex items-center justify-center ${isAdmin ? 'bg-primary text-background' : 'bg-primary/10 text-primary'}`}>
+                    {isAdmin ? <Crown className="size-4" /> : <Lock className="size-4" />}
                   </div>
                   <div>
-                    <p className="text-[9px] font-bold text-muted-foreground uppercase">Commander</p>
-                    <p className="text-xs font-mono text-primary font-bold tracking-widest">{user?.displayName?.split(' ')[0].toUpperCase() || "ADMIN"}</p>
+                    <p className="text-[9px] font-bold text-muted-foreground uppercase">{isAdmin ? "Sovereign Admin" : "Commander"}</p>
+                    <p className="text-xs font-mono text-primary font-bold tracking-widest uppercase">
+                      {isAdmin ? "IMPERIAL_RUBEL" : (user?.displayName?.split(' ')[0] || "ADMIN")}
+                    </p>
                   </div>
                </div>
             </div>

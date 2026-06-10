@@ -15,7 +15,8 @@ import {
   LogOut,
   LogIn,
   X,
-  Globe
+  Globe,
+  Crown
 } from "lucide-react"
 
 import {
@@ -37,6 +38,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { SovereignLogo } from "@/components/sovereign-logo"
+import { Badge } from "@/components/ui/badge"
 
 const items = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
@@ -49,6 +51,8 @@ const items = [
   { title: "Famelack Hub", url: "/famelack", icon: Globe },
 ]
 
+const ADMIN_EMAIL = "rubels1k994@gmail.com"
+
 export function AppSidebar() {
   const pathname = usePathname()
   const router = useRouter()
@@ -56,6 +60,8 @@ export function AppSidebar() {
   const { user } = useUser()
   const { toast } = useToast()
   const { setOpenMobile, isMobile } = useSidebar()
+
+  const isAdmin = user?.email === ADMIN_EMAIL
 
   const handleLogout = async () => {
     try {
@@ -117,19 +123,30 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="p-4 space-y-4">
         {user ? (
-          <div className="p-3 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
+          <div className={`p-3 rounded-xl border space-y-3 transition-all ${isAdmin ? 'bg-primary/10 border-primary/40 shadow-[0_0_15px_rgba(0,150,255,0.2)]' : 'bg-primary/5 border-primary/20'}`}>
             <div className="flex items-center gap-3">
-              <Avatar className="size-8 border border-primary/30">
-                <AvatarImage src={user.photoURL || ""} />
-                <AvatarFallback className="bg-primary/10 text-primary text-[10px] font-bold">
-                  {user.displayName?.substring(0, 2).toUpperCase() || "C"}
-                </AvatarFallback>
-              </Avatar>
+              <div className="relative">
+                <Avatar className={`size-8 border ${isAdmin ? 'border-primary' : 'border-primary/30'}`}>
+                  <AvatarImage src={user.photoURL || ""} />
+                  <AvatarFallback className="bg-primary/10 text-primary text-[10px] font-bold">
+                    {user.displayName?.substring(0, 2).toUpperCase() || "C"}
+                  </AvatarFallback>
+                </Avatar>
+                {isAdmin && (
+                  <div className="absolute -top-1 -right-1 size-3 bg-primary rounded-full flex items-center justify-center border-2 border-background">
+                    <Crown className="size-1.5 text-background fill-current" />
+                  </div>
+                )}
+              </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold truncate uppercase">{user.displayName || "Commander"}</p>
+                <p className={`text-[10px] font-bold truncate uppercase ${isAdmin ? 'text-primary' : ''}`}>
+                  {isAdmin ? "Imperial Admin" : (user.displayName || "Commander")}
+                </p>
                 <div className="flex items-center gap-1">
-                   <div className="size-1 bg-emerald-500 rounded-full animate-pulse" />
-                   <p className="text-[8px] text-muted-foreground uppercase font-mono tracking-tighter">Root_L4 Session</p>
+                   <div className={`size-1 rounded-full animate-pulse ${isAdmin ? 'bg-primary' : 'bg-emerald-500'}`} />
+                   <p className="text-[8px] text-muted-foreground uppercase font-mono tracking-tighter">
+                     {isAdmin ? "ROOT_L4_SUPERUSER" : "Root_L4 Session"}
+                   </p>
                 </div>
               </div>
             </div>
