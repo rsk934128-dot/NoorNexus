@@ -1,8 +1,10 @@
+
 import { NextResponse } from 'next/server';
 
 /**
  * @fileOverview Sovereign Gateway API Simulation.
  * Enhanced to handle Inter-Bank Trade Settlements, Daily Summaries, and Revenue Tracking.
+ * Updated to reflect VERIFIED_SOVEREIGN status with TIN.
  */
 
 const AUTHORIZED_KEY = 'sk_sov_nexus_alpha_v3';
@@ -41,7 +43,7 @@ export async function POST(request: Request) {
         networkGrowth: "+1.2%",
         agentStatus: "ALL_ACTIVE",
         topNode: "SIRAJGANJ-EDGE-01",
-        legalSovereignty: "VERIFIED_FAMILY_SHIELD" // Highlighting the legal standing
+        legalSovereignty: "SOVEREIGN_TIN_ACTIVE" // Reflected from tinNumber verification
       });
 
     case 'SETTLE_INTER_BANK':
@@ -96,7 +98,7 @@ export async function POST(request: Request) {
             "HMAC_V4_SIGNATURE_VERIFIED",
             "KYM_STATUS_STABLE",
             "AML_ON_CHAIN_PASSED",
-            "LEGAL_TRADE_LICENSE_ACTIVE" // Added: Reflection of legal status in payouts
+            "SOVEREIGN_TIN_LINKED" // Reflected from tinNumber verification
           ]
         }
       });

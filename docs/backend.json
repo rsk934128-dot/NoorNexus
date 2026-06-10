@@ -39,7 +39,8 @@
         "complianceScore": { "type": "number" },
         "status": { "type": "string" },
         "region": { "type": "string" },
-        "timestamp": { "type": "number" }
+        "timestamp": { "type": "number" },
+        "tinReference": { "type": "string" }
       }
     },
     "InterBankSettlement": {
@@ -126,6 +127,7 @@
         "lastReviewDate": { "type": "number" },
         "noraAssessment": { "type": "string" },
         "tradeLicenseNumber": { "type": "string" },
+        "tinNumber": { "type": "string" },
         "isFamilyBusiness": { "type": "boolean" },
         "legalStatus": { "type": "string", "enum": ["UNVERIFIED", "VERIFIED_FAMILY", "VERIFIED_SOVEREIGN"] }
       },
@@ -143,6 +145,7 @@
         "linkedAddresses": { "type": "array", "items": { "type": "string" } },
         "issuanceDate": { "type": "number" },
         "lastUpdate": { "type": "number" },
+        "tinVerified": { "type": "boolean" },
         "metadata": { "type": "string" }
       },
       "required": ["did", "owner", "trustScore"]

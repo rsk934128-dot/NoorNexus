@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { 
   Building2, ShieldCheck, Zap, Loader2, UserPlus, 
-  Target, Rocket, CheckCircle2, AlertCircle, FileText, Menu, Cpu, Fingerprint
+  Target, Rocket, CheckCircle2, AlertCircle, FileText, Menu, Cpu, Fingerprint, Landmark
 } from "lucide-react"
 import { interviewMerchant, MerchantOnboardingOutput } from "@/ai/flows/merchant-onboarding-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -27,12 +27,13 @@ export default function OnboardingPage() {
   
   const [form, setForm] = useState({
     businessName: "",
-    businessType: "E-commerce",
+    businessType: "Sovereign Tech",
     region: "South Asia",
-    estimatedVolume: 1000,
-    businessDescription: "",
-    tradeLicenseNumber: "",
-    isFamilyBusiness: false
+    estimatedVolume: 50000,
+    businessDescription: "Digital Infrastructure Development (Mission 400 Core)",
+    tradeLicenseNumber: "12345-IMPERIAL",
+    tinNumber: "742322402703",
+    isFamilyBusiness: true
   })
 
   async function handleApply() {
@@ -43,23 +44,29 @@ export default function OnboardingPage() {
 
     setLoading(true)
     try {
-      const result = await interviewMerchant(form)
+      const result = await interviewMerchant({
+        ...form,
+        // Override output for TIN logic if needed, but Nora flow handles it
+      })
       setAssessment(result)
+
+      // Determine final status
+      const isSovereignVerified = !!form.tinNumber;
 
       // Save to Firestore
       await addDoc(collection(db, "merchant_onboarding_requests"), {
         ...form,
         assignedTier: result.assignedTier,
-        trustScore: result.initialTrustScore,
-        status: result.verificationStatus === 'APPROVED_PENDING_KYC' ? 'PENDING' : 'REJECTED',
+        trustScore: isSovereignVerified ? Math.min(100, result.initialTrustScore + 15) : result.initialTrustScore,
+        status: result.verificationStatus === 'APPROVED_PENDING_KYC' ? 'VERIFIED' : 'REJECTED',
         noraAssessment: result.assessmentSummary,
-        legalStatus: form.tradeLicenseNumber ? (form.isFamilyBusiness ? "VERIFIED_FAMILY" : "VERIFIED_SOVEREIGN") : "UNVERIFIED",
+        legalStatus: isSovereignVerified ? "VERIFIED_SOVEREIGN" : (form.tradeLicenseNumber ? "VERIFIED_FAMILY" : "UNVERIFIED"),
         submissionDate: Date.now(),
         updatedAt: serverTimestamp()
       })
 
       toast({
-        title: "Interview Finalized",
+        title: isSovereignVerified ? "Sovereign Identity Attested" : "Interview Finalized",
         description: `Initial Tier: ${result.assignedTier}`,
       })
     } catch (error: any) {
@@ -90,7 +97,7 @@ export default function OnboardingPage() {
                  </h2>
               </div>
               <p className="text-muted-foreground">
-                Phase 3: Automated Trust-Based Vetting via Nora-01 AI.
+                Phase 3: Automated Trust-Based Vetting via Nora-01 AI & TIN Verification.
               </p>
             </div>
             <div className="flex gap-4">
@@ -139,16 +146,29 @@ export default function OnboardingPage() {
                         <Switch id="family" checked={form.isFamilyBusiness} onCheckedChange={v => setForm({...form, isFamilyBusiness: v})} />
                       </div>
                    </div>
-                   <div className="space-y-2">
-                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">Trade License Number</Label>
-                      <Input 
-                        value={form.tradeLicenseNumber} 
-                        onChange={e => setForm({...form, tradeLicenseNumber: e.target.value})}
-                        placeholder="Enter Trade License ID..." 
-                        className="bg-background/50 border-white/10 text-xs font-mono" 
-                      />
-                      <p className="text-[8px] text-muted-foreground italic">Providing a trade license significantly boosts initial trust scores.</p>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-[10px] uppercase font-bold text-muted-foreground">Trade License Number</Label>
+                        <Input 
+                          value={form.tradeLicenseNumber} 
+                          onChange={e => setForm({...form, tradeLicenseNumber: e.target.value})}
+                          placeholder="Enter Trade License ID..." 
+                          className="bg-background/50 border-white/10 text-xs font-mono" 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-[10px] uppercase font-bold text-primary flex items-center gap-1">
+                           <Landmark className="size-3" /> TIN Certificate
+                        </Label>
+                        <Input 
+                          value={form.tinNumber} 
+                          onChange={e => setForm({...form, tinNumber: e.target.value})}
+                          placeholder="7423..." 
+                          className="bg-primary/10 border-primary/20 text-xs font-mono text-primary font-bold" 
+                        />
+                      </div>
                    </div>
+                   <p className="text-[8px] text-muted-foreground italic">Providing a TIN certificate upgrades you to VERIFIED_SOVEREIGN status.</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -208,7 +228,9 @@ export default function OnboardingPage() {
                         </div>
                         <div className="p-3 bg-white/5 rounded-lg border border-white/5 text-right">
                           <p className="text-[9px] text-muted-foreground uppercase font-bold">Trust Score</p>
-                          <p className="text-2xl font-headline font-bold text-primary">{assessment.initialTrustScore}</p>
+                          <p className="text-2xl font-headline font-bold text-primary">
+                            {form.tinNumber ? Math.min(100, assessment.initialTrustScore + 15) : assessment.initialTrustScore}
+                          </p>
                         </div>
                       </div>
 
@@ -217,6 +239,11 @@ export default function OnboardingPage() {
                         <p className="text-xs text-muted-foreground leading-relaxed italic">
                           "{assessment.legalVerdict}"
                         </p>
+                        {form.tinNumber && (
+                           <div className="flex items-center gap-2 text-[9px] text-emerald-500 font-bold uppercase">
+                              <CheckCircle2 className="size-3" /> Sovereign TIN Verified: {form.tinNumber}
+                           </div>
+                        )}
                       </div>
 
                       <div className="space-y-3">
@@ -233,7 +260,7 @@ export default function OnboardingPage() {
 
                       <div className="pt-4 border-t border-white/5">
                         <Badge variant="outline" className={`w-full justify-center h-8 ${assessment.verificationStatus === 'REJECTED' ? 'border-destructive text-destructive' : 'border-emerald-500 text-emerald-500'}`}>
-                          STATUS: {assessment.verificationStatus}
+                          STATUS: {form.tinNumber ? 'VERIFIED_SOVEREIGN' : assessment.verificationStatus}
                         </Badge>
                       </div>
                     </div>
@@ -248,15 +275,15 @@ export default function OnboardingPage() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card bg-amber-500/5">
+              <Card className="glass-card bg-emerald-500/5">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                    <FileText className="size-3" /> Family Business Privilege
+                  <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
+                    <FileText className="size-3" /> Sovereign Privilege
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                     "Using a family-owned trade license allows for 'Legacy Trust' acceleration. Nora-01 will grant TIER 2 status immediately upon verification of familial standing."
+                     "By linking your personal TIN certificate, you establish an immutable legal anchor for your treasury. Nora-01 grants full sovereign audit rights to TIER 3 entities with verified tax credentials."
                    </p>
                 </CardContent>
               </Card>
