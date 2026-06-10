@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useRef, useEffect } from "react"
@@ -12,17 +11,18 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
-  ChevronRight, Menu, MessageSquare, Cpu, BookOpen, AlertCircle, CheckCircle2
+  ChevronRight, Menu, MessageSquare, Cpu, BookOpen, AlertCircle, CheckCircle2,
+  Coins, ArrowRightLeft, ShieldAlert
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 const ENDPOINTS = [
-  { method: "POST", path: "/api/v1/auth/handshake", desc: "Initiate HMAC_V4 cryptographic session." },
-  { method: "GET", path: "/api/v1/ledger/balance", desc: "Retrieve BDT settlement balance." },
-  { method: "POST", path: "/api/v1/remit/transfer", desc: "Execute cross-border asset broadcast." },
-  { method: "GET", path: "/api/v1/nodes/status", desc: "Check regional node mesh health." }
+  { method: "POST", path: "/api/v1/checkout/paylink", desc: "Generate a hosted stablecoin checkout link." },
+  { method: "POST", path: "/api/v1/checkout/openapi", desc: "Initiate a direct server-to-server checkout session." },
+  { method: "GET", path: "/api/v1/settlement/history", desc: "Retrieve T+1 disbursement logs." },
+  { method: "POST", path: "/api/v1/auth/handshake", desc: "Initiate HMAC_V4 cryptographic session." }
 ]
 
 interface Message {
@@ -42,8 +42,10 @@ export default function ApiHubPage() {
   const [playgroundLoading, setPlaygroundLoading] = useState(false)
   const [playgroundResult, setPlaygroundResult] = useState<any>(null)
   const [payload, setPayload] = useState(`{
-  "action": "ping",
-  "node": "Sirajganj-01",
+  "orderId": "ORD-${Math.random().toString(36).substring(7).toUpperCase()}",
+  "amount": "100.00",
+  "currency": "USDC",
+  "merchantId": "IMPERIAL-CORP-01",
   "timestamp": ${Math.floor(Date.now() / 1000)}
 }`)
 
@@ -64,7 +66,7 @@ export default function ApiHubPage() {
       const history = messages.map(m => ({ role: m.role, text: m.text }))
       const result = await noraIntegrationAssistant({
         query: userMsg,
-        context: "GENERAL",
+        context: "STABLECOIN_PAYMENTS",
         history
       })
       
@@ -86,20 +88,20 @@ export default function ApiHubPage() {
     setPlaygroundLoading(true)
     setPlaygroundResult(null)
     
-    // Simulate HMAC_V4 Handshake Process
     setTimeout(() => {
-      const mockSignature = "0x" + Math.random().toString(16).substring(2, 42)
+      const mockSignature = "0x" + Math.random().toString(16).substring(2, 64)
       setPlaygroundResult({
         status: 200,
-        message: "Sovereign Handshake Accepted",
+        message: "Unified Payment Handshake Accepted",
+        checkoutUrl: "https://pay.noornexus.mesh/checkout/0x...auth",
         x_sovereign_signature: mockSignature,
-        node_response: "SIRAJGANJ_EDGE_01_ACK",
-        security_clearance: "L4_STABLE"
+        on_chain_status: "VERIFIED_SAFE",
+        settlement_cycle: "T+1_STABLE"
       })
       setPlaygroundLoading(false)
       toast({
         title: "Handshake Successful",
-        description: "Cryptographic session established.",
+        description: "Secure payment channel initialized.",
       })
     }, 1500)
   }
@@ -117,30 +119,36 @@ export default function ApiHubPage() {
                  </SidebarTrigger>
                  <h2 className="text-2xl sm:text-4xl font-headline font-bold flex items-center gap-3 uppercase">
                    <Code2 className="size-10 text-primary" />
-                   Sovereign API Gateway
+                   Sovereign Connect Hub
                  </h2>
               </div>
-              <p className="text-muted-foreground">Open Banking Integration Hub for Mission 400.</p>
+              <p className="text-muted-foreground">Unified Stablecoin Payments for Mission 400 Businesses.</p>
             </div>
-            <Badge variant="outline" className="border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
-              <Lock className="size-4" /> AUTH: HMAC_V4_SHA256
-            </Badge>
+            <div className="flex items-center gap-2">
+               <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2">
+                 <ShieldCheck className="size-4" /> COMPLIANCE: VASP_AUTH
+               </Badge>
+               <Badge variant="outline" className="border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
+                 <Lock className="size-4" /> AUTH: HMAC_V4_SHA256
+               </Badge>
+            </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-6">
               <Tabs defaultValue="endpoints" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
-                  <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> Endpoints</TabsTrigger>
+                  <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> API Docs</TabsTrigger>
+                  <TabsTrigger value="payments" className="gap-2"><Coins className="size-4" /> Payment Flows</TabsTrigger>
                   <TabsTrigger value="security" className="gap-2"><Lock className="size-4" /> Security</TabsTrigger>
                   <TabsTrigger value="playground" className="gap-2"><Terminal className="size-4" /> Playground</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="endpoints" className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
+                <TabsContent value="endpoints" className="space-y-4">
                   <Card className="glass-card">
                     <CardHeader>
-                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Service Catalog</CardTitle>
-                      <CardDescription>Available RESTful endpoints for Sovereign Mesh access.</CardDescription>
+                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Sovereign API 2.0</CardTitle>
+                      <CardDescription>Direct integration endpoints for high-throughput merchants.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-0">
                       <div className="divide-y divide-white/5">
@@ -158,20 +166,60 @@ export default function ApiHubPage() {
                   </Card>
                 </TabsContent>
 
+                <TabsContent value="payments" className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Card className="glass-card border-l-4 border-l-primary">
+                      <CardHeader>
+                        <CardTitle className="text-xs uppercase font-bold text-primary">Paylink Flow</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <p className="text-[10px] text-muted-foreground leading-relaxed">
+                          Quickest integration. Redirect your customers to a NoorNexus hosted checkout page. No frontend SDK required.
+                        </p>
+                        <Badge variant="outline" className="text-[8px]">IDEAL FOR E-COMMERCE</Badge>
+                      </CardContent>
+                    </Card>
+                    <Card className="glass-card border-l-4 border-l-emerald-500">
+                      <CardHeader>
+                        <CardTitle className="text-xs uppercase font-bold text-emerald-500">Open-API Flow</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <p className="text-[10px] text-muted-foreground leading-relaxed">
+                          Fully customized checkout. Embed stablecoin payments directly into your app's native interface.
+                        </p>
+                        <Badge variant="outline" className="text-[8px]">IDEAL FOR SAAS & APPS</Badge>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+
                 <TabsContent value="security" className="space-y-4">
                   <Card className="glass-card bg-primary/5">
                     <CardHeader>
-                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">HMAC_V4 Handshake</CardTitle>
+                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Digital Trust Protocol</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        Every request must include the <code>X-Sovereign-Signature</code> header. This is a SHA256 HMAC of the (payload + timestamp) using your Client Secret.
-                      </p>
-                      <div className="bg-black/40 p-4 rounded-lg font-mono text-[10px] space-y-2 border border-white/5 overflow-x-auto">
-                        <p className="text-emerald-500">// Header Generation (Node.js)</p>
-                        <p className="text-white">const signature = crypto.createHmac('sha256', secret)</p>
-                        <p className="text-white">.update(payload + timestamp)</p>
-                        <p className="text-white">.digest('hex');</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
+                            <ShieldCheck className="size-3 text-emerald-500" /> On-Chain Screening
+                          </h4>
+                          <p className="text-[9px] text-muted-foreground leading-relaxed">
+                            Every wallet address is screened before transaction. Risky funds from sanctioned addresses are blocked instantly.
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
+                            <ArrowRightLeft className="size-3 text-primary" /> T+1 Settlement
+                          </h4>
+                          <p className="text-[9px] text-muted-foreground leading-relaxed">
+                            Stablecoins are converted and disbursed to your local settlement account within one business day.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="p-4 bg-black/40 rounded-lg border border-white/5 space-y-2">
+                         <p className="text-[10px] font-mono text-primary">// HMAC_V4 SHA256 Verification Required</p>
+                         <p className="text-[9px] text-muted-foreground font-mono">X-Sovereign-Signature: SHA256(payload + timestamp, client_secret)</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -180,11 +228,11 @@ export default function ApiHubPage() {
                 <TabsContent value="playground" className="space-y-4">
                    <Card className="glass-card">
                       <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase tracking-widest">Imperial Playground</CardTitle>
+                         <CardTitle className="text-sm font-headline uppercase tracking-widest">Connect Playground</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                          <div className="space-y-2">
-                            <Label className="text-[10px] font-bold text-muted-foreground">Payload (JSON)</Label>
+                            <Label className="text-[10px] font-bold text-muted-foreground">Request Payload (JSON)</Label>
                             <textarea 
                               className="w-full h-32 bg-background/50 border border-white/10 rounded-md p-3 font-mono text-xs focus:ring-1 focus:ring-primary outline-none" 
                               value={payload}
@@ -197,14 +245,14 @@ export default function ApiHubPage() {
                           className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary"
                         >
                             {playgroundLoading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
-                            Execute Test Handshake
+                            Execute Test Payment Handshake
                          </Button>
 
                          {playgroundResult && (
                            <div className="mt-6 space-y-4 animate-in fade-in zoom-in-95">
                               <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
                                 <CheckCircle2 className="size-4 text-emerald-500" />
-                                <span className="text-[10px] font-bold text-emerald-500 uppercase">Response: 200 OK</span>
+                                <span className="text-[10px] font-bold text-emerald-500 uppercase">Status: 200 SUCCESS</span>
                               </div>
                               <pre className="bg-black/40 p-4 rounded-lg font-mono text-[10px] border border-white/5 text-primary overflow-x-auto">
                                 {JSON.stringify(playgroundResult, null, 2)}
@@ -223,7 +271,7 @@ export default function ApiHubPage() {
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
                     <Cpu className="size-4" /> Nora-03 Integration AI
                   </CardTitle>
-                  <CardDescription className="text-[9px] uppercase font-bold text-muted-foreground">Expert Integration Guidance</CardDescription>
+                  <CardDescription className="text-[9px] uppercase font-bold text-muted-foreground">Expert Payment Integration Guidance</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col min-h-0 overflow-hidden space-y-4">
                   <ScrollArea className="flex-1 pr-4">
@@ -253,7 +301,7 @@ export default function ApiHubPage() {
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <Input 
-                         placeholder="How do I verify a signature?" 
+                         placeholder="How do I integrate Stablecoin Pay?" 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}
@@ -275,7 +323,7 @@ export default function ApiHubPage() {
                          <BookOpen className="size-3" /> Quick Solutions
                        </p>
                        <div className="flex flex-wrap gap-2">
-                         {['HMAC Setup', 'P2C Docs', 'Webhook Setup'].map((d, i) => (
+                         {['Paylink SDK', 'T+1 Settlement', 'Signature Guide'].map((d, i) => (
                            <Badge 
                             key={i} 
                             variant="secondary" 
@@ -294,12 +342,12 @@ export default function ApiHubPage() {
               <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
-                       <ShieldCheck className="size-3" /> Zero-Trust Ready
+                       <ShieldCheck className="size-3" /> Fraud Prevention
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[10px] text-muted-foreground leading-relaxed">
-                       All integrations are audited by Nora-01 for cryptographic compliance before mesh activation.
+                       Blockchain payments are irreversible, removing chargeback fraud. NoorNexus screens all on-chain activity for AML compliance.
                     </p>
                  </CardContent>
               </Card>

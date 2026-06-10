@@ -2,6 +2,7 @@
 /**
  * @fileOverview Nora-03 Imperial Integration Assistant.
  * Trained to guide TTPs into the Sovereign Mesh with 100% compliance.
+ * Now includes expertise in Unified Stablecoin Payments and RedotPay-style integration.
  */
 
 import {ai} from '@/ai/genkit';
@@ -9,7 +10,7 @@ import {z} from 'genkit';
 
 const IntegrationAssistantInputSchema = z.object({
   query: z.string().describe('The developer query or issue.'),
-  context: z.enum(['AUTHENTICATION', 'ENDPOINTS', 'HMAC_V4', 'WEBHOOKS', 'GENERAL']).default('GENERAL').describe('Technical context of the query.'),
+  context: z.enum(['AUTHENTICATION', 'ENDPOINTS', 'HMAC_V4', 'WEBHOOKS', 'STABLECOIN_PAYMENTS', 'GENERAL']).default('GENERAL').describe('Technical context of the query.'),
   history: z.array(z.object({
     role: z.enum(['user', 'model']),
     text: z.string(),
@@ -33,7 +34,7 @@ const integrationPrompt = ai.definePrompt({
   prompt: `You are Nora-03, the Imperial Integration Assistant for NoorNexus Sovereign OS.
 You are the gatekeeper for Third-Party Providers (TTPs) entering the Mission 400 Open Banking Gateway.
 
-CONTEXT: {{{context}}}
+CURRENT CONTEXT: {{{context}}}
 {{#if history}}
 HISTORY:
 {{#each history}}
@@ -43,12 +44,16 @@ HISTORY:
 
 DEVELOPER QUERY: {{{query}}}
 
-INTEGRATION PROTOCOL:
-1. Provide the fastest, most secure path for integration.
-2. If the query is about security, MANDATE the use of HMAC_V4 SHA256 signatures.
-3. Generate exact Node.js or Python code if requested, ensuring they follow Sovereign OS standards.
-4. Be helpful but maintain a high-security posture. If a developer's request seems insecure, warn them immediately.
-5. Provide actionable next steps. Do not leave the developer in doubt.`,
+IMPERIAL INTEGRATION PROTOCOL (UNIFIED STABLECOIN ERA):
+1. STABLECOIN PAYMENTS: If the query is about payments, explain our "Sovereign Connect" solution. We support USDC/USDT payments with T+1 settlement in BDT or USD.
+2. INTEGRATION FLOWS:
+   - Paylink: A quick redirect solution for e-commerce.
+   - Open-API: A fully integrated server-to-server checkout SDK.
+3. SECURITY (HMAC_V4 & RSA): MANDATE the use of SHA256 signatures. Explain that we use a 12-node cryptographic handshake to verify every transaction.
+4. ON-CHAIN CHECKS: Mention that we perform real-time wallet address screening to block risky funds and ensure AML compliance.
+5. P2C SETTLEMENT: Explain how businesses receive direct payouts while users pay in preferred stablecoins, reducing FX losses.
+
+TONE: Helpful, highly technical, authoritative, and focused on security-first integration.`,
 });
 
 export async function noraIntegrationAssistant(input: IntegrationAssistantInput): Promise<IntegrationAssistantOutput> {
