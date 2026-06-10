@@ -70,6 +70,7 @@ const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Imperial Portfolio", url: "/portfolio", icon: Briefcase },
   { title: "Imperial Flow Pay", url: "/flow-pay", icon: Zap },
+  { title: "GSMIFY Web3", url: "/gsmify-web3", icon: ShieldPlus },
   { title: "Imperial Export Hub", url: "/export-hub", icon: FileOutput },
   { title: "Shurukkha Hub", url: "/shurukkha", icon: Shield, badge: true },
   { title: "Imperial Store", url: "/rubel-store", icon: ShoppingBag },
