@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useRef, useEffect } from "react"
@@ -13,7 +12,7 @@ import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
   Menu, MessageSquare, Cpu, BookOpen, Layers, Info, CheckCircle2,
-  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, RefreshCcw
+  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, RefreshCcw, Star
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -82,7 +81,7 @@ export default function ApiHubPage() {
       const history = messages.map(m => ({ role: m.role, text: m.text }))
       const result = await noraIntegrationAssistant({
         query: userMsg,
-        context: "WEBHOOKS",
+        context: "STABLECOIN_PAYMENTS",
         history
       })
       
@@ -117,13 +116,14 @@ export default function ApiHubPage() {
             "X-R-AK": "4CA7B705-8EF5-4AC3-A0B6-9A4B84EF13B6",
             "X-R-KEY-VERSION": "1",
             "X-R-Signature": mockSignature
-          }
+          },
+          trust_escalation: "PENDING_TSBAC_AUDIT"
         }
       })
       setPlaygroundLoading(false)
       toast({
         title: "RESTful Handshake Successful",
-        description: "API 2.0 SHA256withRSA verified.",
+        description: "API 2.0 SHA256withRSA verified. Trust escalation pending.",
       })
     }, 1500)
   }
@@ -144,14 +144,14 @@ export default function ApiHubPage() {
                    Sovereign Connect Hub
                  </h2>
               </div>
-              <p className="text-muted-foreground">RESTful API 2.0 with Imperial SHA256withRSA Security Standard.</p>
+              <p className="text-muted-foreground">Phase 3: Unified Connect with Trust Score-Based Access (TSBAC).</p>
             </div>
             <div className="flex items-center gap-2">
-               <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2">
-                 <ShieldCheck className="size-4" /> VASP AUTHORIZED
+               <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2 bg-emerald-500/5">
+                 <Star className="size-4 fill-current" /> TRUST LEVEL: L4
                </Badge>
                <Badge variant="outline" className="border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
-                 <Lock className="size-4" /> AUTH: X-R-AK + RSA
+                 <Lock className="size-4" /> RSA AUTH ENABLED
                </Badge>
             </div>
           </header>
@@ -222,28 +222,28 @@ export default function ApiHubPage() {
                       <CardHeader>
                         <CardTitle className="text-lg font-headline flex items-center gap-2 uppercase tracking-tight">
                           <Info className="size-5 text-primary" />
-                          Flow Comparison
+                          Trust-Based Privilege Levels
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <Table>
                           <TableHeader className="bg-white/5">
                             <TableRow>
-                              <TableHead className="w-[150px] text-[10px] uppercase font-bold">Feature</TableHead>
-                              <TableHead className="text-[10px] uppercase font-bold text-primary">Paylink Flow</TableHead>
-                              <TableHead className="text-[10px] uppercase font-bold text-emerald-500">Open-API Flow</TableHead>
+                              <TableHead className="w-[150px] text-[10px] uppercase font-bold">Trust Level</TableHead>
+                              <TableHead className="text-[10px] uppercase font-bold text-primary">Privilege Description</TableHead>
+                              <TableHead className="text-[10px] uppercase font-bold text-emerald-500">Access Type</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody className="text-[11px]">
                             <TableRow>
-                              <TableCell className="font-bold">Core Flow</TableCell>
-                              <TableCell>Redirects to hosted page.</TableCell>
-                              <TableCell>Retrieves raw URL/QR directly.</TableCell>
+                              <TableCell className="font-bold">L1-L20 (New)</TableCell>
+                              <TableCell>Standard monitoring, lower limits.</TableCell>
+                              <TableCell>RESTRICTED</TableCell>
                             </TableRow>
                             <TableRow>
-                              <TableCell className="font-bold">Primary Use</TableCell>
-                              <TableCell>Standard E-commerce.</TableCell>
-                              <TableCell>Deeply customized Apps.</TableCell>
+                              <TableCell className="font-bold">L90+ (Sovereign)</TableCell>
+                              <TableCell>Instant settlement, L4 Shield Priority.</TableCell>
+                              <TableCell className="text-emerald-500 font-bold">UNRESTRICTED</TableCell>
                             </TableRow>
                           </TableBody>
                         </Table>
@@ -308,7 +308,7 @@ export default function ApiHubPage() {
                           <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg flex gap-3">
                             <AlertTriangle className="size-5 text-amber-500 shrink-0" />
                             <p className="text-[10px] text-amber-200">
-                              <b>Imperial Protocol:</b> The <code>secretKey</code> has been removed. All requests must be signed with your 2048-bit RSA Private Key.
+                              <b>Imperial Protocol:</b> Requests must be signed with your 2048-bit RSA Private Key. High Trust scores require 100% signature accuracy.
                             </p>
                           </div>
 
@@ -317,9 +317,6 @@ export default function ApiHubPage() {
                             <div className="p-4 bg-black/40 rounded-lg font-mono text-[10px] text-muted-foreground border border-white/5">
                               {`{http-method} {http-uri}\\n{appKey}.{timestamp}.{requestBody}`}
                             </div>
-                            <p className="text-[10px] text-muted-foreground italic">
-                              Example: POST /openapi/v2/order/create\n4CA7B...1763555...{"{...}"}
-                            </p>
                           </div>
 
                           <div className="space-y-4">
@@ -343,9 +340,6 @@ export default function ApiHubPage() {
                           <pre className="p-2 bg-black/40 rounded border border-white/5 text-[9px] font-mono text-muted-foreground whitespace-pre-wrap">
                             {`openssl genrsa -out private_key.pem 2048\nopenssl rsa -in private_key.pem -pubout -out public_key.pem`}
                           </pre>
-                          <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                            Upload public key to Developer Portal to get <code>appKey</code>.
-                          </p>
                         </CardContent>
                       </Card>
                     </div>
@@ -380,10 +374,6 @@ export default function ApiHubPage() {
                                  <div className="flex justify-between text-[10px]">
                                    <span className="text-muted-foreground">Max Retries</span>
                                    <span className="text-white">3 Attempts</span>
-                                 </div>
-                                 <div className="flex justify-between text-[10px]">
-                                   <span className="text-muted-foreground">Retry Interval</span>
-                                   <span className="text-white">180 Seconds</span>
                                  </div>
                                </div>
                              </div>
@@ -420,26 +410,13 @@ export default function ApiHubPage() {
                           <CardTitle className="text-xs font-headline uppercase text-emerald-500">Expected Response</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                          <p className="text-[10px] text-muted-foreground">Your server must return <code>SUCCESS</code> to acknowledge receipt.</p>
+                          <p className="text-[10px] text-muted-foreground">Your server must return <code>SUCCESS</code>.</p>
                           <pre className="p-3 bg-black/40 rounded border border-white/5 text-[9px] font-mono text-primary">
 {`{
   "code": "SUCCESS",
   "requestId": "uuid-..."
 }`}
                           </pre>
-                        </CardContent>
-                      </Card>
-
-                      <Card className="glass-card border-amber-500/20 bg-amber-500/5">
-                        <CardHeader>
-                           <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                             <AlertTriangle className="size-3" /> Idempotency
-                           </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                           <p className="text-[9px] text-muted-foreground leading-relaxed">
-                             Always check the <code>orderSn</code> to avoid duplicate processing of retried notifications.
-                           </p>
                         </CardContent>
                       </Card>
                     </div>
@@ -450,7 +427,7 @@ export default function ApiHubPage() {
                    <Card className="glass-card">
                       <CardHeader>
                          <CardTitle className="text-sm font-headline uppercase tracking-widest">API 2.0 Test Runner</CardTitle>
-                         <CardDescription>Sandbox URL: <code>https://api-sandbox.noornexus.mesh</code></CardDescription>
+                         <CardDescription>Sandbox with TSBAC Integration</CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-4">
                          <div className="space-y-2">
@@ -467,7 +444,7 @@ export default function ApiHubPage() {
                           className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary"
                         >
                             {playgroundLoading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
-                            Run RESTful API Test
+                            Run TSBAC Handshake
                          </Button>
 
                          {playgroundResult && (
@@ -500,7 +477,7 @@ export default function ApiHubPage() {
                       {messages.length === 0 && (
                         <div className="text-center py-10 space-y-3">
                           <MessageSquare className="size-10 text-muted-foreground/20 mx-auto" />
-                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting API 2.0 query...</p>
+                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting TSBAC query...</p>
                         </div>
                       )}
                       {messages.map((msg, i) => (
@@ -522,7 +499,7 @@ export default function ApiHubPage() {
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <Input 
-                         placeholder="How to verify webhooks?" 
+                         placeholder="How to increase trust score?" 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}
@@ -545,12 +522,12 @@ export default function ApiHubPage() {
               <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
-                       <ShieldCheck className="size-3" /> API 2.0 Trust
+                       <Star className="size-3 fill-current" /> Trust Rewards
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[10px] text-muted-foreground leading-relaxed">
-                       <code>X-R-AK</code> and <code>X-R-KEY-VERSION</code> are now required. <code>secretKey</code> is deprecated. Ensure you use SHA256withRSA.
+                       Maintain Level 90+ trust for 30 days to unlock <b>Instant Settlement</b> across all regional nodes.
                     </p>
                  </CardContent>
               </Card>

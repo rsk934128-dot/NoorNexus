@@ -4,7 +4,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid } from "lucide-react"
+import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid, Star, TrendingUp } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -42,7 +42,7 @@ export default function Home() {
       { text: "INITIALIZING HMAC_V4 BORDER...", time: 800 },
       { text: "VERIFYING NODE TRUST MESH...", time: 1600 },
       { text: "ESTABLISHING TREASURY LEDGER...", time: 2400 },
-      { text: "AI COMPLIANCE AGENT ONLINE", time: 3000 },
+      { text: "CALCULATING ECOSYSTEM TRUST...", time: 3000 },
       { text: "SOVEREIGN INFRASTRUCTURE READY", time: 3600 },
     ]
 
@@ -55,12 +55,12 @@ export default function Home() {
 
     const interval = setInterval(() => {
       const logs = [
-        "SHIELD SYNC: Rubelpay -> Secured",
+        "TRUST SYNC: Rubelpay -> Level 98",
         "SIGNATURE VERIFIED: SG-EDGE-01",
-        "SHIELD SYNC: SovereignPay -> Secured",
-        "P2P HANDSHAKE: Sirajganj -> UAE",
+        "TRUST SYNC: SovereignPay -> Level 92",
+        "PRIVILEGE ESCALATION: Rubelpay L4",
         "ADAPTIVE SHIELD: SCANNING MESH...",
-        "NODE HEARTBEAT: COLLECTIVE_OK"
+        "TSBAC HANDSHAKE: COLLECTIVE_OK"
       ]
       const log = logs[Math.floor(Math.random() * logs.length)]
       setBorderFeed(prev => [log, ...prev].slice(0, 5))
@@ -82,11 +82,10 @@ export default function Home() {
       setAuditResult(result)
       setIsDialogOpen(true)
       toast({
-        title: "Global Mesh Audit Complete",
-        description: `Status: ${result.auditStatus} | Score: ${result.securityScore}`,
+        title: "Empire Trust Audit Complete",
+        description: `Status: ${result.auditStatus} | System Trust: ${result.securityScore}`,
       })
     } catch (error: any) {
-      console.error("Audit UI Error:", error)
       toast({
         title: "Audit AI Error",
         description: error.message || "Failed to communicate with Imperial Treasury Auditor.",
@@ -130,27 +129,27 @@ export default function Home() {
                   <Menu className="size-6" />
                 </Button>
               </SidebarTrigger>
-              <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter">COLLECTIVE IMMUNITY</Badge>
+              <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter">TRUST MATRIX ACTIVE</Badge>
             </div>
             
             <div className="flex flex-col sm:flex-row justify-between items-start gap-6">
               <div className="space-y-4">
                 <div className="hidden md:flex items-center gap-2">
-                  <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">Operational OS v3</Badge>
-                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 glow-emerald uppercase tracking-tighter">Collective Immune System Active</Badge>
+                  <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">PHASE 3: UNIFIED CONNECT</Badge>
+                  <Badge variant="outline" className="border-amber-500/50 text-amber-500 glow-emerald uppercase tracking-tighter">Trust Score-Based Access Enabled</Badge>
                 </div>
                 <h2 className="text-3xl sm:text-4xl lg:text-6xl font-headline font-bold tracking-tighter uppercase">Command <span className="text-primary">Center.</span></h2>
                 <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                  Managing <span className="text-white font-mono">12</span> sovereign applications via Project 150 Shield SDK. 
-                  Global Immunity Level: <span className="text-emerald-500 font-bold">99.99%</span>.
+                  Managing <span className="text-white font-mono">12</span> applications via Phase 3 TSBAC Protocol. 
+                  Avg Ecosystem Trust: <span className="text-emerald-500 font-bold">95.4%</span>.
                 </p>
               </div>
               <div className="flex gap-4">
                  <div className="glass-card p-3 rounded-xl border border-primary/20 flex flex-col items-center min-w-[120px]">
-                    <p className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Rotation Status</p>
+                    <p className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Ecosystem Trust</p>
                     <div className="flex items-center gap-2">
-                       <RefreshCcw className="size-4 text-emerald-500 animate-spin-slow" />
-                       <span className="text-lg font-headline font-bold text-white">{keyRotation}s</span>
+                       <Star className="size-4 text-emerald-500 fill-current" />
+                       <span className="text-lg font-headline font-bold text-white">L4_GOLD</span>
                     </div>
                  </div>
               </div>
@@ -159,10 +158,10 @@ export default function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { label: "Active Nodes", value: activeNodes, sub: `of ${nodes.length} Provisoned`, icon: Server, color: "text-primary" },
-              { label: "Mesh Immunity", value: "99.99%", sub: "12 Apps Integrated", icon: ShieldCheck, color: "text-emerald-500" },
-              { label: "App Key Version", value: "v2.0", sub: "SHA256withRSA", icon: LayoutGrid, color: "text-primary" },
-              { label: "Threat Matrix", value: "STABLE", sub: "Collective Pulse OK", icon: Radar, color: "text-primary" },
+              { label: "Active Nodes", value: activeNodes, sub: "Mission 400 Ready", icon: Server, color: "text-primary" },
+              { label: "Trust Score", value: "95.4%", sub: "TSBAC Protocol", icon: Star, color: "text-emerald-500" },
+              { label: "Unified Apps", value: "12", sub: "Phase 3 Connected", icon: LayoutGrid, color: "text-primary" },
+              { label: "Settlement Rate", value: "FAST", sub: "Trust Escalated", icon: TrendingUp, color: "text-primary" },
             ].map((stat, i) => (
               <Card key={i} className="glass-card hover:border-primary/30 transition-all duration-300 group">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -183,17 +182,16 @@ export default function Home() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 font-headline text-base uppercase">
                     <Globe className="size-5 text-primary" />
-                    Collective Mesh Topology
+                    Cross-App Trust Topology
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="h-full relative overflow-hidden">
                   <div className="relative z-10 w-full h-full flex items-center justify-center">
                     <div className="size-48 sm:size-64 rounded-full border border-primary/20 animate-spin-slow absolute" />
-                    <div className="size-32 sm:size-48 rounded-full border border-primary/10 absolute" />
                     {nodes.map((node: any, i: number) => (
                       <div 
                         key={node.id}
-                        className={`absolute size-2 sm:size-3 rounded-full glow-primary transition-all duration-1000 ${node.status === 'Operational' ? 'bg-primary' : 'bg-destructive'}`}
+                        className={`absolute size-2 sm:size-3 rounded-full glow-primary transition-all duration-1000 ${node.load < 50 ? 'bg-emerald-500' : 'bg-primary'}`}
                         style={{ 
                           transform: `rotate(${(360 / (nodes.length || 1)) * i}deg) translateY(-80px) sm:translateY(-120px)` 
                         }}
@@ -209,10 +207,10 @@ export default function Home() {
               <Card className="glass-card border-l-4 border-l-emerald-500">
                 <CardHeader>
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
-                    <Zap className="size-4 text-emerald-500" />
-                    Immune System Feed
+                    <Star className="size-4 text-emerald-500" />
+                    Trust Matrix Feed
                   </CardTitle>
-                  <CardDescription className="text-xs">Live collective heartbeat.</CardDescription>
+                  <CardDescription className="text-xs">Dynamic privilege escalations.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {borderFeed.map((log, i) => (
@@ -227,8 +225,8 @@ export default function Home() {
                        disabled={auditing}
                        className="w-full bg-primary text-primary-foreground py-3 rounded font-bold text-[10px] uppercase tracking-widest h-auto glow-primary"
                      >
-                        {auditing ? <Loader2 className="animate-spin mr-2 size-3" /> : <Shield className="size-3 mr-2" />}
-                        {auditing ? "Analyzing Collective Mesh..." : "Audit Collective Mesh"}
+                        {auditing ? <Loader2 className="animate-spin mr-2 size-3" /> : <ShieldCheck className="size-3 mr-2" />}
+                        {auditing ? "Analyzing Trust Matrix..." : "Audit Ecosystem Trust"}
                      </Button>
                   </div>
                 </CardContent>
@@ -242,8 +240,8 @@ export default function Home() {
         <DialogContent className="glass-card border-primary/20 w-[95vw] sm:max-w-[600px] p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle className="font-headline text-xl sm:text-2xl flex items-center gap-2 text-primary uppercase">
-              <ShieldCheck className="size-6" />
-              Global Immunity Report
+              <Star className="size-6 text-emerald-500 fill-current" />
+              Ecosystem Trust Report
             </DialogTitle>
           </DialogHeader>
           
@@ -251,9 +249,9 @@ export default function Home() {
             <div className="space-y-6 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-white/5 rounded-lg border border-white/5">
-                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Immunity Status</p>
-                  <p className={`text-lg font-headline font-bold ${auditResult.auditStatus === 'STABLE' ? 'text-emerald-500' : 'text-amber-500'}`}>
-                    {auditResult.auditStatus}
+                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Trust Integrity</p>
+                  <p className="text-lg font-headline font-bold text-emerald-500 uppercase">
+                    HIGH_L4_ELITE
                   </p>
                 </div>
                 <div className="p-4 bg-white/5 rounded-lg border border-white/5 text-right">
@@ -262,7 +260,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="bg-black/40 p-4 rounded border border-white/5 font-mono text-[10px] sm:text-xs leading-relaxed text-muted-foreground max-h-[200px] overflow-y-auto">
-                {auditResult.detailedReport}
+                Ecosystem Trust Summary: Rubelpay and SovereignPay have maintained 100% signature consistency over the last 24 hours. Privilege escalation for Rubelpay to "Elite TSBAC" is recommended for zero-latency settlement.
               </div>
             </div>
           ) : (
@@ -273,7 +271,7 @@ export default function Home() {
           )}
           <DialogFooter>
             <Button onClick={() => setIsDialogOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12">
-              Seal & Re-Hardened Mesh
+              Confirm & Escalate Access
             </Button>
           </DialogFooter>
         </DialogContent>
