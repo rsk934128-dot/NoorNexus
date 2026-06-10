@@ -16,14 +16,20 @@
     {
       "id": "app-logo",
       "description": "Sovereign Digital Crest",
-      "imageUrl": "https://picsum.photos/seed/logo123/200/200",
+      "imageUrl": "https://picsum.photos/seed/sovereign-logo/200/200",
       "imageHint": "digital logo"
     },
     {
       "id": "og-image",
       "description": "Sovereign OS Social Preview",
-      "imageUrl": "https://picsum.photos/seed/logo123/1200/630",
+      "imageUrl": "https://picsum.photos/seed/sovereign-brand/1200/630",
       "imageHint": "digital branding"
+    },
+    {
+      "id": "favicon",
+      "description": "Browser tab icon",
+      "imageUrl": "https://picsum.photos/seed/sovereign-logo/32/32",
+      "imageHint": "abstract logo"
     }
   ]
 }

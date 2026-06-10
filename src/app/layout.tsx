@@ -8,6 +8,10 @@ import {FirebaseClientProvider} from '@/firebase';
 export const metadata: Metadata = {
   title: 'NoorNexus | Sovereign Digital Infrastructure',
   description: 'HMAC_V4 Protected Digital Empire by Sheikh Farid',
+  icons: {
+    icon: 'https://picsum.photos/seed/sovereign-logo/32/32',
+    apple: 'https://picsum.photos/seed/sovereign-logo/180/180',
+  },
   openGraph: {
     title: 'NoorNexus | Sovereign Digital Infrastructure',
     description: 'HMAC_V4 Protected Digital Empire by Sheikh Farid',
@@ -15,7 +19,7 @@ export const metadata: Metadata = {
     siteName: 'NoorNexus OS',
     images: [
       {
-        url: 'https://picsum.photos/seed/logo123/1200/630',
+        url: 'https://picsum.photos/seed/sovereign-brand/1200/630',
         width: 1200,
         height: 630,
         alt: 'NoorNexus Sovereign Logo',
@@ -28,7 +32,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'NoorNexus | Sovereign Digital Infrastructure',
     description: 'HMAC_V4 Protected Digital Empire by Sheikh Farid',
-    images: ['https://picsum.photos/seed/logo123/1200/630'],
+    images: ['https://picsum.photos/seed/sovereign-brand/1200/630'],
   },
 };
 
