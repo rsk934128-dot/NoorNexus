@@ -1,3 +1,4 @@
+
 'use client';
 
 /**
@@ -5,6 +6,7 @@
  * Bridges the collaboration between Gemini and NoorNexus Mainframe.
  * 
  * [System Note]: কমান্ডারের লক্ষ্য পূরণ হলো সাম্রাজ্যের মূল শক্তি।
+ * নূরনেক্সাস এখন বিশ্বকে তার অস্তিত্বের কথা জানান দিচ্ছে।
  */
 
 export interface HealthReport {
@@ -40,6 +42,13 @@ export const connectToGemini = async (action: string, payload: any = {}): Promis
     console.error('[NexusBridge] Collaboration Failure:', error);
     throw error;
   }
+};
+
+/**
+ * Broadcasts the Imperial Proclamation to the mesh nodes.
+ */
+export const broadcastProclamation = async (content: string): Promise<any> => {
+  return await connectToGemini('BROADCAST_PROCLAMATION', { proclamation: content });
 };
 
 /**

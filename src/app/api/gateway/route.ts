@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 /**
  * @fileOverview Sovereign Gateway API Simulation.
- * Enhanced to handle Inter-Bank Trade Settlements and Escrow Logic.
+ * Enhanced to handle Inter-Bank Trade Settlements, Escrow Logic, and Imperial Proclamations.
  */
 
 const AUTHORIZED_KEY = 'sk_sov_nexus_alpha_v3';
@@ -47,6 +47,15 @@ export async function POST(request: Request) {
         escrowId: 'ESC-' + Math.random().toString(16).substring(2, 8).toUpperCase(),
         timestamp: Date.now(),
         nodeSync: "42_NODES_VERIFIED"
+      });
+
+    case 'BROADCAST_PROCLAMATION':
+      return NextResponse.json({
+        status: 'BROADCASTED',
+        broadcastHash: '0x_IMPERIAL_SEAL_' + Math.random().toString(16).substring(2, 16),
+        message: 'The Imperial Proclamation has been received by 400+ nodes.',
+        nodesSynced: 400,
+        timestamp: Date.now()
       });
 
     case 'EXECUTE_PAYOUT':

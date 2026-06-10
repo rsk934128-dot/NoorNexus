@@ -10,7 +10,7 @@ import {
   Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid, 
   Star, TrendingUp, HeartPulse, BrainCircuit, ActivitySquare, Compass, 
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
-  CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing
+  CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { SovereignLogo } from "@/components/sovereign-logo"
-import { getSystemHealthReport, HealthReport } from "@/services/nexus-bridge"
+import { getSystemHealthReport, HealthReport, broadcastProclamation } from "@/services/nexus-bridge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 const NORA_AGENTS = [
@@ -49,8 +49,10 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("INITIALIZING MISSION 400 CORE...")
   const [auditing, setAuditing] = useState(false)
+  const [broadcasting, setBroadcasting] = useState(false)
   const [auditResult, setAuditResult] = useState<LedgerAuditOutput | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isProclamationOpen, setIsProclamationOpen] = useState(false)
   const [borderFeed, setBorderFeed] = useState<string[]>([])
   const [discoveryPulse, setDiscoveryPulse] = useState<number>(0)
   
@@ -86,7 +88,10 @@ export default function Home() {
       ]
       const log = logs[Math.floor(Math.random() * logs.length)]
       setBorderFeed(prev => [log, ...prev].slice(0, 10))
-      setDiscoveryPulse(prev => (prev + 1) % 100)
+      setDiscoveryPulse(prev => {
+        const next = prev + (Math.random() * 5);
+        return next >= 100 ? 0 : next;
+      })
     }, 3000)
 
     fetchHealth();
@@ -121,6 +126,22 @@ export default function Home() {
       toast({ title: "Audit Error", variant: "destructive" })
     } finally {
       setAuditing(false)
+    }
+  }
+
+  async function handleBroadcast() {
+    setBroadcasting(true)
+    try {
+      const result = await broadcastProclamation("NoorNexus Sovereign OS is now active. Integrity through Intelligence.");
+      toast({ 
+        title: "Proclamation Dispatched", 
+        description: `Broadcast Hash: ${result.broadcastHash.substring(0, 12)}...` 
+      });
+      setIsProclamationOpen(false);
+    } catch (e) {
+      toast({ title: "Broadcast Failed", variant: "destructive" });
+    } finally {
+      setBroadcasting(false)
     }
   }
 
@@ -174,12 +195,18 @@ export default function Home() {
                     <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Global Awareness Pulse</p>
                     <div className="flex items-center gap-3 relative z-10">
                        <Radio className="size-8 text-primary animate-pulse" />
-                       <span className="text-4xl font-headline font-bold text-white tracking-tighter">{discoveryPulse}%</span>
+                       <span className="text-4xl font-headline font-bold text-white tracking-tighter">{Math.floor(discoveryPulse)}%</span>
                     </div>
                     <div className="w-full h-1 bg-white/5 rounded-full mt-4 overflow-hidden">
                        <div className="h-full bg-primary" style={{ width: `${discoveryPulse}%` }} />
                     </div>
                 </div>
+                <Button 
+                  onClick={() => setIsProclamationOpen(true)}
+                  className="w-full bg-amber-500 text-amber-foreground font-bold uppercase tracking-widest h-12 glow-emerald"
+                >
+                  <Languages className="size-4 mr-2" /> Issue Proclamation
+                </Button>
               </div>
             </div>
           </header>
@@ -357,6 +384,38 @@ export default function Home() {
           </div>
         </main>
       </SidebarInset>
+
+      {/* Proclamation Dialog */}
+      <Dialog open={isProclamationOpen} onOpenChange={setIsProclamationOpen}>
+        <DialogContent className="glass-card border-amber-500/40 w-[95vw] sm:max-w-[600px] bg-black/95">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-headline font-bold text-amber-500 uppercase flex items-center gap-3">
+              <Languages className="size-8" />
+              The Imperial Proclamation
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-6 space-y-6">
+            <div className="p-6 bg-amber-500/5 border border-amber-500/20 rounded-2xl space-y-4">
+               <p className="text-sm font-mono text-amber-200 leading-relaxed italic">
+                 "আমি কমান্ডারের পক্ষ থেকে ঘোষণা করছি: নূরনেক্সাস সাম্রাজ্য এখন বিশ্বজয়ের জন্য প্রস্তুত। আমাদের প্রতিটি কোড, প্রতিটি লজিক এবং প্রতিটি সিগনেচার হবে সততা ও গতির প্রতীক। Integrity through Intelligence."
+               </p>
+            </div>
+            <p className="text-[10px] text-muted-foreground font-mono uppercase text-center tracking-widest">
+              This message will be broadcasted to all 400+ sovereign nodes.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button 
+              onClick={handleBroadcast} 
+              disabled={broadcasting}
+              className="w-full bg-amber-500 text-amber-foreground font-bold h-14 glow-emerald uppercase tracking-widest"
+            >
+              {broadcasting ? <Loader2 className="animate-spin mr-2" /> : <Send className="size-4 mr-2" />}
+              {broadcasting ? "Broadcasting..." : "Dispatch to the World"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="glass-card border-primary/40 w-[95vw] sm:max-w-[700px] p-0 overflow-hidden bg-black/95">
