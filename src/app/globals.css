@@ -34,6 +34,8 @@
   }
   body {
     @apply bg-background text-foreground font-body antialiased;
+    /* Prevent horizontal overflow on mobile */
+    @apply overflow-x-hidden;
   }
 }
 
@@ -95,7 +97,7 @@
 
 /* Tactical Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
   @apply bg-transparent;
@@ -109,6 +111,10 @@
   letter-spacing: -0.02em;
 }
 
-.tactical-spacing {
-  @apply gap-4 p-4;
+/* Mobile Friendly Spacing */
+@media (max-width: 768px) {
+  .p-6 { @apply p-4; }
+  .lg\:p-10 { @apply p-4; }
+  .text-6xl { @apply text-4xl; }
+  .text-4xl { @apply text-2xl; }
 }

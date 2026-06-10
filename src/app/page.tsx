@@ -2,10 +2,10 @@
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarInset } from "@/components/ui/sidebar"
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Zap, Globe, Cpu, AlertTriangle, Activity, Database, Landmark, Radar, Lock, FileText, CheckCircle, AlertCircle, HardDrive, Terminal, Layers, Box, TestTube, Microscope } from "lucide-react"
+import { Shield, Zap, Globe, Cpu, AlertTriangle, Activity, Database, Landmark, Radar, Lock, FileText, CheckCircle, AlertCircle, HardDrive, Terminal, Layers, Box, TestTube, Microscope, Menu } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -54,7 +54,6 @@ export default function Home() {
       }))
     }, 2000)
 
-    // Simulate Automated Test Execution
     setTimeout(() => setTestStatus("RUNNING"), 5000)
     setTimeout(() => setTestStatus("PASSED"), 8000)
 
@@ -89,17 +88,17 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-10 space-y-8">
-        <div className="size-24 bg-primary/10 rounded-3xl flex items-center justify-center animate-pulse border border-primary/20 shadow-[0_0_80px_rgba(0,150,255,0.15)] relative">
-          <Lock className="size-12 text-primary" />
+      <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-6 sm:p-10 space-y-8">
+        <div className="size-20 sm:size-24 bg-primary/10 rounded-3xl flex items-center justify-center animate-pulse border border-primary/20 shadow-[0_0_80px_rgba(0,150,255,0.15)] relative">
+          <Lock className="size-10 sm:size-12 text-primary" />
           <div className="absolute inset-0 border-2 border-primary/5 rounded-3xl animate-ping" />
         </div>
         <div className="space-y-4 text-center">
           <div className="flex flex-col gap-1">
-             <p className="text-primary font-headline text-xl font-bold tracking-widest uppercase">NoorNexus</p>
-             <p className="text-muted-foreground font-mono text-[10px] tracking-[0.4em] uppercase">{statusText}</p>
+             <p className="text-primary font-headline text-lg sm:text-xl font-bold tracking-widest uppercase">NoorNexus</p>
+             <p className="text-muted-foreground font-mono text-[8px] sm:text-[10px] tracking-[0.4em] uppercase">{statusText}</p>
           </div>
-          <div className="w-80 h-1 bg-muted rounded-full overflow-hidden mx-auto">
+          <div className="w-64 sm:w-80 h-1 bg-muted rounded-full overflow-hidden mx-auto">
             <div className="h-full bg-primary animate-progress" />
           </div>
         </div>
@@ -111,31 +110,40 @@ export default function Home() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto w-full">
-          <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-8 relative">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-6 sm:space-y-8 max-w-7xl mx-auto w-full">
+          <header className="flex flex-col gap-6 border-b border-white/5 pb-8 relative">
+            <div className="flex items-center justify-between md:hidden">
+              <SidebarTrigger>
+                <Button variant="ghost" size="icon" className="text-primary">
+                  <Menu className="size-6" />
+                </Button>
+              </SidebarTrigger>
+              <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter">MISSION 400</Badge>
+            </div>
+            
             <div className="space-y-4">
-              <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2">
                 <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">Operational OS v3</Badge>
                 <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 glow-emerald uppercase tracking-tighter">Mission 400 Active</Badge>
               </div>
-              <h2 className="text-6xl font-headline font-bold tracking-tighter">Sovereign <span className="text-primary">Intelligence.</span></h2>
-              <p className="text-muted-foreground max-w-2xl text-lg leading-relaxed">
+              <h2 className="text-3xl sm:text-4xl lg:text-6xl font-headline font-bold tracking-tighter">Sovereign <span className="text-primary">Intelligence.</span></h2>
+              <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
                 High-performance cryptographic defense and treasury mesh. Optimizing for <span className="text-white font-mono">Parallel Execution</span> and <span className="text-white font-mono">Xmx4G</span> allocation.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="glass-card p-5 rounded-xl text-right border-l-4 border-l-primary">
-                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Global Throughput</p>
-                <p className="text-3xl font-headline font-bold text-primary">1.4M <span className="text-xs font-mono">TX/H</span></p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="glass-card p-4 sm:p-5 rounded-xl text-right border-l-4 border-l-primary">
+                <p className="text-[8px] sm:text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Global Throughput</p>
+                <p className="text-2xl sm:text-3xl font-headline font-bold text-primary">1.4M <span className="text-xs font-mono">TX/H</span></p>
               </div>
-              <div className="glass-card p-5 rounded-xl text-right border-l-4 border-l-emerald-500">
-                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Border Integrity</p>
-                <p className="text-3xl font-headline font-bold text-emerald-500">99.99%</p>
+              <div className="glass-card p-4 sm:p-5 rounded-xl text-right border-l-4 border-l-emerald-500">
+                <p className="text-[8px] sm:text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Border Integrity</p>
+                <p className="text-2xl sm:text-3xl font-headline font-bold text-emerald-500">99.99%</p>
               </div>
             </div>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { label: "Border Guard", value: "LOCKDOWN", sub: "HMAC_V4 Active", icon: Shield, color: "text-primary" },
               { label: "Threat Matrix", value: "ZERO", sub: "Last Audit: 12ms", icon: Radar, color: "text-destructive" },
@@ -148,79 +156,58 @@ export default function Home() {
                   <stat.icon className={`size-4 ${stat.color} transition-transform group-hover:scale-110`} />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-headline font-bold tracking-tight">{stat.value}</div>
+                  <div className="text-xl sm:text-2xl font-headline font-bold tracking-tight">{stat.value}</div>
                   <p className="text-[10px] text-muted-foreground font-mono mt-1 opacity-70">{stat.sub}</p>
                 </CardContent>
               </Card>
             ))}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
             <div className="lg:col-span-2 space-y-6">
-              <Card className="glass-card border-l-4 border-l-primary scan-effect relative overflow-hidden h-[450px]">
+              <Card className="glass-card border-l-4 border-l-primary scan-effect relative overflow-hidden h-[300px] sm:h-[450px]">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 font-headline">
+                  <CardTitle className="flex items-center gap-2 font-headline text-sm sm:text-base">
                     <Globe className="size-5 text-primary" />
                     Digital Border Map
                   </CardTitle>
-                  <CardDescription>Visualizing sovereign encrypted routes and node connections.</CardDescription>
+                  <CardDescription className="text-xs">Visualizing sovereign encrypted routes.</CardDescription>
                 </CardHeader>
                 <CardContent className="h-full">
                   <div className="absolute inset-0 opacity-10 bg-[url('https://picsum.photos/seed/map3/1200/800')] bg-cover" />
-                  <div className="relative z-10 w-full h-full p-8 flex items-center justify-center">
-                    <div className="size-64 rounded-full border border-primary/20 animate-spin-slow absolute" />
-                    <div className="size-48 rounded-full border border-primary/10 absolute" />
-                    <div className="size-4 bg-primary rounded-full animate-ping shadow-[0_0_20px_rgba(0,150,255,0.8)]" />
-                    
-                    <div className="absolute top-1/4 left-1/4">
-                       <div className="size-2 bg-emerald-500 rounded-full glow-emerald" />
-                       <p className="text-[8px] font-mono mt-1 text-emerald-500/70 uppercase">SG-Edge-01</p>
-                    </div>
-                    <div className="absolute bottom-1/3 right-1/4">
-                       <div className="size-2 bg-emerald-500 rounded-full glow-emerald" />
-                       <p className="text-[8px] font-mono mt-1 text-emerald-500/70 uppercase">LON-Relay-04</p>
-                    </div>
-                    
-                    <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                       <path d="M 25% 25% Q 50% 50% 75% 66%" stroke="var(--primary)" strokeWidth="1" strokeDasharray="5 5" fill="transparent" className="animate-pulse" />
-                    </svg>
+                  <div className="relative z-10 w-full h-full p-4 sm:p-8 flex items-center justify-center">
+                    <div className="size-48 sm:size-64 rounded-full border border-primary/20 animate-spin-slow absolute" />
+                    <div className="size-32 sm:size-48 rounded-full border border-primary/10 absolute" />
+                    <div className="size-3 sm:size-4 bg-primary rounded-full animate-ping shadow-[0_0_20px_rgba(0,150,255,0.8)]" />
                   </div>
                 </CardContent>
               </Card>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                  <Card className="glass-card bg-muted/20 border-white/5">
                     <CardHeader className="pb-2">
-                       <CardTitle className="text-xs uppercase font-bold text-muted-foreground flex items-center gap-2">
+                       <CardTitle className="text-[10px] sm:text-xs uppercase font-bold text-muted-foreground flex items-center gap-2">
                           <Activity className="size-3" />
                           Consensus Stream
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                       <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-500/70">
+                       <div className="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono text-emerald-500/70">
                           <div className="size-1 bg-emerald-500 rounded-full" />
-                          LEDGER_SYNC_COMPLETE: EPOCH_402
+                          LEDGER_SYNC_COMPLETE
                        </div>
-                       <div className="flex items-center gap-2 text-[10px] font-mono text-primary/70">
+                       <div className="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono text-primary/70">
                           <div className="size-1 bg-primary rounded-full" />
-                          TREASURY_MESH_STABLE: 12/12
-                       </div>
-                       <div className="flex items-center gap-2 text-[10px] font-mono text-amber-500/70">
-                          <div className="size-1 bg-amber-500 rounded-full" />
-                          AI_COMPLIANCE_RUNNING...
+                          TREASURY_MESH_STABLE
                        </div>
                     </CardContent>
                  </Card>
                  <Card className="glass-card border-primary/20 bg-primary/5">
                     <CardHeader className="pb-2">
-                       <CardTitle className="text-xs font-bold text-primary uppercase">Kernel Diagnostics</CardTitle>
+                       <CardTitle className="text-[10px] sm:text-xs font-bold text-primary uppercase">Kernel Diagnostics</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                       <div className="flex justify-between items-center text-[10px] font-mono">
-                          <span className="text-muted-foreground uppercase">Parallel Workers</span>
-                          <span className="text-primary font-bold">{performance.workers} Active</span>
-                       </div>
-                       <div className="flex justify-between items-center text-[10px] font-mono">
+                       <div className="flex justify-between items-center text-[9px] sm:text-[10px] font-mono">
                           <span className="text-muted-foreground uppercase">Daemon Memory</span>
                           <span className="text-emerald-500 font-bold">{performance.ram.toFixed(1)}G / 4G</span>
                        </div>
@@ -230,157 +217,53 @@ export default function Home() {
                     </CardContent>
                  </Card>
               </div>
-
-              <Card className="glass-card border-amber-500/20 bg-amber-500/5">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-xs uppercase font-bold text-amber-500 flex items-center gap-2">
-                    <Microscope className="size-4" />
-                    Automated Integrity Audit
-                  </CardTitle>
-                  <CardDescription className="text-[10px] uppercase">Robolectric Test Suite</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="p-4 bg-black/40 rounded-lg border border-white/5 space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-mono text-muted-foreground">ExampleRobolectricTest</span>
-                      <Badge variant={testStatus === "PASSED" ? "default" : testStatus === "RUNNING" ? "secondary" : "outline"} className={testStatus === "PASSED" ? "bg-emerald-500" : ""}>
-                        {testStatus}
-                      </Badge>
-                    </div>
-                    <div className="space-y-2 font-mono text-[9px]">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Target SDK:</span>
-                        <span className="text-primary">36</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Assertion:</span>
-                        <span className="text-white">context.getString(R.string.app_name)</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Expected:</span>
-                        <span className="text-emerald-500">"GSMIFY Sports"</span>
-                      </div>
-                    </div>
-                    {testStatus === "PASSED" && (
-                      <div className="pt-2 flex items-center gap-2 text-emerald-500 text-[10px] font-bold">
-                        <CheckCircle className="size-3" />
-                        IDENTITY VERIFIED: CONSISTENCY MATCH 100%
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
             </div>
 
             <div className="space-y-6">
-              <Card className="glass-card border-primary/20 bg-card/60">
-                <CardHeader className="pb-2">
-                   <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2">
-                      <Box className="size-4" />
-                      Imperial Tech Manifest
-                   </CardTitle>
-                   <CardDescription className="text-[9px] uppercase">Loaded Sovereign Modules</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                   <div className="grid grid-cols-2 gap-2 text-[9px] font-mono">
-                      <div className="p-2 bg-black/40 rounded border border-white/5">
-                        <p className="text-muted-foreground">Kotlin</p>
-                        <p className="text-white">v2.2.10</p>
-                      </div>
-                      <div className="p-2 bg-black/40 rounded border border-white/5">
-                        <p className="text-muted-foreground">AGP</p>
-                        <p className="text-white">v9.1.1</p>
-                      </div>
-                      <div className="p-2 bg-black/40 rounded border border-white/5">
-                        <p className="text-muted-foreground">Firebase</p>
-                        <p className="text-white">v34.12.0</p>
-                      </div>
-                      <div className="p-2 bg-black/40 rounded border border-white/5">
-                        <p className="text-muted-foreground">Media3</p>
-                        <p className="text-white">v1.3.1</p>
-                      </div>
-                      <div className="p-2 bg-black/40 rounded border border-white/5">
-                        <p className="text-muted-foreground">Room</p>
-                        <p className="text-white">v2.7.0</p>
-                      </div>
-                      <div className="p-2 bg-black/40 rounded border border-white/5">
-                        <p className="text-muted-foreground">Robolectric</p>
-                        <p className="text-white">v4.16.1</p>
-                      </div>
-                      <div className="p-2 bg-black/40 rounded border border-white/5">
-                        <p className="text-muted-foreground">Roborazzi</p>
-                        <p className="text-white">v1.59.0</p>
-                      </div>
-                   </div>
-                </CardContent>
-              </Card>
-
-              <Card className="glass-card border-destructive/20 overflow-hidden relative">
-                <CardHeader>
-                   <CardTitle className="text-xs uppercase font-bold text-destructive flex items-center gap-2">
-                      <Terminal className="size-4" />
-                      Runtime & Build Protocol
-                   </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                   <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-muted-foreground leading-relaxed">
-                      <p className="text-primary">&gt; parallel_mode: incubating</p>
-                      <p className="text-emerald-500">&gt; config_cache: hit</p>
-                      <p className="text-amber-500">&gt; workers: {performance.workers} (max: 4)</p>
-                      <p className="text-primary/70">&gt; libs: compose, room, media3, robolectric</p>
-                      <p className="animate-pulse">&gt; jvm_args: -Xmx4g -UTF-8</p>
-                   </div>
-                   <div className="flex flex-col gap-2">
-                      <div className="flex justify-between text-[10px] font-mono">
-                         <span className="text-muted-foreground">CORE STACK</span>
-                         <span className="text-primary">OPTIMIZED</span>
-                      </div>
-                      <div className="h-1 bg-muted rounded-full overflow-hidden">
-                         <div className="h-full bg-primary transition-all duration-500" style={{ width: `${performance.cpu}%` }} />
-                      </div>
-                   </div>
-                </CardContent>
-              </Card>
-
               <Card className="glass-card">
                 <CardHeader>
-                  <CardTitle className="font-headline">Treasury Pulse</CardTitle>
-                  <CardDescription>Real-time cross-ledger liquidity.</CardDescription>
+                  <CardTitle className="font-headline text-base">Treasury Pulse</CardTitle>
+                  <CardDescription className="text-xs">Real-time liquidity.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {[
                     { label: "Sovereign-BDT", amount: "1.4B", health: 98, color: "bg-emerald-500" },
                     { label: "Gold-Reserve", amount: "42k Oz", health: 100, color: "bg-amber-500" },
-                    { label: "Mesh-Credit", amount: "250M", health: 82, color: "bg-primary" },
                   ].map((asset, i) => (
                     <div key={i} className="space-y-2">
                       <div className="flex justify-between items-end">
-                        <span className="text-xs font-bold text-muted-foreground uppercase">{asset.label}</span>
-                        <span className="text-sm font-headline font-bold">{asset.amount}</span>
+                        <span className="text-[10px] font-bold text-muted-foreground uppercase">{asset.label}</span>
+                        <span className="text-xs sm:text-sm font-headline font-bold">{asset.amount}</span>
                       </div>
                       <div className="h-1 bg-muted rounded-full overflow-hidden">
                         <div className={`h-full ${asset.color} transition-all duration-1000`} style={{ width: `${asset.health}%` }} />
                       </div>
                     </div>
                   ))}
-                  <div className="pt-4 border-t border-white/5 space-y-3">
-                     <div className="flex justify-between text-[10px] font-mono">
-                        <span className="text-muted-foreground">Queue Depth:</span>
-                        <span className="text-primary">124 TX</span>
-                     </div>
+                  <div className="pt-4 border-t border-white/5">
                      <Button 
                        onClick={handleExecuteAudit}
                        disabled={auditing}
-                       className="w-full bg-primary text-primary-foreground py-2.5 rounded font-bold text-[10px] uppercase tracking-widest glow-primary hover:opacity-90 transition-all h-auto"
+                       className="w-full bg-primary text-primary-foreground py-3 rounded font-bold text-[10px] uppercase tracking-widest h-auto"
                      >
-                        {auditing ? (
-                          <div className="flex items-center gap-2">
-                            <Zap className="size-3 animate-spin" />
-                            Auditing Ledger...
-                          </div>
-                        ) : "Execute Ledger Audit"}
+                        {auditing ? "Auditing..." : "Execute Ledger Audit"}
                      </Button>
                   </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="glass-card border-amber-500/20 bg-amber-500/5">
+                <CardHeader className="pb-2">
+                   <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
+                      <Terminal className="size-4" />
+                      Build Protocol
+                   </CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[8px] text-muted-foreground leading-relaxed">
+                   <p className="text-primary">{'>'} parallel_mode: incubating</p>
+                   <p className="text-emerald-500">{'>'} config_cache: hit</p>
+                   <p className="text-amber-500">{'>'} workers: {performance.workers}</p>
+                   <p className="animate-pulse">{'>'} jvm_args: -Xmx4g</p>
                 </CardContent>
               </Card>
             </div>
@@ -389,59 +272,36 @@ export default function Home() {
       </SidebarInset>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="glass-card border-primary/20 sm:max-w-[600px]">
+        <DialogContent className="glass-card border-primary/20 w-[95vw] sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="font-headline text-2xl flex items-center gap-2 text-primary">
+            <DialogTitle className="font-headline text-xl sm:text-2xl flex items-center gap-2 text-primary">
               <FileText className="size-6" />
-              Sovereign Ledger Audit Report
+              Audit Report
             </DialogTitle>
-            <DialogDescription className="text-muted-foreground font-mono text-xs uppercase tracking-widest">
-              NoorNexus Treasury Compliance Layer
-            </DialogDescription>
           </DialogHeader>
           
           {auditResult && (
             <div className="space-y-6 py-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-white/5 rounded-lg border border-white/5">
-                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Audit Status</p>
-                  <div className="flex items-center gap-2">
-                    {auditResult.auditStatus === 'STABLE' ? <CheckCircle className="size-4 text-emerald-500" /> : <AlertCircle className="size-4 text-amber-500" />}
-                    <p className={`text-lg font-headline font-bold ${auditResult.auditStatus === 'STABLE' ? 'text-emerald-500' : 'text-amber-500'}`}>
-                      {auditResult.auditStatus}
-                    </p>
-                  </div>
+                <div className="p-3 sm:p-4 bg-white/5 rounded-lg border border-white/5">
+                  <p className="text-[8px] sm:text-[10px] uppercase font-bold text-muted-foreground mb-1">Status</p>
+                  <p className={`text-sm sm:text-lg font-headline font-bold ${auditResult.auditStatus === 'STABLE' ? 'text-emerald-500' : 'text-amber-500'}`}>
+                    {auditResult.auditStatus}
+                  </p>
                 </div>
-                <div className="p-4 bg-white/5 rounded-lg border border-white/5">
-                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Security Score</p>
-                  <p className="text-3xl font-headline font-bold text-primary">{auditResult.securityScore}%</p>
+                <div className="p-3 sm:p-4 bg-white/5 rounded-lg border border-white/5">
+                  <p className="text-[8px] sm:text-[10px] uppercase font-bold text-muted-foreground mb-1">Score</p>
+                  <p className="text-xl sm:text-3xl font-headline font-bold text-primary">{auditResult.securityScore}%</p>
                 </div>
               </div>
-
-              <div className="space-y-2">
-                <p className="text-[10px] uppercase font-bold text-primary tracking-widest">Detailed Findings</p>
-                <div className="bg-black/40 p-4 rounded border border-white/5 font-mono text-xs leading-relaxed text-muted-foreground">
-                  {auditResult.detailedReport}
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-[10px] uppercase font-bold text-emerald-500 tracking-widest">Adjustment Protocol</p>
-                <div className="grid grid-cols-1 gap-2">
-                  {auditResult.recommendations.map((rec, i) => (
-                    <div key={i} className="flex items-center gap-3 p-2 bg-emerald-500/5 border border-emerald-500/10 rounded text-xs">
-                      <div className="size-1.5 bg-emerald-500 rounded-full" />
-                      {rec}
-                    </div>
-                  ))}
-                </div>
+              <div className="bg-black/40 p-3 sm:p-4 rounded border border-white/5 font-mono text-[10px] sm:text-xs leading-relaxed text-muted-foreground">
+                {auditResult.detailedReport}
               </div>
             </div>
           )}
-
           <DialogFooter>
-            <Button onClick={() => setIsDialogOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary">
-              Confirm & Re-seal Ledger
+            <Button onClick={() => setIsDialogOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12">
+              Confirm & Re-seal
             </Button>
           </DialogFooter>
         </DialogContent>

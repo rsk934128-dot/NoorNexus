@@ -3,7 +3,7 @@
 
 import { useState, useMemo, useEffect } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarInset } from "@/components/ui/sidebar"
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -24,7 +24,8 @@ import {
   Globe,
   Radio,
   ExternalLink,
-  RefreshCw
+  RefreshCw,
+  Menu
 } from "lucide-react"
 import {
   Dialog,
@@ -46,7 +47,6 @@ const SIGNAL_DATA = [
   { time: '10:10', latency: 8, load: 48 },
   { time: '10:15', latency: 11, load: 60 },
   { time: '10:20', latency: 14, load: 55 },
-  { time: '10:25', latency: 9, load: 42 },
 ]
 
 const DEFAULT_IMPERIAL_UPLINK = "https://www.youtube.com/live/ntjJKCjNmcE?si=ICwtstbtDqctyGMF"
@@ -56,7 +56,6 @@ export default function WorldCupPage() {
   const db = useFirestore()
   const { user } = useUser()
   
-  // লজিক: শুধুমাত্র LIVE এবং UPCOMING ম্যাচগুলো দেখাবে। FINISHED ম্যাচগুলো লিস্ট থেকে নিজে থেকেই সরে যাবে।
   const matchesQuery = useMemo(() => 
     query(
       collection(db, "sports_matches"), 
@@ -85,20 +84,17 @@ export default function WorldCupPage() {
       setSelectedServer(servers[0])
     }
     
-    // যখনই ফায়ারবেস থেকে নতুন ডেটা আসবে, একটিভ ম্যাচ আপডেট হবে
     if (matches.length > 0) {
       if (!activeMatch) {
         const liveMatch = matches.find(m => m.status === 'LIVE') || matches[0]
         setActiveMatch(liveMatch)
       } else {
-        // যদি বর্তমান একটিভ ম্যাচটি ডাটাবেস থেকে রিমুভ হয়ে যায় (এক্সপায়ার), তবে নতুন একটি সিলেক্ট করবে
         const stillExists = matches.find(m => m.id === activeMatch.id)
         if (!stillExists) {
           setActiveMatch(matches[0])
         }
       }
     } else if (!matchesLoading && !activeMatch) {
-      // যদি কোনো ডাইনামিক ডাটা না থাকে, তবে ডিফল্ট ইম্পেরিয়াল ফিড দেখাবে
       setActiveMatch({
         id: "imperial-default",
         home: "SOVEREIGN",
@@ -151,7 +147,6 @@ export default function WorldCupPage() {
     } catch (error) {
       toast({
         title: "Neural Link Failed",
-        description: "Nora-AI is currently optimizing mesh nodes. Try later.",
         variant: "destructive"
       })
     } finally {
@@ -170,306 +165,186 @@ export default function WorldCupPage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full">
-          <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-1">
-              <div className="flex items-center gap-3">
-                <div className="size-12 bg-primary/20 rounded-2xl flex items-center justify-center border border-primary/30 glow-primary">
-                  <Trophy className="size-7 text-primary animate-pulse" />
-                </div>
-                <div>
-                  <h2 className="text-4xl font-headline font-bold uppercase tracking-tight text-primary">GSMIFY SOVEREIGN SPORTS</h2>
-                  <div className="flex items-center gap-2">
-                    <p className="text-[11px] text-muted-foreground font-mono tracking-[0.5em] uppercase font-bold">MISSION 400 | WORLD CUP RELAY</p>
-                    <Badge variant="outline" className="text-[9px] border-emerald-500/30 text-emerald-500 flex items-center gap-1">
-                      <RefreshCw className="size-2 animate-spin" /> LIVE SYNC ACTIVE
-                    </Badge>
-                  </div>
+        <main className="p-4 sm:p-6 lg:p-10 space-y-6 sm:space-y-8 max-w-[1600px] mx-auto w-full">
+          <header className="flex flex-col gap-6">
+            <div className="flex items-center justify-between md:hidden">
+              <SidebarTrigger>
+                <Button variant="ghost" size="icon" className="text-primary">
+                  <Menu className="size-6" />
+                </Button>
+              </SidebarTrigger>
+              <Badge variant="outline" className="border-primary/30 text-primary">GSMIFY L4</Badge>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <div className="size-10 sm:size-12 bg-primary/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-primary/30 glow-primary shrink-0">
+                <Trophy className="size-6 sm:size-7 text-primary" />
+              </div>
+              <div className="min-w-0">
+                <h2 className="text-xl sm:text-4xl font-headline font-bold uppercase tracking-tight text-primary truncate">SOVEREIGN SPORTS</h2>
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <p className="text-[8px] sm:text-[11px] text-muted-foreground font-mono tracking-widest uppercase truncate">MISSION 400 | WORLD CUP</p>
                 </div>
               </div>
-            </div>
-            <div className="flex gap-4">
-               <Badge className="bg-primary/10 text-primary border-primary/20 px-5 py-2.5 h-auto gap-2 font-bold text-sm">
-                  <Radio className="size-4 animate-pulse text-destructive" />
-                  MESH LATENCY: {selectedServer?.ping || "12ms"}
-               </Badge>
             </div>
           </header>
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-            <div className="xl:col-span-3 space-y-6">
+            <div className="xl:col-span-3 space-y-6 order-1">
               <Card className="glass-card border-white/5 overflow-hidden relative group">
-                <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 bg-white/2 py-4 px-6">
-                  <div className="flex items-center gap-4">
-                    <Badge className={`text-[10px] font-bold uppercase ${activeMatch?.status === 'LIVE' ? 'bg-destructive animate-pulse' : 'bg-muted text-muted-foreground'}`}>
+                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 bg-white/2 py-3 px-4 sm:px-6 gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Badge className={`text-[8px] sm:text-[10px] font-bold uppercase ${activeMatch?.status === 'LIVE' ? 'bg-destructive animate-pulse' : 'bg-muted'}`}>
                       {activeMatch?.status || 'AWAITING'}
                     </Badge>
-                    <span className="text-lg font-headline font-bold uppercase tracking-widest text-white">
-                      {activeMatch ? `${activeMatch.home} vs ${activeMatch.away}` : "SELECT A LIVE FEED"}
+                    <span className="text-sm sm:text-lg font-headline font-bold uppercase tracking-widest text-white truncate">
+                      {activeMatch ? `${activeMatch.home} vs ${activeMatch.away}` : "SELECT FEED"}
                     </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => setPlayerMode(playerMode === 'GATEWAY' ? 'EMBED' : 'GATEWAY')}
-                      className="text-[10px] border-white/10 hover:border-primary/50 gap-2 h-8"
-                    >
-                      <Monitor className="size-3" />
-                      {playerMode === 'GATEWAY' ? "EMBED MODE" : "GATEWAY MODE"}
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-0 aspect-video bg-black relative flex items-center justify-center overflow-hidden">
-                  {playerMode === 'EMBED' && (activeMatch?.uplink) ? (
-                    <div className="w-full h-full bg-black">
-                      <iframe 
-                        width="100%" 
-                        height="100%" 
-                        src={`https://www.youtube.com/embed/${getYoutubeId(activeMatch.uplink)}?autoplay=1&mute=0`}
-                        title="Sovereign Stream Player"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                        className="w-full h-full"
-                      ></iframe>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="absolute inset-0 opacity-20 bg-[url('https://picsum.photos/seed/stadium-mesh/1200/800')] bg-cover scale-105" />
-                      <div className="relative z-10 flex flex-col items-center gap-8 text-center px-6">
-                        <div className="size-32 rounded-full border-4 border-primary/30 flex items-center justify-center animate-spin-slow bg-primary/5 backdrop-blur-sm">
-                          <Youtube className="size-16 text-primary/50" />
-                        </div>
-                        <div className="space-y-3">
-                           <h3 className="text-3xl font-headline font-bold text-white uppercase tracking-tighter">Imperial Stream Gateway</h3>
-                           <p className="text-sm text-muted-foreground font-mono uppercase tracking-widest">
-                             {activeMatch ? `Target: ${activeMatch.home} vs ${activeMatch.away}` : "Select a match from the feed gallery"}
-                           </p>
-                        </div>
-                        <Button 
-                          onClick={handleLaunchUplink}
-                          disabled={!activeMatch}
-                          className="bg-primary text-primary-foreground font-bold uppercase tracking-widest px-12 h-16 glow-primary flex items-center gap-4 text-lg hover:scale-105 transition-transform"
-                        >
-                          <Zap className="size-6" />
-                          Establish Secure Handshake
-                        </Button>
-                      </div>
-                    </>
-                  )}
-                </CardContent>
-                <div className="bg-muted/30 p-5 border-t border-white/5 flex flex-wrap gap-5 items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <span className="text-[11px] font-bold text-muted-foreground uppercase flex items-center gap-2">
-                       <Globe className="size-3" />
-                       UPLINK NODES:
-                    </span>
-                    <div className="flex gap-2">
-                      {servers.length > 0 ? servers.map(s => (
-                        <Button 
-                          key={s.id}
-                          variant={selectedServer?.id === s.id ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setSelectedServer(s)}
-                          className={`text-[10px] h-8 px-4 border-white/10 ${selectedServer?.id === s.id ? 'bg-primary glow-primary' : ''}`}
-                        >
-                          {s.name}
-                        </Button>
-                      )) : (
-                        <Badge variant="outline" className="text-[10px] border-primary/50 text-primary">GSM-NODE-01 (ACTIVE)</Badge>
-                      )}
-                    </div>
                   </div>
                   <Button 
-                    onClick={handleGetAiInsight}
-                    disabled={aiLoading || !activeMatch}
-                    className="bg-amber-500/20 text-amber-500 border border-amber-500/30 hover:bg-amber-500/30 text-[11px] h-8 gap-3 font-bold"
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => setPlayerMode(playerMode === 'GATEWAY' ? 'EMBED' : 'GATEWAY')}
+                    className="text-[9px] sm:text-[10px] border-white/10 h-8 w-full sm:w-auto"
                   >
-                    {aiLoading ? <Loader2 className="size-4 animate-spin" /> : <Cpu className="size-4" />}
-                    NORA-AI ANALYSIS
+                    <Monitor className="size-3 mr-2" />
+                    {playerMode === 'GATEWAY' ? "EMBED" : "GATEWAY"}
+                  </Button>
+                </CardHeader>
+                <CardContent className="p-0 aspect-video bg-black relative">
+                  {playerMode === 'EMBED' && (activeMatch?.uplink) ? (
+                    <iframe 
+                      width="100%" 
+                      height="100%" 
+                      src={`https://www.youtube.com/embed/${getYoutubeId(activeMatch.uplink)}?autoplay=1&mute=0`}
+                      frameBorder="0"
+                      allowFullScreen
+                      className="w-full h-full"
+                    ></iframe>
+                  ) : (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 sm:gap-8 text-center p-4">
+                      <Youtube className="size-12 sm:size-16 text-primary/50" />
+                      <Button onClick={handleLaunchUplink} className="bg-primary text-primary-foreground font-bold h-12 sm:h-16 px-6 sm:px-12 text-sm sm:text-lg glow-primary">
+                        <Zap className="size-5 sm:size-6 mr-2" /> HANDSHAKE
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+                <div className="bg-muted/30 p-4 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-center justify-between">
+                  <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
+                    <span className="text-[9px] font-bold text-muted-foreground uppercase">NODES:</span>
+                    {servers.slice(0, 3).map(s => (
+                      <Badge key={s.id} variant="outline" className={`text-[8px] ${selectedServer?.id === s.id ? 'border-primary text-primary' : ''}`}>
+                        {s.name}
+                      </Badge>
+                    ))}
+                  </div>
+                  <Button onClick={handleGetAiInsight} disabled={aiLoading} className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[10px] h-9 w-full sm:w-auto">
+                    {aiLoading ? <Loader2 className="size-3 animate-spin mr-2" /> : <Cpu className="size-3 mr-2" />}
+                    NORA-AI INSIGHT
                   </Button>
                 </div>
               </Card>
 
               {aiInsight && (
-                <Card className="glass-card border-amber-500/20 animate-in fade-in slide-in-from-top-4 overflow-hidden">
-                  <div className="h-1 bg-amber-500" />
-                  <CardHeader>
-                    <CardTitle className="text-md font-headline text-amber-500 flex items-center gap-2 uppercase tracking-widest">
-                      <Cpu className="size-5" />
-                      Imperial Tactical Intelligence Report
+                <Card className="glass-card border-amber-500/20">
+                  <CardHeader className="py-4 px-5">
+                    <CardTitle className="text-xs font-headline text-amber-500 flex items-center gap-2 uppercase">
+                      <Cpu className="size-4" /> Tactical Intelligence
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="p-5 bg-black/50 rounded-2xl border border-white/5 space-y-4">
-                        <p className="text-[11px] text-muted-foreground uppercase font-bold tracking-widest">Win Probability Mesh</p>
-                        <div className="space-y-4">
-                          <div className="space-y-2">
-                            <div className="flex justify-between text-xs font-bold">
-                              <span>{activeMatch?.home}</span>
-                              <span className="text-primary">{aiInsight.winProbability.home}%</span>
-                            </div>
-                            <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                              <div className="h-full bg-primary glow-primary" style={{ width: `${aiInsight.winProbability.home}%` }} />
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="flex justify-between text-xs font-bold">
-                              <span>{activeMatch?.away}</span>
-                              <span className="text-amber-500">{aiInsight.winProbability.away}%</span>
-                            </div>
-                            <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                              <div className="h-full bg-amber-500" style={{ width: `${aiInsight.winProbability.away}%` }} />
-                            </div>
-                          </div>
+                  <CardContent className="px-5 pb-5 space-y-4">
+                     <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                           <p className="text-[8px] text-muted-foreground uppercase">{activeMatch?.home}</p>
+                           <p className="text-lg font-bold text-primary">{aiInsight.winProbability.home}%</p>
                         </div>
-                      </div>
-                      <div className="md:col-span-2 p-5 bg-black/50 rounded-2xl border border-white/5">
-                        <p className="text-[11px] text-muted-foreground uppercase font-bold mb-3 tracking-widest">Tactical Assessment</p>
-                        <p className="text-xs text-muted-foreground leading-relaxed font-mono italic">"{aiInsight.tacticalAnalysis}"</p>
-                      </div>
-                    </div>
+                        <div className="space-y-1 text-right">
+                           <p className="text-[8px] text-muted-foreground uppercase">{activeMatch?.away}</p>
+                           <p className="text-lg font-bold text-amber-500">{aiInsight.winProbability.away}%</p>
+                        </div>
+                     </div>
+                     <p className="text-[10px] text-muted-foreground font-mono leading-relaxed italic">"{aiInsight.tacticalAnalysis}"</p>
                   </CardContent>
                 </Card>
               )}
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="glass-card">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2 tracking-widest">
-                      <BarChart3 className="size-4" />
-                      Uplink Signal Diagnostic
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="h-[240px] p-5">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={SIGNAL_DATA}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1a1a1a" vertical={false} />
-                        <XAxis dataKey="time" stroke="#444" fontSize={11} tickLine={false} axisLine={false} />
-                        <YAxis stroke="#444" fontSize={11} tickLine={false} axisLine={false} />
-                        <Tooltip contentStyle={{ backgroundColor: '#050505', border: '1px solid #222', fontSize: '11px', borderRadius: '8px' }} />
-                        <Line type="monotone" dataKey="latency" stroke="var(--primary)" strokeWidth={3} dot={false} />
-                        <Line type="monotone" dataKey="load" stroke="#fbbf24" strokeWidth={3} dot={false} />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </CardContent>
-                </Card>
-                <Card className="glass-card">
-                   <CardHeader className="pb-2">
-                      <CardTitle className="text-xs uppercase font-bold text-muted-foreground flex items-center gap-2 tracking-widest">
-                        <ShieldCheck className="size-4 text-emerald-500" />
-                        Infrastructure Compliance
-                      </CardTitle>
-                   </CardHeader>
-                   <CardContent className="space-y-6 pt-4">
-                      <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-2">
-                         <p className="text-[9px] font-mono text-muted-foreground uppercase">NODE_IDENTITY: VERIFIED</p>
-                         <p className="text-[9px] font-mono text-emerald-500 uppercase">PROTOCOL_STATUS: OPTIMIZED</p>
-                         <p className="text-[9px] font-mono text-primary uppercase">DATA_INTEGRITY: REAL-TIME SYNC ON</p>
-                      </div>
-                   </CardContent>
-                </Card>
-              </div>
             </div>
 
-            <div className="space-y-6">
-              <Card className="glass-card h-[500px] flex flex-col">
-                <CardHeader className="pb-3 border-b border-white/5">
-                  <CardTitle className="text-sm font-headline flex items-center gap-2 uppercase tracking-widest text-primary">
-                    <MessageSquare className="size-4" />
-                    Imperial Mesh Chat
+            <div className="space-y-6 order-2">
+              <Card className="glass-card h-[400px] sm:h-[500px] flex flex-col">
+                <CardHeader className="py-3 px-4 border-b border-white/5">
+                  <CardTitle className="text-xs font-headline text-primary flex items-center gap-2 uppercase">
+                    <MessageSquare className="size-4" /> MESH CHAT
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
-                  <ScrollArea className="flex-1 p-5">
-                    <div className="space-y-5">
+                  <ScrollArea className="flex-1 p-4">
+                    <div className="space-y-4">
                       {chats.map((chat, i) => (
-                        <div key={i} className="space-y-2 group">
-                          <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-bold text-primary flex items-center gap-2">
-                               <div className="size-1 bg-primary rounded-full animate-pulse" />
-                               {chat.user}
-                            </span>
-                            <span className="text-[9px] text-muted-foreground font-mono">
-                              {chat.timestamp ? new Date(chat.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "..."}
+                        <div key={i} className="space-y-1">
+                          <div className="flex items-center justify-between text-[8px] font-mono">
+                            <span className="text-primary font-bold">{chat.user}</span>
+                            <span className="text-muted-foreground">
+                              {chat.timestamp ? new Date(chat.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
                             </span>
                           </div>
-                          <p className="text-xs text-muted-foreground leading-snug bg-white/5 p-3 rounded-2xl border border-white/5 group-hover:border-primary/20 transition-colors">
+                          <p className="text-[10px] text-muted-foreground bg-white/5 p-2 rounded-lg border border-white/5">
                             {chat.message}
                           </p>
                         </div>
                       ))}
                     </div>
                   </ScrollArea>
-                  <div className="p-5 border-t border-white/5 bg-black/40">
+                  <div className="p-4 border-t border-white/5">
                      <div className="relative">
                         <input 
                           type="text" 
                           value={chatInput}
                           onChange={(e) => setChatInput(e.target.value)}
                           onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                          placeholder="Broadcast signal..." 
-                          className="w-full bg-background/50 border border-white/10 rounded-xl px-5 py-3.5 text-xs outline-none focus:ring-1 focus:ring-primary pr-14 font-mono"
+                          placeholder="Broadcast..." 
+                          className="w-full bg-background/50 border border-white/10 rounded-lg px-4 py-2.5 text-[10px] outline-none pr-10"
                         />
-                        <Button 
-                          onClick={handleSendMessage}
-                          variant="ghost" 
-                          size="icon" 
-                          className="absolute right-1.5 top-1/2 -translate-y-1/2 text-primary hover:bg-primary/10"
-                        >
-                          <Send className="size-5" />
+                        <Button onClick={handleSendMessage} variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 text-primary">
+                          <Send className="size-4" />
                         </Button>
                      </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-white/5">
-                <CardHeader className="pb-3">
-                   <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2 tracking-[0.2em]">
-                      <Radio className="size-4" />
-                      Live Sovereign Feeds
+              <Card className="glass-card">
+                <CardHeader className="py-3 px-4">
+                   <CardTitle className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
+                      <Radio className="size-4" /> LIVE FEEDS
                    </CardTitle>
-                   <CardDescription className="text-[9px] uppercase">Active & Valid Links Only</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                   <ScrollArea className="h-[400px]">
-                   <div className="space-y-4 pr-3">
+                <CardContent className="px-4 pb-4">
+                   <ScrollArea className="h-[300px]">
+                   <div className="space-y-3">
                    {matchesLoading ? (
-                     <div className="flex flex-col items-center justify-center py-10 gap-3">
-                        <Loader2 className="size-6 animate-spin text-primary" />
-                        <p className="text-[10px] font-mono text-muted-foreground uppercase">Syncing mesh nodes...</p>
+                     <div className="flex flex-col items-center py-10 gap-2">
+                        <Loader2 className="size-5 animate-spin text-primary" />
+                        <p className="text-[8px] font-mono text-muted-foreground uppercase">Syncing...</p>
                      </div>
-                   ) : matches.length > 0 ? matches.map(match => (
+                   ) : matches.map(match => (
                      <div 
                        key={match.id} 
                        onClick={() => {
                          setActiveMatch(match)
                          setAiInsight(null)
                         }}
-                       className={`p-4 bg-white/5 rounded-2xl border flex justify-between items-center group cursor-pointer transition-all duration-300 ${activeMatch?.id === match.id ? 'border-primary bg-primary/10 shadow-[0_0_20px_rgba(0,150,255,0.15)] scale-[1.02]' : 'border-white/5 hover:border-primary/30'}`}
+                       className={`p-3 bg-white/5 rounded-xl border flex justify-between items-center cursor-pointer transition-all ${activeMatch?.id === match.id ? 'border-primary bg-primary/5 shadow-lg' : 'border-white/5'}`}
                       >
-                        <div className="space-y-1">
-                           <div className="flex items-center gap-3">
-                              <span className="text-[11px] font-bold text-white uppercase">{match.home}</span>
-                              <span className="text-[9px] text-muted-foreground font-mono">VS</span>
-                              <span className="text-[11px] font-bold text-white uppercase">{match.away}</span>
-                           </div>
-                           <p className="text-[9px] text-muted-foreground font-mono uppercase tracking-tighter truncate max-w-[120px]">{match.description || "Mission 400 Uplink"}</p>
+                        <div className="space-y-0.5">
+                           <p className="text-[10px] font-bold text-white uppercase">{match.home} vs {match.away}</p>
+                           <p className="text-[8px] text-muted-foreground font-mono uppercase truncate max-w-[100px]">{match.status}</p>
                         </div>
                         <div className="text-right">
-                           <p className="text-[11px] font-bold text-primary">{match.score || match.time}</p>
-                           <div className="flex items-center gap-1.5 justify-end">
-                              <div className={`size-1.5 rounded-full ${match.status === 'LIVE' ? 'bg-destructive animate-pulse' : 'bg-primary'}`} />
-                              <p className={`text-[9px] uppercase font-bold ${match.status === 'LIVE' ? 'text-destructive' : 'text-primary'}`}>{match.status}</p>
-                           </div>
+                           <p className="text-[10px] font-bold text-primary">{match.score || "00:00"}</p>
                         </div>
                      </div>
-                   )) : (
-                     <p className="text-[10px] text-center text-muted-foreground font-mono py-10 uppercase">No active feeds detected.</p>
-                   )}
+                   ))}
                    </div>
                    </ScrollArea>
                 </CardContent>
@@ -480,44 +355,29 @@ export default function WorldCupPage() {
       </SidebarInset>
 
       <Dialog open={isHandshaking} onOpenChange={setIsHandshaking}>
-        <DialogContent className="glass-card border-primary/40 sm:max-w-[550px] bg-black/95 backdrop-blur-3xl p-10">
-          <DialogHeader>
-            <DialogTitle className="font-headline text-2xl flex items-center gap-4 text-primary uppercase tracking-tighter">
-              <Lock className="size-6" />
-              Secure Sovereign Handshake
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="py-10 text-center space-y-8">
-            <div className="space-y-6">
-              <div className="size-24 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto relative border border-primary/20 glow-primary">
-                <ShieldCheck className="size-12 text-primary animate-pulse" />
-              </div>
-              <div className="space-y-4">
-                <p className="text-primary font-mono text-sm animate-pulse uppercase tracking-widest font-bold">
-                  Verifying Live Link... {handshakeProgress}%
-                </p>
-                <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
-                  <div className="h-full bg-primary glow-primary transition-all duration-300" style={{ width: `${handshakeProgress}%` }} />
-                </div>
+        <DialogContent className="glass-card border-primary/40 w-[95vw] sm:max-w-[500px] bg-black/95 p-6 sm:p-10">
+          <div className="py-6 sm:py-10 text-center space-y-6 sm:space-y-8">
+            <div className="size-16 sm:size-24 bg-primary/10 rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto border border-primary/20 glow-primary">
+              <ShieldCheck className="size-10 sm:size-12 text-primary animate-pulse" />
+            </div>
+            <div className="space-y-4">
+              <p className="text-primary font-mono text-xs sm:text-sm animate-pulse uppercase tracking-widest font-bold">
+                {handshakeProgress < 100 ? `VERIFYING... ${handshakeProgress}%` : 'IDENTITY VERIFIED'}
+              </p>
+              <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                <div className="h-full bg-primary glow-primary transition-all duration-300" style={{ width: `${handshakeProgress}%` }} />
               </div>
             </div>
-
             {handshakeProgress === 100 && (
-              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-5">
-                 <Button 
-                    className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-16 glow-primary flex items-center justify-center gap-4 text-lg"
-                    onClick={() => {
-                      setIsHandshaking(false)
-                      if (activeMatch?.uplink) {
-                        window.open(activeMatch.uplink, '_blank')
-                      }
-                    }}
-                 >
-                    <ExternalLink className="size-6" />
-                    Launch Official Uplink
-                 </Button>
-              </div>
+              <Button 
+                className="w-full bg-primary text-primary-foreground font-bold h-12 sm:h-16 glow-primary text-sm sm:text-lg"
+                onClick={() => {
+                  setIsHandshaking(false)
+                  if (activeMatch?.uplink) window.open(activeMatch.uplink, '_blank')
+                }}
+              >
+                <ExternalLink className="size-5 sm:size-6 mr-3" /> LAUNCH UPLINK
+              </Button>
             )}
           </div>
         </DialogContent>
