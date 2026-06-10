@@ -18,6 +18,12 @@
       "description": "Sovereign Digital Crest",
       "imageUrl": "https://picsum.photos/seed/logo123/200/200",
       "imageHint": "digital logo"
+    },
+    {
+      "id": "og-image",
+      "description": "Sovereign OS Social Preview",
+      "imageUrl": "https://picsum.photos/seed/logo123/1200/630",
+      "imageHint": "digital branding"
     }
   ]
 }
