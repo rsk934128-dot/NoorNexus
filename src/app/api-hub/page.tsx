@@ -93,7 +93,7 @@ export default function ApiHubPage() {
   "goods": [
     { "id": "PROJ-42-NODE", "name": "Sovereign Node Auth", "quantity": 1, "price": "100.00" }
   ],
-  "redirectUrl": "https://shurukkha-hub.sirajganj.gov.bd/dashboard"
+  "redirectUrl": "https://shurukkha-hub-imperial-sovereign-in.vercel.app/dashboard"
 }`
 
   const v2Response = `{

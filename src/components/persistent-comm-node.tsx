@@ -1,4 +1,3 @@
-
 "use client"
 
 import { usePathname, useRouter } from "next/navigation"
@@ -9,8 +8,8 @@ import { Button } from "@/components/ui/button"
 import { PhoneIncoming } from "lucide-react"
 
 /**
- * @fileOverview Persistent Communication Node (V4.1 Reinforced)
- * এই কম্পোনেন্টটি হাইড্রেশন এরর মুক্ত করা হয়েছে এবং ব্যাকগ্রাউন্ডে সুরক্ষা হাবকে সচল রাখে।
+ * @fileOverview Persistent Communication Node (V4.2 Imperial)
+ * এই কম্পোনেন্টটি নূরনেক্সাস সাম্রাজ্যের ব্যাকগ্রাউন্ড কমিউনিকেশন চ্যানেল বজায় রাখে।
  */
 export function PersistentCommNode() {
   const pathname = usePathname()
@@ -85,7 +84,6 @@ export function PersistentCommNode() {
     return () => window.removeEventListener("message", handleMessage);
   }, [isShurukkhaPage, router, toast]);
 
-  // হাইড্রেশন এরর এড়াতে আমরা সবসময় রুট ডিভ রিটার্ন করি, কিন্তু কন্টেন্ট মাউন্ট হওয়ার পর দেখাই
   return (
     <div 
       className={cn(
@@ -99,9 +97,9 @@ export function PersistentCommNode() {
           "md:pl-[16rem]" 
         )}>
           <iframe 
-            src="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
+            src="https://shurukkha-hub-imperial-sovereign-in.vercel.app/dashboard" 
             className="w-full h-full border-0 bg-white"
-            title="Shurukkha Persistent Node"
+            title="Shurukkha Imperial Hub"
             allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media; geolocation"
             sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
           />
