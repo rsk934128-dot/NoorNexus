@@ -104,10 +104,14 @@
         "businessType": { "type": "string" },
         "region": { "type": "string" },
         "estimatedVolume": { "type": "number" },
-        "status": { "type": "string", "enum": ["PENDING", "VERIFIED", "REJECTED"] },
+        "actualVolume": { "type": "number" },
+        "transactionCount": { "type": "number" },
+        "performanceScore": { "type": "number" },
+        "status": { "type": "string", "enum": ["PENDING", "VERIFIED", "REJECTED", "UNDER_REVIEW"] },
         "assignedTier": { "type": "string", "enum": ["TIER_1", "TIER_2", "TIER_3"] },
         "trustScore": { "type": "number" },
         "submissionDate": { "type": "number" },
+        "lastReviewDate": { "type": "number" },
         "noraAssessment": { "type": "string" }
       },
       "required": ["businessName", "businessType", "region", "status"]
