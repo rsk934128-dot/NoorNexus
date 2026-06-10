@@ -14,7 +14,8 @@ import {
   ChevronRight,
   LogOut,
   LogIn,
-  X
+  X,
+  Globe
 } from "lucide-react"
 
 import {
@@ -45,6 +46,7 @@ const items = [
   { title: "Node Watchtower", url: "/nodes", icon: Activity },
   { title: "SmartRemit P2P", url: "/remittance", icon: Send },
   { title: "World Cup Relay", url: "/world-cup", icon: Trophy },
+  { title: "Famelack Hub", url: "/famelack", icon: Globe },
 ]
 
 export function AppSidebar() {
