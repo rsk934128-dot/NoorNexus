@@ -11,7 +11,7 @@ import {
   Star, TrendingUp, HeartPulse, BrainCircuit, ActivitySquare, Compass, 
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
   CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages,
-  Coins, Briefcase, BarChart3, Clock
+  Coins, Briefcase, BarChart3, Clock, Users
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
