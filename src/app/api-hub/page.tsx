@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
   Menu, MessageSquare, Cpu, BookOpen, Layers, Info, CheckCircle2,
-  ArrowRightLeft, AlertTriangle
+  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -73,7 +73,7 @@ export default function ApiHubPage() {
       const history = messages.map(m => ({ role: m.role, text: m.text }))
       const result = await noraIntegrationAssistant({
         query: userMsg,
-        context: "STABLECOIN_PAYMENTS",
+        context: "HMAC_V4",
         history
       })
       
@@ -114,7 +114,7 @@ export default function ApiHubPage() {
       setPlaygroundLoading(false)
       toast({
         title: "RESTful Handshake Successful",
-        description: "API 2.0 Headers verified.",
+        description: "API 2.0 SHA256withRSA verified.",
       })
     }, 1500)
   }
@@ -135,7 +135,7 @@ export default function ApiHubPage() {
                    Sovereign Connect Hub
                  </h2>
               </div>
-              <p className="text-muted-foreground">RESTful API 2.0 with SHA256withRSA Security Standard.</p>
+              <p className="text-muted-foreground">RESTful API 2.0 with Imperial SHA256withRSA Security Standard.</p>
             </div>
             <div className="flex items-center gap-2">
                <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2">
@@ -153,7 +153,7 @@ export default function ApiHubPage() {
                 <TabsList className="bg-white/5 border border-white/10 p-1">
                   <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> API Docs</TabsTrigger>
                   <TabsTrigger value="flows" className="gap-2"><Layers className="size-4" /> Integration Guide</TabsTrigger>
-                  <TabsTrigger value="security" className="gap-2"><Lock className="size-4" /> Security</TabsTrigger>
+                  <TabsTrigger value="security" className="gap-2"><ShieldAlert className="size-4" /> Security Guide</TabsTrigger>
                   <TabsTrigger value="playground" className="gap-2"><Terminal className="size-4" /> Playground</TabsTrigger>
                 </TabsList>
 
@@ -161,7 +161,7 @@ export default function ApiHubPage() {
                   <Card className="glass-card">
                     <CardHeader>
                       <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Required Request Headers</CardTitle>
-                      <CardDescription>Authentication and signature validation headers for all API 2.0 requests.</CardDescription>
+                      <CardDescription>Authentication and SHA256withRSA signature validation headers.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-0">
                       <Table>
@@ -285,49 +285,100 @@ export default function ApiHubPage() {
                 </TabsContent>
 
                 <TabsContent value="security" className="space-y-6">
-                  <Card className="glass-card bg-primary/5">
-                    <CardHeader>
-                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">SHA256withRSA Security Guide</CardTitle>
-                      <CardDescription>We have removed secretKey in favor of robust RSA signatures.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg flex gap-3">
-                         <AlertTriangle className="size-5 text-amber-500 shrink-0" />
-                         <p className="text-[10px] text-amber-200">
-                           <b>Key Update:</b> The <code>secretKey</code> is no longer used for signature verification. All requests must be signed using your RSA Private Key.
-                         </p>
-                      </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2 space-y-6">
+                      <Card className="glass-card border-l-4 border-l-primary">
+                        <CardHeader>
+                          <CardTitle className="text-lg font-headline flex items-center gap-2 uppercase">
+                            <Lock className="size-5 text-primary" />
+                            SHA256withRSA Signature Guide
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                          <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg flex gap-3">
+                            <AlertTriangle className="size-5 text-amber-500 shrink-0" />
+                            <p className="text-[10px] text-amber-200">
+                              <b>Imperial Protocol:</b> The <code>secretKey</code> has been removed. All requests must be signed with your 2048-bit RSA Private Key.
+                            </p>
+                          </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
-                            <ShieldCheck className="size-3 text-emerald-500" /> RSA Key Pair
-                          </h4>
+                          <div className="space-y-4">
+                            <h4 className="text-sm font-bold uppercase text-white">Step 1: Construct String to Sign</h4>
+                            <div className="p-4 bg-black/40 rounded-lg font-mono text-[10px] text-muted-foreground border border-white/5">
+                              {`{http-method} {http-uri}\\n{appKey}.{timestamp}.{requestBody}`}
+                            </div>
+                            <p className="text-[10px] text-muted-foreground italic">
+                              Example: POST /openapi/v2/order/create\n4CA7B...1763555...{"{...}"}
+                            </p>
+                          </div>
+
+                          <div className="space-y-4">
+                            <h4 className="text-sm font-bold uppercase text-white">Step 2: Generate Signature</h4>
+                            <div className="p-4 bg-black/40 rounded-lg font-mono text-[10px] text-primary border border-white/5">
+                              {`signature = base64Encode(sha256withRSA(stringToSign, privateKey))`}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                            <div className="space-y-2">
+                              <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
+                                <Key className="size-3 text-emerald-500" /> Key Rotation
+                              </h4>
+                              <p className="text-[9px] text-muted-foreground leading-relaxed">
+                                Use <code>X-R-KEY-VERSION</code> (1, 2, 3...) to indicate which key version was used for signing.
+                              </p>
+                            </div>
+                            <div className="space-y-2">
+                              <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
+                                <ShieldCheck className="size-3 text-primary" /> Verification
+                              </h4>
+                              <p className="text-[9px] text-muted-foreground leading-relaxed">
+                                Callback signatures format: <code>{`{appKey}.{timestamp}.{requestBody}`}</code>. Verify using NoorNexus Public Key.
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    <div className="space-y-6">
+                      <Card className="glass-card h-fit">
+                        <CardHeader>
+                          <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
+                            <Terminal className="size-4" /> Implementation
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div className="space-y-2">
+                            <p className="text-[10px] uppercase font-bold text-muted-foreground">RSA Generation (OpenSSL)</p>
+                            <pre className="p-2 bg-black/40 rounded border border-white/5 text-[9px] font-mono text-muted-foreground whitespace-pre-wrap">
+                              {`openssl genrsa -out private_key.pem 2048\nopenssl rsa -in private_key.pem -pubout -out public_key.pem`}
+                            </pre>
+                          </div>
+                          <div className="pt-4 border-t border-white/5">
+                            <p className="text-[10px] text-muted-foreground leading-relaxed">
+                              Upload your <b>public key</b> in the Developer Portal to obtain your <code>appKey</code>.
+                            </p>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
+                            <ShieldCheck className="size-3" /> Secure Best Practices
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
                           <p className="text-[9px] text-muted-foreground leading-relaxed">
-                            Generate a 2048-bit RSA key pair. Upload your public key to the NoorNexus Developer Portal to obtain your <code>appKey</code>.
+                            - Store Private Key in HSM.<br/>
+                            - Validate timestamps within ±5 mins.<br/>
+                            - Use Key Rotation every 12 months.
                           </p>
-                        </div>
-                        <div className="space-y-2">
-                          <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
-                            <ArrowRightLeft className="size-3 text-primary" /> Key Rotation
-                          </h4>
-                          <p className="text-[9px] text-muted-foreground leading-relaxed">
-                            Use the <code>X-R-KEY-VERSION</code> header to indicate which key version was used for signing, allowing for seamless rotation.
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <div className="p-4 bg-black/40 rounded-lg border border-white/5 space-y-2">
-                         <p className="text-[10px] font-mono text-primary">// Mandatory Auth Headers</p>
-                         <div className="text-[9px] text-muted-foreground font-mono space-y-1">
-                            <p>X-R-AK: YOUR_APP_KEY</p>
-                            <p>X-R-TS: CURRENT_TIMESTAMP_MS</p>
-                            <p>X-R-KEY-VERSION: 1</p>
-                            <p>X-R-Signature: BASE64(SHA256withRSA(payload, private_key))</p>
-                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="playground" className="space-y-4">

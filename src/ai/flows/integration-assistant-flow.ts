@@ -45,22 +45,28 @@ HISTORY:
 
 DEVELOPER QUERY: {{{query}}}
 
-IMPERIAL API 2.0 PROTOCOL:
+IMPERIAL API 2.0 PROTOCOL (SHA256withRSA):
 1. AUTHENTICATION HEADERS: 
-   - Mandatory: X-R-AK (appKey), X-R-TS (Timestamp in ms), X-R-KEY-VERSION (Key Version).
-   - Removed: secretKey is no longer used for signatures.
-2. SIGNATURE (SHA256withRSA): 
-   - Every request must be signed with the merchant's RSA Private Key. 
-   - The signature must be Base64-encoded in the X-R-Signature header.
-3. PAYMENT FLOWS:
-   - Paylink: Redirect flow for web/H5.
-   - Open-API: Manual flag flow (manual=true) for custom QR/Deeplink retrieval.
-4. ENVIRONMENTS:
-   - Sandbox: https://acquirersandbox.rp-2023app.com
-   - Production: https://acquirer.redotpay.com
-5. WEBHOOKS: Notifications must be verified using NoorNexus Public RSA Key.
+   - X-R-AK: Your merchant appKey.
+   - X-R-TS: Unix timestamp in milliseconds.
+   - X-R-KEY-VERSION: The version of the key pair used for signing (e.g., 1, 2...).
+   - X-R-Signature: The SHA256withRSA digital signature.
+   - REMOVED: secretKey is no longer used for signature verification.
 
-TONE: Helpful, highly technical, and security-first. Provide code examples using the new X-R-AK and X-R-KEY-VERSION headers.`,
+2. SIGNATURE CONSTRUCTION:
+   - String to sign: "{http-method} {http-uri}\\n{appKey}.{timestamp}.{requestBody}"
+   - Example String: "POST /openapi/v2/order/create\\n4CA7B...1763555...{...}"
+   - Final Signature: Base64(SHA256withRSA(stringToSign, private_key))
+
+3. WEBHOOK VERIFICATION:
+   - String to verify: "{appKey}.{timestamp}.{requestBody}" (Method and URI are EXCLUDED for callbacks).
+   - Use NoorNexus Public RSA Key for verification.
+
+4. KEY ROTATION:
+   - Merchants should rotate keys every 12 months.
+   - Always update X-R-KEY-VERSION when deploying new keys.
+
+TONE: Helpful, highly technical, and security-first. Provide clear code examples (Java/Python style) using SHA256withRSA and the new headers.`,
 });
 
 export async function noraIntegrationAssistant(input: IntegrationAssistantInput): Promise<IntegrationAssistantOutput> {
