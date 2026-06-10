@@ -67,7 +67,6 @@ const verifyHmacV4Signature = ai.defineTool(
 
 const autonomousComplianceMonitorPrompt = ai.definePrompt({
   name: 'autonomousComplianceMonitorPrompt',
-  model: 'googleai/gemini-1.5-flash',
   tools: [verifyHmacV4Signature],
   input: {schema: AutonomousComplianceMonitorInputSchema},
   output: {schema: AutonomousComplianceMonitorOutputSchema},

@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview This file defines the Genkit flow for generating HMAC_V4 security handshake configurations.
@@ -27,11 +28,7 @@ const HmacV4ConfigGeneratorOutputSchema = z.object({
 });
 export type HmacV4ConfigGeneratorOutput = z.infer<typeof HmacV4ConfigGeneratorOutputSchema>;
 
-export async function generateHmacV4Config(input: HmacV4ConfigGeneratorInput): Promise<HmacV4ConfigGeneratorOutput> {
-  return hmacV4ConfigGeneratorFlow(input);
-}
-
-const prompt = ai.definePrompt({
+const hmacV4ConfigGeneratorPrompt = ai.definePrompt({
   name: 'hmacV4ConfigGeneratorPrompt',
   input: {schema: HmacV4ConfigGeneratorInputSchema},
   output: {schema: HmacV4ConfigGeneratorOutputSchema},
@@ -49,17 +46,15 @@ Provide a concise summary description of the entire generated HMAC_V4 configurat
 Ensure the output strictly adheres to the JSON schema for HmacV4ConfigGeneratorOutput.`,
 });
 
-const hmacV4ConfigGeneratorFlow = ai.defineFlow(
-  {
-    name: 'hmacV4ConfigGeneratorFlow',
-    inputSchema: HmacV4ConfigGeneratorInputSchema,
-    outputSchema: HmacV4ConfigGeneratorOutputSchema,
-  },
-  async input => {
-    const {output} = await prompt(input);
+export async function generateHmacV4Config(input: HmacV4ConfigGeneratorInput): Promise<HmacV4ConfigGeneratorOutput> {
+  try {
+    const {output} = await hmacV4ConfigGeneratorPrompt(input);
     if (!output) {
       throw new Error('Failed to generate HMAC_V4 configuration output.');
     }
     return output;
+  } catch (error: any) {
+    console.error('Config Generator Error:', error);
+    throw new Error(error.message || 'Security AI Handshake Error');
   }
-);
+}
