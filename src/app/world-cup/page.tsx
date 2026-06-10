@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo, useEffect, useRef } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -16,6 +16,7 @@ import {
   Monitor,
   ShieldCheck,
   Maximize2,
+  Minimize2,
   Send,
   Cpu,
   Loader2,
@@ -46,6 +47,7 @@ export default function WorldCupPage() {
   const { toast } = useToast()
   const db = useFirestore()
   const { user } = useUser()
+  const playerRef = useRef<HTMLDivElement>(null)
   
   const matchesQuery = useMemo(() => 
     query(
@@ -69,6 +71,7 @@ export default function WorldCupPage() {
   const [aiLoading, setAiLoading] = useState(false)
   const [aiInsight, setAiInsight] = useState<MatchInsightOutput | null>(null)
   const [playerMode, setPlayerMode] = useState<'GATEWAY' | 'EMBED'>('EMBED')
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   useEffect(() => {
     if (servers.length > 0 && !selectedServer) {
@@ -97,6 +100,38 @@ export default function WorldCupPage() {
       })
     }
   }, [servers, matches, activeMatch, selectedServer, matchesLoading])
+
+  // Monitor Fullscreen Changes
+  useEffect(() => {
+    const handleFsChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFsChange);
+    return () => document.removeEventListener('fullscreenchange', handleFsChange);
+  }, []);
+
+  const togglePlayerFullscreen = async () => {
+    if (!playerRef.current) return;
+
+    try {
+      if (!document.fullscreenElement) {
+        await playerRef.current.requestFullscreen();
+        // Attempt to rotate to landscape if supported (Mobile)
+        if (screen.orientation && (screen.orientation as any).lock) {
+          await (screen.orientation as any).lock('landscape').catch(() => {
+            // Silently ignore if orientation lock is not supported
+          });
+        }
+      } else {
+        await document.exitFullscreen();
+        if (screen.orientation && (screen.orientation as any).unlock) {
+          (screen.orientation as any).unlock();
+        }
+      }
+    } catch (e: any) {
+      toast({ title: "Imperial Overlay Error", description: e.message, variant: "destructive" });
+    }
+  }
 
   const handleLaunchUplink = () => {
     setIsHandshaking(true)
@@ -187,7 +222,7 @@ export default function WorldCupPage() {
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div className="xl:col-span-3 space-y-6 order-1">
-              <Card className="glass-card border-white/5 overflow-hidden relative group">
+              <Card ref={playerRef} className={`glass-card border-white/5 overflow-hidden relative group ${isFullscreen ? 'h-screen w-screen rounded-none z-[9999]' : ''}`}>
                 <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 bg-white/2 py-3 px-4 sm:px-6 gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <Badge className={`text-[8px] sm:text-[10px] font-bold uppercase ${activeMatch?.status === 'LIVE' ? 'bg-destructive animate-pulse' : 'bg-muted'}`}>
@@ -197,17 +232,27 @@ export default function WorldCupPage() {
                       {activeMatch ? `${activeMatch.home} vs ${activeMatch.away}` : "SELECT FEED"}
                     </span>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => setPlayerMode(playerMode === 'GATEWAY' ? 'EMBED' : 'GATEWAY')}
-                    className="text-[9px] sm:text-[10px] border-white/10 h-8 w-full sm:w-auto"
-                  >
-                    <Monitor className="size-3 mr-2" />
-                    {playerMode === 'GATEWAY' ? "EMBED" : "GATEWAY"}
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setPlayerMode(playerMode === 'GATEWAY' ? 'EMBED' : 'GATEWAY')}
+                      className="text-[9px] sm:text-[10px] border-white/10 h-8 flex-1 sm:w-auto"
+                    >
+                      <Monitor className="size-3 mr-2" />
+                      {playerMode === 'GATEWAY' ? "EMBED" : "GATEWAY"}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={togglePlayerFullscreen}
+                      className="text-[9px] sm:text-[10px] border-primary/30 text-primary h-8 w-10 p-0"
+                    >
+                      {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+                    </Button>
+                  </div>
                 </CardHeader>
-                <CardContent className="p-0 aspect-video bg-black relative">
+                <CardContent className={`p-0 aspect-video bg-black relative ${isFullscreen ? 'h-[calc(100vh-60px)] aspect-auto' : ''}`}>
                   {playerMode === 'EMBED' && (activeMatch?.uplink) ? (
                     <iframe 
                       width="100%" 
@@ -226,23 +271,25 @@ export default function WorldCupPage() {
                     </div>
                   )}
                 </CardContent>
-                <div className="bg-muted/30 p-4 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-center justify-between">
-                  <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
-                    <span className="text-[9px] font-bold text-muted-foreground uppercase">MESH STATUS:</span>
-                    {servers.slice(0, 3).map(s => (
-                      <Badge key={s.id} variant="outline" className={`text-[8px] ${selectedServer?.id === s.id ? 'border-primary text-primary' : ''}`}>
-                        {s.name}
-                      </Badge>
-                    ))}
+                {!isFullscreen && (
+                  <div className="bg-muted/30 p-4 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-center justify-between">
+                    <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
+                      <span className="text-[9px] font-bold text-muted-foreground uppercase">MESH STATUS:</span>
+                      {servers.slice(0, 3).map(s => (
+                        <Badge key={s.id} variant="outline" className={`text-[8px] ${selectedServer?.id === s.id ? 'border-primary text-primary' : ''}`}>
+                          {s.name}
+                        </Badge>
+                      ))}
+                    </div>
+                    <Button onClick={handleGetAiInsight} disabled={aiLoading} className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[10px] h-9 w-full sm:w-auto">
+                      {aiLoading ? <Loader2 className="size-3 animate-spin mr-2" /> : <Cpu className="size-3 mr-2" />}
+                      NORA-AI INSIGHT
+                    </Button>
                   </div>
-                  <Button onClick={handleGetAiInsight} disabled={aiLoading} className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[10px] h-9 w-full sm:w-auto">
-                    {aiLoading ? <Loader2 className="size-3 animate-spin mr-2" /> : <Cpu className="size-3 mr-2" />}
-                    NORA-AI INSIGHT
-                  </Button>
-                </div>
+                )}
               </Card>
 
-              {aiInsight && (
+              {aiInsight && !isFullscreen && (
                 <Card className="glass-card border-amber-500/20 animate-in fade-in slide-in-from-bottom-2">
                   <CardHeader className="py-4 px-5">
                     <CardTitle className="text-xs font-headline text-amber-500 flex items-center gap-2 uppercase">
