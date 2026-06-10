@@ -351,7 +351,7 @@ export default function Home() {
                 <CardContent className="space-y-6 p-6 pt-0">
                    <div className="space-y-2">
                       <p className="text-4xl font-headline font-bold text-white tracking-tighter">{healthReport?.vaultIntegrity || 100}%</p>
-                      <p className="text-[10px] text-primary font-bold uppercase">REVENUE_NODES_STABLE</p>
+                      <p className="text-[10px] text-primary font-bold uppercase">ETHICAL_ACCURACY_STABLE</p>
                       <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
                          <div className="h-full bg-primary" style={{ width: `100%` }} />
                       </div>

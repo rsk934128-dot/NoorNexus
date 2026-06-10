@@ -81,7 +81,7 @@ export default function DocsPage() {
                     <CardDescription className="text-xs">The ethical foundation of NoorNexus digital empire.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-sm text-muted-foreground leading-relaxed italic">
+                    <p className="text-sm text-muted-foreground leading-relaxed italic border-l-2 border-amber-500/30 pl-4">
                       "গ্রাহকের ব্যক্তিগত তথ্য (NID, পাসপোর্ট, মোবাইল নম্বর) একটি আমানত। নূরনেক্সাস কোনো বাণিজ্যিক স্বার্থে এই ডেটা ব্রোকার বা থার্ড-পার্টির সাথে শেয়ার করে না। প্রতিটি ডেটা পয়েন্ট শুধুমাত্র ব্যবহারকারীর স্বচ্ছ সম্মতির ভিত্তিতে এবং সম্পূর্ণ এনক্রিপ্টেড অবস্থায় সংরক্ষিত থাকে।"
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -156,9 +156,6 @@ export default function DocsPage() {
                       <p><span className="text-primary font-bold">VALUE:</span> {dnsToken}</p>
                       <p><span className="text-primary font-bold">TTL:</span> 3600</p>
                     </div>
-                    <p className="text-[9px] text-muted-foreground italic leading-relaxed">
-                      Confirming ডোমেইন মালিকানা with this TXT record establishes the sovereign authority of the NoorNexus Hub over its root infrastructure.
-                    </p>
                   </CardContent>
                 </Card>
               </section>
@@ -170,15 +167,15 @@ export default function DocsPage() {
                 <div className="space-y-4">
                   {[
                     { title: "Core OS Stabilization", phase: "PHASE_1", status: "COMPLETED", desc: "HMAC_V4 cryptographic handshake and regional node mesh setup." },
-                    { title: "Adaptive Sovereign Shield", phase: "PHASE_2", status: "ACTIVE", desc: "Collective Immune System (Project 150) and Nora-01 Compliance Agent." },
-                    { title: "Unified Connect & Data Justice", phase: "PHASE_3", status: "IN_PROGRESS", desc: "User Data Sovereignty, Trust-based privileges and cross-app layer." },
+                    { title: "Adaptive Sovereign Shield", phase: "PHASE_2", status: "COMPLETED", desc: "Collective Immune System (Project 150) and Nora-01 Compliance Agent." },
+                    { title: "Unified Connect & Data Justice", phase: "PHASE_3", status: "ACTIVE", desc: "User Data Sovereignty, Trust-based privileges and cross-app layer." },
                     { title: "Global Imperial Consensus", phase: "PHASE_4", status: "QUEUED", desc: "Full activation of 400 sovereign nodes for asset mesh consensus." }
                   ].map((step, i) => (
                     <Card key={i} className="glass-card border-l-4 border-l-primary/30">
                       <CardHeader className="py-4">
                         <div className="flex justify-between items-center">
                           <Badge variant="outline" className="text-[10px] font-mono border-primary/20">{step.phase}</Badge>
-                          <Badge className={step.status === 'COMPLETED' ? 'bg-emerald-500' : step.status === 'ACTIVE' || step.status === 'IN_PROGRESS' ? 'bg-primary animate-pulse' : 'bg-muted'}>
+                          <Badge className={step.status === 'COMPLETED' ? 'bg-emerald-500' : step.status === 'ACTIVE' ? 'bg-primary animate-pulse' : 'bg-muted'}>
                             {step.status}
                           </Badge>
                         </div>
@@ -189,49 +186,6 @@ export default function DocsPage() {
                   ))}
                 </div>
               </section>
-
-              {analysis && (
-                <section className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
-                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2">
-                    <ShieldAlert className="size-4" /> AI Strategic Assessment
-                  </h3>
-                  <Card className="glass-card border-amber-500/20">
-                    <CardHeader>
-                      <CardTitle className="text-sm font-headline uppercase text-amber-500">Nora-00 Strategic Directive</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      <div className="p-4 bg-amber-500/5 border border-amber-500/10 rounded-xl">
-                        <p className="text-sm font-mono leading-relaxed text-amber-200">"{analysis.strategicDirective}"</p>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-3">
-                          <h4 className="text-[10px] font-bold uppercase text-muted-foreground">Architectural Risks</h4>
-                          <div className="space-y-2">
-                            {analysis.riskAnalysis.potentialErrors.map((e, i) => (
-                              <div key={i} className="flex gap-2 text-[10px] text-amber-500/80 font-mono">
-                                <Zap className="size-3 shrink-0" />
-                                {e}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="space-y-3">
-                          <h4 className="text-[10px] font-bold uppercase text-muted-foreground">Future Requirements</h4>
-                          <div className="space-y-2">
-                            {analysis.futureRequirements.map((f, i) => (
-                              <div key={i} className="flex gap-2 text-[10px] text-emerald-500/80 font-mono">
-                                <CheckCircle2 className="size-3 shrink-0" />
-                                {f}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </section>
-              )}
             </div>
 
             <div className="space-y-6">

@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -23,7 +22,8 @@ import {
   Award,
   Menu,
   Activity,
-  UserCheck
+  UserCheck,
+  HeartHandshake
 } from "lucide-react"
 import { issueSovereignIdentity, IdentityReputationOutput } from "@/ai/flows/identity-reputation-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -91,8 +91,8 @@ export default function IdentityHubPage() {
               <p className="text-muted-foreground">Mission 400: Project 153 - Global Proof of Reputation Registry.</p>
             </div>
             <div className="flex items-center gap-2">
-               <Badge variant="outline" className="border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
-                 <UserCheck className="size-4" /> DID_PROTOCOL_L4_ACTIVE
+               <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2 bg-emerald-500/5">
+                 <HeartHandshake className="size-4" /> DATA_JUSTICE_ENFORCED
                </Badge>
             </div>
           </header>
@@ -105,7 +105,7 @@ export default function IdentityHubPage() {
                     <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
                       <ShieldCheck className="size-4" /> Identity Registration
                     </CardTitle>
-                    <CardDescription>Issue your cross-chain reputation passport.</CardDescription>
+                    <CardDescription>Issue your cross-chain reputation passport via Zero-Knowledge Protocol.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="space-y-2">
@@ -119,9 +119,9 @@ export default function IdentityHubPage() {
                     </div>
                     
                     <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
-                       <h4 className="text-[10px] font-bold uppercase text-primary">Mesh Trust Sync</h4>
-                       <p className="text-[10px] text-muted-foreground leading-relaxed">
-                         Your identity will be linked to your NoorNexus Trust Score. ELITE and IMPERIAL tiers unlock prioritized mesh routing.
+                       <h4 className="text-[10px] font-bold uppercase text-primary">Zero-Knowledge Attestation</h4>
+                       <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                         Your private data remains on-premise. Only the reputation score and DID are broadcasted to the mesh.
                        </p>
                     </div>
 
@@ -173,11 +173,6 @@ export default function IdentityHubPage() {
                                "{identityResult.reasoning}"
                              </p>
                           </div>
-
-                          <div className="pt-2">
-                             <p className="text-[8px] font-mono text-muted-foreground uppercase mb-1">HMAC_V4 Attestation Seal</p>
-                             <p className="text-[9px] font-mono text-primary truncate">{identityResult.attestationSignature}</p>
-                          </div>
                         </div>
                       ) : (
                         <div className="h-[300px] flex flex-col items-center justify-center gap-4 text-center opacity-40">
@@ -190,28 +185,6 @@ export default function IdentityHubPage() {
                     </CardContent>
                   </Card>
                 </div>
-              </div>
-
-              {/* Identity Benefits & Tiers */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[
-                  { tier: "VERIFIED", min: 300, desc: "Standard cross-chain access.", color: "text-blue-400" },
-                  { tier: "ELITE", min: 600, desc: "Reduced swap fees, priority sync.", color: "text-emerald-400" },
-                  { tier: "IMPERIAL", min: 900, desc: "Zero-latency settlement, Mesh governance.", color: "text-amber-500" }
-                ].map((t, i) => (
-                  <Card key={i} className="glass-card bg-white/2 hover:bg-white/5 transition-colors">
-                     <CardHeader className="pb-2">
-                        <div className="flex justify-between items-center">
-                           <span className={`text-xs font-bold uppercase ${t.color}`}>{t.tier}</span>
-                           <Star className={`size-3 ${t.color} fill-current`} />
-                        </div>
-                     </CardHeader>
-                     <CardContent className="space-y-2">
-                        <p className="text-[10px] text-white font-bold">{t.min}+ Score Required</p>
-                        <p className="text-[9px] text-muted-foreground">{t.desc}</p>
-                     </CardContent>
-                  </Card>
-                ))}
               </div>
             </div>
 
@@ -226,30 +199,24 @@ export default function IdentityHubPage() {
                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
                     "Reputation is the armor of a sovereign merchant. By tying cross-chain activity to a single identity, we enable global trust without central control."
                   </p>
-                  <div className="pt-2 border-t border-white/5">
-                    <p className="text-[8px] text-muted-foreground uppercase font-bold">Consensus Accuracy</p>
-                    <p className="text-lg font-headline font-bold text-amber-500">100.00%</p>
-                  </div>
                 </CardContent>
               </Card>
 
               <Card className="glass-card">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                       <Activity className="size-4" /> Mesh Activity
+                       <ShieldCheck className="size-4" /> Privacy Status
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
-                    {[
-                      { action: "Wallet Linked", date: "2m ago" },
-                      { action: "Reputation Sync", date: "1h ago" },
-                      { action: "Bridge Success", date: "5h ago" }
-                    ].map((act, i) => (
-                      <div key={i} className="flex justify-between items-center text-[9px] p-2 bg-white/5 rounded">
-                         <span className="text-white uppercase font-bold">{act.action}</span>
-                         <span className="text-muted-foreground font-mono">{act.date}</span>
-                      </div>
-                    ))}
+                    <div className="flex justify-between items-center text-[9px] p-2 bg-emerald-500/5 rounded border border-emerald-500/20">
+                       <span className="text-emerald-500 uppercase font-bold">Data Sovereignty</span>
+                       <span className="text-emerald-500">SECURE</span>
+                    </div>
+                    <div className="flex justify-between items-center text-[9px] p-2 bg-primary/5 rounded border border-primary/20">
+                       <span className="text-primary uppercase font-bold">Third-Party Access</span>
+                       <span className="text-primary">DENIED</span>
+                    </div>
                  </CardContent>
               </Card>
             </div>
