@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle } from "lucide-react"
+import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle, Zap } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -29,6 +29,7 @@ export default function Home() {
   const [auditing, setAuditing] = useState(false)
   const [auditResult, setAuditResult] = useState<LedgerAuditOutput | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [borderFeed, setBorderFeed] = useState<string[]>([])
 
   // Real-time infrastructure data
   const { data: nodes } = useCollection<any>(collection(db, "nodes"))
@@ -49,6 +50,20 @@ export default function Home() {
         if (i === sequence.length - 1) setLoading(false)
       }, step.time)
     })
+
+    const interval = setInterval(() => {
+      const logs = [
+        "SIGNATURE VERIFIED: SG-EDGE-01",
+        "P2P HANDSHAKE: Sirajganj -> UAE",
+        "STABLECOIN SYNC: USDC -> MESH",
+        "BORDER SCAN: ZERO THREATS",
+        "NODE HEARTBEAT: SIRAJGANJ_OK"
+      ]
+      const log = logs[Math.floor(Math.random() * logs.length)]
+      setBorderFeed(prev => [log, ...prev].slice(0, 5))
+    }, 4000)
+
+    return () => clearInterval(interval)
   }, [])
 
   async function handleExecuteAudit() {
@@ -56,10 +71,10 @@ export default function Home() {
     setAuditResult(null)
     try {
       const result = await ledgerAudit({
-        totalVolume: 2552000,
-        settlementQueue: 124,
-        liquidityHealth: 98,
-        dailyThroughput: 1400000,
+        totalVolume: 420000000,
+        settlementQueue: 1240000,
+        liquidityHealth: 98.4,
+        dailyThroughput: 15600000,
       })
       setAuditResult(result)
       setIsDialogOpen(true)
@@ -112,17 +127,17 @@ export default function Home() {
                   <Menu className="size-6" />
                 </Button>
               </SidebarTrigger>
-              <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter">MISSION 400</Badge>
+              <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter">PHASE 2 ACTIVE</Badge>
             </div>
             
             <div className="space-y-4">
               <div className="hidden md:flex items-center gap-2">
                 <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">Operational OS v3</Badge>
-                <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 glow-emerald uppercase tracking-tighter">Mission 400 Active</Badge>
+                <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 glow-emerald uppercase tracking-tighter">Mission 400 | Phase 2 Active</Badge>
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-6xl font-headline font-bold tracking-tighter">Sovereign <span className="text-primary">Intelligence.</span></h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Autonomous cryptographic defense and infrastructure orchestration. Currently managing <span className="text-white font-mono">{nodes.length}</span> distributed nodes.
+                Autonomous cryptographic defense and infrastructure orchestration. Currently managing <span className="text-white font-mono">{nodes.length}</span> distributed nodes and <span className="text-primary font-bold">Stablecoin P2C Rails</span>.
               </p>
             </div>
           </header>
@@ -131,8 +146,8 @@ export default function Home() {
             {[
               { label: "Active Nodes", value: activeNodes, sub: `of ${nodes.length} Provisoned`, icon: Server, color: "text-primary" },
               { label: "Mesh Integrity", value: "99.9%", sub: "HMAC_V4 Verified", icon: Shield, color: "text-emerald-500" },
+              { label: "Treasury Health", value: "98.4%", sub: "Stablecoin Optimized", icon: Landmark, color: "text-primary" },
               { label: "Threat Matrix", value: "ZERO", sub: "Last Scan: 12ms", icon: Radar, color: "text-destructive" },
-              { label: "Directives", value: news.length, sub: "Live Broadcasts", icon: Terminal, color: "text-amber-500" },
             ].map((stat, i) => (
               <Card key={i} className="glass-card hover:border-primary/30 transition-all duration-300 group">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -176,24 +191,19 @@ export default function Home() {
             </div>
 
             <div className="space-y-6">
-              <Card className="glass-card">
+              <Card className="glass-card border-l-4 border-l-emerald-500">
                 <CardHeader>
-                  <CardTitle className="font-headline text-base uppercase">Treasury Pulse</CardTitle>
-                  <CardDescription className="text-xs uppercase">Real-time liquidity health.</CardDescription>
+                  <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
+                    <Zap className="size-4 text-emerald-500" />
+                    Imperial Border Feed
+                  </CardTitle>
+                  <CardDescription className="text-xs">Live cryptographic heartbeat.</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  {[
-                    { label: "Sovereign-BDT", amount: "1.4B", health: 98, color: "bg-emerald-500" },
-                    { label: "Asset-Mesh", amount: "420M", health: 94, color: "bg-primary" },
-                  ].map((asset, i) => (
-                    <div key={i} className="space-y-2">
-                      <div className="flex justify-between items-end">
-                        <span className="text-[10px] font-bold text-muted-foreground uppercase">{asset.label}</span>
-                        <span className="text-sm font-headline font-bold">{asset.amount}</span>
-                      </div>
-                      <div className="h-1 bg-muted rounded-full overflow-hidden">
-                        <div className={`h-full ${asset.color} transition-all duration-1000`} style={{ width: `${asset.health}%` }} />
-                      </div>
+                <CardContent className="space-y-4">
+                  {borderFeed.map((log, i) => (
+                    <div key={i} className="p-3 bg-white/5 rounded border border-white/5 font-mono text-[9px] flex items-center gap-3 animate-in fade-in slide-in-from-left-2">
+                      <div className="size-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                      <span className="text-muted-foreground truncate">{log}</span>
                     </div>
                   ))}
                   <div className="pt-4 border-t border-white/5">
@@ -202,8 +212,8 @@ export default function Home() {
                        disabled={auditing}
                        className="w-full bg-primary text-primary-foreground py-3 rounded font-bold text-[10px] uppercase tracking-widest h-auto glow-primary"
                      >
-                        {auditing ? <Loader2 className="animate-spin mr-2 size-3" /> : <FileText className="size-3 mr-2" />}
-                        {auditing ? "Auditing Mesh..." : "Execute Ledger Audit"}
+                        {auditing ? <Loader2 className="animate-spin mr-2 size-3" /> : <Shield className="size-3 mr-2" />}
+                        {auditing ? "Analyzing Mesh..." : "Execute Integrity Audit"}
                      </Button>
                   </div>
                 </CardContent>
@@ -218,7 +228,7 @@ export default function Home() {
           <DialogHeader>
             <DialogTitle className="font-headline text-xl sm:text-2xl flex items-center gap-2 text-primary">
               <Shield className="size-6" />
-              IMPERIAL AUDIT REPORT
+              IMPERIAL INTEGRITY REPORT
             </DialogTitle>
           </DialogHeader>
           
@@ -232,7 +242,7 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="p-4 bg-white/5 rounded-lg border border-white/5 text-right">
-                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Integrity Score</p>
+                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Security Score</p>
                   <p className="text-2xl sm:text-3xl font-headline font-bold text-primary">{auditResult.securityScore}%</p>
                 </div>
               </div>

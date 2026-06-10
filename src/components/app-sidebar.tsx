@@ -22,7 +22,8 @@ import {
   BookOpen,
   TrendingUp,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Wallet
 } from "lucide-react"
 
 import {
@@ -50,6 +51,7 @@ const items = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Border Monitor", url: "/border-monitor", icon: Radar },
   { title: "Compliance Agent", url: "/compliance", icon: ShieldCheck },
+  { title: "Sovereign Treasury", url: "/treasury", icon: Wallet },
   { title: "One Engine Ledger", url: "/ledger", icon: Layers },
   { title: "Node Watchtower", url: "/nodes", icon: Activity },
   { title: "SmartRemit P2P", url: "/remittance", icon: Send },
