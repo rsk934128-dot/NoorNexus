@@ -21,12 +21,13 @@ export interface DailySummary {
   revenue: {
     levy: number;
     sdkFees: number;
+    settlementFees: number;
     total: number;
   };
   networkGrowth: string;
   agentStatus: string;
   topNode: string;
-  legalSovereignty: string; // New: To show the legal standing
+  legalSovereignty: string;
 }
 
 const SIMULATED_SK = 'sk_sov_nexus_alpha_v3';

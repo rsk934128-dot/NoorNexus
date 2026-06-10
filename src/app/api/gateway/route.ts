@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 /**
  * @fileOverview Sovereign Gateway API Simulation.
- * Enhanced to handle V2 Order Creation, Inter-Bank Settlements, and Daily Summaries.
+ * Enhanced to handle V2 Order Creation, Inter-Bank Settlements, and Detailed Revenue Summaries.
  */
 
 const AUTHORIZED_KEY = 'sk_sov_nexus_alpha_v3';
@@ -38,9 +38,9 @@ export async function POST(request: Request) {
     case 'GET_VAULT_STATUS':
       return NextResponse.json({
         integrity: 99.8,
-        activeNodes: 42,
+        activeNodes: 420,
         threatLevel: 'LOW',
-        reasoning: "HMSC_V4 clusters report zero drift. Sirajganj-Edge nodes synchronized.",
+        reasoning: "HMSC_V4 clusters report zero drift. All regional nodes synchronized.",
         status: 'OPTIMAL',
         timestamp: Date.now()
       });
@@ -48,14 +48,15 @@ export async function POST(request: Request) {
     case 'GET_DAILY_SUMMARY':
       return NextResponse.json({
         date: new Date().toLocaleDateString(),
-        totalTransactions: 1240,
-        volume24h: 1560000,
+        totalTransactions: 15420,
+        volume24h: 12560000,
         revenue: {
-          levy: 7800,
-          sdkFees: 1250,
-          total: 9050
+          levy: 12500,
+          sdkFees: 3420,
+          settlementFees: 8250,
+          total: 24170
         },
-        networkGrowth: "+1.2%",
+        networkGrowth: "+4.2%",
         agentStatus: "ALL_ACTIVE",
         topNode: "SIRAJGANJ-EDGE-01",
         legalSovereignty: "SOVEREIGN_TIN_ACTIVE"
@@ -71,7 +72,7 @@ export async function POST(request: Request) {
         message: 'Inter-Bank Handshake Successful',
         escrowId: 'ESC-' + Math.random().toString(16).substring(2, 8).toUpperCase(),
         timestamp: Date.now(),
-        nodeSync: "42_NODES_VERIFIED"
+        nodeSync: "420_NODES_VERIFIED"
       });
 
     case 'BROADCAST_PROCLAMATION':
@@ -79,7 +80,7 @@ export async function POST(request: Request) {
         status: 'BROADCASTED',
         broadcastHash: '0x_IMPERIAL_SEAL_' + Math.random().toString(16).substring(2, 16),
         message: 'The Imperial Proclamation has been received by 400+ nodes.',
-        nodesSynced: 400,
+        nodesSynced: 420,
         timestamp: Date.now()
       });
 

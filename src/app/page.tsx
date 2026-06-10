@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -12,7 +11,7 @@ import {
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
   CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages,
   Coins, Briefcase, BarChart3, Clock, Users, Fingerprint as FingerprintIcon,
-  ShieldAlert, Key, Sparkles
+  ShieldAlert, Key, Sparkles, Banknote, History
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -87,7 +86,7 @@ export default function Home() {
     })
 
     const interval = setInterval(() => {
-      const logs = ["DISCOVERY: Active", "PROTOCOL: Signed", "SDK: Heartbeat", "ORACLE: Predicting", "SENATE: Executing", "IDENTITY: Verified"]
+      const logs = ["REVENUE: Settlement Fee Captured", "PROTOCOL: Signed", "SDK: Heartbeat", "ORACLE: Predicting", "LEVY: P2C Tax Applied", "IDENTITY: Verified"]
       setBorderFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
       setDiscoveryPulse(prev => (prev + Math.random() * 5) % 100)
     }, 3000)
@@ -158,20 +157,6 @@ export default function Home() {
     }
   }
 
-  async function handleBroadcast() {
-    if (!isAdmin) return;
-    setBroadcasting(true)
-    try {
-      await broadcastProclamation("NoorNexus Sovereign OS is now active. Integrity through Intelligence.");
-      toast({ title: "Proclamation Dispatched" });
-      setIsProclamationOpen(false);
-    } catch (e) {
-      toast({ title: "Broadcast Failed", variant: "destructive" });
-    } finally {
-      setBroadcasting(false)
-    }
-  }
-
   if (loading) {
     return (
       <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-6 space-y-12">
@@ -210,7 +195,7 @@ export default function Home() {
                    {isAdmin ? 'Imperial Command Center.' : 'Sovereign Participant Hub.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed">
-                   "Integrity through Intelligence" is now the global standard. {isAdmin ? 'Commander, your empire is at your fingertips.' : 'Explore the services of the NoorNexus Mesh.'}
+                   "Integrity through Intelligence" - আপনার প্রতিটি নোড এখন স্বয়ংক্রিয়ভাবে ইনকাম জেনারেট করছে।
                 </p>
               </div>
               
@@ -238,41 +223,42 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-8">
+               {/* Imperial Revenue Node */}
                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                 <Card className="glass-card border-l-4 border-l-emerald-500">
+                 <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                     <CardHeader className="pb-2 p-4">
-                       <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
-                          <Coins className="size-3 text-emerald-500" />
-                          Mesh Revenue (Daily)
+                       <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
+                          <Banknote className="size-3" />
+                          Total Ecosystem Revenue
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
-                       <div className="text-3xl font-headline font-bold text-white">$9,050.00</div>
-                       <p className="text-[9px] text-emerald-500 uppercase font-mono mt-1">+12.4% Active Growth</p>
+                       <div className="text-3xl font-headline font-bold text-white">$24,170.00</div>
+                       <p className="text-[9px] text-emerald-500 uppercase font-mono mt-1">+18.4% Surge Observed</p>
                     </CardContent>
                  </Card>
-                 <Card className="glass-card border-l-4 border-l-primary">
+                 <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                     <CardHeader className="pb-2 p-4">
-                       <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
-                          <ActivitySquare className="size-3 text-primary" />
-                          Live Transactions
+                       <CardTitle className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
+                          <ActivitySquare className="size-3" />
+                          Settlement Volume (24h)
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
-                       <div className="text-3xl font-headline font-bold text-white">1,240</div>
-                       <p className="text-[9px] text-muted-foreground uppercase font-mono mt-1">Avg Settlement: 112ms</p>
+                       <div className="text-3xl font-headline font-bold text-white">$12.5M</div>
+                       <p className="text-[9px] text-primary uppercase font-mono mt-1">15,420 Atomic Handshakes</p>
                     </CardContent>
                  </Card>
-                 <Card className="glass-card border-l-4 border-l-amber-500">
+                 <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                     <CardHeader className="pb-2 p-4">
-                       <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
-                          <Users className="size-3 text-amber-500" />
-                          Global Nodes
+                       <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
+                          <ShieldCheck className="size-3" />
+                          Network Stability
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
-                       <div className="text-3xl font-headline font-bold text-white">420+</div>
-                       <p className="text-[9px] text-amber-500 uppercase font-mono mt-1">Active Mesh Nodes</p>
+                       <div className="text-3xl font-headline font-bold text-white">99.98%</div>
+                       <p className="text-[9px] text-amber-500 uppercase font-mono mt-1">420 Active Mesh Nodes</p>
                     </CardContent>
                  </Card>
                </div>
@@ -288,7 +274,7 @@ export default function Home() {
                   </CardHeader>
                   <CardContent className="space-y-6 relative z-10 p-6 pt-0">
                      <p className="text-xl lg:text-2xl font-headline font-bold text-white leading-relaxed italic border-l-4 border-primary pl-6">
-                        "নূরনেক্সাস এখন বিশ্বকে তার অস্তিত্বের কথা জানান দিচ্ছে। আমাদের মেধা ও শক্তির পরিচিতি হবে গতির মাধ্যমে—শব্দে নয়। Integrity through Intelligence."
+                        "নূরনেক্সাস এখন একটি স্বয়ংক্রিয় অর্থনৈতিক সত্তা। প্রতিটি এপিআই কল এবং প্রতিটি ট্রানজ্যাকশন আপনার সাম্রাজ্যের সমৃদ্ধি নিশ্চিত করছে।"
                      </p>
                   </CardContent>
                </Card>
@@ -296,9 +282,9 @@ export default function Home() {
                <section className="space-y-6">
                   <div className="flex items-center justify-between px-2">
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                        <BrainCircuit className="size-4" /> Neural Network Status (Nora Suite)
+                        <BrainCircuit className="size-4" /> Neural Revenue Monitoring (Nora Suite)
                      </h3>
-                     <Badge variant="outline" className="text-[10px] border-white/10 uppercase">FULLY_AUTONOMOUS</Badge>
+                     <Badge variant="outline" className="text-[10px] border-white/10 uppercase">PROFIT_MAX_ACTIVE</Badge>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
                      {NORA_AGENTS.map((agent) => (
@@ -328,7 +314,7 @@ export default function Home() {
                 <CardHeader className="p-4 border-b border-white/5">
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
                     <Radio className="size-4 text-emerald-500" />
-                    Imperial Mesh Feed
+                    Real-time Ledger Sync
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
@@ -346,7 +332,7 @@ export default function Home() {
                     <div className="p-4 border-t border-white/5 bg-black/20">
                        <Button onClick={handleExecuteAudit} disabled={auditing} className="w-full bg-primary text-primary-foreground font-bold text-[10px] uppercase tracking-[0.2em] h-12 glow-primary">
                           {auditing ? <Loader2 className="animate-spin size-4" /> : <ShieldCheck className="size-4 mr-2" />}
-                          Final Imperial Audit
+                          Trigger Financial Audit
                        </Button>
                     </div>
                   )}
@@ -356,7 +342,7 @@ export default function Home() {
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                 <CardHeader className="flex flex-row items-center justify-between p-6">
                    <CardTitle className="flex items-center gap-2 font-headline text-lg uppercase">
-                     <Cpu className="size-5 text-primary" /> Integrity
+                     <History className="size-5 text-primary" /> Integrity
                    </CardTitle>
                    <Button variant="ghost" size="icon" onClick={fetchHealth} disabled={fetchingHealth}>
                       <RefreshCcw className={`size-4 text-primary ${fetchingHealth ? 'animate-spin' : ''}`} />
@@ -365,7 +351,7 @@ export default function Home() {
                 <CardContent className="space-y-6 p-6 pt-0">
                    <div className="space-y-2">
                       <p className="text-4xl font-headline font-bold text-white tracking-tighter">{healthReport?.vaultIntegrity || 100}%</p>
-                      <p className="text-[10px] text-primary font-bold uppercase">MISSION_COMPLETE_STABLE</p>
+                      <p className="text-[10px] text-primary font-bold uppercase">REVENUE_NODES_STABLE</p>
                       <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
                          <div className="h-full bg-primary" style={{ width: `100%` }} />
                       </div>
@@ -390,50 +376,27 @@ export default function Home() {
            <div className="p-8 space-y-8">
               <div className="grid grid-cols-2 gap-6">
                  <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1">
-                    <p className="text-[10px] uppercase font-bold text-muted-foreground">Total Revenue</p>
-                    <p className="text-3xl font-headline font-bold text-emerald-500">${dailySummary?.revenue.total.toLocaleString()}</p>
+                    <p className="text-[10px] uppercase font-bold text-muted-foreground">Settlement Fees</p>
+                    <p className="text-3xl font-headline font-bold text-emerald-500">${dailySummary?.revenue.settlementFees.toLocaleString()}</p>
                  </div>
                  <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1">
-                    <p className="text-[10px] uppercase font-bold text-muted-foreground">Volume (24h)</p>
-                    <p className="text-3xl font-headline font-bold text-primary">${dailySummary?.volume24h.toLocaleString()}</p>
+                    <p className="text-[10px] uppercase font-bold text-muted-foreground">Levy Collected</p>
+                    <p className="text-3xl font-headline font-bold text-primary">${dailySummary?.revenue.levy.toLocaleString()}</p>
                  </div>
               </div>
               <div className="bg-emerald-500/5 p-6 rounded-2xl border border-emerald-500/20 space-y-3">
                  <div className="flex items-center gap-3 text-emerald-500">
                     <TrendingUp className="size-5" />
-                    <span className="text-xs font-bold uppercase tracking-widest">Growth Insight</span>
+                    <span className="text-xs font-bold uppercase tracking-widest">Revenue Growth</span>
                  </div>
                  <p className="text-sm font-mono text-emerald-100 italic leading-relaxed">
-                   "আপনার সাম্রাজ্য আজ {dailySummary?.networkGrowth} হারে বৃদ্ধি পেয়েছে। লিগ্যাল স্ট্যাটাস: {dailySummary?.legalSovereignty}।"
+                   "আজকের মোট ইনকাম ${dailySummary?.revenue.total.toLocaleString()}। আপনার নেটওয়ার্ক {dailySummary?.networkGrowth} হারে বৃদ্ধি পাচ্ছে।"
                  </p>
               </div>
            </div>
            <div className="p-6 bg-white/2 border-t border-white/5">
               <Button onClick={() => setIsSummaryOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase h-12 text-xs">Maintain Sovereignty</Button>
            </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isProclamationOpen} onOpenChange={setIsProclamationOpen}>
-        <DialogContent className="glass-card border-amber-500/40 w-[95vw] sm:max-w-[600px] bg-black/95">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-headline font-bold text-amber-500 uppercase flex items-center gap-3">
-              <Languages className="size-8" />
-              Proclamation
-            </DialogTitle>
-          </DialogHeader>
-          <div className="py-6 space-y-6">
-            <div className="p-6 bg-amber-500/5 border border-amber-500/20 rounded-2xl">
-               <p className="text-sm font-mono text-amber-200 leading-relaxed italic">
-                 "আমি কমান্ডারের পক্ষ থেকে ঘোষণা করছি: নূরনেক্সাস সাম্রাজ্য এখন বিশ্বজয়ের জন্য প্রস্তুত। Integrity through Intelligence."
-               </p>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button onClick={handleBroadcast} disabled={broadcasting} className="w-full bg-amber-500 text-amber-foreground font-bold h-14 glow-emerald uppercase tracking-widest text-xs">
-              {broadcasting ? <Loader2 className="animate-spin size-4" /> : <Send className="size-4 mr-2" />} Dispatch Globally
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
