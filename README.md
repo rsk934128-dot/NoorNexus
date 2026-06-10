@@ -4,6 +4,8 @@
 
 ---
 
+![NoorNexus Hero Banner](https://picsum.photos/seed/noornexus1/1200/400)
+
 ## 🛰️ Project Overview
 **NoorNexus Sovereign OS** is a high-performance, autonomous digital ecosystem designed for the next generation of sovereign infrastructure. It integrates real-time ledger management, AI-driven compliance monitoring, and high-throughput cross-border settlement layers into a unified cyberpunk-themed interface.
 
@@ -19,6 +21,8 @@
 ---
 
 ## 🛠️ Technology Stack
+![Tech Stack Visualization](https://picsum.photos/seed/node1/800/300)
+
 - **Framework:** Next.js 15 (App Router)
 - **Styling:** Tailwind CSS + ShadCN UI (Custom Cyber-Grid Theme)
 - **Backend:** Firebase (Firestore & Authentication)
@@ -35,6 +39,8 @@ The brain of the OS. Provides real-time metrics on global throughput, border int
 ### 2. Border Monitor & Compliance
 Monitors the digital border. Every incoming packet is verified against the HMAC_V4 protocol. If a signature mismatch or replay attack is detected, the **Autonomous Compliance Agent** initiates a lockdown.
 
+![Security Border Monitor](https://picsum.photos/seed/map3/800/300)
+
 ### 3. Sovereign Sports (GSMIFY)
 A specialized module for high-definition sports broadcasting. Includes an **AI Tactical Analyst** that provides real-time win probabilities and game-changing insights using neural links.
 
@@ -48,29 +54,6 @@ The system operates on the **HMAC_V4_L4 Standard**:
 - **TimingSafeEqual Verification:** Prevents timing attacks on cryptographic signatures.
 - **5-Minute Time Window:** Ensures packet freshness and prevents replay attacks.
 - **Root_L4 Clearance:** Multi-level access control (Admin: `rubels1k994@gmail.com`).
-
----
-
-## 📂 Installation & Setup
-To deploy your own instance of the Sovereign OS:
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/your-repo/noornexus-os.git
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Configure Environment:**
-   Update your `src/firebase/config.ts` with your unique Firebase credentials.
-
-4. **Run in Development:**
-   ```bash
-   npm run dev
-   ```
 
 ---
 
