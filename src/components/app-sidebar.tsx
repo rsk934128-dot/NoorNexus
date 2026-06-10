@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -19,7 +20,9 @@ import {
   Building2,
   Code2,
   BookOpen,
-  TrendingUp
+  TrendingUp,
+  Maximize2,
+  Minimize2
 } from "lucide-react"
 
 import {
@@ -67,6 +70,7 @@ export function AppSidebar() {
   const { user } = useUser()
   const { toast } = useToast()
   const { setOpenMobile, isMobile } = useSidebar()
+  const [isFullscreen, setIsFullscreen] = React.useState(false)
 
   const isAdmin = user?.email === ADMIN_EMAIL
 
@@ -86,6 +90,32 @@ export function AppSidebar() {
       })
     }
   }
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((e) => {
+        toast({
+          title: "Fullscreen Error",
+          description: e.message,
+          variant: "destructive"
+        })
+      })
+      setIsFullscreen(true)
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen()
+        setIsFullscreen(false)
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+    document.addEventListener("fullscreenchange", handleFullscreenChange)
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange)
+  }, [])
 
   const handleLinkClick = () => {
     if (isMobile) {
@@ -129,6 +159,25 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="p-4 space-y-4">
+        <div className="space-y-2">
+          <button 
+            onClick={toggleFullscreen}
+            className="w-full py-2.5 bg-primary/5 rounded border border-primary/20 text-[9px] uppercase font-bold text-primary hover:bg-primary/10 transition-all flex items-center justify-center gap-2 group"
+          >
+            {isFullscreen ? (
+              <>
+                <Minimize2 className="size-3 group-hover:scale-110 transition-transform" />
+                Exit Fullscreen
+              </>
+            ) : (
+              <>
+                <Maximize2 className="size-3 group-hover:scale-110 transition-transform" />
+                Go Fullscreen
+              </>
+            )}
+          </button>
+        </div>
+
         {user ? (
           <div className={`p-3 rounded-xl border space-y-3 transition-all ${isAdmin ? 'bg-primary/10 border-primary/40 shadow-[0_0_15px_rgba(0,150,255,0.2)]' : 'bg-primary/5 border-primary/20'}`}>
             <div className="flex items-center gap-3">
