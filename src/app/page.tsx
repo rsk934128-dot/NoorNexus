@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -12,7 +11,7 @@ import {
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
   CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages,
   Coins, Briefcase, BarChart3, Clock, Users, Fingerprint as FingerprintIcon,
-  ShieldAlert
+  ShieldAlert, Key
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -29,6 +28,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { SovereignLogo } from "@/components/sovereign-logo"
 import { getSystemHealthReport, HealthReport, broadcastProclamation, getDailyImperialSummary, type DailySummary } from "@/services/nexus-bridge"
+import { connectNode } from "@/services/sovereign-protocol"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
@@ -57,6 +57,7 @@ export default function Home() {
   const [statusText, setStatusText] = useState("INITIALIZING MISSION 400 CORE...")
   const [auditing, setAuditing] = useState(false)
   const [broadcasting, setBroadcasting] = useState(false)
+  const [handshaking, setHandshaking] = useState(false)
   const [fetchingSummary, setFetchingSummary] = useState(false)
   const [auditResult, setAuditResult] = useState<LedgerAuditOutput | null>(null)
   const [dailySummary, setDailySummary] = useState<DailySummary | null>(null)
@@ -139,6 +140,23 @@ export default function Home() {
     }
   }
 
+  async function handleSovereignHandshake() {
+    if (!isAdmin) return;
+    setHandshaking(true)
+    try {
+      const result = await connectNode("IMPERIAL_READ_ONLY_KEY_42B");
+      toast({ 
+        title: "Sovereign Handshake Success", 
+        description: `Node: ${result.hubId} | Proof: ${result.merkleProof.substring(0, 12)}...`,
+        className: "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
+      });
+    } catch (e) {
+      toast({ title: "Handshake Failed", variant: "destructive" });
+    } finally {
+      setHandshaking(false)
+    }
+  }
+
   async function handleBroadcast() {
     if (!isAdmin) return;
     setBroadcasting(true)
@@ -208,8 +226,8 @@ export default function Home() {
                     <Button onClick={handleFetchDailySummary} disabled={fetchingSummary} className="flex-1 bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 gap-2 text-[10px]">
                       <BarChart3 className="size-4" /> Daily Dispatch
                     </Button>
-                    <Button onClick={() => setIsProclamationOpen(true)} className="flex-1 bg-amber-500 text-amber-foreground font-bold uppercase tracking-widest h-12 glow-emerald text-[10px]">
-                      <Languages className="size-4 mr-2" /> Proclamation
+                    <Button onClick={handleSovereignHandshake} disabled={handshaking} className="flex-1 bg-secondary text-secondary-foreground font-bold uppercase tracking-widest h-12 gap-2 text-[10px] glow-emerald">
+                      {handshaking ? <Loader2 className="size-4 animate-spin" /> : <Key className="size-4" />} SDK Handshake
                     </Button>
                   </div>
                 </div>
