@@ -5,19 +5,19 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Zap, Globe, Cpu, AlertTriangle, Activity, Database, Landmark, Radar, Lock, FileText, CheckCircle, AlertCircle, HardDrive, Terminal, Layers, Box, TestTube, Microscope, Menu } from "lucide-react"
+import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { SovereignLogo } from "@/components/sovereign-logo"
 
 export default function Home() {
   const { toast } = useToast()
@@ -27,7 +27,6 @@ export default function Home() {
   const [auditResult, setAuditResult] = useState<LedgerAuditOutput | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [performance, setPerformance] = useState({ cpu: 12, ram: 2.1, workers: 4 })
-  const [testStatus, setTestStatus] = useState("PENDING")
 
   useEffect(() => {
     const sequence = [
@@ -53,9 +52,6 @@ export default function Home() {
         workers: 4
       }))
     }, 2000)
-
-    setTimeout(() => setTestStatus("RUNNING"), 5000)
-    setTimeout(() => setTestStatus("PASSED"), 8000)
 
     return () => clearInterval(interval)
   }, [])
@@ -89,13 +85,10 @@ export default function Home() {
   if (loading) {
     return (
       <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-6 sm:p-10 space-y-8">
-        <div className="size-20 sm:size-24 bg-primary/10 rounded-3xl flex items-center justify-center animate-pulse border border-primary/20 shadow-[0_0_80px_rgba(0,150,255,0.15)] relative">
-          <Lock className="size-10 sm:size-12 text-primary" />
-          <div className="absolute inset-0 border-2 border-primary/5 rounded-3xl animate-ping" />
-        </div>
+        <SovereignLogo size={120} className="animate-pulse" />
         <div className="space-y-4 text-center">
           <div className="flex flex-col gap-1">
-             <p className="text-primary font-headline text-lg sm:text-xl font-bold tracking-widest uppercase">NoorNexus</p>
+             <p className="text-primary font-headline text-lg sm:text-xl font-bold tracking-widest uppercase">NoorNexus OS</p>
              <p className="text-muted-foreground font-mono text-[8px] sm:text-[10px] tracking-[0.4em] uppercase">{statusText}</p>
           </div>
           <div className="w-64 sm:w-80 h-1 bg-muted rounded-full overflow-hidden mx-auto">
@@ -143,7 +136,7 @@ export default function Home() {
             </div>
           </header>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:space-y-0 space-y-4 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { label: "Border Guard", value: "LOCKDOWN", sub: "HMAC_V4 Active", icon: Shield, color: "text-primary" },
               { label: "Threat Matrix", value: "ZERO", sub: "Last Audit: 12ms", icon: Radar, color: "text-destructive" },
@@ -256,14 +249,14 @@ export default function Home() {
                 <CardHeader className="pb-2">
                    <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
                       <Terminal className="size-4" />
-                      Build Protocol
+                      Runtime Protocol
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[8px] text-muted-foreground leading-relaxed">
-                   <p className="text-primary">{'>'} parallel_mode: incubating</p>
-                   <p className="text-emerald-500">{'>'} config_cache: hit</p>
-                   <p className="text-amber-500">{'>'} workers: {performance.workers}</p>
-                   <p className="animate-pulse">{'>'} jvm_args: -Xmx4g</p>
+                   <p className="text-primary">{'>'} sovereign_os: active</p>
+                   <p className="text-emerald-500">{'>'} protocol: HMAC_V4</p>
+                   <p className="text-amber-500">{'>'} build_mode: parallel</p>
+                   <p className="animate-pulse">{'>'} identity: GSMIFY_SPORTS</p>
                 </CardContent>
               </Card>
             </div>
@@ -289,8 +282,8 @@ export default function Home() {
                     {auditResult.auditStatus}
                   </p>
                 </div>
-                <div className="p-3 sm:p-4 bg-white/5 rounded-lg border border-white/5">
-                  <p className="text-[8px] sm:text-[10px] uppercase font-bold text-muted-foreground mb-1">Score</p>
+                <div className="grid grid-cols-1 gap-1">
+                  <p className="text-[8px] sm:text-[10px] uppercase font-bold text-muted-foreground">Integrity Score</p>
                   <p className="text-xl sm:text-3xl font-headline font-bold text-primary">{auditResult.securityScore}%</p>
                 </div>
               </div>

@@ -5,10 +5,11 @@ import { useAuth, useUser } from "@/firebase"
 import { signInWithGoogle } from "@/firebase/auth/auth-service"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Lock, LogIn, ShieldCheck, Zap } from "lucide-react"
+import { LogIn, ShieldCheck, Zap } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
+import { SovereignLogo } from "@/components/sovereign-logo"
 
 export default function LoginPage() {
   const auth = useAuth()
@@ -48,8 +49,8 @@ export default function LoginPage() {
     <div className="h-screen w-full bg-background cyber-grid flex items-center justify-center p-6">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center space-y-4">
-          <div className="size-20 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto border border-primary/20 glow-primary">
-            <Lock className="size-10 text-primary" />
+          <div className="mx-auto flex justify-center">
+            <SovereignLogo size={100} />
           </div>
           <div className="space-y-1">
             <h1 className="text-4xl font-headline font-bold tracking-tighter">NoorNexus <span className="text-primary">OS</span></h1>
@@ -59,8 +60,8 @@ export default function LoginPage() {
 
         <Card className="glass-card border-primary/20 bg-card/60 backdrop-blur-3xl">
           <CardHeader>
-            <CardTitle className="font-headline text-center">Sovereign Gate</CardTitle>
-            <CardDescription className="text-center uppercase text-[10px] tracking-widest">Identify yourself to access the mesh nodes</CardDescription>
+            <CardTitle className="font-headline text-center text-primary uppercase">Sovereign Gate</CardTitle>
+            <CardDescription className="text-center uppercase text-[10px] tracking-widest font-bold">Identify yourself to access the mesh nodes</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="p-4 bg-primary/5 border border-primary/10 rounded-xl space-y-3">
@@ -68,7 +69,7 @@ export default function LoginPage() {
                   <ShieldCheck className="size-4" />
                   LEVEL 4 CLEARANCE REQUIRED
                </div>
-               <p className="text-[10px] text-muted-foreground leading-relaxed">
+               <p className="text-[10px] text-muted-foreground leading-relaxed font-mono">
                   Encryption Layer: HMAC_V4 SHA256<br/>
                   Session Monitoring: ACTIVE<br/>
                   Zero-Trust Protocol: ENABLED

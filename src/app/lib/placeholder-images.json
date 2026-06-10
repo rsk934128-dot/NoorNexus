@@ -1,0 +1,23 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "hero-bg",
+      "description": "Cyberpunk digital infrastructure network",
+      "imageUrl": "https://picsum.photos/seed/noornexus1/1200/800",
+      "imageHint": "cyberpunk network"
+    },
+    {
+      "id": "node-visual",
+      "description": "Server rack representation",
+      "imageUrl": "https://picsum.photos/seed/node1/400/300",
+      "imageHint": "server farm"
+    },
+    {
+      "id": "app-logo",
+      "description": "Sovereign Digital Crest",
+      "imageUrl": "https://picsum.photos/seed/logo123/200/200",
+      "imageHint": "digital logo"
+    }
+  ]
+}

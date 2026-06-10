@@ -8,15 +8,12 @@ import {
   Layers, 
   Activity, 
   Send, 
-  Terminal,
   Settings,
-  Lock,
   Trophy,
   Radar,
   ChevronRight,
   LogOut,
   LogIn,
-  User as UserIcon,
   X
 } from "lucide-react"
 
@@ -38,6 +35,7 @@ import { signOutUser } from "@/firebase/auth/auth-service"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
+import { SovereignLogo } from "@/components/sovereign-logo"
 
 const items = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
@@ -84,11 +82,9 @@ export function AppSidebar() {
     <Sidebar className="border-r border-white/5 bg-card/80 backdrop-blur-xl">
       <SidebarHeader className="p-4 flex flex-row items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="size-8 bg-primary rounded-lg flex items-center justify-center glow-primary">
-            <Lock className="size-5 text-primary-foreground" />
-          </div>
-          <div>
-            <h1 className="text-lg font-headline font-bold text-primary tracking-tight">NoorNexus</h1>
+          <SovereignLogo size={36} className="shrink-0" />
+          <div className="min-w-0">
+            <h1 className="text-lg font-headline font-bold text-primary tracking-tight truncate">NoorNexus</h1>
             <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Imperial OS v3</p>
           </div>
         </div>
