@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
   Menu, MessageSquare, Cpu, BookOpen, Layers, Info, CheckCircle2,
-  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight
+  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, RefreshCcw
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -32,6 +32,15 @@ const REQUIRED_HEADERS = [
   { name: "X-R-TS", desc: "Unix timestamp in milliseconds.", required: "Yes", example: "1763555087656" },
   { name: "X-R-KEY-VERSION", desc: "Key pair version used for signing.", required: "Yes", example: "1" },
   { name: "X-R-Signature", desc: "SHA256withRSA digital signature.", required: "Yes*", example: "ZxAmLpV..." }
+]
+
+const WEBHOOK_FIELDS = [
+  { name: "orderSn", type: "String", desc: "Payment serial number." },
+  { name: "outerOrderSn", type: "String", desc: "Merchant's original order ID." },
+  { name: "orderStatus", type: "Int", desc: "1=Paying; 2=Success; 3=Failed; 4=Closed" },
+  { name: "paymentTime", type: "Long", desc: "Completion timestamp (ms)." },
+  { name: "orderAmount", type: "Decimal", desc: "Total fiat amount." },
+  { name: "coin", type: "String", desc: "Crypto asset used (e.g. USDT)." }
 ]
 
 interface Message {
@@ -73,7 +82,7 @@ export default function ApiHubPage() {
       const history = messages.map(m => ({ role: m.role, text: m.text }))
       const result = await noraIntegrationAssistant({
         query: userMsg,
-        context: "HMAC_V4",
+        context: "WEBHOOKS",
         history
       })
       
@@ -152,8 +161,9 @@ export default function ApiHubPage() {
               <Tabs defaultValue="endpoints" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
                   <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> API Docs</TabsTrigger>
-                  <TabsTrigger value="flows" className="gap-2"><Layers className="size-4" /> Integration Guide</TabsTrigger>
-                  <TabsTrigger value="security" className="gap-2"><ShieldAlert className="size-4" /> Security Guide</TabsTrigger>
+                  <TabsTrigger value="flows" className="gap-2"><Layers className="size-4" /> Integration</TabsTrigger>
+                  <TabsTrigger value="security" className="gap-2"><ShieldAlert className="size-4" /> Security</TabsTrigger>
+                  <TabsTrigger value="webhooks" className="gap-2"><BellRing className="size-4" /> Webhooks</TabsTrigger>
                   <TabsTrigger value="playground" className="gap-2"><Terminal className="size-4" /> Playground</TabsTrigger>
                 </TabsList>
 
@@ -318,25 +328,6 @@ export default function ApiHubPage() {
                               {`signature = base64Encode(sha256withRSA(stringToSign, privateKey))`}
                             </div>
                           </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-                            <div className="space-y-2">
-                              <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
-                                <Key className="size-3 text-emerald-500" /> Key Rotation
-                              </h4>
-                              <p className="text-[9px] text-muted-foreground leading-relaxed">
-                                Use <code>X-R-KEY-VERSION</code> (1, 2, 3...) to indicate which key version was used for signing.
-                              </p>
-                            </div>
-                            <div className="space-y-2">
-                              <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
-                                <ShieldCheck className="size-3 text-primary" /> Verification
-                              </h4>
-                              <p className="text-[9px] text-muted-foreground leading-relaxed">
-                                Callback signatures format: <code>{`{appKey}.{timestamp}.{requestBody}`}</code>. Verify using NoorNexus Public Key.
-                              </p>
-                            </div>
-                          </div>
                         </CardContent>
                       </Card>
                     </div>
@@ -345,36 +336,110 @@ export default function ApiHubPage() {
                       <Card className="glass-card h-fit">
                         <CardHeader>
                           <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                            <Terminal className="size-4" /> Implementation
+                            <Terminal className="size-4" /> RSA Key Gen
                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                          <div className="space-y-2">
-                            <p className="text-[10px] uppercase font-bold text-muted-foreground">RSA Generation (OpenSSL)</p>
-                            <pre className="p-2 bg-black/40 rounded border border-white/5 text-[9px] font-mono text-muted-foreground whitespace-pre-wrap">
-                              {`openssl genrsa -out private_key.pem 2048\nopenssl rsa -in private_key.pem -pubout -out public_key.pem`}
-                            </pre>
-                          </div>
-                          <div className="pt-4 border-t border-white/5">
-                            <p className="text-[10px] text-muted-foreground leading-relaxed">
-                              Upload your <b>public key</b> in the Developer Portal to obtain your <code>appKey</code>.
-                            </p>
-                          </div>
+                          <pre className="p-2 bg-black/40 rounded border border-white/5 text-[9px] font-mono text-muted-foreground whitespace-pre-wrap">
+                            {`openssl genrsa -out private_key.pem 2048\nopenssl rsa -in private_key.pem -pubout -out public_key.pem`}
+                          </pre>
+                          <p className="text-[9px] text-muted-foreground leading-relaxed italic">
+                            Upload public key to Developer Portal to get <code>appKey</code>.
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="webhooks" className="space-y-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    <div className="lg:col-span-3 space-y-6">
+                      <Card className="glass-card border-l-4 border-l-emerald-500">
+                        <CardHeader>
+                          <CardTitle className="text-lg font-headline flex items-center gap-2 uppercase">
+                            <BellRing className="size-5 text-emerald-500" />
+                            Webhook Notifications
+                          </CardTitle>
+                          <CardDescription>Asynchronous result notifications for payments and refunds.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                             <div className="space-y-4">
+                               <h4 className="text-xs font-bold uppercase text-white">Verification Rules</h4>
+                               <p className="text-[10px] text-muted-foreground leading-relaxed">
+                                 Webhooks are signed using NoorNexus Private RSA Key. Verify the <code>X-R-Signature</code> using the NoorNexus Public Key.
+                               </p>
+                               <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[10px] text-primary">
+                                 {`String to Verify: {appKey}.{timestamp}.{requestBody}`}
+                               </div>
+                             </div>
+                             <div className="space-y-4">
+                               <h4 className="text-xs font-bold uppercase text-white">Retry Policy</h4>
+                               <div className="space-y-2">
+                                 <div className="flex justify-between text-[10px]">
+                                   <span className="text-muted-foreground">Max Retries</span>
+                                   <span className="text-white">3 Attempts</span>
+                                 </div>
+                                 <div className="flex justify-between text-[10px]">
+                                   <span className="text-muted-foreground">Retry Interval</span>
+                                   <span className="text-white">180 Seconds</span>
+                                 </div>
+                               </div>
+                             </div>
+                           </div>
+
+                           <div className="space-y-4 pt-6 border-t border-white/5">
+                             <h4 className="text-sm font-bold uppercase text-white">Payment Webhook Fields</h4>
+                             <Table>
+                               <TableHeader className="bg-white/5">
+                                 <TableRow>
+                                   <TableHead className="text-[10px] uppercase">Field</TableHead>
+                                   <TableHead className="text-[10px] uppercase">Type</TableHead>
+                                   <TableHead className="text-[10px] uppercase">Description</TableHead>
+                                 </TableRow>
+                               </TableHeader>
+                               <TableBody className="text-[11px]">
+                                 {WEBHOOK_FIELDS.map((f, i) => (
+                                   <TableRow key={i}>
+                                     <TableCell className="font-mono text-primary">{f.name}</TableCell>
+                                     <TableCell className="text-muted-foreground">{f.type}</TableCell>
+                                     <TableCell className="text-muted-foreground">{f.desc}</TableCell>
+                                   </TableRow>
+                                 ))}
+                               </TableBody>
+                             </Table>
+                           </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    <div className="space-y-6">
+                      <Card className="glass-card">
+                        <CardHeader>
+                          <CardTitle className="text-xs font-headline uppercase text-emerald-500">Expected Response</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <p className="text-[10px] text-muted-foreground">Your server must return <code>SUCCESS</code> to acknowledge receipt.</p>
+                          <pre className="p-3 bg-black/40 rounded border border-white/5 text-[9px] font-mono text-primary">
+{`{
+  "code": "SUCCESS",
+  "requestId": "uuid-..."
+}`}
+                          </pre>
                         </CardContent>
                       </Card>
 
-                      <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
-                            <ShieldCheck className="size-3" /> Secure Best Practices
-                          </CardTitle>
+                      <Card className="glass-card border-amber-500/20 bg-amber-500/5">
+                        <CardHeader>
+                           <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
+                             <AlertTriangle className="size-3" /> Idempotency
+                           </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-2">
-                          <p className="text-[9px] text-muted-foreground leading-relaxed">
-                            - Store Private Key in HSM.<br/>
-                            - Validate timestamps within ±5 mins.<br/>
-                            - Use Key Rotation every 12 months.
-                          </p>
+                        <CardContent>
+                           <p className="text-[9px] text-muted-foreground leading-relaxed">
+                             Always check the <code>orderSn</code> to avoid duplicate processing of retried notifications.
+                           </p>
                         </CardContent>
                       </Card>
                     </div>
@@ -457,7 +522,7 @@ export default function ApiHubPage() {
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <Input 
-                         placeholder="How to sign with RSA?" 
+                         placeholder="How to verify webhooks?" 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}

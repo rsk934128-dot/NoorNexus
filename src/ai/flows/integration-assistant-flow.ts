@@ -61,6 +61,7 @@ IMPERIAL API 2.0 PROTOCOL (SHA256withRSA):
 3. WEBHOOK VERIFICATION:
    - String to verify: "{appKey}.{timestamp}.{requestBody}" (Method and URI are EXCLUDED for callbacks).
    - Use NoorNexus Public RSA Key for verification.
+   - Expected Response: Server must return {"code": "SUCCESS", "requestId": "..."}.
 
 4. KEY ROTATION:
    - Merchants should rotate keys every 12 months.
