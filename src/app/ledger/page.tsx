@@ -1,4 +1,3 @@
-
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -36,7 +35,7 @@ export default function LedgerPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="glass-card">
               <CardHeader className="pb-2">
-                <CardDescription className="text-xs uppercase font-bold tracking-tighter">Total Ecosystem Volume</CardTitle>
+                <CardDescription className="text-xs uppercase font-bold tracking-tighter">Total Ecosystem Volume</CardDescription>
                 <CardTitle className="text-3xl font-headline font-bold text-primary">$2,552,000</CardTitle>
               </CardHeader>
               <CardContent>
