@@ -19,16 +19,25 @@ import {
   PieChart, 
   Menu,
   FileText,
-  AlertCircle
+  AlertCircle,
+  BrainCircuit,
+  ArrowRightLeft,
+  RefreshCcw,
+  TrendingUp,
+  Target
 } from "lucide-react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
 import { Progress } from "@/components/ui/progress"
+import { runLiquidityRebalance } from "@/services/liquidity-service"
+import { LiquidityOptimizerOutput } from "@/ai/flows/liquidity-optimizer-flow"
 
 export default function TreasuryPage() {
   const { toast } = useToast()
   const [auditing, setAuditing] = useState(false)
+  const [optimizing, setOptimizing] = useState(false)
   const [auditData, setAuditData] = useState<LedgerAuditOutput | null>(null)
+  const [optimizationData, setOptimizationData] = useState<LiquidityOptimizerOutput | null>(null)
   const [liquidity, setLiquidity] = useState(98.4)
 
   useEffect(() => {
@@ -63,6 +72,33 @@ export default function TreasuryPage() {
       })
     } finally {
       setAuditing(false)
+    }
+  }
+
+  async function handleOptimize() {
+    setOptimizing(true)
+    setOptimizationData(null)
+    try {
+      const result = await runLiquidityRebalance({
+        usdc: 210000000,
+        bdt: 140000000,
+        gold: 70000000,
+        throughput: 15600000,
+        pending: 1240000
+      })
+      setOptimizationData(result)
+      toast({
+        title: "Optimization Complete",
+        description: `Efficiency Score: ${result.efficiencyScore}%`,
+      })
+    } catch (e: any) {
+      toast({
+        title: "Optimizer Link Failure",
+        description: e.message,
+        variant: "destructive"
+      })
+    } finally {
+      setOptimizing(false)
     }
   }
 
@@ -136,6 +172,89 @@ export default function TreasuryPage() {
                   </CardContent>
                 </Card>
               </div>
+
+              {/* AI Liquidity Optimizer Section */}
+              <Card className="glass-card border-l-4 border-l-amber-500 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                  <BrainCircuit className="size-32 text-amber-500" />
+                </div>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="text-sm font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
+                      <Target className="size-4" /> Nora-02-B Liquidity Optimizer
+                    </CardTitle>
+                    <CardDescription className="text-xs">Mission 400: Automated Treasury Rebalancing.</CardDescription>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    onClick={handleOptimize} 
+                    disabled={optimizing}
+                    className="border-amber-500/30 text-amber-500 hover:bg-amber-500/10 text-[10px] font-bold uppercase"
+                  >
+                    {optimizing ? <Loader2 className="size-3 animate-spin mr-2" /> : <RefreshCcw className="size-3 mr-2" />}
+                    Pulse Optimizer
+                  </Button>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {optimizationData ? (
+                    <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 bg-amber-500/5 border border-amber-500/10 rounded-xl space-y-2">
+                          <p className="text-[10px] font-bold text-amber-500 uppercase">Efficiency Score</p>
+                          <div className="flex items-center gap-4">
+                            <span className="text-3xl font-headline font-bold text-white">{optimizationData.efficiencyScore}%</span>
+                            <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                              <div className="h-full bg-amber-500" style={{ width: `${optimizationData.efficiencyScore}%` }} />
+                            </div>
+                          </div>
+                          <p className="text-[9px] text-muted-foreground italic">"{optimizationData.savingsEstimation}"</p>
+                        </div>
+                        <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl flex items-center justify-center">
+                          <div className="text-center">
+                            <p className="text-[10px] font-bold text-emerald-500 uppercase mb-1">Strategic Directive</p>
+                            <p className="text-xs font-mono text-emerald-200 leading-relaxed italic">"{optimizationData.strategicDirective}"</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <h4 className="text-[10px] font-bold text-white uppercase tracking-widest flex items-center gap-2">
+                          <ArrowRightLeft className="size-3 text-primary" /> Recommended Rebalancing Actions
+                        </h4>
+                        <div className="grid grid-cols-1 gap-2">
+                          {optimizationData.recommendedActions.map((rec, i) => (
+                            <div key={i} className="p-3 bg-white/2 border border-white/5 rounded-lg flex items-center justify-between group hover:bg-white/5 transition-all">
+                              <div className="flex items-center gap-4">
+                                <div className="size-8 bg-primary/10 rounded flex items-center justify-center">
+                                  <TrendingUp className="size-4 text-primary" />
+                                </div>
+                                <div>
+                                  <p className="text-xs font-bold text-white">{rec.action}</p>
+                                  <p className="text-[9px] text-muted-foreground font-mono">{rec.fromAsset} → {rec.toAsset}</p>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-xs font-headline font-bold text-primary">${rec.amount.toLocaleString()}</p>
+                                <p className="text-[8px] text-muted-foreground uppercase">{rec.reason}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <Button className="w-full bg-amber-500 text-amber-foreground font-bold uppercase text-[10px] h-10 tracking-[0.2em] glow-emerald">
+                          Execute Collective Rebalance
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="py-10 flex flex-col items-center justify-center gap-4 opacity-40 text-center">
+                      <Target className="size-12 text-amber-500" />
+                      <p className="text-xs font-mono uppercase tracking-widest leading-relaxed">
+                        Await Optimizer Dispatch.<br/>Pulse mesh nodes to initiate.
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
               <Card className="glass-card border-white/5">
                 <CardHeader>

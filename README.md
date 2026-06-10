@@ -21,12 +21,14 @@
 - **Security:** HMAC_V4 SHA256 / SHA256withRSA (L4 Clearance)
 - **Payments:** Sovereign Connect (USDC/USDT Native)
 - **Compliance:** Real-time On-Chain Wallet Screening & Proactive Adaptive Defense
+- **Optimization:** Project 151 - Global Liquidity Rebalancer (Nora-02-B)
 
 ## ⚠️ Risk Mitigation & Criticality
 1. **Cryptographic Drift:** Continuous signature audits by Nora-01.
 2. **Adaptive Defense:** Dynamic key-rotation and node isolation upon threat pattern detection.
 3. **Fraud Prevention:** Blocking risky on-chain funds via Sovereign Gate.
 4. **Institutional Stability:** T+1 local currency settlement for all merchants.
+5. **Liquidity Drift:** Automated rebalancing via Nora-02-B to ensure 100% settlement uptime.
 
 ---
 *© 2024-2026 NoorNexus Sovereign Infrastructure. All protocols are HMAC_V4 signed.*
