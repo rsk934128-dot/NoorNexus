@@ -35,7 +35,8 @@ import {
   Award,
   ShieldAlert,
   ShieldPlus,
-  Shield
+  Shield,
+  Phone
 } from "lucide-react"
 
 import {
@@ -64,7 +65,7 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
-  { title: "Shurukkha Hub", url: "/shurukkha", icon: Shield },
+  { title: "Shurukkha Hub", url: "/shurukkha", icon: Shield, badge: true },
   { title: "Identity Hub", url: "/identity", icon: Fingerprint },
   { title: "Imperial Senate", url: "/governance", icon: Gavel },
   { title: "Trade Protocol", url: "/settlement", icon: Landmark },
@@ -148,10 +149,16 @@ export function AppSidebar() {
           <SidebarMenu className="px-2">
             {USER_ITEMS.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={pathname === item.url} className="h-11">
+                <SidebarMenuButton asChild isActive={pathname === item.url} className="h-11 relative">
                   <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
                     <item.icon className="size-5" />
                     <span className="font-medium text-sm">{item.title}</span>
+                    {item.badge && (
+                      <span className="absolute right-2 top-1/2 -translate-y-1/2 flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                      </span>
+                    )}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

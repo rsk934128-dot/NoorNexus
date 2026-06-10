@@ -4,6 +4,7 @@ import './globals.css';
 import {SidebarProvider} from '@/components/ui/sidebar';
 import {Toaster} from '@/components/ui/toaster';
 import {FirebaseClientProvider} from '@/firebase';
+import {PersistentCommNode} from '@/components/persistent-comm-node';
 
 export const metadata: Metadata = {
   title: 'NoorNexus | Sovereign Digital Infrastructure',
@@ -51,7 +52,13 @@ export default function RootLayout({
       <body className="font-body antialiased selection:bg-primary/30 selection:text-primary">
         <FirebaseClientProvider>
           <SidebarProvider defaultOpen={true}>
-            {children}
+            <div className="flex w-full">
+              {/* The Communication Node stays mounted here globally */}
+              <PersistentCommNode />
+              <div className="flex-1 flex flex-col min-w-0">
+                {children}
+              </div>
+            </div>
             <Toaster />
           </SidebarProvider>
         </FirebaseClientProvider>

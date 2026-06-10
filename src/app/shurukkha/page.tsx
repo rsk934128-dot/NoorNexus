@@ -3,18 +3,22 @@
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
-import { Card, CardContent } from "@/components/ui/card"
-import { Shield, ExternalLink, ShieldCheck } from "lucide-react"
+import { Shield, ExternalLink, ShieldCheck, Phone } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
+/**
+ * @fileOverview Shurukkha Hub Page (Window View)
+ * This page acts as the viewing window for the persistent communication node.
+ * The actual iframe is managed in RootLayout to prevent call drops during navigation.
+ */
 export default function ShurukkhaPage() {
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
-      <SidebarInset className="flex-1 w-full flex flex-col min-w-0 p-0 m-0">
-        <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0">
-          {/* Imperial Header */}
-          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/50 backdrop-blur-md shrink-0 w-full">
+      <SidebarInset className="flex-1 w-full flex flex-col min-w-0 p-0 m-0 bg-transparent">
+        <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0 relative">
+          {/* Transparent Placeholder to let the persistent iframe show through */}
+          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/80 backdrop-blur-md shrink-0 w-full z-10">
             <div className="flex items-center gap-3">
               <div className="size-10 bg-primary/20 rounded-xl flex items-center justify-center border border-primary/30 glow-primary shrink-0">
                 <Shield className="size-6 text-primary" />
@@ -27,9 +31,9 @@ export default function ShurukkhaPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Badge variant="outline" className="hidden sm:flex border-emerald-500/50 text-emerald-500 uppercase items-center gap-1.5 h-7">
-                <ShieldCheck className="size-3.5" />
-                <span className="text-[10px]">Active Protection</span>
+              <Badge variant="outline" className="hidden sm:flex border-emerald-500/50 text-emerald-500 uppercase items-center gap-1.5 h-7 animate-pulse">
+                <Phone className="size-3.5" />
+                <span className="text-[10px]">Call Link Active</span>
               </Badge>
               <a 
                 href="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
@@ -43,26 +47,13 @@ export default function ShurukkhaPage() {
             </div>
           </header>
 
-          {/* Expansive Integration Area */}
-          <div className="flex-1 overflow-hidden bg-black/20 w-full p-0 m-0">
-            <Card className="border-none h-full w-full overflow-hidden relative rounded-none shadow-none bg-transparent m-0 p-0">
-              <div className="absolute inset-0 bg-primary/5 opacity-[0.02] pointer-events-none" />
-              <CardContent className="p-0 h-full w-full">
-                <iframe 
-                  src="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
-                  className="w-full h-full border-0 bg-white"
-                  title="Shurukkha External Integration"
-                  allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                  sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation allow-orientation-lock"
-                  allowFullScreen
-                />
-              </CardContent>
-            </Card>
-          </div>
+          {/* The space below the header is intentionally empty in this page component 
+              because the PersistentCommNode iframe is positioned here via layout.tsx */}
+          <div className="flex-1 bg-transparent pointer-events-none" />
           
-          <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full">
+          <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-10">
             <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.4em]">
-              NoorNexus OS Integrated Web-View | Endpoint: shurukkha-hub
+              NoorNexus OS Persistent Comm-Link | Node: shurukkha-hub
             </p>
           </footer>
         </main>
