@@ -1,6 +1,33 @@
 
 {
   "entities": {
+    "ApiKey": {
+      "title": "Sovereign API Key",
+      "description": "Credentials for third-party TTP (Third Party Provider) access.",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "clientSecret": { "type": "string" },
+        "owner": { "type": "string" },
+        "permissions": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string", "enum": ["ACTIVE", "REVOKED"] },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["clientId", "clientSecret", "owner", "status"]
+    },
+    "WebhookLog": {
+      "title": "Webhook Event",
+      "description": "Logs of incoming and outgoing Open Banking events.",
+      "type": "object",
+      "properties": {
+        "eventId": { "type": "string" },
+        "type": { "type": "string" },
+        "payload": { "type": "string" },
+        "targetUrl": { "type": "string" },
+        "status": { "type": "string" },
+        "timestamp": { "type": "number" }
+      }
+    },
     "NodeStatus": {
       "title": "Node Status",
       "description": "Real-time status and metrics of a distributed ledger node.",
@@ -9,13 +36,12 @@
         "name": { "type": "string" },
         "region": { "type": "string" },
         "status": { "type": "string", "enum": ["Operational", "Maintenance", "Degraded"] },
-        "latency": { "type": "number", "description": "Latency in milliseconds" },
-        "load": { "type": "number", "description": "CPU/Memory load percentage" },
-        "successRate": { "type": "number", "description": "Handshake success rate" },
+        "latency": { "type": "number" },
+        "load": { "type": "number" },
+        "successRate": { "type": "number" },
         "integrity": { "type": "string", "enum": ["Verified", "Untrusted"] },
         "lastSeen": { "type": "string", "format": "date-time" }
-      },
-      "required": ["name", "region", "status", "latency", "load"]
+      }
     },
     "BorderLog": {
       "title": "HMAC_V4 Border Log",
@@ -29,8 +55,7 @@
         "result": { "type": "string", "enum": ["ACCEPTED", "REJECTED", "WARNING"] },
         "reason": { "type": "string" },
         "riskScore": { "type": "number" }
-      },
-      "required": ["timestamp", "signature", "origin", "result"]
+      }
     },
     "TreasuryStatus": {
       "title": "Sovereign Treasury Overview",
@@ -54,8 +79,7 @@
         "volume": { "type": "string" },
         "health": { "type": "string" },
         "timestamp": { "type": "number" }
-      },
-      "required": ["name", "provider", "status"]
+      }
     },
     "P2CTransaction": {
       "title": "P2C Settlement",
@@ -69,8 +93,7 @@
         "status": { "type": "string" },
         "timestamp": { "type": "number" },
         "hmacSignature": { "type": "string" }
-      },
-      "required": ["merchantId", "consumerId", "amount", "status"]
+      }
     },
     "SportsMatch": {
       "title": "Sovereign Match",
@@ -84,8 +107,7 @@
         "status": { "type": "string", "enum": ["LIVE", "UPCOMING", "FINISHED"] },
         "uplink": { "type": "string" },
         "description": { "type": "string" }
-      },
-      "required": ["home", "away", "status"]
+      }
     },
     "SportsServer": {
       "title": "Sports Relay Server",
@@ -97,8 +119,7 @@
         "status": { "type": "string" },
         "ping": { "type": "string" },
         "load": { "type": "string" }
-      },
-      "required": ["id", "name", "status"]
+      }
     },
     "ChatMessage": {
       "title": "Imperial Chat",
@@ -108,8 +129,7 @@
         "user": { "type": "string" },
         "message": { "type": "string" },
         "timestamp": { "type": "number" }
-      },
-      "required": ["user", "message", "timestamp"]
+      }
     },
     "SportsNews": {
       "title": "Tactical Sports News",
@@ -120,14 +140,21 @@
         "content": { "type": "string" },
         "severity": { "type": "string", "enum": ["INFO", "URGENT", "CRITICAL"] },
         "timestamp": { "type": "number" }
-      },
-      "required": ["title", "content", "timestamp"]
+      }
     }
   },
   "auth": {
     "providers": ["google.com"]
   },
   "firestore": {
+    "/api_keys/{keyId}": {
+      "schema": "ApiKey",
+      "description": "Gateway access credentials"
+    },
+    "/webhook_logs/{logId}": {
+      "schema": "WebhookLog",
+      "description": "Event synchronization logs"
+    },
     "/nodes/{nodeId}": {
       "schema": "NodeStatus",
       "description": "Distributed node metrics"
@@ -142,7 +169,7 @@
     },
     "/payment_methods/{methodId}": {
       "schema": "PaymentMethod",
-      "description": "Configured payment gateways for the One Engine Ledger"
+      "description": "Configured payment gateways"
     },
     "/p2c_transactions/{txId}": {
       "schema": "P2CTransaction",
@@ -150,7 +177,7 @@
     },
     "/sports_matches/{matchId}": {
       "schema": "SportsMatch",
-      "description": "World Cup and Friendly match feed"
+      "description": "World Cup match feed"
     },
     "/sports_servers/{serverId}": {
       "schema": "SportsServer",
@@ -158,11 +185,11 @@
     },
     "/sports_chat/{chatId}": {
       "schema": "ChatMessage",
-      "description": "Live community chat stream"
+      "description": "Live community chat"
     },
     "/sports_news/{newsId}": {
       "schema": "SportsNews",
-      "description": "Tactical news feed for Mission 400"
+      "description": "Tactical news feed"
     }
   }
 }

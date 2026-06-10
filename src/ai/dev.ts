@@ -7,3 +7,4 @@ import '@/ai/flows/autonomous-compliance-monitor.ts';
 import '@/ai/flows/ledger-audit-flow.ts';
 import '@/ai/flows/sports-insight-flow.ts';
 import '@/ai/flows/p2c-settlement-flow.ts';
+import '@/ai/flows/integration-assistant-flow.ts';
