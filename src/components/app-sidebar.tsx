@@ -33,7 +33,9 @@ import {
   Scale,
   Compass,
   Award,
-  ShieldAlert
+  ShieldAlert,
+  ShieldPlus,
+  Shield
 } from "lucide-react"
 
 import {
@@ -62,6 +64,7 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
+  { title: "Shurukkha Hub", url: "/shurukkha", icon: Shield },
   { title: "Identity Hub", url: "/identity", icon: Fingerprint },
   { title: "Imperial Senate", url: "/governance", icon: Gavel },
   { title: "Trade Protocol", url: "/settlement", icon: Landmark },
