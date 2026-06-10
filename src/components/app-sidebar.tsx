@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -25,7 +24,8 @@ import {
   Minimize2,
   Wallet,
   UserPlus,
-  Users
+  Users,
+  Link as LinkIcon
 } from "lucide-react"
 
 import {
@@ -53,6 +53,7 @@ const items = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Merchant Onboarding", url: "/onboarding", icon: UserPlus },
   { title: "Merchant Lifecycle", url: "/merchants", icon: Users },
+  { title: "Cross-Chain Gateway", url: "/cross-chain", icon: LinkIcon },
   { title: "Border Monitor", url: "/border-monitor", icon: Radar },
   { title: "Compliance Agent", url: "/compliance", icon: ShieldCheck },
   { title: "Sovereign Treasury", url: "/treasury", icon: Wallet },

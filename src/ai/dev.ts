@@ -13,3 +13,4 @@ import '@/ai/flows/investor-pitch-flow.ts';
 import '@/ai/flows/merchant-onboarding-flow.ts';
 import '@/ai/flows/merchant-performance-review-flow.ts';
 import '@/ai/flows/liquidity-optimizer-flow.ts';
+import '@/ai/flows/cross-chain-gateway-flow.ts';
