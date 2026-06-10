@@ -84,20 +84,38 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-6 sm:p-10 space-y-12 animate-in fade-in duration-1000">
-        <div className="relative">
-          <SovereignLogo size={160} className="animate-pulse" />
-          <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full -z-10 animate-pulse-slow" />
+      <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-6 sm:p-10 space-y-12 animate-in fade-in duration-1000 overflow-hidden">
+        <div className="relative flex flex-col items-center">
+          <SovereignLogo size={200} className="z-10" />
+          <div className="absolute inset-0 flex items-center justify-center -z-10">
+            <div className="size-40 bg-primary/20 blur-[100px] rounded-full animate-pulse-slow" />
+          </div>
         </div>
-        <div className="space-y-6 text-center max-w-sm">
-          <div className="space-y-2">
-             <h1 className="text-primary font-headline text-3xl sm:text-4xl font-black tracking-tight uppercase glow-primary">NoorNexus OS</h1>
-             <p className="text-muted-foreground font-mono text-[10px] sm:text-[12px] tracking-[0.5em] uppercase h-4 transition-all">{statusText}</p>
+        
+        <div className="space-y-6 text-center max-w-md w-full">
+          <div className="space-y-3">
+             <h1 className="text-primary font-headline text-4xl sm:text-5xl font-black tracking-tighter uppercase drop-shadow-[0_0_10px_rgba(0,150,255,0.5)]">
+               NoorNexus OS
+             </h1>
+             <div className="h-6 flex items-center justify-center">
+               <p className="text-muted-foreground font-mono text-[10px] sm:text-[12px] tracking-[0.4em] uppercase transition-all">
+                 {statusText}
+               </p>
+             </div>
           </div>
-          <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden border border-white/5">
-            <div className="h-full bg-primary animate-progress shadow-[0_0_10px_rgba(0,150,255,0.8)]" />
+          
+          <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5 shadow-inner">
+            <div className="h-full bg-primary animate-progress shadow-[0_0_15px_rgba(0,150,255,0.8)]" />
           </div>
-          <p className="text-[9px] font-mono text-muted-foreground/40 uppercase tracking-widest">Imperial Security Protocol HMAC_V4_L4 Active</p>
+          
+          <div className="flex flex-col gap-1">
+            <p className="text-[9px] font-mono text-muted-foreground/50 uppercase tracking-widest">
+              Imperial Security Protocol HMAC_V4_L4 Active
+            </p>
+            <p className="text-[8px] font-mono text-primary/30 uppercase tracking-[0.2em]">
+              Authorized Access Only
+            </p>
+          </div>
         </div>
       </div>
     )
