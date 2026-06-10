@@ -28,6 +28,7 @@ export type P2CSettlementOutput = z.infer<typeof P2CSettlementOutputSchema>;
 
 const p2cSettlementPrompt = ai.definePrompt({
   name: 'p2cSettlementPrompt',
+  model: 'googleai/gemini-1.5-flash',
   input: {schema: P2CSettlementInputSchema},
   output: {schema: P2CSettlementOutputSchema},
   prompt: `You are Nora-02, the Imperial Merchant Auditor for NoorNexus Sovereign OS.
