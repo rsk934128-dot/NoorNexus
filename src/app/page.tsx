@@ -84,16 +84,20 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-6 sm:p-10 space-y-8">
-        <SovereignLogo size={120} className="animate-pulse" />
-        <div className="space-y-4 text-center">
-          <div className="flex flex-col gap-1">
-             <p className="text-primary font-headline text-lg sm:text-xl font-bold tracking-widest uppercase">NoorNexus OS</p>
-             <p className="text-muted-foreground font-mono text-[8px] sm:text-[10px] tracking-[0.4em] uppercase">{statusText}</p>
+      <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-6 sm:p-10 space-y-12 animate-in fade-in duration-1000">
+        <div className="relative">
+          <SovereignLogo size={160} className="animate-pulse" />
+          <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full -z-10 animate-pulse-slow" />
+        </div>
+        <div className="space-y-6 text-center max-w-sm">
+          <div className="space-y-2">
+             <h1 className="text-primary font-headline text-3xl sm:text-4xl font-black tracking-tight uppercase glow-primary">NoorNexus OS</h1>
+             <p className="text-muted-foreground font-mono text-[10px] sm:text-[12px] tracking-[0.5em] uppercase h-4 transition-all">{statusText}</p>
           </div>
-          <div className="w-64 sm:w-80 h-1 bg-muted rounded-full overflow-hidden mx-auto">
-            <div className="h-full bg-primary animate-progress" />
+          <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden border border-white/5">
+            <div className="h-full bg-primary animate-progress shadow-[0_0_10px_rgba(0,150,255,0.8)]" />
           </div>
+          <p className="text-[9px] font-mono text-muted-foreground/40 uppercase tracking-widest">Imperial Security Protocol HMAC_V4_L4 Active</p>
         </div>
       </div>
     )
