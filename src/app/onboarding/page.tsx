@@ -9,9 +9,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
+import { Switch } from "@/components/ui/switch"
 import { 
   Building2, ShieldCheck, Zap, Loader2, UserPlus, 
-  Target, Rocket, CheckCircle2, AlertCircle, FileText, Menu, Cpu
+  Target, Rocket, CheckCircle2, AlertCircle, FileText, Menu, Cpu, Fingerprint
 } from "lucide-react"
 import { interviewMerchant, MerchantOnboardingOutput } from "@/ai/flows/merchant-onboarding-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -29,7 +30,9 @@ export default function OnboardingPage() {
     businessType: "E-commerce",
     region: "South Asia",
     estimatedVolume: 1000,
-    businessDescription: ""
+    businessDescription: "",
+    tradeLicenseNumber: "",
+    isFamilyBusiness: false
   })
 
   async function handleApply() {
@@ -50,6 +53,7 @@ export default function OnboardingPage() {
         trustScore: result.initialTrustScore,
         status: result.verificationStatus === 'APPROVED_PENDING_KYC' ? 'PENDING' : 'REJECTED',
         noraAssessment: result.assessmentSummary,
+        legalStatus: form.tradeLicenseNumber ? (form.isFamilyBusiness ? "VERIFIED_FAMILY" : "VERIFIED_SOVEREIGN") : "UNVERIFIED",
         submissionDate: Date.now(),
         updatedAt: serverTimestamp()
       })
@@ -100,7 +104,7 @@ export default function OnboardingPage() {
             <Card className="glass-card">
               <CardHeader>
                 <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                   <Building2 className="size-4" /> Business Profile
+                   <Building2 className="size-4" /> Business Profile & Legal
                 </CardTitle>
                 <CardDescription>Provide details for the Nora-01 AI Assessment.</CardDescription>
               </CardHeader>
@@ -124,6 +128,29 @@ export default function OnboardingPage() {
                     />
                   </div>
                 </div>
+
+                <div className="p-4 bg-primary/5 border border-primary/10 rounded-xl space-y-4">
+                   <div className="flex items-center justify-between">
+                      <h4 className="text-[10px] font-bold uppercase text-primary flex items-center gap-2">
+                         <Fingerprint className="size-3" /> Legal Identification
+                      </h4>
+                      <div className="flex items-center gap-2">
+                        <Label htmlFor="family" className="text-[9px] uppercase font-bold text-muted-foreground">Family Business</Label>
+                        <Switch id="family" checked={form.isFamilyBusiness} onCheckedChange={v => setForm({...form, isFamilyBusiness: v})} />
+                      </div>
+                   </div>
+                   <div className="space-y-2">
+                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">Trade License Number</Label>
+                      <Input 
+                        value={form.tradeLicenseNumber} 
+                        onChange={e => setForm({...form, tradeLicenseNumber: e.target.value})}
+                        placeholder="Enter Trade License ID..." 
+                        className="bg-background/50 border-white/10 text-xs font-mono" 
+                      />
+                      <p className="text-[8px] text-muted-foreground italic">Providing a trade license significantly boosts initial trust scores.</p>
+                   </div>
+                </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label className="text-[10px] uppercase font-bold text-muted-foreground">Region</Label>
@@ -149,7 +176,7 @@ export default function OnboardingPage() {
                     value={form.businessDescription} 
                     onChange={e => setForm({...form, businessDescription: e.target.value})}
                     placeholder="Briefly explain your business model..."
-                    className="w-full h-32 bg-background/50 border border-white/10 rounded-md p-3 text-xs outline-none focus:ring-1 focus:ring-primary"
+                    className="w-full h-24 bg-background/50 border border-white/10 rounded-md p-3 text-xs outline-none focus:ring-1 focus:ring-primary"
                   />
                 </div>
 
@@ -186,9 +213,9 @@ export default function OnboardingPage() {
                       </div>
 
                       <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
-                        <h4 className="text-[10px] font-bold uppercase text-primary">AI Reasoning</h4>
+                        <h4 className="text-[10px] font-bold uppercase text-primary">Legal Standing Verdict</h4>
                         <p className="text-xs text-muted-foreground leading-relaxed italic">
-                          "{assessment.assessmentSummary}"
+                          "{assessment.legalVerdict}"
                         </p>
                       </div>
 
@@ -213,8 +240,8 @@ export default function OnboardingPage() {
                   ) : (
                     <div className="h-[300px] flex flex-col items-center justify-center gap-4 text-center opacity-40">
                       <Target className="size-16" />
-                      <p className="text-xs font-mono uppercase tracking-widest leading-relaxed">
-                        Await AI Interviewer.<br/>Submit profile to initiate.
+                      <p className="text-xs font-mono uppercase tracking-widest leading-relaxed text-center">
+                        Await AI Interviewer.<br/>Submit profiles and legal documents to initiate.
                       </p>
                     </div>
                   )}
@@ -224,22 +251,13 @@ export default function OnboardingPage() {
               <Card className="glass-card bg-amber-500/5">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                    <FileText className="size-3" /> 3-Tier Access Policy
+                    <FileText className="size-3" /> Family Business Privilege
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
-                   <div className="space-y-1">
-                      <p className="text-[9px] font-bold text-white uppercase">Tier 1: Restricted Access</p>
-                      <p className="text-[8px] text-muted-foreground italic">Instant access, limited throughput.</p>
-                   </div>
-                   <div className="space-y-1">
-                      <p className="text-[9px] font-bold text-emerald-500 uppercase">Tier 2: Sovereign Verified</p>
-                      <p className="text-[8px] text-muted-foreground italic">Elevated limits, T+1 settlement enabled.</p>
-                   </div>
-                   <div className="space-y-1">
-                      <p className="text-[9px] font-bold text-primary uppercase">Tier 3: Imperial Partner</p>
-                      <p className="text-[8px] text-muted-foreground italic">Unlimited throughput, Instant settlement.</p>
-                   </div>
+                <CardContent>
+                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                     "Using a family-owned trade license allows for 'Legacy Trust' acceleration. Nora-01 will grant TIER 2 status immediately upon verification of familial standing."
+                   </p>
                 </CardContent>
               </Card>
             </div>

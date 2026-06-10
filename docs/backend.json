@@ -124,7 +124,10 @@
         "trustScore": { "type": "number" },
         "submissionDate": { "type": "number" },
         "lastReviewDate": { "type": "number" },
-        "noraAssessment": { "type": "string" }
+        "noraAssessment": { "type": "string" },
+        "tradeLicenseNumber": { "type": "string" },
+        "isFamilyBusiness": { "type": "boolean" },
+        "legalStatus": { "type": "string", "enum": ["UNVERIFIED", "VERIFIED_FAMILY", "VERIFIED_SOVEREIGN"] }
       },
       "required": ["businessName", "businessType", "region", "status"]
     },

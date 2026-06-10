@@ -10,18 +10,12 @@ import { Badge } from "@/components/ui/badge"
 import { 
   Users, TrendingUp, ShieldAlert, Zap, Loader2, Target, 
   ArrowUpRight, ArrowDownRight, Menu, Cpu, MoreVertical, 
-  Search, Filter, CheckCircle2, AlertCircle, LayoutGrid, Activity
+  Search, Filter, CheckCircle2, AlertCircle, LayoutGrid, Activity, ShieldCheck
 } from "lucide-react"
 import { useFirestore, useCollection } from "@/firebase"
 import { collection, query, orderBy, limit, doc, updateDoc, serverTimestamp } from "firebase/firestore"
 import { reviewMerchantPerformance, MerchantPerformanceReviewOutput } from "@/ai/flows/merchant-performance-review-flow"
 import { useToast } from "@/hooks/use-toast"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
 export default function MerchantManagementPage() {
   const { toast } = useToast()
@@ -35,7 +29,6 @@ export default function MerchantManagementPage() {
   async function handleRunAudit(merchant: any) {
     setReviewingId(merchant.id)
     try {
-      // Simulate performance stats since we are in MVP
       const performanceStats = {
         businessName: merchant.businessName,
         currentTier: merchant.assignedTier || 'TIER_1',
@@ -47,7 +40,6 @@ export default function MerchantManagementPage() {
 
       const result = await reviewMerchantPerformance(performanceStats)
       
-      // Update Firestore with new scores and status
       await updateDoc(doc(db, "merchant_onboarding_requests", merchant.id), {
         performanceScore: result.recommendedTrustScore,
         trustScore: result.recommendedTrustScore,
@@ -86,7 +78,7 @@ export default function MerchantManagementPage() {
                    Merchant Lifecycle Monitor
                  </h2>
               </div>
-              <p className="text-muted-foreground">Phase 3: Dynamic Tier Adjustments & Performance Audits via Nora-01.</p>
+              <p className="text-muted-foreground">Phase 3: Dynamic Tier Adjustments & Legal Standing Audits.</p>
             </div>
             <div className="flex items-center gap-3">
                <div className="relative group">
@@ -121,13 +113,13 @@ export default function MerchantManagementPage() {
             </Card>
             <Card className="glass-card border-l-4 border-l-amber-500">
               <CardHeader className="pb-2">
-                <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Tier-3 Partners</CardTitle>
+                <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Legal Standing</CardTitle>
                 <CardTitle className="text-3xl font-headline font-bold text-amber-500">
-                  {merchants.filter(m => m.assignedTier === 'TIER_3').length}
+                  {merchants.filter(m => m.legalStatus && m.legalStatus !== 'UNVERIFIED').length}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-[10px] text-amber-500/70 font-mono uppercase">Imperial Clearance Level</p>
+                <p className="text-[10px] text-amber-500/70 font-mono uppercase">Verified Certificates</p>
               </CardContent>
             </Card>
           </div>
@@ -151,9 +143,9 @@ export default function MerchantManagementPage() {
                   <thead>
                     <tr className="bg-muted/30 text-[9px] uppercase font-bold text-muted-foreground tracking-widest border-b border-white/5">
                       <th className="px-6 py-4">Merchant Identity</th>
+                      <th className="px-6 py-4">Legal Status</th>
                       <th className="px-6 py-4">Tier Status</th>
                       <th className="px-6 py-4">Trust Metric</th>
-                      <th className="px-6 py-4">Last Audit</th>
                       <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
                   </thead>
@@ -179,6 +171,16 @@ export default function MerchantManagementPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4">
+                           <div className="flex flex-col gap-1">
+                              <Badge variant="outline" className={`text-[8px] h-4 font-bold uppercase w-fit ${m.legalStatus === 'VERIFIED_FAMILY' ? 'border-amber-500/50 text-amber-500 bg-amber-500/5' : m.legalStatus === 'VERIFIED_SOVEREIGN' ? 'border-emerald-500/50 text-emerald-500 bg-emerald-500/5' : 'border-white/10'}`}>
+                                {m.legalStatus || 'UNVERIFIED'}
+                              </Badge>
+                              {m.tradeLicenseNumber && (
+                                <p className="text-[7px] font-mono text-muted-foreground uppercase tracking-widest">ID: {m.tradeLicenseNumber}</p>
+                              )}
+                           </div>
+                        </td>
+                        <td className="px-6 py-4">
                            <Badge className={`text-[9px] font-bold ${m.assignedTier === 'TIER_3' ? 'bg-amber-500' : m.assignedTier === 'TIER_2' ? 'bg-primary' : 'bg-muted'}`}>
                              {m.assignedTier || 'TIER_1'}
                            </Badge>
@@ -193,11 +195,6 @@ export default function MerchantManagementPage() {
                                 <div className={`h-full ${m.trustScore > 80 ? 'bg-emerald-500' : 'bg-amber-500'}`} style={{ width: `${m.trustScore}%` }} />
                              </div>
                           </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <p className="text-[10px] text-muted-foreground font-mono">
-                            {m.lastReviewDate ? new Date(m.lastReviewDate).toLocaleDateString() : 'Pending 1st Audit'}
-                          </p>
                         </td>
                         <td className="px-6 py-4 text-right">
                           <Button 
@@ -218,57 +215,6 @@ export default function MerchantManagementPage() {
               </div>
             </CardContent>
           </Card>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-             <Card className="glass-card border-amber-500/20 bg-amber-500/5">
-                <CardHeader>
-                   <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                     <Target className="size-4" /> Strategic Policy: Tier Adjustments
-                   </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                   <p className="text-[11px] text-muted-foreground leading-relaxed italic">
-                     "Merchants are the lifeblood of the empire. By rewarding high-integrity behavior with elevated tiers, we ensure scalable liquidity without compromising the Sovereign Shield."
-                   </p>
-                   <div className="grid grid-cols-2 gap-4 pt-2">
-                      <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
-                         <p className="text-[9px] font-bold text-white uppercase">Growth Trigger</p>
-                         <p className="text-[8px] text-muted-foreground">500+ TXs / 0 Anomalies / 90 Days</p>
-                      </div>
-                      <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
-                         <p className="text-[9px] font-bold text-destructive uppercase">Drift Penalty</p>
-                         <p className="text-[8px] text-muted-foreground">Immediate Tier-1 Downgrade on 2+ Anomalies</p>
-                      </div>
-                   </div>
-                </CardContent>
-             </Card>
-
-             <Card className="glass-card border-primary/20 bg-primary/5 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                   <TrendingUp className="size-32 text-primary" />
-                </div>
-                <CardHeader>
-                   <CardTitle className="text-xs font-headline uppercase text-primary">Performance Insights</CardTitle>
-                </CardHeader>
-                <CardContent>
-                   <div className="space-y-4">
-                      {[
-                        { label: "Compliance Pass Rate", value: "98.2%", icon: CheckCircle2, color: "text-emerald-500" },
-                        { label: "Average Settlement Time", value: "112ms", icon: Activity, color: "text-primary" },
-                        { label: "Risk Mitigation Efficiency", value: "99.4%", icon: ShieldAlert, color: "text-amber-500" }
-                      ].map((stat, i) => (
-                        <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
-                           <div className="flex items-center gap-3">
-                              <stat.icon className={`size-4 ${stat.color}`} />
-                              <span className="text-[10px] font-bold text-muted-foreground uppercase">{stat.label}</span>
-                           </div>
-                           <span className="text-xs font-headline font-bold text-white">{stat.value}</span>
-                        </div>
-                      ))}
-                   </div>
-                </CardContent>
-             </Card>
-          </div>
         </main>
       </SidebarInset>
     </div>
