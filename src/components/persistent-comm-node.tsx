@@ -1,83 +1,87 @@
 "use client"
 
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
-import { PhoneIncoming } from "lucide-react"
+import { PhoneIncoming, ShieldAlert, BellRing } from "lucide-react"
 
 /**
- * @fileOverview Persistent Communication Node
- * Keeps Shurukkha Hub active background and handles Call Notifications.
- * Enhanced: Universal message detection and forced foreground visibility.
+ * @fileOverview Persistent Communication Node (V3 Reinforced)
+ * এই কম্পোনেন্টটি ব্যাকগ্রাউন্ডে সুরক্ষা হাবকে সচল রাখে এবং কলের সিগন্যাল খুঁজে বের করে।
  */
 export function PersistentCommNode() {
   const pathname = usePathname()
   const router = useRouter()
   const { toast } = useToast()
+  const lastToastTime = useRef<number>(0)
+  
   const isShurukkhaPage = pathname === "/shurukkha"
 
   useEffect(() => {
-    // 1. Request Notification Permissions
+    // ১. নোটিফিকেশন পারমিশন চেক
     if (typeof window !== "undefined" && "Notification" in window) {
-      if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+      if (Notification.permission !== "granted") {
         Notification.requestPermission();
       }
     }
 
-    // 2. Listen for messages from ANY source (Broad detection for Iframe calls)
+    // ২. শক্তিশালী মেসেজ লিসেনার
     const handleMessage = (event: MessageEvent) => {
-      let data = event.data;
-      
-      // Attempt to parse if stringified
-      if (typeof data === 'string') {
-        try {
-          const parsed = JSON.parse(data);
-          data = parsed;
-        } catch (e) {
-          // Stay as string
-        }
-      }
+      // ডিব্যাগিংয়ের জন্য কনসোলে প্রিন্ট করা হবে
+      console.log("[NoorNexus-Sync] Message Received from Node:", event.data);
 
+      const data = event.data;
       if (!data) return;
 
-      // Deep keyword scan for call-related signals
-      const dataString = JSON.stringify(data).toLowerCase();
-      const isCallSignal = 
-        dataString.includes('call') || 
-        dataString.includes('incoming') || 
-        dataString.includes('ringing') ||
-        dataString.includes('dialing') ||
-        dataString.includes('offer');
+      // মেসেজটিকে স্ট্রিংয়ে রূপান্তর করে সার্চ করা হবে
+      const msgStr = typeof data === 'string' ? data : JSON.stringify(data);
+      
+      // কলের জন্য কি-ওয়ার্ড সার্চ (Broad Pattern Matching)
+      const callKeywords = /incoming|call|ring|dial|offer|invite|request_access|peer/i;
+      const isCallSignal = callKeywords.test(msgStr);
 
       if (isCallSignal) {
-        // A. Show OS Level Notification
-        showImperialNotification(
-          "NoorNexus | Incoming Call",
-          "A secure protection request is ringing in Shurukkha Hub."
-        );
+        // স্প্যাম রোধ করতে ১০ সেকেন্ডের গ্যাপ রাখা হয়েছে
+        if (Date.now() - lastToastTime.current < 10000) return;
+        lastToastTime.current = Date.now();
 
-        // B. Force Foreground Toast (Only if not already on the page)
+        // এলার্ট সাউন্ড (যদি সম্ভব হয়)
+        try {
+          const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
+          audio.play().catch(() => {/* Browser blocked autoplay */});
+        } catch (e) {}
+
+        // ক. ওএস লেভেল নোটিফিকেশন
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification("NoorNexus | IMPERIAL CALL", {
+            body: "A secure communication link is ringing. Open Shurukkha Hub now.",
+            icon: 'https://picsum.photos/seed/sovereign/192/192',
+            requireInteraction: true,
+          });
+        }
+
+        // খ. ইন-অ্যাপ টোস্ট নোটিফিকেশন (যদি অন্য পেজে থাকেন)
         if (!isShurukkhaPage) {
           toast({
-            title: "Imperial Call Signal Detected",
-            description: "A secure transmission is ringing. Answer now?",
+            title: "CRITICAL CALL SIGNAL DETECTED",
+            description: "The Sovereign Guard is requesting a response.",
             variant: "default",
             action: (
               <Button 
                 variant="default" 
                 size="sm" 
-                className="bg-emerald-500 hover:bg-emerald-600 text-white gap-2 font-bold uppercase text-[10px] glow-emerald"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white gap-2 font-bold uppercase text-[10px] glow-emerald shadow-lg"
                 onClick={() => {
                   router.push("/shurukkha");
                 }}
               >
                 <PhoneIncoming className="size-3" />
-                Answer
+                ANSWER NOW
               </Button>
             ),
-            duration: 20000, // Long duration for priority calls
+            duration: 20000, 
           });
         }
       }
@@ -87,27 +91,15 @@ export function PersistentCommNode() {
     return () => window.removeEventListener("message", handleMessage);
   }, [isShurukkhaPage, router, toast]);
 
-  const showImperialNotification = (title: string, body: string) => {
-    if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "granted") {
-      new Notification(title, {
-        body: body,
-        icon: 'https://picsum.photos/seed/sovereign-logo/192/192',
-        tag: 'noornexus-call-priority',
-        requireInteraction: true,
-        vibrate: [200, 100, 200]
-      });
-    }
-  };
-
   return (
     <div 
       className={cn(
-        "fixed inset-0 transition-opacity duration-500 ease-in-out pointer-events-none",
-        isShurukkhaPage ? "opacity-100 z-50" : "opacity-0 -z-50"
+        "fixed inset-0 transition-opacity duration-700 ease-in-out pointer-events-none",
+        isShurukkhaPage ? "opacity-100 z-[9999]" : "opacity-0 -z-50"
       )}
     >
       <div className={cn(
-        "w-full h-full flex flex-col bg-background transition-all duration-300",
+        "w-full h-full flex flex-col bg-background transition-all duration-500",
         isShurukkhaPage ? "pointer-events-auto" : "pointer-events-none",
         "md:pl-64" 
       )}>
@@ -115,8 +107,8 @@ export function PersistentCommNode() {
           src="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
           className="w-full h-full border-0 bg-white"
           title="Shurukkha Persistent Node"
-          allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-          sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation allow-orientation-lock"
+          allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media; geolocation"
+          sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
         />
       </div>
     </div>
