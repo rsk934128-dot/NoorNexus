@@ -29,7 +29,6 @@ export default function Home() {
   const [auditing, setAuditing] = useState(false)
   const [auditResult, setAuditResult] = useState<LedgerAuditOutput | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [performance, setPerformance] = useState({ cpu: 12, ram: 2.1 })
 
   // Real-time infrastructure data
   const { data: nodes } = useCollection<any>(collection(db, "nodes"))
@@ -50,15 +49,6 @@ export default function Home() {
         if (i === sequence.length - 1) setLoading(false)
       }, step.time)
     })
-
-    const interval = setInterval(() => {
-      setPerformance(prev => ({
-        cpu: Math.min(100, Math.max(5, prev.cpu + (Math.random() * 4 - 2))),
-        ram: Math.min(4, Math.max(1, prev.ram + (Math.random() * 0.2 - 0.1))),
-      }))
-    }, 2000)
-
-    return () => clearInterval(interval)
   }, [])
 
   async function handleExecuteAudit() {
@@ -88,13 +78,13 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-10 space-y-12 animate-in fade-in duration-1000">
-        <SovereignLogo size={200} />
-        <div className="space-y-6 text-center max-w-md w-full">
-          <h1 className="text-primary font-headline text-4xl font-black tracking-tighter uppercase drop-shadow-[0_0_10px_rgba(0,150,255,0.5)]">
+      <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-6 space-y-12 animate-in fade-in duration-1000">
+        <SovereignLogo size={150} />
+        <div className="space-y-6 text-center max-w-xs sm:max-w-md w-full">
+          <h1 className="text-primary font-headline text-3xl sm:text-4xl font-black tracking-tighter uppercase drop-shadow-[0_0_10px_rgba(0,150,255,0.5)]">
             NoorNexus OS
           </h1>
-          <p className="text-muted-foreground font-mono text-[12px] tracking-[0.4em] uppercase h-6">
+          <p className="text-muted-foreground font-mono text-[10px] sm:text-[12px] tracking-[0.4em] uppercase h-6">
             {statusText}
           </p>
           <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
@@ -111,7 +101,7 @@ export default function Home() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-7xl mx-auto w-full">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-6 sm:space-y-8 max-w-7xl mx-auto w-full overflow-x-hidden">
           <header className="flex flex-col gap-6 border-b border-white/5 pb-8">
             <div className="flex items-center justify-between md:hidden">
               <SidebarTrigger>
@@ -127,8 +117,8 @@ export default function Home() {
                 <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">Operational OS v3</Badge>
                 <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 glow-emerald uppercase tracking-tighter">Mission 400 Active</Badge>
               </div>
-              <h2 className="text-4xl lg:text-6xl font-headline font-bold tracking-tighter">Sovereign <span className="text-primary">Intelligence.</span></h2>
-              <p className="text-muted-foreground max-w-2xl text-lg leading-relaxed">
+              <h2 className="text-3xl sm:text-4xl lg:text-6xl font-headline font-bold tracking-tighter">Sovereign <span className="text-primary">Intelligence.</span></h2>
+              <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
                 Autonomous cryptographic defense and infrastructure orchestration. Currently managing <span className="text-white font-mono">{nodes.length}</span> distributed nodes.
               </p>
             </div>
@@ -142,8 +132,8 @@ export default function Home() {
               { label: "Directives", value: news.length, sub: "Live Broadcasts", icon: Terminal, color: "text-amber-500" },
             ].map((stat, i) => (
               <Card key={i} className="glass-card hover:border-primary/30 transition-all duration-300 group">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground group-hover:text-primary transition-colors">{stat.label}</span>
+                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                  <span className="text-[9px] uppercase font-bold tracking-widest text-muted-foreground group-hover:text-primary transition-colors">{stat.label}</span>
                   <stat.icon className={`size-4 ${stat.color} transition-transform group-hover:scale-110`} />
                 </CardHeader>
                 <CardContent>
@@ -154,30 +144,29 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
             <div className="lg:col-span-2 space-y-6">
-              <Card className="glass-card border-l-4 border-l-primary scan-effect relative overflow-hidden h-[400px]">
+              <Card className="glass-card border-l-4 border-l-primary scan-effect relative overflow-hidden h-[300px] sm:h-[400px]">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 font-headline text-base">
+                  <CardTitle className="flex items-center gap-2 font-headline text-base uppercase">
                     <Globe className="size-5 text-primary" />
                     Infrastructure Topology
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="h-full">
-                  <div className="absolute inset-0 opacity-10 bg-[url('https://picsum.photos/seed/map3/1200/800')] bg-cover" />
+                <CardContent className="h-full relative overflow-hidden">
                   <div className="relative z-10 w-full h-full flex items-center justify-center">
-                    <div className="size-64 rounded-full border border-primary/20 animate-spin-slow absolute" />
-                    <div className="size-48 rounded-full border border-primary/10 absolute" />
+                    <div className="size-48 sm:size-64 rounded-full border border-primary/20 animate-spin-slow absolute" />
+                    <div className="size-32 sm:size-48 rounded-full border border-primary/10 absolute" />
                     {nodes.map((node: any, i: number) => (
                       <div 
                         key={node.id}
-                        className={`absolute size-3 rounded-full glow-primary transition-all duration-1000 ${node.status === 'Operational' ? 'bg-primary' : 'bg-destructive'}`}
+                        className={`absolute size-2 sm:size-3 rounded-full glow-primary transition-all duration-1000 ${node.status === 'Operational' ? 'bg-primary' : 'bg-destructive'}`}
                         style={{ 
-                          transform: `rotate(${(360 / (nodes.length || 1)) * i}deg) translateY(-120px)` 
+                          transform: `rotate(${(360 / (nodes.length || 1)) * i}deg) translateY(-80px) sm:translateY(-120px)` 
                         }}
                       />
                     ))}
-                    <div className="size-4 bg-primary rounded-full animate-ping shadow-[0_0_20px_rgba(0,150,255,0.8)]" />
+                    <div className="size-3 sm:size-4 bg-primary rounded-full animate-ping shadow-[0_0_20px_rgba(0,150,255,0.8)]" />
                   </div>
                 </CardContent>
               </Card>
@@ -186,8 +175,8 @@ export default function Home() {
             <div className="space-y-6">
               <Card className="glass-card">
                 <CardHeader>
-                  <CardTitle className="font-headline text-base">Treasury Pulse</CardTitle>
-                  <CardDescription className="text-xs">Real-time liquidity health.</CardDescription>
+                  <CardTitle className="font-headline text-base uppercase">Treasury Pulse</CardTitle>
+                  <CardDescription className="text-xs uppercase">Real-time liquidity health.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {[
@@ -208,9 +197,9 @@ export default function Home() {
                      <Button 
                        onClick={handleExecuteAudit}
                        disabled={auditing}
-                       className="w-full bg-primary text-primary-foreground py-3 rounded font-bold text-[10px] uppercase tracking-widest h-auto"
+                       className="w-full bg-primary text-primary-foreground py-3 rounded font-bold text-[10px] uppercase tracking-widest h-auto glow-primary"
                      >
-                        {auditing ? <Loader2 className="animate-spin mr-2" /> : null}
+                        {auditing ? <Loader2 className="animate-spin mr-2 size-3" /> : null}
                         {auditing ? "Auditing Mesh..." : "Execute Ledger Audit"}
                      </Button>
                   </div>
@@ -222,11 +211,11 @@ export default function Home() {
       </SidebarInset>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="glass-card border-primary/20 sm:max-w-[600px]">
+        <DialogContent className="glass-card border-primary/20 w-[95vw] sm:max-w-[600px] p-4 sm:p-6">
           <DialogHeader>
-            <DialogTitle className="font-headline text-2xl flex items-center gap-2 text-primary">
+            <DialogTitle className="font-headline text-xl sm:text-2xl flex items-center gap-2 text-primary">
               <FileText className="size-6" />
-              Audit Report
+              AUDIT REPORT
             </DialogTitle>
           </DialogHeader>
           
@@ -241,10 +230,10 @@ export default function Home() {
                 </div>
                 <div className="p-4 bg-white/5 rounded-lg border border-white/5 text-right">
                   <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Integrity Score</p>
-                  <p className="text-3xl font-headline font-bold text-primary">{auditResult.securityScore}%</p>
+                  <p className="text-2xl sm:text-3xl font-headline font-bold text-primary">{auditResult.securityScore}%</p>
                 </div>
               </div>
-              <div className="bg-black/40 p-4 rounded border border-white/5 font-mono text-xs leading-relaxed text-muted-foreground">
+              <div className="bg-black/40 p-4 rounded border border-white/5 font-mono text-[10px] sm:text-xs leading-relaxed text-muted-foreground max-h-[200px] overflow-y-auto">
                 {auditResult.detailedReport}
               </div>
             </div>

@@ -117,4 +117,5 @@
   .lg\:p-10 { @apply p-4; }
   .text-6xl { @apply text-4xl; }
   .text-4xl { @apply text-2xl; }
+  .gap-8 { @apply gap-6; }
 }

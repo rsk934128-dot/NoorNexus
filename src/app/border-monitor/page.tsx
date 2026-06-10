@@ -3,11 +3,12 @@
 
 import { useState, useEffect, useRef } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarInset } from "@/components/ui/sidebar"
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Radar, ShieldAlert, ShieldCheck, Terminal, AlertTriangle } from "lucide-react"
+import { Radar, ShieldAlert, ShieldCheck, Terminal, AlertTriangle, Menu } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
 
 const REGIONS = ["South Asia", "Middle East", "Europe", "North America"]
 const PATHS = ["/api/v1/payout", "/api/v1/auth", "/api/v1/ledger", "/api/v1/remit"]
@@ -24,7 +25,6 @@ interface LogEntry {
 
 export default function BorderMonitorPage() {
   const [logs, setLogs] = useState<LogEntry[]>([])
-  const terminalRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,21 +52,28 @@ export default function BorderMonitorPage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto w-full">
-          <header className="flex items-center justify-between">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-7xl mx-auto w-full overflow-x-hidden">
+          <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div className="space-y-1">
-              <h2 className="text-3xl font-headline font-bold flex items-center gap-3">
-                <Radar className="size-8 text-primary animate-pulse" />
-                HMAC_V4 Border Monitor
-              </h2>
-              <p className="text-muted-foreground">Real-time cryptographic audit of inter-node sovereign traffic.</p>
+              <div className="flex items-center gap-3">
+                 <SidebarTrigger className="md:hidden text-primary">
+                    <Button variant="ghost" size="icon">
+                       <Menu className="size-6" />
+                    </Button>
+                 </SidebarTrigger>
+                 <h2 className="text-2xl sm:text-3xl font-headline font-bold flex items-center gap-3">
+                   <Radar className="size-8 text-primary animate-pulse" />
+                   HMAC_V4 Border Monitor
+                 </h2>
+              </div>
+              <p className="text-muted-foreground text-sm sm:text-base">Real-time cryptographic audit of inter-node sovereign traffic.</p>
             </div>
             <div className="flex gap-4">
-              <div className="glass-card px-4 py-2 rounded-lg text-center">
+              <div className="glass-card px-4 py-2 rounded-lg text-center flex-1 sm:flex-none">
                 <p className="text-[10px] text-muted-foreground uppercase font-bold">Mesh Integrity</p>
                 <p className="text-lg font-headline font-bold text-emerald-500">99.9%</p>
               </div>
-              <div className="glass-card px-4 py-2 rounded-lg text-center">
+              <div className="glass-card px-4 py-2 rounded-lg text-center flex-1 sm:flex-none">
                 <p className="text-[10px] text-muted-foreground uppercase font-bold">Threat Level</p>
                 <p className="text-lg font-headline font-bold text-primary">LOW</p>
               </div>
@@ -76,41 +83,43 @@ export default function BorderMonitorPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <Card className="glass-card lg:col-span-3 overflow-hidden">
               <CardHeader className="border-b border-white/5 bg-white/2">
-                <CardTitle className="text-sm font-headline flex items-center gap-2">
+                <CardTitle className="text-sm font-headline flex items-center gap-2 uppercase tracking-widest">
                   <Terminal className="size-4" />
                   Live Border Entry Logs
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="max-h-[600px] overflow-auto">
-                  <Table>
-                    <TableHeader className="bg-muted/30">
-                      <TableRow className="border-white/5">
-                        <TableHead className="w-[100px]">Time</TableHead>
-                        <TableHead>Origin</TableHead>
-                        <TableHead>Path</TableHead>
-                        <TableHead>Signature</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Risk</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {logs.map((log) => (
-                        <TableRow key={log.id} className={`border-white/5 transition-colors duration-500 ${log.result === 'REJECTED' ? 'bg-destructive/10' : log.result === 'WARNING' ? 'bg-amber-500/10' : 'hover:bg-white/5'}`}>
-                          <TableCell className="font-mono text-[10px]">{log.timestamp}</TableCell>
-                          <TableCell className="text-xs font-medium">{log.origin}</TableCell>
-                          <TableCell className="text-xs font-mono">{log.path}</TableCell>
-                          <TableCell className="text-xs font-mono text-muted-foreground">{log.signature}</TableCell>
-                          <TableCell>
-                            <Badge variant="outline" className={`text-[9px] uppercase font-bold ${log.result === 'ACCEPTED' ? 'border-emerald-500/50 text-emerald-500' : log.result === 'REJECTED' ? 'border-destructive text-destructive animate-pulse' : 'border-amber-500 text-amber-500'}`}>
-                              {log.result}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-right font-mono text-xs">{log.risk.toFixed(1)}</TableCell>
+                  <div className="min-w-[600px]">
+                    <Table>
+                      <TableHeader className="bg-muted/30">
+                        <TableRow className="border-white/5">
+                          <TableHead className="w-[100px]">Time</TableHead>
+                          <TableHead>Origin</TableHead>
+                          <TableHead>Path</TableHead>
+                          <TableHead>Signature</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead className="text-right">Risk</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHeader>
+                      <TableBody>
+                        {logs.map((log) => (
+                          <TableRow key={log.id} className={`border-white/5 transition-colors duration-500 ${log.result === 'REJECTED' ? 'bg-destructive/10' : log.result === 'WARNING' ? 'bg-amber-500/10' : 'hover:bg-white/5'}`}>
+                            <TableCell className="font-mono text-[10px]">{log.timestamp}</TableCell>
+                            <TableCell className="text-xs font-medium">{log.origin}</TableCell>
+                            <TableCell className="text-xs font-mono">{log.path}</TableCell>
+                            <TableCell className="text-xs font-mono text-muted-foreground">{log.signature}</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className={`text-[9px] uppercase font-bold ${log.result === 'ACCEPTED' ? 'border-emerald-500/50 text-emerald-500' : log.result === 'REJECTED' ? 'border-destructive text-destructive animate-pulse' : 'border-amber-500 text-amber-500'}`}>
+                                {log.result}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-right font-mono text-xs">{log.risk.toFixed(1)}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -121,7 +130,7 @@ export default function BorderMonitorPage() {
                    <AlertTriangle className="size-10 text-destructive opacity-10" />
                 </div>
                 <CardHeader>
-                  <CardTitle className="text-xs uppercase font-bold text-destructive">Threat Matrix</CardTitle>
+                  <CardTitle className="text-xs uppercase font-bold text-destructive tracking-widest">Threat Matrix</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-1">
@@ -139,9 +148,9 @@ export default function BorderMonitorPage() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-primary/20 bg-primary/5">
+              <Card className="glass-card border-primary/20 bg-primary/5 hidden sm:block">
                 <CardHeader>
-                   <CardTitle className="text-xs uppercase font-bold text-primary">Border Radar</CardTitle>
+                   <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest">Border Radar</CardTitle>
                 </CardHeader>
                 <CardContent>
                    <div className="aspect-square relative flex items-center justify-center">
