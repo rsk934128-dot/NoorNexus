@@ -66,7 +66,6 @@ const verifyHmacV4Signature = ai.defineTool(
 
 const autonomousComplianceMonitorPrompt = ai.definePrompt({
   name: 'autonomousComplianceMonitorPrompt',
-  model: 'googleai/gemini-1.5-flash',
   tools: [verifyHmacV4Signature],
   input: {schema: AutonomousComplianceMonitorInputSchema},
   output: {schema: AutonomousComplianceMonitorOutputSchema},
@@ -78,13 +77,18 @@ const autonomousComplianceMonitorPrompt = ai.definePrompt({
   Node: {{{sourceNode}}}
   Path: {{{requestPath}}}
 
-  Use verifyHmacV4Signature to check integrity. Then provide a risk assessment.`,
+  Use verifyHmacV4Signature tool to check integrity. Then provide a tactical risk assessment based on the tool's result. Speak with authority as an imperial intelligence agent.`,
 });
 
 export async function autonomousComplianceMonitor(
   input: AutonomousComplianceMonitorInput
 ): Promise<AutonomousComplianceMonitorOutput> {
-  const {output} = await autonomousComplianceMonitorPrompt(input);
-  if (!output) throw new Error('AI failed to generate compliance assessment.');
-  return output;
+  try {
+    const {output} = await autonomousComplianceMonitorPrompt(input);
+    if (!output) throw new Error('AI failed to generate compliance assessment.');
+    return output;
+  } catch (error: any) {
+    console.error('Compliance Flow Error:', error);
+    throw new Error(error.message || 'AI Infrastructure Error');
+  }
 }

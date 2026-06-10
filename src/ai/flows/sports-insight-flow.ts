@@ -29,7 +29,6 @@ export type MatchInsightOutput = z.infer<typeof MatchInsightOutputSchema>;
 
 const sportsInsightPrompt = ai.definePrompt({
   name: 'sportsInsightPrompt',
-  model: 'googleai/gemini-1.5-flash',
   input: { schema: MatchInsightInputSchema },
   output: { schema: MatchInsightOutputSchema },
   prompt: `You are the GSMIFY Sovereign Sports AI Analyst (Nora-AI). 
@@ -44,7 +43,12 @@ Provide tactical analysis, win probabilities, key performers, and recommendation
 });
 
 export async function getMatchInsight(input: MatchInsightInput): Promise<MatchInsightOutput> {
-  const {output} = await sportsInsightPrompt(input);
-  if (!output) throw new Error('AI failed to generate sports insight.');
-  return output;
+  try {
+    const {output} = await sportsInsightPrompt(input);
+    if (!output) throw new Error('AI failed to generate sports insight.');
+    return output;
+  } catch (error: any) {
+    console.error('Sports Insight Error:', error);
+    throw new Error(error.message || 'Sports AI Infrastructure Error');
+  }
 }
