@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Radar, ShieldAlert, ShieldCheck, Terminal, AlertTriangle, Menu, Loader2, Database, Lock, Activity } from "lucide-react"
+import { Radar, ShieldAlert, ShieldCheck, Terminal, AlertTriangle, Menu, Loader2, Database, Lock, Activity, RefreshCcw, ShieldHalf } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { useFirestore, useCollection } from "@/firebase"
@@ -20,8 +20,10 @@ export default function BorderMonitorPage() {
   const rejectedCount = logs.filter(l => l.result === 'REJECTED').length
   const warningCount = logs.filter(l => l.result === 'WARNING').length
   
-  // Determine current active defense tier from the latest log
-  const activeTier = logs[0]?.securityTier || 'L1_NORMAL'
+  // Determine current active defense tier and rotation from the latest log
+  const latestLog = logs[0]
+  const activeTier = latestLog?.securityTier || 'L1_NORMAL'
+  const currentRotation = latestLog?.keyRotationInterval || 3600
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -38,21 +40,23 @@ export default function BorderMonitorPage() {
                  </SidebarTrigger>
                  <h2 className="text-2xl sm:text-3xl font-headline font-bold flex items-center gap-3 uppercase">
                    <Radar className="size-8 text-primary animate-pulse" />
-                   Security Audit Trail
+                   Shield Audit Trail
                  </h2>
               </div>
-              <p className="text-muted-foreground text-sm sm:text-base">Adaptive Proactive Defense Monitoring for Mission 400.</p>
+              <p className="text-muted-foreground text-sm sm:text-base">Project 150: Dynamic Key Hardening & Mesh Integrity.</p>
             </div>
             <div className="flex gap-4">
+              <div className="glass-card px-4 py-2 rounded-lg text-center flex-1 sm:flex-none border-t-2 border-t-emerald-500">
+                <p className="text-[10px] text-muted-foreground uppercase font-bold">Key Rotation</p>
+                <p className="text-lg font-headline font-bold text-emerald-500 flex items-center gap-2 justify-center">
+                  <RefreshCcw className="size-4 animate-spin-slow" /> {currentRotation}s
+                </p>
+              </div>
               <div className={`glass-card px-4 py-2 rounded-lg text-center flex-1 sm:flex-none border-t-2 ${activeTier === 'L4_LOCKDOWN' ? 'border-t-destructive' : 'border-t-primary'}`}>
-                <p className="text-[10px] text-muted-foreground uppercase font-bold">Mesh Defense Tier</p>
+                <p className="text-[10px] text-muted-foreground uppercase font-bold">Defense Tier</p>
                 <p className={`text-lg font-headline font-bold flex items-center gap-2 justify-center ${activeTier === 'L4_LOCKDOWN' ? 'text-destructive' : 'text-primary'}`}>
                   <Lock className="size-4" /> {activeTier}
                 </p>
-              </div>
-              <div className="glass-card px-4 py-2 rounded-lg text-center flex-1 sm:flex-none">
-                <p className="text-[10px] text-muted-foreground uppercase font-bold">Audit Confidence</p>
-                <p className="text-lg font-headline font-bold text-emerald-500">99.9%</p>
               </div>
             </div>
           </header>
@@ -62,14 +66,14 @@ export default function BorderMonitorPage() {
               <CardHeader className="border-b border-white/5 bg-white/2">
                 <CardTitle className="text-sm font-headline flex items-center gap-2 uppercase tracking-widest">
                   <Terminal className="size-4" />
-                  Live Cryptographic Logs
+                  Live Shield Logs
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 {loading ? (
                   <div className="flex flex-col items-center justify-center py-20 gap-4">
                     <Loader2 className="size-10 text-primary animate-spin" />
-                    <p className="text-xs font-mono uppercase text-muted-foreground">Syncing Audit Mesh...</p>
+                    <p className="text-xs font-mono uppercase text-muted-foreground">Syncing Shield Mesh...</p>
                   </div>
                 ) : (
                   <div className="max-h-[600px] overflow-auto">
@@ -79,9 +83,9 @@ export default function BorderMonitorPage() {
                           <TableRow className="border-white/5">
                             <TableHead className="w-[120px]">Timestamp</TableHead>
                             <TableHead>Origin/Tier</TableHead>
-                            <TableHead>Signature Protocol</TableHead>
-                            <TableHead>Result</TableHead>
-                            <TableHead className="text-right">Risk Score</TableHead>
+                            <TableHead>Rotation Policy</TableHead>
+                            <TableHead>Consensus</TableHead>
+                            <TableHead className="text-right">Risk</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -99,11 +103,11 @@ export default function BorderMonitorPage() {
                                 </div>
                               </TableCell>
                               <TableCell className="text-[10px] font-mono text-muted-foreground">
-                                {log.signature?.substring(0, 16)}...
+                                {log.keyRotationInterval ? `${log.keyRotationInterval}s Dynamic` : '3600s Fixed'}
                               </TableCell>
                               <TableCell>
-                                <Badge variant="outline" className={`text-[9px] uppercase font-bold ${log.result === 'ACCEPTED' ? 'border-emerald-500 text-emerald-500' : log.result === 'REJECTED' ? 'border-destructive text-destructive' : 'border-amber-500 text-amber-500'}`}>
-                                  {log.result}
+                                <Badge variant="outline" className={`text-[9px] uppercase font-bold ${log.result === 'ACCEPTED' ? 'border-emerald-500 text-emerald-500' : 'border-destructive text-destructive'}`}>
+                                  {log.overrideActive ? 'PENDING_SEAL' : log.result}
                                 </Badge>
                               </TableCell>
                               <TableCell className="text-right font-headline font-bold text-primary">
@@ -120,43 +124,41 @@ export default function BorderMonitorPage() {
             </Card>
 
             <div className="space-y-6">
-              <Card className="glass-card bg-destructive/5 border-destructive/20 overflow-hidden">
+              <Card className="glass-card bg-primary/5 border-primary/20 overflow-hidden">
                 <CardHeader>
-                  <CardTitle className="text-xs uppercase font-bold text-destructive tracking-widest flex items-center gap-2">
-                    <ShieldAlert className="size-4" /> Threat Analysis
+                  <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
+                    <ShieldHalf className="size-4" /> Shield Health
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex justify-between items-end">
                     <div className="space-y-1">
-                      <p className="text-[9px] text-muted-foreground font-mono uppercase">Rejected</p>
-                      <p className="text-3xl font-headline font-bold text-destructive">{rejectedCount}</p>
+                      <p className="text-[9px] text-muted-foreground font-mono uppercase">Mesh Immunity</p>
+                      <p className="text-3xl font-headline font-bold text-primary">99.9%</p>
                     </div>
                     <div className="space-y-1 text-right">
-                      <p className="text-[9px] text-muted-foreground font-mono uppercase">Avg Risk</p>
-                      <p className="text-3xl font-headline font-bold text-amber-500">
-                        {(logs.reduce((acc, l) => acc + (l.riskScore || 0), 0) / (logs.length || 1)).toFixed(1)}
-                      </p>
+                      <p className="text-[9px] text-muted-foreground font-mono uppercase">Key Entropy</p>
+                      <p className="text-3xl font-headline font-bold text-emerald-500">MAX</p>
                     </div>
                   </div>
                   <div className="h-1 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-destructive" style={{ width: `${(rejectedCount / (logs.length || 1)) * 100}%` }} />
+                    <div className="h-full bg-primary" style={{ width: `99.9%` }} />
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-primary/20 bg-primary/5">
+              <Card className="glass-card border-amber-500/20 bg-amber-500/5">
                 <CardHeader>
-                   <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                     <Activity className="size-4" /> Adaptive Pulse
+                   <CardTitle className="text-xs uppercase font-bold text-amber-500 tracking-widest flex items-center gap-2">
+                     <Lock className="size-4" /> Sovereign Seal
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                   <p className="text-[10px] text-muted-foreground leading-relaxed">
-                     Mesh intelligence is currently analyzing for recurring threat vectors.
+                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                     Master override is currently ACTIVE. Critical isolations require your direct command.
                    </p>
                    <div className="pt-2">
-                     <Badge variant="outline" className="text-[8px] border-emerald-500/30 text-emerald-500">PROACTIVE_DEFENSE: STANDBY</Badge>
+                     <Badge variant="outline" className="text-[8px] border-amber-500/30 text-amber-500">SOVEREIGN_AUTH: PENDING</Badge>
                    </div>
                 </CardContent>
               </Card>

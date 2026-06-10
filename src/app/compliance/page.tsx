@@ -8,7 +8,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { ShieldCheck, Terminal, AlertCircle, CheckCircle2, Cpu, Activity, Zap, Menu, History, Loader2, ShieldAlert, Lock } from "lucide-react"
+import { Switch } from "@/components/ui/switch"
+import { 
+  ShieldCheck, Terminal, AlertCircle, CheckCircle2, Cpu, Activity, Zap, 
+  Menu, History, Loader2, ShieldAlert, Lock, ShieldEllipsis, RefreshCcw 
+} from "lucide-react"
 import { autonomousComplianceMonitor, AutonomousComplianceMonitorOutput } from "@/ai/flows/autonomous-compliance-monitor"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useCollection } from "@/firebase"
@@ -21,6 +25,7 @@ export default function CompliancePage() {
   const [results, setResults] = useState<AutonomousComplianceMonitorOutput | null>(null)
   const [reasoningStream, setReasoningStream] = useState("")
   const [typing, setTyping] = useState(false)
+  const [sovereignOverride, setSovereignOverride] = useState(true)
 
   const { data: auditHistory, loading: historyLoading } = useCollection<any>(
     query(collection(db, "border_logs"), orderBy("timestamp", "desc"), limit(5))
@@ -53,7 +58,9 @@ export default function CompliancePage() {
         reason: result.assessmentDetails,
         riskScore: result.riskLevel === 'Critical' ? 95 : result.riskLevel === 'High' ? 80 : result.riskLevel === 'Medium' ? 50 : result.riskLevel === 'Low' ? 20 : 5,
         aiAssessment: result,
-        securityTier: result.suggestedSecurityTier
+        securityTier: result.suggestedSecurityTier,
+        keyRotationInterval: result.keyRotationIntervalSeconds,
+        overrideActive: sovereignOverride
       })
 
       // Simulate typing for UX
@@ -91,15 +98,26 @@ export default function CompliancePage() {
                   <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                 </SidebarTrigger>
                 <ShieldCheck className="size-8 text-primary" />
-                <h2 className="text-2xl sm:text-3xl font-headline font-bold">Nora-01 Compliance Agent</h2>
+                <h2 className="text-2xl sm:text-3xl font-headline font-bold uppercase">Adaptive Sovereign Shield</h2>
               </div>
               <p className="text-muted-foreground text-sm sm:text-base">
-                Autonomous cryptographic defense with Proactive Adaptive Logic.
+                Project 150: Collective Immune System Architecture.
               </p>
             </div>
-            <div className="flex gap-2">
-               <Badge variant="outline" className="text-emerald-500 border-emerald-500/30 h-10 px-4">ADAPTIVE_DEFENSE: ACTIVE</Badge>
-               <Badge variant="outline" className="text-primary border-primary/30 h-10 px-4 uppercase">Tier: {results?.suggestedSecurityTier || 'L1_NORMAL'}</Badge>
+            <div className="flex flex-col items-end gap-3">
+               <div className="flex items-center gap-3 p-2 bg-primary/10 border border-primary/20 rounded-lg">
+                 <Label htmlFor="override" className="text-[10px] font-bold uppercase text-primary">Sovereign Master Override</Label>
+                 <Switch 
+                  id="override" 
+                  checked={sovereignOverride} 
+                  onCheckedChange={setSovereignOverride}
+                  className="data-[state=checked]:bg-primary"
+                 />
+               </div>
+               <div className="flex gap-2">
+                  <Badge variant="outline" className="text-emerald-500 border-emerald-500/30 h-8 px-3">SHIELD: ACTIVE</Badge>
+                  <Badge variant="outline" className="text-primary border-primary/30 h-8 px-3 uppercase">Tier: {results?.suggestedSecurityTier || 'L1_NORMAL'}</Badge>
+               </div>
             </div>
           </header>
 
@@ -125,34 +143,37 @@ export default function CompliancePage() {
                   </div>
                   <Button onClick={runMonitor} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary" disabled={loading}>
                     {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
-                    Analyze & Update Defense Tier
+                    Analyze & Pulse Mesh
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card className="glass-card">
-                <CardHeader>
-                   <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2">
-                     <History className="size-4" /> Adaptive Conflict Log
-                   </CardTitle>
-                   <CardDescription className="text-[10px]">Security decisions influencing the Proactive Defense Layer.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {historyLoading ? <Loader2 className="size-4 animate-spin mx-auto" /> : (
-                    auditHistory.map((log: any) => (
-                      <div key={log.id} className="p-3 bg-white/5 rounded border border-white/5 flex items-center justify-between group">
-                        <div className="min-w-0">
-                          <p className="text-[10px] font-bold uppercase truncate">{log.path}</p>
-                          <p className="text-[8px] text-muted-foreground font-mono">{log.securityTier || 'L1_NORMAL'}</p>
-                        </div>
-                        <Badge variant="outline" className={`text-[8px] ${log.result === 'ACCEPTED' ? 'border-emerald-500/30 text-emerald-500' : 'border-destructive/30 text-destructive'}`}>
-                          {log.result}
-                        </Badge>
-                      </div>
-                    ))
-                  )}
-                </CardContent>
-              </Card>
+              {results && (
+                <div className="grid grid-cols-2 gap-4">
+                  <Card className="glass-card bg-primary/5 border-primary/20">
+                    <CardHeader className="py-3">
+                       <CardTitle className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
+                         <RefreshCcw className="size-3" /> Key Hardening
+                       </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                       <p className="text-xl font-headline font-bold">{results.keyRotationIntervalSeconds}s</p>
+                       <p className="text-[8px] text-muted-foreground uppercase font-mono">Rotation Interval</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
+                    <CardHeader className="py-3">
+                       <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
+                         <ShieldEllipsis className="size-3" /> Mesh Consensus
+                       </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                       <p className="text-xl font-headline font-bold">400/400</p>
+                       <p className="text-[8px] text-muted-foreground uppercase font-mono">Nodes Updated</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
             </div>
 
             <div className="space-y-6">
@@ -160,14 +181,14 @@ export default function CompliancePage() {
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2 uppercase tracking-tighter">
                      <Cpu className="size-4 text-primary" />
-                     Adaptive Audit Reasoning
+                     Shield Reasoning Engine
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="bg-black/40 p-5 rounded-xl border border-white/5 font-mono text-xs min-h-[150px] relative overflow-hidden">
                      {typing && <div className="absolute top-0 left-0 w-full h-0.5 bg-primary animate-progress" />}
                      <p className="leading-relaxed text-muted-foreground whitespace-pre-wrap">
-                        {reasoningStream || (loading ? "Analyzing cryptographic drift..." : "Awaiting protocol packet for analysis...")}
+                        {reasoningStream || (loading ? "Simulating collective immune response..." : "Awaiting protocol packet for analysis...")}
                      </p>
                   </div>
 
@@ -185,11 +206,22 @@ export default function CompliancePage() {
                       </div>
 
                       {results.nodeIsolationRequired && (
-                         <div className="p-4 bg-destructive/20 border border-destructive/30 rounded-lg flex items-center gap-4 animate-pulse">
-                            <ShieldAlert className="size-8 text-destructive" />
+                         <div className={`p-4 rounded-lg flex items-center gap-4 transition-all ${sovereignOverride ? 'bg-amber-500/20 border border-amber-500/30' : 'bg-destructive/20 border border-destructive/30 animate-pulse'}`}>
+                            {sovereignOverride ? <ShieldAlert className="size-8 text-amber-500" /> : <ShieldAlert className="size-8 text-destructive" />}
                             <div>
-                               <p className="text-xs font-bold text-destructive uppercase">Node Isolation Required</p>
-                               <p className="text-[10px] text-destructive/80">Immediate quarantine of {formData.sourceNode} recommended.</p>
+                               <p className="text-xs font-bold uppercase">
+                                 {sovereignOverride ? 'Isolation Recommendation' : 'Node Isolation Active'}
+                               </p>
+                               <p className="text-[10px] opacity-80">
+                                 {sovereignOverride 
+                                   ? `Awaiting Sovereign Seal for node ${formData.sourceNode} isolation.` 
+                                   : `Immediate quarantine of ${formData.sourceNode} executed.`}
+                               </p>
+                               {sovereignOverride && (
+                                 <Button size="sm" className="mt-2 h-7 text-[9px] bg-amber-500 text-white font-bold uppercase px-3">
+                                   Seal Isolation
+                                 </Button>
+                               )}
                             </div>
                          </div>
                       )}
@@ -205,23 +237,6 @@ export default function CompliancePage() {
                       </div>
                     </div>
                   )}
-                </CardContent>
-              </Card>
-              
-              <Card className="glass-card bg-primary/5">
-                <CardHeader className="pb-2">
-                   <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
-                     <Activity className="size-3" /> Defense Protocol Confidence
-                   </CardTitle>
-                </CardHeader>
-                <CardContent>
-                   <div className="flex justify-between text-[10px] font-mono mb-2">
-                     <span>Adaptive Precision:</span>
-                     <span className="text-emerald-500">99.9%</span>
-                   </div>
-                   <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                     <div className="h-full bg-primary w-[99.9%]" />
-                   </div>
                 </CardContent>
               </Card>
             </div>

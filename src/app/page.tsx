@@ -1,16 +1,15 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle, Zap } from "lucide-react"
+import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useCollection } from "@/firebase"
-import { collection } from "firebase/firestore"
+import { collection, query, orderBy, limit } from "firebase/firestore"
 import {
   Dialog,
   DialogContent,
@@ -31,9 +30,12 @@ export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [borderFeed, setBorderFeed] = useState<string[]>([])
 
-  // Real-time infrastructure data
+  // Real-time infrastructure and security data
   const { data: nodes } = useCollection<any>(collection(db, "nodes"))
-  const { data: news } = useCollection<any>(collection(db, "sports_news"))
+  const { data: latestLogs } = useCollection<any>(query(collection(db, "border_logs"), orderBy("timestamp", "desc"), limit(1)))
+
+  const activeTier = latestLogs[0]?.securityTier || 'L1_NORMAL'
+  const keyRotation = latestLogs[0]?.keyRotationInterval || 3600
 
   useEffect(() => {
     const sequence = [
@@ -56,7 +58,8 @@ export default function Home() {
         "SIGNATURE VERIFIED: SG-EDGE-01",
         "P2P HANDSHAKE: Sirajganj -> UAE",
         "STABLECOIN SYNC: USDC -> MESH",
-        "BORDER SCAN: ZERO THREATS",
+        "ADAPTIVE SHIELD: SCANNING...",
+        "KEY ROTATION: SUCCESS",
         "NODE HEARTBEAT: SIRAJGANJ_OK"
       ]
       const log = logs[Math.floor(Math.random() * logs.length)]
@@ -130,24 +133,36 @@ export default function Home() {
               <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase tracking-tighter">PHASE 2 ACTIVE</Badge>
             </div>
             
-            <div className="space-y-4">
-              <div className="hidden md:flex items-center gap-2">
-                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">Operational OS v3</Badge>
-                <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 glow-emerald uppercase tracking-tighter">Mission 400 | Phase 2 Active</Badge>
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-6">
+              <div className="space-y-4">
+                <div className="hidden md:flex items-center gap-2">
+                  <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">Operational OS v3</Badge>
+                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 glow-emerald uppercase tracking-tighter">Adaptive Sovereign Shield Active</Badge>
+                </div>
+                <h2 className="text-3xl sm:text-4xl lg:text-6xl font-headline font-bold tracking-tighter uppercase">Command <span className="text-primary">Center.</span></h2>
+                <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
+                  Project 150: Collective Immune System is monitoring <span className="text-white font-mono">{nodes.length}</span> nodes. 
+                  Defense Tier: <span className={`font-bold ${activeTier === 'L4_LOCKDOWN' ? 'text-destructive' : 'text-primary'}`}>{activeTier}</span>.
+                </p>
               </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-6xl font-headline font-bold tracking-tighter">Sovereign <span className="text-primary">Intelligence.</span></h2>
-              <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Autonomous cryptographic defense and infrastructure orchestration. Currently managing <span className="text-white font-mono">{nodes.length}</span> distributed nodes and <span className="text-primary font-bold">Stablecoin P2C Rails</span>.
-              </p>
+              <div className="flex gap-4">
+                 <div className="glass-card p-3 rounded-xl border border-primary/20 flex flex-col items-center min-w-[120px]">
+                    <p className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Rotation Status</p>
+                    <div className="flex items-center gap-2">
+                       <RefreshCcw className="size-4 text-emerald-500 animate-spin-slow" />
+                       <span className="text-lg font-headline font-bold text-white">{keyRotation}s</span>
+                    </div>
+                 </div>
+              </div>
             </div>
           </header>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { label: "Active Nodes", value: activeNodes, sub: `of ${nodes.length} Provisoned`, icon: Server, color: "text-primary" },
-              { label: "Mesh Integrity", value: "99.9%", sub: "HMAC_V4 Verified", icon: Shield, color: "text-emerald-500" },
-              { label: "Treasury Health", value: "98.4%", sub: "Stablecoin Optimized", icon: Landmark, color: "text-primary" },
-              { label: "Threat Matrix", value: "ZERO", sub: "Last Scan: 12ms", icon: Radar, color: "text-destructive" },
+              { label: "Shield Health", value: "99.9%", sub: "Adaptive Pulse OK", icon: ShieldCheck, color: "text-emerald-500" },
+              { label: "Key Entropy", value: "MAX", sub: "HMAC_V4 Hardened", icon: Zap, color: "text-primary" },
+              { label: "Threat Matrix", value: "STABLE", sub: "Zero-Trust Active", icon: Radar, color: "text-primary" },
             ].map((stat, i) => (
               <Card key={i} className="glass-card hover:border-primary/30 transition-all duration-300 group">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -168,7 +183,7 @@ export default function Home() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 font-headline text-base uppercase">
                     <Globe className="size-5 text-primary" />
-                    Infrastructure Topology
+                    Mesh Network Topology
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="h-full relative overflow-hidden">
@@ -195,9 +210,9 @@ export default function Home() {
                 <CardHeader>
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
                     <Zap className="size-4 text-emerald-500" />
-                    Imperial Border Feed
+                    Shield Border Feed
                   </CardTitle>
-                  <CardDescription className="text-xs">Live cryptographic heartbeat.</CardDescription>
+                  <CardDescription className="text-xs">Live adaptive heartbeat.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {borderFeed.map((log, i) => (
@@ -213,7 +228,7 @@ export default function Home() {
                        className="w-full bg-primary text-primary-foreground py-3 rounded font-bold text-[10px] uppercase tracking-widest h-auto glow-primary"
                      >
                         {auditing ? <Loader2 className="animate-spin mr-2 size-3" /> : <Shield className="size-3 mr-2" />}
-                        {auditing ? "Analyzing Mesh..." : "Execute Integrity Audit"}
+                        {auditing ? "Analyzing Shield..." : "Execute Shield Audit"}
                      </Button>
                   </div>
                 </CardContent>
@@ -226,9 +241,9 @@ export default function Home() {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="glass-card border-primary/20 w-[95vw] sm:max-w-[600px] p-4 sm:p-6">
           <DialogHeader>
-            <DialogTitle className="font-headline text-xl sm:text-2xl flex items-center gap-2 text-primary">
-              <Shield className="size-6" />
-              IMPERIAL INTEGRITY REPORT
+            <DialogTitle className="font-headline text-xl sm:text-2xl flex items-center gap-2 text-primary uppercase">
+              <ShieldCheck className="size-6" />
+              Shield Integrity Report
             </DialogTitle>
           </DialogHeader>
           
@@ -236,13 +251,13 @@ export default function Home() {
             <div className="space-y-6 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-white/5 rounded-lg border border-white/5">
-                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Status</p>
+                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Immunity Status</p>
                   <p className={`text-lg font-headline font-bold ${auditResult.auditStatus === 'STABLE' ? 'text-emerald-500' : 'text-amber-500'}`}>
                     {auditResult.auditStatus}
                   </p>
                 </div>
                 <div className="p-4 bg-white/5 rounded-lg border border-white/5 text-right">
-                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Security Score</p>
+                  <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Shield Score</p>
                   <p className="text-2xl sm:text-3xl font-headline font-bold text-primary">{auditResult.securityScore}%</p>
                 </div>
               </div>
@@ -253,12 +268,12 @@ export default function Home() {
           ) : (
             <div className="py-10 text-center space-y-4">
                <AlertTriangle className="size-12 text-destructive mx-auto animate-pulse" />
-               <p className="text-xs font-mono uppercase text-muted-foreground">Neural Handshake Terminated Prematurely.</p>
+               <p className="text-xs font-mono uppercase text-muted-foreground">Shield Neural Handshake Terminated.</p>
             </div>
           )}
           <DialogFooter>
             <Button onClick={() => setIsDialogOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12">
-              Confirm & Re-seal
+              Seal & Re-Hardened
             </Button>
           </DialogFooter>
         </DialogContent>

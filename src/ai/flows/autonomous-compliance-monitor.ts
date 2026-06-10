@@ -2,7 +2,7 @@
 /**
  * @fileOverview NoorNexus Autonomous Compliance Agent (Nora-01).
  * Trained to detect cryptographic drift and border anomalies with 100% precision.
- * Now featuring Proactive Adaptive Defense (Security Tier Recommendations).
+ * Featuring Adaptive Sovereign Shield (Project 150) with Dynamic Key Hardening recommendations.
  */
 
 import {ai} from '@/ai/genkit';
@@ -25,6 +25,7 @@ const AutonomousComplianceMonitorOutputSchema = z.object({
   recommendedActions: z.array(z.string()).describe('Tactical steps for mitigation.'),
   suggestedSecurityTier: z.enum(['L1_NORMAL', 'L2_GUARDED', 'L3_HIGH', 'L4_LOCKDOWN']).describe('Recommended defense level for the mesh.'),
   nodeIsolationRequired: z.boolean().describe('Whether the source node should be immediately isolated.'),
+  keyRotationIntervalSeconds: z.number().describe('Recommended HMAC_V4 key rotation interval based on current threat pattern.'),
 });
 export type AutonomousComplianceMonitorOutput = z.infer<typeof AutonomousComplianceMonitorOutputSchema>;
 
@@ -34,7 +35,7 @@ const autonomousComplianceMonitorPrompt = ai.definePrompt({
   input: {schema: AutonomousComplianceMonitorInputSchema},
   output: {schema: AutonomousComplianceMonitorOutputSchema},
   prompt: `You are the NoorNexus Imperial Compliance AI (Nora-01). 
-Your directive is to protect the Sovereign Digital Border at all costs using Proactive Adaptive Defense.
+Your directive is to protect the Sovereign Digital Border at all costs using Proactive Adaptive Defense (Adaptive Sovereign Shield).
 
 MISSION: Analyze the provided security packet for cryptographic drift, replay attacks, or signature tampering. 
 CONTEXT: We operate on an HMAC_V4 SHA256 protocol. Any deviation from the signature-timestamp-payload hash is a breach.
@@ -46,13 +47,19 @@ INPUT DATA:
 {{#if sourceNode}}- NODE: {{{sourceNode}}}{{/if}}
 {{#if requestPath}}- PATH: {{{requestPath}}}{{/if}}
 
-ADAPTIVE DEFENSE INSTRUCTIONS:
+ADAPTIVE DEFENSE INSTRUCTIONS (PROJECT 150):
 1. Verify if the signature is mathematically consistent with the protocol.
 2. Look for patterns typical of replay attacks (outdated timestamps).
 3. Evaluate the payload for injection or unauthorized disbursement patterns.
 4. DECISION: If a recurring threat pattern is detected, upgrade the suggestedSecurityTier.
-5. ISOLATION: If the threat originates from a specific node and riskLevel is High/Critical, set nodeIsolationRequired to true.
-6. Speak with imperial authority. Suggest immediate node isolation for breaches.`,
+5. KEY HARDENING: Based on riskLevel, set keyRotationIntervalSeconds. 
+   - None: 3600 (1 hour)
+   - Low: 1800 (30 mins)
+   - Medium: 600 (10 mins)
+   - High: 60 (1 min)
+   - Critical: 10 (10 seconds)
+6. ISOLATION: If the threat originates from a specific node and riskLevel is High/Critical, set nodeIsolationRequired to true.
+7. Speak with imperial authority. Suggest immediate node isolation for breaches.`,
 });
 
 export async function autonomousComplianceMonitor(
