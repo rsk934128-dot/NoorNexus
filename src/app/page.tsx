@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server } from "lucide-react"
+import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -53,6 +53,7 @@ export default function Home() {
 
   async function handleExecuteAudit() {
     setAuditing(true)
+    setAuditResult(null)
     try {
       const result = await ledgerAudit({
         totalVolume: 2552000,
@@ -66,9 +67,11 @@ export default function Home() {
         title: "Audit Complete",
         description: `Status: ${result.auditStatus} | Score: ${result.securityScore}`,
       })
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Audit UI Error:", error)
       toast({
-        title: "Audit Failed",
+        title: "Audit AI Error",
+        description: error.message || "Failed to communicate with Imperial Treasury Auditor.",
         variant: "destructive",
       })
     } finally {
@@ -199,7 +202,7 @@ export default function Home() {
                        disabled={auditing}
                        className="w-full bg-primary text-primary-foreground py-3 rounded font-bold text-[10px] uppercase tracking-widest h-auto glow-primary"
                      >
-                        {auditing ? <Loader2 className="animate-spin mr-2 size-3" /> : null}
+                        {auditing ? <Loader2 className="animate-spin mr-2 size-3" /> : <FileText className="size-3 mr-2" />}
                         {auditing ? "Auditing Mesh..." : "Execute Ledger Audit"}
                      </Button>
                   </div>
@@ -214,12 +217,12 @@ export default function Home() {
         <DialogContent className="glass-card border-primary/20 w-[95vw] sm:max-w-[600px] p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle className="font-headline text-xl sm:text-2xl flex items-center gap-2 text-primary">
-              <FileText className="size-6" />
-              AUDIT REPORT
+              <Shield className="size-6" />
+              IMPERIAL AUDIT REPORT
             </DialogTitle>
           </DialogHeader>
           
-          {auditResult && (
+          {auditResult ? (
             <div className="space-y-6 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-white/5 rounded-lg border border-white/5">
@@ -236,6 +239,11 @@ export default function Home() {
               <div className="bg-black/40 p-4 rounded border border-white/5 font-mono text-[10px] sm:text-xs leading-relaxed text-muted-foreground max-h-[200px] overflow-y-auto">
                 {auditResult.detailedReport}
               </div>
+            </div>
+          ) : (
+            <div className="py-10 text-center space-y-4">
+               <AlertTriangle className="size-12 text-destructive mx-auto animate-pulse" />
+               <p className="text-xs font-mono uppercase text-muted-foreground">Neural Handshake Terminated Prematurely.</p>
             </div>
           )}
           <DialogFooter>
