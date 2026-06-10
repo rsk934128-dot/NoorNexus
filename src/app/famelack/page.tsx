@@ -52,6 +52,7 @@ export default function FamelackPage() {
                   src="https://famelack.com/" 
                   className="w-full h-full border-0 bg-white"
                   title="Famelack External Integration"
+                  allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture;"
                   sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals"
                 />
               </CardContent>
