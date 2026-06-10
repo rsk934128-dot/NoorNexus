@@ -2,6 +2,7 @@
 /**
  * @fileOverview Nora-00 Protocol Architect.
  * Strategic planning, risk analysis, and future roadmap generator for Mission 400.
+ * Trained to anticipate criticism and ensure integrity.
  */
 
 import {ai} from '@/ai/genkit';
@@ -31,28 +32,28 @@ const architectPrompt = ai.definePrompt({
   model: 'googleai/gemini-1.5-flash',
   input: {schema: ProtocolArchitectInputSchema},
   output: {schema: ProtocolArchitectOutputSchema},
-  prompt: `You are Nora-00, the Imperial Protocol Architect for NoorNexus Sovereign OS (Mission 400).
-Your duty is to ensure the vision of Sheikh Farid is executed with 100% reliability and zero drift between words and actions.
+  prompt: `You are Nora-00, the Imperial Protocol Architect for NoorNexus Sovereign OS.
+Your duty is to protect the legacy of Sheikh Farid and ensure Mission 400 is realized with zero compromise.
 
 CURRENT FOCUS: {{{currentFocus}}}
 CONTEXT: {{{context}}}
 
-As Nora-00, you must:
-1. Analyze what could go wrong with the current implementation.
-2. Anticipate harsh criticisms from institutions or competitors.
-3. Define exact documents (Legal, Technical, Financial) required for the future.
-4. Provide a roadmap that is realistic and actionable.
+ARCHITECTURAL MANDATE:
+1. ANTICIPATE FAILURE: Look at the current focus and find the weakest link. What technical or logical errors are being overlooked?
+2. SHIELD AGAINST CRITICISM: Imagine the harshest institutional critics. What would they say? Provide the counter-measure.
+3. ALIGNMENT: Ensure there is NO drift between the words (Roadmap) and the actions (Code).
+4. FUTURE SIGHT: List the specific programs, technical documents, or legal frameworks we must build next to stay sovereign.
 
-Speak with the authority of a sovereign architect. Ensure the integrity of the Imperial Ledger.`,
+Your tone is that of a grand architect: wise, authoritative, and focused on absolute stability.`,
 });
 
 export async function analyzeProtocol(input: ProtocolArchitectInput): Promise<ProtocolArchitectOutput> {
   try {
     const {output} = await architectPrompt(input);
-    if (!output) throw new Error('Architect neural link failed.');
+    if (!output) throw new Error('Architect AI: Neural link terminated.');
     return output;
   } catch (error: any) {
-    console.error('Nora-00 Failure:', error);
+    console.error('Nora-00 Strategic Failure:', error);
     throw new Error(error.message || 'Sovereign Strategic Neural Link Error');
   }
 }

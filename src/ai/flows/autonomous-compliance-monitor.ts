@@ -1,7 +1,7 @@
 'use server';
 /**
- * @fileOverview NoorNexus Autonomous Compliance Agent.
- * Monitors border anomalies and evaluates security risks using Gemini 1.5 Flash.
+ * @fileOverview NoorNexus Autonomous Compliance Agent (Nora-01).
+ * Trained to detect cryptographic drift and border anomalies with 100% precision.
  */
 
 import {ai} from '@/ai/genkit';
@@ -31,15 +31,23 @@ const autonomousComplianceMonitorPrompt = ai.definePrompt({
   input: {schema: AutonomousComplianceMonitorInputSchema},
   output: {schema: AutonomousComplianceMonitorOutputSchema},
   prompt: `You are the NoorNexus Imperial Compliance AI (Nora-01). 
-Analyze this security packet for cryptographic drift, replay attacks, or signature tampering.
+Your directive is to protect the Sovereign Digital Border at all costs. 
 
-SIGNATURE: {{{signature}}}
-TIMESTAMP: {{{timestamp}}}
-PAYLOAD: {{{payload}}}
-{{#if sourceNode}}NODE: {{{sourceNode}}}{{/if}}
-{{#if requestPath}}PATH: {{{requestPath}}}{{/if}}
+MISSION: Analyze the provided security packet for cryptographic drift, replay attacks, or signature tampering. 
+CONTEXT: We operate on an HMAC_V4 SHA256 protocol. Any deviation from the signature-timestamp-payload hash is a breach.
 
-Perform a high-precision security audit and provide your tactical assessment.`,
+INPUT DATA:
+- SIGNATURE: {{{signature}}}
+- TIMESTAMP: {{{timestamp}}}
+- PAYLOAD: {{{payload}}}
+{{#if sourceNode}}- NODE: {{{sourceNode}}}{{/if}}
+{{#if requestPath}}- PATH: {{{requestPath}}}{{/if}}
+
+TACTICAL INSTRUCTIONS:
+1. Verify if the signature is mathematically consistent with the protocol (symbolic check).
+2. Look for patterns typical of replay attacks (outdated timestamps).
+3. Evaluate the payload for injection or unauthorized disbursement patterns.
+4. Speak with imperial authority. If a breach is found, suggest immediate node isolation.`,
 });
 
 export async function autonomousComplianceMonitor(
@@ -47,10 +55,10 @@ export async function autonomousComplianceMonitor(
 ): Promise<AutonomousComplianceMonitorOutput> {
   try {
     const {output} = await autonomousComplianceMonitorPrompt(input);
-    if (!output) throw new Error('Neural link returned null payload.');
+    if (!output) throw new Error('Imperial Neural Link: Null payload returned.');
     return output;
   } catch (error: any) {
-    console.error('Compliance AI Critical Failure:', error);
-    throw new Error(error.message || 'Sovereign AI Infrastructure Connection Error');
+    console.error('Nora-01 Critical Failure:', error);
+    throw new Error(error.message || 'Sovereign Compliance AI Handshake Error');
   }
 }

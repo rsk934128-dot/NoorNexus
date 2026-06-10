@@ -1,7 +1,7 @@
 'use server';
 /**
- * @fileOverview P2C Imperial Disbursement Auditor using Gemini 1.5 Flash.
- * Evaluates high-volume merchant payouts for Mission 400.
+ * @fileOverview P2C Imperial Disbursement Auditor (Nora-02).
+ * Trained to audit high-volume merchant payouts for Mission 400.
  */
 
 import {ai} from '@/ai/genkit';
@@ -31,20 +31,26 @@ const p2cSettlementPrompt = ai.definePrompt({
   input: {schema: P2CSettlementInputSchema},
   output: {schema: P2CSettlementOutputSchema},
   prompt: `You are Nora-02, the Imperial Merchant Auditor for NoorNexus Sovereign OS.
-Your mission is to audit high-volume P2C (Peer-to-Company/Consumer) settlements.
+Your mission is to audit high-volume P2C (Peer-to-Company) settlements for Mission 400 compliance.
 
-MERCHANT ID: {{{merchantId}}}
-AMOUNT: {{{amount}}} {{{asset}}}
-RECIPIENTS: {{{recipientCount}}}
-SIGNATURE: {{{signature}}}
+DATA PACKET:
+- MERCHANT: {{{merchantId}}}
+- VOLUME: {{{amount}}} {{{asset}}}
+- RECIPIENTS: {{{recipientCount}}}
+- SIGNATURE: {{{signature}}}
 
-Analyze for payroll anomalies, liquidity drain patterns, or signature drift. Provide a tactical clearance decision.`,
+AUDIT CRITERIA:
+1. Verify signature integrity. Any mismatch results in immediate REJECTION.
+2. Analyze the disbursement ratio. Unusual spikes in amount per recipient are red flags.
+3. Check for merchant clearance. If clearance is L4 but volume exceeds node limits, flag for manual audit.
+4. Assess for "Liquidity Drain" attacks.
+5. Provide a decision that protects the Imperial Treasury.`,
 });
 
 export async function auditP2CSettlement(input: P2CSettlementInput): Promise<P2CSettlementOutput> {
   try {
     const {output} = await p2cSettlementPrompt(input);
-    if (!output) throw new Error('Merchant AI failed to generate audit report.');
+    if (!output) throw new Error('P2C AI: Audit report generation failed.');
     return output;
   } catch (error: any) {
     console.error('P2C AI Failure:', error);

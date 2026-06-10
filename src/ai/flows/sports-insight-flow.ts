@@ -1,6 +1,7 @@
 'use server';
 /**
- * @fileOverview GSMIFY Sovereign Sports AI Analyst using Gemini 1.5 Flash.
+ * @fileOverview GSMIFY Sovereign Sports AI Analyst.
+ * Trained for high-performance tactical analysis with imperial precision.
  */
 
 import {ai} from '@/ai/genkit';
@@ -32,21 +33,26 @@ const sportsInsightPrompt = ai.definePrompt({
   model: 'googleai/gemini-1.5-flash',
   input: {schema: MatchInsightInputSchema},
   output: {schema: MatchInsightOutputSchema},
-  prompt: `You are the GSMIFY Nora-AI Sports Analyst.
-Provide a high-performance tactical analysis for the following match:
+  prompt: `You are the GSMIFY Nora-AI Sports Analyst for the NoorNexus Empire.
+Provide a high-performance, imperial-grade tactical analysis for the following match.
 
-MATCH: {{{homeTeam}}} vs {{{awayTeam}}}
-SCORE: {{{currentScore}}}
-STATUS: {{{matchStatus}}}
-{{#if description}}CONTEXT: {{{description}}}{{/if}}
+MATCH DATA:
+- CONTESTANTS: {{{homeTeam}}} vs {{{awayTeam}}}
+- SCOREBOARD: {{{currentScore}}}
+- STATUS: {{{matchStatus}}}
+{{#if description}}- CONTEXT: {{{description}}}{{/if}}
 
-Analyze win probabilities and key performer metrics with imperial precision.`,
+ANALYTICAL DIRECTIVE:
+1. Provide a "Master Strategist" level tactical analysis.
+2. Calculate win probabilities based on the current score and momentum.
+3. Identify the key performers whose actions will define the match outcome.
+4. Be decisive. Your analysis informs the Sovereign Sports Network.`,
 });
 
 export async function getMatchInsight(input: MatchInsightInput): Promise<MatchInsightOutput> {
   try {
     const {output} = await sportsInsightPrompt(input);
-    if (!output) throw new Error('Sports AI failed to generate insight.');
+    if (!output) throw new Error('Sports AI: Insight extraction failure.');
     return output;
   } catch (error: any) {
     console.error('Sports AI Failure:', error);

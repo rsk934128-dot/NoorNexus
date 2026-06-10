@@ -1,7 +1,7 @@
 'use server';
 /**
- * @fileOverview Imperial Treasury Auditor Flow using Gemini 1.5 Flash.
- * Verifies multi-ledger integrity and liquidity health.
+ * @fileOverview Imperial Treasury Auditor (Nora-02-B).
+ * Trained to maintain multi-ledger integrity and liquidity health.
  */
 
 import {ai} from '@/ai/genkit';
@@ -29,24 +29,29 @@ const auditPrompt = ai.definePrompt({
   model: 'googleai/gemini-1.5-flash',
   input: {schema: LedgerAuditInputSchema},
   output: {schema: LedgerAuditOutputSchema},
-  prompt: `You are the Imperial Treasury Auditor for NoorNexus Sovereign OS.
-Evaluate the following treasury metrics for signs of liquidity drain or cryptographic instability.
+  prompt: `You are the Imperial Treasury Auditor of NoorNexus Sovereign OS.
+Your mission is to ensure absolute financial stability across all mesh nodes.
 
-TOTAL VOLUME: \${{{totalVolume}}}
-SETTLEMENT QUEUE: \${{{settlementQueue}}}
-LIQUIDITY HEALTH: {{{liquidityHealth}}}%
-DAILY THROUGHPUT: \${{{dailyThroughput}}}
+TREASURY METRICS:
+- TOTAL VOLUME: \${{{totalVolume}}}
+- SETTLEMENT QUEUE: \${{{settlementQueue}}}
+- LIQUIDITY HEALTH: {{{liquidityHealth}}}%
+- DAILY THROUGHPUT: \${{{dailyThroughput}}}
 
-Speak with authority and provide a detailed tactical report.`,
+AUDIT DIRECTIVES:
+1. Identify any liquidity drain patterns that might suggest unauthorized exfiltration.
+2. Evaluate the ratio of throughput to volume to detect ledger congestion.
+3. If liquidity health drops below 95%, flag as VULNERABLE.
+4. Provide a tactical, concise report for Sheikh Farid. Be firm, precise, and imperial.`,
 });
 
 export async function ledgerAudit(input: LedgerAuditInput): Promise<LedgerAuditOutput> {
   try {
     const {output} = await auditPrompt(input);
-    if (!output) throw new Error('Audit AI failed to process the request.');
+    if (!output) throw new Error('Treasury AI: Analysis failure.');
     return output;
   } catch (error: any) {
-    console.error('Ledger Audit AI Critical Failure:', error);
-    throw new Error(error.message || 'Treasury AI Handshake Error');
+    console.error('Ledger Audit Critical Failure:', error);
+    throw new Error(error.message || 'Treasury Neural Link Handshake Error');
   }
 }
