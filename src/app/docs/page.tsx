@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -9,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
   BookOpen, FileText, ShieldAlert, Zap, Loader2, Target, 
-  AlertTriangle, CheckCircle2, ChevronRight, Menu, Cpu, Code2, ShieldCheck, Star, Globe, Copy
+  AlertTriangle, CheckCircle2, ChevronRight, Menu, Cpu, Code2, ShieldCheck, Star, Globe, Copy, Lock, ShieldPlus, DatabaseZap
 } from "lucide-react"
 import { analyzeProtocol, ProtocolArchitectOutput } from "@/ai/flows/protocol-architect-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -69,6 +68,40 @@ export default function DocsPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
+              <section className="space-y-4">
+                <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
+                  <Lock className="size-4" /> Security & Compliance Standard
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
+                        <ShieldPlus className="size-4" /> Data Encryption
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-[11px] text-muted-foreground leading-relaxed">
+                        সকল ডেটা AES-256 বিট এনক্রিপশনের মাধ্যমে আপনার প্রিমাইসে সংরক্ষিত থাকে। আমরা শুধু অডিট রিপোর্ট প্রসেস করি।
+                      </p>
+                      <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">AES_256_ACTIVE</Badge>
+                    </CardContent>
+                  </Card>
+                  <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
+                        <DatabaseZap className="size-4" /> Zero-Write Policy
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-[11px] text-muted-foreground leading-relaxed">
+                        আমাদের সিস্টেম আপনার ডেটাবেসে কোনো রাইট (Write) অপারেশন করবে না। এটি শুধু পঠনযোগ্য (Read-Only) মোডে কাজ করবে।
+                      </p>
+                      <Badge variant="outline" className="text-[8px] border-amber-500/20 text-amber-500">READ_ONLY_ENFORCED</Badge>
+                    </CardContent>
+                  </Card>
+                </div>
+              </section>
+
               <section className="space-y-4">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
                   <Globe className="size-4" /> Domain Validation (DNS)

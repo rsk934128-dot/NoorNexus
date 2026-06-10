@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useRef, useEffect } from "react"
@@ -12,7 +11,7 @@ import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
   Menu, MessageSquare, Cpu, BookOpen, Layers, Info, CheckCircle2,
-  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, Rocket, Copy, Star
+  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, Rocket, Copy, Star, ShieldPlus, DatabaseZap
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -223,7 +222,33 @@ export default function ApiHubPage() {
             </div>
 
             <div className="space-y-6">
-              <Card className="glass-card border-l-4 border-l-amber-500 h-[600px] flex flex-col">
+              <Card className="glass-card border-l-4 border-l-emerald-500">
+                <CardHeader>
+                  <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
+                    <ShieldCheck className="size-4" /> Data Compliance Brief
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                   <div className="space-y-2">
+                      <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
+                        <ShieldPlus className="size-3 text-emerald-500" /> AES-256 Encryption
+                      </h4>
+                      <p className="text-[9px] text-muted-foreground leading-relaxed italic">
+                        সকল ডেটা AES-256 বিট এনক্রিপশনের মাধ্যমে আপনার প্রিমাইসে সংরক্ষিত থাকে।
+                      </p>
+                   </div>
+                   <div className="space-y-2 pt-2 border-t border-white/5">
+                      <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
+                        <DatabaseZap className="size-3 text-amber-500" /> Zero-Write Policy
+                      </h4>
+                      <p className="text-[9px] text-muted-foreground leading-relaxed italic">
+                        সিস্টেম আপনার ডেটাবেসে কোনো রাইট (Write) অপারেশন করবে না। এটি শুধু Read-Only মোডে কাজ করবে।
+                      </p>
+                   </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card border-l-4 border-l-amber-500 h-[400px] flex flex-col">
                 <CardHeader className="shrink-0">
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
                     <Cpu className="size-4" /> Nora-03 SDK Assistant
