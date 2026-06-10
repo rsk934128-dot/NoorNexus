@@ -26,7 +26,7 @@
 - **Framework:** Next.js 15 (App Router)
 - **Styling:** Tailwind CSS + ShadCN UI (Custom Cyber-Grid Theme)
 - **Backend:** Firebase (Firestore & Authentication)
-- **Intelligence:** Genkit AI (Gemini 2.5 Flash)
+- **Intelligence:** Genkit AI (Gemini 1.5 Flash)
 - **Security:** HMAC_V4 SHA256 Cryptographic Handshake
 
 ---
@@ -42,7 +42,7 @@ Monitors the digital border. Every incoming packet is verified against the HMAC_
 ![Security Border Monitor](https://picsum.photos/seed/map3/800/300)
 
 ### 3. Sovereign Sports (GSMIFY)
-A specialized module for high-definition sports broadcasting. Includes an **AI Tactical Analyst** that provides real-time win probabilities and game-changing insights using neural links.
+A specialized module for high-definition sports broadcasting. Includes an **AI Tactical Analyst** (Nora-AI) that provides real-time win probabilities and game-changing insights using neural links.
 
 ### 4. SmartRemit Terminal
 A futuristic remittance portal that handles cross-border BDT/Asset transfers with sub-120ms latency, protected by a zero-trust architecture.
