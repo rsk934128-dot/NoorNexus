@@ -1,15 +1,14 @@
-
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarInset } from "@/components/ui/sidebar"
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { ShieldCheck, Terminal, Search, AlertCircle, CheckCircle2, Cpu, Activity, Zap } from "lucide-react"
+import { ShieldCheck, Terminal, AlertCircle, CheckCircle2, Cpu, Activity, Zap, Menu } from "lucide-react"
 import { autonomousComplianceMonitor, AutonomousComplianceMonitorOutput } from "@/ai/flows/autonomous-compliance-monitor"
 import { useToast } from "@/hooks/use-toast"
 
@@ -21,7 +20,7 @@ export default function CompliancePage() {
   const [typing, setTyping] = useState(false)
 
   const [formData, setFormData] = useState({
-    signature: "HEX_HMAC_V4_9a6c22bb3f1a",
+    signature: "0x9a6c22bb3f1a4e2b8c9d0f1e2a3b4c5d",
     timestamp: Math.floor(Date.now() / 1000),
     payload: '{"action":"payout","amount":5000,"currency":"BDT"}',
     sourceNode: "Sirajganj-Edge-01",
@@ -37,13 +36,17 @@ export default function CompliancePage() {
     try {
       const result = await autonomousComplianceMonitor(formData)
       
+      if (!result || !result.assessmentDetails) {
+        throw new Error("Empty AI response received.")
+      }
+
       // Simulate kinetic typing for AI reasoning
       const reasoning = result.assessmentDetails
       let current = ""
       for (let i = 0; i < reasoning.length; i++) {
         current += reasoning[i]
         setReasoningStream(current)
-        await new Promise(r => setTimeout(r, 10))
+        await new Promise(r => setTimeout(r, 5))
       }
       
       setResults(result)
@@ -53,13 +56,20 @@ export default function CompliancePage() {
           description: `Risk Level: ${result.riskLevel}`,
           variant: "destructive"
         })
+      } else {
+        toast({
+          title: "Scan Complete",
+          description: "No anomalies detected in the current packet.",
+        })
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Compliance Monitor Error:", error)
       toast({
         title: "Agent Error",
-        description: "Failed to communicate with the autonomous monitor.",
+        description: error.message || "Failed to communicate with the autonomous monitor.",
         variant: "destructive"
       })
+      setReasoningStream("ERROR: AI neural link terminated unexpectedly. Please retry.")
     } finally {
       setLoading(false)
       setTyping(false)
@@ -70,14 +80,17 @@ export default function CompliancePage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto w-full">
-          <header className="flex justify-between items-start">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-7xl mx-auto w-full overflow-x-hidden">
+          <header className="flex flex-col sm:flex-row justify-between items-start gap-6">
             <div className="space-y-1">
               <div className="flex items-center gap-3">
+                <SidebarTrigger className="md:hidden text-primary">
+                  <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
+                </SidebarTrigger>
                 <ShieldCheck className="size-8 text-primary" />
-                <h2 className="text-3xl font-headline font-bold">Autonomous Compliance AI</h2>
+                <h2 className="text-2xl sm:text-3xl font-headline font-bold">Autonomous Compliance AI</h2>
               </div>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm sm:text-base">
                 NoorNexus v3 Intelligence Layer monitoring border cryptographic anomalies.
               </p>
             </div>
@@ -155,9 +168,9 @@ export default function CompliancePage() {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="bg-black/40 p-5 rounded-xl border border-white/5 font-mono text-sm min-h-[200px] relative">
-                     {typing && <div className="absolute top-2 right-2 size-2 bg-primary rounded-full animate-ping" />}
-                     <p className="leading-relaxed text-muted-foreground">
+                  <div className="bg-black/40 p-5 rounded-xl border border-white/5 font-mono text-sm min-h-[200px] relative overflow-hidden">
+                     {typing && <div className="absolute top-0 left-0 w-full h-1 bg-primary animate-progress" />}
+                     <p className="leading-relaxed text-muted-foreground whitespace-pre-wrap">
                         {reasoningStream || (loading ? "Generating assessment..." : "Awaiting input for analysis...")}
                      </p>
                   </div>
