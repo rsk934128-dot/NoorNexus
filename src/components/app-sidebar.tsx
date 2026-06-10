@@ -37,7 +37,8 @@ import {
   Shield,
   Phone,
   ShoppingBag,
-  Briefcase
+  Briefcase,
+  Zap
 } from "lucide-react"
 
 import {
@@ -67,6 +68,7 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Imperial Portfolio", url: "/portfolio", icon: Briefcase },
+  { title: "Imperial Flow Pay", url: "/flow-pay", icon: Zap },
   { title: "Shurukkha Hub", url: "/shurukkha", icon: Shield, badge: true },
   { title: "Imperial Store", url: "/rubel-store", icon: ShoppingBag },
   { title: "Identity Hub", url: "/identity", icon: Fingerprint },
