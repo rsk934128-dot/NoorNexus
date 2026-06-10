@@ -32,10 +32,16 @@ export default function LoginPage() {
         title: "Access Granted",
         description: "HMAC_V4 Handshake Successful. Welcome, Commander.",
       })
-    } catch (error) {
+    } catch (error: any) {
+      // Don't show destructive toast if user simply closed the popup
+      if (error.code === 'auth/popup-closed-by-user') {
+        setSigningIn(false)
+        return
+      }
+
       toast({
         title: "Access Denied",
-        description: "Authentication protocol failed.",
+        description: error.message || "Authentication protocol failed.",
         variant: "destructive"
       })
     } finally {

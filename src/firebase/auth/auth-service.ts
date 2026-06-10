@@ -14,7 +14,7 @@ export const signInWithGoogle = async (auth: Auth) => {
     const result = await signInWithPopup(auth, provider);
     return result.user;
   } catch (error) {
-    console.error("Error signing in with Google", error);
+    // We let the UI handle the error logic
     throw error;
   }
 };
@@ -23,7 +23,6 @@ export const signOutUser = async (auth: Auth) => {
   try {
     await signOut(auth);
   } catch (error) {
-    console.error("Error signing out", error);
     throw error;
   }
 };
