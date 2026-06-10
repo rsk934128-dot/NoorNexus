@@ -31,7 +31,8 @@ import {
   Gavel,
   Landmark,
   Scale,
-  Compass
+  Compass,
+  Award
 } from "lucide-react"
 
 import {
@@ -57,6 +58,7 @@ import { SovereignLogo } from "@/components/sovereign-logo"
 const items = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Imperial Oracle", url: "/oracle", icon: Compass },
+  { title: "Strategic Assessment", url: "/assessment", icon: Award },
   { title: "Identity Hub", url: "/identity", icon: Fingerprint },
   { title: "Imperial Senate", url: "/governance", icon: Gavel },
   { title: "Trade Protocol", url: "/settlement", icon: Landmark },
@@ -167,8 +169,8 @@ export function AppSidebar() {
                 className="hover:bg-primary/10 hover:text-primary transition-all duration-200 h-11"
               >
                 <Link href={item.url} onClick={handleLinkClick}>
-                  <item.icon className={`size-5 ${item.title === 'Imperial Oracle' ? 'text-emerald-500' : ''}`} />
-                  <span className={`font-medium text-sm ${item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : ''}`}>{item.title}</span>
+                  <item.icon className={`size-5 ${item.title === 'Imperial Oracle' ? 'text-emerald-500' : item.title === 'Strategic Assessment' ? 'text-amber-500' : ''}`} />
+                  <span className={`font-medium text-sm ${item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : item.title === 'Strategic Assessment' ? 'text-amber-500 font-bold' : ''}`}>{item.title}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
