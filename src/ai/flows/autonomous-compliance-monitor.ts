@@ -2,10 +2,6 @@
 /**
  * @fileOverview An autonomous AI compliance agent that monitors cryptographic anomalies
  * on the HMAC_V4 Digital Border and generates risk assessments.
- *
- * - autonomousComplianceMonitor - A function that triggers the compliance monitoring process.
- * - AutonomousComplianceMonitorInput - The input type for the autonomousComplianceMonitor function.
- * - AutonomousComplianceMonitorOutput - The return type for the autonomousComplianceMonitor function.
  */
 
 import {ai} from '@/ai/genkit';
@@ -70,6 +66,7 @@ const verifyHmacV4Signature = ai.defineTool(
 
 const autonomousComplianceMonitorPrompt = ai.definePrompt({
   name: 'autonomousComplianceMonitorPrompt',
+  model: 'googleai/gemini-1.5-flash',
   tools: [verifyHmacV4Signature],
   input: {schema: AutonomousComplianceMonitorInputSchema},
   output: {schema: AutonomousComplianceMonitorOutputSchema},

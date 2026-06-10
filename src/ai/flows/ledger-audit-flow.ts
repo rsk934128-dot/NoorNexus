@@ -25,6 +25,7 @@ export type LedgerAuditOutput = z.infer<typeof LedgerAuditOutputSchema>;
 
 const auditPrompt = ai.definePrompt({
   name: 'ledgerAuditPrompt',
+  model: 'googleai/gemini-1.5-flash',
   input: {schema: LedgerAuditInputSchema},
   output: {schema: LedgerAuditOutputSchema},
   prompt: `You are the Imperial Treasury Auditor. Analyze these metrics for signs of cryptographic drift or liquidity drain.

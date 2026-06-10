@@ -1,10 +1,6 @@
 'use server';
 /**
  * @fileOverview A sports intelligence AI agent for GSMIFY Sports.
- * 
- * - getMatchInsight - A function that generates tactical insights for a match.
- * - MatchInsightInput - The input type for the match insight function.
- * - MatchInsightOutput - The return type for the match insight function.
  */
 
 import { ai } from '@/ai/genkit';
@@ -31,12 +27,9 @@ const MatchInsightOutputSchema = z.object({
 });
 export type MatchInsightOutput = z.infer<typeof MatchInsightOutputSchema>;
 
-export async function getMatchInsight(input: MatchInsightInput): Promise<MatchInsightOutput> {
-  return sportsInsightFlow(input);
-}
-
 const sportsInsightPrompt = ai.definePrompt({
   name: 'sportsInsightPrompt',
+  model: 'googleai/gemini-1.5-flash',
   input: { schema: MatchInsightInputSchema },
   output: { schema: MatchInsightOutputSchema },
   prompt: `You are the GSMIFY Sovereign Sports AI Analyst (Nora-AI). 
@@ -47,24 +40,11 @@ Current Score: {{{currentScore}}}
 Status: {{{matchStatus}}}
 {{#if description}}Context: {{{description}}}{{/if}}
 
-Provide:
-1. A deep tactical analysis of the current situation.
-2. Win probabilities for both teams and a draw.
-3. Key performers to watch.
-4. A final recommendation.
-
-Speak like a high-end digital infrastructure intelligence agent.`,
+Provide tactical analysis, win probabilities, key performers, and recommendations. Speak like an elite digital intelligence agent.`,
 });
 
-const sportsInsightFlow = ai.defineFlow(
-  {
-    name: 'sportsInsightFlow',
-    inputSchema: MatchInsightInputSchema,
-    outputSchema: MatchInsightOutputSchema,
-  },
-  async (input) => {
-    const { output } = await sportsInsightPrompt(input);
-    if (!output) throw new Error('AI failed to generate sports insight.');
-    return output;
-  }
-);
+export async function getMatchInsight(input: MatchInsightInput): Promise<MatchInsightOutput> {
+  const {output} = await sportsInsightPrompt(input);
+  if (!output) throw new Error('AI failed to generate sports insight.');
+  return output;
+}
