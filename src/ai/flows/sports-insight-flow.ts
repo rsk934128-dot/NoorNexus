@@ -37,6 +37,7 @@ export async function getMatchInsight(input: MatchInsightInput): Promise<MatchIn
 
 const sportsInsightPrompt = ai.definePrompt({
   name: 'sportsInsightPrompt',
+  model: 'googleai/gemini-1.5-flash',
   input: { schema: MatchInsightInputSchema },
   output: { schema: MatchInsightOutputSchema },
   prompt: `You are the GSMIFY Sovereign Sports AI Analyst (Nora-AI). 
