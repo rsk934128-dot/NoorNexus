@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -18,7 +17,8 @@ import {
   Globe,
   Crown,
   Building2,
-  Code2
+  Code2,
+  BookOpen
 } from "lucide-react"
 
 import {
@@ -51,6 +51,7 @@ const items = [
   { title: "SmartRemit P2P", url: "/remittance", icon: Send },
   { title: "Merchant P2C Hub", url: "/p2c", icon: Building2 },
   { title: "Open Banking Hub", url: "/api-hub", icon: Code2 },
+  { title: "Sovereign Charter", url: "/docs", icon: BookOpen },
   { title: "World Cup Relay", url: "/world-cup", icon: Trophy },
   { title: "Famelack Hub", url: "/famelack", icon: Globe },
 ]
