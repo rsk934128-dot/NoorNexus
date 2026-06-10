@@ -27,9 +27,12 @@ import {
   ChevronRight,
   Plus,
   AlertTriangle,
-  Scale
+  Scale,
+  PlayCircle,
+  FileCheck
 } from "lucide-react"
 import { analyzeSenateProposal, GovernanceArchitectOutput } from "@/ai/flows/governance-architect-flow"
+import { executeSenateWill, ExecutiveExecutionOutput } from "@/ai/flows/executive-execution-flow"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useUser, useCollection } from "@/firebase"
 import { collection, addDoc, query, orderBy, limit, doc, updateDoc, increment } from "firebase/firestore"
@@ -39,8 +42,8 @@ export default function GovernanceHubPage() {
   const { toast } = useToast()
   const db = useFirestore()
   const { user } = useUser()
-  const [loading, setLoading] = useState(false)
   const [analyzing, setAnalyzing] = useState(false)
+  const [executingId, setExecutingId] = useState<string | null>(null)
   
   // Real-time proposals
   const { data: proposals, loading: propsLoading } = useCollection<any>(
@@ -53,7 +56,8 @@ export default function GovernanceHubPage() {
   )
   const myIdentity = identities?.[0]
   const isEligible = myIdentity?.reputationTier === 'ELITE' || myIdentity?.reputationTier === 'IMPERIAL'
-  const votingWeight = myIdentity?.reputationTier === 'IMPERIAL' ? 2 : 1
+  const isImperial = myIdentity?.reputationTier === 'IMPERIAL'
+  const votingWeight = isImperial ? 2 : 1
 
   const [form, setForm] = useState({
     title: "",
@@ -117,6 +121,41 @@ export default function GovernanceHubPage() {
     }
   }
 
+  async function handleExecute(proposal: any) {
+    if (!isImperial) {
+      toast({ title: "Forbidden", description: "Only IMPERIAL members can trigger execution.", variant: "destructive" })
+      return
+    }
+
+    setExecutingId(proposal.id)
+    try {
+      const result = await executeSenateWill({
+        proposalId: proposal.id,
+        title: proposal.title,
+        description: proposal.description,
+        category: proposal.category,
+        votesFor: proposal.votesFor,
+        votesAgainst: proposal.votesAgainst
+      })
+
+      await updateDoc(doc(db, "proposals", proposal.id), {
+        status: "EXECUTED",
+        executionHash: result.executionHash,
+        executionReport: result.actionTaken,
+        updatedAt: Date.now()
+      })
+
+      toast({ 
+        title: "Imperial Protocol Executed", 
+        description: "Autonomous Implementation Successful." 
+      })
+    } catch (e: any) {
+      toast({ title: "Execution Failed", description: e.message, variant: "destructive" })
+    } finally {
+      setExecutingId(null)
+    }
+  }
+
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
@@ -133,7 +172,7 @@ export default function GovernanceHubPage() {
                    The Imperial Senate
                  </h2>
               </div>
-              <p className="text-muted-foreground">Mission 400: Project 154 - Decentralized Governance Hub.</p>
+              <p className="text-muted-foreground">Mission 400: Project 155 - Autonomous Executive Execution.</p>
             </div>
             <div className="flex items-center gap-2">
                <Badge variant="outline" className={`h-10 px-4 flex items-center gap-2 ${isEligible ? 'border-amber-500/30 text-amber-500 bg-amber-500/5' : 'border-white/10'}`}>
@@ -145,7 +184,7 @@ export default function GovernanceHubPage() {
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
             <div className="xl:col-span-3 space-y-8">
-              {/* Proposal Creation (Only for eligible) */}
+              {/* Proposal Creation */}
               <Card className={`glass-card border-l-4 ${isEligible ? 'border-l-primary' : 'border-l-muted opacity-50'}`}>
                 <CardHeader>
                   <CardTitle className="text-sm font-headline uppercase tracking-widest flex items-center gap-2">
@@ -168,7 +207,7 @@ export default function GovernanceHubPage() {
                             disabled={!isEligible}
                             value={form.title}
                             onChange={e => setForm({...form, title: e.target.value})}
-                            placeholder="e.g. Expand Sirajganj Node Mesh"
+                            placeholder="e.g. Allocate $1M to SIRAJGANJ node expansion"
                             className="bg-background/50 border-white/10 font-bold"
                           />
                         </div>
@@ -230,7 +269,7 @@ export default function GovernanceHubPage() {
                 ) : (
                   <div className="grid grid-cols-1 gap-6">
                     {proposals.map((prop: any) => (
-                      <Card key={prop.id} className="glass-card hover:border-primary/20 transition-all">
+                      <Card key={prop.id} className={`glass-card hover:border-primary/20 transition-all ${prop.status === 'EXECUTED' ? 'border-l-4 border-l-emerald-500' : ''}`}>
                         <CardHeader className="flex flex-row items-start justify-between pb-2">
                            <div className="space-y-1">
                               <div className="flex items-center gap-2">
@@ -240,7 +279,7 @@ export default function GovernanceHubPage() {
                               <CardTitle className="text-lg font-headline text-white uppercase">{prop.title}</CardTitle>
                            </div>
                            <div className="text-right">
-                              <Badge variant="outline" className="border-emerald-500/20 text-emerald-500 h-6 text-[9px] uppercase font-bold">
+                              <Badge variant="outline" className={`border-emerald-500/20 text-emerald-500 h-6 text-[9px] uppercase font-bold ${prop.status === 'EXECUTED' ? 'bg-emerald-500/10' : ''}`}>
                                 {prop.status}
                               </Badge>
                            </div>
@@ -248,46 +287,73 @@ export default function GovernanceHubPage() {
                         <CardContent className="space-y-6">
                            <p className="text-xs text-muted-foreground leading-relaxed italic">"{prop.description}"</p>
                            
-                           <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-3">
-                              <div className="flex items-center justify-between border-b border-white/5 pb-2">
-                                 <h4 className="text-[10px] font-bold uppercase text-amber-500 flex items-center gap-2">
-                                   <Zap className="size-3" /> Nora-07 Strategic Analysis
-                                 </h4>
-                                 <span className="text-[10px] font-mono text-amber-200">Alignment: {prop.alignmentScore}%</span>
-                              </div>
-                              <p className="text-[10px] text-muted-foreground leading-relaxed">{prop.noraStrategicAnalysis}</p>
-                           </div>
+                           {prop.status === 'EXECUTED' ? (
+                             <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl space-y-3">
+                                <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                                   <h4 className="text-[10px] font-bold uppercase text-emerald-500 flex items-center gap-2">
+                                     <FileCheck className="size-3" /> Nora-08 Execution Report
+                                   </h4>
+                                </div>
+                                <p className="text-[10px] text-emerald-200 leading-relaxed italic">{prop.executionReport}</p>
+                                <div className="pt-2">
+                                   <p className="text-[8px] font-mono text-muted-foreground uppercase">Execution Signature</p>
+                                   <p className="text-[9px] font-mono text-primary truncate">{prop.executionHash}</p>
+                                </div>
+                             </div>
+                           ) : (
+                             <>
+                               <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-3">
+                                  <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                                     <h4 className="text-[10px] font-bold uppercase text-amber-500 flex items-center gap-2">
+                                       <Zap className="size-3" /> Nora-07 Strategic Analysis
+                                     </h4>
+                                     <span className="text-[10px] font-mono text-amber-200">Alignment: {prop.alignmentScore}%</span>
+                                  </div>
+                                  <p className="text-[10px] text-muted-foreground leading-relaxed">{prop.noraStrategicAnalysis}</p>
+                               </div>
 
-                           <div className="flex flex-col sm:flex-row items-center gap-6">
-                              <div className="flex-1 w-full space-y-2">
-                                 <div className="flex justify-between text-[10px] font-bold uppercase">
-                                    <span className="text-emerald-500">Votes For: {prop.votesFor}</span>
-                                    <span className="text-destructive">Votes Against: {prop.votesAgainst}</span>
-                                 </div>
-                                 <div className="h-2 bg-white/5 rounded-full overflow-hidden flex">
-                                    <div className="bg-emerald-500 transition-all" style={{ width: `${(prop.votesFor / (prop.votesFor + prop.votesAgainst || 1)) * 100}%` }} />
-                                    <div className="bg-destructive transition-all" style={{ width: `${(prop.votesAgainst / (prop.votesFor + prop.votesAgainst || 1)) * 100}%` }} />
-                                 </div>
-                              </div>
-                              <div className="flex gap-2">
-                                 <Button 
-                                  onClick={() => handleVote(prop.id, 'FOR')}
-                                  disabled={!isEligible}
-                                  variant="outline" 
-                                  className="border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/10 gap-2 h-10 px-6 font-bold uppercase text-[10px]"
-                                 >
-                                    <CheckCircle2 className="size-4" /> Aye
-                                 </Button>
-                                 <Button 
-                                  onClick={() => handleVote(prop.id, 'AGAINST')}
-                                  disabled={!isEligible}
-                                  variant="outline" 
-                                  className="border-destructive/20 text-destructive hover:bg-destructive/10 gap-2 h-10 px-6 font-bold uppercase text-[10px]"
-                                 >
-                                    <XCircle className="size-4" /> Nay
-                                 </Button>
-                              </div>
-                           </div>
+                               <div className="flex flex-col sm:flex-row items-center gap-6">
+                                  <div className="flex-1 w-full space-y-2">
+                                     <div className="flex justify-between text-[10px] font-bold uppercase">
+                                        <span className="text-emerald-500">Votes For: {prop.votesFor}</span>
+                                        <span className="text-destructive">Votes Against: {prop.votesAgainst}</span>
+                                     </div>
+                                     <div className="h-2 bg-white/5 rounded-full overflow-hidden flex">
+                                        <div className="bg-emerald-500 transition-all" style={{ width: `${(prop.votesFor / (prop.votesFor + prop.votesAgainst || 1)) * 100}%` }} />
+                                        <div className="bg-destructive transition-all" style={{ width: `${(prop.votesAgainst / (prop.votesFor + prop.votesAgainst || 1)) * 100}%` }} />
+                                     </div>
+                                  </div>
+                                  <div className="flex gap-2">
+                                     {prop.votesFor > 0 && isImperial && (
+                                       <Button 
+                                        onClick={() => handleExecute(prop)}
+                                        disabled={executingId === prop.id}
+                                        className="bg-emerald-500 text-emerald-foreground hover:bg-emerald-600 gap-2 h-10 px-6 font-bold uppercase text-[10px] glow-emerald"
+                                       >
+                                          {executingId === prop.id ? <Loader2 className="size-4 animate-spin" /> : <PlayCircle className="size-4" />}
+                                          Execute edict
+                                       </Button>
+                                     )}
+                                     <Button 
+                                      onClick={() => handleVote(prop.id, 'FOR')}
+                                      disabled={!isEligible}
+                                      variant="outline" 
+                                      className="border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/10 gap-2 h-10 px-6 font-bold uppercase text-[10px]"
+                                     >
+                                        <CheckCircle2 className="size-4" /> Aye
+                                     </Button>
+                                     <Button 
+                                      onClick={() => handleVote(prop.id, 'AGAINST')}
+                                      disabled={!isEligible}
+                                      variant="outline" 
+                                      className="border-destructive/20 text-destructive hover:bg-destructive/10 gap-2 h-10 px-6 font-bold uppercase text-[10px]"
+                                     >
+                                        <XCircle className="size-4" /> Nay
+                                     </Button>
+                                  </div>
+                               </div>
+                             </>
+                           )}
                         </CardContent>
                       </Card>
                     ))}
@@ -306,9 +372,10 @@ export default function GovernanceHubPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
                     {[
+                      { label: "Execution Force", value: "Autonomous Nora-08" },
+                      { label: "Execution Hash", value: "HMAC_V4 Signed" },
                       { label: "Quorum", value: "60% Weight" },
-                      { label: "Voting Period", value: "7 Cycles" },
-                      { label: "Execution Delay", value: "24h T-Delay" }
+                      { label: "Sovereign Delay", value: "Immediate" }
                     ].map((item, i) => (
                       <div key={i} className="flex justify-between items-center text-[10px] p-2 bg-white/5 rounded border border-white/5">
                         <span className="text-muted-foreground uppercase">{item.label}</span>
@@ -317,7 +384,7 @@ export default function GovernanceHubPage() {
                     ))}
                   </div>
                   <p className="text-[9px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-4">
-                    "Decentralization is not the absence of order, but the collective agreement on a sovereign path."
+                    "An edict passed but not executed is a drift in sovereignty. Project 155 ensures the Senate's will is manifest."
                   </p>
                 </CardContent>
               </Card>
@@ -332,10 +399,10 @@ export default function GovernanceHubPage() {
                     <div className="space-y-4">
                        <div className="space-y-1">
                           <p className="text-[8px] text-muted-foreground uppercase">Overall Stability</p>
-                          <p className="text-xl font-headline font-bold text-emerald-500">MAX_ELITE</p>
+                          <p className="text-xl font-headline font-bold text-emerald-500">MAX_EXECUTIVE</p>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                          <div className="h-full bg-primary" style={{ width: '85%' }} />
+                          <div className="h-full bg-primary" style={{ width: '92%' }} />
                        </div>
                     </div>
                  </CardContent>

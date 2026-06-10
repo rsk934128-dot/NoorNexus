@@ -146,6 +146,7 @@
         "votesAgainst": { "type": "number" },
         "deadline": { "type": "number" },
         "createdAt": { "type": "number" },
+        "executionHash": { "type": "string" },
         "noraStrategicAnalysis": { "type": "string" }
       },
       "required": ["title", "description", "category", "status", "creatorDID"]
