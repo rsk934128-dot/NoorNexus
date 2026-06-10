@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -7,8 +8,9 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
 /**
- * @fileOverview Shurukkha Hub Page (Window View)
- * এই পেজটি মূলত ব্যাকগ্রাউন্ডে থাকা PersistentCommNode এর জন্য একটি ভিউ পোর্ট।
+ * @fileOverview Shurukkha Hub Page (Transparent Portal)
+ * এই পেজটি মূলত ব্যাকগ্রাউন্ডে থাকা PersistentCommNode এর জন্য একটি উইন্ডো।
+ * এখানে কোনো ব্যাকগ্রাউন্ড কালার নেই যাতে পেছনে থাকা আইফ্রেমটি দৃশ্যমান হয়।
  */
 export default function ShurukkhaPage() {
   const refreshNode = () => {
@@ -17,11 +19,12 @@ export default function ShurukkhaPage() {
 
   return (
     <div className="flex min-h-screen bg-transparent">
+      {/* Sidebar exists here, PersistentCommNode will be behind it due to z-index fix */}
       <AppSidebar />
       <SidebarInset className="flex-1 w-full flex flex-col min-w-0 p-0 m-0 bg-transparent">
         <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0 relative bg-transparent">
-          {/* Header with Glassmorphism */}
-          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/95 backdrop-blur-md shrink-0 w-full z-50">
+          {/* Transparent Header */}
+          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/90 backdrop-blur-md shrink-0 w-full z-50">
             <div className="flex items-center gap-3">
               <div className="size-10 bg-primary/20 rounded-xl flex items-center justify-center border border-primary/30 glow-primary shrink-0">
                 <Shield className="size-6 text-primary" />
@@ -58,12 +61,8 @@ export default function ShurukkhaPage() {
             </div>
           </header>
 
-          {/* Transparent interaction area */}
-          <div className="flex-1 bg-transparent pointer-events-none relative">
-            <div className="absolute inset-0 flex items-center justify-center -z-10 opacity-20">
-               <ShieldCheck className="size-64 text-primary animate-pulse" />
-            </div>
-          </div>
+          {/* This area is intentionally empty and transparent to show the iframe below */}
+          <div className="flex-1 bg-transparent pointer-events-none" />
           
           <footer className="py-2 border-t border-white/5 bg-background/90 shrink-0 text-center w-full z-50">
             <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.4em]">
