@@ -18,3 +18,4 @@ import '@/ai/flows/identity-reputation-flow.ts';
 import '@/ai/flows/governance-architect-flow.ts';
 import '@/ai/flows/executive-execution-flow.ts';
 import '@/ai/flows/inter-bank-settlement-flow.ts';
+import '@/ai/flows/trade-arbitration-flow.ts';

@@ -29,7 +29,8 @@ import {
   Link as LinkIcon,
   Fingerprint,
   Gavel,
-  Landmark
+  Landmark,
+  Scale
 } from "lucide-react"
 
 import {
@@ -58,6 +59,7 @@ const items = [
   { title: "Identity Hub", url: "/identity", icon: Fingerprint },
   { title: "Imperial Senate", url: "/governance", icon: Gavel },
   { title: "Trade Protocol", url: "/settlement", icon: Landmark },
+  { title: "Arbitration Chamber", url: "/arbitration", icon: Scale },
   { title: "Merchant Onboarding", url: "/onboarding", icon: UserPlus },
   { title: "Merchant Lifecycle", url: "/merchants", icon: Users },
   { title: "Cross-Chain Gateway", url: "/cross-chain", icon: LinkIcon },

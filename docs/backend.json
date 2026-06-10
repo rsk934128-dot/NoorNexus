@@ -59,6 +59,24 @@
       },
       "required": ["settlementId", "sourceBank", "targetBank", "amount", "asset", "escrowStatus"]
     },
+    "TradeDispute": {
+      "title": "Sovereign Trade Dispute",
+      "description": "A judicial record for resolving international trade conflicts.",
+      "type": "object",
+      "properties": {
+        "disputeId": { "type": "string" },
+        "settlementId": { "type": "string" },
+        "complainant": { "type": "string" },
+        "defendant": { "type": "string" },
+        "reason": { "type": "string" },
+        "status": { "type": "string", "enum": ["OPEN", "UNDER_ARBITRATION", "RESOLVED", "REJECTED"] },
+        "noraVerdict": { "type": "string" },
+        "reputationImpact": { "type": "number" },
+        "createdAt": { "type": "number" },
+        "resolvedAt": { "type": "number" }
+      },
+      "required": ["disputeId", "settlementId", "complainant", "status"]
+    },
     "WebhookLog": {
       "title": "Webhook Event",
       "description": "Logs of incoming and outgoing Open Banking events.",
@@ -188,6 +206,10 @@
     "/inter_bank_settlements/{logId}": {
       "schema": "InterBankSettlement",
       "description": "Sovereign trade settlement records"
+    },
+    "/trade_disputes/{disputeId}": {
+      "schema": "TradeDispute",
+      "description": "Sovereign trade dispute and arbitration records"
     },
     "/webhook_logs/{logId}": {
       "schema": "WebhookLog",

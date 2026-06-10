@@ -24,17 +24,20 @@ import {
   FileText,
   Activity,
   History,
-  Scale
+  Scale,
+  ShieldAlert
 } from "lucide-react"
 import { processInterBankTrade, InterBankSettlementOutput } from "@/ai/flows/inter-bank-settlement-flow"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore } from "@/firebase"
 import { collection, addDoc, serverTimestamp } from "firebase/firestore"
 import { connectToGemini } from "@/services/nexus-bridge"
+import { useRouter } from "next/navigation"
 
 export default function SettlementProtocolPage() {
   const { toast } = useToast()
   const db = useFirestore()
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<InterBankSettlementOutput | null>(null)
   
@@ -83,6 +86,27 @@ export default function SettlementProtocolPage() {
       toast({ title: "Protocol Breach", description: e.message, variant: "destructive" })
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function handleRaiseDispute() {
+    if (!result) return
+    try {
+      await addDoc(collection(db, "trade_disputes"), {
+        disputeId: 'DISP-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
+        settlementId: 'SOV-TX-MOCK',
+        complainant: form.sourceBank,
+        defendant: form.targetBank,
+        amount: form.amount,
+        conditions: form.escrowConditions,
+        reason: "Counterparty failed to provide Proof of Shipment within 48 hours.",
+        status: "OPEN",
+        createdAt: Date.now()
+      })
+      toast({ title: "Dispute Logged", description: "Forwarding to Arbitration Chamber." })
+      router.push("/arbitration")
+    } catch (e) {
+      toast({ title: "Failed to log dispute", variant: "destructive" })
     }
   }
 
@@ -166,11 +190,16 @@ export default function SettlementProtocolPage() {
 
                 <div className="space-y-6">
                   <Card className={`glass-card min-h-[400px] border-t-4 transition-all duration-500 ${result ? (result.settlementStatus === 'REJECTED' ? 'border-t-destructive' : 'border-t-emerald-500') : 'border-t-primary'}`}>
-                    <CardHeader>
+                    <CardHeader className="flex flex-row items-center justify-between">
                       <CardTitle className="font-headline text-lg flex items-center gap-2 uppercase tracking-tighter">
                         <Cpu className="size-5 text-primary" />
                         Nora-09 Protocol Analysis
                       </CardTitle>
+                      {result?.settlementStatus === 'APPROVED' && (
+                        <Button onClick={handleRaiseDispute} variant="outline" size="sm" className="text-amber-500 border-amber-500/20 hover:bg-amber-500/10 text-[10px] font-bold uppercase h-8">
+                           <ShieldAlert className="size-3 mr-2" /> Raise Dispute
+                        </Button>
+                      )}
                     </CardHeader>
                     <CardContent className="space-y-6">
                       {result ? (
