@@ -48,7 +48,7 @@ export async function autonomousComplianceMonitor(
 ): Promise<AutonomousComplianceMonitorOutput> {
   try {
     const {output} = await autonomousComplianceMonitorPrompt(input);
-    if (!output) throw new Error('AI failed to generate a response. The neural link returned null.');
+    if (!output) throw new Error('Neural link returned null payload.');
     return output;
   } catch (error: any) {
     console.error('Compliance AI Critical Failure:', error);

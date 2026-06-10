@@ -39,15 +39,6 @@ import { useCollection, useFirestore, useUser } from "@/firebase"
 import { collection, query, orderBy, limit, addDoc, where } from "firebase/firestore"
 import { getMatchInsight, type MatchInsightOutput } from "@/ai/flows/sports-insight-flow"
 import { useToast } from "@/hooks/use-toast"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-
-const SIGNAL_DATA = [
-  { time: '10:00', latency: 12, load: 45 },
-  { time: '10:05', latency: 15, load: 52 },
-  { time: '10:10', latency: 8, load: 48 },
-  { time: '10:15', latency: 11, load: 60 },
-  { time: '10:20', latency: 14, load: 55 },
-]
 
 const DEFAULT_IMPERIAL_UPLINK = "https://www.youtube.com/live/ntjJKCjNmcE?si=ICwtstbtDqctyGMF"
 
@@ -118,7 +109,7 @@ export default function WorldCupPage() {
         }
         return prev + 10
       })
-    }, 150)
+    }, 100)
   }
 
   const handleSendMessage = () => {
@@ -143,10 +134,15 @@ export default function WorldCupPage() {
         matchStatus: activeMatch.status,
         description: activeMatch.description
       })
-      setAiInsight(insight)
-    } catch (error) {
+      if (insight) {
+        setAiInsight(insight)
+      } else {
+        throw new Error("AI returned empty insight")
+      }
+    } catch (error: any) {
       toast({
-        title: "Neural Link Failed",
+        title: "Neural Link Failure",
+        description: error.message || "Failed to generate tactical analysis.",
         variant: "destructive"
       })
     } finally {
@@ -225,14 +221,14 @@ export default function WorldCupPage() {
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 sm:gap-8 text-center p-4">
                       <Youtube className="size-12 sm:size-16 text-primary/50" />
                       <Button onClick={handleLaunchUplink} className="bg-primary text-primary-foreground font-bold h-12 sm:h-16 px-6 sm:px-12 text-sm sm:text-lg glow-primary">
-                        <Zap className="size-5 sm:size-6 mr-2" /> HANDSHAKE
+                        <Zap className="size-5 sm:size-6 mr-2" /> INITIATE HANDSHAKE
                       </Button>
                     </div>
                   )}
                 </CardContent>
                 <div className="bg-muted/30 p-4 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-center justify-between">
                   <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
-                    <span className="text-[9px] font-bold text-muted-foreground uppercase">NODES:</span>
+                    <span className="text-[9px] font-bold text-muted-foreground uppercase">MESH STATUS:</span>
                     {servers.slice(0, 3).map(s => (
                       <Badge key={s.id} variant="outline" className={`text-[8px] ${selectedServer?.id === s.id ? 'border-primary text-primary' : ''}`}>
                         {s.name}
@@ -247,24 +243,30 @@ export default function WorldCupPage() {
               </Card>
 
               {aiInsight && (
-                <Card className="glass-card border-amber-500/20">
+                <Card className="glass-card border-amber-500/20 animate-in fade-in slide-in-from-bottom-2">
                   <CardHeader className="py-4 px-5">
                     <CardTitle className="text-xs font-headline text-amber-500 flex items-center gap-2 uppercase">
-                      <Cpu className="size-4" /> Tactical Intelligence
+                      <Cpu className="size-4" /> Tactical Intelligence Dispatch
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="px-5 pb-5 space-y-4">
-                     <div className="grid grid-cols-2 gap-4">
+                     <div className="grid grid-cols-3 gap-4">
                         <div className="space-y-1">
                            <p className="text-[8px] text-muted-foreground uppercase">{activeMatch?.home}</p>
-                           <p className="text-lg font-bold text-primary">{aiInsight.winProbability.home}%</p>
+                           <p className="text-xl font-bold text-primary">{aiInsight.winProbability.home}%</p>
+                        </div>
+                        <div className="space-y-1 text-center">
+                           <p className="text-[8px] text-muted-foreground uppercase">Draw</p>
+                           <p className="text-xl font-bold text-muted-foreground">{aiInsight.winProbability.draw}%</p>
                         </div>
                         <div className="space-y-1 text-right">
                            <p className="text-[8px] text-muted-foreground uppercase">{activeMatch?.away}</p>
-                           <p className="text-lg font-bold text-amber-500">{aiInsight.winProbability.away}%</p>
+                           <p className="text-xl font-bold text-amber-500">{aiInsight.winProbability.away}%</p>
                         </div>
                      </div>
-                     <p className="text-[10px] text-muted-foreground font-mono leading-relaxed italic">"{aiInsight.tacticalAnalysis}"</p>
+                     <div className="p-3 bg-black/40 rounded border border-white/5">
+                        <p className="text-[10px] text-muted-foreground font-mono leading-relaxed italic">"{aiInsight.tacticalAnalysis}"</p>
+                     </div>
                   </CardContent>
                 </Card>
               )}
@@ -302,7 +304,7 @@ export default function WorldCupPage() {
                           value={chatInput}
                           onChange={(e) => setChatInput(e.target.value)}
                           onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                          placeholder="Broadcast..." 
+                          placeholder="Broadcast message..." 
                           className="w-full bg-background/50 border border-white/10 rounded-lg px-4 py-2.5 text-[10px] outline-none pr-10"
                         />
                         <Button onClick={handleSendMessage} variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 text-primary">
@@ -325,7 +327,7 @@ export default function WorldCupPage() {
                    {matchesLoading ? (
                      <div className="flex flex-col items-center py-10 gap-2">
                         <Loader2 className="size-5 animate-spin text-primary" />
-                        <p className="text-[8px] font-mono text-muted-foreground uppercase">Syncing...</p>
+                        <p className="text-[8px] font-mono text-muted-foreground uppercase">Syncing mesh...</p>
                      </div>
                    ) : matches.map(match => (
                      <div 
@@ -334,14 +336,14 @@ export default function WorldCupPage() {
                          setActiveMatch(match)
                          setAiInsight(null)
                         }}
-                       className={`p-3 bg-white/5 rounded-xl border flex justify-between items-center cursor-pointer transition-all ${activeMatch?.id === match.id ? 'border-primary bg-primary/5 shadow-lg' : 'border-white/5'}`}
+                       className={`p-3 bg-white/5 rounded-xl border flex justify-between items-center cursor-pointer transition-all ${activeMatch?.id === match.id ? 'border-primary bg-primary/5 shadow-lg' : 'border-white/5 hover:border-white/20'}`}
                       >
                         <div className="space-y-0.5">
                            <p className="text-[10px] font-bold text-white uppercase">{match.home} vs {match.away}</p>
                            <p className="text-[8px] text-muted-foreground font-mono uppercase truncate max-w-[100px]">{match.status}</p>
                         </div>
                         <div className="text-right">
-                           <p className="text-[10px] font-bold text-primary">{match.score || "00:00"}</p>
+                           <p className="text-[10px] font-bold text-primary">{match.score || "0-0"}</p>
                         </div>
                      </div>
                    ))}
@@ -362,22 +364,25 @@ export default function WorldCupPage() {
             </div>
             <div className="space-y-4">
               <p className="text-primary font-mono text-xs sm:text-sm animate-pulse uppercase tracking-widest font-bold">
-                {handshakeProgress < 100 ? `VERIFYING... ${handshakeProgress}%` : 'IDENTITY VERIFIED'}
+                {handshakeProgress < 100 ? `VERIFYING MESH... ${handshakeProgress}%` : 'IDENTITY VERIFIED'}
               </p>
               <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
                 <div className="h-full bg-primary glow-primary transition-all duration-300" style={{ width: `${handshakeProgress}%` }} />
               </div>
             </div>
             {handshakeProgress === 100 && (
-              <Button 
-                className="w-full bg-primary text-primary-foreground font-bold h-12 sm:h-16 glow-primary text-sm sm:text-lg"
-                onClick={() => {
-                  setIsHandshaking(false)
-                  if (activeMatch?.uplink) window.open(activeMatch.uplink, '_blank')
-                }}
-              >
-                <ExternalLink className="size-5 sm:size-6 mr-3" /> LAUNCH UPLINK
-              </Button>
+              <div className="space-y-4 animate-in zoom-in duration-500">
+                <p className="text-[10px] text-muted-foreground font-mono uppercase">Cryptographic signature valid for 5 minutes.</p>
+                <Button 
+                  className="w-full bg-primary text-primary-foreground font-bold h-12 sm:h-16 glow-primary text-sm sm:text-lg"
+                  onClick={() => {
+                    setIsHandshaking(false)
+                    if (activeMatch?.uplink) window.open(activeMatch.uplink, '_blank')
+                  }}
+                >
+                  <ExternalLink className="size-5 sm:size-6 mr-3" /> LAUNCH UPLINK
+                </Button>
+              </div>
             )}
           </div>
         </DialogContent>
