@@ -9,6 +9,15 @@ import {PersistentCommNode} from '@/components/persistent-comm-node';
 export const metadata: Metadata = {
   title: 'NoorNexus | Sovereign Digital Infrastructure',
   description: 'HMAC_V4 Protected Digital Empire by Sheikh Farid',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'NoorNexus',
+  },
+  formatDetection: {
+    telephone: false,
+  },
   icons: {
     icon: 'https://picsum.photos/seed/sovereign-logo/32/32',
     apple: 'https://picsum.photos/seed/sovereign-logo/180/180',
@@ -48,6 +57,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <meta name="theme-color" content="#030708" />
       </head>
       <body className="font-body antialiased selection:bg-primary/30 selection:text-primary">
         <FirebaseClientProvider>
