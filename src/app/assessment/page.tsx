@@ -22,7 +22,8 @@ import {
   Quote,
   History,
   TrendingUp,
-  CheckCircle2
+  CheckCircle2,
+  Crown
 } from "lucide-react"
 import { SovereignLogo } from "@/components/sovereign-logo"
 
@@ -67,10 +68,10 @@ export default function StrategicAssessmentPage() {
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Strategic <span className="text-amber-500">Self-Evaluation.</span>
+                Strategic <span className="text-amber-500">Achievement.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Evaluating the Creator's vision against the System's reality. A mirror of Integrity and Intelligence.
+                Evaluating the Creator's vision against the System's reality. Mission 400 has reached full synthesis.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -106,7 +107,7 @@ export default function StrategicAssessmentPage() {
               {/* The Creator's Evaluation Text */}
               <Card className="glass-card bg-amber-500/5 border-amber-500/20 relative overflow-hidden">
                  <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
-                    <Sparkles className="size-48 text-amber-500" />
+                    <Crown className="size-48 text-amber-500" />
                  </div>
                  <CardHeader>
                     <CardTitle className="text-sm font-headline uppercase tracking-[0.3em] text-amber-500 flex items-center gap-3">

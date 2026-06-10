@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -11,7 +12,7 @@ import {
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
   CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages,
   Coins, Briefcase, BarChart3, Clock, Users, Fingerprint as FingerprintIcon,
-  ShieldAlert, Key
+  ShieldAlert, Key, Sparkles
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -75,7 +76,7 @@ export default function Home() {
       { text: "SYNCHRONIZING 11 NORA AGENTS...", time: 1200 },
       { text: "ESTABLISHING TREASURY QUORUM...", time: 1800 },
       { text: "OPENING SOVEREIGN GATEWAYS...", time: 2400 },
-      { text: "MISSION 400: THE FINAL SYNTHESIS READY", time: 3000 },
+      { text: "MISSION 400: SYNTHESIS ACHIEVED", time: 3000 },
     ]
 
     sequence.forEach((step, i) => {
@@ -198,8 +199,8 @@ export default function Home() {
                    <SidebarTrigger className="md:hidden text-primary -ml-2">
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
-                   <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
-                      <Rocket className="size-3 mr-2" /> Mission 400: Complete
+                   <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-xs animate-pulse">
+                      <Sparkles className="size-3 mr-2" /> Mission 400: Synthesized
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
                       <ShieldCheck className="size-3 mr-2" /> {isAdmin ? 'IMPERIAL_ADMIN_ROOT' : 'MESH_PARTICIPANT'}
