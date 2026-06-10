@@ -1,7 +1,6 @@
-
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -10,9 +9,13 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Code2, Globe, Lock, Terminal, Zap, BookOpen, Send, Loader2, ShieldCheck, ChevronRight, Menu } from "lucide-react"
+import { 
+  Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
+  ChevronRight, Menu, MessageSquare, Cpu, BookOpen, AlertCircle 
+} from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 const ENDPOINTS = [
   { method: "POST", path: "/api/v1/auth/handshake", desc: "Initiate HMAC_V4 cryptographic session." },
@@ -21,21 +24,46 @@ const ENDPOINTS = [
   { method: "GET", path: "/api/v1/nodes/status", desc: "Check regional node mesh health." }
 ]
 
+interface Message {
+  role: 'user' | 'model'
+  text: string
+  code?: string
+}
+
 export default function ApiHubPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [query, setQuery] = useState("")
-  const [aiResponse, setAiResponse] = useState<IntegrationAssistantOutput | null>(null)
+  const [messages, setMessages] = useState<Message[]>([])
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [messages])
 
   async function askNora() {
-    if (!query) return
+    if (!query.trim()) return
+    const userMsg = query
+    setMessages(prev => [...prev, { role: 'user', text: userMsg }])
+    setQuery("")
     setLoading(true)
+
     try {
+      const history = messages.map(m => ({ role: m.role, text: m.text }))
       const result = await noraIntegrationAssistant({
-        query,
-        context: "HMAC_V4"
+        query: userMsg,
+        context: "GENERAL",
+        history
       })
-      setAiResponse(result)
+      
+      setMessages(prev => [...prev, { 
+        role: 'model', 
+        text: result.answer, 
+        code: result.codeSnippet 
+      }])
+      
       toast({ title: "Nora-03 Dispatched Guidance" })
     } catch (e: any) {
       toast({ title: "AI Offline", description: e.message, variant: "destructive" })
@@ -60,7 +88,7 @@ export default function ApiHubPage() {
                    Sovereign API Gateway
                  </h2>
               </div>
-              <p className="text-muted-foreground">Open Banking Integration Layer for Mission 400.</p>
+              <p className="text-muted-foreground">Open Banking Integration Hub for Mission 400.</p>
             </div>
             <Badge variant="outline" className="border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
               <Lock className="size-4" /> AUTH: HMAC_V4_SHA256
@@ -72,7 +100,7 @@ export default function ApiHubPage() {
               <Tabs defaultValue="endpoints" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
                   <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> Endpoints</TabsTrigger>
-                  <TabsTrigger value="security" className="gap-2"><Lock className="size-4" /> Security Protocol</TabsTrigger>
+                  <TabsTrigger value="security" className="gap-2"><Lock className="size-4" /> Security</TabsTrigger>
                   <TabsTrigger value="playground" className="gap-2"><Terminal className="size-4" /> Playground</TabsTrigger>
                 </TabsList>
 
@@ -107,7 +135,7 @@ export default function ApiHubPage() {
                       <p className="text-xs text-muted-foreground leading-relaxed">
                         Every request must include the <code>X-Sovereign-Signature</code> header. This is a SHA256 HMAC of the (payload + timestamp) using your Client Secret.
                       </p>
-                      <div className="bg-black/40 p-4 rounded-lg font-mono text-[10px] space-y-2 border border-white/5">
+                      <div className="bg-black/40 p-4 rounded-lg font-mono text-[10px] space-y-2 border border-white/5 overflow-x-auto">
                         <p className="text-emerald-500">// Header Generation (Node.js)</p>
                         <p className="text-white">const signature = crypto.createHmac('sha256', secret)</p>
                         <p className="text-white">.update(payload + timestamp)</p>
@@ -137,56 +165,75 @@ export default function ApiHubPage() {
             </div>
 
             <div className="space-y-6">
-              <Card className="glass-card border-l-4 border-l-amber-500">
-                <CardHeader>
+              <Card className="glass-card border-l-4 border-l-amber-500 h-[600px] flex flex-col">
+                <CardHeader className="shrink-0">
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
-                    <Zap className="size-4" /> Nora-03 Integration Assistant
+                    <Cpu className="size-4" /> Nora-03 Integration AI
                   </CardTitle>
+                  <CardDescription className="text-[9px] uppercase font-bold text-muted-foreground">Expert Integration Guidance</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="bg-black/40 p-3 rounded-lg border border-white/5 min-h-[100px] flex flex-col justify-end">
-                      {aiResponse ? (
-                        <div className="space-y-3 animate-in fade-in">
-                          <p className="text-[11px] font-mono text-muted-foreground leading-relaxed italic">"{aiResponse.answer}"</p>
-                          {aiResponse.codeSnippet && (
-                             <div className="bg-white/5 p-2 rounded text-[9px] font-mono text-primary overflow-x-auto">
-                                <pre>{aiResponse.codeSnippet}</pre>
-                             </div>
+                <CardContent className="flex-1 flex flex-col min-h-0 overflow-hidden space-y-4">
+                  <ScrollArea className="flex-1 pr-4">
+                    <div className="space-y-4">
+                      {messages.length === 0 && (
+                        <div className="text-center py-10 space-y-3">
+                          <MessageSquare className="size-10 text-muted-foreground/20 mx-auto" />
+                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting developer query...</p>
+                        </div>
+                      )}
+                      {messages.map((msg, i) => (
+                        <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                          <div className={`max-w-[90%] p-3 rounded-xl text-xs font-mono leading-relaxed ${msg.role === 'user' ? 'bg-primary/20 border border-primary/20 text-primary-foreground' : 'bg-white/5 border border-white/5 text-muted-foreground'}`}>
+                            {msg.text}
+                          </div>
+                          {msg.code && (
+                            <div className="mt-2 w-full max-w-[95%] bg-black/40 p-2 rounded border border-white/5 overflow-x-auto">
+                              <pre className="text-[9px] text-primary">{msg.code}</pre>
+                            </div>
                           )}
                         </div>
-                      ) : (
-                        <p className="text-[10px] text-muted-foreground font-mono uppercase text-center py-8">Awaiting developer query...</p>
-                      )}
+                      ))}
+                      <div ref={scrollRef} />
                     </div>
+                  </ScrollArea>
+
+                  <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <Input 
                          placeholder="How do I verify a signature?" 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
+                         onKeyDown={e => e.key === 'Enter' && askNora()}
                          className="bg-background/50 border-white/10 text-xs h-12 pr-12"
+                         disabled={loading}
                        />
                        <Button 
                          onClick={askNora} 
-                         disabled={loading}
+                         disabled={loading || !query.trim()}
                          size="icon" 
                          className="absolute right-1 top-1 text-primary hover:bg-primary/20 bg-transparent"
                        >
                          {loading ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
                        </Button>
                     </div>
-                  </div>
 
-                  <div className="space-y-2 pt-4 border-t border-white/5">
-                     <p className="text-[10px] font-bold text-muted-foreground uppercase">Integration Directives</p>
-                     <div className="space-y-1">
-                        {['Standard KYC Handshake', 'Asset Mirror Protocol', 'Node Trust Mesh'].map((d, i) => (
-                           <div key={i} className="flex items-center justify-between p-2 rounded hover:bg-white/5 transition-colors cursor-pointer group">
-                              <span className="text-[10px] text-muted-foreground group-hover:text-white">{d}</span>
-                              <ChevronRight className="size-3 text-primary" />
-                           </div>
-                        ))}
-                     </div>
+                    <div className="space-y-2">
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-2">
+                         <BookOpen className="size-3" /> Quick Solutions
+                       </p>
+                       <div className="flex flex-wrap gap-2">
+                         {['HMAC Setup', 'P2C Docs', 'Webhook Setup'].map((d, i) => (
+                           <Badge 
+                            key={i} 
+                            variant="secondary" 
+                            className="text-[8px] cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                            onClick={() => { setQuery(`Tell me about ${d}`); }}
+                           >
+                            {d}
+                           </Badge>
+                         ))}
+                       </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
