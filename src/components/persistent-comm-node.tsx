@@ -9,9 +9,8 @@ import { Button } from "@/components/ui/button"
 import { PhoneIncoming } from "lucide-react"
 
 /**
- * @fileOverview Persistent Communication Node (V4 Reinforced)
- * এই কম্পোনেন্টটি ব্যাকগ্রাউন্ডে সুরক্ষা হাবকে সচল রাখে এবং কলের সিগন্যাল খুঁজে বের করে।
- * সাইডবার যাতে দৃশ্যমান থাকে সেজন্য z-index এবং লেআউট অ্যাডজাস্ট করা হয়েছে।
+ * @fileOverview Persistent Communication Node (V4.1 Reinforced)
+ * এই কম্পোনেন্টটি হাইড্রেশন এরর মুক্ত করা হয়েছে এবং ব্যাকগ্রাউন্ডে সুরক্ষা হাবকে সচল রাখে।
  */
 export function PersistentCommNode() {
   const pathname = usePathname()
@@ -25,39 +24,30 @@ export function PersistentCommNode() {
   useEffect(() => {
     setMounted(true)
     
-    // ১. নোটিফিকেশন পারমিশন রিকোয়েস্ট
     if (typeof window !== "undefined" && "Notification" in window) {
       if (Notification.permission === "default") {
         Notification.requestPermission();
       }
     }
 
-    // ২. অ্যাডভান্সড মেসেজ লিসেনার (Cross-Origin Message Detection)
     const handleMessage = (event: MessageEvent) => {
-      // Debug: কনসোলে মেসেজ দেখা যাবে যদি কোনো সিগন্যাল আসে
-      console.log("[NoorNexus-Link] Received message from node:", event.data);
-
       const data = event.data;
       if (!data) return;
 
       const msgStr = typeof data === 'string' ? data : JSON.stringify(data);
-      // কল ডিটেকশনের জন্য আরও কি-ওয়ার্ড
       const callKeywords = /incoming|call|ring|dial|offer|invite|request_access|peer|joined/i;
       const isCallSignal = callKeywords.test(msgStr);
 
       if (isCallSignal) {
-        // ১০ সেকেন্ডের মধ্যে একাধিক টোস্ট যাতে না আসে
         if (Date.now() - lastToastTime.current < 10000) return;
         lastToastTime.current = Date.now();
 
-        // অডিও এলার্ট (যদি ব্রাউজার এলাউ করে)
         try {
           const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
           audio.volume = 0.5;
-          audio.play().catch(() => console.log("Audio autoplay blocked. Need user interaction."));
+          audio.play().catch(() => console.log("Audio autoplay blocked."));
         } catch (e) {}
 
-        // ব্রাউজার পুশ নোটিফিকেশন
         if ("Notification" in window && Notification.permission === "granted") {
           new Notification("NoorNexus | IMPERIAL CALL", {
             body: "A secure communication link is ringing. Respond immediately.",
@@ -67,7 +57,6 @@ export function PersistentCommNode() {
           });
         }
 
-        // ইন-অ্যাপ টোস্ট নোটিফিকেশন
         if (!isShurukkhaPage) {
           toast({
             title: "CRITICAL CALL SIGNAL DETECTED",
@@ -96,28 +85,28 @@ export function PersistentCommNode() {
     return () => window.removeEventListener("message", handleMessage);
   }, [isShurukkhaPage, router, toast]);
 
-  if (!mounted) return null;
-
+  // হাইড্রেশন এরর এড়াতে আমরা সবসময় রুট ডিভ রিটার্ন করি, কিন্তু কন্টেন্ট মাউন্ট হওয়ার পর দেখাই
   return (
     <div 
       className={cn(
         "fixed inset-0 transition-all duration-700 ease-in-out",
-        // z-index 30 যাতে এটি সাইডবার (z-50) এর নিচে থাকে কিন্তু মেইন কন্টেন্ট এর উপরে
-        isShurukkhaPage ? "opacity-100 z-30 pointer-events-auto" : "opacity-0 -z-50 pointer-events-none"
+        mounted && isShurukkhaPage ? "opacity-100 z-30 pointer-events-auto" : "opacity-0 -z-50 pointer-events-none"
       )}
     >
-      <div className={cn(
-        "w-full h-full flex flex-col bg-background transition-all duration-500",
-        "md:pl-[16rem]" // Sidebar width offset for desktop
-      )}>
-        <iframe 
-          src="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
-          className="w-full h-full border-0 bg-white"
-          title="Shurukkha Persistent Node"
-          allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media; geolocation"
-          sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
-        />
-      </div>
+      {mounted && (
+        <div className={cn(
+          "w-full h-full flex flex-col bg-background transition-all duration-500",
+          "md:pl-[16rem]" 
+        )}>
+          <iframe 
+            src="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
+            className="w-full h-full border-0 bg-white"
+            title="Shurukkha Persistent Node"
+            allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media; geolocation"
+            sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
+          />
+        </div>
+      )}
     </div>
   )
 }
