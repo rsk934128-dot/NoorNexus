@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -9,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { ShieldCheck, Terminal, AlertCircle, CheckCircle2, Cpu, Activity, Zap, Menu, History, Loader2 } from "lucide-react"
+import { ShieldCheck, Terminal, AlertCircle, CheckCircle2, Cpu, Activity, Zap, Menu, History, Loader2, ShieldAlert, Lock } from "lucide-react"
 import { autonomousComplianceMonitor, AutonomousComplianceMonitorOutput } from "@/ai/flows/autonomous-compliance-monitor"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore, useCollection } from "@/firebase"
@@ -53,7 +52,8 @@ export default function CompliancePage() {
         result: result.anomalyDetected ? "REJECTED" : "ACCEPTED",
         reason: result.assessmentDetails,
         riskScore: result.riskLevel === 'Critical' ? 95 : result.riskLevel === 'High' ? 80 : result.riskLevel === 'Medium' ? 50 : result.riskLevel === 'Low' ? 20 : 5,
-        aiAssessment: result
+        aiAssessment: result,
+        securityTier: result.suggestedSecurityTier
       })
 
       // Simulate typing for UX
@@ -94,10 +94,13 @@ export default function CompliancePage() {
                 <h2 className="text-2xl sm:text-3xl font-headline font-bold">Nora-01 Compliance Agent</h2>
               </div>
               <p className="text-muted-foreground text-sm sm:text-base">
-                Autonomous cryptographic defense and automated security audit trail.
+                Autonomous cryptographic defense with Proactive Adaptive Logic.
               </p>
             </div>
-            <Badge variant="outline" className="text-emerald-500 border-emerald-500/30 h-10 px-4">L4_CONSENSUS_ACTIVE</Badge>
+            <div className="flex gap-2">
+               <Badge variant="outline" className="text-emerald-500 border-emerald-500/30 h-10 px-4">ADAPTIVE_DEFENSE: ACTIVE</Badge>
+               <Badge variant="outline" className="text-primary border-primary/30 h-10 px-4 uppercase">Tier: {results?.suggestedSecurityTier || 'L1_NORMAL'}</Badge>
+            </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -122,7 +125,7 @@ export default function CompliancePage() {
                   </div>
                   <Button onClick={runMonitor} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary" disabled={loading}>
                     {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
-                    Initiate Audit & Logging
+                    Analyze & Update Defense Tier
                   </Button>
                 </CardContent>
               </Card>
@@ -130,9 +133,9 @@ export default function CompliancePage() {
               <Card className="glass-card">
                 <CardHeader>
                    <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2">
-                     <History className="size-4" /> Conflict Resolution Log
+                     <History className="size-4" /> Adaptive Conflict Log
                    </CardTitle>
-                   <CardDescription className="text-[10px]">Persistent record of historical security decisions.</CardDescription>
+                   <CardDescription className="text-[10px]">Security decisions influencing the Proactive Defense Layer.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {historyLoading ? <Loader2 className="size-4 animate-spin mx-auto" /> : (
@@ -140,7 +143,7 @@ export default function CompliancePage() {
                       <div key={log.id} className="p-3 bg-white/5 rounded border border-white/5 flex items-center justify-between group">
                         <div className="min-w-0">
                           <p className="text-[10px] font-bold uppercase truncate">{log.path}</p>
-                          <p className="text-[8px] text-muted-foreground font-mono">{new Date(log.timestamp).toLocaleString()}</p>
+                          <p className="text-[8px] text-muted-foreground font-mono">{log.securityTier || 'L1_NORMAL'}</p>
                         </div>
                         <Badge variant="outline" className={`text-[8px] ${log.result === 'ACCEPTED' ? 'border-emerald-500/30 text-emerald-500' : 'border-destructive/30 text-destructive'}`}>
                           {log.result}
@@ -157,7 +160,7 @@ export default function CompliancePage() {
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2 uppercase tracking-tighter">
                      <Cpu className="size-4 text-primary" />
-                     AI Audit Reasoning
+                     Adaptive Audit Reasoning
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -170,13 +173,29 @@ export default function CompliancePage() {
 
                   {results && (
                     <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
-                      <div className="p-3 bg-muted/20 rounded-lg flex items-center gap-3">
-                        {results.anomalyDetected ? <AlertCircle className="size-5 text-destructive" /> : <CheckCircle2 className="size-5 text-emerald-500" />}
-                        <span className="text-xs font-bold uppercase">{results.anomalyDetected ? results.anomalyType : "INTEGRITY_VERIFIED"}</span>
+                      <div className="grid grid-cols-2 gap-4">
+                         <div className={`p-3 rounded-lg flex items-center gap-3 ${results.anomalyDetected ? 'bg-destructive/10' : 'bg-emerald-500/10'}`}>
+                           {results.anomalyDetected ? <AlertCircle className="size-5 text-destructive" /> : <CheckCircle2 className="size-5 text-emerald-500" />}
+                           <span className="text-xs font-bold uppercase">{results.anomalyDetected ? results.anomalyType : "VERIFIED"}</span>
+                         </div>
+                         <div className={`p-3 rounded-lg flex items-center gap-3 bg-primary/10`}>
+                           <Lock className="size-5 text-primary" />
+                           <span className="text-xs font-bold uppercase">{results.suggestedSecurityTier}</span>
+                         </div>
                       </div>
+
+                      {results.nodeIsolationRequired && (
+                         <div className="p-4 bg-destructive/20 border border-destructive/30 rounded-lg flex items-center gap-4 animate-pulse">
+                            <ShieldAlert className="size-8 text-destructive" />
+                            <div>
+                               <p className="text-xs font-bold text-destructive uppercase">Node Isolation Required</p>
+                               <p className="text-[10px] text-destructive/80">Immediate quarantine of {formData.sourceNode} recommended.</p>
+                            </div>
+                         </div>
+                      )}
                       
                       <div className="space-y-2">
-                        <p className="text-[10px] uppercase font-bold text-primary tracking-widest">Recommended Self-Learning Actions</p>
+                        <p className="text-[10px] uppercase font-bold text-primary tracking-widest">Adaptive Defense Recommendations</p>
                         {results.recommendedActions.map((action, i) => (
                           <div key={i} className="text-[10px] p-2 bg-white/5 rounded border border-white/5 flex items-center gap-2">
                             <div className="size-1 bg-primary rounded-full" />
@@ -192,16 +211,16 @@ export default function CompliancePage() {
               <Card className="glass-card bg-primary/5">
                 <CardHeader className="pb-2">
                    <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
-                     <Activity className="size-3" /> Agent Neural Confidence
+                     <Activity className="size-3" /> Defense Protocol Confidence
                    </CardTitle>
                 </CardHeader>
                 <CardContent>
                    <div className="flex justify-between text-[10px] font-mono mb-2">
-                     <span>Precision:</span>
-                     <span className="text-emerald-500">99.8%</span>
+                     <span>Adaptive Precision:</span>
+                     <span className="text-emerald-500">99.9%</span>
                    </div>
                    <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                     <div className="h-full bg-primary w-[99.8%]" />
+                     <div className="h-full bg-primary w-[99.9%]" />
                    </div>
                 </CardContent>
               </Card>

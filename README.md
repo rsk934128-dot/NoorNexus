@@ -13,19 +13,19 @@
 | :--- | :--- | :--- | :--- |
 | **Phase 1** | Sovereign Core | OS Architecture & HMAC_V4 Protocol | `COMPLETED` |
 | **Phase 2** | Value Settlement | P2P SmartRemit & P2C Merchant Hub | `ACTIVE` |
-| **Phase 3** | Unified Connect | Stablecoin OpenAPI & Global Payout Rails | `IN_PROGRESS` |
+| **Phase 3** | Adaptive Defense | Proactive AI Security & Node Isolation | `IN_PROGRESS` |
 | **Phase 4** | Global Consensus | 400-Node Decentralized Ledger activation | `QUEUED` |
 
 ## 🏗️ Technology Stack & Security
 - **Intelligence:** Nora-AI Suite (Gemini 1.5 Flash)
 - **Security:** HMAC_V4 SHA256 / SHA256withRSA (L4 Clearance)
 - **Payments:** Sovereign Connect (USDC/USDT Native)
-- **Compliance:** Real-time On-Chain Wallet Screening
+- **Compliance:** Real-time On-Chain Wallet Screening & Proactive Adaptive Defense
 
 ## ⚠️ Risk Mitigation & Criticality
 1. **Cryptographic Drift:** Continuous signature audits by Nora-01.
-2. **Fraud Prevention:** Blocking risky on-chain funds via Sovereign Gate.
-3. **Integration Velocity:** Nora-03 Developer Assistant for sub-120ms onboarding.
+2. **Adaptive Defense:** Dynamic key-rotation and node isolation upon threat pattern detection.
+3. **Fraud Prevention:** Blocking risky on-chain funds via Sovereign Gate.
 4. **Institutional Stability:** T+1 local currency settlement for all merchants.
 
 ---

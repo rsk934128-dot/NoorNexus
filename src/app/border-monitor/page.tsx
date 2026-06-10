@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -6,7 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Radar, ShieldAlert, ShieldCheck, Terminal, AlertTriangle, Menu, Loader2, Database } from "lucide-react"
+import { Radar, ShieldAlert, ShieldCheck, Terminal, AlertTriangle, Menu, Loader2, Database, Lock, Activity } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { useFirestore, useCollection } from "@/firebase"
@@ -20,6 +19,9 @@ export default function BorderMonitorPage() {
 
   const rejectedCount = logs.filter(l => l.result === 'REJECTED').length
   const warningCount = logs.filter(l => l.result === 'WARNING').length
+  
+  // Determine current active defense tier from the latest log
+  const activeTier = logs[0]?.securityTier || 'L1_NORMAL'
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -39,16 +41,18 @@ export default function BorderMonitorPage() {
                    Security Audit Trail
                  </h2>
               </div>
-              <p className="text-muted-foreground text-sm sm:text-base">Real-time cryptographic audit log of the Sovereign Digital Border.</p>
+              <p className="text-muted-foreground text-sm sm:text-base">Adaptive Proactive Defense Monitoring for Mission 400.</p>
             </div>
             <div className="flex gap-4">
-              <div className="glass-card px-4 py-2 rounded-lg text-center flex-1 sm:flex-none">
-                <p className="text-[10px] text-muted-foreground uppercase font-bold">Audit Reliability</p>
-                <p className="text-lg font-headline font-bold text-emerald-500">99.99%</p>
+              <div className={`glass-card px-4 py-2 rounded-lg text-center flex-1 sm:flex-none border-t-2 ${activeTier === 'L4_LOCKDOWN' ? 'border-t-destructive' : 'border-t-primary'}`}>
+                <p className="text-[10px] text-muted-foreground uppercase font-bold">Mesh Defense Tier</p>
+                <p className={`text-lg font-headline font-bold flex items-center gap-2 justify-center ${activeTier === 'L4_LOCKDOWN' ? 'text-destructive' : 'text-primary'}`}>
+                  <Lock className="size-4" /> {activeTier}
+                </p>
               </div>
               <div className="glass-card px-4 py-2 rounded-lg text-center flex-1 sm:flex-none">
-                <p className="text-[10px] text-muted-foreground uppercase font-bold">Mesh Status</p>
-                <p className="text-lg font-headline font-bold text-primary">L4_SECURE</p>
+                <p className="text-[10px] text-muted-foreground uppercase font-bold">Audit Confidence</p>
+                <p className="text-lg font-headline font-bold text-emerald-500">99.9%</p>
               </div>
             </div>
           </header>
@@ -74,7 +78,7 @@ export default function BorderMonitorPage() {
                         <TableHeader className="bg-muted/30">
                           <TableRow className="border-white/5">
                             <TableHead className="w-[120px]">Timestamp</TableHead>
-                            <TableHead>Origin/Path</TableHead>
+                            <TableHead>Origin/Tier</TableHead>
                             <TableHead>Signature Protocol</TableHead>
                             <TableHead>Result</TableHead>
                             <TableHead className="text-right">Risk Score</TableHead>
@@ -89,7 +93,9 @@ export default function BorderMonitorPage() {
                               <TableCell>
                                 <div className="space-y-0.5">
                                   <p className="text-xs font-bold uppercase">{log.origin || 'UNKNOWN_NODE'}</p>
-                                  <p className="text-[9px] text-muted-foreground font-mono">{log.path}</p>
+                                  <p className={`text-[9px] font-mono uppercase ${log.securityTier === 'L4_LOCKDOWN' ? 'text-destructive font-bold' : 'text-muted-foreground'}`}>
+                                    {log.securityTier || 'L1_NORMAL'}
+                                  </p>
                                 </div>
                               </TableCell>
                               <TableCell className="text-[10px] font-mono text-muted-foreground">
@@ -117,7 +123,7 @@ export default function BorderMonitorPage() {
               <Card className="glass-card bg-destructive/5 border-destructive/20 overflow-hidden">
                 <CardHeader>
                   <CardTitle className="text-xs uppercase font-bold text-destructive tracking-widest flex items-center gap-2">
-                    <ShieldAlert className="size-4" /> Alert Summary
+                    <ShieldAlert className="size-4" /> Threat Analysis
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -127,8 +133,10 @@ export default function BorderMonitorPage() {
                       <p className="text-3xl font-headline font-bold text-destructive">{rejectedCount}</p>
                     </div>
                     <div className="space-y-1 text-right">
-                      <p className="text-[9px] text-muted-foreground font-mono uppercase">Warnings</p>
-                      <p className="text-3xl font-headline font-bold text-amber-500">{warningCount}</p>
+                      <p className="text-[9px] text-muted-foreground font-mono uppercase">Avg Risk</p>
+                      <p className="text-3xl font-headline font-bold text-amber-500">
+                        {(logs.reduce((acc, l) => acc + (l.riskScore || 0), 0) / (logs.length || 1)).toFixed(1)}
+                      </p>
                     </div>
                   </div>
                   <div className="h-1 bg-muted rounded-full overflow-hidden">
@@ -137,18 +145,18 @@ export default function BorderMonitorPage() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-primary/20">
+              <Card className="glass-card border-primary/20 bg-primary/5">
                 <CardHeader>
                    <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                     <Database className="size-4" /> Integrity Seal
+                     <Activity className="size-4" /> Adaptive Pulse
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                    <p className="text-[10px] text-muted-foreground leading-relaxed">
-                     All audit entries are HMAC_V4 signed and immutably stored in the Sovereign Ledger.
+                     Mesh intelligence is currently analyzing for recurring threat vectors.
                    </p>
                    <div className="pt-2">
-                     <Badge variant="outline" className="text-[8px] border-emerald-500/30 text-emerald-500">PROT_VERIFIED: L4</Badge>
+                     <Badge variant="outline" className="text-[8px] border-emerald-500/30 text-emerald-500">PROACTIVE_DEFENSE: STANDBY</Badge>
                    </div>
                 </CardContent>
               </Card>
