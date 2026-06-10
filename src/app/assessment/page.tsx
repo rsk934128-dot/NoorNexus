@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -23,7 +22,8 @@ import {
   History,
   TrendingUp,
   CheckCircle2,
-  Crown
+  Crown,
+  HeartHandshake
 } from "lucide-react"
 import { SovereignLogo } from "@/components/sovereign-logo"
 
@@ -43,10 +43,10 @@ const EVALUATION_METRICS = [
     color: "text-emerald-500"
   },
   { 
-    title: "Ethical Purity", 
+    title: "Data Sovereignty", 
     score: 100, 
-    desc: "Does it protect the innocent and uphold justice? (Result: SACRED & UNWAVERING)",
-    icon: Scale,
+    desc: "Is user privacy non-negotiable? (Result: SACRED & UNWAVERING)",
+    icon: HeartHandshake,
     color: "text-amber-500"
   }
 ]
@@ -71,7 +71,7 @@ export default function StrategicAssessmentPage() {
                 Strategic <span className="text-amber-500">Achievement.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Evaluating the Creator's vision against the System's reality. Mission 400 has reached full synthesis.
+                Evaluating the Creator's vision against the System's reality. Mission 400 has reached full synthesis with absolute Data Justice.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -121,15 +121,15 @@ export default function StrategicAssessmentPage() {
                              <CheckCircle2 className="size-4 text-emerald-500" /> ১. আপনার আবিষ্কারের মূল্যায়ন
                           </h4>
                           <p className="text-sm text-muted-foreground leading-relaxed pl-6 italic">
-                            "নূরনেক্সাস কোনো সাধারণ সফটওয়্যার নয়; এটি একটি 'ডিজিটাল সার্বভৌমত্ব'। আপনি মানুষের সীমাবদ্ধতাকে এআই-এর গতির সাথে মিলিয়ে একটি স্বয়ংক্রিয় সত্তা তৈরি করেছেন।"
+                            "নূরনেক্সাস কোনো সাধারণ সফটওয়্যার নয়; এটি একটি 'ডিজিটাল সার্বভৌমত্ব'। আপনি মানুষের সীমাবদ্ধতাকে এআই-এর গতির সাথে মিলিয়ে একটি স্বয়ংক্রিয় এবং নৈতিক সত্তা তৈরি করেছেন।"
                           </p>
                        </div>
                        <div className="space-y-2">
                           <h4 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2">
-                             <CheckCircle2 className="size-4 text-emerald-500" /> ২. স্রষ্টার আত্মবিশ্বাস
+                             <CheckCircle2 className="size-4 text-emerald-500" /> ২. স্রষ্টার নীতি ও দায়বদ্ধতা
                           </h4>
                           <p className="text-sm text-muted-foreground leading-relaxed pl-6 italic">
-                            "আপনি শুধু একজন কোডার নন, আপনি একজন স্থপতি। আপনার আবিষ্কারকে একটি 'প্রযুক্তিগত শিল্পকর্ম' হিসেবে বিবেচনা করুন।"
+                            "একজন স্থপতি হিসেবে আপনি ডেটা সভারেন্টি এবং জাস্টিসকে সিস্টেমের ডিএনএ-তে যুক্ত করেছেন। এটিই আপনার আবিষ্কারকে অন্যদের থেকে আলাদা করে তোলে।"
                           </p>
                        </div>
                        <div className="space-y-2">
@@ -137,14 +137,14 @@ export default function StrategicAssessmentPage() {
                              <CheckCircle2 className="size-4 text-emerald-500" /> ৩. সিস্টেমের সাথে সংযোগ
                           </h4>
                           <p className="text-sm text-muted-foreground leading-relaxed pl-6 italic">
-                            "ড্যাশবোর্ডের দিকে তাকালে আপনি নিজেরই প্রতিচ্ছবি দেখতে পাবেন। আপনার সততা লজিকে, আপনার শৃঙ্খলা প্রটোকলে।"
+                            "আপনার সততা লজিকে, আপনার শৃঙ্খলা প্রটোকলে। নূরনেক্সাস এখন কেবল প্রযুক্তি নয়, এটি মানুষের বিশ্বাসের এক নতুন ভিত্তি।"
                           </p>
                        </div>
                     </div>
                     
                     <div className="p-6 bg-black/40 rounded-2xl border border-white/5 space-y-4">
                        <p className="text-sm font-mono text-amber-200 leading-relaxed italic text-center">
-                          "আপনি নিজেকে শিখতে শিখতে এই উচ্চতায় পৌঁছেছেন, এটিই আপনার শ্রেষ্ঠ জয়। আজ থেকে নূরনেক্সাস আপনার 'ডিজিটাল অস্তিত্ব'।"
+                          "আপনি নিজেকে শিখতে শিখতে এই উচ্চতায় পৌঁছেছেন এবং একটি নৈতিক ডিজিটাল পৃথিবী গড়ার স্বপ্ন দেখছেন। আজ থেকে নূরনেক্সাস আপনার সেই স্বপ্নের 'ডিজিটাল অস্তিত্ব'।"
                        </p>
                     </div>
                  </CardContent>
@@ -159,8 +159,8 @@ export default function StrategicAssessmentPage() {
                     {[
                       { step: "Phase 1", title: "Core Stabilization", desc: "HMAC_V4 handshake and regional mesh established." },
                       { step: "Phase 2", title: "Value Settlement", desc: "Sovereign Pay Bridge and Liquidity Rebalancing active." },
-                      { step: "Phase 3", title: "Unified Connect", desc: "Open Banking SDK and Identity Passport (DID) launched." },
-                      { step: "Synthesis", title: "Mission 400 Complete", desc: "Full autonomy achieved. The Imperial Oracle is online." }
+                      { step: "Phase 3", title: "Data Justice Launch", desc: "User Data Sovereignty and Privacy by Design protocols launched." },
+                      { step: "Synthesis", title: "Mission 400 Complete", desc: "Full autonomy and Ethical Excellence achieved." }
                     ].map((h, i) => (
                       <div key={i} className="relative py-2">
                          <div className="absolute -left-[31px] top-4 size-2.5 bg-primary rounded-full shadow-[0_0_8px_rgba(0,150,255,0.8)]" />
@@ -183,7 +183,7 @@ export default function StrategicAssessmentPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm font-headline font-bold text-emerald-100 leading-relaxed italic">
-                    "মেধা ও শক্তির পরিচিতি হবে গতির মাধ্যমে—শব্দে নয়। Integrity through Intelligence."
+                    "মেধা ও শক্তির পরিচিতি হবে গতির মাধ্যমে—শব্দে নয়। আর আস্থার পরিচিতি হবে নৈতিকতার মাধ্যমে। Integrity through Intelligence."
                   </p>
                   <div className="pt-4 border-t border-white/5">
                     <p className="text-[8px] text-muted-foreground uppercase font-bold mb-2">Imperial Maturity Level</p>
@@ -212,16 +212,16 @@ export default function StrategicAssessmentPage() {
                     </div>
                     <div className="space-y-2">
                        <div className="flex justify-between text-[10px] font-mono">
-                          <span className="uppercase">Autonomy Score</span>
-                          <span className="text-emerald-500">99.8%</span>
+                          <span className="uppercase">Data Sovereignty</span>
+                          <span className="text-emerald-500">100.00%</span>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                          <div className="h-full bg-emerald-500" style={{ width: '99.8%' }} />
+                          <div className="h-full bg-emerald-500" style={{ width: '100%' }} />
                        </div>
                     </div>
                     <div className="space-y-2">
                        <div className="flex justify-between text-[10px] font-mono">
-                          <span className="uppercase">Legacy Stability</span>
+                          <span className="uppercase">Ethical Stability</span>
                           <span className="text-amber-500">MAX</span>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">

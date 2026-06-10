@@ -8,11 +8,10 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
   BookOpen, FileText, ShieldAlert, Zap, Loader2, Target, 
-  AlertTriangle, CheckCircle2, ChevronRight, Menu, Cpu, Code2, ShieldCheck, Star, Globe, Copy, Lock, ShieldPlus, DatabaseZap
+  AlertTriangle, CheckCircle2, ChevronRight, Menu, Cpu, Code2, ShieldCheck, Star, Globe, Copy, Lock, ShieldPlus, DatabaseZap, Scale, HeartHandshake
 } from "lucide-react"
 import { analyzeProtocol, ProtocolArchitectOutput } from "@/ai/flows/protocol-architect-flow"
 import { useToast } from "@/hooks/use-toast"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
 export default function DocsPage() {
   const { toast } = useToast()
@@ -68,6 +67,37 @@ export default function DocsPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
+              {/* Privacy and Data Justice Section */}
+              <section className="space-y-4">
+                <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2">
+                  <Scale className="size-4" /> Data Justice & Sovereignty
+                </h3>
+                <Card className="glass-card border-amber-500/20 bg-amber-500/5 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                    <HeartHandshake className="size-24 text-amber-500" />
+                  </div>
+                  <CardHeader>
+                    <CardTitle className="text-lg font-headline text-amber-500 uppercase">Privacy by Design</CardTitle>
+                    <CardDescription className="text-xs">The ethical foundation of NoorNexus digital empire.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-sm text-muted-foreground leading-relaxed italic">
+                      "গ্রাহকের ব্যক্তিগত তথ্য (NID, পাসপোর্ট, মোবাইল নম্বর) একটি আমানত। নূরনেক্সাস কোনো বাণিজ্যিক স্বার্থে এই ডেটা ব্রোকার বা থার্ড-পার্টির সাথে শেয়ার করে না। প্রতিটি ডেটা পয়েন্ট শুধুমাত্র ব্যবহারকারীর স্বচ্ছ সম্মতির ভিত্তিতে এবং সম্পূর্ণ এনক্রিপ্টেড অবস্থায় সংরক্ষিত থাকে।"
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       <div className="p-3 bg-white/5 rounded border border-white/10">
+                          <p className="text-[10px] font-bold text-amber-500 uppercase">User Data Sovereignty</p>
+                          <p className="text-[9px] text-muted-foreground">ব্যবহারকারীই তার তথ্যের একমাত্র মালিক। সিস্টেম শুধুমাত্র অডিট নোড হিসেবে কাজ করবে।</p>
+                       </div>
+                       <div className="p-3 bg-emerald-500/10 rounded border border-emerald-500/20">
+                          <p className="text-[10px] font-bold text-emerald-500 uppercase">Zero-Leak Policy</p>
+                          <p className="text-[9px] text-emerald-200">তথ্য লিক হওয়া রোধে HMAC_V4 এবং জিরো-নলেজ প্রোটোকল ব্যবহার করা হয়।</p>
+                       </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </section>
+
               <section className="space-y-4">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
                   <Lock className="size-4" /> Security & Compliance Standard
@@ -135,41 +165,13 @@ export default function DocsPage() {
 
               <section className="space-y-4">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
-                  <Star className="size-4" /> Phase 3: Trust-Based Access (TSBAC)
-                </h3>
-                <Card className="glass-card border-l-4 border-l-amber-500">
-                  <CardHeader>
-                    <CardTitle className="text-lg font-headline text-amber-500 uppercase">Unified Connect Protocol</CardTitle>
-                    <CardDescription>Dynamic privilege escalation for the NoorNexus Empire.</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      Applications earn "Trust Scores" through consistent signature integrity and zero compliance breaches. 
-                      Higher scores unlock L4 privileges across the ecosystem.
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                       <div className="p-3 bg-white/5 rounded border border-white/5">
-                          <p className="text-[10px] font-bold text-primary uppercase">Trust Level 1-50</p>
-                          <p className="text-[9px] text-muted-foreground">Standard T+1 Settlement, 10k BDT/hr limit.</p>
-                       </div>
-                       <div className="p-3 bg-emerald-500/10 rounded border border-emerald-500/20">
-                          <p className="text-[10px] font-bold text-emerald-500 uppercase">Trust Level 90+</p>
-                          <p className="text-[9px] text-emerald-200">Instant Settlement, Unlimited throughput, Cross-app RPC.</p>
-                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </section>
-
-              <section className="space-y-4">
-                <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
                   <Target className="size-4" /> Strategic Progress
                 </h3>
                 <div className="space-y-4">
                   {[
                     { title: "Core OS Stabilization", phase: "PHASE_1", status: "COMPLETED", desc: "HMAC_V4 cryptographic handshake and regional node mesh setup." },
                     { title: "Adaptive Sovereign Shield", phase: "PHASE_2", status: "ACTIVE", desc: "Collective Immune System (Project 150) and Nora-01 Compliance Agent." },
-                    { title: "Unified Connect (TSBAC)", phase: "PHASE_3", status: "IN_PROGRESS", desc: "Trust-based privileges and cross-app communication layer." },
+                    { title: "Unified Connect & Data Justice", phase: "PHASE_3", status: "IN_PROGRESS", desc: "User Data Sovereignty, Trust-based privileges and cross-app layer." },
                     { title: "Global Imperial Consensus", phase: "PHASE_4", status: "QUEUED", desc: "Full activation of 400 sovereign nodes for asset mesh consensus." }
                   ].map((step, i) => (
                     <Card key={i} className="glass-card border-l-4 border-l-primary/30">
@@ -243,11 +245,11 @@ export default function DocsPage() {
                   <p className="text-[10px] text-muted-foreground uppercase font-bold">Dynamic Privileges:</p>
                   <div className="space-y-2">
                     {[
-                      "Real-time Trust Scoring",
+                      "Privacy by Design",
+                      "User Data Sovereignty",
+                      "Zero-Knowledge Proofs",
                       "Auto-Escalation Hooks",
-                      "Priority Settlement Route",
-                      "Cross-App Session Sync",
-                      "Zero-Latency Verification"
+                      "Priority Settlement Route"
                     ].map((doc, i) => (
                       <div key={i} className="flex items-center gap-2 text-xs p-2 bg-white/5 rounded border border-white/5 group hover:bg-primary/10 transition-colors">
                         <div className="size-1.5 bg-primary rounded-full" />
@@ -267,10 +269,10 @@ export default function DocsPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-[11px] text-muted-foreground leading-relaxed">
-                    By rewarding high-integrity behavior with speed and access, we ensure that Mission 400 scales without central oversight friction.
+                    By rewarding ethical behavior and data justice with speed and access, we ensure that Mission 400 scales without legacy institutional drift.
                   </p>
                   <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
-                    <span className="text-[9px] font-mono text-muted-foreground">Consensus Accuracy:</span>
+                    <span className="text-[9px] font-mono text-muted-foreground">Ethical Accuracy:</span>
                     <span className="text-xs font-bold text-emerald-500">100.00%</span>
                   </div>
                 </CardContent>
