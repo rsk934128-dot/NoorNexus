@@ -11,6 +11,7 @@ import { PhoneIncoming } from "lucide-react"
  * @fileOverview Persistent Communication Node
  * Keeps Shurukkha Hub active background and handles Call Notifications.
  * Integrated with Browser Notification API and In-App Toast for incoming signals.
+ * Enhanced: More robust message listener to capture various call signal formats.
  */
 export function PersistentCommNode() {
   const pathname = usePathname()
@@ -26,24 +27,35 @@ export function PersistentCommNode() {
       }
     }
 
-    // 2. Listen for "Call" messages from the Shurukkha Iframe
+    // 2. Listen for messages from the Shurukkha Iframe
     const handleMessage = (event: MessageEvent) => {
-      // In production, we should check event.origin for security
-      // Expected payload from Shurukkha Hub: { type: 'INCOMING_CALL' } or { action: 'call' }
-      if (event.data && (event.data.type === 'INCOMING_CALL' || event.data.action === 'call' || event.data.event === 'incoming-call')) {
-        
-        // A. Show OS Level Notification (For Background)
+      // In production, we check event.origin for security. 
+      // Here we focus on identifying call-related data in any reasonable format.
+      const data = event.data;
+      
+      if (!data) return;
+
+      const isCallSignal = 
+        data.type === 'INCOMING_CALL' || 
+        data.action === 'call' || 
+        data.event === 'incoming-call' ||
+        data.event === 'call-incoming' ||
+        (typeof data === 'string' && data.toLowerCase().includes('call'));
+
+      if (isCallSignal) {
+        // A. Show OS Level Notification (For Background/Minimized)
         showImperialNotification(
           "Incoming Secure Call",
           "A protection request is pending in Shurukkha Hub."
         );
 
-        // B. Show In-App UI Notification (For Foreground)
-        // We only show this if the user is NOT already on the Shurukkha page
+        // B. Show In-App UI Toast Notification (For Foreground/Active Use)
+        // Only show if the user is NOT already on the Shurukkha page
         if (!isShurukkhaPage) {
           toast({
             title: "Imperial Call Signal",
             description: "An incoming secure transmission is detected.",
+            variant: "default",
             action: (
               <Button 
                 variant="default" 
@@ -55,7 +67,7 @@ export function PersistentCommNode() {
                 Answer
               </Button>
             ),
-            duration: 10000, // Show for 10 seconds
+            duration: 15000, // Show for 15 seconds to ensure visibility
           });
         }
       }
@@ -80,7 +92,7 @@ export function PersistentCommNode() {
     <div 
       className={cn(
         "fixed inset-0 transition-opacity duration-500 ease-in-out pointer-events-none",
-        isShurukkhaPage ? "opacity-100 z-10" : "opacity-0 -z-50"
+        isShurukkhaPage ? "opacity-100 z-50" : "opacity-0 -z-50"
       )}
     >
       <div className={cn(
