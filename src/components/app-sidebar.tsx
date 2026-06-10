@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -36,7 +35,8 @@ import {
   ShieldAlert,
   ShieldPlus,
   Shield,
-  Phone
+  Phone,
+  ShoppingBag
 } from "lucide-react"
 
 import {
@@ -66,6 +66,7 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Shurukkha Hub", url: "/shurukkha", icon: Shield, badge: true },
+  { title: "Imperial Store", url: "/rubel-store", icon: ShoppingBag },
   { title: "Identity Hub", url: "/identity", icon: Fingerprint },
   { title: "Imperial Senate", url: "/governance", icon: Gavel },
   { title: "Trade Protocol", url: "/settlement", icon: Landmark },
