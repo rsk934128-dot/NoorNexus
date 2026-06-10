@@ -10,8 +10,7 @@ import { PhoneIncoming } from "lucide-react"
 /**
  * @fileOverview Persistent Communication Node
  * Keeps Shurukkha Hub active background and handles Call Notifications.
- * Integrated with Browser Notification API and In-App Toast for incoming signals.
- * Enhanced: More robust message listener to capture various call signal formats.
+ * Enhanced: Universal message detection and forced foreground visibility.
  */
 export function PersistentCommNode() {
   const pathname = usePathname()
@@ -20,54 +19,65 @@ export function PersistentCommNode() {
   const isShurukkhaPage = pathname === "/shurukkha"
 
   useEffect(() => {
-    // 1. Request Notification Permissions on Mount
+    // 1. Request Notification Permissions
     if (typeof window !== "undefined" && "Notification" in window) {
       if (Notification.permission !== "granted" && Notification.permission !== "denied") {
         Notification.requestPermission();
       }
     }
 
-    // 2. Listen for messages from the Shurukkha Iframe
+    // 2. Listen for messages from ANY source (Broad detection for Iframe calls)
     const handleMessage = (event: MessageEvent) => {
-      // In production, we check event.origin for security. 
-      // Here we focus on identifying call-related data in any reasonable format.
-      const data = event.data;
+      let data = event.data;
       
+      // Attempt to parse if stringified
+      if (typeof data === 'string') {
+        try {
+          const parsed = JSON.parse(data);
+          data = parsed;
+        } catch (e) {
+          // Stay as string
+        }
+      }
+
       if (!data) return;
 
+      // Deep keyword scan for call-related signals
+      const dataString = JSON.stringify(data).toLowerCase();
       const isCallSignal = 
-        data.type === 'INCOMING_CALL' || 
-        data.action === 'call' || 
-        data.event === 'incoming-call' ||
-        data.event === 'call-incoming' ||
-        (typeof data === 'string' && data.toLowerCase().includes('call'));
+        dataString.includes('call') || 
+        dataString.includes('incoming') || 
+        dataString.includes('ringing') ||
+        dataString.includes('dialing') ||
+        dataString.includes('offer');
 
       if (isCallSignal) {
-        // A. Show OS Level Notification (For Background/Minimized)
+        // A. Show OS Level Notification
         showImperialNotification(
-          "Incoming Secure Call",
-          "A protection request is pending in Shurukkha Hub."
+          "NoorNexus | Incoming Call",
+          "A secure protection request is ringing in Shurukkha Hub."
         );
 
-        // B. Show In-App UI Toast Notification (For Foreground/Active Use)
-        // Only show if the user is NOT already on the Shurukkha page
+        // B. Force Foreground Toast (Only if not already on the page)
         if (!isShurukkhaPage) {
           toast({
-            title: "Imperial Call Signal",
-            description: "An incoming secure transmission is detected.",
+            title: "Imperial Call Signal Detected",
+            description: "A secure transmission is ringing. Answer now?",
             variant: "default",
             action: (
               <Button 
                 variant="default" 
                 size="sm" 
-                className="bg-emerald-500 hover:bg-emerald-600 text-white gap-2 font-bold uppercase text-[10px]"
-                onClick={() => router.push("/shurukkha")}
+                className="bg-emerald-500 hover:bg-emerald-600 text-white gap-2 font-bold uppercase text-[10px] glow-emerald"
+                onClick={() => {
+                  router.push("/shurukkha");
+                }}
               >
                 <PhoneIncoming className="size-3" />
                 Answer
               </Button>
             ),
-            duration: 15000, // Show for 15 seconds to ensure visibility
+            duration: 20000, // Long duration for priority calls
           });
         }
       }
@@ -82,8 +92,9 @@ export function PersistentCommNode() {
       new Notification(title, {
         body: body,
         icon: 'https://picsum.photos/seed/sovereign-logo/192/192',
-        tag: 'shurukkha-call',
-        renotify: true
+        tag: 'noornexus-call-priority',
+        requireInteraction: true,
+        vibrate: [200, 100, 200]
       });
     }
   };
