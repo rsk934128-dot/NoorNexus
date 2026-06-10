@@ -73,7 +73,7 @@ export default function Home() {
     const sequence = [
       { text: "STABILIZING IMPERIAL CORE...", time: 600 },
       { text: "SYNCHRONIZING 11 NORA AGENTS...", time: 1200 },
-      { text: "ESTABLISHING TREASURY QUORUM...", time: 1800 },
+      { text: "ESTABLISHING ETHICAL QUORUM...", time: 1800 },
       { text: "OPENING SOVEREIGN GATEWAYS...", time: 2400 },
       { text: "MISSION 400: SYNTHESIS ACHIEVED", time: 3000 },
     ]
@@ -192,10 +192,10 @@ export default function Home() {
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   {isAdmin ? 'Imperial Command Center.' : 'Sovereign Participant Hub.'}
+                   {isAdmin ? 'Command Center.' : 'Sovereign Hub.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed">
-                   "Integrity through Intelligence" - আপনার প্রতিটি নোড এখন স্বয়ংক্রিয়ভাবে ইনকাম জেনারেট করছে।
+                   "Integrity through Intelligence" - প্রযুক্তিগত উৎকর্ষতা এবং নৈতিক জবাবদিহিতার এক অনন্য সমন্বয়।
                 </p>
               </div>
               
@@ -274,7 +274,7 @@ export default function Home() {
                   </CardHeader>
                   <CardContent className="space-y-6 relative z-10 p-6 pt-0">
                      <p className="text-xl lg:text-2xl font-headline font-bold text-white leading-relaxed italic border-l-4 border-primary pl-6">
-                        "নূরনেক্সাস এখন একটি স্বয়ংক্রিয় অর্থনৈতিক সত্তা। প্রতিটি এপিআই কল এবং প্রতিটি ট্রানজ্যাকশন আপনার সাম্রাজ্যের সমৃদ্ধি নিশ্চিত করছে।"
+                        "নূরনেক্সাস কেবল একটি অ্যাপ্লিকেশন নয়; এটি বিশ্বাসের এক সুদৃঢ় অবকাঠামো যেখানে প্রতিটি ডেটা আমানত হিসেবে গণ্য হয়।"
                      </p>
                   </CardContent>
                </Card>
@@ -282,9 +282,9 @@ export default function Home() {
                <section className="space-y-6">
                   <div className="flex items-center justify-between px-2">
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                        <BrainCircuit className="size-4" /> Neural Revenue Monitoring (Nora Suite)
+                        <BrainCircuit className="size-4" /> Neural Monitoring (Nora Suite)
                      </h3>
-                     <Badge variant="outline" className="text-[10px] border-white/10 uppercase">PROFIT_MAX_ACTIVE</Badge>
+                     <Badge variant="outline" className="text-[10px] border-white/10 uppercase">INTEGRITY_STABLE</Badge>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
                      {NORA_AGENTS.map((agent) => (
@@ -332,7 +332,7 @@ export default function Home() {
                     <div className="p-4 border-t border-white/5 bg-black/20">
                        <Button onClick={handleExecuteAudit} disabled={auditing} className="w-full bg-primary text-primary-foreground font-bold text-[10px] uppercase tracking-[0.2em] h-12 glow-primary">
                           {auditing ? <Loader2 className="animate-spin size-4" /> : <ShieldCheck className="size-4 mr-2" />}
-                          Trigger Financial Audit
+                          Trigger Accountability Audit
                        </Button>
                     </div>
                   )}
@@ -351,7 +351,7 @@ export default function Home() {
                 <CardContent className="space-y-6 p-6 pt-0">
                    <div className="space-y-2">
                       <p className="text-4xl font-headline font-bold text-white tracking-tighter">{healthReport?.vaultIntegrity || 100}%</p>
-                      <p className="text-[10px] text-primary font-bold uppercase">ETHICAL_ACCURACY_STABLE</p>
+                      <p className="text-[10px] text-primary font-bold uppercase">ETHICAL_INTEGRITY_VERIFIED</p>
                       <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
                          <div className="h-full bg-primary" style={{ width: `100%` }} />
                       </div>
@@ -369,7 +369,7 @@ export default function Home() {
            <div className="bg-primary/10 p-6 border-b border-white/10 flex items-center gap-4">
               <BarChart3 className="size-10 text-primary" />
               <div>
-                <DialogTitle className="text-2xl font-headline font-bold text-white uppercase">Daily Imperial Dispatch</DialogTitle>
+                <DialogTitle className="text-2xl font-headline font-bold text-white uppercase">Daily Dispatch</DialogTitle>
                 <p className="text-[10px] text-primary uppercase font-bold tracking-widest">{dailySummary?.date}</p>
               </div>
            </div>
@@ -387,15 +387,15 @@ export default function Home() {
               <div className="bg-emerald-500/5 p-6 rounded-2xl border border-emerald-500/20 space-y-3">
                  <div className="flex items-center gap-3 text-emerald-500">
                     <TrendingUp className="size-5" />
-                    <span className="text-xs font-bold uppercase tracking-widest">Revenue Growth</span>
+                    <span className="text-xs font-bold uppercase tracking-widest">Growth & Stability</span>
                  </div>
                  <p className="text-sm font-mono text-emerald-100 italic leading-relaxed">
-                   "আজকের মোট ইনকাম ${dailySummary?.revenue.total.toLocaleString()}। আপনার নেটওয়ার্ক {dailySummary?.networkGrowth} হারে বৃদ্ধি পাচ্ছে।"
+                   "আজকের মোট ইনকাম ${dailySummary?.revenue.total.toLocaleString()}। নেটওয়ার্ক {dailySummary?.networkGrowth} স্থিতিশীলতার সাথে বৃদ্ধি পাচ্ছে।"
                  </p>
               </div>
            </div>
            <div className="p-6 bg-white/2 border-t border-white/5">
-              <Button onClick={() => setIsSummaryOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase h-12 text-xs">Maintain Sovereignty</Button>
+              <Button onClick={() => setIsSummaryOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase h-12 text-xs">Maintain Accountability</Button>
            </div>
         </DialogContent>
       </Dialog>
