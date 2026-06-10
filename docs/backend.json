@@ -81,17 +81,15 @@
         "dailyThroughput": { "type": "number" }
       }
     },
-    "PaymentMethod": {
-      "title": "Payment Method",
-      "description": "Configuration for an ecosystem payment gateway.",
+    "VaultHealth": {
+      "title": "Imperial Vault Health",
+      "description": "Consolidated health report of the sovereign vault system.",
       "type": "object",
       "properties": {
-        "name": { "type": "string" },
-        "provider": { "type": "string" },
-        "status": { "type": "string", "enum": ["Active", "Deprecated", "Maintenance"] },
-        "volume": { "type": "string" },
-        "health": { "type": "string" },
-        "timestamp": { "type": "number" }
+        "integrity": { "type": "number" },
+        "activeNodes": { "type": "number" },
+        "threatLevel": { "type": "string" },
+        "lastAudit": { "type": "number" }
       }
     }
   },

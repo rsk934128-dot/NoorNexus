@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid, Star, TrendingUp, HeartPulse } from "lucide-react"
+import { Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid, Star, TrendingUp, HeartPulse, BrainCircuit, ActivitySquare } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { SovereignLogo } from "@/components/sovereign-logo"
+import { getSystemHealthReport, HealthReport } from "@/services/nexus-bridge"
 
 export default function Home() {
   const { toast } = useToast()
@@ -30,6 +31,10 @@ export default function Home() {
   const [auditResult, setAuditResult] = useState<LedgerAuditOutput | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [borderFeed, setBorderFeed] = useState<string[]>([])
+  
+  // Health Report State
+  const [healthReport, setHealthReport] = useState<HealthReport | null>(null)
+  const [fetchingHealth, setFetchingHealth] = useState(false)
 
   // Real-time infrastructure and security data
   const { data: nodes } = useCollection<any>(collection(db, "nodes"))
@@ -67,8 +72,23 @@ export default function Home() {
       setBorderFeed(prev => [log, ...prev].slice(0, 5))
     }, 4000)
 
+    // Initial Health Check
+    fetchHealth();
+
     return () => clearInterval(interval)
   }, [])
+
+  async function fetchHealth() {
+    setFetchingHealth(true)
+    try {
+      const report = await getSystemHealthReport();
+      setHealthReport(report);
+    } catch (e) {
+      console.error("Health Check Failed", e);
+    } finally {
+      setFetchingHealth(false)
+    }
+  }
 
   async function handleExecuteAudit() {
     setAuditing(true)
@@ -179,6 +199,57 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
             <div className="lg:col-span-2 space-y-6">
+              {/* AI Health Report via Bridge */}
+              <Card className="glass-card border-l-4 border-l-secondary bg-secondary/5">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2 font-headline text-base uppercase text-secondary">
+                      <BrainCircuit className="size-5" />
+                      AI System Health Report
+                    </CardTitle>
+                    <CardDescription className="text-xs">Operational audit via Sovereign Gateway Bridge.</CardDescription>
+                  </div>
+                  <Button variant="ghost" size="icon" onClick={fetchHealth} disabled={fetchingHealth}>
+                    <RefreshCcw className={`size-4 text-secondary ${fetchingHealth ? 'animate-spin' : ''}`} />
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  {healthReport ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in">
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[10px] font-bold text-muted-foreground uppercase">Vault Integrity</span>
+                          <span className="text-lg font-headline font-bold text-secondary">{healthReport.vaultIntegrity}%</span>
+                        </div>
+                        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-full bg-secondary" style={{ width: `${healthReport.vaultIntegrity}%` }} />
+                        </div>
+                        <div className="p-3 bg-black/40 rounded-lg border border-white/5">
+                           <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                             "Gemini Bridge Analysis: {healthReport.reasoning}"
+                           </p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                         <div className="p-3 rounded-xl border border-white/5 bg-white/2">
+                            <p className="text-[8px] font-bold text-muted-foreground uppercase mb-1">Threat Level</p>
+                            <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-500 uppercase">{healthReport.threatLevel}</Badge>
+                         </div>
+                         <div className="p-3 rounded-xl border border-white/5 bg-white/2">
+                            <p className="text-[8px] font-bold text-muted-foreground uppercase mb-1">Bridge Status</p>
+                            <Badge variant="outline" className="text-[10px] border-secondary/30 text-secondary uppercase">CONNECTED</Badge>
+                         </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="py-10 flex flex-col items-center gap-3 text-muted-foreground">
+                      <Loader2 className="size-8 animate-spin" />
+                      <p className="text-[10px] font-mono uppercase">Connecting to Gemini Bridge...</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
               <Card className="glass-card border-l-4 border-l-primary relative overflow-hidden h-fit">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 font-headline text-base uppercase">
