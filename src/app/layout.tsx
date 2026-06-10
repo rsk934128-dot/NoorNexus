@@ -58,6 +58,20 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <meta name="theme-color" content="#030708" />
+        {/* Service Worker Registration */}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                  console.log('Nora-SW Registered: ', registration.scope);
+                }, function(err) {
+                  console.log('Nora-SW Registration failed: ', err);
+                });
+              });
+            }
+          `
+        }} />
       </head>
       <body className="font-body antialiased selection:bg-primary/30 selection:text-primary">
         <FirebaseClientProvider>
