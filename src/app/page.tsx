@@ -167,7 +167,7 @@ export default function Home() {
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
                    <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
-                      <Zap className="size-3 mr-2" /> Phase P3: Verified Ready
+                      <Zap className="size-3 mr-2" /> Phase P4: Legitimacy Readiness
                    </Badge>
                    <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-xs">
                       <FileCheck className="size-3 mr-2" /> Evidence-Driven Institution
@@ -184,13 +184,13 @@ export default function Home() {
               <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
                 <Card className="glass-card p-6 rounded-2xl border border-primary/20 w-full min-w-[320px]">
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Verification Status</p>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Legitimacy Progress</p>
                        <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">TRUSTED_L4</Badge>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-emerald-500 glow-emerald" style={{ width: '92%' }} />
+                       <div className="h-full bg-emerald-500 glow-emerald" style={{ width: '42%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-2 italic text-center">"Assumptions = 0. Reality = Verified."</p>
+                    <p className="text-[9px] text-muted-foreground mt-2 italic text-center">"Internal Truth: 92% | External Recognition: 42%"</p>
                 </Card>
               </div>
             </div>
@@ -322,13 +322,13 @@ export default function Home() {
 
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                  <CardHeader className="p-6">
-                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">Verified Ready</CardTitle>
+                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">Legitimacy Node</CardTitle>
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Phase P3 is achieved when every system claim is verifiable by an independent audit chain."
+                       "Phase P4 bridges the gap between our internal truth and global institutional recognition."
                     </p>
-                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Trust Proof: 92% Verified</Badge>
+                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Legitimacy: 42% Recognized</Badge>
                  </CardContent>
               </Card>
             </div>

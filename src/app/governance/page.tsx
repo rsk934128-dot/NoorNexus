@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { 
   Crown, 
   Gavel, 
@@ -37,7 +36,9 @@ import {
   Search,
   LayoutGrid,
   Box,
-  Fingerprint
+  Fingerprint,
+  LockKeyhole,
+  Users
 } from "lucide-react"
 import { analyzeSenateProposal, GovernanceArchitectOutput } from "@/ai/flows/governance-architect-flow"
 import { executeSenateWill, ExecutiveExecutionOutput } from "@/ai/flows/executive-execution-flow"
@@ -76,7 +77,7 @@ export default function GovernanceHubPage() {
     setSimulating(true)
     setTimeout(() => {
       setSimulating(false)
-      toast({ title: "Simulation Complete", description: "Outcome: Survivable. No Meta-Gov stress detected." })
+      toast({ title: "Stress Simulation Complete", description: "Outcome: Survival Score 92/100. Collusion detected and neutralized." })
     }, 1500)
   }
 
@@ -115,7 +116,7 @@ export default function GovernanceHubPage() {
       })
 
       setForm({ title: "", description: "", category: "PROTOCOL" })
-      toast({ title: "Proposal Dispatched", description: "Constitution verification PASSED." })
+      toast({ title: "Proposal Dispatched", description: "Legitimacy verification PASSED." })
     } catch (e: any) {
       toast({ title: "Council Error", description: e.message, variant: "destructive" })
     } finally {
@@ -188,11 +189,11 @@ export default function GovernanceHubPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <h2 className="text-2xl sm:text-4xl font-headline font-bold flex items-center gap-3 uppercase">
-                   <Gavel className="size-10 text-primary" />
+                   <LockKeyhole className="size-10 text-primary" />
                    Sovereign Senate Hub
                  </h2>
               </div>
-              <p className="text-muted-foreground">Meta-Governance & Institutional Accountability Engine.</p>
+              <p className="text-muted-foreground">Meta-Governance & Institutional Accountability Engine (Phase P4).</p>
             </div>
             <div className="flex items-center gap-2">
                <Badge variant="outline" className={`h-10 px-4 flex items-center gap-2 ${isEligible ? 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5' : 'border-white/10'}`}>
@@ -210,7 +211,7 @@ export default function GovernanceHubPage() {
                      <CardTitle className="text-sm font-headline uppercase tracking-widest flex items-center gap-2">
                        <Plus className="size-4" /> Drafting Chamber
                      </CardTitle>
-                     <CardDescription>Verify edicts against the Living Constitution.</CardDescription>
+                     <CardDescription>Verify edicts against the Living Constitution (Article VI Active).</CardDescription>
                    </CardHeader>
                    <CardContent className="space-y-6">
                       <div className="space-y-4">
@@ -220,25 +221,25 @@ export default function GovernanceHubPage() {
                             disabled={!isEligible}
                             value={form.title}
                             onChange={e => setForm({...form, title: e.target.value})}
-                            placeholder="e.g. Expansion of Mesh Infrastructure"
+                            placeholder="e.g. Regulatory Alignment Protocol"
                             className="bg-background/50 border-white/10 font-bold"
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-[10px] font-bold uppercase text-muted-foreground">Rationale & Context</Label>
+                          <Label className="text-[10px] font-bold uppercase text-muted-foreground">Institutional Context</Label>
                           <textarea 
                             disabled={!isEligible}
                             value={form.description}
                             onChange={e => setForm({...form, description: e.target.value})}
-                            placeholder="Explain the civilizational outcome..."
+                            placeholder="Explain the legitimacy outcome..."
                             className="w-full h-24 bg-background/50 border border-white/10 rounded-md p-3 text-xs outline-none focus:ring-1 focus:ring-primary"
                           />
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                          <Button variant="outline" onClick={handleSimulate} disabled={!isEligible || simulating} className="text-[10px] uppercase font-bold gap-2 border-primary/20">
-                            {simulating ? <Loader2 className="size-3 animate-spin" /> : <Eye className="size-3" />}
-                            Simulate Stress
+                            {simulating ? <Loader2 className="size-3 animate-spin" /> : <ShieldAlert className="size-3" />}
+                            Capture Simulation
                          </Button>
                          <Button 
                            onClick={handleCreateProposal}
@@ -255,25 +256,25 @@ export default function GovernanceHubPage() {
                  <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                     <CardHeader>
                        <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
-                          <Activity className="size-4" /> Meta-Gov Health Audit
+                          <Activity className="size-4" /> Governance Survival Score
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
                        <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-4">
                           <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                             <span className="text-[10px] text-muted-foreground uppercase font-bold">Model Fairness</span>
-                             <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">STABLE</Badge>
+                             <span className="text-[10px] text-muted-foreground uppercase font-bold">Anti-Capture Resistance</span>
+                             <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">MAX_STABLE</Badge>
                           </div>
                           <div className="space-y-2">
                              <div className="flex justify-between text-[9px] font-mono">
-                                <span>Voting Weight Balance</span>
-                                <span className="text-emerald-500">99.8%</span>
+                                <span>Survival Probability</span>
+                                <span className="text-emerald-500">92.4%</span>
                              </div>
                              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                                <div className="h-full bg-emerald-500" style={{ width: '99.8%' }} />
+                                <div className="h-full bg-emerald-500" style={{ width: '92%' }} />
                              </div>
                           </div>
-                          <p className="text-[9px] text-muted-foreground italic">"Audit reports zero systemic bias in current reputation vector weightings."</p>
+                          <p className="text-[9px] text-muted-foreground italic">"Simulated attempts at collusion by Malicious Stewards were automatically neutralized by Reputation Decay rules."</p>
                        </div>
                     </CardContent>
                  </Card>
@@ -393,22 +394,20 @@ export default function GovernanceHubPage() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card">
+              <Card className="glass-card border-l-4 border-l-amber-500">
                  <CardHeader>
-                    <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                       <History className="size-4" /> Living History
+                    <CardTitle className="text-xs uppercase font-bold text-amber-500 tracking-widest flex items-center gap-2">
+                       <Users className="size-4" /> Advisory Council
                     </CardTitle>
                  </CardHeader>
-                 <CardContent>
-                    <div className="space-y-4">
-                       <div className="space-y-1">
-                          <p className="text-[8px] text-muted-foreground uppercase">Debates Linked to Constitution</p>
-                          <p className="text-xl font-headline font-bold text-emerald-500">100%</p>
-                       </div>
-                       <p className="text-[9px] text-muted-foreground italic">
-                          Every edict is a brick in the living constitution, backed by historical evidence.
-                       </p>
+                 <CardContent className="space-y-4">
+                    <div className="p-3 bg-white/5 rounded border border-white/5 space-y-2 text-center">
+                       <p className="text-[8px] text-muted-foreground uppercase">External Review Sync</p>
+                       <Badge className="bg-amber-500/20 text-amber-500 border-none text-[8px]">SYNCHRONIZED</Badge>
                     </div>
+                    <p className="text-[9px] text-muted-foreground leading-relaxed italic">
+                       Independent experts from University Nodes are auditing Article VI alignment.
+                    </p>
                  </CardContent>
               </Card>
 

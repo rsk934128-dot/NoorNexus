@@ -177,7 +177,7 @@ export default function AiGovernancePage() {
               <Card className="glass-card">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                       <Network className="size-4" /> External Trust Sync
+                       <Users className="size-4" /> External Trust Sync
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
