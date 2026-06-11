@@ -15,7 +15,11 @@ import {
   FlaskConical,
   Key,
   Webhook,
-  Activity
+  Activity,
+  Rocket,
+  LayoutGrid,
+  Award,
+  Search
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -29,11 +33,10 @@ const PARTNER_ENDPOINTS = [
   { method: "POST", path: "/partner/v1/webhook/register", desc: "Configure global event bus listener." }
 ]
 
-const SANDBOX_CONFIG = [
-  { key: "API_ENDPOINT", value: "https://sandbox.noornexus.sovereign/v1" },
-  { key: "TEST_PARTNER_ID", value: "PARTNER_SANDBOX_992" },
-  { key: "TEST_API_KEY", value: "sk_sandbox_..." },
-  { key: "RATE_LIMIT", value: "100 req/min (Isolated)" }
+const BUILDER_MODULES = [
+  { title: "SDK Core", desc: "The root engine for handshakes.", version: "v2.1" },
+  { title: "Vault Connect", desc: "Direct treasury bridge module.", version: "v1.0" },
+  { title: "Identity Resolver", desc: "DID and reputation parsing.", version: "v1.4" }
 ]
 
 interface Message {
@@ -64,7 +67,7 @@ export default function ApiHubPage() {
     try {
       const result = await noraIntegrationAssistant({
         query: userMsg,
-        context: query.toLowerCase().includes('sandbox') ? "GENERAL" : "GENERAL",
+        context: "GENERAL",
         history: messages.map(m => ({ role: m.role, text: m.text }))
       })
       
@@ -93,37 +96,65 @@ export default function ApiHubPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <Globe className="size-3 mr-2" /> Global Partnership Readiness
+                   <Rocket className="size-3 mr-2" /> Global Builders Program
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Partner <span className="text-primary">Gateway.</span>
+                Developer <span className="text-primary">Ecosystem.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Standardized API Hub for international institutions and banks. One integration to connect them all.
+                Project 165: NoorNexus Builders. Providing pilot partners and external developers the tools to co-architect the future.
               </p>
             </div>
-            <div className="flex items-center gap-2">
-               <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2 bg-emerald-500/5">
-                 <Webhook className="size-4 animate-pulse" /> UNIVERSAL_GATEWAY_ACTIVE
-               </Badge>
+            <div className="flex items-center gap-4">
+               <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[200px]">
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Builder Nodes</p>
+                  <p className="text-3xl font-headline font-bold text-primary">12 ACTIVE</p>
+               </div>
             </div>
           </header>
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
             <div className="xl:col-span-3 space-y-6">
-              <Tabs defaultValue="gateway" className="space-y-6">
+              <Tabs defaultValue="builders" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
-                  <TabsTrigger value="gateway" className="gap-2"><ReceiptText className="size-4" /> Universal Gateway</TabsTrigger>
-                  <TabsTrigger value="sandbox" className="gap-2"><FlaskConical className="size-4" /> Partner Sandbox</TabsTrigger>
-                  <TabsTrigger value="sdk" className="gap-2"><Cpu className="size-4" /> Imperial SDK</TabsTrigger>
+                  <TabsTrigger value="builders" className="gap-2"><Rocket className="size-4" /> Builders Program</TabsTrigger>
+                  <TabsTrigger value="gateway" className="gap-2"><ReceiptText className="size-4" /> Partner Gateway</TabsTrigger>
+                  <TabsTrigger value="marketplace" className="gap-2"><LayoutGrid className="size-4" /> Module Marketplace</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="gateway" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+                <TabsContent value="builders" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
                    <Card className="glass-card border-l-4 border-l-primary">
                       <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase text-primary">Standard Partner API</CardTitle>
-                         <CardDescription>Gateway endpoints for 1000+ partners scaling.</CardDescription>
+                         <CardTitle className="text-sm font-headline uppercase text-primary">The Builders Roadmap</CardTitle>
+                         <CardDescription>Path to NoorNexus Certification and Pilot Grants.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {[
+                              { step: "1. Certification", desc: "Pass the HMAC_V4 Security audit.", icon: Award },
+                              { step: "2. Pilot Grant", desc: "Apply for 500k Simulation Tokens.", icon: Zap },
+                              { step: "3. Mainnet Launch", desc: "Deploy to 420+ Mesh Nodes.", icon: Rocket }
+                            ].map((s, i) => (
+                              <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-2">
+                                 <s.icon className="size-6 text-primary" />
+                                 <p className="text-[10px] font-bold text-white uppercase">{s.step}</p>
+                                 <p className="text-[9px] text-muted-foreground">{s.desc}</p>
+                              </div>
+                            ))}
+                         </div>
+                         <Button className="w-full bg-primary text-primary-foreground font-bold h-12 uppercase text-[10px] glow-primary">
+                            Apply for Builders Grant
+                         </Button>
+                      </CardContent>
+                   </Card>
+                </TabsContent>
+
+                <TabsContent value="gateway" className="space-y-6">
+                   <Card className="glass-card border-l-4 border-l-emerald-500">
+                      <CardHeader>
+                         <CardTitle className="text-sm font-headline uppercase text-emerald-500">Universal Gateway Endpoints</CardTitle>
+                         <CardDescription>Standardized API for Pilot and Institutional Partners.</CardDescription>
                       </CardHeader>
                       <CardContent className="p-0">
                          <div className="divide-y divide-white/5">
@@ -141,61 +172,23 @@ export default function ApiHubPage() {
                    </Card>
                 </TabsContent>
 
-                <TabsContent value="sandbox" className="space-y-6">
-                   <Card className="glass-card border-l-4 border-l-amber-500">
-                      <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase text-amber-500">Isolated Testing Node</CardTitle>
-                         <CardDescription>Experimental environment for new partner handshakes.</CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {SANDBOX_CONFIG.map((c, i) => (
-                              <div key={i} className="p-3 bg-black/40 rounded-xl border border-white/5 flex justify-between items-center">
-                                 <span className="text-[9px] text-muted-foreground uppercase font-bold">{c.key}</span>
-                                 <code className="text-[10px] text-white font-mono">{c.value}</code>
-                              </div>
-                            ))}
-                         </div>
-                         <Button className="w-full bg-amber-500/10 text-amber-500 border border-amber-500/20 text-xs font-bold uppercase h-12">
-                            Reset Sandbox Session
-                         </Button>
-                      </CardContent>
-                   </Card>
-                </TabsContent>
-
-                <TabsContent value="sdk" className="space-y-6">
-                  <Card className="glass-card border-l-4 border-l-primary">
-                    <CardHeader>
-                      <CardTitle className="text-lg font-headline flex items-center gap-2 uppercase">
-                        <Cpu className="size-5 text-primary" />
-                        Imperial SDK v2.1 (@sheikh/core)
-                      </CardTitle>
-                      <CardDescription>Optimized for Partner Readiness & Global Event Bus.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <Table>
-                          <TableHeader className="bg-white/5">
-                            <TableRow>
-                              <TableHead className="text-[10px] uppercase">Method</TableHead>
-                              <TableHead className="text-[10px] uppercase">Compliance Scope</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody className="text-[11px]">
-                            {[
-                              { name: "sheikh.init(partnerId)", scope: "Handshake & ID Validation" },
-                              { name: "sheikh.settle(params)", scope: "Financial Abstraction" },
-                              { name: "sheikh.complianceCheck()", scope: "KYC/AML Automated Audit" },
-                              { name: "sheikh.onEvent(cb)", scope: "Global Bus Listener" }
-                            ].map((m, i) => (
-                              <TableRow key={i}>
-                                <TableCell className="font-mono text-primary font-bold">{m.name}</TableCell>
-                                <TableCell className="text-muted-foreground italic">{m.scope}</TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                    </CardContent>
-                  </Card>
+                <TabsContent value="marketplace" className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {BUILDER_MODULES.map((m, i) => (
+                      <Card key={i} className="glass-card bg-primary/5 hover:border-primary/40 transition-all">
+                        <CardHeader className="pb-2">
+                           <div className="flex justify-between items-start">
+                              <p className="text-xs font-bold text-white uppercase">{m.title}</p>
+                              <Badge variant="outline" className="text-[8px] border-primary/20 text-primary">{m.version}</Badge>
+                           </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           <p className="text-[10px] text-muted-foreground italic leading-relaxed">{m.desc}</p>
+                           <Button variant="ghost" className="w-full h-8 text-[9px] uppercase font-bold border border-white/10">Install Module</Button>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
                 </TabsContent>
               </Tabs>
             </div>
@@ -204,20 +197,20 @@ export default function ApiHubPage() {
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-                    <Key className="size-4" /> Global Secrets
+                    <Award className="size-4" /> Builder Status
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                      "Partner secrets are isolated per node. Breaching a single partner node does not compromise the Universal Gateway."
+                      "Builders are the heart of civilization. Certified architects gain voting weight in Article IV governance edits."
                    </p>
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-l-4 border-l-amber-500 h-[400px] flex flex-col">
+              <Card className="glass-card border-l-4 border-l-amber-500 h-[450px] flex flex-col">
                 <CardHeader className="shrink-0">
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
-                    <Cpu className="size-4" /> Nora-03 Partner Support
+                    <Cpu className="size-4" /> Nora-03 Builder Support
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col min-h-0 overflow-hidden space-y-4">
@@ -226,7 +219,7 @@ export default function ApiHubPage() {
                       {messages.length === 0 && (
                         <div className="text-center py-10 space-y-3">
                           <MessageSquare className="size-10 text-muted-foreground/20 mx-auto" />
-                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting Partner query...</p>
+                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting Builder query...</p>
                         </div>
                       )}
                       {messages.map((msg, i) => (
@@ -243,7 +236,7 @@ export default function ApiHubPage() {
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <input 
-                         placeholder="How to implement Multi-Currency?" 
+                         placeholder="How to apply for Certification?" 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}

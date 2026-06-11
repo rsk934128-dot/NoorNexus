@@ -13,15 +13,20 @@ import {
   Menu, 
   ShieldCheck, 
   Layers, 
-  History,
   ShieldHalf,
   Database,
-  ArrowRightLeft,
   Network,
   Globe,
   Handshake,
   Workflow,
-  Coins
+  Coins,
+  FileText,
+  Briefcase,
+  Scale,
+  Award,
+  ArrowRight,
+  CheckCircle2,
+  FileCheck
 } from "lucide-react"
 import { analyzeProtocol, ProtocolArchitectOutput } from "@/ai/flows/protocol-architect-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -35,12 +40,12 @@ export default function DocsPage() {
     setLoading(true)
     try {
       const result = await analyzeProtocol({
-        currentFocus: "Phase Ω+: Global Partnership Readiness Framework",
-        context: "Transitioning to a standard-driven institution ready for 1000+ partners.",
-        history: ["Phase 4 Complete", "Civilization Twin Mirrored", "Institutional Maturity Verified"]
+        currentFocus: "Phase ΩΩ: Institutional Adoption & Credibility Portfolio",
+        context: "Transitioning from Feature-Ready to Market-Validated through Pilot Partnerships.",
+        history: ["Phase Ω+ Complete", "Partnership Readiness Verified", "Institutional Stack Hardened"]
       })
       setAnalysis(result)
-      toast({ title: "Infrastructure Hardened" })
+      toast({ title: "Credibility Logic Updated" })
     } catch (e: any) {
       toast({ title: "Neural Handshake Failed", description: e.message, variant: "destructive" })
     } finally {
@@ -60,14 +65,14 @@ export default function DocsPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-[10px]">
-                   <Network className="size-3 mr-2" /> Global Partnership Readiness
+                   <Briefcase className="size-3 mr-2" /> Institutional Credibility
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Infrastructure <span className="text-primary">Manifesto.</span>
+                Partnership <span className="text-primary">Kits.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project 164: Scaling from 1 to 1,000+ Partners. Standardizing Integration, Compliance, and Financial Settlement.
+                Phase ΩΩ: Market Validation. Providing potential partners with the tools, legal frameworks, and evidence required for adoption.
               </p>
             </div>
             <Button 
@@ -75,8 +80,8 @@ export default function DocsPage() {
               disabled={loading}
               className="bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 gap-2"
             >
-              {loading ? <Loader2 className="size-4 animate-spin" /> : <ShieldHalf className="size-4" />}
-              Audit Partnership Readiness
+              {loading ? <Loader2 className="size-4 animate-spin" /> : <Award className="size-4" />}
+              Audit Credibility Portfolio
             </Button>
           </header>
 
@@ -84,47 +89,44 @@ export default function DocsPage() {
             <div className="lg:col-span-2 space-y-12">
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
-                    <Layers className="size-4" /> Civilizational Stack v2.0
+                    <Layers className="size-4" /> The Partnership Acquisition Pack
                  </h3>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
                       { 
-                        title: "Layer I: Infrastructure", 
-                        desc: "Universal Gateway, Event Bus, and Global Node Mesh.",
-                        status: "STABLE",
+                        title: "Executive Pack", 
+                        desc: "Mission, Integration Models, and Revenue Projection.",
+                        status: "READY",
+                        icon: FileText
+                      },
+                      { 
+                        title: "Technical Pack", 
+                        desc: "API/SDK Documentation and Event Bus Specifications.",
+                        status: "READY",
                         icon: Database
                       },
                       { 
-                        title: "Layer II: Economic", 
-                        desc: "Multi-Currency Treasury, Settlement Abstraction, and Tax Automation.",
+                        title: "Legal Pack", 
+                        desc: "NDA, MOU, and Data Processing Agreements.",
                         status: "READY",
-                        icon: Coins
-                      },
-                      { 
-                        title: "Layer III: Governance", 
-                        desc: "Constitutional Safeguards, Simulation Nodes, and Audit Chains.",
-                        status: "ENFORCED",
-                        icon: ShieldCheck
-                      },
-                      { 
-                        title: "Layer IV: Partnership", 
-                        desc: "Compliance Engine (KYC/KYB), Sandbox, and Trust Federation.",
-                        status: "ACTIVE",
-                        icon: Handshake
+                        icon: Scale
                       }
-                    ].map((art, i) => (
+                    ].map((pack, i) => (
                       <Card key={i} className="glass-card border-white/5 hover:border-primary/20 transition-all group">
                          <CardContent className="p-6 space-y-4">
                             <div className="flex justify-between items-start">
                                <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                                  <art.icon className="size-5" />
+                                  <pack.icon className="size-5" />
                                 </div>
-                               <Badge className="bg-emerald-500/20 text-emerald-500 border-none shrink-0 text-[8px]">{art.status}</Badge>
+                               <Badge className="bg-emerald-500/20 text-emerald-500 border-none shrink-0 text-[8px]">{pack.status}</Badge>
                             </div>
                             <div className="space-y-1">
-                               <p className="text-sm font-bold text-white uppercase">{art.title}</p>
-                               <p className="text-xs text-muted-foreground leading-relaxed italic">{art.desc}</p>
+                               <p className="text-xs font-bold text-white uppercase">{pack.title}</p>
+                               <p className="text-[10px] text-muted-foreground leading-relaxed italic">{pack.desc}</p>
                             </div>
+                            <Button variant="ghost" className="w-full justify-between h-8 text-[9px] uppercase font-bold text-primary group-hover:bg-primary/10">
+                               Download Assets <ArrowRight className="size-3" />
+                            </Button>
                          </CardContent>
                       </Card>
                     ))}
@@ -133,29 +135,55 @@ export default function DocsPage() {
 
               <section className="space-y-6">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2">
-                  <Workflow className="size-4" /> Global Partnership Protocol
+                  <Workflow className="size-4" /> Pilot Partner Strategy
                 </h3>
                 <Card className="glass-card border-amber-500/20 bg-amber-500/5 overflow-hidden">
                    <CardContent className="p-6 space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                          <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-center space-y-2">
-                            <p className="text-[10px] font-bold text-primary uppercase">1. Identify</p>
-                            <p className="text-[9px] text-muted-foreground">Universal Gateway & Partner ID Issuance.</p>
+                            <p className="text-[10px] font-bold text-primary uppercase">1. Pilot (3)</p>
+                            <p className="text-[9px] text-muted-foreground">Architectural Learning Phase.</p>
                          </div>
                          <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-center space-y-2">
-                            <p className="text-[10px] font-bold text-emerald-500 uppercase">2. Verify</p>
-                            <p className="text-[9px] text-muted-foreground">KYB/AML Compliance Engine Audit.</p>
+                            <p className="text-[10px] font-bold text-emerald-500 uppercase">2. Institutional (10)</p>
+                            <p className="text-[9px] text-muted-foreground">Sovereign Validation Phase.</p>
                          </div>
                          <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-center space-y-2">
-                            <p className="text-[10px] font-bold text-amber-500 uppercase">3. Settle</p>
-                            <p className="text-[9px] text-muted-foreground">Atomic Multi-Currency Treasury Bridge.</p>
+                            <p className="text-[10px] font-bold text-amber-500 uppercase">3. Strategic (50)</p>
+                            <p className="text-[9px] text-muted-foreground">Ecosystem Growth Phase.</p>
+                         </div>
+                         <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-center space-y-2">
+                            <p className="text-[10px] font-bold text-white uppercase">4. Scale</p>
+                            <p className="text-[9px] text-muted-foreground">Universal Global Adoption.</p>
                          </div>
                       </div>
                       <p className="text-[10px] text-muted-foreground text-center italic">
-                        "The protocol is designed such that 1 Partner = 1000 Partners. Architecture is fixed, scaling is infinite."
+                        "First 3 partners provide 300 architectural lessons. Trust before scale is the path to institutional longevity."
                       </p>
                    </CardContent>
                 </Card>
+              </section>
+
+              <section className="space-y-6">
+                <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-emerald-500 flex items-center gap-2">
+                  <FileCheck className="size-4" /> Credibility Portfolio
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                   {[
+                     { label: "Audit Reports", desc: "Internal and Simulation-based stress tests.", val: "12 Certified" },
+                     { label: "Security Assessment", desc: "HMAC_V4 and L4 Handshake validation.", val: "PASSED_L4" },
+                     { label: "Case Studies", desc: "Verifiable results from Pilot programs.", val: "2 Pending" },
+                     { label: "Testimonials", desc: "Verified feedback from initial stewards.", val: "3 Active" }
+                   ].map((item, i) => (
+                     <div key={i} className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl flex justify-between items-center">
+                        <div className="space-y-1">
+                           <p className="text-[10px] font-bold text-white uppercase">{item.label}</p>
+                           <p className="text-[9px] text-muted-foreground">{item.desc}</p>
+                        </div>
+                        <Badge variant="outline" className="text-[9px] border-emerald-500/30 text-emerald-500 font-mono">{item.val}</Badge>
+                     </div>
+                   ))}
+                </div>
               </section>
             </div>
 
@@ -163,43 +191,52 @@ export default function DocsPage() {
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                    <Globe className="size-4" /> Global Event Bus
+                    <Globe className="size-4" /> Adoption Target
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4 text-[10px] text-muted-foreground leading-relaxed italic">
-                   "Every partner action is broadcasted through the global bus, triggering automated governance and settlement logic without manual intervention."
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                     {[
+                       { category: "Universities", target: "1 Pilot", current: "0" },
+                       { category: "Fintechs", target: "1 Pilot", current: "1" },
+                       { category: "Enterprises", target: "1 Pilot", current: "0" }
+                     ].map((t, i) => (
+                       <div key={i} className="space-y-1">
+                          <div className="flex justify-between text-[9px] font-bold uppercase">
+                             <span className="text-muted-foreground">{t.category}</span>
+                             <span className="text-primary">{t.current}/{t.target}</span>
+                          </div>
+                          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                             <div className="h-full bg-primary" style={{ width: t.current !== '0' ? '100%' : '0%' }} />
+                          </div>
+                       </div>
+                     ))}
+                  </div>
                 </CardContent>
               </Card>
 
               <Card className="glass-card border-emerald-500/20">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                    <ArrowRightLeft className="size-4" /> Settlement Abstraction
+                    <FileText className="size-4" /> Adoption Manifesto
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {[
-                    "Provider Independence: ENFORCED",
-                    "Currency Drift: MONITORED",
-                    "Atomic Rollbacks: READY"
-                  ].map((s, i) => (
-                    <div key={i} className="flex items-center gap-2 text-[9px] text-white">
-                       <ShieldCheck className="size-3 text-emerald-500" />
-                       <span>{s}</span>
-                    </div>
-                  ))}
+                  <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                    "Institutional credibility is built on evidence, not claims. We do not ask for trust; we provide the ledger for verification."
+                  </p>
                 </CardContent>
               </Card>
 
               <Card className="glass-card bg-amber-500/5 border-amber-500/20 h-fit">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
-                    <Handshake className="size-4" /> Trust Federation
+                    <Handshake className="size-4" /> Pilot Stewardship
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                    "External legitimacy is built by federating trust with global institutions. NoorNexus scores are verified across university and financial mesh nodes."
+                    "Pilot partners are not just users; they are co-architects of the final sovereign standard."
                   </p>
                 </CardContent>
               </Card>

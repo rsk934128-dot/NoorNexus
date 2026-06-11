@@ -22,7 +22,10 @@ import {
   PieChart,
   LineChart,
   TrendingUp,
-  History
+  History,
+  ShieldCheck,
+  AlertTriangle,
+  ExternalLink
 } from "lucide-react"
 import { authorizeWithdrawal, OffRampOutput } from "@/ai/flows/off-ramp-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -34,6 +37,7 @@ export default function TreasuryPage() {
   const { toast } = useToast()
   const [withdrawing, setWithdrawing] = useState(false)
   const [offRampResult, setOffRampResult] = useState<OffRampOutput | null>(null)
+  const [isOperational, setIsOperational] = useState(false)
   
   const [withdrawForm, setWithdrawForm] = useState({
     amount: 1000,
@@ -72,20 +76,22 @@ export default function TreasuryPage() {
               <div className="flex items-center gap-3">
                  <SidebarTrigger className="md:hidden text-primary"><Button variant="ghost" size="icon"><Menu className="size-6" /></Button></SidebarTrigger>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-[10px]">
-                   <Globe className="size-3 mr-2" /> Multi-Currency Treasury
+                   <Database className="size-3 mr-2" /> Sovereign Treasury
                  </Badge>
               </div>
               <h2 className="text-2xl sm:text-5xl font-headline font-bold flex items-center gap-3 uppercase tracking-tighter">
-                Sovereign <span className="text-primary">Economy.</span>
+                Operational <span className="text-primary">Readiness.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project 162: Universal Economic Abstraction. Supporting multiple fiat and digital assets for global partners.
+                Phase ΩΩ: Moving from Simulation to Reality. Verifying regulatory compliance and licensing for full operational deployment.
               </p>
             </div>
             <div className="flex items-center gap-4">
-               <div className="p-4 glass-card rounded-2xl border border-emerald-500/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Net Treasury Worth</p>
-                  <p className="text-3xl font-headline font-bold text-emerald-500">$512M</p>
+               <div className={`p-4 glass-card rounded-2xl border text-center min-w-[200px] ${isOperational ? 'border-emerald-500/30' : 'border-amber-500/30'}`}>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Treasury Mode</p>
+                  <p className={`text-xl font-headline font-bold ${isOperational ? 'text-emerald-500' : 'text-amber-500'}`}>
+                    {isOperational ? 'OPERATIONAL' : 'SIMULATION'}
+                  </p>
                </div>
             </div>
           </header>
@@ -94,9 +100,20 @@ export default function TreasuryPage() {
             <div className="xl:col-span-3 space-y-8">
               {/* Multi-Currency Balances */}
               <section className="space-y-6">
-                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <PieChart className="size-4" /> Global Currency Reserves
-                 </h3>
+                 <div className="flex justify-between items-center">
+                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                       <PieChart className="size-4" /> Multi-Currency Reserves
+                    </h3>
+                    <div className="flex items-center gap-2">
+                       <span className="text-[8px] font-bold text-muted-foreground uppercase">Operational Mode:</span>
+                       <Badge 
+                         onClick={() => setIsOperational(!isOperational)}
+                         className={`cursor-pointer h-6 text-[8px] ${isOperational ? 'bg-emerald-500' : 'bg-amber-500'}`}
+                        >
+                          {isOperational ? 'LIVE' : 'SWITCH TO REALITY'}
+                       </Badge>
+                    </div>
+                 </div>
                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {CURRENCIES.map((c, i) => (
                       <Card key={i} className="glass-card bg-primary/5 border-white/5 hover:border-primary/20 transition-all">
@@ -121,7 +138,7 @@ export default function TreasuryPage() {
                     <CardTitle className="text-sm font-headline flex items-center gap-2 uppercase text-primary">
                       <ArrowDownToLine className="size-4" /> Settlement Bridge
                     </CardTitle>
-                    <CardDescription>Initiate atomic transfer to partner nodes.</CardDescription>
+                    <CardDescription>Initiate atomic transfer to pilot nodes.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
@@ -142,35 +159,29 @@ export default function TreasuryPage() {
                     </div>
                     <Button onClick={handleWithdraw} disabled={withdrawing} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary">
                       {withdrawing ? <Loader2 className="size-4 animate-spin" /> : <Banknote className="size-5 mr-2" />}
-                      Authorize Bridge Handshake
+                      Authorize Settlement
                     </Button>
                   </CardContent>
                 </Card>
 
-                <Card className={`glass-card transition-all duration-500 border-t-4 ${offRampResult ? 'border-t-emerald-500' : 'border-t-primary'}`}>
+                <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                   <CardHeader>
-                    <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
-                       <BrainCircuit className="size-4" /> Settlement Logic
+                    <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
+                       <ShieldCheck className="size-4" /> Operational Checklist
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-6">
-                    {offRampResult ? (
-                      <div className="space-y-6 animate-in fade-in zoom-in-95">
-                         <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl space-y-2">
-                            <p className="text-[9px] text-muted-foreground uppercase font-bold">Abstration Status</p>
-                            <p className="text-lg font-headline font-bold text-emerald-500 uppercase">Provider Synced</p>
-                            <p className="text-[10px] text-muted-foreground italic leading-relaxed">"{offRampResult.reasoning}"</p>
-                         </div>
-                         <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-primary truncate">
-                            {offRampResult.securitySignature}
-                         </div>
+                  <CardContent className="space-y-4">
+                    {[
+                      { item: "Regulatory Licensing", status: "PENDING" },
+                      { item: "Banking Agreements", status: "ACTIVE (1)" },
+                      { item: "L4 Security Sign-off", status: "VERIFIED" },
+                      { item: "AML Reporting Loop", status: "READY" }
+                    ].map((check, i) => (
+                      <div key={i} className="flex justify-between items-center p-2 bg-black/40 rounded border border-white/5">
+                         <span className="text-[9px] text-white font-bold uppercase">{check.item}</span>
+                         <Badge variant="outline" className={`text-[7px] ${check.status === 'VERIFIED' || check.status.includes('ACTIVE') ? 'text-emerald-500 border-emerald-500/20' : 'text-amber-500 border-amber-500/20'}`}>{check.status}</Badge>
                       </div>
-                    ) : (
-                      <div className="h-[200px] flex flex-col items-center justify-center opacity-40 text-center gap-4">
-                         <ArrowRightLeft className="size-12 text-primary" />
-                         <p className="text-[10px] font-mono uppercase">Awaiting Settlement Bridge...</p>
-                      </div>
-                    )}
+                    ))}
                   </CardContent>
                 </Card>
               </div>
@@ -183,42 +194,27 @@ export default function TreasuryPage() {
                     <TrendingUp className="size-4" /> Global Value Flow
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                   <div className="flex flex-col items-center gap-4">
-                      <div className="size-10 bg-emerald-500/20 rounded-full flex items-center justify-center border border-emerald-500/30">
-                        <Globe className="size-5 text-emerald-500" />
-                      </div>
-                      <ArrowRightLeft className="size-4 text-muted-foreground rotate-90 animate-pulse" />
-                      <div className="size-12 bg-primary/20 rounded-full flex items-center justify-center border border-primary/30 glow-primary">
-                        <Database className="size-6 text-primary" />
-                      </div>
-                      <ArrowRightLeft className="size-4 text-muted-foreground rotate-90 animate-pulse" />
-                      <div className="size-10 bg-amber-500/20 rounded-full flex items-center justify-center border border-amber-500/30">
-                        <Zap className="size-5 text-amber-500" />
-                      </div>
+                <CardContent className="space-y-6 text-center">
+                   <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-4">
+                      <p className="text-[10px] text-muted-foreground uppercase font-bold">Pilot Efficiency</p>
+                      <p className="text-3xl font-headline font-bold text-emerald-500">99.8%</p>
+                      <p className="text-[8px] text-muted-foreground italic">"Simulated Handshake Success Rate across 12 Nodes."</p>
                    </div>
-                   <p className="text-[9px] text-center text-muted-foreground italic">"Universal Abstraction Layer Active"</p>
+                   <Button variant="ghost" className="w-full h-8 text-[9px] uppercase font-bold gap-2">
+                      View Full Ledger <ExternalLink className="size-3" />
+                   </Button>
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-l-4 border-l-amber-500">
+              <Card className="glass-card border-l-4 border-l-destructive">
                  <CardHeader className="pb-2">
-                    <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                       <History className="size-3" /> Contract Lifecycle
+                    <CardTitle className="text-[10px] uppercase font-bold text-destructive flex items-center gap-2">
+                       <AlertTriangle className="size-3" /> Risk Guard
                     </CardTitle>
                  </CardHeader>
-                 <CardContent className="space-y-3">
-                    <div className="space-y-2">
-                       <div className="flex justify-between text-[8px] font-bold text-white uppercase">
-                          <span>Obligations</span>
-                          <span>92%</span>
-                       </div>
-                       <div className="h-0.5 bg-white/5 rounded-full overflow-hidden">
-                          <div className="h-full bg-amber-500" style={{ width: '92%' }} />
-                       </div>
-                    </div>
-                    <p className="text-[9px] text-muted-foreground leading-relaxed">
-                       Agreement milestones are verified via signed event bus handshakes.
+                 <CardContent>
+                    <p className="text-[9px] text-muted-foreground leading-relaxed italic">
+                       "Transitioning to Reality requires 100% regulatory alignment. Any liquidity drift above 0.5% triggers automatic simulation fallback."
                     </p>
                  </CardContent>
               </Card>

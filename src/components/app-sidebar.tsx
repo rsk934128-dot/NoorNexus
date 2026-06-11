@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -43,7 +42,9 @@ import {
   FileOutput,
   CandlestickChart,
   UserCircle,
-  BrainCircuit
+  BrainCircuit,
+  Rocket,
+  Star
 } from "lucide-react"
 
 import {
@@ -73,23 +74,22 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
-  { title: "Imperial Portfolio", url: "/portfolio", icon: Briefcase },
+  { title: "Builders Program", url: "/api-hub", icon: Rocket },
+  { title: "Partnership Kit", url: "/docs", icon: Briefcase },
+  { title: "Imperial Portfolio", url: "/portfolio", icon: Star },
   { title: "Imperial Flow Pay", url: "/flow-pay", icon: Zap },
   { title: "Imperial Exchange", url: "/exchange-hub", icon: CandlestickChart },
   { title: "GSMIFY Web3", url: "/gsmify-web3", icon: ShieldPlus },
   { title: "Imperial Export Hub", url: "/export-hub", icon: FileOutput },
-  { title: "Shurukkha Imperial", url: "/shurukkha-imperial", icon: Shield },
-  { title: "Shurukkha Standard", url: "/shurukkha-standard", icon: Phone },
+  { title: "Shurukkha Imperial", url: "/shield", icon: Shield },
   { title: "Imperial Store", url: "/rubel-store", icon: ShoppingBag },
   { title: "Identity Hub", url: "/identity", icon: Fingerprint },
   { title: "Imperial Senate", url: "/governance", icon: Gavel },
   { title: "Trade Protocol", url: "/settlement", icon: Landmark },
-  { title: "Merchant Onboarding", url: "/onboarding", icon: UserPlus },
+  { title: "Pilot Onboarding", url: "/onboarding", icon: UserPlus },
   { title: "Cross-Chain Gateway", url: "/cross-chain", icon: LinkIcon },
   { title: "SmartRemit P2P", url: "/remittance", icon: Send },
   { title: "Merchant P2C Hub", url: "/p2c", icon: Building2 },
-  { title: "Open Banking Hub", url: "/api-hub", icon: Code2 },
-  { title: "Sovereign Charter", url: "/docs", icon: BookOpen },
   { title: "World Cup Relay", url: "/world-cup", icon: Trophy },
   { title: "Famelack Hub", url: "/famelack", icon: Globe },
 ]
@@ -98,8 +98,8 @@ const ADMIN_ITEMS = [
   { title: "Imperial Oracle", url: "/oracle", icon: Compass },
   { title: "AI Governance", url: "/ai-governance", icon: BrainCircuit },
   { title: "Session Monitor", url: "/sessions", icon: Activity },
-  { title: "Strategic Assessment", url: "/assessment", icon: Award },
-  { title: "Merchant Lifecycle", url: "/merchants", icon: Users },
+  { title: "Adoption Audit", url: "/assessment", icon: Award },
+  { title: "Pilot Lifecycle", url: "/merchants", icon: Users },
   { title: "Arbitration Chamber", url: "/arbitration", icon: Scale },
   { title: "Border Monitor", url: "/border-monitor", icon: Radar },
   { title: "Compliance Agent", url: "/compliance", icon: ShieldCheck },
@@ -210,8 +210,8 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.url} className="h-11 hover:bg-primary/10">
                     <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
-                      <item.icon className={`size-5 ${item.title === 'Imperial Oracle' ? 'text-emerald-500' : item.title === 'Strategic Assessment' ? 'text-amber-500' : 'text-primary'}`} />
-                      <span className={`font-medium text-sm ${item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : item.title === 'Strategic Assessment' ? 'text-amber-500 font-bold' : ''}`}>{item.title}</span>
+                      <item.icon className={`size-5 ${item.title === 'Imperial Oracle' ? 'text-emerald-500' : item.title === 'Adoption Audit' ? 'text-amber-500' : 'text-primary'}`} />
+                      <span className={`font-medium text-sm ${item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : item.title === 'Adoption Audit' ? 'text-amber-500 font-bold' : ''}`}>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -223,7 +223,7 @@ export function AppSidebar() {
 
       <SidebarFooter className="p-4 space-y-4">
         <button onClick={toggleFullscreen} className="w-full py-2.5 bg-primary/5 rounded border border-primary/20 text-[9px] uppercase font-bold text-primary hover:bg-primary/10 transition-all flex items-center justify-center gap-2 group">
-          {isFullscreen ? <><Minimize2 className="size-3" /> Exit Fullscreen</> : <><Maximize2 className="size-3" /> Go Fullscreen</>}
+          {isFullscreen ? <><Maximize2 className="size-3" /> Exit Fullscreen</> : <><Maximize2 className="size-3" /> Go Fullscreen</>}
         </button>
 
         {user ? (
