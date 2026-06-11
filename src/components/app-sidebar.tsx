@@ -114,8 +114,27 @@ export function AppSidebar() {
   const { toast } = useToast()
   const { setOpenMobile, isMobile } = useSidebar()
   const [isFullscreen, setIsFullscreen] = React.useState(false)
+  const scrollRef = React.useRef<HTMLDivElement>(null)
 
   const isAdmin = user?.email === ADMIN_EMAIL
+
+  // Scroll Restoration Logic
+  React.useEffect(() => {
+    const savedScrollPos = sessionStorage.getItem("sidebar-scroll-position")
+    if (savedScrollPos && scrollRef.current) {
+      scrollRef.current.scrollTop = parseInt(savedScrollPos)
+    }
+
+    // Optional: Auto-scroll active item into view
+    const activeElement = scrollRef.current?.querySelector('[data-active="true"]')
+    if (activeElement) {
+      activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  }, [pathname])
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    sessionStorage.setItem("sidebar-scroll-position", e.currentTarget.scrollTop.toString())
+  }
 
   const handleLogout = async () => {
     try {
@@ -157,7 +176,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarSeparator />
       
-      <SidebarContent>
+      <SidebarContent ref={scrollRef} onScroll={handleScroll}>
         <SidebarGroup>
           <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-muted-foreground px-4 mb-2">Mesh Services</SidebarGroupLabel>
           <SidebarMenu className="px-2">
