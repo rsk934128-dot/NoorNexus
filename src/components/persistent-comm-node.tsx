@@ -5,28 +5,46 @@ import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
-import { PhoneIncoming, ShieldCheck, Wifi } from "lucide-react"
+import { PhoneIncoming, ShieldCheck } from "lucide-react"
 import { useSidebar } from "@/components/ui/sidebar"
 
 /**
- * @fileOverview Global Persistent Communication Node (V5.0)
- * এই কম্পোনেন্টটি নূরনেক্সাস সাম্রাজ্যের সকল কলিং চ্যানেলকে ব্যাকগ্রাউন্ডে সবসময় সচল রাখে।
- * এটি রিলোড-মুক্ত কলিং রিসিভ নিশ্চিত করে।
+ * @fileOverview Global Persistent Communication Node (V5.1)
+ * Optimized for Next.js 15 hydration stability.
+ * This component keeps the communication hubs alive in the background.
  */
 export function PersistentCommNode() {
+  const [mounted, setMounted] = useState(false)
+
+  // Ensure the component only renders its logic on the client after hydration
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    // Return null to match the server's initial render exactly
+    return null
+  }
+
+  return <RealPersistentCommNode />
+}
+
+/**
+ * Inner component containing all the client-side logic.
+ * This only runs after the component has successfully mounted on the client.
+ */
+function RealPersistentCommNode() {
   const router = useRouter()
   const pathname = usePathname()
   const { toast } = useToast()
   const { open, isMobile } = useSidebar()
   const lastToastTime = useRef<number>(0)
-  const [mounted, setMounted] = useState(false)
 
   const isStandardActive = pathname === "/shurukkha-standard"
   const isImperialActive = pathname === "/shurukkha-imperial"
 
   useEffect(() => {
-    setMounted(true)
-    
+    // Request notification permission if not already granted
     if (typeof window !== "undefined" && "Notification" in window) {
       if (Notification.permission === "default") {
         Notification.requestPermission();
@@ -42,6 +60,7 @@ export function PersistentCommNode() {
       const isCallSignal = callKeywords.test(msgStr);
 
       if (isCallSignal) {
+        // Prevent toast spamming within 15 seconds
         if (Date.now() - lastToastTime.current < 15000) return;
         lastToastTime.current = Date.now();
 
@@ -49,7 +68,9 @@ export function PersistentCommNode() {
           const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
           audio.volume = 0.6;
           audio.play().catch(() => console.log("Interaction required for audio play."));
-        } catch (e) {}
+        } catch (e) {
+          // Silently fail if audio playback is blocked
+        }
 
         if ("Notification" in window && Notification.permission === "granted") {
           new Notification("NoorNexus | ইনকামিং কল", {
@@ -100,9 +121,7 @@ export function PersistentCommNode() {
     return () => window.removeEventListener("message", handleMessage);
   }, [router, toast]);
 
-  if (!mounted) return null;
-
-  // Sidebar width logic
+  // Sidebar width logic for positioning the hubs
   const sidebarWidth = isMobile ? '0px' : (open ? '16rem' : '3rem')
 
   return (
@@ -110,7 +129,11 @@ export function PersistentCommNode() {
       {/* 1. Persistent Standard Hub (ofzc.vercel.app) */}
       <div 
         className={`fixed top-0 bottom-0 right-0 z-[40] transition-all duration-300 overflow-hidden bg-white ${isStandardActive ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none w-1 h-1'}`}
-        style={{ left: isStandardActive ? sidebarWidth : '100%', top: isStandardActive ? '4.5rem' : '0' }}
+        style={{ 
+          left: isStandardActive ? sidebarWidth : '100%', 
+          top: isStandardActive ? '4.5rem' : '0',
+          visibility: isStandardActive ? 'visible' : 'hidden'
+        }}
       >
         <iframe 
           src="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
@@ -121,10 +144,14 @@ export function PersistentCommNode() {
         />
       </div>
 
-      {/* 2. Persistent Imperial Hub (Sirajganj governmental node or Imperial Vercel) */}
+      {/* 2. Persistent Imperial Hub */}
       <div 
         className={`fixed top-0 bottom-0 right-0 z-[40] transition-all duration-300 overflow-hidden bg-white ${isImperialActive ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none w-1 h-1'}`}
-        style={{ left: isImperialActive ? sidebarWidth : '100%', top: isImperialActive ? '4.5rem' : '0' }}
+        style={{ 
+          left: isImperialActive ? sidebarWidth : '100%', 
+          top: isImperialActive ? '4.5rem' : '0',
+          visibility: isImperialActive ? 'visible' : 'hidden'
+        }}
       >
         <iframe 
           src="https://shurukkha-hub-imperial-sovereign-in.vercel.app/dashboard" 
