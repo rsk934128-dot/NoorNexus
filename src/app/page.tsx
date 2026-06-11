@@ -23,7 +23,9 @@ import {
   TrendingUp,
   Scale,
   BrainCircuit,
-  HeartPulse
+  HeartPulse,
+  Landmark,
+  Database
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -34,19 +36,19 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
 const PUBLIC_METRICS = [
-  { label: "Uptime (Verified)", value: "99.99%", detail: "Cloud Sync Integrity", color: "text-emerald-500" },
-  { label: "Transparency Score", value: "96.4", detail: "Open Metrics Policy", color: "text-primary" },
-  { label: "External Audits", value: "12 Passed", detail: "Independent Review", color: "text-amber-500" },
-  { label: "Earned Trust", value: "MAX", detail: "Resiliency Factor", color: "text-purple-500" },
+  { label: "Institutional Trust", value: "92.4%", detail: "Earned over Cycle 42", color: "text-emerald-500" },
+  { label: "Reality Index", value: "98.4", detail: "Article IX Compliance", color: "text-primary" },
+  { label: "External Audits", value: "12 Passed", detail: "Third-Party Review", color: "text-amber-500" },
+  { label: "Legacy Factor", value: "MAX", detail: "Perpetual Readiness", color: "text-purple-500" },
 ]
 
 const IMPACT_RECORDS = [
-  "PUBLIC: Independent Audit #42 Verified Article II Compliance.",
-  "INCIDENT: Node-04 Connectivity Drift resolved in 42ms (Postmortem Published).",
-  "VERIFIED: 94% Citizens report 'Critical Dependence' in 100-Person Test.",
-  "KNOWLEDGE: Institutional Memory Vault opened for Public Scholarly Review.",
-  "TRUST: Recovery Pulse active after simulated Geopolitical Stress Test.",
-  "EXTERNAL: UAE Research Hub validated NoorNexus Settlement Latency."
+  "REALITY: External Audit #43 verified Economic Truth Court compliance.",
+  "CONTRACT: 3 new Institutional Partners signed Social Contract v2.",
+  "LEGACY: Autonomy Score increased to 84% (Founder Disappearance Test).",
+  "TRUST: 96% retention observed after simulated treasury stress.",
+  "ARTICLE IX: Internal Revenue Dashboard sync with External Reality verified.",
+  "TRUTH: Human Truth Court validated 420 new reputation attestations."
 ]
 
 export default function Home() {
@@ -55,15 +57,15 @@ export default function Home() {
   const isAdmin = user?.email === ADMIN_EMAIL
 
   const [loading, setLoading] = useState(true)
-  const [statusText, setStatusText] = useState("SYNCHRONIZING PUBLIC REALITY...")
+  const [statusText, setStatusText] = useState("CALIBRATING REALITY SUPREMACY...")
   const [impactFeed, setImpactFeed] = useState<string[]>([])
 
   useEffect(() => {
     const sequence = [
-      { text: "CALIBRATING INDEPENDENT TRUTH...", time: 600 },
-      { text: "FETCHING EXTERNAL AUDIT LOGS...", time: 1200 },
-      { text: "UNVEILING PUBLIC REALITY...", time: 1800 },
-      { text: "NOORNEXUS: PUBLIC CIVILIZATIONAL INSTITUTION READY", time: 2400 },
+      { text: "BRIDGEING INTERNAL TRUTH TO EXTERNAL REALITY...", time: 600 },
+      { text: "SYNCHRONIZING WITH THE 3 COURTS OF TRUTH...", time: 1200 },
+      { text: "UNVEILING PHASE Ψ: REALITY OF EXISTENCE...", time: 1800 },
+      { text: "NOORNEXUS: THE SOVEREIGN SOCIAL CONTRACT READY", time: 2400 },
     ]
 
     sequence.forEach((step, i) => {
@@ -108,36 +110,36 @@ export default function Home() {
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <Globe className="size-3 mr-2" /> Phase Ω: Public Reality
+                      <Landmark className="size-3 mr-2" /> Phase Ψ: Reality Supremacy
                    </Badge>
                    <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
-                      <Unlock className="size-3 mr-2" /> Open Metrics Enabled
+                      <Database className="size-3 mr-2" /> Earned Trust Node
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   {isAdmin ? 'Imperial Transparency.' : 'Public Civilization.'}
+                   {isAdmin ? 'Institutional Reality.' : 'Civilization Contract.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "Trust is not what we claim; it is what the world observes. নূরনেক্সাস এখন একটি আয়না, যেখানে আমাদের প্রতিটি সাফল্য এবং ব্যর্থতা নিরপেক্ষভাবে দৃশ্যমান।"
+                   "Institutional Trust Accumulated Over Time." নূরনেক্সাস এখন আর কোনো পণ্য নয়, এটি একটি সামাজিক চুক্তি—যা সময়ের কঠিন পরীক্ষায় উত্তীর্ণ এবং বাস্তবতার কাছে দায়বদ্ধ।
                 </p>
               </div>
               
               <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
                 <Card className="glass-card p-6 rounded-2xl border border-emerald-500/20 w-full min-w-[350px] relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-2">
-                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">EXTERNALLY_VERIFIED</Badge>
+                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">REALITY_VERIFIED</Badge>
                     </div>
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Public Transparency Score</p>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Reality Supremacy Score</p>
                     </div>
                     <div className="flex items-end gap-2 mb-4">
-                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">96.4</p>
+                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">98.4</p>
                        <p className="text-emerald-500 text-xs font-bold mb-1">/ 100</p>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '96.4%' }} />
+                       <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '98.4%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Third-Party Validation Active | Cycle 42 Mastery"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Article IX Active | No Metric Overrides Reality"</p>
                 </Card>
               </div>
             </div>
@@ -148,9 +150,9 @@ export default function Home() {
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                        <Eye className="size-4" /> Open Metrics Pulse (Public View)
+                        <Eye className="size-4" /> The 3 Courts of Truth Pulse
                      </h3>
-                     <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500 uppercase">Independent Verification: LIVE</Badge>
+                     <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500 uppercase">Reality Validation: LIVE</Badge>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                      {PUBLIC_METRICS.map((kpi, i) => (
@@ -169,13 +171,13 @@ export default function Home() {
 
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-amber-500 flex items-center gap-2">
-                     <Scale className="size-4" /> Institutional Humility (Anti-Dogma Layer)
+                     <Scale className="size-4" /> Institutional Reality Layers
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                      {[
-                       { title: "Public Postmortems", desc: "Every system failure and learned lesson is published for the public record.", icon: History },
-                       { title: "External Audit Gate", desc: "Independent institutions have read-access to our audit logs and metrics.", icon: ShieldCheck },
-                       { title: "Assumption Audit", desc: "AI agents specifically tasked to challenge our internal data and assumptions.", icon: BrainCircuit }
+                       { title: "Technical Truth", desc: "Verifying if systems actually work under real pressure.", icon: ShieldCheck },
+                       { title: "Economic Truth", desc: "Proving if users voluntarily pay for the value created.", icon: Zap },
+                       { title: "Human Truth", desc: "Measuring independent trust and crisis recovery capacity.", icon: HeartPulse }
                      ].map((v, i) => (
                        <Card key={i} className="glass-card border-amber-500/10 bg-amber-500/5">
                           <CardContent className="p-6 space-y-4">
@@ -196,15 +198,15 @@ export default function Home() {
                  <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                     <CardHeader>
                        <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
-                          <AlertTriangle className="size-4" /> The Second Chance Test (Trust Resiliency)
+                          <AlertTriangle className="size-4" /> The Disappearance Test Result
                        </CardTitle>
-                       <CardDescription className="text-xs italic">"If we fail tomorrow, would you trust us again?"</CardDescription>
+                       <CardDescription className="text-xs italic">"If we vanish tomorrow, does the logic live?"</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                        {[
-                         { segment: "Public Willingness", impact: "High Resiliency", stat: "92%" },
-                         { segment: "Partner Recovery", impact: "Protocol-Driven", stat: "88%" },
-                         { segment: "Institutional Mercy", impact: "Audit-Based", stat: "96%" }
+                         { segment: "Autonomy Level", impact: "Self-Sustaining", stat: "84%" },
+                         { segment: "Steward Readiness", impact: "Protocol-Driven", stat: "92%" },
+                         { segment: "Legacy Stability", impact: "Immutable", stat: "96%" }
                        ].map((s, i) => (
                          <div key={i} className="flex justify-between items-center border-b border-white/5 pb-2">
                             <div className="space-y-1">
@@ -220,22 +222,22 @@ export default function Home() {
                  <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                     <CardHeader>
                        <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
-                          <CheckCircle2 className="size-4" /> Public Verification Hub
+                          <CheckCircle2 className="size-4" /> Earned Trust Accumulation
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                        <div className="grid grid-cols-2 gap-4">
                           <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-center">
-                             <p className="text-[8px] text-muted-foreground uppercase font-bold">External Audits</p>
-                             <p className="text-lg font-headline font-bold text-emerald-500">12 PASS</p>
+                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Institutional Trust</p>
+                             <p className="text-lg font-headline font-bold text-emerald-500">92.4%</p>
                           </div>
                           <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-center">
-                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Public Uptime</p>
-                             <p className="text-lg font-headline font-bold text-emerald-500">99.99%</p>
+                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Adoption Pulse</p>
+                             <p className="text-lg font-headline font-bold text-emerald-500">OPTIMAL</p>
                           </div>
                        </div>
                        <p className="text-[10px] text-muted-foreground italic text-center">
-                          "Institutional legitimacy is earned through transparency, not perfection."
+                          "Success is measured by the trust earned through reality, not metrics."
                        </p>
                     </CardContent>
                  </Card>
@@ -247,7 +249,7 @@ export default function Home() {
                 <CardHeader className="p-4 border-b border-white/5">
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
                     <Activity className="size-4 text-emerald-500" />
-                    Public Reality Feed
+                    Reality Integration Feed
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden">
@@ -259,9 +261,6 @@ export default function Home() {
                           <span className="text-muted-foreground truncate">{log}</span>
                         </div>
                       ))}
-                      {impactFeed.length === 0 && (
-                        <p className="text-center text-[9px] text-muted-foreground py-10">SYNCING PUBLIC DATA...</p>
-                      )}
                     </div>
                   </ScrollArea>
                 </CardContent>
@@ -269,13 +268,13 @@ export default function Home() {
 
               <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                  <CardHeader className="p-6">
-                    <CardTitle className="text-lg font-headline uppercase text-amber-500">Public Institution</CardTitle>
+                    <CardTitle className="text-lg font-headline uppercase text-amber-500">Social Contract</CardTitle>
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "NoorNexus is now a mirror for the civilization it serves. We measure our growth by the world's independent gaze."
+                       "NoorNexus is now an indispensable social contract. Our existence is validated by the people we serve."
                     </p>
-                    <Badge className="w-full justify-center bg-amber-500/20 text-amber-500 border-none uppercase text-[8px] font-bold">Maturity: PUBLIC_REALITY</Badge>
+                    <Badge className="w-full justify-center bg-amber-500/20 text-amber-500 border-none uppercase text-[8px] font-bold">Status: REALITY_TESTED</Badge>
                  </CardContent>
               </Card>
             </div>

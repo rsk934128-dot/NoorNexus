@@ -27,7 +27,10 @@ import {
   Eye,
   Unlock,
   AlertTriangle,
-  Search
+  Search,
+  Globe,
+  Scale,
+  Rocket
 } from "lucide-react"
 
 export default function DocsPage() {
@@ -43,22 +46,22 @@ export default function DocsPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-[10px]">
-                   <Globe className="size-3 mr-2" /> Phase Ω: Public Reality
+                   <Globe className="size-3 mr-2" /> Phase Ψ: Reality of Existence
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Public <span className="text-emerald-500">Evidence.</span>
+                Reality <span className="text-emerald-500">Supremacy.</span>
               </h2>
-              <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                "Independent Verification Registry." NoorNexus success is not a claim; it is a publicly verifiable record of external audits and failure postmortems.
+              <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
+                "No internal metric shall override external reality." নূরনেক্সাস এখন তার নিজস্ব ধারণার ঊর্ধ্বে বাস্তব পৃথিবীর ওপর নির্ভরশীল।
               </p>
             </div>
             <div className="flex gap-4">
                <Button className="bg-emerald-500 text-white font-bold h-12 uppercase tracking-widest gap-2 glow-emerald">
-                  <FileSearch className="size-4" /> Public Audit Deck
+                  <FileSearch className="size-4" /> Reality Proof Audit
                </Button>
                <Button variant="outline" className="border-white/10 h-12 uppercase tracking-widest text-[10px] font-bold">
-                  Postmortem Archive
+                  Independent Case Studies
                </Button>
             </div>
           </header>
@@ -67,63 +70,53 @@ export default function DocsPage() {
             <div className="lg:col-span-2 space-y-12">
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
-                    <HeartHandshake className="size-4" /> Independent Evidence Registry
+                    <Scale className="size-4" /> The Sovereign Constitution
                  </h3>
                  <div className="grid grid-cols-1 gap-6">
-                    {[
-                      { 
-                        entity: "Independent Security Hub", 
-                        type: "Penetration Test Report", 
-                        verdict: "L4_HARDENED - No critical vulnerabilities found in HMAC_V4 protocol.", 
-                        proof: "audit_report_sec_09.pdf" 
-                      },
-                      { 
-                        entity: "University Research Mesh", 
-                        type: "Governance Efficiency Audit", 
-                        verdict: "NoorNexus Senate model outperforms legacy structures by 12x in implementation speed.", 
-                        proof: "academic_review_gov_12.pdf" 
-                      }
-                    ].map((m, i) => (
-                      <Card key={i} className="glass-card border-white/5 bg-white/2 hover:border-emerald-500/20 transition-all relative">
-                        <div className="absolute top-4 right-4">
-                           <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">THIRD_PARTY_VERIFIED</Badge>
-                        </div>
-                        <CardHeader className="pb-2">
-                           <div className="flex justify-between items-start mb-2">
-                              <CardTitle className="text-lg font-headline text-emerald-500 uppercase">{m.entity}</CardTitle>
-                           </div>
-                           <p className="text-[10px] font-bold text-white uppercase mb-4">Audit Type: <span className="text-muted-foreground normal-case font-medium">{m.type}</span></p>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                           <p className="text-xs text-emerald-100 leading-relaxed italic border-l-2 border-emerald-500/30 pl-4">"Verdict: {m.verdict}"</p>
-                           <div className="flex justify-between items-center pt-2">
-                              <span className="text-[8px] font-mono text-muted-foreground uppercase">Reference: {m.proof}</span>
-                              <Button variant="ghost" size="sm" className="h-6 text-[8px] uppercase font-bold gap-1 text-primary">
-                                 Download Record <ArrowRight className="size-2" />
-                              </Button>
-                           </div>
-                        </CardContent>
-                      </Card>
-                    ))}
+                    <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                      <CardHeader>
+                         <CardTitle className="text-lg font-headline text-emerald-500 uppercase">Article IX: Reality Supremacy</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                         <p className="text-sm text-emerald-100 leading-relaxed italic">
+                            "সিস্টেমের ভেতরের কোনো ড্যাশবোর্ড বা স্কোর যদি বাস্তব ব্যবহারকারীর অভিজ্ঞতার সাথে না মেলে, তবে বাস্তব ব্যবহারকারীর অভিজ্ঞতাই চূড়ান্ত সত্য বলে গণ্য হবে। নূরনেক্সাস নিজেকে নয়, বাস্তবতাকে উদযাপন করে।"
+                         </p>
+                      </CardContent>
+                    </Card>
+                    <Card className="glass-card border-white/5">
+                      <CardHeader>
+                         <CardTitle className="text-sm font-headline text-white uppercase">Article VII: Institutional Longevity</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                         <p className="text-xs text-muted-foreground leading-relaxed">
+                            "No capability shall be optimized at the expense of long-term institutional survival."
+                         </p>
+                      </CardContent>
+                    </Card>
                  </div>
               </section>
 
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2">
-                    <History className="size-4" /> Failure Transparency Ledger (Postmortems)
+                    <Rocket className="size-4" /> The Reality Roadmap (Next 5 Objectives)
                  </h3>
-                 <div className="grid grid-cols-1 gap-4">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[
-                      { event: "Node-04 Drift Incident", date: "Cycle 41", lesson: "Automated key rotation required a 2s longer cooling period. Protocol updated.", impact: "Low" },
-                      { event: "Reputation Inflation Attempt", date: "Cycle 39", lesson: "Sybil detection thresholds were set too high for Tier 1 users. Adjusted to L4.", impact: "Medium" }
-                    ].map((h, i) => (
-                      <Card key={i} className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
-                        <CardContent className="p-4 space-y-2">
-                           <div className="flex justify-between items-center">
-                              <p className="text-[10px] font-bold text-white uppercase">{h.event}</p>
-                              <Badge variant="outline" className="text-[7px] border-amber-500/20 text-amber-500">{h.date}</Badge>
+                      { step: "1. Real Partner Contract", desc: "Moving from simulation to first 3 institutional contracts.", icon: HeartHandshake },
+                      { step: "2. External Audit Report", desc: "First independent evaluation by a third-party firm.", icon: ShieldCheck },
+                      { step: "3. Voluntary Revenue Proof", desc: "First recurring payment from a client who depends on the OS.", icon: Zap },
+                      { step: "4. Public Failure Postmortem", desc: "Transparent report of the first operational incident.", icon: History },
+                      { step: "5. Partner-Led Case Study", desc: "Success story written by an external institution, not us.", icon: BookOpen },
+                    ].map((s, i) => (
+                      <Card key={i} className="glass-card border-white/5 hover:border-amber-500/20 transition-all">
+                        <CardContent className="p-4 flex items-start gap-4">
+                           <div className="p-2 bg-amber-500/10 rounded-lg text-amber-500">
+                              <s.icon className="size-5" />
                            </div>
-                           <p className="text-[10px] text-muted-foreground italic leading-relaxed">"Lesson: {h.lesson}"</p>
+                           <div className="space-y-1">
+                              <p className="text-[10px] font-bold text-white uppercase">{s.step}</p>
+                              <p className="text-[9px] text-muted-foreground leading-relaxed">{s.desc}</p>
+                           </div>
                         </CardContent>
                       </Card>
                     ))}
@@ -135,16 +128,16 @@ export default function DocsPage() {
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-                    <Eye className="size-4" /> Public Trust Mirror
+                    <Eye className="size-4" /> The Reality Mirror
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="text-center py-6">
-                     <p className="text-4xl font-headline font-bold text-white tracking-tighter">96.4%</p>
-                     <p className="text-[8px] text-muted-foreground uppercase font-bold mt-1">Transparency Index</p>
+                     <p className="text-4xl font-headline font-bold text-white tracking-tighter">98.4%</p>
+                     <p className="text-[8px] text-muted-foreground uppercase font-bold mt-1">External Reliability Gap</p>
                   </div>
                   <p className="text-[10px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-4">
-                    "Every success and failure is our teacher. We publish our failures as openly as our successes to earn the world's second chance."
+                    "Internal scores are for guidance; external reality is for finality. We bridge this gap through constant verification."
                   </p>
                 </CardContent>
               </Card>
@@ -152,13 +145,13 @@ export default function DocsPage() {
               <Card className="glass-card border-amber-500/20">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                    <AlertTriangle className="size-4" /> Anti-Dogma Policy
+                    <AlertTriangle className="size-4" /> Anti-Success Trap
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                    <div className="p-3 bg-white/5 rounded border border-white/5 space-y-2 text-center">
-                      <p className="text-[8px] text-muted-foreground uppercase">Assumption Review Rate</p>
-                      <Badge className="bg-primary/20 text-primary border-none text-[8px]">CONTINUOUS_CHALLENGE</Badge>
+                      <p className="text-[8px] text-muted-foreground uppercase">Internal Validation Cap</p>
+                      <Badge className="bg-primary/20 text-primary border-none text-[8px]">REALITY_ONLY</Badge>
                    </div>
                 </CardContent>
               </Card>
@@ -166,17 +159,13 @@ export default function DocsPage() {
               <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
-                    <Unlock className="size-4" /> Open Truth Gate
+                    <Unlock className="size-4" /> Open Trust Protocol
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-[10px]">
                    <div className="flex justify-between text-muted-foreground">
-                      <span>Public Verifiability</span>
+                      <span>Public Truth Factor</span>
                       <span className="text-emerald-500 font-bold">MAX</span>
-                   </div>
-                   <div className="flex justify-between text-muted-foreground">
-                      <span>Audit Completion</span>
-                      <span className="text-primary font-bold">100%</span>
                    </div>
                    <div className="h-1 bg-white/5 rounded-full mt-2 overflow-hidden">
                       <div className="h-full bg-emerald-500" style={{ width: '100%' }} />
