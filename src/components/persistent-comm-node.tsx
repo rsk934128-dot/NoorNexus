@@ -9,26 +9,26 @@ import { PhoneIncoming, ShieldCheck } from "lucide-react"
 import { useSidebar } from "@/components/ui/sidebar"
 
 /**
- * @fileOverview Global Persistent Communication Node (V5.2)
- * Hardened against Next.js 15 hydration mismatches.
+ * @fileOverview Global Persistent Communication Node (V5.3)
+ * Fully hardened against Next.js 15 hydration mismatches.
  * This component keeps the communication hubs alive in the background with zero-reload switching.
  */
 export function PersistentCommNode() {
-  const [mounted, setMounted] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
   const { toast } = useToast()
   const { open, isMobile } = useSidebar()
   const lastToastTime = useRef<number>(0)
 
-  // Ensure the component only renders its logic on the client after hydration
+  // Double-pass mounting: switches to true only after initial client mount.
   useEffect(() => {
-    setMounted(true)
+    setIsMounted(true)
   }, [])
 
-  // Call Monitoring Logic
+  // Call Monitoring Logic - Only runs on the client
   useEffect(() => {
-    if (!mounted) return
+    if (!isMounted) return
 
     // Request notification permission if not already granted
     if (typeof window !== "undefined" && "Notification" in window) {
@@ -105,15 +105,19 @@ export function PersistentCommNode() {
 
     window.addEventListener("message", handleMessage)
     return () => window.removeEventListener("message", handleMessage)
-  }, [mounted, router, toast])
+  }, [isMounted, router, toast])
 
-  // Hydration safety: Return null to match the server's initial render exactly
-  if (!mounted) {
+  // HYDRATION SAFETY: 
+  // Return null on both Server and first Client pass to guarantee HTML matching.
+  // The UI will appear only after the client has fully taken over.
+  if (!isMounted) {
     return null
   }
 
   const isStandardActive = pathname === "/shurukkha-standard"
   const isImperialActive = pathname === "/shurukkha-imperial"
+  
+  // sidebarWidth calculation is now safe as it happens only on client
   const sidebarWidth = isMobile ? '0px' : (open ? '16rem' : '3rem')
 
   return (
