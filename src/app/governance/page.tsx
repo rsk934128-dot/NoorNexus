@@ -38,7 +38,8 @@ import {
   Box,
   Fingerprint,
   LockKeyhole,
-  Users
+  Users,
+  Compass
 } from "lucide-react"
 import { analyzeSenateProposal, GovernanceArchitectOutput } from "@/ai/flows/governance-architect-flow"
 import { executeSenateWill, ExecutiveExecutionOutput } from "@/ai/flows/executive-execution-flow"
@@ -112,7 +113,8 @@ export default function GovernanceHubPage() {
         accountabilityScore: 100,
         lifecycleStage: "SUBMITTED",
         constitutionalCheck: "PASSED",
-        impactForecast: "Estimated 12% boost to Mesh Resilience"
+        impactForecast: "Estimated 12% boost to Mesh Resilience",
+        intergenerationalImpact: 85
       })
 
       setForm({ title: "", description: "", category: "PROTOCOL" })
@@ -193,7 +195,7 @@ export default function GovernanceHubPage() {
                    Sovereign Senate Hub
                  </h2>
               </div>
-              <p className="text-muted-foreground">Meta-Governance & Institutional Accountability Engine (Phase P4).</p>
+              <p className="text-muted-foreground">Meta-Governance & Institutional Succession Framework (Phase P5).</p>
             </div>
             <div className="flex items-center gap-2">
                <Badge variant="outline" className={`h-10 px-4 flex items-center gap-2 ${isEligible ? 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5' : 'border-white/10'}`}>
@@ -211,7 +213,7 @@ export default function GovernanceHubPage() {
                      <CardTitle className="text-sm font-headline uppercase tracking-widest flex items-center gap-2">
                        <Plus className="size-4" /> Drafting Chamber
                      </CardTitle>
-                     <CardDescription>Verify edicts against the Living Constitution (Article VI Active).</CardDescription>
+                     <CardDescription>Verify edicts against the Living Constitution (Article VII Survival Policy).</CardDescription>
                    </CardHeader>
                    <CardContent className="space-y-6">
                       <div className="space-y-4">
@@ -221,7 +223,7 @@ export default function GovernanceHubPage() {
                             disabled={!isEligible}
                             value={form.title}
                             onChange={e => setForm({...form, title: e.target.value})}
-                            placeholder="e.g. Regulatory Alignment Protocol"
+                            placeholder="e.g. Generational Knowledge Transfer"
                             className="bg-background/50 border-white/10 font-bold"
                           />
                         </div>
@@ -231,15 +233,15 @@ export default function GovernanceHubPage() {
                             disabled={!isEligible}
                             value={form.description}
                             onChange={e => setForm({...form, description: e.target.value})}
-                            placeholder="Explain the legitimacy outcome..."
+                            placeholder="Explain the longevity outcome..."
                             className="w-full h-24 bg-background/50 border border-white/10 rounded-md p-3 text-xs outline-none focus:ring-1 focus:ring-primary"
                           />
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                          <Button variant="outline" onClick={handleSimulate} disabled={!isEligible || simulating} className="text-[10px] uppercase font-bold gap-2 border-primary/20">
-                            {simulating ? <Loader2 className="size-3 animate-spin" /> : <ShieldAlert className="size-3" />}
-                            Capture Simulation
+                            {simulating ? <Loader2 className="size-3 animate-spin" /> : <Activity className="size-3" />}
+                            Run Survival Sim
                          </Button>
                          <Button 
                            onClick={handleCreateProposal}
@@ -253,29 +255,26 @@ export default function GovernanceHubPage() {
                    </CardContent>
                  </Card>
 
-                 <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                 <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                     <CardHeader>
-                       <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
-                          <Activity className="size-4" /> Governance Survival Score
+                       <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
+                          <Crown className="size-4" /> Succession Framework
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
-                       <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-4">
-                          <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                             <span className="text-[10px] text-muted-foreground uppercase font-bold">Anti-Capture Resistance</span>
-                             <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">MAX_STABLE</Badge>
-                          </div>
-                          <div className="space-y-2">
-                             <div className="flex justify-between text-[9px] font-mono">
-                                <span>Survival Probability</span>
-                                <span className="text-emerald-500">92.4%</span>
-                             </div>
-                             <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                                <div className="h-full bg-emerald-500" style={{ width: '92%' }} />
-                             </div>
-                          </div>
-                          <p className="text-[9px] text-muted-foreground italic">"Simulated attempts at collusion by Malicious Stewards were automatically neutralized by Reputation Decay rules."</p>
+                       <div className="space-y-4">
+                          {[
+                            { role: "Founder Override", status: "LIMITED (Art II)", color: "text-white" },
+                            { role: "Steward Council", status: "85% READY", color: "text-emerald-500" },
+                            { role: "Emergency Quorum", status: "STANDBY", color: "text-amber-500" }
+                          ].map((r, i) => (
+                            <div key={i} className="p-3 bg-black/40 rounded-xl border border-white/5 flex justify-between items-center">
+                               <span className="text-[10px] text-muted-foreground uppercase font-bold">{r.role}</span>
+                               <span className={`text-[10px] font-mono font-bold ${r.color}`}>{r.status}</span>
+                            </div>
+                          ))}
                        </div>
+                       <p className="text-[9px] text-muted-foreground italic text-center">"Institution > Individual. The succession protocol ensures civilization continuity."</p>
                     </CardContent>
                  </Card>
               </div>
@@ -325,16 +324,16 @@ export default function GovernanceHubPage() {
                             <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
                                <div className="flex items-center justify-between border-b border-white/5 pb-2">
                                   <h4 className="text-[10px] font-bold uppercase text-primary flex items-center gap-2">
-                                    <ClipboardCheck className="size-3" /> Accountability Review
+                                    <TrendingUp className="size-3" /> Legacy Impact Review
                                   </h4>
                                </div>
                                <div className="flex justify-between items-end">
                                   <div className="space-y-1">
-                                     <p className="text-[8px] text-muted-foreground uppercase">Outcome Match Score</p>
-                                     <p className="text-2xl font-headline font-bold text-emerald-500">{prop.accountabilityScore || 100}%</p>
+                                     <p className="text-[8px] text-muted-foreground uppercase">Intergenerational Score</p>
+                                     <p className="text-2xl font-headline font-bold text-emerald-500">{prop.intergenerationalImpact || 85}/100</p>
                                   </div>
                                </div>
-                               <p className="text-[9px] text-muted-foreground italic">"{prop.impactReview || "Auditing results against Simulation Forecast..."}"</p>
+                               <p className="text-[9px] text-muted-foreground italic">"Outcome honors the long-term survival mandate of Article VII."</p>
                             </div>
                          </div>
                        ) : (
@@ -394,30 +393,32 @@ export default function GovernanceHubPage() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-l-4 border-l-amber-500">
+              <Card className="glass-card border-l-4 border-l-emerald-500">
                  <CardHeader>
-                    <CardTitle className="text-xs uppercase font-bold text-amber-500 tracking-widest flex items-center gap-2">
-                       <Users className="size-4" /> Advisory Council
+                    <CardTitle className="text-xs uppercase font-bold text-emerald-500 tracking-widest flex items-center gap-2">
+                       <Compass className="size-4" /> Stewardship Observatory
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <div className="p-3 bg-white/5 rounded border border-white/5 space-y-2 text-center">
-                       <p className="text-[8px] text-muted-foreground uppercase">External Review Sync</p>
-                       <Badge className="bg-amber-500/20 text-amber-500 border-none text-[8px]">SYNCHRONIZED</Badge>
+                       <p className="text-[8px] text-muted-foreground uppercase">Mission Drift Risk</p>
+                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">LOW_STABLE</Badge>
                     </div>
                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       Independent experts from University Nodes are auditing Article VI alignment.
+                       Independent generational audit is verifying alignment with Sheikh Farid's Mission 400.
                     </p>
                  </CardContent>
               </Card>
 
-              <Card className="glass-card bg-amber-500/5 border-amber-500/20">
+              <Card className="glass-card border-amber-500/20">
                  <CardHeader className="pb-2">
-                    <CardTitle className="text-[10px] font-bold uppercase text-amber-500">Steward Council</CardTitle>
+                    <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
+                       <History className="size-3" /> Gen. Continuity
+                    </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[9px] text-muted-foreground italic leading-relaxed">
-                       Founder override is inactive. Stewardship council quorum required for Article II/IV edits.
+                       Survival Protocol: Active.<br/>Institutional memory sync complete for Cycle 42.
                     </p>
                  </CardContent>
               </Card>

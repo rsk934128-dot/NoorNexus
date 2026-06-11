@@ -93,11 +93,18 @@ const FOUNDER_SCORECARD = [
   { label: "Institutional Retention", value: "100%", target: ">90%", icon: UserCheck, color: "text-purple-500" },
 ]
 
+const LEGACY_PULSE = [
+  { label: "Mission Alignment", score: "98.4%", icon: Target, color: "text-primary" },
+  { label: "Survivability Rating", score: "MAX", icon: HeartPulse, color: "text-emerald-500" },
+  { label: "Succession Readiness", score: "85%", icon: Users, color: "text-amber-500" },
+  { label: "Generational Legacy", score: "EMERGING", icon: History, color: "text-purple-500" }
+]
+
 const VERIFIED_TRUTH = [
   { label: "Last Security Review", date: "24h ago", status: "PASSED", icon: ShieldCheck },
   { label: "Last Chaos Test", date: "2h ago", status: "STABLE", icon: Activity },
   { label: "Audit Integrity", date: "Real-time", status: "SIGNED", icon: FileCheck },
-  { label: "Reconciliation", date: "Daily", status: "MATCHED", icon: RefreshCcw }
+  { label: "Longevity Score", date: "Verified", status: "94/100", icon: HeartPulse }
 ]
 
 export default function Home() {
@@ -127,7 +134,7 @@ export default function Home() {
     const interval = setInterval(() => {
       const logs = [
         "REVENUE: $1.2k Transaction Fee Verified", 
-        "PILOT: University Mesh Activation 85%", 
+        "LEGACY: Succession Matrix Heartbeat OK", 
         "VERIFY: Chaos Test Result - 100% Recovery", 
         "SECURITY: Red-Team Simulation - No Drift",
         "WEDGE: Governance Module Dependency Confirmed",
@@ -167,30 +174,30 @@ export default function Home() {
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
                    <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
-                      <Zap className="size-3 mr-2" /> Phase P4: Legitimacy Readiness
+                      <Zap className="size-3 mr-2" /> Phase P5: Sovereign Legacy
                    </Badge>
-                   <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-xs">
-                      <FileCheck className="size-3 mr-2" /> Evidence-Driven Institution
+                   <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
+                      <HeartPulse className="size-3 mr-2" /> Sustainability Active
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   {isAdmin ? 'Verified Truth.' : 'Institutional Trust.'}
+                   {isAdmin ? 'Sovereign Sustainability.' : 'Institutional Legacy.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed">
-                   "NoorNexus operates on the principle of periodic verification. Trust is not a claim; it is a verified reality backed by constant chaos testing and independent audits."
+                   "NoorNexus is built for the century. We prioritize institutional survival and generative legacy over temporary growth. Every decision honors Article VII: Longevity."
                 </p>
               </div>
               
               <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
                 <Card className="glass-card p-6 rounded-2xl border border-primary/20 w-full min-w-[320px]">
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Legitimacy Progress</p>
-                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">TRUSTED_L4</Badge>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Sustainability Index</p>
+                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">SURVIVABLE</Badge>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-emerald-500 glow-emerald" style={{ width: '42%' }} />
+                       <div className="h-full bg-emerald-500 glow-emerald" style={{ width: '94%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-2 italic text-center">"Internal Truth: 92% | External Recognition: 42%"</p>
+                    <p className="text-[9px] text-muted-foreground mt-2 italic text-center">"Resilience Rating: 94/100 | Target: Century Stability"</p>
                 </Card>
               </div>
             </div>
@@ -202,12 +209,12 @@ export default function Home() {
                  <section className="space-y-6">
                     <div className="flex justify-between items-center">
                        <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                          <Star className="size-4" /> Founder Scorecard (Verified Stats)
+                          <History className="size-4" /> Legacy Pulse (Institutional Health)
                        </h3>
-                       <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">AUDIT_SYNC: ACTIVE</Badge>
+                       <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">GENERATIONAL_SYNC: OK</Badge>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                       {FOUNDER_SCORECARD.map((kpi, i) => (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                       {LEGACY_PULSE.map((kpi, i) => (
                          <Card key={i} className="glass-card border-white/5 bg-white/2 hover:border-primary/20 transition-all">
                             <CardContent className="p-4 space-y-3">
                                <div className={`p-2 rounded-lg bg-white/5 w-fit ${kpi.color}`}>
@@ -215,8 +222,8 @@ export default function Home() {
                                </div>
                                <div className="space-y-0.5">
                                   <p className="text-[9px] font-bold text-muted-foreground uppercase">{kpi.label}</p>
-                                  <p className="text-xl font-headline font-bold text-white">{kpi.value}</p>
-                                  <p className="text-[8px] text-muted-foreground font-mono">Target: {kpi.target}</p>
+                                  <p className="text-xl font-headline font-bold text-white">{kpi.score}</p>
+                                  <p className="text-[8px] text-muted-foreground font-mono">Status: VERIFIED</p>
                                </div>
                             </CardContent>
                          </Card>
@@ -259,7 +266,7 @@ export default function Home() {
                        {[
                          { step: "Red Team", desc: "Periodic attack simulations on mesh nodes." },
                          { step: "Chaos", desc: "Automated failure handling during runtime." },
-                         { step: "Evidence", desc: "Every system claim is backed by an audit report." }
+                         { step: "Legacy", desc: "Hardening succession matrix for long-term survival." }
                        ].map((s, i) => (
                          <div key={i} className="flex gap-4 items-start">
                             <Badge variant="outline" className="text-[8px] border-primary/20 text-primary h-5 w-16 justify-center shrink-0 uppercase">{s.step}</Badge>
@@ -291,7 +298,7 @@ export default function Home() {
                           </div>
                        </div>
                        <p className="text-[10px] text-muted-foreground italic text-center">
-                          "Verification is the currency of institutional trust."
+                          "Sustainability is the final frontier of institutional trust."
                        </p>
                     </CardContent>
                  </Card>
@@ -322,13 +329,13 @@ export default function Home() {
 
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                  <CardHeader className="p-6">
-                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">Legitimacy Node</CardTitle>
+                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">Legacy Node</CardTitle>
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Phase P4 bridges the gap between our internal truth and global institutional recognition."
+                       "Phase P5 ensures NoorNexus survives its creator, honoring the generational trust of its citizens."
                     </p>
-                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Legitimacy: 42% Recognized</Badge>
+                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Survivability: OPTIMAL</Badge>
                  </CardContent>
               </Card>
             </div>
