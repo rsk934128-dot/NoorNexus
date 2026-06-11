@@ -7,11 +7,11 @@ import { Badge } from "@/components/ui/badge"
 import { 
   Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, 
   Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid, 
-  Star, TrendingUp, HeartPulse, BrainCircuit, SquareActivity, Compass, 
+  Star, TrendingUp, HeartPulse, BrainCircuit, Compass, 
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
   CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages,
   Coins, Briefcase, BarChart3, Clock, Users, Fingerprint as FingerprintIcon,
-  ShieldAlert, Key, Sparkles, Banknote, History, Heart, Network, GraduationCap
+  ShieldAlert, Key, Sparkles, Banknote, History, Heart, GraduationCap, Share2
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -28,6 +28,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { SovereignLogo } from "@/components/sovereign-logo"
 import { getSystemHealthReport, HealthReport, broadcastProclamation, getDailyImperialSummary, type DailySummary } from "@/services/nexus-bridge"
+import { connectToGemini } from "@/services/nexus-bridge"
 import { connectNode } from "@/services/sovereign-protocol"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
@@ -51,7 +52,7 @@ const MATURITY_INDEX = [
   { label: "Financial Sovereignty", target: "95%+", current: 92.4, icon: Landmark, color: "text-emerald-500" },
   { label: "Identity Integrity", target: "99%+", current: 98.1, icon: Fingerprint, color: "text-primary" },
   { label: "Governance Automation", target: "90%+", current: 84.5, icon: Gavel, color: "text-amber-500" },
-  { label: "Mesh Resilience", target: "99.99%", current: 99.98, icon: Network, color: "text-purple-500" },
+  { label: "Mesh Resilience", target: "99.99%", current: 99.98, icon: Share2, color: "text-purple-500" },
 ]
 
 export default function Home() {
@@ -133,7 +134,7 @@ export default function Home() {
       const result = await ledgerAudit({
         totalVolume: 420000000,
         settlementQueue: 1240000,
-        liquidityHealth: 98.4,
+        liquidityHealth: liquidity,
         dailyThroughput: 15600000,
       })
       setAuditResult(result)
@@ -278,7 +279,7 @@ export default function Home() {
                  <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                     <CardHeader className="pb-2 p-4">
                        <CardTitle className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
-                          <SquareActivity className="size-3" />
+                          <Activity className="size-3" />
                           Settlement Volume (24h)
                        </CardTitle>
                     </CardHeader>

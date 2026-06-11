@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -41,8 +40,7 @@ import {
   Briefcase,
   Zap,
   FileOutput,
-  CandlestickChart,
-  ActivitySquare
+  CandlestickChart
 } from "lucide-react"
 
 import {
@@ -94,7 +92,7 @@ const USER_ITEMS = [
 
 const ADMIN_ITEMS = [
   { title: "Imperial Oracle", url: "/oracle", icon: Compass },
-  { title: "Session Monitor", url: "/sessions", icon: ActivitySquare },
+  { title: "Session Monitor", url: "/sessions", icon: Activity },
   { title: "Strategic Assessment", url: "/assessment", icon: Award },
   { title: "Merchant Lifecycle", url: "/merchants", icon: Users },
   { title: "Arbitration Chamber", url: "/arbitration", icon: Scale },
