@@ -1,22 +1,47 @@
 
 {
   "entities": {
-    "TaxComplianceRecord": {
-      "title": "Tax & Compliance Record",
-      "description": "Digital audit trail for cross-border settlements with external gateway mapping.",
+    "Payment": {
+      "title": "Sovereign Payment Record",
+      "description": "Core payment entity with idempotency and state tracking.",
       "type": "object",
       "properties": {
-        "txId": { "type": "string" },
-        "externalTxId": { "type": "string", "description": "bKash or Xendit Transaction ID" },
+        "paymentId": { "type": "string" },
         "provider": { "type": "string" },
+        "externalTxId": { "type": "string" },
         "amount": { "type": "number" },
-        "mappedAmount": { "type": "number" },
         "currency": { "type": "string" },
+        "status": { "type": "string", "enum": ["CREATED", "PENDING", "PROCESSING", "SUCCESS", "FAILED", "REFUNDED", "DISPUTED"] },
+        "idempotencyKey": { "type": "string" },
         "userEmail": { "type": "string" },
-        "complianceScore": { "type": "number" },
-        "status": { "type": "string" },
-        "timestamp": { "type": "number" },
-        "metadata": { "type": "object" }
+        "metadata": { "type": "object" },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      }
+    },
+    "Settlement": {
+      "title": "Treasury Settlement Record",
+      "description": "Tracking when money actually moves from Gateway to Treasury.",
+      "type": "object",
+      "properties": {
+        "settlementId": { "type": "string" },
+        "paymentId": { "type": "string" },
+        "amount": { "type": "number" },
+        "status": { "type": "string", "enum": ["PENDING", "SETTLED", "RECONCILED", "FAILED"] },
+        "settledAt": { "type": "number" }
+      }
+    },
+    "LedgerEntry": {
+      "title": "Double-Entry Ledger",
+      "description": "Immutable event chain for financial auditing.",
+      "type": "object",
+      "properties": {
+        "entryId": { "type": "string" },
+        "paymentId": { "type": "string" },
+        "type": { "type": "string", "enum": ["DEBIT", "CREDIT"] },
+        "amount": { "type": "number" },
+        "asset": { "type": "string" },
+        "timestamp": { "type": "number" }
       }
     },
     "AppConnection": {
@@ -28,20 +53,7 @@
         "name": { "type": "string" },
         "trustScore": { "type": "number" },
         "status": { "type": "string", "enum": ["SYNCHRONIZED", "DRIFT_DETECTED", "OFFLINE"] },
-        "lastHeartbeat": { "type": "number" },
-        "latency": { "type": "number" }
-      }
-    },
-    "MerchantOnboarding": {
-      "title": "Merchant Onboarding Request",
-      "description": "Onboarding application and trust assessment.",
-      "type": "object",
-      "properties": {
-        "businessName": { "type": "string" },
-        "businessType": { "type": "string" },
-        "status": { "type": "string", "enum": ["PENDING", "VERIFIED", "REJECTED", "UNDER_REVIEW"] },
-        "trustScore": { "type": "number" },
-        "gatewayApiKey": { "type": "string", "description": "Encrypted bKash/Xendit Key Storage" }
+        "lastHeartbeat": { "type": "number" }
       }
     }
   },
@@ -49,13 +61,17 @@
     "providers": ["google.com"]
   },
   "firestore": {
-    "/compliance_records/{logId}": {
-      "schema": "TaxComplianceRecord",
-      "description": "Audit-ready mapping logs"
+    "/payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Source of truth for all transactions"
     },
-    "/merchant_onboarding_requests/{reqId}": {
-      "schema": "MerchantOnboarding",
-      "description": "Merchant gateway credentials"
+    "/ledger/{entryId}": {
+      "schema": "LedgerEntry",
+      "description": "Immutable financial events"
+    },
+    "/settlements/{settlementId}": {
+      "schema": "Settlement",
+      "description": "Gateway to Treasury reconciliation"
     }
   }
 }
