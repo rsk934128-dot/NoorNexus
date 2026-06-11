@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -12,7 +13,9 @@ import {
   Search, Filter, CheckCircle2, AlertCircle, LayoutGrid, Activity, ShieldCheck,
   Briefcase,
   Star,
-  Award
+  Award,
+  Layers,
+  ArrowRight
 } from "lucide-react"
 import { useFirestore, useCollection } from "@/firebase"
 import { collection, query, orderBy, limit, doc, updateDoc, serverTimestamp } from "firebase/firestore"
@@ -77,63 +80,42 @@ export default function MerchantManagementPage() {
                  </SidebarTrigger>
                  <h2 className="text-2xl sm:text-4xl font-headline font-bold flex items-center gap-3 uppercase">
                    <Briefcase className="size-10 text-primary" />
-                   Pilot Partner Monitor
+                   Institutional CRM
                  </h2>
               </div>
-              <p className="text-muted-foreground">Phase ΩΩ: Managing and Auditing our first 10 Institutional Pilot Partners.</p>
+              <p className="text-muted-foreground">Tracking lead generation, pilot status, and production lifecycle for the first 10 partners.</p>
             </div>
             <div className="flex items-center gap-3">
-               <div className="relative group">
-                 <div className="absolute -inset-0.5 bg-primary/20 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
-                 <Badge variant="outline" className="relative bg-background border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
-                    <Star className="size-4 animate-pulse" /> PILOT_ADOPTION_ACTIVE
-                 </Badge>
-               </div>
+               <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2 bg-emerald-500/5">
+                 <Target className="size-4" /> CRM_PIPELINE_ACTIVE
+               </Badge>
             </div>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="glass-card border-l-4 border-l-primary">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Active Pilots</CardTitle>
-                <CardTitle className="text-3xl font-headline font-bold text-white">3/10</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-[10px] text-emerald-500 font-bold uppercase flex items-center gap-1">
-                  <TrendingUp className="size-3" /> Initial Adoption Phase
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="glass-card border-l-4 border-l-secondary">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Adoption Score</CardTitle>
-                <CardTitle className="text-3xl font-headline font-bold text-secondary">72%</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-[10px] text-muted-foreground font-mono uppercase">Institutional Trust Rating</p>
-              </CardContent>
-            </Card>
-            <Card className="glass-card border-l-4 border-l-amber-500">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Credibility Assets</Value>
-                <CardTitle className="text-3xl font-headline font-bold text-amber-500">12</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-[10px] text-amber-500/70 font-mono uppercase">Case Studies & Audits</p>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+             {[
+               { label: "Leads", count: 12, color: "text-blue-400" },
+               { label: "Discussion", count: 4, color: "text-amber-400" },
+               { label: "Pilot", count: 3, color: "text-emerald-400" },
+               { label: "Production", count: 1, color: "text-primary" }
+             ].map((s, i) => (
+               <Card key={i} className="glass-card p-4 border-white/5">
+                  <p className={`text-[10px] font-bold uppercase tracking-widest ${s.color}`}>{s.label}</p>
+                  <p className="text-2xl font-headline font-bold text-white">{s.count}</p>
+               </Card>
+             ))}
           </div>
 
           <Card className="glass-card overflow-hidden">
-            <CardHeader className="border-b border-white/5 bg-white/2 flex flex-row items-center justify-between py-4">
+            <CardHeader className="border-b border-white/5 bg-white/2 flex flex-row items-center justify-between py-4 px-6">
               <div className="flex items-center gap-4">
-                <LayoutGrid className="size-5 text-primary" />
-                <CardTitle className="text-sm font-headline uppercase tracking-widest">Pilot Partner Ledger</CardTitle>
+                <Layers className="size-5 text-primary" />
+                <CardTitle className="text-sm font-headline uppercase tracking-widest">Partnership Lifecycle Ledger</CardTitle>
               </div>
               <div className="flex items-center gap-3">
                  <div className="relative hidden sm:block">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3 text-muted-foreground" />
-                    <input className="bg-background/50 border border-white/10 rounded-md pl-8 pr-4 py-1.5 text-[10px] w-48 outline-none focus:ring-1 focus:ring-primary" placeholder="Filter Pilots..." />
+                    <input className="bg-background/50 border border-white/10 rounded-md pl-8 pr-4 py-1.5 text-[10px] w-48 outline-none focus:ring-1 focus:ring-primary" placeholder="Filter Partners..." />
                  </div>
               </div>
             </CardHeader>
@@ -143,10 +125,10 @@ export default function MerchantManagementPage() {
                   <thead>
                     <tr className="bg-muted/30 text-[9px] uppercase font-bold text-muted-foreground tracking-widest border-b border-white/5">
                       <th className="px-6 py-4">Partner Identity</th>
-                      <th className="px-6 py-4">Adoption Stage</th>
-                      <th className="px-6 py-4">Trust Status</th>
-                      <th className="px-6 py-4">Market Readiness</th>
-                      <th className="px-6 py-4 text-right">Directives</th>
+                      <th className="px-6 py-4">Pipeline Status</th>
+                      <th className="px-6 py-4">Trust Score</th>
+                      <th className="px-6 py-4">Revenue Flow</th>
+                      <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
@@ -154,7 +136,7 @@ export default function MerchantManagementPage() {
                       <tr>
                         <td colSpan={5} className="px-6 py-20 text-center">
                           <Loader2 className="size-8 animate-spin text-primary mx-auto mb-2" />
-                          <p className="text-[10px] font-mono text-muted-foreground uppercase">Syncing Pilot Data...</p>
+                          <p className="text-[10px] font-mono text-muted-foreground uppercase">Syncing CRM Nodes...</p>
                         </td>
                       </tr>
                     ) : merchants.map((m: any) => (
@@ -171,25 +153,18 @@ export default function MerchantManagementPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                           <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500 bg-emerald-500/5">
-                              PILOT_ACTIVE
-                           </Badge>
-                        </td>
-                        <td className="px-6 py-4">
-                           <div className="flex flex-col gap-1">
-                              <Badge className={`text-[8px] font-bold w-fit ${m.assignedTier === 'TIER_3' ? 'bg-amber-500' : 'bg-primary'}`}>
-                                {m.assignedTier || 'TIER_1'}
+                           <div className="flex items-center gap-2">
+                              <Badge className={`text-[8px] font-bold ${m.status === 'VERIFIED' ? 'bg-emerald-500' : 'bg-amber-500'}`}>
+                                 {m.status === 'VERIFIED' ? 'PRODUCTION' : 'PILOT'}
                               </Badge>
-                              <p className="text-[7px] font-mono text-muted-foreground uppercase">Trust: {m.trustScore}%</p>
+                              <ArrowRight className="size-3 text-muted-foreground opacity-30" />
                            </div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="space-y-1.5 w-32">
-                             <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                                <div className="h-full bg-primary" style={{ width: `${Math.random() * 40 + 50}%` }} />
-                             </div>
-                             <p className="text-[7px] text-muted-foreground uppercase font-bold">Integration Integrity</p>
-                          </div>
+                           <p className="text-sm font-headline font-bold text-primary">{m.trustScore || 50}%</p>
+                        </td>
+                        <td className="px-6 py-4">
+                           <p className="text-sm font-mono text-emerald-500 font-bold">${(Math.random() * 500).toFixed(2)}</p>
                         </td>
                         <td className="px-6 py-4 text-right">
                           <Button 
@@ -200,7 +175,7 @@ export default function MerchantManagementPage() {
                             className="text-[9px] font-bold uppercase border-primary/20 hover:bg-primary/10 hover:text-primary transition-all gap-2"
                           >
                             {reviewingId === m.id ? <Loader2 className="size-3 animate-spin" /> : <Award className="size-3" />}
-                            Audit Adoption
+                            Audit Performance
                           </Button>
                         </td>
                       </tr>

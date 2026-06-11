@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -60,7 +61,9 @@ import {
   Database,
   Search,
   Box,
-  Award
+  Award,
+  ArrowUpRight,
+  TrendingDown
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -84,13 +87,19 @@ const CIVILIZATIONAL_WORTH = [
   { label: "Market Readiness", value: "85/100", trend: "+12.4%" },
 ]
 
+const STRATEGIC_RISKS = [
+  { risk: "Execution Drift", level: "Low", impact: "Medium" },
+  { risk: "Revenue Lag", level: "Medium", impact: "High" },
+  { risk: "Regulatory Drift", level: "Low", impact: "Critical" },
+]
+
 export default function Home() {
   const { toast } = useToast()
   const { user } = useUser()
   const isAdmin = user?.email === ADMIN_EMAIL
 
   const [loading, setLoading] = useState(true)
-  const [statusText, setStatusText] = useState("INITIALIZING ADOPTION GATEWAY...")
+  const [statusText, setStatusText] = useState("INITIALIZING EXECUTION GATEWAY...")
   const [fetchingSummary, setFetchingSummary] = useState(false)
   const [isSummaryOpen, setIsSummaryOpen] = useState(false)
   const [dailySummary, setDailySummary] = useState<DailySummary | null>(null)
@@ -98,11 +107,11 @@ export default function Home() {
 
   useEffect(() => {
     const sequence = [
-      { text: "STABILIZING INSTITUTIONAL CORE...", time: 600 },
-      { text: "ENFORCING PARTNERSHIP KITS...", time: 1200 },
-      { text: "ACTIVATING BUILDERS PROGRAM...", time: 1800 },
-      { text: "SYNCING PILOT NODES...", time: 2400 },
-      { text: "NOORNEXUS: MARKET ADOPTION READY", time: 3000 },
+      { text: "STABILIZING EXECUTION CORE...", time: 600 },
+      { text: "VALIDATING REVENUE MODELS...", time: 1200 },
+      { text: "ACTIVATING FOUNDER OS...", time: 1800 },
+      { text: "SYNCING PILOT SUCCESS NODES...", time: 2400 },
+      { text: "NOORNEXUS: EXECUTION READY", time: 3000 },
     ]
 
     sequence.forEach((step, i) => {
@@ -114,12 +123,12 @@ export default function Home() {
 
     const interval = setInterval(() => {
       const logs = [
-        "ADOPT: Pilot Partner 01 Synced", 
-        "BUILDER: New Module Published v1.2", 
-        "CRED: Case Study 04 Verified", 
-        "MARKET: Trust Federation Node Online",
-        "SYNC: Operational Checklist 85% Complete",
-        "GRANT: 500k Simulation Tokens Released"
+        "REVENUE: $1.2k Transaction Fee Verified", 
+        "PILOT: University Mesh Activation 85%", 
+        "TRUST: Velocity Increase +12%", 
+        "MARKET: New Fintech Lead in Pipeline",
+        "EXECUTION: 90-Day Sprint Step 12 Complete",
+        "GRANT: Developer Module Certified"
       ]
       setBorderFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 3000)
@@ -168,28 +177,28 @@ export default function Home() {
                    <SidebarTrigger className="md:hidden text-primary -ml-2">
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
-                   <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs animate-pulse">
-                      <Rocket className="size-3 mr-2" /> Market Adoption Phase
-                   </Badge>
                    <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
-                      <Award className="size-3 mr-2" /> PILOT_STRENGTH: 72/100
+                      <Zap className="size-3 mr-2" /> Phase ΩΩΩ: Execution Mode
+                   </Badge>
+                   <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs animate-pulse">
+                      <TrendingUp className="size-3 mr-2" /> Trust Velocity: +14.2%
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   {isAdmin ? 'Institutional Adoption.' : 'Ecosystem Validation.'}
+                   {isAdmin ? 'Founder Operating System.' : 'Execution Command.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed">
-                   "Trust Before Scale. Pilots Over Claims. Credibility Over Features." - নূরনেক্সাস এখন তার প্রথম ১০টি প্রাতিষ্ঠানিক পার্টনার গ্রহণের জন্য প্রস্তুত।
+                   "Technology + Trust + Execution = Institution." - নূরনেক্সাস এখন তার প্রথম ১০টি পার্টনারের মাধ্যমে বাস্তব ভ্যালু এবং রেভিনিউ ভ্যালিডেশনের পর্যায়ে।
                 </p>
               </div>
               
               {isAdmin && (
                 <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
                   <div className="glass-card p-6 rounded-2xl border border-primary/20 flex flex-col items-center w-full min-w-[280px]">
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Institutional Credibility</p>
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Monthly Trust Velocity</p>
                       <div className="flex items-center gap-3">
-                         <Star className="size-8 text-emerald-500 animate-pulse" />
-                         <span className="text-4xl font-headline font-bold text-white tracking-tighter">72/100</span>
+                         <TrendingUp className="size-8 text-emerald-500" />
+                         <span className="text-4xl font-headline font-bold text-white tracking-tighter">+14.2%</span>
                       </div>
                   </div>
                 </div>
@@ -199,6 +208,55 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-8">
+               {isAdmin && (
+                 <section className="space-y-6">
+                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                       <ShieldAlert className="size-4" /> Strategic Founder OS Metrics
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                       <Card className="glass-card border-l-4 border-l-destructive bg-destructive/5">
+                          <CardHeader className="pb-2">
+                             <CardTitle className="text-[10px] uppercase font-bold text-destructive tracking-widest">Active Risks</CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-3">
+                             {STRATEGIC_RISKS.map((r, i) => (
+                               <div key={i} className="flex justify-between items-center text-[10px] p-2 bg-black/40 rounded border border-white/5">
+                                  <span className="text-white font-bold">{r.risk}</span>
+                                  <Badge className="bg-destructive/20 text-destructive text-[8px] h-4">{r.impact} Impact</Badge>
+                               </div>
+                             ))}
+                          </CardContent>
+                       </Card>
+                       <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                          <CardHeader className="pb-2">
+                             <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 tracking-widest">Growth Opportunities</CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-3">
+                             {[
+                               "European Banking Bridge",
+                               "Sovereign TIN API",
+                               "Meta-Gov Grant Program"
+                             ].map((op, i) => (
+                               <div key={i} className="flex items-center gap-2 text-[10px] p-2 bg-black/40 rounded border border-white/5">
+                                  <ArrowUpRight className="size-3 text-emerald-500" />
+                                  <span className="text-white font-medium">{op}</span>
+                               </div>
+                             ))}
+                          </CardContent>
+                       </Card>
+                       <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+                          <CardHeader className="pb-2">
+                             <CardTitle className="text-[10px] uppercase font-bold text-primary tracking-widest">Revenue Status (M1)</CardTitle>
+                          </CardHeader>
+                          <CardContent className="flex flex-col items-center justify-center py-4">
+                             <p className="text-3xl font-headline font-bold text-white">$4.2K</p>
+                             <p className="text-[10px] text-emerald-500 font-bold uppercase mt-1">+100% (Baseline)</p>
+                          </CardContent>
+                       </Card>
+                    </div>
+                 </section>
+               )}
+
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                      <TrendingUp className="size-4" /> Market Validation Metrics
@@ -220,16 +278,16 @@ export default function Home() {
                  <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                     <CardHeader className="pb-2 p-6">
                        <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
-                          <Building2 className="size-4" /> Pilot Program Status
+                          <Building2 className="size-4" /> Pilot Success Pipeline
                        </CardTitle>
-                       <CardDescription className="text-xs">Architectural learning through first-adopters.</CardDescription>
+                       <CardDescription className="text-xs">Tracking first 10 Institutional Partners.</CardDescription>
                     </CardHeader>
                     <CardContent className="px-6 pb-6 space-y-5">
                        {[
-                         { label: "Fintech Pilots", score: 1, target: 3, status: "IN_PROGRESS" },
-                         { label: "University Mesh", score: 0, target: 2, status: "AWAITING" },
-                         { label: "Gov Nodes", score: 0, target: 1, status: "AWAITING" },
-                         { label: "Enterprise Partners", score: 0, target: 4, status: "AWAITING" }
+                         { label: "Education (Universities)", score: 1, target: 3, status: "PILOT_READY" },
+                         { label: "Business (Merchants)", score: 1, target: 3, status: "INTEGRATED" },
+                         { label: "Technology (SDK)", score: 1, target: 2, status: "CERTIFIED" },
+                         { label: "Financial (Bridges)", score: 0, target: 2, status: "PIPELINE" }
                        ].map((metric, i) => (
                          <div key={i} className="space-y-2">
                             <div className="flex justify-between text-[10px] font-mono">
@@ -247,46 +305,28 @@ export default function Home() {
                  <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                     <CardHeader className="p-6">
                        <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
-                          <Rocket className="size-4" /> Builders Program (v1.0)
+                          <BarChart3 className="size-4" /> Recurring Revenue Model
                        </CardTitle>
-                       <CardDescription className="text-xs">Certified architects building on NoorNexus.</CardDescription>
+                       <CardDescription className="text-xs">Sustainability and Growth Mapping.</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-6 p-6 pt-0">
-                       <div className="space-y-4">
-                          {[
-                            { label: "Certified Architects", score: "12", trend: "+4" },
-                            { label: "API Marketplace Modules", score: "42", trend: "+8" },
-                            { label: "Builder Grants Released", score: "$24k", trend: "Active" }
-                          ].map((item, i) => (
-                            <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
-                               <span className="text-[10px] text-muted-foreground uppercase font-bold">{item.label}</span>
-                               <div className="text-right">
-                                  <p className="text-xs font-bold text-white">{item.score}</p>
-                                  <p className="text-[8px] text-emerald-500 uppercase">{item.trend}</p>
-                               </div>
+                    <CardContent className="space-y-4 p-6 pt-0">
+                       {[
+                         { label: "Transaction Fees (0.1%)", status: "ACTIVE", rev: "$1.2k" },
+                         { label: "Enterprise Licenses", status: "PENDING", rev: "$0" },
+                         { label: "API Access (Builder)", status: "PILOT", rev: "$400" },
+                         { label: "Sovereign Certification", status: "LIVE", rev: "$2.6k" }
+                       ].map((item, i) => (
+                         <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
+                            <span className="text-[10px] text-muted-foreground uppercase font-bold">{item.label}</span>
+                            <div className="text-right">
+                               <p className="text-xs font-bold text-white">{item.rev}</p>
+                               <Badge variant="outline" className="text-[7px] border-primary/20 text-primary uppercase">{item.status}</Badge>
                             </div>
-                          ))}
-                       </div>
+                         </div>
+                       ))}
                     </CardContent>
                  </Card>
                </div>
-
-               <Card className="glass-card bg-emerald-500/5 border-emerald-500/30">
-                  <CardHeader className="p-6">
-                     <CardTitle className="text-xs sm:text-sm font-headline uppercase tracking-[0.3em] text-emerald-500 flex items-center gap-3">
-                        <ShieldCheck className="size-5" /> Institutional Credibility Mandate
-                     </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-6 pt-0 space-y-4">
-                     <p className="text-xl lg:text-2xl font-headline font-bold text-white leading-relaxed italic border-l-4 border-emerald-500 pl-6">
-                        "নূরনেক্সাসের পরবর্তী বিবর্তন আর ফিচারের নয়, বরং বিশ্বাসের। প্রথম ৩টি পাইলট পার্টনারের সফল ব্যবহারই আমাদের আর্কিটেকচারের শ্রেষ্ঠত্ব প্রমাণ করবে।"
-                     </p>
-                     <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest pl-6 text-emerald-500/60">
-                        <span className="flex items-center gap-1"><CheckCircle2 className="size-3" /> Audit Ready</span>
-                        <span className="flex items-center gap-1"><Handshake className="size-3" /> Trust Fed Active</span>
-                     </div>
-                  </CardContent>
-               </Card>
             </div>
 
             <div className="space-y-8">
@@ -294,7 +334,7 @@ export default function Home() {
                 <CardHeader className="p-4 border-b border-white/5">
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
                     <History className="size-4 text-primary" />
-                    Adoption Stream
+                    Execution Stream
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden">
@@ -313,41 +353,19 @@ export default function Home() {
 
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                  <CardHeader className="p-6">
-                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">Credibility Index</CardTitle>
+                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">Execution Health</CardTitle>
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Institutional readiness is measured by case studies and third-party audits."
+                       "Institutional success is measured by verifiable outcomes, not features."
                     </p>
-                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Verification: 72% Verified</Badge>
+                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Execution Index: 88% Efficient</Badge>
                  </CardContent>
               </Card>
             </div>
           </div>
         </main>
       </SidebarInset>
-
-      <Dialog open={isSummaryOpen} onOpenChange={setIsSummaryOpen}>
-        <DialogContent className="glass-card border-primary/40 w-[95vw] sm:max-w-[600px] bg-black/95 p-0 overflow-hidden">
-           <div className="bg-primary/10 p-6 border-b border-white/10 flex items-center gap-4">
-              <Star className="size-10 text-primary" />
-              <div>
-                <DialogTitle className="text-2xl font-headline font-bold text-white uppercase">Adoption Dispatch</DialogTitle>
-                <p className="text-[10px] text-primary uppercase font-bold tracking-widest">{dailySummary?.date}</p>
-              </div>
-           </div>
-           <div className="p-8 space-y-8">
-              <div className="bg-emerald-500/5 p-6 rounded-2xl border border-emerald-500/20 space-y-3">
-                 <p className="text-sm font-mono text-emerald-100 italic leading-relaxed">
-                   "আজকের অ্যাডপশন আপডেট: নূরনেক্সাস এখন ফিচার-কমপ্লিট থেকে পাইলট-ভ্যালিডেশন ধাপে প্রবেশ করেছে। আমাদের প্রাতিষ্ঠানিক ক্রেডিবিলিটি এখন ৭২%।"
-                 </p>
-              </div>
-           </div>
-           <div className="p-6 bg-white/2 border-t border-white/5">
-              <Button onClick={() => setIsSummaryOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase h-12 text-xs">Confirm Adoption Progress</Button>
-           </div>
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

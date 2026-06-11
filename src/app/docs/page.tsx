@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -26,7 +27,12 @@ import {
   Award,
   ArrowRight,
   CheckCircle2,
-  FileCheck
+  FileCheck,
+  Rocket,
+  Activity,
+  History,
+  TrendingUp,
+  BarChart3
 } from "lucide-react"
 import { analyzeProtocol, ProtocolArchitectOutput } from "@/ai/flows/protocol-architect-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -40,12 +46,12 @@ export default function DocsPage() {
     setLoading(true)
     try {
       const result = await analyzeProtocol({
-        currentFocus: "Phase ΩΩ: Institutional Adoption & Credibility Portfolio",
-        context: "Transitioning from Feature-Ready to Market-Validated through Pilot Partnerships.",
-        history: ["Phase Ω+ Complete", "Partnership Readiness Verified", "Institutional Stack Hardened"]
+        currentFocus: "Phase ΩΩΩ: Execution & Revenue Validation",
+        context: "Validating recurring revenue streams and pilot partner success metrics.",
+        history: ["Phase ΩΩ Complete", "Partnership Kits Ready", "Market Validation Initiated"]
       })
       setAnalysis(result)
-      toast({ title: "Credibility Logic Updated" })
+      toast({ title: "Execution Strategy Updated" })
     } catch (e: any) {
       toast({ title: "Neural Handshake Failed", description: e.message, variant: "destructive" })
     } finally {
@@ -65,14 +71,14 @@ export default function DocsPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-[10px]">
-                   <Briefcase className="size-3 mr-2" /> Institutional Credibility
+                   <Rocket className="size-3 mr-2" /> Execution Roadmap
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Partnership <span className="text-primary">Kits.</span>
+                Execution <span className="text-primary">Sprint.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Phase ΩΩ: Market Validation. Providing potential partners with the tools, legal frameworks, and evidence required for adoption.
+                Phase ΩΩΩ: 90-Day Execution Sprint. Moving from Integration-Ready to Revenue-Validated and Institutional Scale.
               </p>
             </div>
             <Button 
@@ -80,8 +86,8 @@ export default function DocsPage() {
               disabled={loading}
               className="bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 gap-2"
             >
-              {loading ? <Loader2 className="size-4 animate-spin" /> : <Award className="size-4" />}
-              Audit Credibility Portfolio
+              {loading ? <Loader2 className="size-4 animate-spin" /> : <TrendingUp className="size-4" />}
+              Audit Execution Strategy
             </Button>
           </header>
 
@@ -89,45 +95,29 @@ export default function DocsPage() {
             <div className="lg:col-span-2 space-y-12">
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
-                    <Layers className="size-4" /> The Partnership Acquisition Pack
+                    <History className="size-4" /> 90-Day Execution Roadmap
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
-                      { 
-                        title: "Executive Pack", 
-                        desc: "Mission, Integration Models, and Revenue Projection.",
-                        status: "READY",
-                        icon: FileText
-                      },
-                      { 
-                        title: "Technical Pack", 
-                        desc: "API/SDK Documentation and Event Bus Specifications.",
-                        status: "READY",
-                        icon: Database
-                      },
-                      { 
-                        title: "Legal Pack", 
-                        desc: "NDA, MOU, and Data Processing Agreements.",
-                        status: "READY",
-                        icon: Scale
-                      }
-                    ].map((pack, i) => (
-                      <Card key={i} className="glass-card border-white/5 hover:border-primary/20 transition-all group">
-                         <CardContent className="p-6 space-y-4">
-                            <div className="flex justify-between items-start">
-                               <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                                  <pack.icon className="size-5" />
-                                </div>
-                               <Badge className="bg-emerald-500/20 text-emerald-500 border-none shrink-0 text-[8px]">{pack.status}</Badge>
-                            </div>
-                            <div className="space-y-1">
-                               <p className="text-xs font-bold text-white uppercase">{pack.title}</p>
-                               <p className="text-[10px] text-muted-foreground leading-relaxed italic">{pack.desc}</p>
-                            </div>
-                            <Button variant="ghost" className="w-full justify-between h-8 text-[9px] uppercase font-bold text-primary group-hover:bg-primary/10">
-                               Download Assets <ArrowRight className="size-3" />
-                            </Button>
-                         </CardContent>
+                      { month: "Month 1", focus: "Partnership Outreach", items: ["Security Review", "Pilot Recruitment", "NDA Signings"] },
+                      { month: "Month 2", focus: "Sandbox Testing", items: ["First Integrations", "Case Study Generation", "SDK Hardening"] },
+                      { month: "Month 3", focus: "Revenue Validation", items: ["Production Rollout", "Public Credibility Assets", "First Revenue Flow"] }
+                    ].map((sprint, i) => (
+                      <Card key={i} className="glass-card border-white/5 bg-primary/5 group">
+                        <CardContent className="p-6 space-y-4">
+                           <div className="flex justify-between items-start">
+                              <p className="text-xs font-bold text-white uppercase">{sprint.month}</p>
+                              <Badge className="bg-primary/20 text-primary border-none text-[8px]">ACTIVE</Badge>
+                           </div>
+                           <p className="text-[10px] font-headline font-bold text-primary uppercase">{sprint.focus}</p>
+                           <ul className="space-y-1">
+                              {sprint.items.map((item, j) => (
+                                <li key={j} className="text-[9px] text-muted-foreground flex items-center gap-2 italic">
+                                   <CheckCircle2 className="size-2 text-emerald-500" /> {item}
+                                </li>
+                              ))}
+                           </ul>
+                        </CardContent>
                       </Card>
                     ))}
                  </div>
@@ -135,30 +125,26 @@ export default function DocsPage() {
 
               <section className="space-y-6">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2">
-                  <Workflow className="size-4" /> Pilot Partner Strategy
+                  <BarChart3 className="size-4" /> Institutional Revenue Matrix
                 </h3>
                 <Card className="glass-card border-amber-500/20 bg-amber-500/5 overflow-hidden">
-                   <CardContent className="p-6 space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                         <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-center space-y-2">
-                            <p className="text-[10px] font-bold text-primary uppercase">1. Pilot (3)</p>
-                            <p className="text-[9px] text-muted-foreground">Architectural Learning Phase.</p>
-                         </div>
-                         <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-center space-y-2">
-                            <p className="text-[10px] font-bold text-emerald-500 uppercase">2. Institutional (10)</p>
-                            <p className="text-[9px] text-muted-foreground">Sovereign Validation Phase.</p>
-                         </div>
-                         <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-center space-y-2">
-                            <p className="text-[10px] font-bold text-amber-500 uppercase">3. Strategic (50)</p>
-                            <p className="text-[9px] text-muted-foreground">Ecosystem Growth Phase.</p>
-                         </div>
-                         <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-center space-y-2">
-                            <p className="text-[10px] font-bold text-white uppercase">4. Scale</p>
-                            <p className="text-[9px] text-muted-foreground">Universal Global Adoption.</p>
-                         </div>
+                   <CardContent className="p-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                         {[
+                           { model: "Subscription", base: "$500/mo", target: "Institutions" },
+                           { model: "Transaction", base: "0.1%", target: "Commerce" },
+                           { model: "Enterprise", base: "Custom", target: "Sovereign" },
+                           { model: "API Access", base: "$200/yr", target: "Developers" }
+                         ].map((rev, i) => (
+                           <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 text-center space-y-1">
+                              <p className="text-[9px] font-bold text-primary uppercase">{rev.model}</p>
+                              <p className="text-xs font-headline font-bold text-white">{rev.base}</p>
+                              <p className="text-[7px] text-muted-foreground uppercase">{rev.target}</p>
+                           </div>
+                         ))}
                       </div>
-                      <p className="text-[10px] text-muted-foreground text-center italic">
-                        "First 3 partners provide 300 architectural lessons. Trust before scale is the path to institutional longevity."
+                      <p className="text-[10px] text-muted-foreground text-center mt-6 italic">
+                        "Revenue is the ultimate validator of institutional trust."
                       </p>
                    </CardContent>
                 </Card>
@@ -166,21 +152,21 @@ export default function DocsPage() {
 
               <section className="space-y-6">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-emerald-500 flex items-center gap-2">
-                  <FileCheck className="size-4" /> Credibility Portfolio
+                  <FileCheck className="size-4" /> Independent Validation Pack
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                    {[
-                     { label: "Audit Reports", desc: "Internal and Simulation-based stress tests.", val: "12 Certified" },
-                     { label: "Security Assessment", desc: "HMAC_V4 and L4 Handshake validation.", val: "PASSED_L4" },
-                     { label: "Case Studies", desc: "Verifiable results from Pilot programs.", val: "2 Pending" },
-                     { label: "Testimonials", desc: "Verified feedback from initial stewards.", val: "3 Active" }
+                     { label: "Pentest L4", status: "SCHEDULED", icon: ShieldCheck },
+                     { label: "Governance Audit", status: "COMPLETE", icon: Scale },
+                     { label: "Treasury Review", status: "IN_REVIEW", icon: Landmark },
+                     { label: "SDK Cert", status: "READY", icon: Code2 }
                    ].map((item, i) => (
                      <div key={i} className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl flex justify-between items-center">
-                        <div className="space-y-1">
+                        <div className="flex items-center gap-3">
+                           <item.icon className="size-4 text-emerald-500" />
                            <p className="text-[10px] font-bold text-white uppercase">{item.label}</p>
-                           <p className="text-[9px] text-muted-foreground">{item.desc}</p>
                         </div>
-                        <Badge variant="outline" className="text-[9px] border-emerald-500/30 text-emerald-500 font-mono">{item.val}</Badge>
+                        <Badge variant="outline" className="text-[9px] border-emerald-500/30 text-emerald-500 font-mono">{item.status}</Badge>
                      </div>
                    ))}
                 </div>
@@ -191,39 +177,29 @@ export default function DocsPage() {
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                    <Globe className="size-4" /> Adoption Target
+                    <TrendingUp className="size-4" /> Trust Velocity KPI
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                     {[
-                       { category: "Universities", target: "1 Pilot", current: "0" },
-                       { category: "Fintechs", target: "1 Pilot", current: "1" },
-                       { category: "Enterprises", target: "1 Pilot", current: "0" }
-                     ].map((t, i) => (
-                       <div key={i} className="space-y-1">
-                          <div className="flex justify-between text-[9px] font-bold uppercase">
-                             <span className="text-muted-foreground">{t.category}</span>
-                             <span className="text-primary">{t.current}/{t.target}</span>
-                          </div>
-                          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                             <div className="h-full bg-primary" style={{ width: t.current !== '0' ? '100%' : '0%' }} />
-                          </div>
-                       </div>
-                     ))}
+                  <div className="text-center py-6">
+                     <p className="text-4xl font-headline font-bold text-white tracking-tighter">+14.2%</p>
+                     <p className="text-[8px] text-muted-foreground uppercase font-bold mt-1">Growth in Institutional Trust</p>
                   </div>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                    "Trust Velocity measures the monthly expansion of verifiable institutional relationships within the mesh."
+                  </p>
                 </CardContent>
               </Card>
 
               <Card className="glass-card border-emerald-500/20">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                    <FileText className="size-4" /> Adoption Manifesto
+                    <Target className="size-4" /> Execution Mandate
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                    "Institutional credibility is built on evidence, not claims. We do not ask for trust; we provide the ledger for verification."
+                    "Technology + Trust + Execution = Institution. কোড নয়, ফলাফলই আমাদের শ্রেষ্ঠত্বের পরিচয়।"
                   </p>
                 </CardContent>
               </Card>
@@ -231,13 +207,22 @@ export default function DocsPage() {
               <Card className="glass-card bg-amber-500/5 border-amber-500/20 h-fit">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
-                    <Handshake className="size-4" /> Pilot Stewardship
+                    <Briefcase className="size-4" /> First 10 Partners
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                    "Pilot partners are not just users; they are co-architects of the final sovereign standard."
-                  </p>
+                  <div className="space-y-2">
+                     {[
+                       { label: "Edu Pilot 01", val: "ACTIVE" },
+                       { label: "Biz Pilot 01", val: "READY" },
+                       { label: "Fin Pilot 01", val: "PIPELINE" }
+                     ].map((p, i) => (
+                       <div key={i} className="flex justify-between text-[9px] font-mono">
+                          <span className="text-white uppercase">{p.label}</span>
+                          <span className="text-amber-500">{p.val}</span>
+                       </div>
+                     ))}
+                  </div>
                 </CardContent>
               </Card>
             </div>
