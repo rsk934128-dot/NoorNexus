@@ -36,7 +36,9 @@ import {
   ShieldHalf,
   Database,
   Search,
-  LayoutGrid
+  LayoutGrid,
+  ArrowRightLeft,
+  Network
 } from "lucide-react"
 import { analyzeProtocol, ProtocolArchitectOutput } from "@/ai/flows/protocol-architect-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -50,12 +52,12 @@ export default function DocsPage() {
     setLoading(true)
     try {
       const result = await analyzeProtocol({
-        currentFocus: "Phase 4: Reality-Proof Institutional Hardening",
-        context: "Evolving NoorNexus from a digital twin into a resilient, anti-capture sovereign operating system.",
-        history: ["Phase 3 Complete", "Digital Twin Verified", "Civilization Stack Operational"]
+        currentFocus: "Phase 4: Sovereign Institutional Hardening",
+        context: "Transitioning from founder-centric software to a self-governing digital institution.",
+        history: ["Phase 3 Complete", "Digital Twin Mirrored", "Steward Council Active"]
       })
       setAnalysis(result)
-      toast({ title: "Charter Re-evaluated" })
+      toast({ title: "Living Constitution Audited" })
     } catch (e: any) {
       toast({ title: "Neural Handshake Failed", description: e.message, variant: "destructive" })
     } finally {
@@ -75,14 +77,14 @@ export default function DocsPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <BookOpen className="size-3 mr-2" /> Sovereign Charter v6.0
+                   <BookOpen className="size-3 mr-2" /> Living Constitution v1.0
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Constitutional <span className="text-primary">Registry.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                The fundamental laws of NoorNexus. Designed to prevent power capture and ensure civilizational longevity through cryptographic enforcement.
+                The legal bedrock of NoorNexus. Each Article is now linked to its Historical Debate and Case Studies in the Memory Vault.
               </p>
             </div>
             <Button 
@@ -91,36 +93,41 @@ export default function DocsPage() {
               className="bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 gap-2"
             >
               {loading ? <Loader2 className="size-4 animate-spin" /> : <ShieldHalf className="size-4" />}
-              Audit Constitutional Alignment
+              Audit Living Constitution
             </Button>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-12">
+              {/* Constitutional Knowledge Graph */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
-                    <ShieldCheck className="size-4" /> Fundamental Articles
+                    <ShieldCheck className="size-4" /> Constitutional Articles & Origin
                  </h3>
                  <div className="grid grid-cols-1 gap-4">
                     {[
                       { 
                         title: "Article I: Citizen Rights", 
-                        desc: "Every citizen has the right to data sovereignty, verifiable identity, and participation in the collective governance without fear of capture.",
+                        desc: "Right to data sovereignty and multi-dimensional verifiable identity.",
+                        origin: "Cycle 42 Debate #12",
                         status: "ENFORCED"
                       },
                       { 
                         title: "Article II: Economic Sovereignty", 
-                        desc: "Treasury allocation and tax policy must be auditable, transparent, and multi-sig protected to prevent single-point institutional failure.",
+                        desc: "Anti-capture treasury and institutional balance sheet integrity.",
+                        origin: "Mission 400 Core Charter",
                         status: "ENFORCED"
                       },
                       { 
                         title: "Article III: AI Containment", 
-                        desc: "No AI agent shall possess autonomous write-access to the Constitutional Registry. AI is a validator, not a ruler.",
+                        desc: "Strict permission matrix and alignment audits for Nora agents.",
+                        origin: "Phase 3 Stabilization Audit",
                         status: "AUDITED"
                       },
                       { 
-                        title: "Article IV: Governance Limits", 
-                        desc: "The Senate's power is limited by a minimum quorum of 66.7% and a constitutional override mechanism for emergency vetos.",
+                        title: "Article IV: Governance Execution", 
+                        desc: "Meta-governance auditing and stewardship council quorum.",
+                        origin: "Phase 4 Institutional Hardening",
                         status: "ENFORCED"
                       }
                     ].map((art, i) => (
@@ -129,6 +136,7 @@ export default function DocsPage() {
                             <div className="space-y-2">
                                <p className="text-lg font-bold text-white uppercase">{art.title}</p>
                                <p className="text-sm text-muted-foreground leading-relaxed italic">{art.desc}</p>
+                               <p className="text-[9px] font-mono text-primary/60 uppercase tracking-widest">ORIGIN: {art.origin}</p>
                             </div>
                             <Badge className="bg-emerald-500/20 text-emerald-500 border-none shrink-0">{art.status}</Badge>
                          </CardContent>
@@ -139,40 +147,36 @@ export default function DocsPage() {
 
               <section className="space-y-6">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2">
-                  <Database className="size-4" /> Institutional Memory Vault
+                  <Database className="size-4" /> Living Memory Vault
                 </h3>
                 <Card className="glass-card border-amber-500/20 bg-amber-500/5 overflow-hidden">
                    <CardHeader className="border-b border-white/5 py-4">
                       <div className="flex items-center justify-between">
-                         <CardTitle className="text-xs uppercase font-bold text-amber-500">History Node Browser</CardTitle>
-                         <div className="relative">
-                            <Search className="absolute left-2 top-1/2 -translate-y-1/2 size-3 text-muted-foreground" />
-                            <input className="bg-black/40 border border-white/5 rounded pl-7 pr-2 py-1 text-[9px] w-32 outline-none" placeholder="Search Cycle..." />
-                         </div>
+                         <CardTitle className="text-xs uppercase font-bold text-amber-500">Decision Context Graph</CardTitle>
                       </div>
                    </CardHeader>
                    <CardContent className="p-0">
                       <table className="w-full text-left">
                          <thead className="bg-muted/30 border-b border-white/5">
                             <tr className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">
-                               <th className="px-6 py-3">Cycle</th>
-                               <th className="px-6 py-3">Event Hash</th>
-                               <th className="px-6 py-3">Context</th>
+                               <th className="px-6 py-3">Article Link</th>
+                               <th className="px-6 py-3">Debate Ref</th>
+                               <th className="px-6 py-3">Outcome Context</th>
                                <th className="px-6 py-3 text-right">Integrity</th>
                             </tr>
                          </thead>
                          <tbody className="divide-y divide-white/5 text-[10px]">
                             {[
-                              { cycle: "42-B", hash: "0x82...f9", context: "Constitution Ratification Debate", integrity: "100%" },
-                              { cycle: "40-A", hash: "0x12...a3", context: "Merchant Hub Migration Failure Analysis", integrity: "99.8%" },
-                              { cycle: "38-C", hash: "0xcc...e1", context: "Treasury Multi-sig Protocol Upgrade", integrity: "100%" }
+                              { article: "Article II", ref: "D-45-B", context: "Anti-Capture Implementation", integrity: "100%" },
+                              { article: "Article IV", ref: "D-46-A", context: "Steward Council Activation", integrity: "99.8%" },
+                              { article: "Article I", ref: "D-42-C", context: "DID Privacy Standards", integrity: "100%" }
                             ].map((row, i) => (
                               <tr key={i} className="hover:bg-white/5 transition-colors group">
-                                 <td className="px-6 py-3 font-bold text-white">{row.cycle}</td>
-                                 <td className="px-6 py-3 font-mono text-primary text-[8px]">{row.hash}</td>
-                                 <td className="px-6 py-3 text-muted-foreground italic truncate max-w-[200px]">{row.context}</td>
+                                 <td className="px-6 py-3 font-bold text-white">{row.article}</td>
+                                 <td className="px-6 py-3 font-mono text-primary text-[8px]">{row.ref}</td>
+                                 <td className="px-6 py-3 text-muted-foreground italic">{row.context}</td>
                                  <td className="px-6 py-3 text-right">
-                                    <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">{row.integrity}</integrity>
+                                    <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">{row.integrity}</Badge>
                                  </td>
                               </tr>
                             ))}
@@ -187,31 +191,44 @@ export default function DocsPage() {
               <Card className="glass-card bg-primary/5 border-primary/20">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                    <ShieldHalf className="size-4" /> Anti-Capture Guard
+                    <ShieldHalf className="size-4" /> Amendment Engine
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4 text-[10px] text-muted-foreground leading-relaxed italic">
-                   "No single citizen, AI, or senate can control the treasury. Power is distributed across 400 nodes with multi-layer verification."
+                   "Constitution is a living entity. Amendments require a Cooling Period, Simulation pass, and 66.7% Senate Quorum."
                 </CardContent>
               </Card>
 
               <Card className="glass-card border-emerald-500/20">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                    <DatabaseZap className="size-4" /> Interoperability Stack
+                    <ArrowRightLeft className="size-4" /> Trust Federation
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {[
-                    "Sovereign API Gateway: ACTIVE",
-                    "Identity Bridge Protocol: READY",
-                    "Trust Ledger Exchange: SYNCED"
+                    "External Banking Bridge: READY",
+                    "University Trust Sync: ACTIVE",
+                    "Inter-Platform Identity: SYNCED"
                   ].map((s, i) => (
                     <div key={i} className="flex items-center gap-2 text-[9px] text-white">
                        <CheckCircle2 className="size-3 text-emerald-500" />
                        <span>{s}</span>
                     </div>
                   ))}
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card bg-amber-500/5 border-amber-500/20 h-fit">
+                <CardHeader>
+                  <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
+                    <Network className="size-4" /> Institutional Independence
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-[9px] text-muted-foreground leading-relaxed italic">
+                    "NoorNexus is designed to survive founder transition. The Stewardship Council manages continuity protocols Cycle-over-Cycle."
+                  </p>
                 </CardContent>
               </Card>
             </div>

@@ -59,46 +59,34 @@ import {
   UserCircle,
   ExternalLink,
   ShieldHalf,
-  Database
+  Database,
+  Search,
+  Box
 } from "lucide-react"
 import { useEffect, useState } from "react"
-import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { useToast } from "@/hooks/use-toast"
-import { useFirestore, useCollection, useUser } from "@/firebase"
-import { collection, query, orderBy, limit } from "firebase/firestore"
+import { useFirestore, useUser } from "@/firebase"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { SovereignLogo } from "@/components/sovereign-logo"
-import { getSystemHealthReport, HealthReport, broadcastProclamation, getDailyImperialSummary, type DailySummary } from "@/services/nexus-bridge"
-import { connectNode } from "@/services/sovereign-protocol"
+import { getDailyImperialSummary, type DailySummary } from "@/services/nexus-bridge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
-const CIVILIZATIONAL_INDEX = [
-  { label: "Financial Sovereignty", weight: "20%", score: 92.4, icon: Landmark, color: "text-emerald-500", evidence: "ledger-audit-v3" },
-  { label: "Identity Integrity", weight: "20%", score: 98.1, icon: Fingerprint, color: "text-primary", evidence: "identity-ledger-v1" },
-  { label: "Governance Quality", weight: "20%", score: 84.5, icon: Gavel, color: "text-amber-500", evidence: "accountability-report" },
-  { label: "Citizen Participation", weight: "20%", score: 76.2, icon: UserCircle, color: "text-purple-500", evidence: "engagement-index" },
-  { label: "Infrastructure Resilience", weight: "20%", score: 99.98, icon: Share2, color: "text-blue-500", evidence: "mesh-pulse" },
-]
-
-const RESILIENCE_METRICS = [
-  { label: "Governance Failure Resistance", score: 94 },
-  { label: "Treasury Stability (Anti-Capture)", score: 99 },
-  { label: "Security Posture (HMAC_V4)", score: 100 },
-  { label: "AI Dependency Containment", score: 88 }
+const CIVILIZATIONAL_WORTH = [
+  { label: "Knowledge Assets", value: "$85M", trend: "+12%" },
+  { label: "Trust Equity", value: "98.4%", trend: "+2.1%" },
+  { label: "Net Institutional Value", value: "$512M", trend: "+5.4%" },
 ]
 
 export default function Home() {
   const { toast } = useToast()
-  const db = useFirestore()
   const { user } = useUser()
   const isAdmin = user?.email === ADMIN_EMAIL
 
@@ -108,7 +96,6 @@ export default function Home() {
   const [isSummaryOpen, setIsSummaryOpen] = useState(false)
   const [dailySummary, setDailySummary] = useState<DailySummary | null>(null)
   const [borderFeed, setBorderFeed] = useState<string[]>([])
-  const [discoveryPulse, setDiscoveryPulse] = useState<number>(0)
 
   useEffect(() => {
     const sequence = [
@@ -116,7 +103,7 @@ export default function Home() {
       { text: "ENFORCING CONSTITUTIONAL GUARDRAILS...", time: 1200 },
       { text: "ACTIVATING ANTI-CAPTURE ARCHITECTURE...", time: 1800 },
       { text: "CALIBRATING RESILIENCE MESH...", time: 2400 },
-      { text: "NOORNEXUS: REALITY-PROOF CIVILIZATION READY", time: 3000 },
+      { text: "NOORNEXUS: SOVEREIGN INSTITUTION READY", time: 3000 },
     ]
 
     sequence.forEach((step, i) => {
@@ -128,15 +115,14 @@ export default function Home() {
 
     const interval = setInterval(() => {
       const logs = [
-        "CONST: Constitutional Registry Pulse OK", 
-        "RESIL: Governance Resistance Verified", 
-        "MEM: Historical Evidence Vaulted", 
-        "AI: Permission Matrix Enforced",
-        "SYNC: Institutional Memory Engine Active",
-        "ECON: Anti-Capture Liquidity Confirmed"
+        "METAGOV: Institutional Audit Pulse OK", 
+        "OBSERV: Reputation Inflation within Ceiling", 
+        "MEM: Historical Context Linked", 
+        "ECON: Balance Sheet Validated",
+        "SYNC: External Trust Federation Active",
+        "STRESS: Periodic Simulation Success"
       ]
       setBorderFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
-      setDiscoveryPulse(prev => (prev + Math.random() * 5) % 100)
     }, 3000)
 
     return () => clearInterval(interval)
@@ -184,33 +170,28 @@ export default function Home() {
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
                    <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-xs animate-pulse">
-                      <Sparkles className="size-3 mr-2" /> Reality-Proof Hub
+                      <Compass className="size-3 mr-2" /> Civilization Observatory
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <ShieldCheck className="size-3 mr-2" /> SELF_AUDITING_L4
+                      <ShieldCheck className="size-3 mr-2" /> SOVEREIGN_INSTITUTION_v1.0
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   {isAdmin ? 'Institutional Core.' : 'Civilization Mirror.'}
+                   {isAdmin ? 'Institutional Intelligence.' : 'Civilization Mirror.'}
                 </h2>
-                <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed">
-                   "Institutional Hardening. Anti-Capture Governance. Civilizational Resilience." - নূরনেক্সাস এখন একটি স্থায়িত্ব-নির্ভর রিয়ালিটি-প্রুফ অপারেটিং সিস্টেম।
+                <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed">
+                   "Predictive Health. Founder Independence. External Legitimacy." - নূরনেক্সাস এখন একটি স্বয়ংসম্পূর্ণ এবং দীর্ঘমেয়াদী সার্বভৌম প্রতিষ্ঠান।
                 </p>
               </div>
               
               {isAdmin && (
-                <div className="flex flex-col items-center gap-4 w-full lg:w-auto animate-in fade-in slide-in-from-right-4 duration-500">
-                  <div className="glass-card p-6 rounded-2xl border border-primary/20 flex flex-col items-center w-full min-w-[240px]">
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Resilience Pulse</p>
+                <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
+                  <div className="glass-card p-6 rounded-2xl border border-primary/20 flex flex-col items-center w-full min-w-[280px]">
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Net Civilizational Worth</p>
                       <div className="flex items-center gap-3">
-                         <ShieldHalf className="size-8 text-primary animate-pulse" />
-                         <span className="text-4xl font-headline font-bold text-white tracking-tighter">98.2%</span>
+                         <TrendingUp className="size-8 text-emerald-500 animate-pulse" />
+                         <span className="text-4xl font-headline font-bold text-white tracking-tighter">$512M</span>
                       </div>
-                  </div>
-                  <div className="flex gap-2 w-full">
-                    <Button onClick={handleFetchDailySummary} disabled={fetchingSummary} className="flex-1 bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 gap-2 text-[10px]">
-                      <BarChart3 className="size-4" /> Strategic Dispatch
-                    </Button>
                   </div>
                 </div>
               )}
@@ -220,33 +201,16 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-8">
                <section className="space-y-6">
-                  <div className="flex items-center justify-between px-2">
-                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                        <Activity className="size-4" /> Civilizational Maturity Index
-                     </h3>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
-                    {CIVILIZATIONAL_INDEX.map((m, i) => (
-                      <Card key={i} className="glass-card border-l-4 border-l-primary/20 hover:border-l-primary transition-all relative group">
-                        <CardContent className="p-4 space-y-4">
-                           <div className="flex justify-between items-start">
-                              <div className={`p-2 bg-white/5 rounded-lg ${m.color}`}>
-                                 <m.icon className="size-4" />
-                              </div>
-                              <Button variant="ghost" size="icon" className="size-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                                 <ExternalLink className="size-3 text-muted-foreground" />
-                              </Button>
-                           </div>
-                           <div className="space-y-2">
-                              <p className="text-[10px] font-bold text-muted-foreground uppercase leading-tight h-8">{m.label}</p>
-                              <div className="flex justify-between items-end">
-                                 <p className={`text-xl font-headline font-bold ${m.color}`}>{m.score}%</p>
-                              </div>
-                              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                                 <div className={`h-full transition-all duration-1000 ${m.color.replace('text-', 'bg-')}`} style={{ width: `${m.score}%` }} />
-                              </div>
-                              <p className="text-[7px] font-mono text-muted-foreground uppercase tracking-tighter truncate">EVIDENCE: {m.evidence}</p>
-                           </div>
+                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                     <BarChart3 className="size-4" /> Civilizational Balance Sheet
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {CIVILIZATIONAL_WORTH.map((item, i) => (
+                      <Card key={i} className="glass-card bg-primary/5 border-white/5">
+                        <CardContent className="p-6 text-center space-y-2">
+                           <p className="text-[10px] font-bold text-muted-foreground uppercase">{item.label}</p>
+                           <p className="text-3xl font-headline font-bold text-white">{item.value}</p>
+                           <p className="text-[10px] text-emerald-500 font-bold">{item.trend}</p>
                         </CardContent>
                       </Card>
                     ))}
@@ -257,90 +221,89 @@ export default function Home() {
                  <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                     <CardHeader className="pb-2 p-6">
                        <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
-                          <ShieldAlert className="size-4" /> Civilizational Resilience Index
+                          <Eye className="size-4" /> Civilization Health Observatory
                        </CardTitle>
-                       <CardDescription className="text-xs">Measuring the system's ability to survive reality contact.</CardDescription>
+                       <CardDescription className="text-xs">Predicting emerging stresses before they become failures.</CardDescription>
                     </CardHeader>
                     <CardContent className="px-6 pb-6 space-y-5">
-                       {RESILIENCE_METRICS.map((metric, i) => (
-                         <div key={metric.label} className="space-y-2">
+                       {[
+                         { label: "Reputation Inflation Risk", score: 12, status: "LOW" },
+                         { label: "Governance Stress Level", score: 34, status: "STABLE" },
+                         { label: "Treasury Allocation Debt", score: 5, status: "MINIMAL" },
+                         { label: "AI Concentration Index", score: 48, status: "MONITORED" }
+                       ].map((metric, i) => (
+                         <div key={i} className="space-y-2">
                             <div className="flex justify-between text-[10px] font-mono">
                                <span className="text-white uppercase font-bold">{metric.label}</span>
-                               <span className="text-amber-500">{metric.score}%</span>
+                               <span className="text-amber-500">{metric.status} ({metric.score}%)</span>
                             </div>
                             <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                               <div className="h-full bg-amber-500 transition-all duration-1000" style={{ width: `${metric.score}%` }} />
+                               <div className="h-full bg-amber-500" style={{ width: `${metric.score}%` }} />
                             </div>
                          </div>
                        ))}
                     </CardContent>
                  </Card>
 
-                 <Card className="glass-card bg-primary/5 border-primary/20 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                       <Database className="size-48 text-primary" />
-                    </div>
+                 <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                     <CardHeader className="p-6">
-                       <CardTitle className="text-xs sm:text-sm font-headline uppercase tracking-[0.3em] text-primary flex items-center gap-3">
-                          <History className="size-5" /> Institutional Memory Engined
+                       <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
+                          <BrainCircuit className="size-4" /> Meta-Governance Layer
                        </CardTitle>
+                       <CardDescription className="text-xs">Auditing the effectiveness of the Governance model itself.</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-6 relative z-10 p-6 pt-0">
+                    <CardContent className="space-y-6 p-6 pt-0">
                        <div className="space-y-4">
                           {[
-                            { title: "Constitution Ratified", date: "Cycle 42", proof: "0x82...f9" },
-                            { title: "Multi-sig Governance Active", date: "Cycle 45", proof: "0xcc...e1" }
+                            { label: "Founder Independence Score", score: "82%", trend: "Expanding" },
+                            { label: "Voting Model Fairness", score: "99.8%", trend: "Stable" },
+                            { label: "Audit Neutrality Index", score: "MAX", trend: "Verified" }
                           ].map((item, i) => (
-                            <div key={i} className="p-3 bg-black/40 rounded-xl border border-white/5 flex justify-between items-center">
-                               <div className="space-y-1">
-                                  <p className="text-xs font-bold text-white uppercase">{item.title}</p>
-                                  <p className="text-[8px] text-muted-foreground font-mono">TIMESTAMP: {item.date}</p>
+                            <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
+                               <span className="text-[10px] text-muted-foreground uppercase font-bold">{item.label}</span>
+                               <div className="text-right">
+                                  <p className="text-xs font-bold text-white">{item.score}</p>
+                                  <p className="text-[8px] text-emerald-500 uppercase">{item.trend}</p>
                                </div>
-                               <Badge variant="outline" className="text-[8px] border-primary/20 text-primary">VERIFIED</Badge>
                             </div>
                           ))}
                        </div>
-                       <Button variant="ghost" className="w-full text-[10px] uppercase font-bold tracking-widest text-primary/60 hover:text-primary">
-                          Access Full Memory Vault
-                       </Button>
                     </CardContent>
                  </Card>
                </div>
 
-               <Card className="glass-card bg-emerald-500/5 border-emerald-500/30 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                     <Quote className="size-32 text-emerald-500" />
-                  </div>
+               <Card className="glass-card bg-emerald-500/5 border-emerald-500/30">
                   <CardHeader className="p-6">
                      <CardTitle className="text-xs sm:text-sm font-headline uppercase tracking-[0.3em] text-emerald-500 flex items-center gap-3">
-                        <ShieldCheck className="size-5" /> Institutional Statement v6.0
+                        <ShieldCheck className="size-5" /> Institutional Sustainability Statement
                      </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-6 relative z-10 p-6 pt-0">
+                  <CardContent className="p-6 pt-0 space-y-4">
                      <p className="text-xl lg:text-2xl font-headline font-bold text-white leading-relaxed italic border-l-4 border-emerald-500 pl-6">
-                        "নুরনেক্সাস এখন আর শুধু সফটওয়্যার নয়; এটি একটি স্থায়িত্ব-নির্ভর ডিজিটাল প্রতিষ্ঠান, যেখানে প্রতিটি ক্ষমতার কেন্দ্রীকরণ প্রতিরোধ করা হয়েছে এবং প্রতিটি সিদ্ধান্ত ঐতিহাসিক স্মৃতির অংশ।"
+                        "প্রতিষ্ঠাতা থাকবেন না, কিন্তু প্রতিষ্ঠান থাকবে। নূরনেক্সাস এখন তার নিজস্ব মেটা-গভর্ন্যান্স এবং ইকোনমিক ইন্টেলিজেন্স দ্বারা পরিচালিত একটি দীর্ঘস্থায়ী সত্তা।"
                      </p>
-                     <div className="flex items-center gap-2 text-emerald-500/60 text-xs font-bold uppercase tracking-widest pl-6">
-                        <Heart className="size-3 fill-current" /> Constitutional Safeguards Active
+                     <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest pl-6 text-emerald-500/60">
+                        <span className="flex items-center gap-1"><Lock className="size-3" /> Anti-Capture Active</span>
+                        <span className="flex items-center gap-1"><Share2 className="size-3" /> Federation Ready</span>
                      </div>
                   </CardContent>
                </Card>
             </div>
 
             <div className="space-y-8">
-               <Card className="glass-card border-l-4 border-l-emerald-500 flex flex-col h-[500px]">
+               <Card className="glass-card flex flex-col h-[500px]">
                 <CardHeader className="p-4 border-b border-white/5">
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
-                    <History className="size-4 text-emerald-500" />
-                    Civilizational Replay
+                    <History className="size-4 text-primary" />
+                    Evolution Stream
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
-                  <ScrollArea className="flex-1 p-4">
+                <CardContent className="flex-1 p-0 overflow-hidden">
+                  <ScrollArea className="h-full p-4">
                     <div className="space-y-4">
                       {borderFeed.map((log, i) => (
                         <div key={i} className="p-3 bg-white/2 rounded-xl border border-white/5 font-mono text-[10px] flex items-center gap-3">
-                          <div className="size-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                          <div className="size-1.5 bg-primary rounded-full animate-pulse" />
                           <span className="text-muted-foreground truncate">{log}</span>
                         </div>
                       ))}
@@ -349,21 +312,16 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                <CardHeader className="p-6">
-                   <CardTitle className="flex items-center gap-2 font-headline text-lg uppercase">
-                     <ShieldHalf className="size-5 text-primary" /> Mesh Survival
-                   </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6 p-6 pt-0">
-                   <div className="space-y-2">
-                      <p className="text-4xl font-headline font-bold text-white tracking-tighter">MAX</p>
-                      <p className="text-[10px] text-primary font-bold uppercase">MISSION_400_REALITY_PROOF</p>
-                      <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-                         <div className="h-full bg-primary" style={{ width: `100%` }} />
-                      </div>
-                   </div>
-                </CardContent>
+              <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                 <CardHeader className="p-6">
+                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">Steward Council</CardTitle>
+                 </CardHeader>
+                 <CardContent className="p-6 pt-0 space-y-4">
+                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                       "Emergency delegation enabled. The system can function autonomously under Mass Failure Scenarios."
+                    </p>
+                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none">SYSTEM_AUTONOMY: 82%</Badge>
+                 </CardContent>
               </Card>
             </div>
           </div>
@@ -375,23 +333,19 @@ export default function Home() {
            <div className="bg-primary/10 p-6 border-b border-white/10 flex items-center gap-4">
               <ShieldCheck className="size-10 text-primary" />
               <div>
-                <DialogTitle className="text-2xl font-headline font-bold text-white uppercase">Institutional Dispatch</DialogTitle>
+                <DialogTitle className="text-2xl font-headline font-bold text-white uppercase">Sovereign Dispatch</DialogTitle>
                 <p className="text-[10px] text-primary uppercase font-bold tracking-widest">{dailySummary?.date}</p>
               </div>
            </div>
            <div className="p-8 space-y-8">
               <div className="bg-emerald-500/5 p-6 rounded-2xl border border-emerald-500/20 space-y-3">
-                 <div className="flex items-center gap-3 text-emerald-500">
-                    <TrendingUp className="size-5" />
-                    <span className="text-xs font-bold uppercase tracking-widest">Resilience Status</span>
-                 </div>
                  <p className="text-sm font-mono text-emerald-100 italic leading-relaxed">
-                   "আজকের রিজিলিয়েন্স অডিট আপডেট: এন্টি-ক্যাপচার গার্ডরাইলস ১০০% কার্যকর। ক্ষমতার একক কেন্দ্রীকরণ ঝুঁকি শূন্য।"
+                   "আজকের অডিট আপডেট: নূরনেক্সাস এখন প্রতিষ্ঠাতা-নির্ভরতা কাটিয়ে একটি পূর্ণাঙ্গ সার্বভৌম প্রতিষ্ঠানে রূপ নিয়েছে। সিভিলাইজেশনাল ব্যালেন্স শিট পজিটিভ।"
                  </p>
               </div>
            </div>
            <div className="p-6 bg-white/2 border-t border-white/5">
-              <Button onClick={() => setIsSummaryOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase h-12 text-xs">Acknowledge Status</Button>
+              <Button onClick={() => setIsSummaryOpen(false)} className="w-full bg-primary text-primary-foreground font-bold uppercase h-12 text-xs">Acknowledge Maturity</Button>
            </div>
         </DialogContent>
       </Dialog>
