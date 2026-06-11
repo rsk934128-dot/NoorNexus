@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -40,7 +41,8 @@ import {
   Briefcase,
   Zap,
   FileOutput,
-  CandlestickChart
+  CandlestickChart,
+  UserCircle
 } from "lucide-react"
 
 import {
@@ -69,12 +71,13 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
+  { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Imperial Portfolio", url: "/portfolio", icon: Briefcase },
   { title: "Imperial Flow Pay", url: "/flow-pay", icon: Zap },
   { title: "Imperial Exchange", url: "/exchange-hub", icon: CandlestickChart },
   { title: "GSMIFY Web3", url: "/gsmify-web3", icon: ShieldPlus },
   { title: "Imperial Export Hub", url: "/export-hub", icon: FileOutput },
-  { title: "Shurukkha Imperial", url: "/shurukkha-imperial", icon: Shield, badge: true },
+  { title: "Shurukkha Imperial", url: "/shurukkha-imperial", icon: Shield },
   { title: "Shurukkha Standard", url: "/shurukkha-standard", icon: Phone },
   { title: "Imperial Store", url: "/rubel-store", icon: ShoppingBag },
   { title: "Identity Hub", url: "/identity", icon: Fingerprint },
@@ -116,14 +119,12 @@ export function AppSidebar() {
 
   const isAdmin = user?.email === ADMIN_EMAIL
 
-  // Scroll Restoration Logic
   React.useEffect(() => {
     const savedScrollPos = sessionStorage.getItem("sidebar-scroll-position")
     if (savedScrollPos && scrollRef.current) {
       scrollRef.current.scrollTop = parseInt(savedScrollPos)
     }
 
-    // Optional: Auto-scroll active item into view
     const activeElement = scrollRef.current?.querySelector('[data-active="true"]')
     if (activeElement) {
       activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' })

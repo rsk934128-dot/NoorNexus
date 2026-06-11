@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -54,8 +55,8 @@ import {
   Banknote, 
   History, 
   Heart, 
-  GraduationCap, 
-  Share2
+  Share2,
+  UserCircle
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -92,11 +93,12 @@ const NORA_AGENTS = [
   { id: "Nora-11", name: "Imperial Oracle", role: "Precognition", status: "MAX_WISDOM", icon: Compass },
 ]
 
-const MATURITY_INDEX = [
-  { label: "Financial Sovereignty", target: "95%+", current: 92.4, icon: Landmark, color: "text-emerald-500" },
-  { label: "Identity Integrity", target: "99%+", current: 98.1, icon: Fingerprint, color: "text-primary" },
-  { label: "Governance Automation", target: "90%+", current: 84.5, icon: Gavel, color: "text-amber-500" },
-  { label: "Mesh Resilience", target: "99.99%", current: 99.98, icon: Share2, color: "text-purple-500" },
+const CIVILIZATIONAL_INDEX = [
+  { label: "Financial Sovereignty", weight: "30%", score: 92.4, icon: Landmark, color: "text-emerald-500" },
+  { label: "Identity Integrity", weight: "25%", score: 98.1, icon: Fingerprint, color: "text-primary" },
+  { label: "Governance Automation", weight: "20%", score: 84.5, icon: Gavel, color: "text-amber-500" },
+  { label: "Citizen Participation", weight: "15%", score: 76.2, icon: UserCircle, color: "text-purple-500" },
+  { label: "Mesh Resilience", weight: "10%", score: 99.98, icon: Share2, color: "text-blue-500" },
 ]
 
 export default function Home() {
@@ -106,7 +108,7 @@ export default function Home() {
   const isAdmin = user?.email === ADMIN_EMAIL
 
   const [loading, setLoading] = useState(true)
-  const [statusText, setStatusText] = useState("INITIALIZING MISSION 400 CORE...")
+  const [statusText, setStatusText] = useState("INITIALIZING CIVILIZATION STACK...")
   const [auditing, setAuditing] = useState(false)
   const [fetchingSummary, setFetchingSummary] = useState(false)
   const [handshaking, setHandshaking] = useState(false)
@@ -122,10 +124,10 @@ export default function Home() {
   useEffect(() => {
     const sequence = [
       { text: "STABILIZING IMPERIAL CORE...", time: 600 },
-      { text: "SYNCHRONIZING 11 NORA AGENTS...", time: 1200 },
-      { text: "ESTABLISHING ETHICAL QUORUM...", time: 1800 },
+      { text: "SYNCHRONIZING CIVILIZATION LAYERS...", time: 1200 },
+      { text: "ESTABLISHING CITIZEN TRUST NODES...", time: 1800 },
       { text: "OPENING SOVEREIGN GATEWAYS...", time: 2400 },
-      { text: "MISSION 400: SYNTHESIS ACHIEVED", time: 3000 },
+      { text: "MISSION 400: SYNTHESIS COMPLETE", time: 3000 },
     ]
 
     sequence.forEach((step, i) => {
@@ -136,7 +138,14 @@ export default function Home() {
     })
 
     const interval = setInterval(() => {
-      const logs = ["REVENUE: Settlement Fee Captured", "PROTOCOL: Signed", "SDK: Heartbeat", "ORACLE: Predicting", "LEVY: P2C Tax Applied", "IDENTITY: Verified"]
+      const logs = [
+        "AUDIT: Transaction Traceability Verified", 
+        "GOV: Proposal Lifecycle Synced", 
+        "TRUST: Reputation Graph Updated", 
+        "CITIZEN: Engagement Pulse Detected",
+        "LEVY: Automatic Settlement Captured",
+        "MESH: Resilience Stress-Test PASSED"
+      ]
       setBorderFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
       setDiscoveryPulse(prev => (prev + Math.random() * 5) % 100)
     }, 3000)
@@ -235,24 +244,24 @@ export default function Home() {
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
                    <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-xs animate-pulse">
-                      <Sparkles className="size-3 mr-2" /> Mission 400: Synthesized
+                      <Sparkles className="size-3 mr-2" /> Mission 400: Validated
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <ShieldCheck className="size-3 mr-2" /> ETHICAL_INTEGRITY_VERIFIED
+                      <ShieldCheck className="size-3 mr-2" /> EVIDENCE_DRIVEN_TRUST
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   {isAdmin ? 'Command Center.' : 'Sovereign Hub.'}
+                   {isAdmin ? 'Civilization Ops.' : 'Citizen Hub.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed">
-                   "Integrity through Intelligence" - প্রযুক্তিগত উৎকর্ষতা এবং নৈতিক জবাবদিহিতার এক অনন্য সমন্বয়।
+                   "Integrity through Intelligence" - নুরনেক্সাস এখন একটি পূর্ণাঙ্গ ডিজিটাল সভ্যতা, যেখানে প্রতিটি নাগরিকের অংশগ্রহণ আমাদের সম্মিলিত শক্তির উৎস।
                 </p>
               </div>
               
               {isAdmin && (
                 <div className="flex flex-col items-center gap-4 w-full lg:w-auto animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="glass-card p-6 rounded-2xl border border-primary/20 flex flex-col items-center w-full min-w-[240px]">
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Global Awareness Pulse</p>
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">System Awareness Pulse</p>
                       <div className="flex items-center gap-3">
                          <Radio className="size-8 text-primary animate-pulse" />
                          <span className="text-4xl font-headline font-bold text-white tracking-tighter">{Math.floor(discoveryPulse)}%</span>
@@ -276,27 +285,27 @@ export default function Home() {
                <section className="space-y-6">
                   <div className="flex items-center justify-between px-2">
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                        <GraduationCap className="size-4" /> Civilizational Maturity Index
+                        <Activity className="size-4" /> Civilizational Maturity Engine
                      </h3>
-                     <Badge variant="outline" className="text-[10px] border-emerald-500/20 text-emerald-500 uppercase">Mission 400 Readiness</Badge>
+                     <Badge variant="outline" className="text-[10px] border-emerald-500/20 text-emerald-500 uppercase">Evidence-Driven Readiness</Badge>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-                    {MATURITY_INDEX.map((m, i) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+                    {CIVILIZATIONAL_INDEX.map((m, i) => (
                       <Card key={i} className="glass-card border-l-4 border-l-primary/20 hover:border-l-primary transition-all">
-                        <CardContent className="p-5 space-y-4">
+                        <CardContent className="p-4 space-y-4">
                            <div className="flex justify-between items-start">
                               <div className={`p-2 bg-white/5 rounded-lg ${m.color}`}>
-                                 <m.icon className="size-5" />
+                                 <m.icon className="size-4" />
                               </div>
-                              <span className="text-[10px] font-mono text-muted-foreground uppercase">Target: {m.target}</span>
+                              <span className="text-[8px] font-mono text-muted-foreground uppercase">Weight: {m.weight}</span>
                            </div>
                            <div className="space-y-2">
+                              <p className="text-[10px] font-bold text-muted-foreground uppercase leading-tight h-8">{m.label}</p>
                               <div className="flex justify-between items-end">
-                                 <p className="text-[10px] font-bold text-muted-foreground uppercase">{m.label}</p>
-                                 <p className={`text-xl font-headline font-bold ${m.color}`}>{m.current}%</p>
+                                 <p className={`text-xl font-headline font-bold ${m.color}`}>{m.score}%</p>
                               </div>
                               <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                                 <div className={`h-full transition-all duration-1000 ${m.color === 'text-emerald-500' ? 'bg-emerald-500' : m.color === 'text-primary' ? 'bg-primary' : m.color === 'text-amber-500' ? 'bg-amber-500' : 'bg-purple-500'}`} style={{ width: `${m.current}%` }} />
+                                 <div className={`h-full transition-all duration-1000 ${m.color.replace('text-', 'bg-')}`} style={{ width: `${m.score}%` }} />
                               </div>
                            </div>
                         </CardContent>
@@ -310,36 +319,36 @@ export default function Home() {
                     <CardHeader className="pb-2 p-4">
                        <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
                           <Banknote className="size-3" />
-                          Total Ecosystem Revenue
+                          Civilization Revenue (24h)
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
                        <div className="text-3xl font-headline font-bold text-white">$24,170.00</div>
-                       <p className="text-[9px] text-emerald-500 uppercase font-mono mt-1">+18.4% Surge Observed</p>
+                       <p className="text-[9px] text-emerald-500 uppercase font-mono mt-1">Audit: VERIFIED_ATOMIC</p>
                     </CardContent>
                  </Card>
                  <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                     <CardHeader className="pb-2 p-4">
                        <CardTitle className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
                           <Activity className="size-3" />
-                          Settlement Volume (24h)
+                          Event Traceability Chain
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
-                       <div className="text-3xl font-headline font-bold text-white">$12.5M</div>
-                       <p className="text-[9px] text-primary uppercase font-mono mt-1">15,420 Atomic Handshakes</p>
+                       <div className="text-3xl font-headline font-bold text-white">100%</div>
+                       <p className="text-[9px] text-primary uppercase font-mono mt-1">End-to-End Audit Active</p>
                     </CardContent>
                  </Card>
                  <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                     <CardHeader className="pb-2 p-4">
                        <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
                           <ShieldCheck className="size-3" />
-                          Network Stability
+                          Resilience Level
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
-                       <div className="text-3xl font-headline font-bold text-white">99.98%</div>
-                       <p className="text-[9px] text-amber-500 uppercase font-mono mt-1">420 Active Mesh Nodes</p>
+                       <div className="text-3xl font-headline font-bold text-white">MAX</div>
+                       <p className="text-[9px] text-amber-500 uppercase font-mono mt-1">Byzantine Fault Tolerant</p>
                     </CardContent>
                  </Card>
                </div>
@@ -350,15 +359,15 @@ export default function Home() {
                   </div>
                   <CardHeader className="p-6">
                      <CardTitle className="text-xs sm:text-sm font-headline uppercase tracking-[0.3em] text-primary flex items-center gap-3">
-                        <Shield className="size-5" /> Sovereign Manifesto
+                        <Shield className="size-5" /> Strategic Manifesto v4.2
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6 relative z-10 p-6 pt-0">
                      <p className="text-xl lg:text-2xl font-headline font-bold text-white leading-relaxed italic border-l-4 border-primary pl-6">
-                        "নূরনেক্সাস কেবল একটি অ্যাপ্লিকেশন নয়; এটি বিশ্বাসের এক সুদৃঢ় অবকাঠামো যেখানে প্রতিটি ডেটা আমানত হিসেবে গণ্য হয়।"
+                        "নুরনেক্সাস এখন কেবল একটি ওএস নয়; এটি একটি ডিজিটাল সভ্যতা যেখানে বিশ্বাস, জবাবদিহিতা এবং নাগরিক অংশগ্রহণই আমাদের মূল চালিকাশক্তি।"
                      </p>
                      <div className="flex items-center gap-2 text-primary/60 text-xs font-bold uppercase tracking-widest pl-6">
-                        <Heart className="size-3 fill-current" /> Collaborative Purity Achieved
+                        <Heart className="size-3 fill-current" /> Collaborative Purity Enforced
                      </div>
                   </CardContent>
                </Card>
@@ -368,14 +377,14 @@ export default function Home() {
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                         <BrainCircuit className="size-4" /> Neural Monitoring (Nora Suite)
                      </h3>
-                     <Badge variant="outline" className="text-[10px] border-white/10 uppercase">INTEGRITY_STABLE</Badge>
+                     <Badge variant="outline" className="text-[10px] border-white/10 uppercase">EXPLAINABILITY_ON</Badge>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
                      {NORA_AGENTS.map((agent) => (
                        <Card key={agent.id} className="glass-card hover:border-primary/40 transition-all group h-full">
                           <CardContent className="p-4 flex flex-col justify-between h-full space-y-4">
                              <div className="flex justify-between items-start">
-                                <div className="p-2 bg-primary/10 rounded-lg">
+                                <div className={`p-2 bg-white/5 rounded-lg`}>
                                    <agent.icon className="size-5 text-primary" />
                                 </div>
                                 <Badge className={`text-[8px] font-bold px-2 ${agent.status === 'MAX_WISDOM' ? 'bg-emerald-500' : 'bg-primary/20 text-primary'}`}>
@@ -398,7 +407,7 @@ export default function Home() {
                 <CardHeader className="p-4 border-b border-white/5">
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
                     <Radio className="size-4 text-emerald-500" />
-                    Real-time Ledger Sync
+                    Audit Chain Pulse
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
@@ -416,7 +425,7 @@ export default function Home() {
                     <div className="p-4 border-t border-white/5 bg-black/20">
                        <Button onClick={handleExecuteAudit} disabled={auditing} className="w-full bg-primary text-primary-foreground font-bold text-[10px] uppercase tracking-[0.2em] h-12 glow-primary">
                           {auditing ? <Loader2 className="animate-spin size-4" /> : <ShieldCheck className="size-4 mr-2" />}
-                          Trigger Accountability Audit
+                          Stress-Test Resilience
                        </Button>
                     </div>
                   )}
@@ -434,8 +443,8 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="space-y-6 p-6 pt-0">
                    <div className="space-y-2">
-                      <p className="text-4xl font-headline font-bold text-white tracking-tighter">{healthReport?.vaultIntegrity || 100}%</p>
-                      <p className="text-[10px] text-primary font-bold uppercase">CIVILIZATIONAL_MATURITY_L4</p>
+                      <p className="text-4xl font-headline font-bold text-white tracking-tighter">99.98%</p>
+                      <p className="text-[10px] text-primary font-bold uppercase">MISSION_400_READY</p>
                       <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
                          <div className="h-full bg-primary" style={{ width: `100%` }} />
                       </div>

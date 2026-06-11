@@ -25,8 +25,9 @@ import {
   Activity,
   UserCheck,
   HeartHandshake,
-  Network,
-  Users
+  Users,
+  Share2,
+  Box
 } from "lucide-react"
 import { issueSovereignIdentity, IdentityReputationOutput } from "@/ai/flows/identity-reputation-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -51,14 +52,13 @@ export default function IdentityHubPage() {
       const input = {
         owner: user.email || user.uid,
         linkedAddresses: wallets.split(',').map(s => s.trim()),
-        trustScore: 92, // Mock baseline from mesh
-        transactionHistorySummary: "Consistent cross-chain bridging observed across 12 mesh nodes."
+        trustScore: 92,
+        transactionHistorySummary: "Consistent civilizational participation observed across 12 mesh nodes."
       }
 
       const result = await issueSovereignIdentity(input)
       setIdentityResult(result)
 
-      // Save to Firestore Registry
       await setDoc(doc(db, "identities", result.did), {
         ...result,
         owner: user.email,
@@ -67,7 +67,7 @@ export default function IdentityHubPage() {
         updatedAt: serverTimestamp()
       })
 
-      toast({ title: "Identity Attested", description: `Tier assigned: ${result.reputationTier}` })
+      toast({ title: "Identity Attested", description: `Tier: ${result.reputationTier}` })
     } catch (e: any) {
       toast({ title: "Registry Failure", description: e.message, variant: "destructive" })
     } finally {
@@ -91,11 +91,11 @@ export default function IdentityHubPage() {
                    Sovereign Identity Hub
                  </h2>
               </div>
-              <p className="text-muted-foreground">Mission 400: Project 153 - Global Proof of Reputation Registry.</p>
+              <p className="text-muted-foreground">Mission 400: Project 153 - Sovereign Trust Graph & Reputation Passport.</p>
             </div>
             <div className="flex items-center gap-2">
                <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2 bg-emerald-500/5">
-                 <HeartHandshake className="size-4" /> DATA_JUSTICE_ENFORCED
+                 <HeartHandshake className="size-4" /> IDENTITY_JUSTICE_L4
                </Badge>
             </div>
           </header>
@@ -106,9 +106,9 @@ export default function IdentityHubPage() {
                 <Card className="glass-card border-l-4 border-l-primary">
                   <CardHeader>
                     <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                      <ShieldCheck className="size-4" /> Identity Registration
+                      <ShieldCheck className="size-4" /> Passport Registration
                     </CardTitle>
-                    <CardDescription>Issue your cross-chain reputation passport via Zero-Knowledge Protocol.</CardDescription>
+                    <CardDescription>Issue your cross-chain reputation passport for the civilization.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="space-y-2">
@@ -122,9 +122,9 @@ export default function IdentityHubPage() {
                     </div>
                     
                     <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
-                       <h4 className="text-[10px] font-bold uppercase text-primary">Zero-Knowledge Attestation</h4>
+                       <h4 className="text-[10px] font-bold uppercase text-primary">Relationship Mapping Active</h4>
                        <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                         Your private data remains on-premise. Only the reputation score and DID are broadcasted to the mesh.
+                         Your identity will be linked to your contributions, governance votes, and trade history in the Sovereign Trust Graph.
                        </p>
                     </div>
 
@@ -144,7 +144,7 @@ export default function IdentityHubPage() {
                     <CardHeader>
                       <CardTitle className="font-headline text-lg flex items-center gap-2 uppercase">
                         <Cpu className="size-5 text-primary" />
-                        Nora-06 Identity Analysis
+                        Nora-06 Identity Dispatch
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -152,7 +152,7 @@ export default function IdentityHubPage() {
                         <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
                           <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
                              <div className="flex justify-between items-center">
-                                <h4 className="text-[10px] font-bold uppercase text-primary">DID Issued</h4>
+                                <h4 className="text-[10px] font-bold uppercase text-primary">Civilization DID</h4>
                                 <Button variant="ghost" size="icon" className="size-6 h-6"><Copy className="size-3" /></Button>
                              </div>
                              <p className="text-[10px] font-mono text-white truncate">{identityResult.did}</p>
@@ -181,7 +181,7 @@ export default function IdentityHubPage() {
                         <div className="h-[300px] flex flex-col items-center justify-center gap-4 text-center opacity-40">
                           <Fingerprint className="size-16 text-primary animate-pulse" />
                           <p className="text-xs font-mono uppercase tracking-widest leading-relaxed">
-                            Await Identity Dispatch.<br/>Configure wallets to initiate.
+                            Await Identity Dispatch.<br/>Register passport to activate.
                           </p>
                         </div>
                       )}
@@ -190,37 +190,54 @@ export default function IdentityHubPage() {
                 </div>
               </div>
 
-              {/* Merchant Reputation Graph concept */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <Network className="size-4" /> Sovereign Trust & Reputation Graph
+                    <Share2 className="size-4" /> Sovereign Trust Graph (Relationship Mapping)
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <Card className="glass-card bg-white/2 border-white/5">
                        <CardHeader className="pb-2">
-                          <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground">Cross-Service Passport</CardTitle>
+                          <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground">Connected Entities</CardTitle>
                        </CardHeader>
-                       <CardContent>
-                          <div className="flex items-center gap-2">
-                             <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">FLOW_PAY</Badge>
-                             <Badge variant="outline" className="text-[8px] border-primary/20 text-primary">SENATE</Badge>
-                             <Badge variant="outline" className="text-[8px] border-amber-500/20 text-amber-500">EXCHANGE</Badge>
-                          </div>
-                          <p className="text-[9px] text-muted-foreground mt-3 italic">"Unified access across the entire Imperium."</p>
+                       <CardContent className="space-y-4">
+                          {[
+                            { name: "Flow Pay Node", trust: "High", icon: Zap },
+                            { name: "Senate Chamber", trust: "Verified", icon: Gavel },
+                            { name: "Merchant Hub", trust: "Imperial", icon: Building2 },
+                          ].map((e, i) => (
+                            <div key={i} className="flex items-center justify-between p-2 bg-black/20 rounded border border-white/5">
+                               <div className="flex items-center gap-2">
+                                  <e.icon className="size-3 text-primary" />
+                                  <span className="text-[10px] text-white uppercase font-bold">{e.name}</span>
+                               </div>
+                               <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">{e.trust}</Badge>
+                            </div>
+                          ))}
                        </CardContent>
                     </Card>
-                    <Card className="glass-card bg-white/2 border-white/5 col-span-2">
+                    <Card className="glass-card bg-white/2 border-white/5 col-span-2 relative overflow-hidden">
+                       <div className="absolute inset-0 bg-primary/5 pointer-events-none" />
                        <CardHeader className="pb-2">
-                          <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground">Merchant Trust Score</CardTitle>
+                          <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground">Reputation Network Pulse</CardTitle>
                        </CardHeader>
-                       <CardContent className="flex items-center justify-between">
-                          <div className="space-y-1 flex-1">
-                             <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                                <div className="h-full bg-emerald-500" style={{ width: '85%' }} />
-                             </div>
-                             <p className="text-[8px] text-muted-foreground uppercase font-mono">Verification: 850/1000 - ELITE_MERCHANT</p>
+                       <CardContent className="flex items-center justify-center h-[180px]">
+                          <div className="relative size-32 flex items-center justify-center">
+                             <div className="absolute inset-0 border border-primary/20 rounded-full animate-spin-slow" />
+                             <div className="absolute inset-4 border border-emerald-500/20 rounded-full animate-[spin_8s_linear_infinite]" />
+                             <Box className="size-10 text-primary glow-primary relative z-10" />
+                             <div className="absolute -top-2 left-1/2 -translate-x-1/2 size-4 bg-emerald-500 rounded-full glow-emerald" />
+                             <div className="absolute top-1/2 -left-2 -translate-y-1/2 size-3 bg-primary rounded-full glow-primary" />
+                             <div className="absolute bottom-2 right-2 size-2 bg-amber-500 rounded-full" />
                           </div>
-                          <Users className="size-10 text-emerald-500 opacity-20 ml-6" />
+                          <div className="ml-8 space-y-4">
+                             <div className="space-y-1">
+                                <p className="text-[10px] font-bold text-white uppercase">Reputation Depth</p>
+                                <p className="text-2xl font-headline font-bold text-emerald-500">L4_MASTER</p>
+                             </div>
+                             <p className="text-[8px] text-muted-foreground italic leading-relaxed">
+                                "Mapping 128 active sovereign relationships across the mesh."
+                             </p>
+                          </div>
                        </CardContent>
                     </Card>
                  </div>
@@ -231,12 +248,12 @@ export default function IdentityHubPage() {
               <Card className="glass-card bg-amber-500/5 border-amber-500/20">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                    <Award className="size-4" /> Recognition Mandate
+                    <Award className="size-4" /> Identity Mandate
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                    "Reputation is the armor of a sovereign merchant. By tying cross-chain activity to a single identity, we enable global trust without central control."
+                    "Reputation is the armor of a sovereign citizen. By tying all civilizational activity to a single DID, we enable trust without a central master."
                   </p>
                 </CardContent>
               </Card>
@@ -244,17 +261,17 @@ export default function IdentityHubPage() {
               <Card className="glass-card">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                       <ShieldCheck className="size-4" /> Privacy Status
+                       <ShieldCheck className="size-4" /> Privacy Protocol
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <div className="flex justify-between items-center text-[9px] p-2 bg-emerald-500/5 rounded border border-emerald-500/20">
-                       <span className="text-emerald-500 uppercase font-bold">Data Sovereignty</span>
-                       <span className="text-emerald-500">SECURE</span>
+                       <span className="text-emerald-500 uppercase font-bold">Traceability Check</span>
+                       <span className="text-emerald-500">VERIFIED</span>
                     </div>
                     <div className="flex justify-between items-center text-[9px] p-2 bg-primary/5 rounded border border-primary/20">
-                       <span className="text-primary uppercase font-bold">Third-Party Access</span>
-                       <span className="text-primary">DENIED</span>
+                       <span className="text-primary uppercase font-bold">Third-Party Leak</span>
+                       <span className="text-primary">ZERO_DETECTED</span>
                     </div>
                  </CardContent>
               </Card>

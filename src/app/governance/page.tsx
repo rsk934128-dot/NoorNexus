@@ -13,7 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { 
   Crown, 
   Gavel, 
-  MessageSquare, 
   Zap, 
   Loader2, 
   CheckCircle2, 
@@ -22,14 +21,14 @@ import {
   ShieldCheck, 
   Menu,
   FileText,
-  Clock,
-  UserCheck,
-  ChevronRight,
   Plus,
   AlertTriangle,
   Scale,
   PlayCircle,
-  FileCheck
+  FileCheck,
+  History,
+  Activity,
+  ArrowRight
 } from "lucide-react"
 import { analyzeSenateProposal, GovernanceArchitectOutput } from "@/ai/flows/governance-architect-flow"
 import { executeSenateWill, ExecutiveExecutionOutput } from "@/ai/flows/executive-execution-flow"
@@ -45,12 +44,10 @@ export default function GovernanceHubPage() {
   const [analyzing, setAnalyzing] = useState(false)
   const [executingId, setExecutingId] = useState<string | null>(null)
   
-  // Real-time proposals
   const { data: proposals, loading: propsLoading } = useCollection<any>(
     query(collection(db, "proposals"), orderBy("createdAt", "desc"), limit(50))
   )
 
-  // Get user's identity to check tier
   const { data: identities } = useCollection<any>(
     user ? query(collection(db, "identities"), limit(1)) : null
   )
@@ -88,11 +85,13 @@ export default function GovernanceHubPage() {
         status: "OPEN",
         votesFor: 0,
         votesAgainst: 0,
-        deadline: Date.now() + (7 * 24 * 60 * 60 * 1000), // 7 days
+        deadline: Date.now() + (7 * 24 * 60 * 60 * 1000),
         createdAt: Date.now(),
         noraStrategicAnalysis: analysis.noraAssessment,
         alignmentScore: analysis.strategicAlignmentScore,
-        verdict: analysis.verdict
+        verdict: analysis.verdict,
+        accountabilityScore: 100,
+        lifecycleStage: "SUBMITTED"
       })
 
       setForm({ title: "", description: "", category: "PROTOCOL" })
@@ -113,9 +112,10 @@ export default function GovernanceHubPage() {
     try {
       const propRef = doc(db, "proposals", proposalId)
       await updateDoc(propRef, {
-        [choice === 'FOR' ? 'votesFor' : 'votesAgainst']: increment(votingWeight)
+        [choice === 'FOR' ? 'votesFor' : 'votesAgainst']: increment(votingWeight),
+        lifecycleStage: "IN_DELIBERATION"
       })
-      toast({ title: "Vote Cast", description: `Power of ${votingWeight} applied.` })
+      toast({ title: "Vote Cast", description: `Power: ${votingWeight}` })
     } catch (e) {
       toast({ title: "Vote Failed", variant: "destructive" })
     }
@@ -142,13 +142,11 @@ export default function GovernanceHubPage() {
         status: "EXECUTED",
         executionHash: result.executionHash,
         executionReport: result.actionTaken,
+        lifecycleStage: "COMPLETED",
         updatedAt: Date.now()
       })
 
-      toast({ 
-        title: "Imperial Protocol Executed", 
-        description: "Autonomous Implementation Successful." 
-      })
+      toast({ title: "Imperial Protocol Executed" })
     } catch (e: any) {
       toast({ title: "Execution Failed", description: e.message, variant: "destructive" })
     } finally {
@@ -172,7 +170,7 @@ export default function GovernanceHubPage() {
                    The Imperial Senate
                  </h2>
               </div>
-              <p className="text-muted-foreground">Mission 400: Project 155 - Autonomous Executive Execution.</p>
+              <p className="text-muted-foreground">Governance Execution Layer: Proposals to Autonomous Workflows.</p>
             </div>
             <div className="flex items-center gap-2">
                <Badge variant="outline" className={`h-10 px-4 flex items-center gap-2 ${isEligible ? 'border-amber-500/30 text-amber-500 bg-amber-500/5' : 'border-white/10'}`}>
@@ -184,19 +182,18 @@ export default function GovernanceHubPage() {
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
             <div className="xl:col-span-3 space-y-8">
-              {/* Proposal Creation */}
               <Card className={`glass-card border-l-4 ${isEligible ? 'border-l-primary' : 'border-l-muted opacity-50'}`}>
                 <CardHeader>
                   <CardTitle className="text-sm font-headline uppercase tracking-widest flex items-center gap-2">
                     <Plus className="size-4" /> Drafting Chamber
                   </CardTitle>
-                  <CardDescription>Only ELITE and IMPERIAL members may propose new imperial edicts.</CardDescription>
+                  <CardDescription>Only ELITE and IMPERIAL members may propose new civilizational edicts.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                    {!isEligible && (
                      <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center gap-3">
                         <AlertTriangle className="size-5 text-amber-500" />
-                        <p className="text-xs text-amber-200">Increase your Reputation Tier in the Identity Hub to unlock the Senate.</p>
+                        <p className="text-xs text-amber-200">Increase your Reputation Tier in the Identity Hub to unlock governance rights.</p>
                      </div>
                    )}
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -207,7 +204,7 @@ export default function GovernanceHubPage() {
                             disabled={!isEligible}
                             value={form.title}
                             onChange={e => setForm({...form, title: e.target.value})}
-                            placeholder="e.g. Allocate $1M to SIRAJGANJ node expansion"
+                            placeholder="e.g. Expand Mesh Resilience in South Asia"
                             className="bg-background/50 border-white/10 font-bold"
                           />
                         </div>
@@ -224,19 +221,19 @@ export default function GovernanceHubPage() {
                             <SelectContent>
                               <SelectItem value="PROTOCOL">PROTOCOL_UPGRADE</SelectItem>
                               <SelectItem value="TREASURY">TREASURY_REBALANCE</SelectItem>
-                              <SelectItem value="FEATURE">NEW_SUBSYSTEM</SelectItem>
+                              <SelectItem value="FEATURE">CITIZEN_ENGAGEMENT</SelectItem>
                               <SelectItem value="EMERGENCY">EMERGENCY_EDICT</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-[10px] font-bold uppercase text-muted-foreground">Edict Description</Label>
+                        <Label className="text-[10px] font-bold uppercase text-muted-foreground">Implementation Reasoning</Label>
                         <textarea 
                           disabled={!isEligible}
                           value={form.description}
                           onChange={e => setForm({...form, description: e.target.value})}
-                          placeholder="Provide cold, imperial logic for your proposal..."
+                          placeholder="Describe how this proposal aligns with Mission 400..."
                           className="w-full h-28 bg-background/50 border border-white/10 rounded-md p-3 text-xs outline-none focus:ring-1 focus:ring-primary"
                         />
                       </div>
@@ -247,15 +244,14 @@ export default function GovernanceHubPage() {
                     className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary"
                    >
                      {analyzing ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
-                     Analyze & Dispatch to Senate
+                     Analyze & Submit for Execution
                    </Button>
                 </CardContent>
               </Card>
 
-              {/* Proposals List */}
               <div className="space-y-4">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
-                   <FileText className="size-4" /> Active Deliberations
+                   <FileText className="size-4" /> Active Proposal Lifecycle
                 </h3>
                 {propsLoading ? (
                   <div className="flex flex-col items-center py-20 gap-4 opacity-50">
@@ -274,29 +270,45 @@ export default function GovernanceHubPage() {
                            <div className="space-y-1">
                               <div className="flex items-center gap-2">
                                 <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 text-[8px] h-4">{prop.category}</Badge>
-                                <span className="text-[8px] text-muted-foreground font-mono uppercase">BY {prop.creatorName}</span>
+                                <span className="text-[8px] text-muted-foreground font-mono uppercase">LIFECYCLE: {prop.lifecycleStage || "SUBMITTED"}</span>
                               </div>
                               <CardTitle className="text-lg font-headline text-white uppercase">{prop.title}</CardTitle>
                            </div>
-                           <div className="text-right">
+                           <div className="text-right space-y-2">
                               <Badge variant="outline" className={`border-emerald-500/20 text-emerald-500 h-6 text-[9px] uppercase font-bold ${prop.status === 'EXECUTED' ? 'bg-emerald-500/10' : ''}`}>
                                 {prop.status}
                               </Badge>
+                              <div className="flex items-center gap-1 justify-end">
+                                 <p className="text-[7px] text-muted-foreground uppercase font-bold">Accountability</p>
+                                 <p className="text-[10px] text-emerald-500 font-bold font-mono">{prop.accountabilityScore || 100}%</p>
+                              </div>
                            </div>
                         </CardHeader>
                         <CardContent className="space-y-6">
                            <p className="text-xs text-muted-foreground leading-relaxed italic">"{prop.description}"</p>
                            
+                           <div className="flex items-center gap-2 px-2 py-4 bg-white/2 rounded-lg border border-white/5 overflow-x-auto">
+                              {["SUBMITTED", "IN_DELIBERATION", "APPROVED", "EXECUTING", "COMPLETED"].map((step, i) => (
+                                <div key={i} className="flex items-center gap-2 shrink-0">
+                                   <div className={`p-1.5 rounded-full ${prop.lifecycleStage === step ? 'bg-primary text-primary-foreground' : (i < 2 ? 'bg-emerald-500/20 text-emerald-500' : 'bg-white/5 text-muted-foreground')}`}>
+                                      <CheckCircle2 className="size-3" />
+                                   </div>
+                                   <span className={`text-[8px] font-bold uppercase ${prop.lifecycleStage === step ? 'text-primary' : 'text-muted-foreground'}`}>{step.replace('_', ' ')}</span>
+                                   {i < 4 && <ArrowRight className="size-2 text-muted-foreground/30" />}
+                                </div>
+                              ))}
+                           </div>
+
                            {prop.status === 'EXECUTED' ? (
                              <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl space-y-3">
                                 <div className="flex items-center justify-between border-b border-white/5 pb-2">
                                    <h4 className="text-[10px] font-bold uppercase text-emerald-500 flex items-center gap-2">
-                                     <FileCheck className="size-3" /> Nora-08 Execution Report
+                                     <FileCheck className="size-3" /> Nora-08 Autonomous Execution Report
                                    </h4>
                                 </div>
                                 <p className="text-[10px] text-emerald-200 leading-relaxed italic">{prop.executionReport}</p>
                                 <div className="pt-2">
-                                   <p className="text-[8px] font-mono text-muted-foreground uppercase">Execution Signature</p>
+                                   <p className="text-[8px] font-mono text-muted-foreground uppercase">Execution Signature (HMAC_V4)</p>
                                    <p className="text-[9px] font-mono text-primary truncate">{prop.executionHash}</p>
                                 </div>
                              </div>
@@ -331,7 +343,7 @@ export default function GovernanceHubPage() {
                                         className="bg-emerald-500 text-emerald-foreground hover:bg-emerald-600 gap-2 h-10 px-6 font-bold uppercase text-[10px] glow-emerald"
                                        >
                                           {executingId === prop.id ? <Loader2 className="size-4 animate-spin" /> : <PlayCircle className="size-4" />}
-                                          Execute edict
+                                          Trigger Execution
                                        </Button>
                                      )}
                                      <Button 
@@ -366,16 +378,16 @@ export default function GovernanceHubPage() {
               <Card className="glass-card bg-primary/5 border-primary/20">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                    <Scale className="size-4" /> Governance Charter
+                    <Scale className="size-4" /> Governance Execution Layer
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
                     {[
-                      { label: "Execution Force", value: "Autonomous Nora-08" },
-                      { label: "Execution Hash", value: "HMAC_V4 Signed" },
-                      { label: "Quorum", value: "60% Weight" },
-                      { label: "Sovereign Delay", value: "Immediate" }
+                      { label: "Execution Force", value: "Autonomous Workflow" },
+                      { label: "Accountability", value: "Weighted Scoring" },
+                      { label: "Traceability", value: "Audit-Ready" },
+                      { label: "Lifecycle", value: "Submitted -> Complete" }
                     ].map((item, i) => (
                       <div key={i} className="flex justify-between items-center text-[10px] p-2 bg-white/5 rounded border border-white/5">
                         <span className="text-muted-foreground uppercase">{item.label}</span>
@@ -384,7 +396,7 @@ export default function GovernanceHubPage() {
                     ))}
                   </div>
                   <p className="text-[9px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-4">
-                    "An edict passed but not executed is a drift in sovereignty. Project 155 ensures the Senate's will is manifest."
+                    "Every passed edict is a mandate for change. The Governance Execution Layer ensures zero-drift between the Senate's will and system reality."
                   </p>
                 </CardContent>
               </Card>
@@ -392,17 +404,17 @@ export default function GovernanceHubPage() {
               <Card className="glass-card">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                       <TrendingUp className="size-4" /> Mesh Sentiment
+                       <TrendingUp className="size-4" /> Outcome Tracking
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <div className="space-y-4">
                        <div className="space-y-1">
-                          <p className="text-[8px] text-muted-foreground uppercase">Overall Stability</p>
-                          <p className="text-xl font-headline font-bold text-emerald-500">MAX_EXECUTIVE</p>
+                          <p className="text-[8px] text-muted-foreground uppercase">Execution Success Rate</p>
+                          <p className="text-xl font-headline font-bold text-emerald-500">100.00%</p>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                          <div className="h-full bg-primary" style={{ width: '92%' }} />
+                          <div className="h-full bg-primary" style={{ width: '100%' }} />
                        </div>
                     </div>
                  </CardContent>

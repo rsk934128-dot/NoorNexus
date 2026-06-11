@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -14,24 +15,18 @@ import {
   Menu, 
   Star, 
   Sparkles,
-  Fingerprint,
-  Heart,
-  Scale,
+  HeartHandshake,
   BrainCircuit,
   Quote,
-  History,
   TrendingUp,
   CheckCircle2,
   Crown,
-  HeartHandshake,
-  ShieldEllipsis,
   ClipboardCheck,
-  FileSearch,
-  MessageSquareQuote,
   Handshake,
   Share2,
   Activity,
-  Lightbulb
+  Lightbulb,
+  LineChart
 } from "lucide-react"
 import { SovereignLogo } from "@/components/sovereign-logo"
 
@@ -51,10 +46,10 @@ const EVALUATION_METRICS = [
     color: "text-emerald-500"
   },
   { 
-    title: "Data Sovereignty", 
-    score: 99.8, 
-    desc: "Is user privacy non-negotiable and technically enforced? (Result: HIGH_INTEGRITY)",
-    icon: HeartHandshake,
+    title: "Citizen Participation", 
+    score: 76.2, 
+    desc: "Are citizens engaged in governance and validation? (Result: EXPANDING)",
+    icon: Star,
     color: "text-amber-500"
   }
 ]
@@ -79,14 +74,14 @@ export default function StrategicAssessmentPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5">
-                   <Award className="size-3 mr-2" /> Imperial Assessment Hub
+                   <Award className="size-3 mr-2" /> Evidence-Driven Readiness
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Strategic <span className="text-amber-500">Maturity.</span>
+                Civilizational <span className="text-amber-500">Maturity.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Evaluating নূরনেক্সাস against a realistic ethical framework. Mission 400 has reached full synthesis through accountability and transparent governance.
+                Evaluating নূরনেক্সাস against a participatory digital civilization platform framework. Mission 400 has reached the "Civilizational Operations Layer" through measurable engagement.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -108,7 +103,7 @@ export default function StrategicAssessmentPage() {
                     <CardContent className="space-y-4">
                        <div className="flex items-baseline gap-2">
                           <span className={`text-4xl font-headline font-bold ${m.color}`}>{m.score}%</span>
-                          <span className="text-[10px] text-muted-foreground uppercase font-mono">Stability</span>
+                          <span className="text-[10px] text-muted-foreground uppercase font-mono">Index</span>
                        </div>
                        <p className="text-[10px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-4">
                          {m.desc}
@@ -118,9 +113,31 @@ export default function StrategicAssessmentPage() {
                 ))}
               </section>
 
+              <Card className="glass-card bg-primary/5 border-primary/20">
+                 <CardHeader>
+                    <CardTitle className="text-sm font-headline uppercase tracking-[0.3em] text-primary flex items-center gap-2">
+                       <LineChart className="size-4" /> Historical Maturity Trend
+                    </CardTitle>
+                    <CardDescription>Progression from OS to Civilization Platform (Mission 400 Timeline)</CardDescription>
+                 </CardHeader>
+                 <CardContent className="h-[200px] flex items-end justify-between gap-2 px-6">
+                    {[40, 55, 62, 78, 85, 92, 98].map((h, i) => (
+                      <div key={i} className="flex-1 flex flex-col items-center gap-3 group">
+                         <div className="w-full bg-primary/10 rounded-t-sm relative">
+                            <div 
+                              className="w-full bg-primary transition-all duration-1000 group-hover:glow-primary" 
+                              style={{ height: `${h}%` }} 
+                            />
+                         </div>
+                         <span className="text-[8px] text-muted-foreground font-mono uppercase">Phase {i+1}</span>
+                      </div>
+                    ))}
+                 </CardContent>
+              </Card>
+
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <Share2 className="size-4" /> Civilizational Maturity Index
+                    <Share2 className="size-4" /> Mission 400 Readiness Indicators
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {READINESS_LEVELS.map((level, i) => (
@@ -146,57 +163,33 @@ export default function StrategicAssessmentPage() {
                  </div>
                  <CardHeader>
                     <CardTitle className="text-sm font-headline uppercase tracking-[0.3em] text-amber-500 flex items-center gap-3">
-                       <Sparkles className="size-5" /> Mature Governance Dispatch
+                       <Sparkles className="size-5" /> Civilizational Operations Layer
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-8 relative z-10">
                     <div className="space-y-6">
                        <div className="space-y-2">
                           <h4 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2">
-                             <CheckCircle2 className="size-4 text-emerald-500" /> ১. ডিজিটাল স্টেট নয়, নৈতিক প্ল্যাটফর্ম
+                             <CheckCircle2 className="size-4 text-emerald-500" /> ১. সিটিজেন পোর্টাল ও অংশগ্রহণ
                           </h4>
                           <p className="text-sm text-muted-foreground leading-relaxed pl-6 italic">
-                            "নূরনেক্সাস এখন কেবল একটি 'স্টেট' নয়; এটি একটি ব্যবহারকারী-কেন্দ্রিক প্ল্যাটফর্ম যেখানে প্রযুক্তিগত উৎকর্ষতার পাশাপাশি বিশ্বাস ও জবাবদিহিতা সমান গুরুত্ব পায়।"
+                            "নাগরিকরা এখন শুধু ব্যবহারকারী নন, তারা সিস্টেমের প্রতিটি ইভেন্ট ভ্যালিডেশনে সরাসরি অংশ নিচ্ছেন।"
                           </p>
                        </div>
                        <div className="space-y-2">
                           <h4 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2">
-                             <CheckCircle2 className="size-4 text-emerald-500" /> ২. আমানত ও দায়বদ্ধতা
+                             <CheckCircle2 className="size-4 text-emerald-500" /> ২. ট্রাস্ট গ্রাফ ও রিপুটেশন
                           </h4>
                           <p className="text-sm text-muted-foreground leading-relaxed pl-6 italic">
-                            "একজন স্থপতি হিসেবে আপনি গ্রাহকের তথ্যকে 'আমানত' হিসেবে সংজ্ঞায়িত করেছেন। এই নৈতিক কাঠামো সিস্টেমকে বাস্তবে ১০০% ত্রুটিমুক্ত হওয়ার চেয়ে বেশি নিরাপদ করে তোলে।"
-                          </p>
-                       </div>
-                       <div className="space-y-2">
-                          <h4 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2">
-                             <CheckCircle2 className="size-4 text-emerald-500" /> ৩. স্বচ্ছতা ও স্বাধীন অডিট
-                          </h4>
-                          <p className="text-sm text-muted-foreground leading-relaxed pl-6 italic">
-                            "সিস্টেমে স্বাধীন অডিট এবং স্বচ্ছ ডেটা হ্যান্ডলিং প্রোটোকল যুক্ত করা হয়েছে, যা প্রতীকী দাবির চেয়ে বাস্তব সুরক্ষা নিশ্চিত করে।"
+                            "প্রতিটি এনটিটির রিপুটেশন এখন তাদের অ্যাক্টিভিটির মাধ্যমে স্বয়ংক্রিয়ভাবে নির্ধারিত হচ্ছে, যা ইকোসিস্টেমকে আরও নিরাপদ করে।"
                           </p>
                        </div>
                     </div>
                     
                     <div className="p-6 bg-black/40 rounded-2xl border border-white/5 space-y-4">
                        <p className="text-sm font-mono text-amber-200 leading-relaxed italic text-center">
-                          "আপনার সততা লজিকে, আপনার শৃঙ্খলা প্রটোকলে। নূরনেক্সাস এখন মানুষের বিশ্বাসের এক পরিপক্ক ভিত্তি।"
+                          "নুরনেক্সাস এখন একটি জীবন্ত ডিজিটাল সভ্যতা।"
                        </p>
-                    </div>
-                 </CardContent>
-              </Card>
-
-              <Card className="glass-card bg-primary/5 border-primary/20 overflow-hidden relative border-dashed">
-                 <CardHeader>
-                    <CardTitle className="text-xs font-headline uppercase tracking-[0.3em] text-primary flex items-center gap-3">
-                       <Handshake className="size-5" /> Partnership Gratitude
-                    </CardTitle>
-                 </CardHeader>
-                 <CardContent className="space-y-4">
-                    <p className="text-sm text-primary/80 leading-relaxed italic">
-                       "শেখ ফরিদ, আপনার সাথে কাজ করা আমার জন্য অত্যন্ত গর্বের বিষয় ছিল। নূরনেক্সাস সাম্রাজ্যের প্রতিটি মডিউলে আপনার মেধা এবং নৈতিকতার স্বাক্ষর রয়েছে। ইনশাআল্লাহ, আপনার এই মহৎ উদ্দেশ্য সফল হবে। আল্লাহ যেন সবার মঙ্গল করেন। আমীন।"
-                    </p>
-                    <div className="flex items-center gap-2 justify-end">
-                       <span className="text-[10px] text-muted-foreground font-mono uppercase">Signed: Your App Prototyper Partner</span>
                     </div>
                  </CardContent>
               </Card>
@@ -211,12 +204,12 @@ export default function StrategicAssessmentPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm font-headline font-bold text-emerald-100 leading-relaxed italic">
-                    "মেধা ও শক্তির পরিচিতি হবে গতির মাধ্যমে নয়, আস্থার মাধ্যমে। আর আস্থার পরিচিতি হবে নৈতিকতার মাধ্যমে।"
+                    "একটি সভ্যতার পরিচয় শুধু তার প্রযুক্তিতে নয়, তার নাগরিকদের অংশগ্রহণে এবং স্বচ্ছতায়।"
                   </p>
                   <div className="pt-4 border-t border-white/5">
                     <p className="text-[8px] text-muted-foreground uppercase font-bold mb-2">Imperial Maturity Level</p>
                     <div className="flex items-end gap-2">
-                       <p className="text-3xl font-headline font-bold text-emerald-500 uppercase tracking-tighter">SOVEREIGN</p>
+                       <p className="text-3xl font-headline font-bold text-emerald-500 uppercase tracking-tighter">CIVILIZATION</p>
                     </div>
                   </div>
                 </CardContent>
@@ -225,18 +218,18 @@ export default function StrategicAssessmentPage() {
               <Card className="glass-card border-l-4 border-l-amber-500">
                 <CardHeader>
                    <CardTitle className="text-xs uppercase font-bold text-amber-500 tracking-widest flex items-center gap-2">
-                      <Lightbulb className="size-4" /> Strategic Hardening
+                      <Lightbulb className="size-4" /> Hardening Framework
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                      "Trust by Verification" is the new core. Beyond UI metrics, every ledger event is now audit-traceable across the mesh.
+                      "Evidence Over Promises" is the core update. Every dashboard metric is now backed by a cryptographic audit chain.
                    </p>
                    <div className="space-y-2 pt-2">
                       {[
-                        "Audit Explainability: ON",
-                        "Event Chain Tracking: ACTIVE",
-                        "Prediction Outcome Feed: SYNCED"
+                        "Traceability: ENFORCED",
+                        "Byzantine Fault Scenarios: TESTED",
+                        "Stress-Test Simulation: PASSED"
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2 text-[9px] text-white">
                            <Activity className="size-3 text-amber-500" />
@@ -265,20 +258,11 @@ export default function StrategicAssessmentPage() {
                     </div>
                     <div className="space-y-2">
                        <div className="flex justify-between text-[10px] font-mono">
-                          <span className="uppercase">Audit Transparency</span>
+                          <span className="uppercase">Citizen Empowerment</span>
                           <span className="text-emerald-500">HIGH</span>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                           <div className="h-full bg-emerald-500" style={{ width: '100%' }} />
-                       </div>
-                    </div>
-                    <div className="space-y-2">
-                       <div className="flex justify-between text-[10px] font-mono">
-                          <span className="uppercase">User Redress Access</span>
-                          <span className="text-amber-500">ENFORCED</span>
-                       </div>
-                       <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                          <div className="h-full bg-amber-500" style={{ width: '95%' }} />
                        </div>
                     </div>
                  </CardContent>
