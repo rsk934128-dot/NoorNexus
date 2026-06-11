@@ -57,7 +57,9 @@ import {
   Heart, 
   Share2,
   UserCircle,
-  ExternalLink
+  ExternalLink,
+  ShieldHalf,
+  Database
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -87,6 +89,13 @@ const CIVILIZATIONAL_INDEX = [
   { label: "Infrastructure Resilience", weight: "20%", score: 99.98, icon: Share2, color: "text-blue-500", evidence: "mesh-pulse" },
 ]
 
+const RESILIENCE_METRICS = [
+  { label: "Governance Failure Resistance", score: 94 },
+  { label: "Treasury Stability (Anti-Capture)", score: 99 },
+  { label: "Security Posture (HMAC_V4)", score: 100 },
+  { label: "AI Dependency Containment", score: 88 }
+]
+
 export default function Home() {
   const { toast } = useToast()
   const db = useFirestore()
@@ -94,8 +103,7 @@ export default function Home() {
   const isAdmin = user?.email === ADMIN_EMAIL
 
   const [loading, setLoading] = useState(true)
-  const [statusText, setStatusText] = useState("INITIALIZING CIVILIZATION DIGITAL TWIN...")
-  const [auditing, setAuditing] = useState(false)
+  const [statusText, setStatusText] = useState("INITIALIZING CIVILIZATION OPERATING SYSTEM...")
   const [fetchingSummary, setFetchingSummary] = useState(false)
   const [isSummaryOpen, setIsSummaryOpen] = useState(false)
   const [dailySummary, setDailySummary] = useState<DailySummary | null>(null)
@@ -104,11 +112,11 @@ export default function Home() {
 
   useEffect(() => {
     const sequence = [
-      { text: "STABILIZING IMPERIAL CORE...", time: 600 },
-      { text: "SYNCHRONIZING CIVILIZATION LAYERS...", time: 1200 },
-      { text: "ESTABLISHING CITIZEN TRUST NODES...", time: 1800 },
-      { text: "OPENING SOVEREIGN GATEWAYS...", time: 2400 },
-      { text: "MISSION 400: CIVILIZATION DIGITAL TWIN READY", time: 3000 },
+      { text: "STABILIZING INSTITUTIONAL CORE...", time: 600 },
+      { text: "ENFORCING CONSTITUTIONAL GUARDRAILS...", time: 1200 },
+      { text: "ACTIVATING ANTI-CAPTURE ARCHITECTURE...", time: 1800 },
+      { text: "CALIBRATING RESILIENCE MESH...", time: 2400 },
+      { text: "NOORNEXUS: REALITY-PROOF CIVILIZATION READY", time: 3000 },
     ]
 
     sequence.forEach((step, i) => {
@@ -120,12 +128,12 @@ export default function Home() {
 
     const interval = setInterval(() => {
       const logs = [
-        "AUDIT: Cryptographic Attestation Verified", 
-        "GOV: Accountability Loop Synchronized", 
-        "TRUST: Multi-Dimensional Vector Updated", 
-        "AI: Alignment Audit COMPLETED",
-        "ECON: Value Flow Graph Updated",
-        "TWIN: System Mirror Active"
+        "CONST: Constitutional Registry Pulse OK", 
+        "RESIL: Governance Resistance Verified", 
+        "MEM: Historical Evidence Vaulted", 
+        "AI: Permission Matrix Enforced",
+        "SYNC: Institutional Memory Engine Active",
+        "ECON: Anti-Capture Liquidity Confirmed"
       ]
       setBorderFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
       setDiscoveryPulse(prev => (prev + Math.random() * 5) % 100)
@@ -176,32 +184,32 @@ export default function Home() {
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
                    <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-xs animate-pulse">
-                      <Sparkles className="size-3 mr-2" /> Digital Twin Active
+                      <Sparkles className="size-3 mr-2" /> Reality-Proof Hub
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <ShieldCheck className="size-3 mr-2" /> VERIFIABLE_OS_L4
+                      <ShieldCheck className="size-3 mr-2" /> SELF_AUDITING_L4
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   {isAdmin ? 'Civilization Mirror.' : 'Twin Interface.'}
+                   {isAdmin ? 'Institutional Core.' : 'Civilization Mirror.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed">
-                   "Verifiable Trust. Autonomous Governance. Economic Sovereignty." - নূরনেক্সাস এখন সভ্যতার একটি ডিজিটাল টুইন, যেখানে প্রতিটি সিদ্ধান্ত ও ফলাফল যাচাইযোগ্য।
+                   "Institutional Hardening. Anti-Capture Governance. Civilizational Resilience." - নূরনেক্সাস এখন একটি স্থায়িত্ব-নির্ভর রিয়ালিটি-প্রুফ অপারেটিং সিস্টেম।
                 </p>
               </div>
               
               {isAdmin && (
                 <div className="flex flex-col items-center gap-4 w-full lg:w-auto animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="glass-card p-6 rounded-2xl border border-primary/20 flex flex-col items-center w-full min-w-[240px]">
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Institutional Pulse</p>
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Resilience Pulse</p>
                       <div className="flex items-center gap-3">
-                         <Radio className="size-8 text-primary animate-pulse" />
-                         <span className="text-4xl font-headline font-bold text-white tracking-tighter">{Math.floor(discoveryPulse)}%</span>
+                         <ShieldHalf className="size-8 text-primary animate-pulse" />
+                         <span className="text-4xl font-headline font-bold text-white tracking-tighter">98.2%</span>
                       </div>
                   </div>
                   <div className="flex gap-2 w-full">
                     <Button onClick={handleFetchDailySummary} disabled={fetchingSummary} className="flex-1 bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 gap-2 text-[10px]">
-                      <BarChart3 className="size-4" /> Daily Dispatch
+                      <BarChart3 className="size-4" /> Strategic Dispatch
                     </Button>
                   </div>
                 </div>
@@ -214,7 +222,7 @@ export default function Home() {
                <section className="space-y-6">
                   <div className="flex items-center justify-between px-2">
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                        <Activity className="size-4" /> Evidence Marketplace (Maturity Index)
+                        <Activity className="size-4" /> Civilizational Maturity Index
                      </h3>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
@@ -245,60 +253,75 @@ export default function Home() {
                   </div>
                </section>
 
-               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                 <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                    <CardHeader className="pb-2 p-4">
-                       <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
-                          <TrendingUp className="size-3" />
-                          Economic Execution (Value Flow)
-                       </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-4 pt-0">
-                       <div className="text-3xl font-headline font-bold text-white">$24.1M</div>
-                       <p className="text-[9px] text-emerald-500 uppercase font-mono mt-1">Audit: VERIFIABLE_LEDGER</p>
-                    </CardContent>
-                 </Card>
-                 <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                    <CardHeader className="pb-2 p-4">
-                       <CardTitle className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
-                          <Activity className="size-3" />
-                          Accountability Chain
-                       </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-4 pt-0">
-                       <div className="text-3xl font-headline font-bold text-white">96.4%</div>
-                       <p className="text-[9px] text-primary uppercase font-mono mt-1">Execution Loop: ACTIVE</p>
-                    </CardContent>
-                 </Card>
+               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                  <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
-                    <CardHeader className="pb-2 p-4">
-                       <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                          <BrainCircuit className="size-3" />
-                          AI Alignment Depth
+                    <CardHeader className="pb-2 p-6">
+                       <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
+                          <ShieldAlert className="size-4" /> Civilizational Resilience Index
+                       </CardTitle>
+                       <CardDescription className="text-xs">Measuring the system's ability to survive reality contact.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="px-6 pb-6 space-y-5">
+                       {RESILIENCE_METRICS.map((metric, i) => (
+                         <div key={metric.label} className="space-y-2">
+                            <div className="flex justify-between text-[10px] font-mono">
+                               <span className="text-white uppercase font-bold">{metric.label}</span>
+                               <span className="text-amber-500">{metric.score}%</span>
+                            </div>
+                            <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                               <div className="h-full bg-amber-500 transition-all duration-1000" style={{ width: `${metric.score}%` }} />
+                            </div>
+                         </div>
+                       ))}
+                    </CardContent>
+                 </Card>
+
+                 <Card className="glass-card bg-primary/5 border-primary/20 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                       <Database className="size-48 text-primary" />
+                    </div>
+                    <CardHeader className="p-6">
+                       <CardTitle className="text-xs sm:text-sm font-headline uppercase tracking-[0.3em] text-primary flex items-center gap-3">
+                          <History className="size-5" /> Institutional Memory Engined
                        </CardTitle>
                     </CardHeader>
-                    <CardContent className="p-4 pt-0">
-                       <div className="text-3xl font-headline font-bold text-white">L4_MAX</div>
-                       <p className="text-[9px] text-amber-500 uppercase font-mono mt-1">Nora Registry: AUDITED</p>
+                    <CardContent className="space-y-6 relative z-10 p-6 pt-0">
+                       <div className="space-y-4">
+                          {[
+                            { title: "Constitution Ratified", date: "Cycle 42", proof: "0x82...f9" },
+                            { title: "Multi-sig Governance Active", date: "Cycle 45", proof: "0xcc...e1" }
+                          ].map((item, i) => (
+                            <div key={i} className="p-3 bg-black/40 rounded-xl border border-white/5 flex justify-between items-center">
+                               <div className="space-y-1">
+                                  <p className="text-xs font-bold text-white uppercase">{item.title}</p>
+                                  <p className="text-[8px] text-muted-foreground font-mono">TIMESTAMP: {item.date}</p>
+                               </div>
+                               <Badge variant="outline" className="text-[8px] border-primary/20 text-primary">VERIFIED</Badge>
+                            </div>
+                          ))}
+                       </div>
+                       <Button variant="ghost" className="w-full text-[10px] uppercase font-bold tracking-widest text-primary/60 hover:text-primary">
+                          Access Full Memory Vault
+                       </Button>
                     </CardContent>
                  </Card>
                </div>
 
-               <Card className="glass-card bg-primary/5 border-primary/30 relative overflow-hidden">
+               <Card className="glass-card bg-emerald-500/5 border-emerald-500/30 relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                     <Quote className="size-32 text-primary" />
+                     <Quote className="size-32 text-emerald-500" />
                   </div>
                   <CardHeader className="p-6">
-                     <CardTitle className="text-xs sm:text-sm font-headline uppercase tracking-[0.3em] text-primary flex items-center gap-3">
-                        <Shield className="size-5" /> Strategic Manifesto v5.0 (Civilization Twin)
+                     <CardTitle className="text-xs sm:text-sm font-headline uppercase tracking-[0.3em] text-emerald-500 flex items-center gap-3">
+                        <ShieldCheck className="size-5" /> Institutional Statement v6.0
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6 relative z-10 p-6 pt-0">
-                     <p className="text-xl lg:text-2xl font-headline font-bold text-white leading-relaxed italic border-l-4 border-primary pl-6">
-                        "নুরনেক্সাস এখন সভ্যতার একটি ডিজিটাল টুইন, যেখানে প্রতিটি সিদ্ধান্ত ক্রিপ্টোগ্রাফিক প্রমাণের মাধ্যমে যাচাইযোগ্য এবং প্রতিটি ফলাফল একাউন্টিবিলিটি ইঞ্জিনের মাধ্যমে পরিমাপযোগ্য।"
+                     <p className="text-xl lg:text-2xl font-headline font-bold text-white leading-relaxed italic border-l-4 border-emerald-500 pl-6">
+                        "নুরনেক্সাস এখন আর শুধু সফটওয়্যার নয়; এটি একটি স্থায়িত্ব-নির্ভর ডিজিটাল প্রতিষ্ঠান, যেখানে প্রতিটি ক্ষমতার কেন্দ্রীকরণ প্রতিরোধ করা হয়েছে এবং প্রতিটি সিদ্ধান্ত ঐতিহাসিক স্মৃতির অংশ।"
                      </p>
-                     <div className="flex items-center gap-2 text-primary/60 text-xs font-bold uppercase tracking-widest pl-6">
-                        <Heart className="size-3 fill-current" /> Zero-Drift Decision System Enforced
+                     <div className="flex items-center gap-2 text-emerald-500/60 text-xs font-bold uppercase tracking-widest pl-6">
+                        <Heart className="size-3 fill-current" /> Constitutional Safeguards Active
                      </div>
                   </CardContent>
                </Card>
@@ -329,13 +352,13 @@ export default function Home() {
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                 <CardHeader className="p-6">
                    <CardTitle className="flex items-center gap-2 font-headline text-lg uppercase">
-                     <History className="size-5 text-primary" /> System Health
+                     <ShieldHalf className="size-5 text-primary" /> Mesh Survival
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6 p-6 pt-0">
                    <div className="space-y-2">
-                      <p className="text-4xl font-headline font-bold text-white tracking-tighter">99.99%</p>
-                      <p className="text-[10px] text-primary font-bold uppercase">MISSION_400_TWIN_READY</p>
+                      <p className="text-4xl font-headline font-bold text-white tracking-tighter">MAX</p>
+                      <p className="text-[10px] text-primary font-bold uppercase">MISSION_400_REALITY_PROOF</p>
                       <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
                          <div className="h-full bg-primary" style={{ width: `100%` }} />
                       </div>
@@ -350,9 +373,9 @@ export default function Home() {
       <Dialog open={isSummaryOpen} onOpenChange={setIsSummaryOpen}>
         <DialogContent className="glass-card border-primary/40 w-[95vw] sm:max-w-[600px] bg-black/95 p-0 overflow-hidden">
            <div className="bg-primary/10 p-6 border-b border-white/10 flex items-center gap-4">
-              <BarChart3 className="size-10 text-primary" />
+              <ShieldCheck className="size-10 text-primary" />
               <div>
-                <DialogTitle className="text-2xl font-headline font-bold text-white uppercase">Daily Twin Dispatch</DialogTitle>
+                <DialogTitle className="text-2xl font-headline font-bold text-white uppercase">Institutional Dispatch</DialogTitle>
                 <p className="text-[10px] text-primary uppercase font-bold tracking-widest">{dailySummary?.date}</p>
               </div>
            </div>
@@ -360,10 +383,10 @@ export default function Home() {
               <div className="bg-emerald-500/5 p-6 rounded-2xl border border-emerald-500/20 space-y-3">
                  <div className="flex items-center gap-3 text-emerald-500">
                     <TrendingUp className="size-5" />
-                    <span className="text-xs font-bold uppercase tracking-widest">Digital Twin Status</span>
+                    <span className="text-xs font-bold uppercase tracking-widest">Resilience Status</span>
                  </div>
                  <p className="text-sm font-mono text-emerald-100 italic leading-relaxed">
-                   "আজকের সিস্টেম মিরর আপডেট: ট্রাস্ট লেজার ১০০% সিঙ্কড। সিভিক ইমপ্যাক্ট ০.৪% বৃদ্ধি পেয়েছে।"
+                   "আজকের রিজিলিয়েন্স অডিট আপডেট: এন্টি-ক্যাপচার গার্ডরাইলস ১০০% কার্যকর। ক্ষমতার একক কেন্দ্রীকরণ ঝুঁকি শূন্য।"
                  </p>
               </div>
            </div>

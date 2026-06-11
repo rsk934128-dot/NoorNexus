@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useRef, useEffect } from "react"
@@ -11,7 +12,10 @@ import { Label } from "@/components/ui/label"
 import { 
   Code2, Globe, Lock, Terminal, Zap, Send, Loader2, ShieldCheck, 
   Menu, MessageSquare, Cpu, BookOpen, Layers, Info, CheckCircle2,
-  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, Rocket, Copy, Star, ShieldPlus, DatabaseZap, ReceiptText
+  ArrowRightLeft, AlertTriangle, Key, ShieldAlert, ChevronRight, BellRing, Rocket, Copy, Star, ShieldPlus, DatabaseZap, ReceiptText,
+  ShieldHalf,
+  Database,
+  Unplug
 } from "lucide-react"
 import { noraIntegrationAssistant, IntegrationAssistantOutput } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -24,6 +28,12 @@ const ENDPOINTS = [
   { method: "POST", path: "/openapi/v2/order/payment-method", desc: "Fetch URL/QR for specific method." },
   { method: "GET", path: "/openapi/v2/order/query", desc: "Poll transaction status." },
   { method: "POST", path: "/openapi/v2/webhook/callback", desc: "Inbound notification receiver." }
+]
+
+const INTEROP_ENDPOINTS = [
+  { method: "POST", path: "/x-chain/trust/exchange", desc: "Cross-platform reputation verification." },
+  { method: "POST", path: "/x-chain/proposal/sync", desc: "Synchronize governance edicts with DAOs." },
+  { method: "GET", path: "/x-chain/memory/query", desc: "Fetch institutional memory nodes." }
 ]
 
 const SDK_METHODS = [
@@ -83,54 +93,31 @@ export default function ApiHubPage() {
     }
   }
 
-  const v2Payload = `{
-  "outerOrderSn": "RD-V2-H4DB1RWI",
-  "outerUid": "SF-ARCHITECT-001",
-  "orderAmount": "100.00",
-  "orderCurrency": "USD",
-  "orderDesc": "Sovereign Grid Access Phase 42-B License",
-  "env": "WEB",
-  "goods": [
-    { "id": "PROJ-42-NODE", "name": "Sovereign Node Auth", "quantity": 1, "price": "100.00" }
-  ],
-  "redirectUrl": "https://shurukkha-hub-imperial-sovereign-in.vercel.app/dashboard"
-}`
-
-  const v2Response = `{
-  "code": "SUCCESS",
-  "msg": null,
-  "requestId": "94012d08-9945-4f45-85c7-6276da3e6d45",
-  "data": {
-    "orderSn": "P1781129258404772",
-    "outerOrderSn": "RD-V2-H4DB1RWI",
-    "webUrl": "https://pay.redotpay.com/checkout/RD-V2-H4DB1RWI",
-    "h5Url": "https://pay.redotpay.com/h5/RD-V2-H4DB1RWI",
-    "appUrl": "redotpay://payment/RD-V2-H4DB1RWI",
-    "paymentMethods": ["USDT", "USDC", "BTC"]
-  }
-}`
-
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full">
-          <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-1">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20">
+          <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
+            <div className="space-y-4">
               <div className="flex items-center gap-3">
                  <SidebarTrigger className="md:hidden text-primary">
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
-                 <h2 className="text-2xl sm:text-4xl font-headline font-bold flex items-center gap-3 uppercase">
-                   <Code2 className="size-10 text-primary" />
-                   Sovereign Connect Hub
-                 </h2>
+                 <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
+                   <ShieldHalf className="size-3 mr-2" /> Interoperability Layer
+                 </Badge>
               </div>
-              <p className="text-muted-foreground">Project 160: Global Discovery & Imperial SDK Integration.</p>
+              <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
+                Sovereign <span className="text-primary">Connect.</span>
+              </h2>
+              <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
+                Project 160: Linking NoorNexus to the global financial and governance mesh. Secure institutional data exchange gateways.
+              </p>
             </div>
             <div className="flex items-center gap-2">
-               <Badge variant="outline" className="border-primary/30 text-primary h-10 px-4 flex items-center gap-2">
-                 <Globe className="size-4 animate-spin-slow" /> DISCOVERY_PROTOCOL_ACTIVE
+               <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 h-10 px-4 flex items-center gap-2 bg-emerald-500/5">
+                 <Globe className="size-4 animate-spin-slow" /> GATEWAY_L4_ACTIVE
                </Badge>
             </div>
           </header>
@@ -140,79 +127,52 @@ export default function ApiHubPage() {
               <Tabs defaultValue="v2" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
                   <TabsTrigger value="v2" className="gap-2"><ReceiptText className="size-4" /> V2 Protocol</TabsTrigger>
+                  <TabsTrigger value="interop" className="gap-2"><Unplug className="size-4" /> Interop API</TabsTrigger>
                   <TabsTrigger value="sdk" className="gap-2"><Cpu className="size-4" /> Imperial SDK</TabsTrigger>
-                  <TabsTrigger value="endpoints" className="gap-2"><Globe className="size-4" /> REST API</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="v2" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
-                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      <Card className="glass-card border-l-4 border-l-primary">
-                         <CardHeader>
-                            <CardTitle className="text-sm font-headline uppercase text-primary">Request Specification</CardTitle>
-                            <CardDescription>POST /openapi/v2/order/create</CardDescription>
-                         </CardHeader>
-                         <CardContent className="space-y-4">
-                            <div className="grid grid-cols-2 gap-3">
-                               <div className="p-3 bg-white/5 rounded-lg border border-white/10">
-                                  <p className="text-[8px] uppercase font-bold text-muted-foreground">X-R-TS (Timestamp)</p>
-                                  <p className="text-xs font-mono text-white mt-1">1781129258404</p>
+                   <Card className="glass-card border-l-4 border-l-primary">
+                      <CardHeader>
+                         <CardTitle className="text-sm font-headline uppercase text-primary">Standard Gateway API</CardTitle>
+                         <CardDescription>Primary financial settlement endpoints.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-0">
+                         <div className="divide-y divide-white/5">
+                           {ENDPOINTS.map((ep, i) => (
+                             <div key={i} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/2 transition-colors">
+                               <div className="flex items-center gap-4">
+                                 <Badge className={ep.method === 'POST' ? 'bg-primary' : 'bg-emerald-500'}>{ep.method}</Badge>
+                                 <code className="text-xs font-mono text-white">{ep.path}</code>
                                </div>
-                               <div className="p-3 bg-white/5 rounded-lg border border-white/10">
-                                  <p className="text-[8px] uppercase font-bold text-muted-foreground">X-R-Signature</p>
-                                  <p className="text-xs font-mono text-primary mt-1">bGJjeXVvMTc4MTEy...</p>
-                               </div>
-                            </div>
-                            <div className="space-y-2">
-                               <Label className="text-[10px] uppercase font-bold text-muted-foreground">Example Payload</Label>
-                               <pre className="p-4 bg-black/60 rounded-xl text-[10px] font-mono text-emerald-400 overflow-x-auto border border-white/5">
-                                  {v2Payload}
-                               </pre>
-                            </div>
-                         </CardContent>
-                      </Card>
-
-                      <Card className="glass-card border-l-4 border-l-emerald-500">
-                         <CardHeader>
-                            <CardTitle className="text-sm font-headline uppercase text-emerald-500">Unified Response (V2)</CardTitle>
-                            <CardDescription>Standard wrapper for all sovereign responses.</CardDescription>
-                         </CardHeader>
-                         <CardContent className="space-y-4">
-                            <div className="p-3 bg-emerald-500/5 rounded-lg border border-emerald-500/10">
-                               <p className="text-[9px] text-emerald-200 leading-relaxed italic">
-                                  "The V2 wrapper provides a predictable structure with atomic requestId tracking."
-                               </p>
-                            </div>
-                            <div className="space-y-2">
-                               <Label className="text-[10px] uppercase font-bold text-muted-foreground">JSON Response</Label>
-                               <pre className="p-4 bg-black/60 rounded-xl text-[10px] font-mono text-primary overflow-x-auto border border-white/5">
-                                  {v2Response}
-                               </pre>
-                            </div>
-                         </CardContent>
-                      </Card>
-                   </div>
+                               <p className="text-[10px] text-muted-foreground uppercase">{ep.desc}</p>
+                             </div>
+                           ))}
+                         </div>
+                      </CardContent>
+                   </Card>
                 </TabsContent>
 
-                <TabsContent value="endpoints" className="space-y-4">
-                  <Card className="glass-card">
-                    <CardHeader>
-                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary">Sovereign API 2.0 Endpoints</CardTitle>
-                      <CardDescription>Direct integration via SHA256withRSA for high-throughput nodes.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                      <div className="divide-y divide-white/5">
-                        {ENDPOINTS.map((ep, i) => (
-                          <div key={i} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/2 transition-colors">
-                            <div className="flex items-center gap-4">
-                              <Badge className={ep.method === 'POST' ? 'bg-primary' : 'bg-emerald-500'}>{ep.method}</Badge>
-                              <code className="text-xs font-mono text-white">{ep.path}</code>
-                            </div>
-                            <p className="text-[10px] text-muted-foreground uppercase">{ep.desc}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
+                <TabsContent value="interop" className="space-y-6">
+                   <Card className="glass-card border-l-4 border-l-amber-500">
+                      <CardHeader>
+                         <CardTitle className="text-sm font-headline uppercase text-amber-500">Cross-Platform Exchange</CardTitle>
+                         <CardDescription>Linking institutional memory and trust chains.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-0">
+                         <div className="divide-y divide-white/5">
+                           {INTEROP_ENDPOINTS.map((ep, i) => (
+                             <div key={i} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/2 transition-colors">
+                               <div className="flex items-center gap-4">
+                                 <Badge className="bg-amber-500">{ep.method}</Badge>
+                                 <code className="text-xs font-mono text-white">{ep.path}</code>
+                               </div>
+                               <p className="text-[10px] text-muted-foreground uppercase">{ep.desc}</p>
+                             </div>
+                           ))}
+                         </div>
+                      </CardContent>
+                   </Card>
                 </TabsContent>
 
                 <TabsContent value="sdk" className="space-y-6">
@@ -222,22 +182,13 @@ export default function ApiHubPage() {
                         <Cpu className="size-5 text-primary" />
                         Imperial SDK (@sheikh/core)
                       </CardTitle>
-                      <CardDescription>The official NoorNexus bridge for ecosystem applications.</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-6">
-                      <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-3">
-                         <h4 className="text-xs font-bold text-primary uppercase">Quick Installation</h4>
-                         <code className="text-[10px] font-mono text-emerald-500">npm install @sheikh/core --registry https://npm.noornexus.mesh</code>
-                      </div>
-
-                      <div className="space-y-4">
-                        <h4 className="text-sm font-bold uppercase text-white">Core Methods</h4>
+                    <CardContent className="space-y-4">
                         <Table>
                           <TableHeader className="bg-white/5">
                             <TableRow>
                               <TableHead className="text-[10px] uppercase">Method</TableHead>
                               <TableHead className="text-[10px] uppercase">Description</TableHead>
-                              <TableHead className="text-[10px] uppercase">Parameters</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody className="text-[11px]">
@@ -245,12 +196,10 @@ export default function ApiHubPage() {
                               <TableRow key={i}>
                                 <TableCell className="font-mono text-primary font-bold">{m.name}</TableCell>
                                 <TableCell className="text-muted-foreground">{m.desc}</TableCell>
-                                <TableCell className="font-mono text-[9px]">{m.params}</TableCell>
                               </TableRow>
                             ))}
                           </TableBody>
                         </Table>
-                      </div>
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -258,29 +207,16 @@ export default function ApiHubPage() {
             </div>
 
             <div className="space-y-6">
-              <Card className="glass-card border-l-4 border-l-emerald-500">
+              <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-                    <ShieldCheck className="size-4" /> Data Compliance Brief
+                    <ShieldCheck className="size-4" /> Institutional Memory
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                   <div className="space-y-2">
-                      <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
-                        <ShieldPlus className="size-3 text-emerald-500" /> AES-256 Encryption
-                      </h4>
-                      <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                        সকল ডেটা AES-256 বিট এনক্রিপশনের মাধ্যমে আপনার প্রিমাইসে সংরক্ষিত থাকে।
-                      </p>
-                   </div>
-                   <div className="space-y-2 pt-2 border-t border-white/5">
-                      <h4 className="text-[10px] font-bold uppercase text-white flex items-center gap-2">
-                        <DatabaseZap className="size-3 text-amber-500" /> Zero-Write Policy
-                      </h4>
-                      <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                        সিস্টেম আপনার ডেটাবেসে কোনো রাইট (Write) অপারেশন করবে না। এটি শুধু Read-Only মোডে কাজ করবে।
-                      </p>
-                   </div>
+                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                      "API consumers can query institutional memory nodes to verify historical edict alignment before executing financial swaps."
+                   </p>
                 </CardContent>
               </Card>
 
@@ -296,7 +232,7 @@ export default function ApiHubPage() {
                       {messages.length === 0 && (
                         <div className="text-center py-10 space-y-3">
                           <MessageSquare className="size-10 text-muted-foreground/20 mx-auto" />
-                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting SDK query or Discovery intent...</p>
+                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting Interop query...</p>
                         </div>
                       )}
                       {messages.map((msg, i) => (
@@ -304,16 +240,6 @@ export default function ApiHubPage() {
                           <div className={`max-w-[90%] p-3 rounded-xl text-xs font-mono leading-relaxed ${msg.role === 'user' ? 'bg-primary/20 border border-primary/20 text-primary-foreground' : 'bg-white/5 border border-white/5 text-muted-foreground'}`}>
                             {msg.text}
                           </div>
-                          {msg.brief && (
-                             <div className="mt-2 p-3 bg-primary/10 border border-primary/30 rounded-xl text-[10px] text-primary italic">
-                                {msg.brief}
-                             </div>
-                          )}
-                          {msg.code && (
-                            <div className="mt-2 w-full max-w-[95%] bg-black/40 p-2 rounded border border-white/5 overflow-x-auto">
-                              <pre className="text-[9px] text-primary">{msg.code}</pre>
-                            </div>
-                          )}
                         </div>
                       ))}
                       <div ref={scrollRef} />
@@ -323,7 +249,7 @@ export default function ApiHubPage() {
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <input 
-                         placeholder="How to join Discovery Protocol?" 
+                         placeholder="How to link External DAO memory?" 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}
