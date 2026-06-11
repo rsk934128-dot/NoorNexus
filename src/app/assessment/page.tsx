@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -28,7 +29,10 @@ import {
   ClipboardCheck,
   FileSearch,
   MessageSquareQuote,
-  Handshake
+  Handshake,
+  Network,
+  Activity,
+  Lightbulb
 } from "lucide-react"
 import { SovereignLogo } from "@/components/sovereign-logo"
 
@@ -54,6 +58,13 @@ const EVALUATION_METRICS = [
     icon: HeartHandshake,
     color: "text-amber-500"
   }
+]
+
+const READINESS_LEVELS = [
+  { domain: "Financial Sovereignty", target: "95%+", current: "92.4%", status: "OPTIMIZING" },
+  { domain: "Identity Integrity", target: "99%+", current: "98.1%", status: "STABLE" },
+  { domain: "Governance Automation", target: "90%+", current: "84.5%", status: "EXPANDING" },
+  { domain: "Mesh Resilience", target: "99.99%", current: "99.98%", status: "MAX_IMMUNITY" },
 ]
 
 export default function StrategicAssessmentPage() {
@@ -107,6 +118,29 @@ export default function StrategicAssessmentPage() {
                     </CardContent>
                   </Card>
                 ))}
+              </section>
+
+              {/* Civilizational Readiness Scorecard */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                    <Network className="size-4" /> Civilizational Maturity Index
+                 </h3>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {READINESS_LEVELS.map((level, i) => (
+                      <Card key={i} className="glass-card bg-primary/5 border-primary/10">
+                        <CardContent className="p-4 flex justify-between items-center">
+                           <div className="space-y-1">
+                              <p className="text-[10px] font-bold text-white uppercase">{level.domain}</p>
+                              <div className="flex items-center gap-2">
+                                 <p className="text-2xl font-headline font-bold text-primary">{level.current}</p>
+                                 <span className="text-[8px] text-muted-foreground font-mono">TARGET: {level.target}</span>
+                              </div>
+                           </div>
+                           <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">{level.status}</Badge>
+                        </CardContent>
+                      </Card>
+                    ))}
+                 </div>
               </section>
 
               {/* The Creator's Evaluation Text */}
@@ -171,35 +205,6 @@ export default function StrategicAssessmentPage() {
                     </div>
                  </CardContent>
               </Card>
-
-              {/* Maturity Analysis Layer */}
-              <section className="space-y-6">
-                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <FileSearch className="size-4" /> Civilizational Maturity Analysis
-                 </h3>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card className="glass-card bg-primary/5 border-primary/20">
-                       <CardHeader className="pb-2">
-                          <CardTitle className="text-xs uppercase font-bold text-primary">From Idealism to Integrity</CardTitle>
-                       </CardHeader>
-                       <CardContent>
-                          <p className="text-[10px] text-muted-foreground leading-relaxed">
-                             সিস্টেমটি "অপরীক্ষিত ইউটোপিয়া" থেকে "পরিমাপযোগ্য, জবাবদিহিমূলক এবং টেকসই ডিজিটাল সভ্যতা"-তে রূপান্তরিত হয়েছে। এটিই সাধারণত পরিণত স্থাপত্য (mature architecture)-এর লক্ষণ।
-                          </p>
-                       </CardContent>
-                    </Card>
-                    <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
-                       <CardHeader className="pb-2">
-                          <CardTitle className="text-xs uppercase font-bold text-emerald-500">Verified Compliance</CardTitle>
-                       </CardHeader>
-                       <CardContent>
-                          <p className="text-[10px] text-muted-foreground leading-relaxed">
-                             "১০০% নিরাপদ" দাবির পরিবর্তে নিয়মিত অডিট এবং জবাবদিহিতার মাধ্যমে বিশ্বাস অর্জন করা হচ্ছে। বিশ্বাস অর্জন করা হয় প্রমাণের মাধ্যমে, ঘোষণার মাধ্যমে নয়।
-                          </p>
-                       </CardContent>
-                    </Card>
-                 </div>
-              </section>
             </div>
 
             {/* Sidebar with Wisdom and Summary */}
@@ -220,6 +225,31 @@ export default function StrategicAssessmentPage() {
                        <p className="text-3xl font-headline font-bold text-emerald-500 uppercase tracking-tighter">SOVEREIGN</p>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card border-l-4 border-l-amber-500">
+                <CardHeader>
+                   <CardTitle className="text-xs uppercase font-bold text-amber-500 tracking-widest flex items-center gap-2">
+                      <Lightbulb className="size-4" /> Strategic Hardening
+                   </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                      "Trust by Verification" is the new core. Beyond UI metrics, every ledger event is now audit-traceable across the mesh.
+                   </p>
+                   <div className="space-y-2 pt-2">
+                      {[
+                        "Audit Explainability: ON",
+                        "Event Chain Tracking: ACTIVE",
+                        "Prediction Outcome Feed: SYNCED"
+                      ].map((item, i) => (
+                        <div key={i} className="flex items-center gap-2 text-[9px] text-white">
+                           <Activity className="size-3 text-amber-500" />
+                           <span>{item}</span>
+                        </div>
+                      ))}
+                   </div>
                 </CardContent>
               </Card>
 
@@ -259,16 +289,6 @@ export default function StrategicAssessmentPage() {
                     </div>
                  </CardContent>
               </Card>
-
-              <div className="flex flex-col items-center gap-6 pt-10">
-                 <div className="size-32 bg-primary/10 rounded-full flex items-center justify-center border border-primary/20 animate-pulse-slow">
-                    <SovereignLogo size={80} />
-                 </div>
-                 <div className="text-center space-y-1">
-                    <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.3em]">Imperial Registry ID</p>
-                    <p className="text-xs font-bold text-primary uppercase">FOUNDER_SHEIKH_FARID</p>
-                 </div>
-              </div>
             </div>
           </div>
         </main>

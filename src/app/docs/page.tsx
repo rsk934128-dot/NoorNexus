@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -8,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
   BookOpen, FileText, ShieldAlert, Zap, Loader2, Target, 
-  AlertTriangle, CheckCircle2, ChevronRight, Menu, Cpu, Code2, ShieldCheck, Star, Globe, Copy, Lock, ShieldPlus, DatabaseZap, Scale, HeartHandshake, ShieldEllipsis, Eye, ClipboardCheck, Handshake, MessageCircleWarning, FileBarChart
+  AlertTriangle, CheckCircle2, ChevronRight, Menu, Cpu, Code2, ShieldCheck, Star, Globe, Copy, Lock, ShieldPlus, DatabaseZap, Scale, HeartHandshake, ShieldEllipsis, Eye, ClipboardCheck, Handshake, MessageCircleWarning, FileBarChart, Layers, Users, Network
 } from "lucide-react"
 import { analyzeProtocol, ProtocolArchitectOutput } from "@/ai/flows/protocol-architect-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -16,7 +17,7 @@ import { useToast } from "@/hooks/use-toast"
 export default function DocsPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
-  const [analysis, setAnalysis] = useState<ProtocolArchitectOutput | null>(null)
+  const [analysis, setAnalysis] = useState<ProtocolArchitectOutput | null>(analysis)
 
   async function runArchitect() {
     setLoading(true)
@@ -67,6 +68,36 @@ export default function DocsPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-12">
+              {/* The 4 Architecture Layers */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
+                    <Layers className="size-4" /> Civilizational Stack Architecture
+                 </h3>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {[
+                      { title: "1. Infrastructure Layer", items: ["One Engine Ledger", "Mesh Nodes", "Imperial SDK"], icon: Network },
+                      { title: "2. Economic Layer", items: ["Flow Pay", "Exchange Hub", "SmartRemit P2P"], icon: Globe },
+                      { title: "3. Governance Layer", items: ["Imperial Senate", "Oracle Agent", "Arbiter Chamber"], icon: Gavel },
+                      { title: "4. Citizen Layer", items: ["Sovereign Identity", "Merchant Empire", "Developer Nodes"], icon: Users }
+                    ].map((layer, i) => (
+                      <Card key={i} className="glass-card bg-primary/5 border-primary/10">
+                        <CardHeader className="pb-2">
+                           <CardTitle className="text-[10px] font-bold uppercase text-primary flex items-center gap-2">
+                              <layer.icon className="size-3" /> {layer.title}
+                           </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                           <div className="flex flex-wrap gap-2">
+                              {layer.items.map((item, j) => (
+                                <Badge key={j} variant="outline" className="text-[8px] border-white/10">{item}</Badge>
+                              ))}
+                           </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                 </div>
+              </section>
+
               {/* Mature Ethical Framework Section */}
               <section className="space-y-6">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2">
@@ -193,33 +224,6 @@ export default function DocsPage() {
                     </div>
                   </CardContent>
                 </Card>
-              </section>
-
-              <section className="space-y-4">
-                <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
-                  <Target className="size-4" /> Strategic Progress
-                </h3>
-                <div className="space-y-4">
-                  {[
-                    { title: "Core OS Stabilization", phase: "PHASE_1", status: "COMPLETED", desc: "HMAC_V4 cryptographic handshake and regional node mesh setup." },
-                    { title: "Adaptive Sovereign Shield", phase: "PHASE_2", status: "COMPLETED", desc: "Collective Immune System (Project 150) and Nora-01 Compliance Agent." },
-                    { title: "Mature Governance & Redress", phase: "PHASE_3", status: "ACTIVE", desc: "Implementation of the 7-pillar ethical framework and accountability layers." },
-                    { title: "Global Imperial Consensus", phase: "PHASE_4", status: "QUEUED", desc: "Full activation of 400 sovereign nodes for asset mesh consensus." }
-                  ].map((step, i) => (
-                    <Card key={i} className="glass-card border-l-4 border-l-primary/30">
-                      <CardHeader className="py-4">
-                        <div className="flex justify-between items-center">
-                          <Badge variant="outline" className="text-[10px] font-mono border-primary/20">{step.phase}</Badge>
-                          <Badge className={step.status === 'COMPLETED' ? 'bg-emerald-500' : step.status === 'ACTIVE' ? 'bg-primary animate-pulse' : 'bg-muted'}>
-                            {step.status}
-                          </Badge>
-                        </div>
-                        <CardTitle className="text-lg font-headline mt-2">{step.title}</CardTitle>
-                        <CardDescription className="text-xs">{step.desc}</CardDescription>
-                      </CardHeader>
-                    </Card>
-                  ))}
-                </div>
               </section>
             </div>
 

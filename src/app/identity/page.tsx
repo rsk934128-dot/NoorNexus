@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -23,7 +24,9 @@ import {
   Menu,
   Activity,
   UserCheck,
-  HeartHandshake
+  HeartHandshake,
+  Network,
+  Users
 } from "lucide-react"
 import { issueSovereignIdentity, IdentityReputationOutput } from "@/ai/flows/identity-reputation-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -146,7 +149,7 @@ export default function IdentityHubPage() {
                     </CardHeader>
                     <CardContent className="space-y-6">
                       {identityResult ? (
-                        <div className="space-y-6 animate-in fade-in zoom-in-95">
+                        <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
                           <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
                              <div className="flex justify-between items-center">
                                 <h4 className="text-[10px] font-bold uppercase text-primary">DID Issued</h4>
@@ -163,7 +166,7 @@ export default function IdentityHubPage() {
                                 </Badge>
                              </div>
                              <div className="p-3 bg-white/5 rounded-lg border border-white/5 text-center">
-                                <p className="text-[8px] text-muted-foreground uppercase font-bold">Reputation Score</p>
+                                <p className="text-[8px] text-muted-foreground uppercase font-bold">Trust Score</p>
                                 <p className="text-xl font-headline font-bold text-emerald-500">{identityResult.calculatedReputationScore}</p>
                              </div>
                           </div>
@@ -186,6 +189,42 @@ export default function IdentityHubPage() {
                   </Card>
                 </div>
               </div>
+
+              {/* Merchant Reputation Graph concept */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                    <Network className="size-4" /> Sovereign Trust & Reputation Graph
+                 </h3>
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <Card className="glass-card bg-white/2 border-white/5">
+                       <CardHeader className="pb-2">
+                          <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground">Cross-Service Passport</CardTitle>
+                       </CardHeader>
+                       <CardContent>
+                          <div className="flex items-center gap-2">
+                             <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">FLOW_PAY</Badge>
+                             <Badge variant="outline" className="text-[8px] border-primary/20 text-primary">SENATE</Badge>
+                             <Badge variant="outline" className="text-[8px] border-amber-500/20 text-amber-500">EXCHANGE</Badge>
+                          </div>
+                          <p className="text-[9px] text-muted-foreground mt-3 italic">"Unified access across the entire Imperium."</p>
+                       </CardContent>
+                    </Card>
+                    <Card className="glass-card bg-white/2 border-white/5 col-span-2">
+                       <CardHeader className="pb-2">
+                          <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground">Merchant Trust Score</CardTitle>
+                       </CardHeader>
+                       <CardContent className="flex items-center justify-between">
+                          <div className="space-y-1 flex-1">
+                             <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                                <div className="h-full bg-emerald-500" style={{ width: '85%' }} />
+                             </div>
+                             <p className="text-[8px] text-muted-foreground uppercase font-mono">Verification: 850/1000 - ELITE_MERCHANT</p>
+                          </div>
+                          <Users className="size-10 text-emerald-500 opacity-20 ml-6" />
+                       </CardContent>
+                    </Card>
+                 </div>
+              </section>
             </div>
 
             <div className="space-y-6">

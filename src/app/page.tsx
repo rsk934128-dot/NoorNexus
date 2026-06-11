@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -11,7 +12,7 @@ import {
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
   CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages,
   Coins, Briefcase, BarChart3, Clock, Users, Fingerprint as FingerprintIcon,
-  ShieldAlert, Key, Sparkles, Banknote, History, Heart
+  ShieldAlert, Key, Sparkles, Banknote, History, Heart, Network, GraduationCap
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -47,6 +48,13 @@ const NORA_AGENTS = [
   { id: "Nora-11", name: "Imperial Oracle", role: "Precognition", status: "MAX_WISDOM", icon: Compass },
 ]
 
+const MATURITY_INDEX = [
+  { label: "Financial Sovereignty", target: "95%+", current: 92.4, icon: Landmark, color: "text-emerald-500" },
+  { label: "Identity Integrity", target: "99%+", current: 98.1, icon: Fingerprint, color: "text-primary" },
+  { label: "Governance Automation", target: "90%+", current: 84.5, icon: Gavel, color: "text-amber-500" },
+  { label: "Mesh Resilience", target: "99.99%", current: 99.98, icon: Network, color: "text-purple-500" },
+]
+
 export default function Home() {
   const { toast } = useToast()
   const db = useFirestore()
@@ -56,13 +64,11 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("INITIALIZING MISSION 400 CORE...")
   const [auditing, setAuditing] = useState(false)
-  const [broadcasting, setBroadcasting] = useState(false)
-  const [handshaking, setHandshaking] = useState(false)
   const [fetchingSummary, setFetchingSummary] = useState(false)
+  const [handshaking, setHandshaking] = useState(false)
   const [auditResult, setAuditResult] = useState<LedgerAuditOutput | null>(null)
   const [dailySummary, setDailySummary] = useState<DailySummary | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [isProclamationOpen, setIsProclamationOpen] = useState(false)
   const [isSummaryOpen, setIsSummaryOpen] = useState(false)
   const [borderFeed, setBorderFeed] = useState<string[]>([])
   const [discoveryPulse, setDiscoveryPulse] = useState<number>(0)
@@ -223,6 +229,39 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-8">
+               {/* Civilizational Maturity Index */}
+               <section className="space-y-6">
+                  <div className="flex items-center justify-between px-2">
+                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                        <GraduationCap className="size-4" /> Civilizational Maturity Index
+                     </h3>
+                     <Badge variant="outline" className="text-[10px] border-emerald-500/20 text-emerald-500 uppercase">Mission 400 Readiness</Badge>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+                    {MATURITY_INDEX.map((m, i) => (
+                      <Card key={i} className="glass-card border-l-4 border-l-primary/20 hover:border-l-primary transition-all">
+                        <CardContent className="p-5 space-y-4">
+                           <div className="flex justify-between items-start">
+                              <div className={`p-2 bg-white/5 rounded-lg ${m.color}`}>
+                                 <m.icon className="size-5" />
+                              </div>
+                              <span className="text-[10px] font-mono text-muted-foreground uppercase">Target: {m.target}</span>
+                           </div>
+                           <div className="space-y-2">
+                              <div className="flex justify-between items-end">
+                                 <p className="text-[10px] font-bold text-muted-foreground uppercase">{m.label}</p>
+                                 <p className={`text-xl font-headline font-bold ${m.color}`}>{m.current}%</p>
+                              </div>
+                              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                                 <div className={`h-full transition-all duration-1000 ${m.color === 'text-emerald-500' ? 'bg-emerald-500' : m.color === 'text-primary' ? 'bg-primary' : m.color === 'text-amber-500' ? 'bg-amber-500' : 'bg-purple-500'}`} style={{ width: `${m.current}%` }} />
+                              </div>
+                           </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+               </section>
+
                {/* Imperial Revenue Node */}
                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                  <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
