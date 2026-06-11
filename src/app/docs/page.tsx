@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -9,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
   BookOpen, FileText, ShieldAlert, Zap, Loader2, Target, 
-  AlertTriangle, CheckCircle2, ChevronRight, Menu, Cpu, Code2, ShieldCheck, Star, Globe, Copy, Lock, ShieldPlus, DatabaseZap, Scale, HeartHandshake, ShieldEllipsis, Eye, ClipboardCheck, Handshake, MessageCircleWarning, FileBarChart, Layers, Users, Network
+  AlertTriangle, CheckCircle2, ChevronRight, Menu, Cpu, Code2, ShieldCheck, Star, Globe, Copy, Lock, ShieldPlus, DatabaseZap, Scale, HeartHandshake, ShieldEllipsis, Eye, ClipboardCheck, Handshake, MessageCircleWarning, FileBarChart, Layers, Users, Network, Gavel
 } from "lucide-react"
 import { analyzeProtocol, ProtocolArchitectOutput } from "@/ai/flows/protocol-architect-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -17,7 +16,7 @@ import { useToast } from "@/hooks/use-toast"
 export default function DocsPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
-  const [analysis, setAnalysis] = useState<ProtocolArchitectOutput | null>(analysis)
+  const [analysis, setAnalysis] = useState<ProtocolArchitectOutput | null>(null)
 
   async function runArchitect() {
     setLoading(true)

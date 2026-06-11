@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -32,7 +31,9 @@ import {
   History,
   CheckCircle2,
   Lock,
-  ShieldAlert
+  ShieldAlert,
+  Heart,
+  Network
 } from "lucide-react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
 import { authorizeWithdrawal, OffRampOutput } from "@/ai/flows/off-ramp-flow"

@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -8,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { 
   Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, 
   Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid, 
-  Star, TrendingUp, HeartPulse, BrainCircuit, ActivitySquare, Compass, 
+  Star, TrendingUp, HeartPulse, BrainCircuit, SquareActivity, Compass, 
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
   CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages,
   Coins, Briefcase, BarChart3, Clock, Users, Fingerprint as FingerprintIcon,
@@ -279,7 +278,7 @@ export default function Home() {
                  <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                     <CardHeader className="pb-2 p-4">
                        <CardTitle className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
-                          <ActivitySquare className="size-3" />
+                          <SquareActivity className="size-3" />
                           Settlement Volume (24h)
                        </CardTitle>
                     </CardHeader>
