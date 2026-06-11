@@ -20,15 +20,18 @@ import {
   Share2,
   Menu,
   Activity,
-  Award
+  Award,
+  Cpu,
+  Landmark,
+  Scale
 } from "lucide-react"
 import { useUser } from "@/firebase"
 
-const PARTICIPATION_METRICS = [
-  { label: "Community Engagement", score: 85, icon: MessageSquare, color: "text-primary" },
-  { label: "Trust Contribution", score: 92, icon: HeartHandshake, color: "text-emerald-500" },
-  { label: "Governance Activity", score: 64, icon: ShieldCheck, color: "text-amber-500" },
-  { label: "Mesh Support", score: 78, icon: Activity, color: "text-purple-500" },
+const REPUTATION_VECTORS = [
+  { label: "Civic Reputation", score: 85, icon: Users, color: "text-blue-500" },
+  { label: "Economic Reputation", score: 92, icon: Landmark, color: "text-emerald-500" },
+  { label: "Technical Reputation", score: 64, icon: Cpu, color: "text-purple-500" },
+  { label: "Governance Reputation", score: 78, icon: Scale, color: "text-amber-500" },
 ]
 
 export default function CitizenPortalPage() {
@@ -53,41 +56,43 @@ export default function CitizenPortalPage() {
                 Citizen <span className="text-primary">Portal.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Welcome, {user?.displayName || "Sovereign Citizen"}. This is your gateway to participate in the digital civilization of NoorNexus. Engagement, contribution, and governance start here.
+                Welcome, {user?.displayName || "Sovereign Citizen"}. Your identity is now multi-dimensional. Every action across civic, economic, and governance domains strengthens your civilization standing.
               </p>
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[150px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Reputation Score</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Composite Trust</p>
                   <p className="text-3xl font-headline font-bold text-primary">850</p>
                </div>
             </div>
           </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-8">
-              <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {PARTICIPATION_METRICS.map((m, i) => (
-                  <Card key={i} className="glass-card border-white/5 hover:border-primary/20 transition-all group">
-                    <CardContent className="p-6 space-y-4">
-                       <div className="flex justify-between items-start">
-                          <div className={`p-3 bg-white/5 rounded-xl ${m.color}`}>
-                             <m.icon className="size-6" />
-                          </div>
-                          <Badge variant="outline" className="text-[10px] border-white/10 uppercase">Verified</Badge>
-                       </div>
-                       <div className="space-y-2">
-                          <div className="flex justify-between items-end">
-                             <p className="text-xs font-bold text-white uppercase tracking-widest">{m.label}</p>
-                             <p className={`text-2xl font-headline font-bold ${m.color}`}>{m.score}%</p>
-                          </div>
-                          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                             <div className={`h-full transition-all duration-1000 ${m.color.replace('text-', 'bg-')}`} style={{ width: `${m.score}%` }} />
-                          </div>
-                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="lg:col-span-3 space-y-8">
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                    <TrendingUp className="size-4" /> Multi-Dimensional Reputation Vector
+                 </h3>
+                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                    {REPUTATION_VECTORS.map((v, i) => (
+                      <Card key={i} className="glass-card border-white/5 hover:border-primary/20 transition-all group">
+                        <CardContent className="p-6 space-y-4">
+                           <div className={`p-3 bg-white/5 rounded-xl w-fit ${v.color}`}>
+                              <v.icon className="size-6" />
+                           </div>
+                           <div className="space-y-2">
+                              <p className="text-[10px] font-bold text-white uppercase tracking-widest">{v.label}</p>
+                              <div className="flex justify-between items-end">
+                                 <p className={`text-2xl font-headline font-bold ${v.color}`}>{v.score}%</p>
+                              </div>
+                              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                                 <div className={`h-full transition-all duration-1000 ${v.color.replace('text-', 'bg-')}`} style={{ width: `${v.score}%` }} />
+                              </div>
+                           </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                 </div>
               </section>
 
               <Card className="glass-card relative overflow-hidden bg-primary/5 border-primary/20">
@@ -123,18 +128,21 @@ export default function CitizenPortalPage() {
 
               <section className="space-y-4">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-muted-foreground flex items-center gap-2">
-                    <Activity className="size-4" /> Participation History
+                    <Activity className="size-4" /> Verifiable Participation History
                  </h3>
                  <div className="space-y-3">
                     {[
-                      { action: "Governance Vote Cast", impact: "+5 Trust", time: "2h ago" },
-                      { action: "Merchant Validation Completed", impact: "+15 Trust", time: "1d ago" },
-                      { action: "Mesh Node Uptime Sync", impact: "+2 Trust", time: "3d ago" },
+                      { action: "Governance Vote Cast (Proposal #42)", impact: "+5 Governance", time: "2h ago", proof: "0x82...f9" },
+                      { action: "Merchant Validation Completed", impact: "+15 Economic", time: "1d ago", proof: "0x12...a3" },
+                      { action: "Mesh Node Uptime Sync", impact: "+2 Technical", time: "3d ago", proof: "0xcc...e1" },
                     ].map((h, i) => (
                       <div key={i} className="flex items-center justify-between p-4 bg-white/2 border border-white/5 rounded-xl">
                          <div className="flex items-center gap-4">
                             <div className="size-2 bg-emerald-500 rounded-full" />
-                            <p className="text-xs text-white font-medium">{h.action}</p>
+                            <div className="space-y-0.5">
+                               <p className="text-xs text-white font-medium">{h.action}</p>
+                               <p className="text-[7px] font-mono text-muted-foreground">PROOF_HASH: {h.proof}</p>
+                            </div>
                          </div>
                          <div className="text-right">
                             <p className="text-[10px] text-emerald-500 font-bold">{h.impact}</p>
@@ -150,18 +158,21 @@ export default function CitizenPortalPage() {
               <Card className="glass-card border-l-4 border-l-amber-500">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                    <Award className="size-4" /> Citizen Mandate
+                    <Award className="size-4" /> Verifiable Credentials
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-[11px] text-muted-foreground leading-relaxed italic">
-                    "Every NoorNexus citizen is a validator of truth. Your engagement strengthens the collective immunity of the mesh."
-                  </p>
-                  <div className="pt-4 border-t border-white/5">
-                    <div className="flex justify-between items-center text-[10px] font-mono">
-                       <span className="text-muted-foreground uppercase">Civilization Tier</span>
-                       <span className="text-amber-500 font-bold uppercase">VERIFIED_RESIDENT</span>
-                    </div>
+                  <div className="space-y-2">
+                     {[
+                       { label: "Genesis Resident", status: "VERIFIED" },
+                       { label: "L4 Security Clearance", status: "PENDING" },
+                       { label: "Community Validator", status: "VERIFIED" }
+                     ].map((c, i) => (
+                       <div key={i} className="flex justify-between items-center p-2 bg-white/5 rounded border border-white/5">
+                          <span className="text-[9px] text-white font-bold uppercase">{c.label}</span>
+                          <Badge variant="outline" className={`text-[7px] h-3 ${c.status === 'VERIFIED' ? 'text-emerald-500 border-emerald-500/20' : 'text-amber-500 border-amber-500/20'}`}>{c.status}</Badge>
+                       </div>
+                     ))}
                   </div>
                 </CardContent>
               </Card>
@@ -169,34 +180,21 @@ export default function CitizenPortalPage() {
               <Card className="glass-card">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                       <TrendingUp className="size-4" /> My Growth Engine
+                       <TrendingUp className="size-4" /> Civic Impact Engine
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-6">
                     <div className="space-y-2">
                        <div className="flex justify-between text-[10px] font-mono">
-                          <span className="uppercase">Civic Impact</span>
-                          <span className="text-primary">85%</span>
+                          <span className="uppercase">Reputation Reliability</span>
+                          <span className="text-primary">99.8%</span>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                          <div className="h-full bg-primary" style={{ width: '85%' }} />
+                          <div className="h-full bg-primary" style={{ width: '99.8%' }} />
                        </div>
                     </div>
                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       You are in the top 15% of NoorNexus citizens by participation this cycle.
-                    </p>
-                 </CardContent>
-              </Card>
-
-              <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
-                 <CardHeader className="pb-2">
-                    <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
-                       <ShieldCheck className="size-3" /> Data Justice Verified
-                    </CardTitle>
-                 </CardHeader>
-                 <CardContent>
-                    <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       Your data remains 100% sovereign. No third-party access has been requested or granted in the last 30 days.
+                       Your reputation is attested by 12 mesh nodes. Tamper-proof standing in the civilization.
                     </p>
                  </CardContent>
               </Card>

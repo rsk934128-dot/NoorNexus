@@ -42,7 +42,8 @@ import {
   Zap,
   FileOutput,
   CandlestickChart,
-  UserCircle
+  UserCircle,
+  BrainCircuit
 } from "lucide-react"
 
 import {
@@ -95,6 +96,7 @@ const USER_ITEMS = [
 
 const ADMIN_ITEMS = [
   { title: "Imperial Oracle", url: "/oracle", icon: Compass },
+  { title: "AI Governance", url: "/ai-governance", icon: BrainCircuit },
   { title: "Session Monitor", url: "/sessions", icon: Activity },
   { title: "Strategic Assessment", url: "/assessment", icon: Award },
   { title: "Merchant Lifecycle", url: "/merchants", icon: Users },
