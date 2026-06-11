@@ -7,8 +7,37 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
-  BookOpen, FileText, ShieldAlert, Zap, Loader2, Target, 
-  AlertTriangle, CheckCircle2, ChevronRight, Menu, Cpu, Code2, ShieldCheck, Star, Globe, Copy, Lock, ShieldPlus, DatabaseZap, Scale, HeartHandshake, ShieldEllipsis, Eye, ClipboardCheck, Handshake, MessageCircleWarning, FileBarChart, Layers, Users, Network, Gavel
+  BookOpen, 
+  FileText, 
+  ShieldAlert, 
+  Zap, 
+  Loader2, 
+  Target, 
+  AlertTriangle, 
+  CheckCircle2, 
+  ChevronRight, 
+  Menu, 
+  Cpu, 
+  Code2, 
+  ShieldCheck, 
+  Star, 
+  Globe, 
+  Copy, 
+  Lock, 
+  ShieldPlus, 
+  DatabaseZap, 
+  Scale, 
+  HeartHandshake, 
+  ShieldEllipsis, 
+  Eye, 
+  ClipboardCheck, 
+  Handshake, 
+  MessageCircleWarning, 
+  FileBarChart, 
+  Layers, 
+  Users, 
+  Share2, 
+  Gavel 
 } from "lucide-react"
 import { analyzeProtocol, ProtocolArchitectOutput } from "@/ai/flows/protocol-architect-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -67,14 +96,13 @@ export default function DocsPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-12">
-              {/* The 4 Architecture Layers */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
                     <Layers className="size-4" /> Civilizational Stack Architecture
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[
-                      { title: "1. Infrastructure Layer", items: ["One Engine Ledger", "Mesh Nodes", "Imperial SDK"], icon: Network },
+                      { title: "1. Infrastructure Layer", items: ["One Engine Ledger", "Mesh Nodes", "Imperial SDK"], icon: Share2 },
                       { title: "2. Economic Layer", items: ["Flow Pay", "Exchange Hub", "SmartRemit P2P"], icon: Globe },
                       { title: "3. Governance Layer", items: ["Imperial Senate", "Oracle Agent", "Arbiter Chamber"], icon: Gavel },
                       { title: "4. Citizen Layer", items: ["Sovereign Identity", "Merchant Empire", "Developer Nodes"], icon: Users }
@@ -97,7 +125,6 @@ export default function DocsPage() {
                  </div>
               </section>
 
-              {/* Mature Ethical Framework Section */}
               <section className="space-y-6">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2">
                   <Scale className="size-4" /> Sovereign Ethical Framework (7 Pillars)
@@ -152,7 +179,6 @@ export default function DocsPage() {
                 </Card>
               </section>
 
-              {/* Mature Governance Layers */}
               <section className="space-y-6">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
                   <Star className="size-4" /> Mature Governance Layers

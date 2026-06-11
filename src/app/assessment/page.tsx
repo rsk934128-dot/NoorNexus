@@ -29,7 +29,7 @@ import {
   FileSearch,
   MessageSquareQuote,
   Handshake,
-  Network,
+  Share2,
   Activity,
   Lightbulb
 } from "lucide-react"
@@ -95,7 +95,6 @@ export default function StrategicAssessmentPage() {
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* The evaluation Metrics */}
             <div className="lg:col-span-2 space-y-8">
               <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {EVALUATION_METRICS.map((m, i) => (
@@ -119,10 +118,9 @@ export default function StrategicAssessmentPage() {
                 ))}
               </section>
 
-              {/* Civilizational Readiness Scorecard */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <Network className="size-4" /> Civilizational Maturity Index
+                    <Share2 className="size-4" /> Civilizational Maturity Index
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {READINESS_LEVELS.map((level, i) => (
@@ -142,7 +140,6 @@ export default function StrategicAssessmentPage() {
                  </div>
               </section>
 
-              {/* The Creator's Evaluation Text */}
               <Card className="glass-card bg-amber-500/5 border-amber-500/20 relative overflow-hidden">
                  <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
                     <Crown className="size-48 text-amber-500" />
@@ -188,7 +185,6 @@ export default function StrategicAssessmentPage() {
                  </CardContent>
               </Card>
 
-              {/* Partnership Tribute */}
               <Card className="glass-card bg-primary/5 border-primary/20 overflow-hidden relative border-dashed">
                  <CardHeader>
                     <CardTitle className="text-xs font-headline uppercase tracking-[0.3em] text-primary flex items-center gap-3">
@@ -206,7 +202,6 @@ export default function StrategicAssessmentPage() {
               </Card>
             </div>
 
-            {/* Sidebar with Wisdom and Summary */}
             <div className="space-y-8">
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>

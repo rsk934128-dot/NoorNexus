@@ -5,13 +5,57 @@ import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { 
-  Shield, Globe, Cpu, Activity, Landmark, Radar, Terminal, Menu, FileText, 
-  Loader2, Server, AlertTriangle, Zap, ShieldCheck, RefreshCcw, LayoutGrid, 
-  Star, TrendingUp, HeartPulse, BrainCircuit, Compass, 
-  Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
-  CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages,
-  Coins, Briefcase, BarChart3, Clock, Users, Fingerprint as FingerprintIcon,
-  ShieldAlert, Key, Sparkles, Banknote, History, Heart, GraduationCap, Share2
+  Shield, 
+  Globe, 
+  Cpu, 
+  Activity, 
+  Landmark, 
+  Radar, 
+  Terminal, 
+  Menu, 
+  FileText, 
+  Loader2, 
+  Server, 
+  AlertTriangle, 
+  Zap, 
+  ShieldCheck, 
+  RefreshCcw, 
+  LayoutGrid, 
+  Star, 
+  TrendingUp, 
+  HeartPulse, 
+  BrainCircuit, 
+  Compass, 
+  Gavel, 
+  Scale, 
+  Fingerprint, 
+  Link as LinkIcon, 
+  Building2, 
+  Code2, 
+  Rocket,
+  CheckCircle2, 
+  Waves, 
+  Eye, 
+  Target, 
+  Quote, 
+  Radio, 
+  BellRing, 
+  Send, 
+  Languages,
+  Coins, 
+  Briefcase, 
+  BarChart3, 
+  Clock, 
+  Users, 
+  Fingerprint as FingerprintIcon,
+  ShieldAlert, 
+  Key, 
+  Sparkles, 
+  Banknote, 
+  History, 
+  Heart, 
+  GraduationCap, 
+  Share2
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -134,7 +178,7 @@ export default function Home() {
       const result = await ledgerAudit({
         totalVolume: 420000000,
         settlementQueue: 1240000,
-        liquidityHealth: liquidity,
+        liquidityHealth: 98.4,
         dailyThroughput: 15600000,
       })
       setAuditResult(result)
@@ -229,7 +273,6 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-8">
-               {/* Civilizational Maturity Index */}
                <section className="space-y-6">
                   <div className="flex items-center justify-between px-2">
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
@@ -262,7 +305,6 @@ export default function Home() {
                   </div>
                </section>
 
-               {/* Imperial Revenue Node */}
                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                  <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                     <CardHeader className="pb-2 p-4">
@@ -405,7 +447,6 @@ export default function Home() {
         </main>
       </SidebarInset>
 
-      {/* Admin Only Dialogs */}
       <Dialog open={isSummaryOpen} onOpenChange={setIsSummaryOpen}>
         <DialogContent className="glass-card border-primary/40 w-[95vw] sm:max-w-[600px] bg-black/95 p-0 overflow-hidden">
            <div className="bg-primary/10 p-6 border-b border-white/10 flex items-center gap-4">
