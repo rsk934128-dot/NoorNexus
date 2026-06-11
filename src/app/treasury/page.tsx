@@ -29,7 +29,10 @@ import {
   ExternalLink,
   ShieldAlert,
   Flame,
-  Radio
+  Radio,
+  Activity,
+  FileCheck,
+  ShieldEllipsis
 } from "lucide-react"
 import { authorizeWithdrawal, OffRampOutput } from "@/ai/flows/off-ramp-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -42,7 +45,6 @@ export default function TreasuryPage() {
   const { toast } = useToast()
   const [withdrawing, setWithdrawing] = useState(false)
   const [offRampResult, setOffRampResult] = useState<OffRampOutput | null>(null)
-  const [isOperational, setIsOperational] = useState(false)
   const [cbActive, setCbActive] = useState(false)
   
   const [withdrawForm, setWithdrawForm] = useState({
@@ -101,14 +103,14 @@ export default function TreasuryPage() {
               <div className="flex items-center gap-3">
                  <SidebarTrigger className="md:hidden text-primary"><Button variant="ghost" size="icon"><Menu className="size-6" /></Button></SidebarTrigger>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-[10px]">
-                   <Database className="size-3 mr-2" /> Sovereign Treasury
+                   <Database className="size-3 mr-2" /> Phase P3: Resilience
                  </Badge>
               </div>
               <h2 className="text-2xl sm:text-5xl font-headline font-bold flex items-center gap-3 uppercase tracking-tighter">
-                Operational <span className="text-primary">Resilience.</span>
+                Evidence <span className="text-primary">Observatory.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Phase P2: Real-time Volatility Monitor & Operational Fortress. Treasury Protection Mode is ACTIVE.
+                Phase P3: Real-time Volatility & Chaos Testing. Proving Treasury stability through evidence and constant verification.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -128,7 +130,7 @@ export default function TreasuryPage() {
               <section className="space-y-6">
                  <div className="flex justify-between items-center">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                       <Radio className="size-4" /> Resilience Observatory
+                       <Radio className="size-4" /> Verified Resilience Stats
                     </h3>
                     <Badge variant="outline" className={`h-6 text-[8px] ${cbActive ? 'border-destructive text-destructive bg-destructive/5' : 'border-emerald-500 text-emerald-500 bg-emerald-500/5'}`}>
                       {cbActive ? 'SYSTEM_LOCKED' : 'SYSTEM_STABLE'}
@@ -136,10 +138,10 @@ export default function TreasuryPage() {
                  </div>
                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
-                      { label: "Vol. Velocity", value: "Normal", trend: "0.2%", status: "STABLE" },
-                      { label: "Recon. Health", value: "Matched", trend: "100%", status: "OPTIMAL" },
+                      { label: "Chaos Pass Rate", value: "100%", trend: "LAST_2H", status: "VERIFIED" },
+                      { label: "CB Latency", value: "2ms", trend: "0.01ms Var", status: "OPTIMAL" },
                       { label: "Audit Integrity", value: "Signed", trend: "MAX", status: "VERIFIED" },
-                      { label: "Risk Exposure", value: "Minimal", trend: "2.4%", status: "SECURE" }
+                      { label: "Red-Team Status", value: "Clear", trend: "NO_DRIFT", status: "SECURE" }
                     ].map((m, i) => (
                       <Card key={i} className="glass-card bg-primary/5 border-white/5">
                         <CardContent className="p-6 space-y-3">
@@ -159,9 +161,9 @@ export default function TreasuryPage() {
                 <Card className={`glass-card border-l-4 transition-opacity duration-500 ${cbActive ? 'opacity-50 pointer-events-none border-l-muted' : 'border-l-primary'}`}>
                   <CardHeader>
                     <CardTitle className="text-sm font-headline flex items-center gap-2 uppercase text-primary">
-                      <ArrowDownToLine className="size-4" /> Settlement Bridge
+                      <ArrowDownToLine className="size-4" /> Verified Settlement Bridge
                     </CardTitle>
-                    <CardDescription>Initiate atomic transfer to pilot nodes.</CardDescription>
+                    <CardDescription>Atomic transfer with multi-node attestation.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     {cbActive && (
@@ -195,14 +197,14 @@ export default function TreasuryPage() {
                 <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                   <CardHeader>
                     <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                       <ShieldCheck className="size-4" /> Resilience Checklist
+                       <ShieldCheck className="size-4" /> Verification Runbook
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {[
-                      { item: "Circuit Breaker Latency", status: "2ms" },
-                      { item: "Audit Log Immutability", status: "ENFORCED" },
-                      { item: "Reconciliation Threshold", status: "0.01%" },
+                      { item: "Last Chaos Test", status: "2H_AGO" },
+                      { item: "Red-Team Audit", status: "PASSED" },
+                      { item: "Reconciliation Log", status: "MATCHED" },
                       { item: "Evidence Vault Sync", status: "REAL-TIME" }
                     ].map((check, i) => (
                       <div key={i} className="flex justify-between items-center p-2 bg-black/40 rounded border border-white/5">
@@ -219,15 +221,15 @@ export default function TreasuryPage() {
                <Card className="glass-card border-l-4 border-l-amber-500">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
-                    <History className="size-4" /> Forensic History
+                    <History className="size-4" /> Verified History
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                    <div className="space-y-3">
                       {[
-                        { event: "Circuit Breaker Scan", time: "1m ago", status: "STABLE" },
-                        { event: "Audit Ledger Signed", time: "5m ago", status: "MAX" },
-                        { event: "Gateway Ping Sync", time: "12m ago", status: "OPTIMAL" }
+                        { event: "Chaos Recovery Success", time: "2h ago", status: "100%" },
+                        { event: "Red-Team Sim Clear", time: "5h ago", status: "MAX" },
+                        { event: "Ledger Chain Signed", time: "12h ago", status: "OPTIMAL" }
                       ].map((h, i) => (
                         <div key={i} className="flex justify-between items-center text-[9px] p-2 border-b border-white/5">
                            <span className="text-muted-foreground uppercase">{h.event}</span>
@@ -236,20 +238,20 @@ export default function TreasuryPage() {
                       ))}
                    </div>
                    <Button variant="ghost" className="w-full h-8 text-[9px] uppercase font-bold gap-2">
-                      View Immutable Logs <ExternalLink className="size-3" />
+                      View Independent Audits <ExternalLink className="size-3" />
                    </Button>
                 </CardContent>
               </Card>
 
               <Card className="glass-card border-l-4 border-l-destructive bg-destructive/5">
                  <CardHeader className="pb-2">
-                    <CardTitle className="text-[10px] uppercase font-bold text-destructive flex items-center gap-2">
-                       <ShieldAlert className="size-3" /> Risk Guard
+                    <CardTitle className="text-10px uppercase font-bold text-destructive flex items-center gap-2">
+                       <ShieldAlert className="size-3" /> Red-Team Guard
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       "Resilience mode prevents unauthorized liquidity drain. In case of anomaly, the system uses zero-trust handshakes for all cross-border settlements."
+                       "Constant attack simulation ensures zero complacency. Every mesh node is targeted by our internal Red-Team every 24 hours to prove its resilience."
                     </p>
                  </CardContent>
               </Card>
