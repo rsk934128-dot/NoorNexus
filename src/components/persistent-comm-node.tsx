@@ -9,65 +9,51 @@ import { PhoneIncoming, ShieldCheck } from "lucide-react"
 import { useSidebar } from "@/components/ui/sidebar"
 
 /**
- * @fileOverview Global Persistent Communication Node (V5.1)
- * Optimized for Next.js 15 hydration stability.
- * This component keeps the communication hubs alive in the background.
+ * @fileOverview Global Persistent Communication Node (V5.2)
+ * Hardened against Next.js 15 hydration mismatches.
+ * This component keeps the communication hubs alive in the background with zero-reload switching.
  */
 export function PersistentCommNode() {
   const [mounted, setMounted] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
+  const { toast } = useToast()
+  const { open, isMobile } = useSidebar()
+  const lastToastTime = useRef<number>(0)
 
   // Ensure the component only renders its logic on the client after hydration
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  if (!mounted) {
-    // Return null to match the server's initial render exactly
-    return null
-  }
-
-  return <RealPersistentCommNode />
-}
-
-/**
- * Inner component containing all the client-side logic.
- * This only runs after the component has successfully mounted on the client.
- */
-function RealPersistentCommNode() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const { toast } = useToast()
-  const { open, isMobile } = useSidebar()
-  const lastToastTime = useRef<number>(0)
-
-  const isStandardActive = pathname === "/shurukkha-standard"
-  const isImperialActive = pathname === "/shurukkha-imperial"
-
+  // Call Monitoring Logic
   useEffect(() => {
+    if (!mounted) return
+
     // Request notification permission if not already granted
     if (typeof window !== "undefined" && "Notification" in window) {
       if (Notification.permission === "default") {
-        Notification.requestPermission();
+        Notification.requestPermission()
       }
     }
 
     const handleMessage = (event: MessageEvent) => {
-      const data = event.data;
-      if (!data) return;
+      const data = event.data
+      if (!data) return
 
-      const msgStr = typeof data === 'string' ? data : JSON.stringify(data);
-      const callKeywords = /incoming|call|ring|dial|offer|invite|request_access|peer|joined|waiting|connect|rtc/i;
-      const isCallSignal = callKeywords.test(msgStr);
+      const msgStr = typeof data === 'string' ? data : JSON.stringify(data)
+      const callKeywords = /incoming|call|ring|dial|offer|invite|request_access|peer|joined|waiting|connect|rtc/i
+      const isCallSignal = callKeywords.test(msgStr)
 
       if (isCallSignal) {
         // Prevent toast spamming within 15 seconds
-        if (Date.now() - lastToastTime.current < 15000) return;
-        lastToastTime.current = Date.now();
+        if (Date.now() - lastToastTime.current < 15000) return
+        lastToastTime.current = Date.now()
 
         try {
-          const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
-          audio.volume = 0.6;
-          audio.play().catch(() => console.log("Interaction required for audio play."));
+          const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3')
+          audio.volume = 0.6
+          audio.play().catch(() => console.log("Interaction required for audio play."))
         } catch (e) {
           // Silently fail if audio playback is blocked
         }
@@ -78,7 +64,7 @@ function RealPersistentCommNode() {
             icon: 'https://picsum.photos/seed/sovereign/192/192',
             tag: 'call-signal',
             requireInteraction: true
-          });
+          })
         }
 
         toast({
@@ -93,7 +79,7 @@ function RealPersistentCommNode() {
                 size="sm" 
                 className="bg-emerald-500 hover:bg-emerald-600 text-white gap-2 font-bold uppercase text-[10px] glow-emerald h-10 px-4"
                 onClick={() => {
-                  router.push("/shurukkha-standard");
+                  router.push("/shurukkha-standard")
                 }}
               >
                 <PhoneIncoming className="size-3" />
@@ -104,7 +90,7 @@ function RealPersistentCommNode() {
                 size="sm" 
                 className="border-emerald-500/50 text-emerald-500 hover:bg-emerald-500/10 gap-2 font-bold uppercase text-[10px] h-10 px-4"
                 onClick={() => {
-                  router.push("/shurukkha-imperial");
+                  router.push("/shurukkha-imperial")
                 }}
               >
                 <ShieldCheck className="size-3" />
@@ -113,22 +99,28 @@ function RealPersistentCommNode() {
             </div>
           ),
           duration: 45000,
-        });
+        })
       }
-    };
+    }
 
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, [router, toast]);
+    window.addEventListener("message", handleMessage)
+    return () => window.removeEventListener("message", handleMessage)
+  }, [mounted, router, toast])
 
-  // Sidebar width logic for positioning the hubs
+  // Hydration safety: Return null to match the server's initial render exactly
+  if (!mounted) {
+    return null
+  }
+
+  const isStandardActive = pathname === "/shurukkha-standard"
+  const isImperialActive = pathname === "/shurukkha-imperial"
   const sidebarWidth = isMobile ? '0px' : (open ? '16rem' : '3rem')
 
   return (
-    <>
+    <div className="fixed inset-0 z-[40] pointer-events-none overflow-hidden">
       {/* 1. Persistent Standard Hub (ofzc.vercel.app) */}
       <div 
-        className={`fixed top-0 bottom-0 right-0 z-[40] transition-all duration-300 overflow-hidden bg-white ${isStandardActive ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none w-1 h-1'}`}
+        className={`absolute inset-y-0 right-0 transition-all duration-700 ease-in-out bg-white ${isStandardActive ? 'opacity-100 pointer-events-auto' : 'opacity-0'}`}
         style={{ 
           left: isStandardActive ? sidebarWidth : '100%', 
           top: isStandardActive ? '4.5rem' : '0',
@@ -146,7 +138,7 @@ function RealPersistentCommNode() {
 
       {/* 2. Persistent Imperial Hub */}
       <div 
-        className={`fixed top-0 bottom-0 right-0 z-[40] transition-all duration-300 overflow-hidden bg-white ${isImperialActive ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none w-1 h-1'}`}
+        className={`absolute inset-y-0 right-0 transition-all duration-700 ease-in-out bg-white ${isImperialActive ? 'opacity-100 pointer-events-auto' : 'opacity-0'}`}
         style={{ 
           left: isImperialActive ? sidebarWidth : '100%', 
           top: isImperialActive ? '4.5rem' : '0',
@@ -163,7 +155,7 @@ function RealPersistentCommNode() {
       </div>
 
       {/* 3. Hidden Background Stable Listener (gov.bd) */}
-      <div className="fixed bottom-0 right-0 w-1 h-1 opacity-0 pointer-events-none overflow-hidden z-[-1]">
+      <div className="absolute bottom-0 right-0 w-1 h-1 opacity-0 pointer-events-none overflow-hidden">
         <iframe 
           src="https://shurukkha-hub.sirajganj.gov.bd/dashboard" 
           title="Stable Persistent Listener"
@@ -171,6 +163,6 @@ function RealPersistentCommNode() {
           sandbox="allow-same-origin allow-scripts allow-popovers allow-forms"
         />
       </div>
-    </>
+    </div>
   )
 }
