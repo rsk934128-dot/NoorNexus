@@ -1,19 +1,23 @@
 
 {
   "entities": {
-    "ApiKey": {
-      "title": "Sovereign API Key",
-      "description": "Credentials for third-party TTP (Third Party Provider) access.",
+    "TaxComplianceRecord": {
+      "title": "Tax & Compliance Record",
+      "description": "Digital audit trail for cross-border settlements with external gateway mapping.",
       "type": "object",
       "properties": {
-        "clientId": { "type": "string" },
-        "clientSecret": { "type": "string" },
-        "owner": { "type": "string" },
-        "permissions": { "type": "array", "items": { "type": "string" } },
-        "status": { "type": "string", "enum": ["ACTIVE", "REVOKED"] },
-        "createdAt": { "type": "number" }
-      },
-      "required": ["clientId", "clientSecret", "owner", "status"]
+        "txId": { "type": "string" },
+        "externalTxId": { "type": "string", "description": "bKash or Xendit Transaction ID" },
+        "provider": { "type": "string" },
+        "amount": { "type": "number" },
+        "mappedAmount": { "type": "number" },
+        "currency": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "complianceScore": { "type": "number" },
+        "status": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "metadata": { "type": "object" }
+      }
     },
     "AppConnection": {
       "title": "Imperial App Connection",
@@ -28,208 +32,30 @@
         "latency": { "type": "number" }
       }
     },
-    "TaxComplianceRecord": {
-      "title": "Tax & Compliance Record",
-      "description": "Digital audit trail for cross-border settlements.",
-      "type": "object",
-      "properties": {
-        "txId": { "type": "string" },
-        "amount": { "type": "number" },
-        "taxAmount": { "type": "number" },
-        "complianceScore": { "type": "number" },
-        "status": { "type": "string" },
-        "region": { "type": "string" },
-        "timestamp": { "type": "number" },
-        "tinReference": { "type": "string" }
-      }
-    },
-    "InterBankSettlement": {
-      "title": "Inter-Bank Trade Settlement",
-      "description": "Atomic cross-border trade protocol between sovereign banks.",
-      "type": "object",
-      "properties": {
-        "settlementId": { "type": "string" },
-        "sourceBank": { "type": "string" },
-        "targetBank": { "type": "string" },
-        "amount": { "type": "number" },
-        "asset": { "type": "string" },
-        "escrowStatus": { "type": "string", "enum": ["PENDING", "LOCKED", "RELEASED", "DISPUTED"] },
-        "conditions": { "type": "string" },
-        "timestamp": { "type": "number" },
-        "noraForensicScore": { "type": "number" }
-      },
-      "required": ["settlementId", "sourceBank", "targetBank", "amount", "asset", "escrowStatus"]
-    },
-    "TradeDispute": {
-      "title": "Sovereign Trade Dispute",
-      "description": "A judicial record for resolving international trade conflicts.",
-      "type": "object",
-      "properties": {
-        "disputeId": { "type": "string" },
-        "settlementId": { "type": "string" },
-        "complainant": { "type": "string" },
-        "defendant": { "type": "string" },
-        "reason": { "type": "string" },
-        "status": { "type": "string", "enum": ["OPEN", "UNDER_ARBITRATION", "RESOLVED", "REJECTED"] },
-        "noraVerdict": { "type": "string" },
-        "reputationImpact": { "type": "number" },
-        "createdAt": { "type": "number" },
-        "resolvedAt": { "type": "number" }
-      },
-      "required": ["disputeId", "settlementId", "complainant", "status"]
-    },
-    "OraclePolicy": {
-      "title": "Imperial Oracle Policy",
-      "description": "Predictive strategic policy for global empire management.",
-      "type": "object",
-      "properties": {
-        "policyId": { "type": "string" },
-        "title": { "type": "string" },
-        "marketTrend": { "type": "string" },
-        "predictedImpact": { "type": "string" },
-        "strategicRecommendation": { "type": "string" },
-        "confidenceScore": { "type": "number" },
-        "timestamp": { "type": "number" }
-      },
-      "required": ["policyId", "title", "strategicRecommendation"]
-    },
-    "NodeStatus": {
-      "title": "Node Status",
-      "description": "Real-time status and metrics of a distributed ledger node.",
-      "type": "object",
-      "properties": {
-        "name": { "type": "string" },
-        "region": { "type": "string" },
-        "status": { "type": "string", "enum": ["Operational", "Maintenance", "Degraded"] },
-        "latency": { "type": "number" },
-        "load": { "type": "number" },
-        "successRate": { "type": "number" },
-        "integrity": { "type": "string", "enum": ["Verified", "Untrusted"] },
-        "lastSeen": { "type": "string", "format": "date-time" }
-      }
-    },
     "MerchantOnboarding": {
       "title": "Merchant Onboarding Request",
-      "description": "Onboarding application and trust assessment for new merchants.",
+      "description": "Onboarding application and trust assessment.",
       "type": "object",
       "properties": {
         "businessName": { "type": "string" },
         "businessType": { "type": "string" },
-        "region": { "type": "string" },
-        "estimatedVolume": { "type": "number" },
-        "actualVolume": { "type": "number" },
-        "transactionCount": { "type": "number" },
-        "performanceScore": { "type": "number" },
         "status": { "type": "string", "enum": ["PENDING", "VERIFIED", "REJECTED", "UNDER_REVIEW"] },
-        "assignedTier": { "type": "string", "enum": ["TIER_1", "TIER_2", "TIER_3"] },
         "trustScore": { "type": "number" },
-        "submissionDate": { "type": "number" },
-        "lastReviewDate": { "type": "number" },
-        "noraAssessment": { "type": "string" },
-        "tradeLicenseNumber": { "type": "string" },
-        "tinNumber": { "type": "string" },
-        "isFamilyBusiness": { "type": "boolean" },
-        "legalStatus": { "type": "string", "enum": ["UNVERIFIED", "VERIFIED_FAMILY", "VERIFIED_SOVEREIGN"] }
-      },
-      "required": ["businessName", "businessType", "region", "status"]
-    },
-    "SovereignIdentity": {
-      "title": "Sovereign Identity (DID)",
-      "description": "Cross-chain reputation passport for merchants and users.",
-      "type": "object",
-      "properties": {
-        "did": { "type": "string" },
-        "owner": { "type": "string" },
-        "trustScore": { "type": "number" },
-        "reputationTier": { "type": "string", "enum": ["NOVICE", "VERIFIED", "ELITE", "IMPERIAL"] },
-        "linkedAddresses": { "type": "array", "items": { "type": "string" } },
-        "issuanceDate": { "type": "number" },
-        "lastUpdate": { "type": "number" },
-        "tinVerified": { "type": "boolean" },
-        "metadata": { "type": "string" }
-      },
-      "required": ["did", "owner", "trustScore"]
-    },
-    "ImperialProposal": {
-      "title": "Imperial Senate Proposal",
-      "description": "A governance proposal for the NoorNexus Empire.",
-      "type": "object",
-      "properties": {
-        "title": { "type": "string" },
-        "description": { "type": "string" },
-        "category": { "type": "string", "enum": ["PROTOCOL", "TREASURY", "FEATURE", "EMERGENCY"] },
-        "status": { "type": "string", "enum": ["OPEN", "APPROVED", "REJECTED", "EXECUTED"] },
-        "creatorDID": { "type": "string" },
-        "votesFor": { "type": "number" },
-        "votesAgainst": { "type": "number" },
-        "deadline": { "type": "number" },
-        "createdAt": { "type": "number" },
-        "executionHash": { "type": "string" },
-        "noraStrategicAnalysis": { "type": "string" }
-      },
-      "required": ["title", "description", "category", "status", "creatorDID"]
-    },
-    "WithdrawalRecord": {
-      "title": "Sovereign Withdrawal Record",
-      "description": "A record of off-ramping digital assets to fiat or external accounts.",
-      "type": "object",
-      "properties": {
-        "withdrawalId": { "type": "string" },
-        "amount": { "type": "number" },
-        "currency": { "type": "string" },
-        "method": { "type": "string", "enum": ["BANK_TRANSFER", "MOBILE_BANKING", "DIGITAL_CARD", "BILL_PAY"] },
-        "destination": { "type": "string" },
-        "status": { "type": "string", "enum": ["PENDING", "PROCESSING", "COMPLETED", "FAILED"] },
-        "timestamp": { "type": "number" },
-        "signature": { "type": "string" },
-        "reasoning": { "type": "string" }
-      },
-      "required": ["withdrawalId", "amount", "method", "status"]
+        "gatewayApiKey": { "type": "string", "description": "Encrypted bKash/Xendit Key Storage" }
+      }
     }
   },
   "auth": {
     "providers": ["google.com"]
   },
   "firestore": {
-    "/app_connections/{connId}": {
-      "schema": "AppConnection",
-      "description": "Imperial SDK heartbeat registry"
-    },
     "/compliance_records/{logId}": {
       "schema": "TaxComplianceRecord",
-      "description": "Audit-ready tax and compliance logs"
-    },
-    "/inter_bank_settlements/{logId}": {
-      "schema": "InterBankSettlement",
-      "description": "Sovereign trade settlement records"
-    },
-    "/trade_disputes/{disputeId}": {
-      "schema": "TradeDispute",
-      "description": "Sovereign trade dispute and arbitration records"
-    },
-    "/oracle_policies/{policyId}": {
-      "schema": "OraclePolicy",
-      "description": "Strategic oracle policy records"
-    },
-    "/nodes/{nodeId}": {
-      "schema": "NodeStatus",
-      "description": "Distributed node metrics"
+      "description": "Audit-ready mapping logs"
     },
     "/merchant_onboarding_requests/{reqId}": {
       "schema": "MerchantOnboarding",
-      "description": "Merchant onboarding and vetting records"
-    },
-    "/identities/{did}": {
-      "schema": "SovereignIdentity",
-      "description": "Global reputation registry for the mesh"
-    },
-    "/proposals/{proposalId}": {
-      "schema": "ImperialProposal",
-      "description": "Governance proposals for the Senate"
-    },
-    "/withdrawals/{id}": {
-      "schema": "WithdrawalRecord",
-      "description": "Treasury off-ramp and withdrawal records"
+      "description": "Merchant gateway credentials"
     }
   }
 }

@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useRef, useEffect } from "react"
@@ -19,24 +20,20 @@ import {
   Rocket,
   LayoutGrid,
   Award,
-  Search
+  Search,
+  RefreshCcw,
+  ArrowRightLeft
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
-const PARTNER_ENDPOINTS = [
-  { method: "POST", path: "/partner/v1/handshake", desc: "Initiate RSA-signed session with Partner ID." },
-  { method: "POST", path: "/partner/v1/settle", desc: "Request atomic multi-currency settlement." },
-  { method: "GET", path: "/partner/v1/compliance/status", desc: "Query KYB/AML standing." },
-  { method: "POST", path: "/partner/v1/webhook/register", desc: "Configure global event bus listener." }
-]
-
-const BUILDER_MODULES = [
-  { title: "SDK Core", desc: "The root engine for handshakes.", version: "v2.1" },
-  { title: "Vault Connect", desc: "Direct treasury bridge module.", version: "v1.0" },
-  { title: "Identity Resolver", desc: "DID and reputation parsing.", version: "v1.4" }
+const STATUS_MAPPINGS = [
+  { provider: "bKash", code: "0000", meaning: "SUCCESS", system: "APPROVED" },
+  { provider: "bKash", code: "2023", meaning: "INSUFFICIENT_BALANCE", system: "FAILED" },
+  { provider: "Xendit", code: "PAID", meaning: "SETTLED", system: "APPROVED" },
+  { provider: "Xendit", code: "PENDING", meaning: "WAITING_PAYMENT", system: "PENDING_SOVEREIGN_SEAL" }
 ]
 
 interface Message {
@@ -103,7 +100,7 @@ export default function ApiHubPage() {
                 Developer <span className="text-primary">Ecosystem.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project 165: NoorNexus Builders. Providing pilot partners and external developers the tools to co-architect the future.
+                Project 165: Integration Hub. Access standard mapping protocols for bKash, Xendit, and future gateways.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -116,14 +113,53 @@ export default function ApiHubPage() {
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
             <div className="xl:col-span-3 space-y-6">
-              <Tabs defaultValue="builders" className="space-y-6">
+              <Tabs defaultValue="mapping" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
+                  <TabsTrigger value="mapping" className="gap-2"><RefreshCcw className="size-4" /> Status Mapping</TabsTrigger>
                   <TabsTrigger value="builders" className="gap-2"><Rocket className="size-4" /> Builders Program</TabsTrigger>
                   <TabsTrigger value="gateway" className="gap-2"><ReceiptText className="size-4" /> Partner Gateway</TabsTrigger>
-                  <TabsTrigger value="marketplace" className="gap-2"><LayoutGrid className="size-4" /> Module Marketplace</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="builders" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+                <TabsContent value="mapping" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+                   <Card className="glass-card border-l-4 border-l-emerald-500">
+                      <CardHeader>
+                         <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
+                            <ArrowRightLeft className="size-4" /> Status Normalization Ledger
+                         </CardTitle>
+                         <CardDescription>Cross-provider status code mapping to Sovereign system states.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-0">
+                         <div className="overflow-x-auto">
+                            <Table>
+                               <TableHeader>
+                                  <TableRow className="border-white/5">
+                                     <TableHead className="text-[10px] uppercase font-bold">Provider</TableHead>
+                                     <TableHead className="text-[10px] uppercase font-bold">Gateway Code</TableHead>
+                                     <TableHead className="text-[10px] uppercase font-bold">Raw Meaning</TableHead>
+                                     <TableHead className="text-[10px] uppercase font-bold">Sovereign Normalization</TableHead>
+                                  </TableRow>
+                               </TableHeader>
+                               <TableBody>
+                                  {STATUS_MAPPINGS.map((m, i) => (
+                                    <TableRow key={i} className="border-white/5 hover:bg-white/2 transition-colors">
+                                       <TableCell className="font-bold text-white text-xs">{m.provider}</TableCell>
+                                       <TableCell className="font-mono text-primary text-xs">{m.code}</TableCell>
+                                       <TableCell className="text-muted-foreground text-[10px] uppercase font-bold">{m.meaning}</TableCell>
+                                       <TableCell>
+                                          <Badge variant="outline" className={`text-[9px] uppercase ${m.system === 'APPROVED' ? 'border-emerald-500 text-emerald-500' : 'border-amber-500 text-amber-500'}`}>
+                                             {m.system}
+                                          </Badge>
+                                       </TableCell>
+                                    </TableRow>
+                                  ))}
+                               </TableBody>
+                            </Table>
+                         </div>
+                      </CardContent>
+                   </Card>
+                </TabsContent>
+
+                <TabsContent value="builders" className="space-y-6">
                    <Card className="glass-card border-l-4 border-l-primary">
                       <CardHeader>
                          <CardTitle className="text-sm font-headline uppercase text-primary">The Builders Roadmap</CardTitle>
@@ -143,9 +179,6 @@ export default function ApiHubPage() {
                               </div>
                             ))}
                          </div>
-                         <Button className="w-full bg-primary text-primary-foreground font-bold h-12 uppercase text-[10px] glow-primary">
-                            Apply for Builders Grant
-                         </Button>
                       </CardContent>
                    </Card>
                 </TabsContent>
@@ -158,7 +191,10 @@ export default function ApiHubPage() {
                       </CardHeader>
                       <CardContent className="p-0">
                          <div className="divide-y divide-white/5">
-                           {PARTNER_ENDPOINTS.map((ep, i) => (
+                           {[
+                             { method: "POST", path: "/partner/v1/handshake", desc: "Initiate RSA-signed session." },
+                             { method: "POST", path: "/partner/v1/settle", desc: "Request atomic settlement." }
+                           ].map((ep, i) => (
                              <div key={i} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/2 transition-colors">
                                <div className="flex items-center gap-4">
                                  <Badge className="bg-primary text-[8px]">{ep.method}</Badge>
@@ -171,25 +207,6 @@ export default function ApiHubPage() {
                       </CardContent>
                    </Card>
                 </TabsContent>
-
-                <TabsContent value="marketplace" className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {BUILDER_MODULES.map((m, i) => (
-                      <Card key={i} className="glass-card bg-primary/5 hover:border-primary/40 transition-all">
-                        <CardHeader className="pb-2">
-                           <div className="flex justify-between items-start">
-                              <p className="text-xs font-bold text-white uppercase">{m.title}</p>
-                              <Badge variant="outline" className="text-[8px] border-primary/20 text-primary">{m.version}</Badge>
-                           </div>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                           <p className="text-[10px] text-muted-foreground italic leading-relaxed">{m.desc}</p>
-                           <Button variant="ghost" className="w-full h-8 text-[9px] uppercase font-bold border border-white/10">Install Module</Button>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </TabsContent>
               </Tabs>
             </div>
 
@@ -197,12 +214,12 @@ export default function ApiHubPage() {
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-                    <Award className="size-4" /> Builder Status
+                    <Award className="size-4" /> Mapping Readiness
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                      "Builders are the heart of civilization. Certified architects gain voting weight in Article IV governance edits."
+                      "We are documenting the translation layer between legacy finance and sovereign nodes. Integration speed: &lt; 2 hours per provider."
                    </p>
                 </CardContent>
               </Card>
@@ -210,18 +227,12 @@ export default function ApiHubPage() {
               <Card className="glass-card border-l-4 border-l-amber-500 h-[450px] flex flex-col">
                 <CardHeader className="shrink-0">
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
-                    <Cpu className="size-4" /> Nora-03 Builder Support
+                    <Cpu className="size-4" /> Nora-03 Support
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col min-h-0 overflow-hidden space-y-4">
                   <ScrollArea className="flex-1 pr-4">
                     <div className="space-y-4">
-                      {messages.length === 0 && (
-                        <div className="text-center py-10 space-y-3">
-                          <MessageSquare className="size-10 text-muted-foreground/20 mx-auto" />
-                          <p className="text-[10px] text-muted-foreground font-mono uppercase">Awaiting Builder query...</p>
-                        </div>
-                      )}
                       {messages.map((msg, i) => (
                         <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                           <div className={`max-w-[90%] p-3 rounded-xl text-xs font-mono leading-relaxed ${msg.role === 'user' ? 'bg-primary/20 border border-primary/20 text-primary-foreground' : 'bg-white/5 border border-white/5 text-muted-foreground'}`}>
@@ -236,7 +247,7 @@ export default function ApiHubPage() {
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <input 
-                         placeholder="How to apply for Certification?" 
+                         placeholder="Mapping query..." 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}
@@ -245,7 +256,7 @@ export default function ApiHubPage() {
                        />
                        <div 
                          onClick={askNora} 
-                         className={`absolute right-1 top-1 text-primary hover:bg-primary/20 bg-transparent size-10 flex items-center justify-center cursor-pointer ${loading || !query.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}
+                         className={`absolute right-1 top-1 text-primary size-10 flex items-center justify-center cursor-pointer ${loading ? 'opacity-50' : ''}`}
                        >
                          {loading ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
                        </div>
