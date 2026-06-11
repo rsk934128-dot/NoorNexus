@@ -39,7 +39,8 @@ import {
   Fingerprint,
   LockKeyhole,
   Users,
-  Compass
+  Compass,
+  Rocket
 } from "lucide-react"
 import { analyzeSenateProposal, GovernanceArchitectOutput } from "@/ai/flows/governance-architect-flow"
 import { executeSenateWill, ExecutiveExecutionOutput } from "@/ai/flows/executive-execution-flow"
@@ -78,7 +79,7 @@ export default function GovernanceHubPage() {
     setSimulating(true)
     setTimeout(() => {
       setSimulating(false)
-      toast({ title: "Stress Simulation Complete", description: "Outcome: Survival Score 92/100. Collusion detected and neutralized." })
+      toast({ title: "Utility Simulation Complete", description: "Outcome: Citizen Benefit 94/100. Implementation probability verified." })
     }, 1500)
   }
 
@@ -113,12 +114,13 @@ export default function GovernanceHubPage() {
         accountabilityScore: 100,
         lifecycleStage: "SUBMITTED",
         constitutionalCheck: "PASSED",
-        impactForecast: "Estimated 12% boost to Mesh Resilience",
-        intergenerationalImpact: 85
+        impactForecast: "Estimated 14% boost to Citizen Utility",
+        intergenerationalImpact: 92,
+        utilityDensityPotential: 88
       })
 
       setForm({ title: "", description: "", category: "PROTOCOL" })
-      toast({ title: "Proposal Dispatched", description: "Legitimacy verification PASSED." })
+      toast({ title: "Outcome-Based Proposal Dispatched", description: "Utility verification PASSED." })
     } catch (e: any) {
       toast({ title: "Council Error", description: e.message, variant: "destructive" })
     } finally {
@@ -138,7 +140,7 @@ export default function GovernanceHubPage() {
         [choice === 'FOR' ? 'votesFor' : 'votesAgainst']: increment(votingWeight),
         lifecycleStage: "IN_DELIBERATION"
       })
-      toast({ title: "Vote Cast", description: `Power: ${votingWeight}` })
+      toast({ title: "Outcome Vote Cast", description: `Power: ${votingWeight}` })
     } catch (e) {
       toast({ title: "Vote Failed", variant: "destructive" })
     }
@@ -167,11 +169,12 @@ export default function GovernanceHubPage() {
         executionReport: result.actionTaken,
         lifecycleStage: "COMPLETED",
         updatedAt: Date.now(),
-        impactReview: "Verified: Outcome matches Forecast by 98.4%",
-        accountabilityScore: 98.5
+        impactReview: "Verified: Outcome Utility matches Forecast by 96.2%",
+        accountabilityScore: 98.8,
+        actualCitizenBenefit: 94
       })
 
-      toast({ title: "Institutional Protocol Executed" })
+      toast({ title: "Outcome-Driven Protocol Executed" })
     } catch (e: any) {
       toast({ title: "Execution Failed", description: e.message, variant: "destructive" })
     } finally {
@@ -192,15 +195,15 @@ export default function GovernanceHubPage() {
                  </SidebarTrigger>
                  <h2 className="text-2xl sm:text-4xl font-headline font-bold flex items-center gap-3 uppercase">
                    <LockKeyhole className="size-10 text-primary" />
-                   Sovereign Senate Hub
+                   Sovereign Outcome Senate
                  </h2>
               </div>
-              <p className="text-muted-foreground">Meta-Governance & Institutional Succession Framework (Phase P5).</p>
+              <p className="text-muted-foreground">Phase P6: Outcome-Based Governance. Focus on Utility Density and Implementation Success.</p>
             </div>
             <div className="flex items-center gap-2">
                <Badge variant="outline" className={`h-10 px-4 flex items-center gap-2 ${isEligible ? 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5' : 'border-white/10'}`}>
-                 <Scale className={`size-4 ${isEligible ? 'animate-pulse' : ''}`} /> 
-                 {isEligible ? `STEWARD: ${myIdentity?.reputationTier}` : 'GUEST OBSERVER'}
+                 <Rocket className={`size-4 ${isEligible ? 'animate-pulse' : ''}`} /> 
+                 {isEligible ? `OUTCOME STEWARD: ${myIdentity?.reputationTier}` : 'GUEST OBSERVER'}
                </Badge>
             </div>
           </header>
@@ -211,29 +214,29 @@ export default function GovernanceHubPage() {
                  <Card className={`glass-card border-l-4 ${isEligible ? 'border-l-primary' : 'border-l-muted opacity-50'}`}>
                    <CardHeader>
                      <CardTitle className="text-sm font-headline uppercase tracking-widest flex items-center gap-2">
-                       <Plus className="size-4" /> Drafting Chamber
+                       <Plus className="size-4" /> Outcome Chamber
                      </CardTitle>
-                     <CardDescription>Verify edicts against the Living Constitution (Article VII Survival Policy).</CardDescription>
+                     <CardDescription>Drafting edicts focused on verifiable citizen utility and implementation success.</CardDescription>
                    </CardHeader>
                    <CardContent className="space-y-6">
                       <div className="space-y-4">
                         <div className="space-y-2">
-                          <Label className="text-[10px] font-bold uppercase text-muted-foreground">Edict Title</Label>
+                          <Label className="text-[10px] font-bold uppercase text-muted-foreground">Utility Edict Title</Label>
                           <Input 
                             disabled={!isEligible}
                             value={form.title}
                             onChange={e => setForm({...form, title: e.target.value})}
-                            placeholder="e.g. Generational Knowledge Transfer"
+                            placeholder="e.g. Universal P2C Transaction Speed Up"
                             className="bg-background/50 border-white/10 font-bold"
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-[10px] font-bold uppercase text-muted-foreground">Institutional Context</Label>
+                          <Label className="text-[10px] font-bold uppercase text-muted-foreground">Expected Outcome Value</Label>
                           <textarea 
                             disabled={!isEligible}
                             value={form.description}
                             onChange={e => setForm({...form, description: e.target.value})}
-                            placeholder="Explain the longevity outcome..."
+                            placeholder="Describe how this improves daily utility..."
                             className="w-full h-24 bg-background/50 border border-white/10 rounded-md p-3 text-xs outline-none focus:ring-1 focus:ring-primary"
                           />
                         </div>
@@ -241,7 +244,7 @@ export default function GovernanceHubPage() {
                       <div className="grid grid-cols-2 gap-4">
                          <Button variant="outline" onClick={handleSimulate} disabled={!isEligible || simulating} className="text-[10px] uppercase font-bold gap-2 border-primary/20">
                             {simulating ? <Loader2 className="size-3 animate-spin" /> : <Activity className="size-3" />}
-                            Run Survival Sim
+                            Run Utility Sim
                          </Button>
                          <Button 
                            onClick={handleCreateProposal}
@@ -249,7 +252,7 @@ export default function GovernanceHubPage() {
                            className="bg-primary text-primary-foreground font-bold uppercase tracking-widest text-[10px] glow-primary"
                          >
                            {analyzing ? <Loader2 className="size-3 animate-spin mr-2" /> : <Zap className="size-3 mr-2" />}
-                           Submit to Senate
+                           Push to Flywheel
                          </Button>
                       </div>
                    </CardContent>
@@ -258,15 +261,15 @@ export default function GovernanceHubPage() {
                  <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                     <CardHeader>
                        <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
-                          <Crown className="size-4" /> Succession Framework
+                          <Compass className="size-4" /> Civilizational Flywheel
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
                        <div className="space-y-4">
                           {[
-                            { role: "Founder Override", status: "LIMITED (Art II)", color: "text-white" },
-                            { role: "Steward Council", status: "85% READY", color: "text-emerald-500" },
-                            { role: "Emergency Quorum", status: "STANDBY", color: "text-amber-500" }
+                            { role: "Decision Torque", status: "94% POWER", color: "text-white" },
+                            { role: "Implementation Sync", status: "OPTIMAL", color: "text-emerald-500" },
+                            { role: "Utility Reinforcement", status: "ACTIVE", color: "text-amber-500" }
                           ].map((r, i) => (
                             <div key={i} className="p-3 bg-black/40 rounded-xl border border-white/5 flex justify-between items-center">
                                <span className="text-[10px] text-muted-foreground uppercase font-bold">{r.role}</span>
@@ -274,27 +277,27 @@ export default function GovernanceHubPage() {
                             </div>
                           ))}
                        </div>
-                       <p className="text-[9px] text-muted-foreground italic text-center">"Institution > Individual. The succession protocol ensures civilization continuity."</p>
+                       <p className="text-[9px] text-muted-foreground italic text-center">"Governance is the engine of utility. The faster we implement, the more trust we generate."</p>
                     </CardContent>
                  </Card>
               </div>
 
               <div className="space-y-4">
                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
-                   <FileText className="size-4" /> Institutional Accountability Stream
+                   <FileText className="size-4" /> Outcome-Based Accountability Stream
                 </h3>
                 {propsLoading ? (
                   <div className="flex flex-col items-center py-20 gap-4 opacity-50">
                     <Loader2 className="size-10 text-primary animate-spin" />
-                    <p className="text-[10px] font-mono uppercase">Syncing Institutional Records...</p>
+                    <p className="text-[10px] font-mono uppercase">Syncing Outcome Records...</p>
                   </div>
                 ) : proposals.map((prop: any) => (
                   <Card key={prop.id} className={`glass-card hover:border-primary/20 transition-all ${prop.status === 'EXECUTED' ? 'border-l-4 border-l-emerald-500' : ''}`}>
                     <CardHeader className="flex flex-row items-start justify-between pb-2">
                        <div className="space-y-1">
                           <div className="flex items-center gap-2">
-                            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 text-[8px] h-4">CONST_LINK: {prop.constitutionalCheck || "PASSED"}</Badge>
-                            <span className="text-[8px] text-muted-foreground font-mono uppercase">STAGE: {prop.lifecycleStage || "SUBMITTED"}</span>
+                            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 text-[8px] h-4">UTILITY_LINK: {prop.utilityDensityPotential || 88}%</Badge>
+                            <span className="text-[8px] text-muted-foreground font-mono uppercase">OUTCOME_STAGE: {prop.lifecycleStage || "SUBMITTED"}</span>
                           </div>
                           <CardTitle className="text-lg font-headline text-white uppercase">{prop.title}</CardTitle>
                        </div>
@@ -312,28 +315,28 @@ export default function GovernanceHubPage() {
                             <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl space-y-3">
                                <div className="flex items-center justify-between border-b border-white/5 pb-2">
                                   <h4 className="text-[10px] font-bold uppercase text-emerald-500 flex items-center gap-2">
-                                    <FileCheck className="size-3" /> Post-Execution Audit
+                                    <FileCheck className="size-3" /> Outcome Audit
                                   </h4>
                                </div>
                                <p className="text-[10px] text-emerald-200 leading-relaxed italic">{prop.executionReport}</p>
                                <div className="pt-2">
-                                  <p className="text-[8px] font-mono text-muted-foreground uppercase">Maturity Proof (HMAC_V4)</p>
+                                  <p className="text-[8px] font-mono text-muted-foreground uppercase">Outcome Hash (Utility)</p>
                                   <p className="text-[9px] font-mono text-primary truncate">{prop.executionHash}</p>
                                </div>
                             </div>
                             <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
                                <div className="flex items-center justify-between border-b border-white/5 pb-2">
                                   <h4 className="text-[10px] font-bold uppercase text-primary flex items-center gap-2">
-                                    <TrendingUp className="size-3" /> Legacy Impact Review
+                                    <TrendingUp className="size-3" /> Citizen Benefit Review
                                   </h4>
                                </div>
                                <div className="flex justify-between items-end">
                                   <div className="space-y-1">
-                                     <p className="text-[8px] text-muted-foreground uppercase">Intergenerational Score</p>
-                                     <p className="text-2xl font-headline font-bold text-emerald-500">{prop.intergenerationalImpact || 85}/100</p>
+                                     <p className="text-[8px] text-muted-foreground uppercase">Actual Benefit Score</p>
+                                     <p className="text-2xl font-headline font-bold text-emerald-500">{prop.actualCitizenBenefit || 94}/100</p>
                                   </div>
                                </div>
-                               <p className="text-[9px] text-muted-foreground italic">"Outcome honors the long-term survival mandate of Article VII."</p>
+                               <p className="text-[9px] text-muted-foreground italic">"Implementation success verified. Utility delivered to 82% of target citizens."</p>
                             </div>
                          </div>
                        ) : (
@@ -356,7 +359,7 @@ export default function GovernanceHubPage() {
                                   className="bg-emerald-500 text-emerald-foreground hover:bg-emerald-600 gap-2 h-10 px-6 font-bold uppercase text-[10px] glow-emerald"
                                  >
                                     {executingId === prop.id ? <Loader2 className="size-4 animate-spin" /> : <PlayCircle className="size-4" />}
-                                    Final Execution
+                                    Final Implementation
                                  </Button>
                                )}
                                <Button onClick={() => handleVote(prop.id, 'FOR')} disabled={!isEligible} variant="outline" className="border-emerald-500/20 text-emerald-500 text-[10px]">Aye</Button>
@@ -374,21 +377,21 @@ export default function GovernanceHubPage() {
               <Card className="glass-card bg-primary/5 border-primary/20">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                    <ShieldHalf className="size-4" /> Meta-Governance
+                    <ShieldHalf className="size-4" /> Outcome-Based Governance
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <div className="space-y-1">
                       <div className="flex justify-between text-[10px] font-mono">
-                         <span className="uppercase text-muted-foreground">Governance Quorum</span>
-                         <span className="text-primary font-bold">66.7%</span>
+                         <span className="uppercase text-muted-foreground">Implementation Success</span>
+                         <span className="text-primary font-bold">96.7%</span>
                       </div>
                       <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                         <div className="h-full bg-primary" style={{ width: '67%' }} />
+                         <div className="h-full bg-primary" style={{ width: '96%' }} />
                       </div>
                    </div>
                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                      "Governance audits governance. Senate performance is reviewed by the AI Stewardship Council every Cycle."
+                      "We value outcomes over implementations. Governance success is measured by the tangible benefit delivered to our citizens."
                    </p>
                 </CardContent>
               </Card>
@@ -396,16 +399,16 @@ export default function GovernanceHubPage() {
               <Card className="glass-card border-l-4 border-l-emerald-500">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-emerald-500 tracking-widest flex items-center gap-2">
-                       <Compass className="size-4" /> Stewardship Observatory
+                       <Rocket className="size-4" /> Utility Observatory
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <div className="p-3 bg-white/5 rounded border border-white/5 space-y-2 text-center">
-                       <p className="text-[8px] text-muted-foreground uppercase">Mission Drift Risk</p>
-                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">LOW_STABLE</Badge>
+                       <p className="text-[8px] text-muted-foreground uppercase">Indispensability Score</p>
+                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">HIGH_INDISPENSABLE</Badge>
                     </div>
                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       Independent generational audit is verifying alignment with Sheikh Farid's Mission 400.
+                       Citizens report that 92% of their critical digital operations now rely on NoorNexus.
                     </p>
                  </CardContent>
               </Card>
@@ -413,12 +416,12 @@ export default function GovernanceHubPage() {
               <Card className="glass-card border-amber-500/20">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                       <History className="size-3" /> Gen. Continuity
+                       <History className="size-3" /> Generational Utility
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[9px] text-muted-foreground italic leading-relaxed">
-                       Survival Protocol: Active.<br/>Institutional memory sync complete for Cycle 42.
+                       Flywheel spinning at optimal torque.<br/>Trust -> Adoption Loop is self-sustaining.
                     </p>
                  </CardContent>
               </Card>

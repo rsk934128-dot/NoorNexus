@@ -67,7 +67,8 @@ import {
   ChevronRight,
   DollarSign,
   UserCheck,
-  FileCheck
+  FileCheck,
+  LifeBuoy
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -85,26 +86,25 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
-const FOUNDER_SCORECARD = [
-  { label: "Paying Partners", value: "1", target: "10", icon: Building2, color: "text-primary" },
-  { label: "Monthly Revenue (MRR)", value: "$4.2K", target: "$10K", icon: DollarSign, color: "text-emerald-500" },
-  { label: "Trust Velocity", value: "+14.2%", target: "Positive", icon: TrendingUp, color: "text-blue-500" },
-  { label: "Pilot Conversion", value: "33%", target: ">50%", icon: Zap, color: "text-amber-500" },
-  { label: "Institutional Retention", value: "100%", target: ">90%", icon: UserCheck, color: "text-purple-500" },
+const UTILITY_VITAL_SIGNS = [
+  { label: "Hours Saved (Comm)", value: "1.2K", target: "Daily", icon: Clock, color: "text-primary" },
+  { label: "Decisions Hardened", value: "42", target: "Cycle", icon: Gavel, color: "text-emerald-500" },
+  { label: "Utility Density", value: "92%", target: "Critical", icon: Zap, color: "text-blue-500" },
+  { label: "Institutional Dependence", value: "8/10", target: "Scale", icon: Building2, color: "text-amber-500" },
 ]
 
-const LEGACY_PULSE = [
-  { label: "Mission Alignment", score: "98.4%", icon: Target, color: "text-primary" },
-  { label: "Survivability Rating", score: "MAX", icon: HeartPulse, color: "text-emerald-500" },
-  { label: "Succession Readiness", score: "85%", icon: Users, color: "text-amber-500" },
-  { label: "Generational Legacy", score: "EMERGING", icon: History, color: "text-purple-500" }
+const NET_CIVILIZATIONAL_VALUE = [
+  { label: "Net Economic Value", score: "$4.2M", icon: DollarSign, color: "text-primary" },
+  { label: "Trust Liquidity", score: "99.8%", icon: ShieldCheck, color: "text-emerald-500" },
+  { label: "Knowledge Equity", score: "1.2K Nodes", icon: BrainCircuit, color: "text-amber-500" },
+  { label: "Governance Quality", score: "94/100", icon: Scale, color: "text-purple-500" }
 ]
 
-const VERIFIED_TRUTH = [
-  { label: "Last Security Review", date: "24h ago", status: "PASSED", icon: ShieldCheck },
-  { label: "Last Chaos Test", date: "2h ago", status: "STABLE", icon: Activity },
-  { label: "Audit Integrity", date: "Real-time", status: "SIGNED", icon: FileCheck },
-  { label: "Longevity Score", date: "Verified", status: "94/100", icon: HeartPulse }
+const REALITY_ADOPTION_METRICS = [
+  { label: "Active Utility Nodes", date: "Real-time", status: "82 ACTIVE", icon: Activity },
+  { label: "Civilizational Flywheel", date: "Spinning", status: "OPTIMAL", icon: RefreshCcw },
+  { label: "Net Value Created", date: "Verified", status: "+$12.5M", icon: ArrowUpRight },
+  { label: "Absence Loss Risk", date: "Critical", status: "HIGH", icon: AlertTriangle }
 ]
 
 export default function Home() {
@@ -113,15 +113,15 @@ export default function Home() {
   const isAdmin = user?.email === ADMIN_EMAIL
 
   const [loading, setLoading] = useState(true)
-  const [statusText, setStatusText] = useState("INITIALIZING VERIFICATION MESH...")
+  const [statusText, setStatusText] = useState("INITIALIZING UTILITY MESH...")
   const [borderFeed, setBorderFeed] = useState<string[]>([])
 
   useEffect(() => {
     const sequence = [
-      { text: "STABILIZING VERIFICATION CORE...", time: 600 },
-      { text: "SYNCING EVIDENCE VAULTS...", time: 1200 },
-      { text: "ACTIVATING RED-TEAM MONITOR...", time: 1800 },
-      { text: "NOORNEXUS: VERIFIED REALITY READY", time: 2400 },
+      { text: "CALIBRATING UTILITY DENSITY...", time: 600 },
+      { text: "SYNCING CIVILIZATIONAL FLYWHEEL...", time: 1200 },
+      { text: "VERIFYING NET VALUE METRICS...", time: 1800 },
+      { text: "NOORNEXUS: REALITY ADOPTION READY", time: 2400 },
     ]
 
     sequence.forEach((step, i) => {
@@ -133,12 +133,12 @@ export default function Home() {
 
     const interval = setInterval(() => {
       const logs = [
-        "REVENUE: $1.2k Transaction Fee Verified", 
-        "LEGACY: Succession Matrix Heartbeat OK", 
-        "VERIFY: Chaos Test Result - 100% Recovery", 
-        "SECURITY: Red-Team Simulation - No Drift",
-        "WEDGE: Governance Module Dependency Confirmed",
-        "AUDIT: Ledger Chain Signed by Node 42"
+        "UTILITY: 42 Decisions Hardened in Senate", 
+        "VALUE: $450k Financial Loss Prevented", 
+        "DEPENDENCE: 3 Institutions Integrated Core Nodes", 
+        "ADOPTION: 120 New Citizens Onboarded",
+        "FLYWHEEL: Trust Gain -> Adoption Spike Detected",
+        "LEGER: Knowledge Transfer Complete for Node 09"
       ]
       setBorderFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 3000)
@@ -174,30 +174,30 @@ export default function Home() {
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
                    <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
-                      <Zap className="size-3 mr-2" /> Phase P5: Sovereign Legacy
+                      <Zap className="size-3 mr-2" /> Phase P6: Civilizational Utility
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <HeartPulse className="size-3 mr-2" /> Sustainability Active
+                      <Rocket className="size-3 mr-2" /> Adoption Active
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   {isAdmin ? 'Sovereign Sustainability.' : 'Institutional Legacy.'}
+                   {isAdmin ? 'Civilizational Value.' : 'Reality Adoption.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed">
-                   "NoorNexus is built for the century. We prioritize institutional survival and generative legacy over temporary growth. Every decision honors Article VII: Longevity."
+                   "NoorNexus is defined by its utility. We measure success by the net value created for our citizens and institutions. If NoorNexus didn't exist, the loss would be measurable."
                 </p>
               </div>
               
               <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
                 <Card className="glass-card p-6 rounded-2xl border border-primary/20 w-full min-w-[320px]">
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Sustainability Index</p>
-                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">SURVIVABLE</Badge>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Utility Density Index</p>
+                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">CRITICAL</Badge>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-emerald-500 glow-emerald" style={{ width: '94%' }} />
+                       <div className="h-full bg-emerald-500 glow-emerald" style={{ width: '92%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-2 italic text-center">"Resilience Rating: 94/100 | Target: Century Stability"</p>
+                    <p className="text-[9px] text-muted-foreground mt-2 italic text-center">"Dependence Rating: 92/100 | Target: Absolute Necessity"</p>
                 </Card>
               </div>
             </div>
@@ -205,39 +205,37 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
-               {isAdmin && (
-                 <section className="space-y-6">
-                    <div className="flex justify-between items-center">
-                       <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                          <History className="size-4" /> Legacy Pulse (Institutional Health)
-                       </h3>
-                       <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">GENERATIONAL_SYNC: OK</Badge>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                       {LEGACY_PULSE.map((kpi, i) => (
-                         <Card key={i} className="glass-card border-white/5 bg-white/2 hover:border-primary/20 transition-all">
-                            <CardContent className="p-4 space-y-3">
-                               <div className={`p-2 rounded-lg bg-white/5 w-fit ${kpi.color}`}>
-                                  <kpi.icon className="size-4" />
-                               </div>
-                               <div className="space-y-0.5">
-                                  <p className="text-[9px] font-bold text-muted-foreground uppercase">{kpi.label}</p>
-                                  <p className="text-xl font-headline font-bold text-white">{kpi.score}</p>
-                                  <p className="text-[8px] text-muted-foreground font-mono">Status: VERIFIED</p>
-                               </div>
-                            </CardContent>
-                         </Card>
-                       ))}
-                    </div>
-                 </section>
-               )}
+               <section className="space-y-6">
+                  <div className="flex justify-between items-center">
+                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                        <History className="size-4" /> Utility Vital Signs (Real-world Impact)
+                     </h3>
+                     <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">UTILITY_SYNC: ACTIVE</Badge>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                     {UTILITY_VITAL_SIGNS.map((kpi, i) => (
+                       <Card key={i} className="glass-card border-white/5 bg-white/2 hover:border-primary/20 transition-all">
+                          <CardContent className="p-4 space-y-3">
+                             <div className={`p-2 rounded-lg bg-white/5 w-fit ${kpi.color}`}>
+                                <kpi.icon className="size-4" />
+                             </div>
+                             <div className="space-y-0.5">
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase">{kpi.label}</p>
+                                <p className="text-xl font-headline font-bold text-white">{kpi.value}</p>
+                                <p className="text-[8px] text-muted-foreground font-mono">Status: {kpi.target}</p>
+                             </div>
+                          </CardContent>
+                       </Card>
+                     ))}
+                  </div>
+               </section>
 
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                     <ShieldCheck className="size-4" /> Verified Truth (Reality Check)
+                     <ShieldCheck className="size-4" /> Net Civilizational Value (Verifiable Proof)
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                     {VERIFIED_TRUTH.map((v, i) => (
+                     {NET_CIVILIZATIONAL_VALUE.map((v, i) => (
                        <Card key={i} className="glass-card border-emerald-500/10 bg-emerald-500/5">
                           <CardContent className="p-6 space-y-3 text-center">
                              <div className="p-3 rounded-full bg-emerald-500/10 w-fit mx-auto">
@@ -245,8 +243,7 @@ export default function Home() {
                              </div>
                              <div className="space-y-1">
                                 <p className="text-[10px] font-bold text-emerald-200 uppercase">{v.label}</p>
-                                <p className="text-lg font-headline font-bold text-white">{v.status}</p>
-                                <p className="text-[8px] text-muted-foreground font-mono uppercase">{v.date}</p>
+                                <p className="text-lg font-headline font-bold text-white">{v.score}</p>
                              </div>
                           </CardContent>
                        </Card>
@@ -258,15 +255,15 @@ export default function Home() {
                  <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                     <CardHeader>
                        <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
-                          <Target className="size-4" /> Evidence Strategy: Constant Verification
+                          <Target className="size-4" /> Civilizational Flywheel: Trust & Adoption
                        </CardTitle>
-                       <CardDescription className="text-xs italic">"No critical capability shall be trusted merely because it exists."</CardDescription>
+                       <CardDescription className="text-xs italic">"Trust drives adoption; adoption creates data; data hardens decisions."</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                        {[
-                         { step: "Red Team", desc: "Periodic attack simulations on mesh nodes." },
-                         { step: "Chaos", desc: "Automated failure handling during runtime." },
-                         { step: "Legacy", desc: "Hardening succession matrix for long-term survival." }
+                         { step: "Trust", desc: "Verifiable proof of integrity builds foundation." },
+                         { step: "Adoption", desc: "Citizens and institutions migrate critical flows." },
+                         { step: "Insight", desc: "Rich data leads to superior governance and utility." }
                        ].map((s, i) => (
                          <div key={i} className="flex gap-4 items-start">
                             <Badge variant="outline" className="text-[8px] border-primary/20 text-primary h-5 w-16 justify-center shrink-0 uppercase">{s.step}</Badge>
@@ -274,7 +271,7 @@ export default function Home() {
                          </div>
                        ))}
                        <Button variant="ghost" className="w-full h-8 text-[9px] uppercase font-bold border border-white/5 mt-2">
-                          View Verification Runbooks <ChevronRight className="size-3 ml-1" />
+                          View Adoption Flywheel <ChevronRight className="size-3 ml-1" />
                        </Button>
                     </CardContent>
                  </Card>
@@ -282,23 +279,23 @@ export default function Home() {
                  <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                     <CardHeader>
                        <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
-                          <BarChart3 className="size-4" /> Institutional Resilience
+                          <BarChart3 className="size-4" /> Reality Adoption Metrics
                        </CardTitle>
-                       <CardDescription className="text-xs italic">"Proving recovery under mass failure conditions."</CardDescription>
+                       <CardDescription className="text-xs italic">"Measuring success beyond code implementation."</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                        <div className="grid grid-cols-2 gap-4">
                           <div className="p-3 bg-black/40 rounded-xl border border-white/5 text-center">
-                             <p className="text-[8px] text-muted-foreground uppercase font-bold">RTO Target</p>
-                             <p className="text-lg font-headline font-bold text-white">&lt; 5s</p>
+                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Utility Growth</p>
+                             <p className="text-lg font-headline font-bold text-white">+14.2%</p>
                           </div>
                           <div className="p-3 bg-black/40 rounded-xl border border-white/5 text-center">
-                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Chaos Pass</p>
-                             <p className="text-lg font-headline font-bold text-white">100%</p>
+                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Dependence Pass</p>
+                             <p className="text-lg font-headline font-bold text-white">82%</p>
                           </div>
                        </div>
                        <p className="text-[10px] text-muted-foreground italic text-center">
-                          "Sustainability is the final frontier of institutional trust."
+                          "Institutional utility is the final frontier of civilizational maturity."
                        </p>
                     </CardContent>
                  </Card>
@@ -310,7 +307,7 @@ export default function Home() {
                 <CardHeader className="p-4 border-b border-white/5">
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
                     <History className="size-4 text-primary" />
-                    Verified Pulse
+                    Verified Utility Pulse
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden">
@@ -329,13 +326,13 @@ export default function Home() {
 
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                  <CardHeader className="p-6">
-                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">Legacy Node</CardTitle>
+                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">Utility Hub</CardTitle>
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Phase P5 ensures NoorNexus survives its creator, honoring the generational trust of its citizens."
+                       "Phase P6 ensures NoorNexus is not just a vision, but a tool. Our value is proven daily by the citizens who use us."
                     </p>
-                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Survivability: OPTIMAL</Badge>
+                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Utility: INDISPENSABLE</Badge>
                  </CardContent>
               </Card>
             </div>

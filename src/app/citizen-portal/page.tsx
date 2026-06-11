@@ -23,7 +23,10 @@ import {
   Award,
   Cpu,
   Landmark,
-  Scale
+  Scale,
+  Clock,
+  ShieldAlert,
+  BarChart3
 } from "lucide-react"
 import { useUser } from "@/firebase"
 
@@ -49,14 +52,14 @@ export default function CitizenPortalPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <UserCircle className="size-3 mr-2" /> Citizen Layer Expansion
+                   <UserCircle className="size-3 mr-2" /> Civilizational Utility
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Citizen <span className="text-primary">Portal.</span>
+                Citizen <span className="text-primary">Value Hub.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Welcome, {user?.displayName || "Sovereign Citizen"}. Your identity is now multi-dimensional. Every action across civic, economic, and governance domains strengthens your civilization standing.
+                Welcome, {user?.displayName || "Sovereign Citizen"}. This portal tracks the tangible value NoorNexus provides to your life. From time saved to financial losses prevented, your utility is our primary metric.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -71,23 +74,23 @@ export default function CitizenPortalPage() {
             <div className="lg:col-span-3 space-y-8">
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <TrendingUp className="size-4" /> Multi-Dimensional Reputation Vector
+                    <TrendingUp className="size-4" /> Personal Value Ledger (Impact Tracker)
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-                    {REPUTATION_VECTORS.map((v, i) => (
+                    {[
+                      { label: "Time Saved", value: "42 Hours", icon: Clock, color: "text-blue-500" },
+                      { label: "Losses Avoided", value: "$1,200", icon: ShieldAlert, color: "text-emerald-500" },
+                      { label: "Transparency Gain", value: "MAX", icon: Eye, color: "text-purple-500" },
+                      { label: "Decision Hardening", value: "8 Active", icon: Gavel, color: "text-amber-500" },
+                    ].map((v, i) => (
                       <Card key={i} className="glass-card border-white/5 hover:border-primary/20 transition-all group">
-                        <CardContent className="p-6 space-y-4">
-                           <div className={`p-3 bg-white/5 rounded-xl w-fit ${v.color}`}>
+                        <CardContent className="p-6 space-y-4 text-center">
+                           <div className={`p-3 bg-white/5 rounded-full w-fit mx-auto ${v.color}`}>
                               <v.icon className="size-6" />
                            </div>
-                           <div className="space-y-2">
-                              <p className="text-[10px] font-bold text-white uppercase tracking-widest">{v.label}</p>
-                              <div className="flex justify-between items-end">
-                                 <p className={`text-2xl font-headline font-bold ${v.color}`}>{v.score}%</p>
-                              </div>
-                              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                                 <div className={`h-full transition-all duration-1000 ${v.color.replace('text-', 'bg-')}`} style={{ width: `${v.score}%` }} />
-                              </div>
+                           <div className="space-y-1">
+                              <p className="text-[10px] font-bold text-muted-foreground uppercase">{v.label}</p>
+                              <p className={`text-xl font-headline font-bold ${v.color}`}>{v.value}</p>
                            </div>
                         </CardContent>
                       </Card>
@@ -101,15 +104,15 @@ export default function CitizenPortalPage() {
                  </div>
                  <CardHeader>
                     <CardTitle className="text-sm font-headline uppercase tracking-[0.3em] text-primary flex items-center gap-3">
-                       <Gift className="size-5" /> Contribution Rewards
+                       <Gift className="size-5" /> Adoption Rewards (Indispensability)
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-6 relative z-10">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                        {[
-                         { title: "Early Citizen", reward: "Verified Badge", status: "CLAIMED" },
-                         { title: "Gov Contributor", reward: "2x Voting Weight", status: "LOCKED" },
-                         { title: "Mesh Node", reward: "Daily Revenue Share", status: "ELIGIBLE" },
+                         { title: "Power User", reward: "L5 Clearance", status: "ELIGIBLE" },
+                         { title: "Transparency Adv.", reward: "Auditor Badge", status: "CLAIMED" },
+                         { title: "Value Contributor", reward: "2% Revenue Share", status: "LOCKED" },
                        ].map((r, i) => (
                          <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-2">
                             <p className="text-[10px] font-bold text-primary uppercase">{r.title}</p>
@@ -121,27 +124,27 @@ export default function CitizenPortalPage() {
                        ))}
                     </div>
                     <Button className="w-full bg-primary text-primary-foreground font-bold uppercase h-12 glow-primary">
-                       Explore Rewards Catalog
+                       Explore Value Catalog
                     </Button>
                  </CardContent>
               </Card>
 
               <section className="space-y-4">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-muted-foreground flex items-center gap-2">
-                    <Activity className="size-4" /> Verifiable Participation History
+                    <Activity className="size-4" /> Civilizational Outcome History
                  </h3>
                  <div className="space-y-3">
                     {[
-                      { action: "Governance Vote Cast (Proposal #42)", impact: "+5 Governance", time: "2h ago", proof: "0x82...f9" },
-                      { action: "Merchant Validation Completed", impact: "+15 Economic", time: "1d ago", proof: "0x12...a3" },
-                      { action: "Mesh Node Uptime Sync", impact: "+2 Technical", time: "3d ago", proof: "0xcc...e1" },
+                      { action: "Automated Tax Settlement Success", impact: "0% Error Rate", time: "2h ago", proof: "v_381_x" },
+                      { action: "Governance Veto - Drift Prevented", impact: "Principle Maintained", time: "1d ago", proof: "v_122_p" },
+                      { action: "Mesh Node Contribution (Utility)", impact: "+12.5 GWh Saved", time: "3d ago", proof: "v_092_u" },
                     ].map((h, i) => (
                       <div key={i} className="flex items-center justify-between p-4 bg-white/2 border border-white/5 rounded-xl">
                          <div className="flex items-center gap-4">
                             <div className="size-2 bg-emerald-500 rounded-full" />
                             <div className="space-y-0.5">
                                <p className="text-xs text-white font-medium">{h.action}</p>
-                               <p className="text-[7px] font-mono text-muted-foreground">PROOF_HASH: {h.proof}</p>
+                               <p className="text-[7px] font-mono text-muted-foreground">OUTCOME_PROOF: {h.proof}</p>
                             </div>
                          </div>
                          <div className="text-right">
@@ -158,15 +161,15 @@ export default function CitizenPortalPage() {
               <Card className="glass-card border-l-4 border-l-amber-500">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                    <Award className="size-4" /> Verifiable Credentials
+                    <Award className="size-4" /> Indispensable Credentials
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                      {[
-                       { label: "Genesis Resident", status: "VERIFIED" },
-                       { label: "L4 Security Clearance", status: "PENDING" },
-                       { label: "Community Validator", status: "VERIFIED" }
+                       { label: "Crisis Navigator", status: "VERIFIED" },
+                       { label: "Utility Expert (L3)", status: "PENDING" },
+                       { label: "Community Value Pillar", status: "VERIFIED" }
                      ].map((c, i) => (
                        <div key={i} className="flex justify-between items-center p-2 bg-white/5 rounded border border-white/5">
                           <span className="text-[9px] text-white font-bold uppercase">{c.label}</span>
@@ -180,21 +183,21 @@ export default function CitizenPortalPage() {
               <Card className="glass-card">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                       <TrendingUp className="size-4" /> Civic Impact Engine
+                       <TrendingUp className="size-4" /> Civilizational Utility Engine
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-6">
                     <div className="space-y-2">
                        <div className="flex justify-between text-[10px] font-mono">
-                          <span className="uppercase">Reputation Reliability</span>
-                          <span className="text-primary">99.8%</span>
+                          <span className="uppercase">Utility Reliability</span>
+                          <span className="text-primary">99.9%</span>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                          <div className="h-full bg-primary" style={{ width: '99.8%' }} />
+                          <div className="h-full bg-primary" style={{ width: '99.9%' }} />
                        </div>
                     </div>
                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       Your reputation is attested by 12 mesh nodes. Tamper-proof standing in the civilization.
+                       NoorNexus has become critical to your daily operations. Total dependency is verified.
                     </p>
                  </CardContent>
               </Card>
