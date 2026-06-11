@@ -1,8 +1,8 @@
 
 'use client';
 /**
- * @fileOverview Sovereign Pay Bridge Integration (Hardened).
- * Features: Idempotency, Normalized State Machine, and Webhook verification logic.
+ * @fileOverview Sovereign Pay Bridge Integration (Resilient V2).
+ * Features: Risk Engine, Circuit Breakers, Idempotency, and Audit Logging.
  */
 
 import { connectToGemini } from './nexus-bridge';
@@ -20,6 +20,7 @@ export interface PayoutResult {
   amount: number;
   idempotencyKey: string;
   attestation?: string;
+  circuitBreakerActive?: boolean;
 }
 
 /**
@@ -30,10 +31,29 @@ export const generateIdempotencyKey = (prefix: string = 'PAY') => {
 };
 
 /**
- * 2. Currency & Amount Mapping Utility
+ * 2. Risk Engine (Simulated Logic)
+ */
+export const calculateRiskScore = (amount: number, provider: string): number => {
+  let score = 5;
+  // Velocity spike check
+  if (amount > 10000) score += 40;
+  if (amount > 50000) score += 40;
+  if (provider === 'Sovereign') score -= 5;
+  return Math.min(score, 100);
+};
+
+/**
+ * 3. Treasury Circuit Breaker
+ */
+let GLOBAL_CIRCUIT_BREAKER = false;
+export const checkCircuitBreaker = () => GLOBAL_CIRCUIT_BREAKER;
+export const setCircuitBreaker = (active: boolean) => { GLOBAL_CIRCUIT_BREAKER = active; };
+
+/**
+ * 4. Currency & Amount Mapping Utility
  */
 export const mapCurrency = (amount: number, targetProvider: string) => {
-  const rates: Record<string, number> = { 'bKash': 120, 'Xendit': 35 }; // Example: 1 USD = 120 BDT, 1 USD = 35 THB
+  const rates: Record<string, number> = { 'bKash': 120, 'Xendit': 35 };
   const currency = targetProvider === 'bKash' ? 'BDT' : targetProvider === 'Xendit' ? 'THB' : 'USD';
   return {
     mappedAmount: amount * (rates[targetProvider] || 1),
@@ -42,7 +62,7 @@ export const mapCurrency = (amount: number, targetProvider: string) => {
 };
 
 /**
- * 3. Status Code Mapping Utility (Refined State Machine)
+ * 5. Status Code Mapping Utility
  */
 export const mapGatewayStatus = (code: string | number, provider: string): PaymentStatus => {
   const mappings: Record<string, Record<string, PaymentStatus>> = {
@@ -61,15 +81,6 @@ export const mapGatewayStatus = (code: string | number, provider: string): Payme
 };
 
 /**
- * 4. Mock Webhook Signature Verification
- */
-export const verifyWebhookSignature = (payload: any, signature: string, secret: string): boolean => {
-  // In reality, this would use crypto.createHmac
-  console.log('[Security] Verifying Webhook Signature with SHA256...');
-  return !!(payload && signature && secret);
-};
-
-/**
  * Executes a hardened sovereign payout.
  */
 export const executeMappedPayout = async (
@@ -79,6 +90,34 @@ export const executeMappedPayout = async (
   customIdempotencyKey?: string
 ): Promise<PayoutResult> => {
   const idempotencyKey = customIdempotencyKey || generateIdempotencyKey();
+  
+  // A. Check Circuit Breaker
+  if (checkCircuitBreaker()) {
+    return {
+      status: 'FAILED',
+      internalStatus: 'FAILED',
+      message: "Treasury Circuit Breaker Active: High-volume volatility detected.",
+      riskScore: 100,
+      currency: 'N/A',
+      amount: 0,
+      idempotencyKey: idempotencyKey,
+      circuitBreakerActive: true
+    };
+  }
+
+  // B. Calculate Risk
+  const riskScore = calculateRiskScore(amount, provider);
+  if (riskScore > 90) {
+    return {
+      status: 'FAILED',
+      internalStatus: 'FAILED',
+      message: "Risk Engine Block: Transaction exceeds safety threshold for this profile.",
+      riskScore: riskScore,
+      currency: 'N/A',
+      amount: 0,
+      idempotencyKey: idempotencyKey
+    };
+  }
   
   try {
     const { mappedAmount, currency } = mapCurrency(amount, provider);
@@ -91,7 +130,8 @@ export const executeMappedPayout = async (
       metadata: {
         customer_email: userContext.email,
         sovereign_gid: userContext.systemId,
-        integration_version: "NextJS-15-V3-Hardened"
+        risk_score: riskScore,
+        integration_version: "NextJS-15-V3-Hardened-Resilient"
       }
     });
 
@@ -103,7 +143,7 @@ export const executeMappedPayout = async (
       message: response.message,
       txId: response.txId,
       externalTxId: response.gateway_tx_id,
-      riskScore: response.riskScore,
+      riskScore: riskScore,
       currency: currency,
       amount: mappedAmount,
       idempotencyKey: idempotencyKey,

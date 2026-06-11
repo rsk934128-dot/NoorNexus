@@ -14,6 +14,7 @@
         "status": { "type": "string", "enum": ["CREATED", "PENDING", "PROCESSING", "SUCCESS", "FAILED", "REFUNDED", "DISPUTED"] },
         "idempotencyKey": { "type": "string" },
         "userEmail": { "type": "string" },
+        "riskScore": { "type": "number" },
         "metadata": { "type": "object" },
         "createdAt": { "type": "number" },
         "updatedAt": { "type": "number" }
@@ -44,6 +45,19 @@
         "timestamp": { "type": "number" }
       }
     },
+    "AuditLog": {
+      "title": "Operational Audit Log",
+      "description": "Immutable record of system actions and security events.",
+      "type": "object",
+      "properties": {
+        "logId": { "type": "string" },
+        "action": { "type": "string" },
+        "actor": { "type": "string" },
+        "severity": { "type": "string", "enum": ["INFO", "WARNING", "CRITICAL"] },
+        "metadata": { "type": "object" },
+        "timestamp": { "type": "number" }
+      }
+    },
     "AppConnection": {
       "title": "Imperial App Connection",
       "description": "Registered application heartbeat and sync status.",
@@ -68,6 +82,10 @@
     "/ledger/{entryId}": {
       "schema": "LedgerEntry",
       "description": "Immutable financial events"
+    },
+    "/audit_logs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Immutable operational history"
     },
     "/settlements/{settlementId}": {
       "schema": "Settlement",
