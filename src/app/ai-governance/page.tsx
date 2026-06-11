@@ -24,14 +24,17 @@ import {
   Database,
   LockKeyhole,
   Network,
-  Users
+  Users,
+  Target,
+  Waves,
+  Lightbulb
 } from "lucide-react"
 
 const AI_REGISTRY = [
-  { name: "Nora-00", role: "Protocol Architect", alignment: 99.8, risk: "Low", status: "Audited", scope: "Architecture Only", permissions: ["Read", "Audit"] },
-  { name: "Nora-01", role: "Compliance Monitor", alignment: 100, risk: "None", status: "Stable", scope: "Border Security", permissions: ["Read", "Write", "Isolate"] },
-  { name: "Nora-07", role: "Senate Strategist", alignment: 98.5, risk: "Medium", status: "Active", scope: "Simulation Pass", permissions: ["Read", "Recommend"] },
-  { name: "Nora-11", role: "Imperial Oracle", alignment: 96.2, risk: "High", status: "Continuous", scope: "Prediction Engine", permissions: ["Read", "Audit"] },
+  { name: "Nora-00", role: "Protocol Architect", alignment: 99.8, consequence: "High", risk: "Low", status: "Audited", scope: "Architecture Only", permissions: ["Read", "Audit"] },
+  { name: "Nora-01", role: "Compliance Monitor", alignment: 100, consequence: "Critical", risk: "None", status: "Stable", scope: "Border Security", permissions: ["Read", "Write", "Isolate"] },
+  { name: "Nora-07", role: "Senate Strategist", alignment: 98.5, consequence: "Medium", risk: "Medium", status: "Active", scope: "Simulation Pass", permissions: ["Read", "Recommend"] },
+  { name: "Nora-11", role: "Imperial Oracle", alignment: 96.2, consequence: "Critical", risk: "High", status: "Continuous", scope: "Prediction Engine", permissions: ["Read", "Audit"] },
 ]
 
 export default function AiGovernancePage() {
@@ -46,21 +49,21 @@ export default function AiGovernancePage() {
                  <SidebarTrigger className="md:hidden text-primary">
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
-                 <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <BrainCircuit className="size-3 mr-2" /> AI Containment Framework
+                 <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
+                   <Target className="size-3 mr-2" /> Phase P8: AI Impact Audit
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                AI <span className="text-primary">Governance.</span>
+                AI <span className="text-emerald-500">Consequence.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project 164: Meta-Governance Audit. Ensuring every Nora-AI agent operates within Constitutional Scope and Risk Ceilings.
+                "Nora-AI Impact Verification." auditing each agent based on the real-world consequences of their decisions and autonomous actions.
               </p>
             </div>
             <div className="flex items-center gap-4">
-               <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Human Stewardship</p>
-                  <p className="text-3xl font-headline font-bold text-emerald-500">ACTIVE</p>
+               <div className="p-4 glass-card rounded-2xl border border-emerald-500/20 text-center min-w-[200px]">
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Stewardship Accountability</p>
+                  <p className="text-3xl font-headline font-bold text-emerald-500">99.9%</p>
                </div>
             </div>
           </header>
@@ -69,21 +72,23 @@ export default function AiGovernancePage() {
             <div className="lg:col-span-2 space-y-8">
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
-                    <Cpu className="size-4" /> AI Registry & Permission Matrix
+                    <Cpu className="size-4" /> AI Consequence Matrix
                  </h3>
                  <div className="grid grid-cols-1 gap-4">
                     {AI_REGISTRY.map((ai, i) => (
-                      <Card key={i} className="glass-card border-white/5 hover:border-primary/20 transition-all">
+                      <Card key={i} className="glass-card border-white/5 hover:border-emerald-500/20 transition-all">
                         <CardContent className="p-6">
                            <div className="flex flex-col md:flex-row justify-between gap-6">
                               <div className="flex gap-4">
-                                 <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
-                                    <LockKeyhole className="size-6 text-primary" />
+                                 <div className="size-12 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                                    <Waves className="size-6 text-emerald-500" />
                                  </div>
                                  <div className="space-y-1">
                                     <p className="text-lg font-bold text-white uppercase">{ai.name}</p>
                                     <p className="text-xs text-muted-foreground font-mono">{ai.role}</p>
-                                    <p className="text-[9px] text-primary/60 uppercase font-bold">SCOPE: {ai.scope}</p>
+                                    <p className={`text-[9px] font-bold uppercase ${ai.consequence === 'Critical' ? 'text-destructive' : 'text-primary'}`}>
+                                       Consequence: {ai.consequence}
+                                    </p>
                                     <div className="flex flex-wrap gap-2 mt-2">
                                        {ai.permissions.map((p, j) => (
                                          <Badge key={j} variant="secondary" className="text-[8px] bg-primary/10 text-primary uppercase font-bold">{p}</Badge>
@@ -108,19 +113,19 @@ export default function AiGovernancePage() {
                  </div>
               </section>
 
-              <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+              <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                  <CardHeader>
-                    <CardTitle className="text-sm font-headline uppercase tracking-[0.3em] text-primary flex items-center gap-3">
-                       <ShieldHalf className="size-5" /> Stewardship Rules (Founder Independence)
+                    <CardTitle className="text-sm font-headline uppercase tracking-[0.3em] text-emerald-500 flex items-center gap-3">
+                       <ShieldHalf className="size-5" /> Consequence Control Rules
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                        {[
-                         { rule: "Zero Constitutional Write-Access", status: "ENFORCED" },
-                         { rule: "Multi-sig Steward Verification", status: "ENFORCED" },
-                         { rule: "Risk Ceiling Dynamic Cap", status: "STABLE" },
-                         { rule: "Founder Override Limited (Art II)", status: "ACTIVE" }
+                         { rule: "Zero Outcome Write-Access", status: "ENFORCED" },
+                         { rule: "Audit of Autonomous Consequences", status: "ACTIVE" },
+                         { rule: "Consequence-Based Shutdown", status: "READY" },
+                         { rule: "Article VIII Compliance Audit", status: "STABLE" }
                        ].map((r, i) => (
                          <div key={i} className="p-3 bg-black/40 rounded-xl border border-white/5 flex justify-between items-center">
                             <span className="text-[10px] text-white font-bold uppercase">{r.rule}</span>
@@ -136,16 +141,16 @@ export default function AiGovernancePage() {
               <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                    <AlertTriangle className="size-4" /> Stewardship Observatory
+                    <AlertTriangle className="size-4" /> Impact Observatory
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-[11px] text-muted-foreground leading-relaxed italic">
-                    "AI agents possess no legal personhood. All autonomous actions are audited by the Meta-Governance layer every Cycle."
+                    "AI agents must be judged by their fruits. We track the real-world consequences of every automated prompt and oracle insight."
                   </p>
                   <div className="pt-4 border-t border-white/5">
                     <div className="flex justify-between items-center text-[9px] font-mono">
-                       <span className="text-muted-foreground uppercase">AI Feedback Immunity</span>
+                       <span className="text-muted-foreground uppercase">Positive AI Consequence</span>
                        <span className="text-emerald-500 font-bold uppercase">MAX</span>
                     </div>
                   </div>
@@ -155,21 +160,21 @@ export default function AiGovernancePage() {
               <Card className="glass-card border-l-4 border-l-emerald-500">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-emerald-500 tracking-widest flex items-center gap-2">
-                       <Users className="size-4" /> Delegation Framework
+                       <Waves className="size-4" /> Systemic Indispensability
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-6">
                     <div className="space-y-2">
                        <div className="flex justify-between text-[10px] font-mono">
-                          <span className="uppercase">Emergency Steward Quorum</span>
-                          <span className="text-emerald-500">READY</span>
+                          <span className="uppercase">AI-Driven Efficiency Gain</span>
+                          <span className="text-emerald-500">96.2%</span>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                          <div className="h-full bg-emerald-500" style={{ width: '100%' }} />
+                          <div className="h-full bg-emerald-500" style={{ width: '96%' }} />
                        </div>
                     </div>
                     <p className="text-[9px] text-muted-foreground italic">
-                       Continuity protocol enabled. Mass failure recovery time: &lt; 5s.
+                       Removing Nora-AI agents would result in an immediate 12x increase in operational latency.
                     </p>
                  </CardContent>
               </Card>
@@ -177,13 +182,13 @@ export default function AiGovernancePage() {
               <Card className="glass-card">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                       <Users className="size-4" /> External Trust Sync
+                       <Lightbulb className="size-4" /> Strategic Consequence Audit
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <div className="p-3 bg-white/5 rounded border border-white/5 space-y-2 text-center">
-                       <p className="text-[8px] text-muted-foreground uppercase">Trust Federation Status</p>
-                       <Badge className="bg-primary/20 text-primary border-none text-[8px]">SYNCHRONIZED</Badge>
+                       <p className="text-[8px] text-muted-foreground uppercase">Consequence Verification</p>
+                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">SYNCHRONIZED</Badge>
                     </div>
                  </CardContent>
               </Card>

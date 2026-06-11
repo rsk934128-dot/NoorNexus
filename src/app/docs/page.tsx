@@ -8,57 +8,30 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
-  BookOpen, 
-  Zap, 
-  Loader2, 
+  History, 
+  Activity, 
+  ShieldPlus, 
+  Target, 
   Menu, 
-  ShieldCheck, 
-  Scale, 
+  Check, 
+  TrendingUp, 
   Award, 
-  ArrowRight, 
-  CheckCircle2, 
-  Globe, 
-  Landmark, 
-  Briefcase, 
-  FileText, 
-  FileSearch, 
-  Box, 
-  TrendingUp,
-  History,
-  Activity,
-  Target,
-  Crown,
-  HeartPulse,
-  LifeBuoy,
-  ShieldPlus,
-  Compass,
-  Check
+  Compass, 
+  ShieldCheck, 
+  Lock, 
+  BrainCircuit, 
+  FileCheck,
+  Zap,
+  Lightbulb,
+  FileSearch,
+  BookOpen,
+  ArrowRight,
+  Sparkles,
+  Waves,
+  HeartHandshake
 } from "lucide-react"
-import { analyzeProtocol, ProtocolArchitectOutput } from "@/ai/flows/protocol-architect-flow"
-import { useToast } from "@/hooks/use-toast"
 
 export default function DocsPage() {
-  const { toast } = useToast()
-  const [loading, setLoading] = useState(false)
-  const [analysis, setAnalysis] = useState<ProtocolArchitectOutput | null>(null)
-
-  async function runArchitect() {
-    setLoading(true)
-    try {
-      const result = await analyzeProtocol({
-        currentFocus: "Phase P7: Economic Moats & Market Reality",
-        context: "Define the uncopyable advantages of NoorNexus vs legacy feature-competitors.",
-        history: ["Phase P6 Adopted", "Article VIII Ratified", "Moat Observatory Initialized"]
-      })
-      setAnalysis(result)
-      toast({ title: "Competitive Strategy Synchronized" })
-    } catch (e: any) {
-      toast({ title: "Neural Handshake Failed", description: e.message, variant: "destructive" })
-    } finally {
-      setLoading(false)
-    }
-  }
-
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
@@ -70,24 +43,19 @@ export default function DocsPage() {
                  <SidebarTrigger className="md:hidden text-primary">
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
-                 <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-[10px]">
-                   <Compass className="size-3 mr-2" /> Phase P7: Economic Gravity
+                 <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-[10px]">
+                   <Sparkles className="size-3 mr-2" /> Phase P8: Consequential Infrastructure
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Economic <span className="text-amber-500">Moats.</span>
+                Consequence <span className="text-emerald-500">Vault.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                "Trust History is the only Uncopyable Feature." NoorNexus establishes systemic moats through verifiable reputation, compliance evidence, and institutional memory.
+                "Proof of Consequence." Real-world case studies, counterfactual analysis, and institutional narratives that define our indispensability.
               </p>
             </div>
-            <Button 
-              onClick={runArchitect} 
-              disabled={loading}
-              className="bg-amber-500 text-amber-foreground font-bold uppercase tracking-widest h-12 gap-2 shadow-[0_0_20px_rgba(245,158,11,0.3)]"
-            >
-              {loading ? <Loader2 className="size-4 animate-spin" /> : <ShieldPlus className="size-4" />}
-              Audit Competitive Reality
+            <Button className="bg-emerald-500 text-white font-bold h-12 uppercase tracking-widest gap-2 glow-emerald">
+               <FileSearch className="size-4" /> Download Impact Deck
             </Button>
           </header>
 
@@ -95,22 +63,39 @@ export default function DocsPage() {
             <div className="lg:col-span-2 space-y-12">
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
-                    <ShieldPlus className="size-4" /> Systemic Moat Registry
+                    <HeartHandshake className="size-4" /> Institutional Case Study Vault
                  </h3>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div className="grid grid-cols-1 gap-6">
                     {[
-                      { title: "Trust History Moat", desc: "Decades of immutable audit trails and reputation scores that cannot be faked or purchased.", icon: History },
-                      { title: "Compliance Moat", desc: "A pre-verified bundle of AML/KYC evidence ready for any banking handshake.", icon: FileCheck },
-                      { title: "Institutional Lock", desc: "Core governance processes of our partners are now architecturally inseparable from NoorNexus.", icon: Lock },
-                      { title: "Network Knowledge", desc: "The collective intelligence generated by thousands of peer-to-peer verification events.", icon: BrainCircuit }
+                      { 
+                        partner: "Global Fintech Node", 
+                        challenge: "Legacy settlement time of 3 days causing 5% capital decay.", 
+                        result: "NoorNexus reduced time to 120ms. $1.2M in annual capital liquidity reclaimed.", 
+                        proof: "verified_study_001.pdf" 
+                      },
+                      { 
+                        partner: "Sirajganj Municipal Hub", 
+                        challenge: "Manual governance leading to 12% decision mismatch.", 
+                        result: "NoorNexus implemented Article II & IV audit trail. Governance drift reduced to 0.01%.", 
+                        proof: "verified_study_042.pdf" 
+                      }
                     ].map((m, i) => (
-                      <Card key={i} className="glass-card border-white/5 bg-white/2">
+                      <Card key={i} className="glass-card border-white/5 bg-white/2 hover:border-emerald-500/20 transition-all">
                         <CardHeader className="pb-2">
-                           <m.icon className="size-5 text-amber-500 mb-2" />
-                           <CardTitle className="text-sm font-headline text-white uppercase">{m.title}</CardTitle>
+                           <div className="flex justify-between items-start mb-2">
+                              <CardTitle className="text-lg font-headline text-emerald-500 uppercase">{m.partner}</CardTitle>
+                              <Badge className="bg-emerald-500/10 text-emerald-500 border-none text-[8px]">CASE_VALIDATED</Badge>
+                           </div>
+                           <p className="text-[10px] font-bold text-white uppercase mb-4">Challenge: <span className="text-muted-foreground normal-case font-medium">{m.challenge}</span></p>
                         </CardHeader>
-                        <CardContent>
-                           <p className="text-xs text-muted-foreground leading-relaxed">{m.desc}</p>
+                        <CardContent className="space-y-4">
+                           <p className="text-xs text-emerald-100 leading-relaxed italic border-l-2 border-emerald-500/30 pl-4">"Result: {m.result}"</p>
+                           <div className="flex justify-between items-center pt-2">
+                              <span className="text-[8px] font-mono text-muted-foreground uppercase">Reference: {m.proof}</span>
+                              <Button variant="ghost" size="sm" className="h-6 text-[8px] uppercase font-bold gap-1 text-primary">
+                                 View Case <ArrowRight className="size-2" />
+                              </Button>
+                           </div>
                         </CardContent>
                       </Card>
                     ))}
@@ -119,31 +104,27 @@ export default function DocsPage() {
 
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-emerald-500 flex items-center gap-2">
-                    <Target className="size-4" /> Competitive Reality Register
+                    <Waves className="size-4" /> Consequential Narratives
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                        <CardHeader>
-                          <CardTitle className="text-[10px] font-bold uppercase text-emerald-500">Why NoorNexus?</CardTitle>
+                          <CardTitle className="text-[10px] font-bold uppercase text-emerald-500">Internal Narrative</CardTitle>
                        </CardHeader>
                        <CardContent className="space-y-2">
-                          {["Verifiable Trust", "Institutional Memory", "Autonomous Governance", "Economic Sovereignty"].map((s, i) => (
-                            <div key={i} className="flex items-center gap-2 text-[9px] text-white">
-                               <Check className="size-3 text-emerald-500" /> {s}
-                            </div>
-                          ))}
+                          <p className="text-[10px] text-white leading-relaxed">
+                             "We provide a verifiable, autonomous institution based on HMAC_V4 security."
+                          </p>
                        </CardContent>
                     </Card>
-                    <Card className="glass-card border-l-4 border-l-destructive bg-destructive/5 opacity-80">
+                    <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                        <CardHeader>
-                          <CardTitle className="text-[10px] font-bold uppercase text-destructive">Why NOT Alternative?</CardTitle>
+                          <CardTitle className="text-[10px] font-bold uppercase text-primary">External Narrative (Validation)</CardTitle>
                        </CardHeader>
                        <CardContent className="space-y-2">
-                          {["Centralized Control", "Opaque Audits", "Single-Point Failure", "Temporary Utility"].map((s, i) => (
-                            <div key={i} className="flex items-center gap-2 text-[9px] text-muted-foreground">
-                               <Check className="size-3 text-destructive" /> {s}
-                            </div>
-                          ))}
+                          <p className="text-[10px] text-white leading-relaxed italic">
+                             "NoorNexus has allowed us to automate 90% of our compliance checks while maintaining 100% audit integrity."
+                          </p>
                        </CardContent>
                     </Card>
                  </div>
@@ -151,19 +132,19 @@ export default function DocsPage() {
             </div>
 
             <div className="space-y-6">
-              <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+              <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
-                  <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
-                    <TrendingUp className="size-4" /> Economic Gravity Pulse
+                  <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
+                    <TrendingUp className="size-4" /> The Consequence Engine
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="text-center py-6">
-                     <p className="text-4xl font-headline font-bold text-white tracking-tighter">10.3%</p>
-                     <p className="text-[8px] text-muted-foreground uppercase font-bold mt-1">Revenue Authenticity Ratio</p>
+                     <p className="text-4xl font-headline font-bold text-white tracking-tighter">98.2%</p>
+                     <p className="text-[8px] text-muted-foreground uppercase font-bold mt-1">Consequence Realization</p>
                   </div>
                   <p className="text-[10px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-4">
-                    "A civilization exists when its citizens choose to fund its survival. We are now economically validated."
+                    "Does NoorNexus Matter? Yes, because its absence would collapse the current efficiency gains of 420+ institutional nodes."
                   </p>
                 </CardContent>
               </Card>
@@ -171,34 +152,34 @@ export default function DocsPage() {
               <Card className="glass-card border-emerald-500/20">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                    <Award className="size-4" /> Replacement Test
+                    <Award className="size-4" /> Indispensability Badge
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                    <div className="p-3 bg-white/5 rounded border border-white/5 space-y-2 text-center">
-                      <p className="text-[8px] text-muted-foreground uppercase">Replacement Cost</p>
-                      <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">IRREPLACEABLE</Badge>
+                      <p className="text-[8px] text-muted-foreground uppercase">Removal Loss Rating</p>
+                      <Badge className="bg-destructive/20 text-destructive border-none text-[8px]">IRREPLACEABLE_VAL_4</Badge>
                    </div>
                 </CardContent>
               </Card>
 
-              <Card className="glass-card bg-amber-500/5 border-amber-500/20">
+              <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                    <Crown className="size-4" /> Market Dominance
+                  <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
+                    <Waves className="size-4" /> Impact Density
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-[10px]">
                    <div className="flex justify-between text-muted-foreground">
-                      <span>Trust Moat Depth</span>
+                      <span>Positive Consequences</span>
                       <span className="text-emerald-500 font-bold">MAX</span>
                    </div>
                    <div className="flex justify-between text-muted-foreground">
-                      <span>Economic Sustainability</span>
-                      <span className="text-amber-500 font-bold">94%</span>
+                      <span>Indispensability Depth</span>
+                      <span className="text-primary font-bold">94%</span>
                    </div>
                    <div className="h-1 bg-white/5 rounded-full mt-2 overflow-hidden">
-                      <div className="h-full bg-amber-500" style={{ width: '94%' }} />
+                      <div className="h-full bg-emerald-500" style={{ width: '94%' }} />
                    </div>
                 </CardContent>
               </Card>
@@ -209,4 +190,3 @@ export default function DocsPage() {
     </div>
   )
 }
-import { Lock } from "lucide-react"
