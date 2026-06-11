@@ -11,7 +11,7 @@ import {
   Gavel, Scale, Fingerprint, Link as LinkIcon, Building2, Code2, Rocket,
   CheckCircle2, Waves, Eye, Target, Quote, Radio, BellRing, Send, Languages,
   Coins, Briefcase, BarChart3, Clock, Users, Fingerprint as FingerprintIcon,
-  ShieldAlert, Key, Sparkles, Banknote, History
+  ShieldAlert, Key, Sparkles, Banknote, History, Heart
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { ledgerAudit, LedgerAuditOutput } from "@/ai/flows/ledger-audit-flow"
@@ -276,6 +276,9 @@ export default function Home() {
                      <p className="text-xl lg:text-2xl font-headline font-bold text-white leading-relaxed italic border-l-4 border-primary pl-6">
                         "নূরনেক্সাস কেবল একটি অ্যাপ্লিকেশন নয়; এটি বিশ্বাসের এক সুদৃঢ় অবকাঠামো যেখানে প্রতিটি ডেটা আমানত হিসেবে গণ্য হয়।"
                      </p>
+                     <div className="flex items-center gap-2 text-primary/60 text-xs font-bold uppercase tracking-widest pl-6">
+                        <Heart className="size-3 fill-current" /> Collaborative Purity Achieved
+                     </div>
                   </CardContent>
                </Card>
 
