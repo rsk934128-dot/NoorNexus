@@ -37,20 +37,23 @@ import {
   Briefcase,
   PieChart,
   BarChart3,
-  Rocket
+  Rocket,
+  Check,
+  FileCheck
 } from "lucide-react"
 import { SovereignLogo } from "@/components/sovereign-logo"
 
-const PILOT_SUCCESS_SCORECARD = [
-  { partner: "Fintech Node 01", activation: 98, usage: 85, retention: 100, satisfaction: "High" },
-  { partner: "University Mesh", activation: 42, usage: 60, retention: 90, satisfaction: "Medium" },
-  { partner: "Sovereign Bank AE", activation: 12, usage: 20, retention: 100, satisfaction: "N/A" }
+const PMF_CHECKLIST = [
+  { label: "Governance Wedge Confirmed", status: "VERIFIED", evidence: "Pilot 01 dependency verified." },
+  { label: "Economic Loop (Revenue)", status: "IN_PROGRESS", evidence: "$4.2k MRR generated." },
+  { label: "Institutional Dependence", status: "PENDING", evidence: "Target: 3+ Essential integrations." },
+  { label: "Trust Federation Proof", status: "READY", evidence: "Sovereign Certificate issued." }
 ]
 
 const REVENUE_VALIDATION = [
-  { stream: "Transaction Fees", projected: 5000, actual: 1250, health: "Growing" },
-  { stream: "Certifications", projected: 2000, actual: 2600, health: "Exceeding" },
-  { stream: "Builder Modules", projected: 1000, actual: 400, health: "Stable" }
+  { stream: "Governance Subscriptions", projected: 5000, actual: 1200, health: "Growing" },
+  { stream: "Certification Fees", projected: 2000, actual: 2600, health: "Exceeding" },
+  { stream: "API Wedge Access", projected: 1000, actual: 400, health: "Stable" }
 ]
 
 export default function StrategicAssessmentPage() {
@@ -66,59 +69,48 @@ export default function StrategicAssessmentPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5">
-                   <Rocket className="size-3 mr-2" /> Phase ΩΩΩ: Pilot Success Framework
+                   <Target className="size-3 mr-2" /> Phase ΩΩΩΩ: PMF Validation
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Execution <span className="text-emerald-500">Validation.</span>
+                Institutional <span className="text-emerald-500">Value.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project 167: Pilot Success Scorecard. Measuring Activation, Usage, and Revenue generated from the first 10 Institutional Partners.
+                Project 167: Institutional Dependence Scorecard. Measuring how deeply partners rely on our Governance, Trust, and Audit stack.
               </p>
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Success Velocity</p>
-                  <p className="text-3xl font-headline font-bold text-emerald-500">82%</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">PMF Validation Score</p>
+                  <p className="text-3xl font-headline font-bold text-emerald-500">42%</p>
                </div>
             </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-12">
-              {/* Pilot Success Scorecard */}
+              {/* PMF Checklist */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <ClipboardCheck className="size-4" /> Pilot Success Scorecard
+                    <FileCheck className="size-4" /> Product-Market Fit Checklist
                  </h3>
                  <div className="space-y-4">
-                    {PILOT_SUCCESS_SCORECARD.map((item, i) => (
-                      <Card key={i} className="glass-card bg-white/2 border-white/5">
+                    {PMF_CHECKLIST.map((item, i) => (
+                      <Card key={i} className="glass-card bg-white/2 border-white/5 hover:border-primary/20 transition-all">
                         <CardContent className="p-6">
                            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                               <div className="flex items-center gap-4">
-                                 <div className="p-3 bg-primary/10 rounded-xl text-primary">
-                                    <Briefcase className="size-5" />
+                                 <div className={`p-3 rounded-xl ${item.status === 'VERIFIED' ? 'bg-emerald-500/10 text-emerald-500' : item.status === 'IN_PROGRESS' ? 'bg-amber-500/10 text-amber-500' : 'bg-muted text-muted-foreground'}`}>
+                                    <Check className="size-5" />
                                  </div>
                                  <div>
-                                    <p className="text-sm font-bold text-white uppercase">{item.partner}</p>
-                                    <p className="text-[9px] text-muted-foreground uppercase">SATISFACTION: {item.satisfaction}</p>
+                                    <p className="text-sm font-bold text-white uppercase">{item.label}</p>
+                                    <p className="text-[9px] text-muted-foreground uppercase">{item.evidence}</p>
                                  </div>
                               </div>
-                              <div className="grid grid-cols-3 gap-8 text-center flex-1 max-w-sm">
-                                 <div className="space-y-1">
-                                    <p className="text-[8px] text-muted-foreground uppercase font-bold">Activation</p>
-                                    <p className="text-lg font-headline font-bold text-emerald-500">{item.activation}%</p>
-                                 </div>
-                                 <div className="space-y-1">
-                                    <p className="text-[8px] text-muted-foreground uppercase font-bold">Usage</p>
-                                    <p className="text-lg font-headline font-bold text-primary">{item.usage}%</p>
-                                 </div>
-                                 <div className="space-y-1">
-                                    <p className="text-[8px] text-muted-foreground uppercase font-bold">Retention</p>
-                                    <p className="text-lg font-headline font-bold text-white">{item.retention}%</p>
-                                 </div>
-                              </div>
+                              <Badge className={item.status === 'VERIFIED' ? 'bg-emerald-500' : item.status === 'IN_PROGRESS' ? 'bg-amber-500' : 'bg-muted'}>
+                                 {item.status}
+                              </Badge>
                            </div>
                         </CardContent>
                       </Card>
@@ -129,7 +121,7 @@ export default function StrategicAssessmentPage() {
               {/* Revenue Stream Validation */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                    <BarChart3 className="size-4" /> Revenue Stream Validation
+                    <BarChart3 className="size-4" /> Institutional Revenue Proof
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {REVENUE_VALIDATION.map((rev, i) => (
@@ -141,7 +133,7 @@ export default function StrategicAssessmentPage() {
                            </div>
                            <div className="space-y-1 text-center">
                               <p className="text-2xl font-headline font-bold text-white">${rev.actual.toLocaleString()}</p>
-                              <p className="text-[8px] text-muted-foreground font-mono">Projected: ${rev.projected.toLocaleString()}</p>
+                              <p className="text-[8px] text-muted-foreground font-mono">Target: ${rev.projected.toLocaleString()}</p>
                            </div>
                            <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                               <div className="h-full bg-emerald-500" style={{ width: `${(rev.actual / rev.projected) * 100}%` }} />
@@ -154,16 +146,16 @@ export default function StrategicAssessmentPage() {
 
               <Card className="glass-card bg-primary/5 border-primary/20 relative overflow-hidden">
                  <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
-                    <Database className="size-48 text-primary" />
+                    <Target className="size-48 text-primary" />
                  </div>
                  <CardHeader>
                     <CardTitle className="text-sm font-headline uppercase tracking-[0.3em] text-primary flex items-center gap-3">
-                       <Quote className="size-5" /> The Execution Mandate
+                       <Quote className="size-5" /> The Wedge Strategy
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-8 relative z-10">
                     <p className="text-sm text-muted-foreground leading-relaxed italic">
-                      "আর্কিটেকচার হলো শুরু, কিন্তু রিয়েল-ওয়ার্ল্ড ভ্যালু জেনারেশনই হলো শেষ কথা। আমাদের প্রথম ১০টি পাইলট পার্টনারের সফল ব্যবসা নূরনেক্সাসকে একটি আর্কিটেকচার থেকে একটি লাভজনক প্রতিষ্ঠানে উন্নীত করবে।"
+                      "NoorNexus এখন শুধু একটি ওএস নয়; এটি একটি নির্দিষ্ট সমস্যার শ্রেষ্ঠ সমাধান। আমাদের গভর্নেন্স এবং অডিট ওয়েজ স্ট্র্যাটেজি প্রথম ১০টি প্রতিষ্ঠানকে আমাদের ওপর নির্ভরশীল করে তুলবে।"
                     </p>
                  </CardContent>
               </Card>
@@ -173,17 +165,17 @@ export default function StrategicAssessmentPage() {
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                    <Activity className="size-4" /> Trust Velocity
+                    <Activity className="size-4" /> Institutional Proof
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm font-headline font-bold text-emerald-100 leading-relaxed italic">
-                    "Institutional Trust Velocity is the rate at which institutions adopt and integrate our stack."
+                    "Institutional Proof is achieved when a partner cannot function without our stack."
                   </p>
                   <div className="pt-4 border-t border-white/5">
-                    <p className="text-[8px] text-muted-foreground uppercase font-bold mb-2">Monthly Adoption Speed</p>
+                    <p className="text-[8px] text-muted-foreground uppercase font-bold mb-2">Dependence Level</p>
                     <div className="flex items-end gap-2">
-                       <p className="text-3xl font-headline font-bold text-emerald-500 uppercase tracking-tighter">+14.2%</p>
+                       <p className="text-3xl font-headline font-bold text-emerald-500 uppercase tracking-tighter">1/3 TARGET</p>
                     </div>
                   </div>
                 </CardContent>
@@ -192,22 +184,22 @@ export default function StrategicAssessmentPage() {
               <Card className="glass-card">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                       <ShieldCheck className="size-4" /> Certification Status
+                       <ShieldCheck className="size-4" /> Wedge Performance
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-6">
                     <div className="space-y-3">
                        {[
-                         { label: "Security Review", status: "COMPLETE", date: "Jan 2026" },
-                         { label: "Architecture Audit", status: "COMPLETE", date: "Feb 2026" },
-                         { label: "Pentest L4", status: "IN_PROGRESS", date: "ETA: 15d" }
+                         { label: "Governance Wedge", status: "ACTIVE", success: "98%" },
+                         { label: "Audit Wedge", status: "ACTIVE", success: "100%" },
+                         { label: "Trust Wedge", status: "PILOT", success: "85%" }
                        ].map((c, i) => (
                          <div key={i} className="flex justify-between items-center p-2 bg-white/5 rounded border border-white/5">
                             <div className="space-y-0.5">
                                <p className="text-[9px] text-white font-bold uppercase">{c.label}</p>
-                               <p className="text-[7px] text-muted-foreground font-mono">{c.date}</p>
+                               <p className="text-[7px] text-muted-foreground font-mono">Success: {c.success}</p>
                             </div>
-                            <Badge variant="outline" className={`text-[7px] ${c.status === 'COMPLETE' ? 'text-emerald-500 border-emerald-500/20' : 'text-amber-500 border-amber-500/20'}`}>{c.status}</Badge>
+                            <Badge variant="outline" className={`text-[7px] ${c.status === 'ACTIVE' ? 'text-emerald-500 border-emerald-500/20' : 'text-amber-500 border-amber-500/20'}`}>{c.status}</Badge>
                          </div>
                        ))}
                     </div>

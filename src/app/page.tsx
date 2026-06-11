@@ -63,7 +63,10 @@ import {
   Box,
   Award,
   ArrowUpRight,
-  TrendingDown
+  TrendingDown,
+  ChevronRight,
+  DollarSign,
+  UserCheck
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -81,16 +84,12 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
-const CIVILIZATIONAL_WORTH = [
-  { label: "Institutional Trust", value: "72%", trend: "+5.1%" },
-  { label: "Pilot Success Rate", value: "99.8%", trend: "Stable" },
-  { label: "Market Readiness", value: "85/100", trend: "+12.4%" },
-]
-
-const STRATEGIC_RISKS = [
-  { risk: "Execution Drift", level: "Low", impact: "Medium" },
-  { risk: "Revenue Lag", level: "Medium", impact: "High" },
-  { risk: "Regulatory Drift", level: "Low", impact: "Critical" },
+const FOUNDER_SCORECARD = [
+  { label: "Paying Partners", value: "1", target: "10", icon: Building2, color: "text-primary" },
+  { label: "Monthly Revenue (MRR)", value: "$4.2K", target: "$10K", icon: DollarSign, color: "text-emerald-500" },
+  { label: "Trust Velocity", value: "+14.2%", target: "Positive", icon: TrendingUp, color: "text-blue-500" },
+  { label: "Pilot Conversion", value: "33%", target: ">50%", icon: Zap, color: "text-amber-500" },
+  { label: "Institutional Retention", value: "100%", target: ">90%", icon: UserCheck, color: "text-purple-500" },
 ]
 
 export default function Home() {
@@ -111,7 +110,7 @@ export default function Home() {
       { text: "VALIDATING REVENUE MODELS...", time: 1200 },
       { text: "ACTIVATING FOUNDER OS...", time: 1800 },
       { text: "SYNCING PILOT SUCCESS NODES...", time: 2400 },
-      { text: "NOORNEXUS: EXECUTION READY", time: 3000 },
+      { text: "NOORNEXUS: PRODUCT-MARKET FIT READY", time: 3000 },
     ]
 
     sequence.forEach((step, i) => {
@@ -127,28 +126,14 @@ export default function Home() {
         "PILOT: University Mesh Activation 85%", 
         "TRUST: Velocity Increase +12%", 
         "MARKET: New Fintech Lead in Pipeline",
-        "EXECUTION: 90-Day Sprint Step 12 Complete",
-        "GRANT: Developer Module Certified"
+        "WEDGE: Governance Module Dependency Confirmed",
+        "CONVERSION: Lead conversion process initiated"
       ]
       setBorderFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 3000)
 
     return () => clearInterval(interval)
   }, [])
-
-  async function handleFetchDailySummary() {
-    if (!isAdmin) return;
-    setFetchingSummary(true)
-    try {
-      const summary = await getDailyImperialSummary();
-      setDailySummary(summary);
-      setIsSummaryOpen(true);
-    } catch (e) {
-      toast({ title: "Summary Failure", variant: "destructive" });
-    } finally {
-      setFetchingSummary(false)
-    }
-  }
 
   if (loading) {
     return (
@@ -178,155 +163,135 @@ export default function Home() {
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
                    <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
-                      <Zap className="size-3 mr-2" /> Phase ΩΩΩ: Execution Mode
+                      <Zap className="size-3 mr-2" /> Phase ΩΩΩΩ: PMF & Value
                    </Badge>
-                   <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs animate-pulse">
-                      <TrendingUp className="size-3 mr-2" /> Trust Velocity: +14.2%
+                   <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-xs">
+                      <Target className="size-3 mr-2" /> Wedge: Governance + Audit
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   {isAdmin ? 'Founder Operating System.' : 'Execution Command.'}
+                   {isAdmin ? 'Founder Scorecard.' : 'Institutional Value.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed">
-                   "Technology + Trust + Execution = Institution." - নূরনেক্সাস এখন তার প্রথম ১০টি পার্টনারের মাধ্যমে বাস্তব ভ্যালু এবং রেভিনিউ ভ্যালিডেশনের পর্যায়ে।
+                   "NoorNexus is solving the core institutional pains of accountability and audit. We are moving from Architecture to Dependence."
                 </p>
               </div>
               
-              {isAdmin && (
-                <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
-                  <div className="glass-card p-6 rounded-2xl border border-primary/20 flex flex-col items-center w-full min-w-[280px]">
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Monthly Trust Velocity</p>
-                      <div className="flex items-center gap-3">
-                         <TrendingUp className="size-8 text-emerald-500" />
-                         <span className="text-4xl font-headline font-bold text-white tracking-tighter">+14.2%</span>
-                      </div>
-                  </div>
-                </div>
-              )}
+              <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
+                <Card className="glass-card p-6 rounded-2xl border border-primary/20 w-full min-w-[320px]">
+                    <div className="flex justify-between items-center mb-4">
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Institutional Progress</p>
+                       <Badge className="bg-primary/20 text-primary border-none text-[8px]">1/10 PARTNERS</Badge>
+                    </div>
+                    <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                       <div className="h-full bg-primary glow-primary" style={{ width: '10%' }} />
+                    </div>
+                    <p className="text-[9px] text-muted-foreground mt-2 italic text-center">"Proof of Dependence: 1 Institution secured."</p>
+                </Card>
+              </div>
             </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-3 space-y-8">
+            <div className="lg:col-span-3 space-y-12">
                {isAdmin && (
                  <section className="space-y-6">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                       <ShieldAlert className="size-4" /> Strategic Founder OS Metrics
+                       <Star className="size-4" /> The Founder Scorecard (PMF Metrics)
                     </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                       <Card className="glass-card border-l-4 border-l-destructive bg-destructive/5">
-                          <CardHeader className="pb-2">
-                             <CardTitle className="text-[10px] uppercase font-bold text-destructive tracking-widest">Active Risks</CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-3">
-                             {STRATEGIC_RISKS.map((r, i) => (
-                               <div key={i} className="flex justify-between items-center text-[10px] p-2 bg-black/40 rounded border border-white/5">
-                                  <span className="text-white font-bold">{r.risk}</span>
-                                  <Badge className="bg-destructive/20 text-destructive text-[8px] h-4">{r.impact} Impact</Badge>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                       {FOUNDER_SCORECARD.map((kpi, i) => (
+                         <Card key={i} className="glass-card border-white/5 bg-white/2 hover:border-primary/20 transition-all">
+                            <CardContent className="p-4 space-y-3">
+                               <div className={`p-2 rounded-lg bg-white/5 w-fit ${kpi.color}`}>
+                                  <kpi.icon className="size-4" />
                                </div>
-                             ))}
-                          </CardContent>
-                       </Card>
-                       <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                          <CardHeader className="pb-2">
-                             <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 tracking-widest">Growth Opportunities</CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-3">
-                             {[
-                               "European Banking Bridge",
-                               "Sovereign TIN API",
-                               "Meta-Gov Grant Program"
-                             ].map((op, i) => (
-                               <div key={i} className="flex items-center gap-2 text-[10px] p-2 bg-black/40 rounded border border-white/5">
-                                  <ArrowUpRight className="size-3 text-emerald-500" />
-                                  <span className="text-white font-medium">{op}</span>
+                               <div className="space-y-0.5">
+                                  <p className="text-[9px] font-bold text-muted-foreground uppercase">{kpi.label}</p>
+                                  <p className="text-xl font-headline font-bold text-white">{kpi.value}</p>
+                                  <p className="text-[8px] text-muted-foreground font-mono">Target: {kpi.target}</p>
                                </div>
-                             ))}
-                          </CardContent>
-                       </Card>
-                       <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                          <CardHeader className="pb-2">
-                             <CardTitle className="text-[10px] uppercase font-bold text-primary tracking-widest">Revenue Status (M1)</CardTitle>
-                          </CardHeader>
-                          <CardContent className="flex flex-col items-center justify-center py-4">
-                             <p className="text-3xl font-headline font-bold text-white">$4.2K</p>
-                             <p className="text-[10px] text-emerald-500 font-bold uppercase mt-1">+100% (Baseline)</p>
-                          </CardContent>
-                       </Card>
+                            </CardContent>
+                         </Card>
+                       ))}
                     </div>
                  </section>
                )}
 
-               <section className="space-y-6">
-                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                     <TrendingUp className="size-4" /> Market Validation Metrics
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {CIVILIZATIONAL_WORTH.map((item, i) => (
-                      <Card key={i} className="glass-card bg-primary/5 border-white/5">
-                        <CardContent className="p-6 text-center space-y-2">
-                           <p className="text-[10px] font-bold text-muted-foreground uppercase">{item.label}</p>
-                           <p className="text-3xl font-headline font-bold text-white">{item.value}</p>
-                           <p className="text-[10px] text-emerald-500 font-bold">{item.trend}</p>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-               </section>
-
                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                 <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
-                    <CardHeader className="pb-2 p-6">
-                       <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
-                          <Building2 className="size-4" /> Pilot Success Pipeline
+                 <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+                    <CardHeader>
+                       <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
+                          <Target className="size-4" /> Wedge Strategy: Governance & Audit
                        </CardTitle>
-                       <CardDescription className="text-xs">Tracking first 10 Institutional Partners.</CardDescription>
+                       <CardDescription className="text-xs italic">"Solving the decision-tracking pain for institutions."</CardDescription>
                     </CardHeader>
-                    <CardContent className="px-6 pb-6 space-y-5">
+                    <CardContent className="space-y-4">
                        {[
-                         { label: "Education (Universities)", score: 1, target: 3, status: "PILOT_READY" },
-                         { label: "Business (Merchants)", score: 1, target: 3, status: "INTEGRATED" },
-                         { label: "Technology (SDK)", score: 1, target: 2, status: "CERTIFIED" },
-                         { label: "Financial (Bridges)", score: 0, target: 2, status: "PIPELINE" }
-                       ].map((metric, i) => (
-                         <div key={i} className="space-y-2">
-                            <div className="flex justify-between text-[10px] font-mono">
-                               <span className="text-white uppercase font-bold">{metric.label}</span>
-                               <span className="text-amber-500">{metric.score}/{metric.target} ({metric.status})</span>
-                            </div>
-                            <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                               <div className="h-full bg-amber-500" style={{ width: `${(metric.score / metric.target) * 100}%` }} />
-                            </div>
+                         { step: "Problem", desc: "No audit trail for high-stakes decisions." },
+                         { step: "Solution", desc: "NoorNexus Verifiable Governance Engine." },
+                         { step: "Outcome", desc: "100% accountability for institutional acts." }
+                       ].map((s, i) => (
+                         <div key={i} className="flex gap-4 items-start">
+                            <Badge variant="outline" className="text-[8px] border-primary/20 text-primary h-5 w-16 justify-center shrink-0 uppercase">{s.step}</Badge>
+                            <p className="text-[10px] text-white font-medium">{s.desc}</p>
                          </div>
                        ))}
+                       <Button variant="ghost" className="w-full h-8 text-[9px] uppercase font-bold border border-white/5 mt-2">
+                          View Wedge Performance <ChevronRight className="size-3 ml-1" />
+                       </Button>
                     </CardContent>
                  </Card>
 
-                 <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                    <CardHeader className="p-6">
-                       <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
-                          <BarChart3 className="size-4" /> Recurring Revenue Model
+                 <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                    <CardHeader>
+                       <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
+                          <BarChart3 className="size-4" /> Economic Proof (Revenue streams)
                        </CardTitle>
-                       <CardDescription className="text-xs">Sustainability and Growth Mapping.</CardDescription>
+                       <CardDescription className="text-xs italic">"Verifying if institutions are willing to pay."</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-4 p-6 pt-0">
-                       {[
-                         { label: "Transaction Fees (0.1%)", status: "ACTIVE", rev: "$1.2k" },
-                         { label: "Enterprise Licenses", status: "PENDING", rev: "$0" },
-                         { label: "API Access (Builder)", status: "PILOT", rev: "$400" },
-                         { label: "Sovereign Certification", status: "LIVE", rev: "$2.6k" }
-                       ].map((item, i) => (
-                         <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
-                            <span className="text-[10px] text-muted-foreground uppercase font-bold">{item.label}</span>
-                            <div className="text-right">
-                               <p className="text-xs font-bold text-white">{item.rev}</p>
-                               <Badge variant="outline" className="text-[7px] border-primary/20 text-primary uppercase">{item.status}</Badge>
-                            </div>
-                         </div>
-                       ))}
+                    <CardContent className="space-y-4">
+                       <div className="grid grid-cols-2 gap-4">
+                          <div className="p-3 bg-black/40 rounded-xl border border-white/5 text-center">
+                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Subscription</p>
+                             <p className="text-lg font-headline font-bold text-white">$1.2k</p>
+                          </div>
+                          <div className="p-3 bg-black/40 rounded-xl border border-white/5 text-center">
+                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Certifications</p>
+                             <p className="text-lg font-headline font-bold text-white">$2.6k</p>
+                          </div>
+                       </div>
+                       <p className="text-[10px] text-muted-foreground italic text-center">
+                          "Revenue is the ultimate validator of institutional trust."
+                       </p>
                     </CardContent>
                  </Card>
                </div>
+
+               <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                    <ShieldCheck className="size-4" /> The 3 Proofs: Success Verification
+                 </h3>
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {[
+                      { title: "Technical Proof", status: "VERIFIED", desc: "Core Governance Engine is operational across 12 nodes.", color: "text-blue-500" },
+                      { title: "Economic Proof", status: "IN_PROGRESS", desc: "First paying partner successfully onboarded.", color: "text-emerald-500" },
+                      { title: "Institutional Proof", status: "PENDING", desc: "Critical dependency of 3+ institutions on the stack.", color: "text-amber-500" }
+                    ].map((p, i) => (
+                      <Card key={i} className="glass-card border-white/5 group overflow-hidden">
+                        <CardHeader className="pb-2">
+                           <div className="flex justify-between items-center">
+                              <CardTitle className="text-[10px] uppercase font-bold text-white">{p.title}</CardTitle>
+                              <Badge variant="outline" className={`text-[7px] border-white/10 ${p.status === 'VERIFIED' ? 'text-emerald-500' : p.status === 'PENDING' ? 'text-muted-foreground' : 'text-amber-500'}`}>{p.status}</Badge>
+                           </div>
+                        </CardHeader>
+                        <CardContent>
+                           <p className="text-[9px] text-muted-foreground leading-relaxed italic">{p.desc}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                 </div>
+               </section>
             </div>
 
             <div className="space-y-8">
@@ -353,13 +318,13 @@ export default function Home() {
 
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                  <CardHeader className="p-6">
-                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">Execution Health</CardTitle>
+                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">PMF Status</CardTitle>
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Institutional success is measured by verifiable outcomes, not features."
+                       "Product-Market Fit starts the day an institution cannot function without your system."
                     </p>
-                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Execution Index: 88% Efficient</Badge>
+                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">PMF Index: 42% Validated</Badge>
                  </CardContent>
               </Card>
             </div>

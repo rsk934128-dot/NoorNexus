@@ -32,7 +32,10 @@ import {
   Activity,
   History,
   TrendingUp,
-  BarChart3
+  BarChart3,
+  Target,
+  Landmark,
+  Code2
 } from "lucide-react"
 import { analyzeProtocol, ProtocolArchitectOutput } from "@/ai/flows/protocol-architect-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -46,12 +49,12 @@ export default function DocsPage() {
     setLoading(true)
     try {
       const result = await analyzeProtocol({
-        currentFocus: "Phase ΩΩΩ: Execution & Revenue Validation",
-        context: "Validating recurring revenue streams and pilot partner success metrics.",
-        history: ["Phase ΩΩ Complete", "Partnership Kits Ready", "Market Validation Initiated"]
+        currentFocus: "Phase ΩΩΩΩ: PMF & Institutional Value",
+        context: "Executing the Wedge Strategy: Governance + Trust + Audit for the first 10 paying partners.",
+        history: ["Phase ΩΩΩ Complete", "Revenue Model Validated", "Beachhead Market Identified"]
       })
       setAnalysis(result)
-      toast({ title: "Execution Strategy Updated" })
+      toast({ title: "PMF Strategy Synchronized" })
     } catch (e: any) {
       toast({ title: "Neural Handshake Failed", description: e.message, variant: "destructive" })
     } finally {
@@ -70,15 +73,15 @@ export default function DocsPage() {
                  <SidebarTrigger className="md:hidden text-primary">
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
-                 <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-[10px]">
-                   <Rocket className="size-3 mr-2" /> Execution Roadmap
+                 <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-[10px]">
+                   <Target className="size-3 mr-2" /> PMF Strategic Roadmap
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Execution <span className="text-primary">Sprint.</span>
+                Value <span className="text-primary">Sprint.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Phase ΩΩΩ: 90-Day Execution Sprint. Moving from Integration-Ready to Revenue-Validated and Institutional Scale.
+                Phase ΩΩΩΩ: 90-Day Sprint to 10 Paying Partners. Executing the Wedge Strategy across Governance, Trust, and Audit domains.
               </p>
             </div>
             <Button 
@@ -87,7 +90,7 @@ export default function DocsPage() {
               className="bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 gap-2"
             >
               {loading ? <Loader2 className="size-4 animate-spin" /> : <TrendingUp className="size-4" />}
-              Audit Execution Strategy
+              Audit PMF Strategy
             </Button>
           </header>
 
@@ -95,23 +98,20 @@ export default function DocsPage() {
             <div className="lg:col-span-2 space-y-12">
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
-                    <History className="size-4" /> 90-Day Execution Roadmap
+                    <Target className="size-4" /> The Beachhead Wedge Strategy
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
-                      { month: "Month 1", focus: "Partnership Outreach", items: ["Security Review", "Pilot Recruitment", "NDA Signings"] },
-                      { month: "Month 2", focus: "Sandbox Testing", items: ["First Integrations", "Case Study Generation", "SDK Hardening"] },
-                      { month: "Month 3", focus: "Revenue Validation", items: ["Production Rollout", "Public Credibility Assets", "First Revenue Flow"] }
-                    ].map((sprint, i) => (
+                      { wedge: "Governance", focus: "Decision Tracking", items: ["Audit Trails", "Role Logic", "Veto Paths"] },
+                      { wedge: "Audit", focus: "Forensic Integrity", items: ["Ledger Sync", "HMAC_V4 Proofs", "Risk Scoring"] },
+                      { wedge: "Trust", focus: "Reputation Assets", items: ["DID Attestation", "Relation Mapping", "Trust Scores"] }
+                    ].map((w, i) => (
                       <Card key={i} className="glass-card border-white/5 bg-primary/5 group">
                         <CardContent className="p-6 space-y-4">
-                           <div className="flex justify-between items-start">
-                              <p className="text-xs font-bold text-white uppercase">{sprint.month}</p>
-                              <Badge className="bg-primary/20 text-primary border-none text-[8px]">ACTIVE</Badge>
-                           </div>
-                           <p className="text-[10px] font-headline font-bold text-primary uppercase">{sprint.focus}</p>
+                           <p className="text-xs font-bold text-white uppercase">{w.wedge}</p>
+                           <p className="text-[10px] font-headline font-bold text-primary uppercase">{w.focus}</p>
                            <ul className="space-y-1">
-                              {sprint.items.map((item, j) => (
+                              {w.items.map((item, j) => (
                                 <li key={j} className="text-[9px] text-muted-foreground flex items-center gap-2 italic">
                                    <CheckCircle2 className="size-2 text-emerald-500" /> {item}
                                 </li>
@@ -124,49 +124,43 @@ export default function DocsPage() {
               </section>
 
               <section className="space-y-6">
-                <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2">
-                  <BarChart3 className="size-4" /> Institutional Revenue Matrix
+                <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-emerald-500 flex items-center gap-2">
+                  <BarChart3 className="size-4" /> Founder Scorecard KPIs
                 </h3>
-                <Card className="glass-card border-amber-500/20 bg-amber-500/5 overflow-hidden">
+                <Card className="glass-card border-emerald-500/20 bg-emerald-500/5 overflow-hidden">
                    <CardContent className="p-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                          {[
-                           { model: "Subscription", base: "$500/mo", target: "Institutions" },
-                           { model: "Transaction", base: "0.1%", target: "Commerce" },
-                           { model: "Enterprise", base: "Custom", target: "Sovereign" },
-                           { model: "API Access", base: "$200/yr", target: "Developers" }
+                           { kpi: "Paying Partners", target: "10" },
+                           { kpi: "MRR Growth", target: "Rising" },
+                           { kpi: "Trust Velocity", target: "Positive" },
+                           { kpi: "Pilot Conv.", target: ">50%" },
+                           { kpi: "Retention", target: ">90%" }
                          ].map((rev, i) => (
                            <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 text-center space-y-1">
-                              <p className="text-[9px] font-bold text-primary uppercase">{rev.model}</p>
-                              <p className="text-xs font-headline font-bold text-white">{rev.base}</p>
-                              <p className="text-[7px] text-muted-foreground uppercase">{rev.target}</p>
+                              <p className="text-[9px] font-bold text-primary uppercase">{rev.kpi}</p>
+                              <p className="text-xs font-headline font-bold text-white">{rev.target}</p>
                            </div>
                          ))}
                       </div>
-                      <p className="text-[10px] text-muted-foreground text-center mt-6 italic">
-                        "Revenue is the ultimate validator of institutional trust."
-                      </p>
                    </CardContent>
                 </Card>
               </section>
 
               <section className="space-y-6">
-                <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-emerald-500 flex items-center gap-2">
-                  <FileCheck className="size-4" /> Independent Validation Pack
+                <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2">
+                  <FileCheck className="size-4" /> The 3 Institutional Proofs
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                    {[
-                     { label: "Pentest L4", status: "SCHEDULED", icon: ShieldCheck },
-                     { label: "Governance Audit", status: "COMPLETE", icon: Scale },
-                     { label: "Treasury Review", status: "IN_REVIEW", icon: Landmark },
-                     { label: "SDK Cert", status: "READY", icon: Code2 }
+                     { label: "Technical Proof", desc: "System Works.", status: "VERIFIED" },
+                     { label: "Economic Proof", desc: "Someone Pays.", status: "IN_PROGRESS" },
+                     { label: "Institutional Proof", desc: "Someone Depends.", status: "PIPELINE" }
                    ].map((item, i) => (
-                     <div key={i} className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl flex justify-between items-center">
-                        <div className="flex items-center gap-3">
-                           <item.icon className="size-4 text-emerald-500" />
-                           <p className="text-[10px] font-bold text-white uppercase">{item.label}</p>
-                        </div>
-                        <Badge variant="outline" className="text-[9px] border-emerald-500/30 text-emerald-500 font-mono">{item.status}</Badge>
+                     <div key={i} className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl space-y-2">
+                        <p className="text-[10px] font-bold text-white uppercase">{item.label}</p>
+                        <p className="text-[9px] text-muted-foreground italic">"{item.desc}"</p>
+                        <Badge variant="outline" className="text-[7px] border-amber-500/30 text-amber-500 font-mono">{item.status}</Badge>
                      </div>
                    ))}
                 </div>
@@ -177,16 +171,16 @@ export default function DocsPage() {
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                    <TrendingUp className="size-4" /> Trust Velocity KPI
+                    <Rocket className="size-4" /> Dependence Index
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="text-center py-6">
-                     <p className="text-4xl font-headline font-bold text-white tracking-tighter">+14.2%</p>
-                     <p className="text-[8px] text-muted-foreground uppercase font-bold mt-1">Growth in Institutional Trust</p>
+                     <p className="text-4xl font-headline font-bold text-white tracking-tighter">1/10</p>
+                     <p className="text-[8px] text-muted-foreground uppercase font-bold mt-1">Paying Institutional Partners</p>
                   </div>
                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                    "Trust Velocity measures the monthly expansion of verifiable institutional relationships within the mesh."
+                    "Product-Market Fit starts the day an institution cannot function without NoorNexus."
                   </p>
                 </CardContent>
               </Card>
@@ -194,12 +188,12 @@ export default function DocsPage() {
               <Card className="glass-card border-emerald-500/20">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                    <Target className="size-4" /> Execution Mandate
+                    <Target className="size-4" /> Wedge Mandate
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                    "Technology + Trust + Execution = Institution. কোড নয়, ফলাফলই আমাদের শ্রেষ্ঠত্বের পরিচয়।"
+                    "Don't build everything. Solve the Governance and Audit pain better than anyone else."
                   </p>
                 </CardContent>
               </Card>
@@ -207,15 +201,15 @@ export default function DocsPage() {
               <Card className="glass-card bg-amber-500/5 border-amber-500/20 h-fit">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
-                    <Briefcase className="size-4" /> First 10 Partners
+                    <Briefcase className="size-4" /> Beachhead Markets
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                      {[
-                       { label: "Edu Pilot 01", val: "ACTIVE" },
-                       { label: "Biz Pilot 01", val: "READY" },
-                       { label: "Fin Pilot 01", val: "PIPELINE" }
+                       { label: "Educational", val: "PILOT_01_ACTIVE" },
+                       { label: "Financial", val: "DISCUSSION" },
+                       { label: "Community", val: "PIPELINE" }
                      ].map((p, i) => (
                        <div key={i} className="flex justify-between text-[9px] font-mono">
                           <span className="text-white uppercase">{p.label}</span>
