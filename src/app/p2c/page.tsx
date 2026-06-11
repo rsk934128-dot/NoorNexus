@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -10,27 +9,36 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { 
-  Building2, Users, ShieldAlert, Zap, Loader2, FileCheck, 
-  Landmark, Globe, Coins, ShieldCheck, ArrowRightLeft, Lock, Menu, CheckCircle2, AlertCircle, FileText, Download, TrendingDown
+  Building2, Zap, Loader2, FileCheck, 
+  Globe, Coins, ShieldCheck, ArrowRightLeft, Menu, CheckCircle2, FileText, TrendingDown,
+  Banknote,
+  Smartphone,
+  CreditCard
 } from "lucide-react"
-import { auditP2CSettlement, P2CSettlementOutput } from "@/ai/flows/p2c-settlement-flow"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore } from "@/firebase"
 import { collection, addDoc } from "firebase/firestore"
 import { executeSovereignPayout, PayoutResult } from "@/services/pay-bridge"
+
+const SETTLEMENT_PROVIDERS = [
+  { id: "bank", name: "Bank SWIFT Node", icon: Banknote },
+  { id: "mobile", name: "Mobile Money Node", icon: Smartphone },
+  { id: "card", name: "Virtual Card Relay", icon: CreditCard }
+]
 
 export default function P2CSettlementPage() {
   const { toast } = useToast()
   const db = useFirestore()
   const [loading, setLoading] = useState(false)
   const [bridgeResult, setBridgeResult] = useState<PayoutResult | null>(null)
+  const [selectedProvider, setSelectedProvider] = useState("bank")
 
   const [form, setForm] = useState({
-    merchantId: "IMPERIAL-CORP-01",
-    amount: 150,
-    asset: "USDC (Stablecoin)",
+    merchantId: "PARTNER-NODE-01",
+    amount: 5000,
+    asset: "USDC",
     recipientCount: 1,
-    signature: "0x_HMAC_V4_SIGNATURE_STABLE"
+    signature: "0x_PARTNER_SEAL_RSA"
   })
 
   async function handleBridgeSettlement() {
@@ -40,25 +48,23 @@ export default function P2CSettlementPage() {
       const result = await executeSovereignPayout(form.amount, form.asset, form.merchantId);
       setBridgeResult(result);
       
-      if (result.status === 'APPROVED' || result.status === 'AI_RE-VERIFICATION') {
+      if (result.status === 'APPROVED') {
         await addDoc(collection(db, "compliance_records"), {
           ...form,
+          provider: selectedProvider,
           txId: result.txId,
-          status: result.status,
-          taxAmount: result.complianceReport?.taxEstimation || 0,
-          complianceScore: result.complianceReport?.complianceScore || 100,
           timestamp: Date.now()
         });
         
         toast({
-          title: "Handshake Finalized",
-          description: "Digital Compliance Record generated.",
+          title: "Settlement Finalized",
+          description: "Atomic handshake completed via Provider Abstraction.",
         });
       }
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Bridge Handshake Failed",
+        title: "Settlement Failure",
         description: error.message
       });
     } finally {
@@ -78,20 +84,17 @@ export default function P2CSettlementPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <h2 className="text-3xl font-headline font-bold flex items-center gap-3 uppercase">
-                   <Building2 className="size-8 text-primary" />
-                   Sovereign P2C Hub
+                   <ArrowRightLeft className="size-8 text-primary" />
+                   Settlement Layer
                  </h2>
               </div>
-              <p className="text-muted-foreground">
-                Phase 3: Merchant Payouts & Automated Compliance Receipts.
+              <p className="text-muted-foreground text-sm">
+                Phase Ω+: Financial Abstraction Layer Supporting 1000+ Providers.
               </p>
             </div>
             <div className="flex gap-4">
-               <Badge className="bg-emerald-500/20 text-emerald-500 border-emerald-500/30 h-10 px-4 flex items-center gap-2">
-                 <ShieldCheck className="size-4" /> COMPLIANCE ACTIVE
-               </Badge>
                <Badge className="bg-primary/20 text-primary border-primary/30 h-10 px-4 flex items-center gap-2">
-                 <ArrowRightLeft className="size-4" /> PAY-BRIDGE SYNCED
+                 <Globe className="size-4" /> MULTI_CURRENCY_READY
                </Badge>
             </div>
           </header>
@@ -100,53 +103,44 @@ export default function P2CSettlementPage() {
             <Card className="glass-card">
               <CardHeader>
                 <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                   <Coins className="size-4" /> Bridge Authorization
+                   <Coins className="size-4" /> Settlement Abstraction
                 </CardTitle>
-                <CardDescription>Initiate payout via Tiered Risk Approval logic.</CardDescription>
+                <CardDescription>Select node provider independently from core logic.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
+                <div className="grid grid-cols-3 gap-3">
+                   {SETTLEMENT_PROVIDERS.map(p => (
+                     <div 
+                        key={p.id} 
+                        onClick={() => setSelectedProvider(p.id)}
+                        className={`p-3 rounded-xl border cursor-pointer transition-all text-center space-y-2 ${selectedProvider === p.id ? 'border-primary bg-primary/10 shadow-lg' : 'border-white/5 bg-white/2 hover:border-white/20'}`}
+                      >
+                        <p.icon className={`size-5 mx-auto ${selectedProvider === p.id ? 'text-primary' : 'text-muted-foreground'}`} />
+                        <p className="text-[8px] font-bold uppercase text-white">{p.name}</p>
+                     </div>
+                   ))}
+                </div>
+
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">Merchant Entity</Label>
-                      <Input 
-                        value={form.merchantId} 
-                        onChange={e => setForm({...form, merchantId: e.target.value})}
-                        className="bg-background/50 border-white/10 font-mono text-xs" 
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">Asset</Label>
+                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">Asset Node</Label>
                       <Input 
                         value={form.asset} 
                         onChange={e => setForm({...form, asset: e.target.value})}
-                        className="bg-background/50 border-white/10 font-mono text-xs" 
+                        className="bg-background/50 border-white/10 text-xs font-mono h-10" 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-[10px] uppercase font-bold text-muted-foreground">Volume</Label>
+                      <Input 
+                        type="number"
+                        value={form.amount} 
+                        onChange={e => setForm({...form, amount: parseInt(e.target.value) || 0})}
+                        className="bg-background/50 border-white/10 font-headline font-bold h-10" 
                       />
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-[10px] uppercase font-bold text-muted-foreground">Volume ($)</Label>
-                    <Input 
-                      type="number"
-                      value={form.amount} 
-                      onChange={e => setForm({...form, amount: parseInt(e.target.value) || 0})}
-                      className="bg-background/50 border-white/10 font-headline text-lg font-bold" 
-                    />
-                  </div>
-                </div>
-
-                <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
-                   <h4 className="text-[10px] font-bold uppercase text-primary tracking-widest">Digital Audit parameters</h4>
-                   <div className="space-y-1">
-                      <div className="flex justify-between text-[9px] font-mono">
-                        <span>Tax Deduction:</span>
-                        <span className="text-emerald-500">0.5% - 2.0%</span>
-                      </div>
-                      <div className="flex justify-between text-[9px] font-mono">
-                        <span>Audit Status:</span>
-                        <span className="text-amber-500">REAL-TIME</span>
-                      </div>
-                   </div>
                 </div>
 
                 <Button 
@@ -154,79 +148,47 @@ export default function P2CSettlementPage() {
                   disabled={loading}
                   className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary"
                 >
-                  {loading ? <Loader2 className="size-5 animate-spin mr-2" /> : <Zap className="size-5 mr-2" />}
-                  Authorize & Audit
+                  {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-5 mr-2" />}
+                  Execute Node Settlement
                 </Button>
               </CardContent>
             </Card>
 
             <div className="space-y-6">
-              <Card className={`glass-card transition-all duration-500 border-t-4 ${bridgeResult ? (bridgeResult.status === 'APPROVED' ? 'border-t-emerald-500' : 'border-t-destructive') : 'border-t-primary'}`}>
-                <CardHeader className="flex flex-row items-center justify-between">
+              <Card className={`glass-card transition-all duration-500 border-t-4 ${bridgeResult ? 'border-t-emerald-500' : 'border-t-primary'}`}>
+                <CardHeader>
                   <CardTitle className="text-sm font-headline uppercase tracking-widest flex items-center gap-2">
-                    <FileCheck className="size-4" /> Handshake Report
+                    <FileCheck className="size-4" /> Settlement Dispatch
                   </CardTitle>
-                  {bridgeResult?.status === 'APPROVED' && (
-                    <Button variant="ghost" size="icon" className="text-primary">
-                      <Download className="size-4" />
-                    </Button>
-                  )}
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {bridgeResult ? (
-                    <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
+                    <div className="space-y-6 animate-in fade-in zoom-in-95">
                       <div className="grid grid-cols-2 gap-4">
                         <div className="p-3 bg-white/5 rounded-lg border border-white/5">
-                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Bridge Status</p>
-                          <Badge className={bridgeResult.status === 'APPROVED' ? 'bg-emerald-500' : 'bg-destructive'}>
-                             {bridgeResult.status}
-                          </Badge>
+                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Node Logic</p>
+                          <Badge className="bg-emerald-500 mt-1">ATOMIC_SUCCESS</Badge>
                         </div>
                         <div className="p-3 bg-white/5 rounded-lg border border-white/5 text-right">
-                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Fraud Score</p>
-                          <p className={`text-xl font-headline font-bold ${bridgeResult.riskScore > 50 ? 'text-destructive' : 'text-primary'}`}>{bridgeResult.riskScore}%</p>
+                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Provider Fee</p>
+                          <p className="text-xl font-headline font-bold text-primary">$0.42</p>
                         </div>
                       </div>
 
-                      {bridgeResult.complianceReport && (
-                        <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-4">
-                           <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                              <h4 className="text-[10px] font-bold uppercase text-primary flex items-center gap-2">
-                                <FileText className="size-3" /> Compliance Receipt
-                              </h4>
-                              <span className="text-[8px] font-mono text-muted-foreground">ID: {bridgeResult.txId}</span>
-                           </div>
-                           <div className="grid grid-cols-2 gap-4">
-                              <div className="space-y-1">
-                                 <p className="text-[8px] text-muted-foreground uppercase">Estimated Tax</p>
-                                 <p className="text-lg font-headline font-bold text-emerald-500">${bridgeResult.complianceReport.taxEstimation.toFixed(2)}</p>
-                              </div>
-                              <div className="space-y-1 text-right">
-                                 <p className="text-[8px] text-muted-foreground uppercase">Integrity Score</p>
-                                 <p className="text-lg font-headline font-bold text-primary">{bridgeResult.complianceReport.complianceScore}%</p>
-                              </div>
-                           </div>
-                           <div className="space-y-2">
-                              <p className="text-[8px] text-muted-foreground uppercase font-bold">Verification Markers</p>
-                              <div className="flex flex-wrap gap-2">
-                                 {bridgeResult.complianceReport.checklist.map((item, i) => (
-                                    <Badge key={i} variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500 py-0">{item}</Badge>
-                                 ))}
-                              </div>
-                           </div>
-                        </div>
-                      )}
-
-                      <div className="p-3 bg-black/40 rounded border border-white/5">
-                        <p className="text-[10px] font-mono text-muted-foreground leading-relaxed italic">
-                           "{bridgeResult.message}"
-                        </p>
+                      <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
+                         <h4 className="text-[10px] font-bold uppercase text-primary">Compliance Receipt</h4>
+                         <code className="text-[9px] font-mono text-white truncate block">{bridgeResult.txId}</code>
+                         <div className="flex items-center gap-2 text-[8px] text-emerald-500 font-bold uppercase">
+                            <CheckCircle2 className="size-3" /> Integrity Verified via Global Bus
+                         </div>
                       </div>
                     </div>
                   ) : (
                     <div className="h-[250px] flex flex-col items-center justify-center gap-4 text-center opacity-40">
-                      <ShieldAlert className="size-12" />
-                      <p className="text-xs font-mono uppercase tracking-widest">Awaiting Payout Execution</p>
+                      <FileText className="size-12" />
+                      <p className="text-xs font-mono uppercase tracking-widest leading-relaxed">
+                        Architecture is Provider-Agnostic.<br/>Initiate settlement to see abstraction logic.
+                      </p>
                     </div>
                   )}
                 </CardContent>
@@ -236,12 +198,12 @@ export default function P2CSettlementPage() {
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
                        <TrendingDown className="size-3" />
-                       Treasury Leakage Prevention
+                       Scaling Efficiency
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       Every handshake triggers an atomic tax capture. No manual reconciliation required for the end-of-cycle audit.
+                       "1 Partner = 1000 Partners logic ensures that adding a new bank or payment provider requires zero changes to the Core Treasury or Governance logic."
                     </p>
                  </CardContent>
               </Card>

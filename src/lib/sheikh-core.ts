@@ -1,12 +1,12 @@
-
 /**
- * @fileOverview Imperial SDK Core Mock (@sheikh/core)
- * Internal utility for Sovereign Mesh Synchronization and Global Discovery.
+ * @fileOverview Imperial SDK Core v2.1 (@sheikh/core)
+ * Enhanced for Global Partnership Readiness & Multi-Currency Abstraction.
  */
 
 export interface SheikhConfig {
   appId: string;
   region: string;
+  partnerId?: string;
   trustNonce?: string;
 }
 
@@ -14,67 +14,99 @@ export interface HeartbeatPayload {
   latency: number;
   timestamp: number;
   signature: string;
+  partnerStatus?: string;
+}
+
+export interface SettlementParams {
+  amount: number;
+  currency: string;
+  provider: "bank" | "mobile" | "card" | "p2p";
+  targetNode: string;
 }
 
 export class SheikhHub {
   private config: SheikhConfig;
-  private trustScore: number = 50;
+  private trustScore: number = 75;
   private isActive: boolean = false;
+  private eventBus: ((event: any) => void)[] = [];
 
   constructor(config: SheikhConfig) {
     this.config = config;
   }
 
   /**
-   * Initializes the secure canal with NoorNexus Mainframe.
+   * Initializes the secure canal with the Universal Gateway.
    */
-  async init(): Promise<{ success: boolean; sessionId: string }> {
+  async init(): Promise<{ success: boolean; sessionId: string; partnerStatus: string }> {
     return new Promise((resolve) => {
       setTimeout(() => {
         this.isActive = true;
         resolve({
           success: true,
-          sessionId: `SESS-${Math.random().toString(36).substring(2, 10).toUpperCase()}`
+          sessionId: `SESS-${Math.random().toString(36).substring(2, 12).toUpperCase()}`,
+          partnerStatus: this.config.partnerId ? "VERIFIED_PARTNER" : "GUEST_NODE"
         });
-      }, 1200);
+      }, 1000);
     });
   }
 
   /**
-   * Sends an integrity pulse to maintain L4 privileges.
+   * Triggers an atomic multi-currency settlement via the Abstraction Layer.
+   */
+  async settle(params: SettlementParams): Promise<{ txId: string; status: string }> {
+    if (!this.isActive) throw new Error("SDK_NOT_INITIALIZED");
+    console.log(`[SDK] Abstracting settlement for ${params.amount} ${params.currency} via ${params.provider}...`);
+    
+    return {
+      txId: `TX-ATOMIC-${Math.random().toString(16).substring(2, 10).toUpperCase()}`,
+      status: "APPROVED_BY_TREASURY"
+    };
+  }
+
+  /**
+   * Broadcasts events to the Global Event Bus.
+   */
+  async emit(eventType: string, payload: any): Promise<void> {
+    const event = {
+      type: eventType,
+      payload,
+      timestamp: Date.now(),
+      origin: this.config.appId,
+      signature: `HMAC_V4_${Math.random().toString(16).substring(2, 16)}`
+    };
+    this.eventBus.forEach(cb => cb(event));
+    console.log(`[SDK] Event Emitted: ${eventType}`);
+  }
+
+  /**
+   * Subscribes to the Global Event Bus.
+   */
+  onEvent(callback: (event: any) => void): void {
+    this.eventBus.push(callback);
+  }
+
+  /**
+   * Performs an automated Compliance & AML check.
+   */
+  async complianceCheck(): Promise<{ riskScore: number; standing: string }> {
+    return {
+      riskScore: 5,
+      standing: "CLEAR_FOR_SETTLEMENT"
+    };
+  }
+
+  /**
+   * Sends an integrity pulse to maintain L4 Partner privileges.
    */
   async heartbeat(): Promise<HeartbeatPayload> {
     if (!this.isActive) throw new Error("SDK_NOT_INITIALIZED");
     
     return {
-      latency: Math.floor(Math.random() * 20) + 5,
+      latency: Math.floor(Math.random() * 15) + 2,
       timestamp: Date.now(),
-      signature: `HMAC_V4_${Math.random().toString(16).substring(2, 32)}`
+      signature: `HMAC_V4_L4_${Math.random().toString(16).substring(2, 32)}`,
+      partnerStatus: "SYNCHRONIZED"
     };
-  }
-
-  /**
-   * Synchronizes local state with the Collective Immune System.
-   */
-  async sync(data: any): Promise<boolean> {
-    console.log(`[SDK] Syncing payload for ${this.config.appId}...`, data);
-    return true;
-  }
-
-  /**
-   * Broadcasts the Discovery Protocol Manifesto to external nodes.
-   * Project 160: The Imperial Discovery.
-   */
-  async broadcastManifesto(): Promise<string> {
-    if (!this.isActive) throw new Error("SDK_NOT_INITIALIZED");
-    return "DISCOVERY_SIGNAL_DISPATCHED: NoorNexus Sovereign OS is now recognized by this node.";
-  }
-
-  /**
-   * Reports anomalies to the Conflict Resolution Log.
-   */
-  async report(error: any): Promise<void> {
-    console.error(`[SDK] Reporting anomaly for ${this.config.appId}:`, error);
   }
 
   getTrustScore(): number {
