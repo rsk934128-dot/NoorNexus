@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useMemo } from "react"
@@ -421,7 +420,7 @@ export default function GovernanceHubPage() {
                  </CardHeader>
                  <CardContent>
                     <p className="text-[9px] text-muted-foreground italic leading-relaxed">
-                       Flywheel spinning at optimal torque.<br/>Trust -> Adoption Loop is self-sustaining.
+                       Flywheel spinning at optimal torque.<br/>Trust -&gt; Adoption Loop is self-sustaining.
                     </p>
                  </CardContent>
               </Card>
