@@ -235,7 +235,7 @@ export default function GovernanceHubPage() {
                             disabled={!isEligible}
                             value={form.description}
                             onChange={e => setForm({...form, description: e.target.value})}
-                            placeholder="Describe how this improves daily utility..."
+                            placeholder="Describe how this improves daily daily utility..."
                             className="w-full h-24 bg-background/50 border border-white/10 rounded-md p-3 text-xs outline-none focus:ring-1 focus:ring-primary"
                           />
                         </div>
@@ -420,7 +420,7 @@ export default function GovernanceHubPage() {
                  </CardHeader>
                  <CardContent>
                     <p className="text-[9px] text-muted-foreground italic leading-relaxed">
-                       Flywheel spinning at optimal torque.<br/>Trust -&gt; Adoption Loop is self-sustaining.
+                       Flywheel spinning at optimal torque.<br/>Trust {'->'} Adoption Loop is self-sustaining.
                     </p>
                  </CardContent>
               </Card>
