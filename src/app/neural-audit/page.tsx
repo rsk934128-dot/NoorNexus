@@ -35,7 +35,8 @@ import {
   Coins,
   HeartPulse,
   Flame,
-  Award
+  Award,
+  Rocket
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { runNeuralAudit, NeuralAuditOutput } from "@/ai/flows/neural-audit-flow"
@@ -48,6 +49,8 @@ export default function NeuralAuditPage() {
   const [autonomyResult, setAutonomyResult] = useState<GridAutonomyOutput | null>(null)
   const [activeNode, setActiveNode] = useState("abn-amro-be-private")
   
+  const OFFICIAL_APP_ID = "a085f875-dac3-47ef-83dd-b00d56df81d3"
+
   // LIVE Efficiency Stats (Simulated)
   const [liveStats, setLiveStats] = useState({
     latency: 28,
@@ -72,8 +75,9 @@ export default function NeuralAuditPage() {
   const handleFullGridSync = async () => {
     setLoading(true)
     try {
-      // 1. Regulatory Audit
+      // 1. Regulatory Audit with App ID
       const audit = await runNeuralAudit({
+        appId: OFFICIAL_APP_ID,
         nodeId: activeNode,
         nodeType: 'ASPSP',
         region: "Belgium - Private LIVE",
@@ -81,7 +85,7 @@ export default function NeuralAuditPage() {
       })
       setAuditResult(audit)
 
-      // 2. Autonomy Calibration (Smart Settlement + Self Healing + Scorecard)
+      // 2. Autonomy Calibration
       const autonomy = await runGridAutonomy({
         region: "Global Mesh Corridor",
         detectedRegulatoryChange: "New Sovereign Autonomy Protocol #54 established.",
@@ -99,8 +103,8 @@ export default function NeuralAuditPage() {
       setAutonomyResult(autonomy)
 
       toast({ 
-        title: "Project #54 Finalized", 
-        description: "Self-Healing Protocol and Efficiency Scorecard calibrated." 
+        title: "Zenith Level Sync Finalized", 
+        description: `Application ${OFFICIAL_APP_ID.substring(0, 8)} is verified.` 
       })
     } catch (e: any) {
       toast({ title: "Sync Error", description: e.message, variant: "destructive" })
@@ -124,14 +128,14 @@ export default function NeuralAuditPage() {
                    <Infinity className="size-3 mr-2" /> Phase ΩΩ: Global Autonomy
                  </Badge>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <HeartPulse className="size-3 mr-2" /> SELF-HEALING ARMED
+                   <Rocket className="size-3 mr-2" /> ZENITH MONITORING: ON
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Sovereign <span className="text-emerald-500">Sentinel.</span>
+                Neural <span className="text-emerald-500">Sentinel.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Project #54: Sovereign Grid Autonomy." নূরনেক্সাস এখন ১৫টি নোডের মধ্যে ট্রাফিক অটো-হিল করছে এবং আঞ্চলিক দক্ষতার স্কোরকার্ড বিশ্লেষণ করছে।
+                "Zenith Level Traceability." নূরনেক্সাস এখন অফিশিয়াল App ID-এর মাধ্যমে প্রতিটি লেনদেনকে নিউরাল অডিটের আওতায় নিয়ে এসেছে।
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -141,14 +145,41 @@ export default function NeuralAuditPage() {
                 className="bg-emerald-500 text-white font-bold h-12 uppercase tracking-widest gap-2 glow-emerald"
                >
                  {loading ? <Loader2 className="size-4 animate-spin" /> : <RefreshCcw className="size-4" />}
-                 Recalibrate Grid Torque
+                 Full Grid Zenith Sync
                </Button>
             </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-8">
-              {/* Regional Efficiency Scorecard */}
+              {/* Zenith Application Monitor Card */}
+              <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div className="space-y-1">
+                    <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
+                       <Fingerprint className="size-4" /> Zenith Application Monitor
+                    </CardTitle>
+                    <CardDescription className="text-xs font-mono uppercase tracking-widest">TRACE_ID: {OFFICIAL_APP_ID}</CardDescription>
+                  </div>
+                  <Badge className="bg-emerald-500 animate-pulse">LIVE_AUDIT</Badge>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
+                  {[
+                    { label: "Handshake Protocol", val: "HMAC_V4", icon: Lock },
+                    { label: "Traceability Level", val: "ZENITH", icon: Activity },
+                    { label: "Verification Status", val: "PASS", icon: CheckCircle2 },
+                    { label: "Ledger Anchor", val: "100%", icon: Database }
+                  ].map((stat, i) => (
+                    <div key={i} className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1 text-center">
+                       <stat.icon className="size-4 text-primary mx-auto mb-2" />
+                       <p className="text-[8px] text-muted-foreground uppercase font-bold">{stat.label}</p>
+                       <p className="text-xs font-headline font-bold text-white uppercase">{stat.val}</p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Existing Self-Healing and Scorecard sections... */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                     <Award className="size-4" /> Sovereign Efficiency Scorecard
@@ -170,10 +201,6 @@ export default function NeuralAuditPage() {
                                  <div className="h-full bg-emerald-500" style={{ width: `${s.efficiencyScore}%` }} />
                               </div>
                            </div>
-                           <div className="flex justify-between items-center pt-2">
-                              <p className="text-[10px] font-bold text-muted-foreground uppercase">Economic Return</p>
-                              <p className="text-xs font-mono text-primary font-bold">{s.economicReturn}</p>
-                           </div>
                         </CardContent>
                       </Card>
                     )) || (
@@ -183,94 +210,21 @@ export default function NeuralAuditPage() {
                     )}
                  </div>
               </section>
-
-              <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Self-Healing Protocol Panel */}
-                <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                  <CardHeader>
-                    <CardTitle className="text-sm font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-                       <HeartPulse className="size-4" /> Self-Healing Sentinel
-                    </CardTitle>
-                    <CardDescription>Autonomous Connectivity Recovery (P54.2)</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {autonomyResult ? (
-                      <div className="space-y-6 animate-in fade-in slide-in-from-left-2">
-                         <div className="p-4 bg-black/40 rounded-xl border border-white/10 space-y-4">
-                            <div className="flex justify-between items-center">
-                               <span className="text-[10px] text-muted-foreground uppercase font-bold">Protocol Status</span>
-                               <Badge className="bg-emerald-500">{autonomyResult.selfHealingStatus.active ? 'HEALING_ACTIVE' : 'STANDBY_OPTIMAL'}</Badge>
-                            </div>
-                            <div className="space-y-1">
-                               <p className="text-[8px] text-muted-foreground uppercase font-bold">Recovered Nodes</p>
-                               <div className="flex flex-wrap gap-1">
-                                  {autonomyResult.selfHealingStatus.recoveredNodes.map((n, i) => (
-                                    <Badge key={i} variant="outline" className="text-[7px] border-emerald-500/30 text-emerald-500 uppercase">{n}</Badge>
-                                  ))}
-                                  {autonomyResult.selfHealingStatus.recoveredNodes.length === 0 && <span className="text-[9px] text-white">None (Stability MAX)</span>}
-                               </div>
-                            </div>
-                         </div>
-                         <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
-                            <p className="text-[10px] font-bold text-emerald-500 uppercase mb-1">Autonomous Statement</p>
-                            <p className="text-xs text-white leading-relaxed italic">"{autonomyResult.noraReasoning}"</p>
-                         </div>
-                      </div>
-                    ) : (
-                      <div className="h-[200px] flex flex-col items-center justify-center gap-4 text-center opacity-40">
-                         <Activity className="size-12 text-emerald-500 animate-pulse" />
-                         <p className="text-xs font-mono uppercase tracking-widest">Awaiting Sentinel Calibration</p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                {/* Smart Routing ROI UI */}
-                <Card className={`glass-card border-t-4 transition-all duration-500 ${autonomyResult ? 'border-t-primary' : 'border-t-muted'}`}>
-                  <CardHeader>
-                    <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
-                       <TrendingUp className="size-4" /> Economic Drift Shield
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {autonomyResult ? (
-                      <div className="space-y-6 animate-in fade-in zoom-in-95">
-                         <div className="space-y-2">
-                            <p className="text-[10px] font-bold text-muted-foreground uppercase">Estimated Fee Savings</p>
-                            <p className="text-3xl font-headline font-bold text-emerald-500">{autonomyResult.estimatedSavings || "$12,450.00"}</p>
-                         </div>
-                         <div className="p-3 bg-black/40 rounded border border-white/5 space-y-2">
-                            <p className="text-[8px] font-mono text-muted-foreground uppercase mb-1">Autonomy Decision Hash</p>
-                            <code className="text-[9px] font-mono text-primary break-all">{autonomyResult.autonomyHash}</code>
-                         </div>
-                         <div className="flex items-center gap-2 text-primary text-[10px] font-bold uppercase">
-                            <CheckCircle2 className="size-3" /> Anchored to One Engine Ledger
-                         </div>
-                      </div>
-                    ) : (
-                      <div className="h-[200px] flex flex-col items-center justify-center gap-4 text-center opacity-40">
-                         <Lock className="size-12 text-primary" />
-                         <p className="text-xs font-mono uppercase tracking-widest">Awaiting ROI Analysis</p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </section>
             </div>
 
             <div className="space-y-8">
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
-                    <Scale className="size-4" /> Grid Accountability
+                    <Scale className="size-4" /> Judicial Traceability
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                    <div className="space-y-4">
                       {[
-                        { label: "Corridor Sync", val: "100%", color: "text-emerald-500" },
-                        { label: "Self-Healing Index", val: "MAX", color: "text-primary" },
-                        { label: "Stability Veracity", val: "99.9%", color: "text-emerald-400" }
+                        { label: "Auth Bridge Sync", val: "100%", color: "text-emerald-500" },
+                        { label: "App ID Verification", val: "L4", color: "text-primary" },
+                        { label: "Compliance Veracity", val: "99.9%", color: "text-emerald-400" }
                       ].map((s, i) => (
                         <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
                            <span className="text-[10px] text-muted-foreground uppercase font-bold">{s.label}</span>
@@ -284,12 +238,12 @@ export default function NeuralAuditPage() {
               <Card className="glass-card border-amber-500/20 bg-amber-500/5">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                       <Flame className="size-3" /> Fail-Safe Activation
+                       <Clock className="size-3" /> Key Lifecycle Alert
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       "If a regional rail collapses, Nora-54 executes smart re-routing in &lt; 120ms. The Efficiency Scorecard ensures we always choose the most stable alternative."
+                       "Next secret rotation for App ID a085f8... scheduled in 15 days. Policy is synchronized with Sovereign Vault (P55)."
                     </p>
                  </CardContent>
               </Card>

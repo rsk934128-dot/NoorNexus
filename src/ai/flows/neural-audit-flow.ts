@@ -2,13 +2,14 @@
 /**
  * @fileOverview Nora-52 Neural Audit & Compliance Agent.
  * Performs real-time auditing of banking nodes against global regulatory standards (PSD2, GDPR).
- * Part of Mission 400 - Project #52.
+ * Updated for Zenith Level Enterprise App ID monitoring.
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const NeuralAuditInputSchema = z.object({
+  appId: z.string().optional().describe('The Enterprise Application ID to monitor.'),
   nodeId: z.string().describe('The ID of the banking node being audited.'),
   nodeType: z.enum(['ASPSP', 'TPP', 'AGGREGATOR']),
   region: z.string().describe('Regulatory jurisdiction (e.g. EU, UK, US).'),
@@ -27,6 +28,7 @@ const NeuralAuditOutputSchema = z.object({
   privacyRiskLevel: z.enum(['Low', 'Medium', 'High', 'Critical']),
   tacticalAction: z.string().describe('AI recommendation for node maintenance.'),
   auditSignature: z.string().describe('HMAC_V4 signed audit certificate.'),
+  zenithStatus: z.string().optional().describe('Zenith Level traceability status for the App ID.'),
 });
 export type NeuralAuditOutput = z.infer<typeof NeuralAuditOutputSchema>;
 
@@ -44,14 +46,15 @@ const auditPrompt = ai.definePrompt({
 Your mandate is Project #52: Real-time Regulatory Compliance and Data Sovereignty Audit.
 
 AUDIT DATA:
+{{#if appId}}- ENTERPRISE APP_ID: {{{appId}}} (ZENITH_LEVEL_MONITORING ACTIVE){{/if}}
 - NODE: {{{nodeId}}}
 - TYPE: {{{nodeType}}}
 - REGION: {{{region}}}
 - CONSENT: {{{consentStatus}}}
 
 MISSION DIRECTIVES:
-1. PSD2 AUDIT: Verify if the node is correctly enforcing Strong Customer Authentication (SCA) and account access scopes.
-2. GDPR AUDIT: Analyze the consent metadata. Is user data being handled with absolute sovereignty? Any leakage detected?
+1. PSD2 AUDIT: Verify if the node/app is correctly enforcing SCA and account access scopes.
+2. ZENITH MONITORING: If an appId is provided, ensure all transactions under this key are verified against the Sovereign Ledger.
 3. RISK SCORING: Calculate a compliance score (0-100). Any score < 95 must be flagged with a tacticalAction.
 4. SIGNATURE: Every audit MUST be sealed with an HMAC_V4_52 certificate.
 

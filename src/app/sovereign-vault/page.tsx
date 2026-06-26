@@ -24,7 +24,8 @@ import {
   EyeOff,
   Flame,
   Key,
-  Users
+  Users,
+  ShieldPlus
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { anchorToSovereignVault, SovereignVaultOutput } from "@/ai/flows/sovereign-vault-flow"
@@ -34,6 +35,8 @@ export default function SovereignVaultPage() {
   const [loading, setLoading] = useState(false)
   const [vaultResult, setVaultResult] = useState<SovereignVaultOutput | null>(null)
   const [vaultHistory, setVaultHistory] = useState<any[]>([])
+  
+  const OFFICIAL_APP_ID = "a085f875-dac3-47ef-83dd-b00d56df81d3"
 
   const [form, setForm] = useState({
     txId: "SOV-HNW-998811",
@@ -80,26 +83,50 @@ export default function SovereignVaultPage() {
                    <Lock className="size-3 mr-2" /> Project #55: The Sovereign Vault
                  </Badge>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <Users className="size-3 mr-2" /> Multi-Tenant I/O
+                   <ShieldPlus className="size-3 mr-2" /> Key Anchoring Active
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Isolated <span className="text-primary">Storage.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Deep storage for isolated enterprise nodes." নূরনেক্সাস এখন টিন্যান্ট ভিত্তিক ডাটা সেগ্রিগেশন এবং অফলাইন এনক্রিপশন হ্যান্ডেল করছে।
+                "Deep storage for enterprise secrets." নূরনেক্সাস এখন এন্টারপ্রাইজ এপিআই চাবিকাঠিগুলোকে অভেদ্য কোল্ড-স্টোরেজে অ্যাঙ্কর করছে।
               </p>
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Isolation Integrity</p>
-                  <p className="text-3xl font-headline font-bold text-primary">MAX</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Vault Status</p>
+                  <p className="text-2xl font-headline font-bold text-emerald-500 uppercase">SYNCHRONIZED</p>
                </div>
             </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-10">
+               {/* Enterprise Key Lifecycle Card */}
+               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                  <CardHeader>
+                     <CardTitle className="text-sm font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
+                        <Key className="size-4" /> Enterprise Key Anchoring
+                     </CardTitle>
+                     <CardDescription>Official Application Secret Protection Node.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                     <div className="p-4 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                           <div className="size-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                              <Lock className="size-5 text-primary" />
+                           </div>
+                           <div className="space-y-0.5">
+                              <p className="text-[10px] font-bold text-white uppercase">App ID: {OFFICIAL_APP_ID.substring(0, 16)}...</p>
+                              <p className="text-[8px] text-muted-foreground uppercase">Status: QUANTUM_ANCHORED</p>
+                           </div>
+                        </div>
+                        <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 text-[8px]">SECURE_L4</Badge>
+                     </div>
+                  </CardContent>
+               </Card>
+
                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Vault Terminal */}
                   <Card className="glass-card border-l-4 border-l-primary">
@@ -126,31 +153,6 @@ export default function SovereignVaultPage() {
                                onChange={e => setForm({...form, txId: e.target.value})}
                                className="w-full bg-background/50 border border-white/10 rounded-md p-3 text-xs font-mono outline-none focus:ring-1 focus:ring-primary text-white"
                              />
-                          </div>
-                          <div className="grid grid-cols-2 gap-4">
-                             <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Client Tier</label>
-                                <select 
-                                   value={form.tier}
-                                   onChange={e => setForm({...form, tier: e.target.value as any})}
-                                   className="w-full bg-background/50 border border-white/10 rounded-md p-2 text-xs outline-none focus:ring-1 focus:ring-primary text-white"
-                                >
-                                   <option value="ELITE">ELITE</option>
-                                   <option value="IMPERIAL">IMPERIAL</option>
-                                </select>
-                             </div>
-                             <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Vault Target</label>
-                                <select 
-                                   value={form.target}
-                                   onChange={e => setForm({...form, target: e.target.value as any})}
-                                   className="w-full bg-background/50 border border-white/10 rounded-md p-2 text-xs outline-none focus:ring-1 focus:ring-primary text-white"
-                                >
-                                   <option value="COLD_STORAGE">Cold Storage</option>
-                                   <option value="AIR_GAPPED_MESH">Air-Gapped Mesh</option>
-                                   <option value="QUANTUM_ENCRYPTED">Quantum Encrypted</option>
-                                </select>
-                             </div>
                           </div>
                        </div>
 
@@ -186,10 +188,6 @@ export default function SovereignVaultPage() {
                                <p className="text-[8px] font-bold text-muted-foreground uppercase">Tenant Signature (HMAC_V4)</p>
                                <code className="text-[9px] font-mono text-primary block bg-black/40 p-2 rounded break-all">{vaultResult.tenantSignature}</code>
                             </div>
-                            <div className="flex justify-between text-[10px] font-mono">
-                               <span className="text-muted-foreground uppercase">Storage Node</span>
-                               <span className="text-white uppercase">{vaultResult.storageNode}</span>
-                            </div>
                          </div>
                        ) : (
                          <div className="h-[250px] flex flex-col items-center justify-center gap-4 text-center opacity-40">
@@ -200,44 +198,22 @@ export default function SovereignVaultPage() {
                     </CardContent>
                   </Card>
                </div>
-
-               {/* Vault History */}
-               <section className="space-y-6">
-                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-muted-foreground flex items-center gap-2">
-                     <History className="size-4" /> Isolated Anchor Log (Last 5 Events)
-                  </h3>
-                  <div className="space-y-3">
-                     {vaultHistory.length === 0 && <p className="text-xs text-muted-foreground italic">No isolated historical anchors found.</p>}
-                     {vaultHistory.map((v, i) => (
-                       <div key={i} className="p-4 bg-white/2 border border-white/5 rounded-xl flex items-center justify-between group hover:border-primary/30 transition-all">
-                          <div className="flex items-center gap-4">
-                             <Database className="size-5 text-primary opacity-50" />
-                             <div className="space-y-0.5">
-                                <p className="text-xs text-white font-bold uppercase">TENANT_PAYLOAD: {v.storageNode}</p>
-                                <p className="text-[8px] font-mono text-muted-foreground">SIGNATURE: {v.tenantSignature.substring(0, 32)}...</p>
-                             </div>
-                          </div>
-                          <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">ISOLATED</Badge>
-                       </div>
-                     ))}
-                  </div>
-               </section>
             </div>
 
             <div className="space-y-8">
                <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                        <ShieldPlus className="size-4" /> Multi-Tenant Shield
+                        <ShieldPlus className="size-4" /> Key Rotation Sentinel
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                      <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                        "Cross-tenant data leakage is mathematically impossible under the Sovereign Vault protocol. Each anchor point is scoped to unique tenant keys."
+                        "Your enterprise secrets are rotating on an autonomous cycle. Next rotation synchronized with the Auth Bridge."
                      </p>
                      <div className="pt-4 flex justify-center">
                         <div className="size-20 rounded-full border-2 border-emerald-500/20 flex items-center justify-center relative">
-                           <Users className="size-10 text-emerald-500 animate-pulse" />
+                           <RefreshCcw className="size-10 text-emerald-500 animate-spin-slow" />
                         </div>
                      </div>
                   </CardContent>
@@ -246,12 +222,12 @@ export default function SovereignVaultPage() {
                <Card className="glass-card border-l-4 border-l-amber-500">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                        <Flame className="size-4" /> Auto-Purge Sentinel
+                        <Flame className="size-4" /> Zero-Drift Policy
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                      <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                        "Tamper detection at the tenant level triggers automatic payload purging and rotation to secondary cold-storage nodes."
+                        "If the App Secret drifts from the Vault Anchor, Nora-52 triggers immediate node isolation."
                      </p>
                      <Badge className="w-full justify-center bg-amber-500/10 text-amber-500 border-none uppercase text-[8px] font-bold">SENTINEL_ARMED</Badge>
                   </CardContent>
