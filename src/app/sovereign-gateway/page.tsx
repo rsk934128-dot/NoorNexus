@@ -35,7 +35,9 @@ import {
   Loader2,
   FileCheck,
   Key,
-  Building2
+  Building2,
+  BellRing,
+  Clock
 } from "lucide-react"
 
 const BLUEPRINT_STEPS = [
@@ -92,6 +94,47 @@ export default function SovereignGatewayPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-10">
               
+              {/* eIDAS Health & Alerts Section */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                    <BellRing className="size-4 animate-pulse" /> eIDAS Vault Monitoring
+                 </h3>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                       <CardHeader className="pb-2">
+                          <CardTitle className="text-xs font-bold uppercase text-white">mTLS Certificate (Transport)</CardTitle>
+                       </CardHeader>
+                       <CardContent className="space-y-3">
+                          <div className="flex justify-between items-center text-[10px] font-mono">
+                             <span className="text-muted-foreground">Expires: Oct 20, 2025</span>
+                             <Badge variant="outline" className="text-emerald-500 border-emerald-500/20">HEALTHY</Badge>
+                          </div>
+                          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                             <div className="h-full bg-emerald-500" style={{ width: '82%' }} />
+                          </div>
+                          <p className="text-[9px] text-muted-foreground italic">"Automatic renewal protocol active. Scheduled for Sept 20, 2025."</p>
+                       </CardContent>
+                    </Card>
+                    <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+                       <CardHeader className="pb-2">
+                          <CardTitle className="text-xs font-bold uppercase text-white">QSealC Certificate (Signing)</CardTitle>
+                       </CardHeader>
+                       <CardContent className="space-y-3">
+                          <div className="flex justify-between items-center text-[10px] font-mono">
+                             <span className="text-muted-foreground">Expires: Aug 15, 2025</span>
+                             <Badge variant="outline" className="text-amber-500 border-amber-500/20">RENEWAL_DUE</Badge>
+                          </div>
+                          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                             <div className="h-full bg-amber-500" style={{ width: '65%' }} />
+                          </div>
+                          <div className="flex items-center gap-2 text-[9px] text-amber-500 font-bold">
+                             <Clock className="size-3" /> ALERT: Renewal required in 142 days.
+                          </div>
+                       </CardContent>
+                    </Card>
+                 </div>
+              </section>
+
               {/* White-label Studio Section */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
@@ -147,41 +190,6 @@ export default function SovereignGatewayPage() {
                           </div>
                        </div>
                     </div>
-                 </Card>
-              </section>
-
-              {/* Certificate Management Section */}
-              <section className="space-y-6">
-                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                    <Key className="size-4" /> eIDAS Certificate Vault (P51.6)
-                 </h3>
-                 <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                    <CardHeader>
-                       <CardTitle className="text-sm font-headline text-white uppercase flex items-center gap-2">
-                          <ShieldCheck className="size-4" /> Secure Identity Management
-                       </CardTitle>
-                       <CardDescription>Automated lifecycle for QWAC and QSealC certificates required for EU Open Banking.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="p-4 bg-black/40 rounded border border-white/5 space-y-3">
-                             <h4 className="text-[10px] font-bold text-primary uppercase tracking-widest">Transport Certificate (mTLS)</h4>
-                             <p className="text-[9px] text-muted-foreground italic">"Used for BIG Espanha - Sandbox (BIC: IGSEESMMXXX) connections."</p>
-                             <div className="flex justify-between items-center">
-                                <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">SYNCED</Badge>
-                                <span className="text-[8px] font-mono text-muted-foreground">Expires in 242 days</span>
-                             </div>
-                          </div>
-                          <div className="p-4 bg-black/40 rounded border border-white/5 space-y-3">
-                             <h4 className="text-[10px] font-bold text-primary uppercase tracking-widest">Signing Certificate (QSealC)</h4>
-                             <p className="text-[9px] text-muted-foreground italic">"Ensures non-repudiation for BIG Espanha Domestic Single Payments."</p>
-                             <div className="flex justify-between items-center">
-                                <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">SYNCED</Badge>
-                                <span className="text-[8px] font-mono text-muted-foreground">Expires in 180 days</span>
-                             </div>
-                          </div>
-                       </div>
-                    </CardContent>
                  </Card>
               </section>
 

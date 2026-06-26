@@ -36,7 +36,9 @@ import {
   Monitor,
   Building2,
   CheckCircle2,
-  FlaskConical
+  FlaskConical,
+  ShieldPlus,
+  ArrowRightLeft
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
@@ -56,7 +58,8 @@ const VALIDATED_NODES = [
     country: "Portugal / Spain",
     type: "AIS_PIS",
     features: ["Accounts", "Balances", "Transactions", "Domestic Single Payment"],
-    status: "SYNCED"
+    status: "SYNCED",
+    crossBorderVeracity: "99.9%"
   }
 ]
 
@@ -95,6 +98,7 @@ export default function OpenBankingHubPage() {
   const [loadingView, setLoadingView] = useState(false)
   const [orchestrating, setOrchestrating] = useState(false)
   const [activeProvider, setActiveProvider] = useState("yapily")
+  const [simulatingVeracity, setSimulatingVeracity] = useState(false)
 
   const handleOrchestration = () => {
     setOrchestrating(true)
@@ -108,6 +112,18 @@ export default function OpenBankingHubPage() {
         className: "border-emerald-500/50 bg-emerald-500/5"
       })
     }, 1500)
+  }
+
+  const handleSimulateVeracity = () => {
+    setSimulatingVeracity(true)
+    setTimeout(() => {
+      setSimulatingVeracity(false)
+      toast({
+        title: "Cross-Border Veracity Confirmed",
+        description: "PIS-AIS handshake validated across Iberian corridor (Spain-Portugal).",
+        className: "border-emerald-500/50 bg-emerald-500/5"
+      })
+    }, 2000)
   }
 
   const openInApp = (url: string) => {
@@ -167,10 +183,18 @@ export default function OpenBankingHubPage() {
                   Banking <span className="text-primary">Infrastructure.</span>
                 </h2>
                 <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                  Mission 400: Universal Banking Connect. Optimized by **Nora-50 Intelligent Orchestrator** with SIBS Network Integration.
+                  Mission 400: Universal Banking Connect. Optimized by **Nora-50 Intelligent Orchestrator** with Cross-Border Veracity.
                 </p>
               </div>
               <div className="flex gap-4">
+                 <Button 
+                  onClick={handleSimulateVeracity}
+                  disabled={simulatingVeracity}
+                  className="bg-emerald-500 text-white font-bold h-12 uppercase tracking-widest gap-2 glow-emerald"
+                 >
+                   {simulatingVeracity ? <Loader2 className="size-4 animate-spin" /> : <ArrowRightLeft className="size-4" />}
+                   Simulate Cross-Border Veracity
+                 </Button>
                  <Link href="/sovereign-gateway">
                    <Button className="bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-primary">
                      <Zap className="size-4" /> Project #51 Blueprint
@@ -207,8 +231,8 @@ export default function OpenBankingHubPage() {
                                           <p className="text-[10px] text-white font-mono">{node.bic}</p>
                                        </div>
                                        <div className="space-y-0.5">
-                                          <p className="text-[8px] text-muted-foreground uppercase font-bold">Region</p>
-                                          <p className="text-[10px] text-white font-mono">{node.country}</p>
+                                          <p className="text-[8px] text-muted-foreground uppercase font-bold">Veracity Index</p>
+                                          <p className="text-[10px] text-emerald-500 font-bold font-mono">{node.crossBorderVeracity}</p>
                                        </div>
                                        <div className="space-y-0.5">
                                           <p className="text-[8px] text-muted-foreground uppercase font-bold">Capability</p>
@@ -391,36 +415,6 @@ export default function OpenBankingHubPage() {
                       </CardContent>
                    </Card>
                 </section>
-
-                {/* Providers Explorer */}
-                <section className="space-y-6">
-                   <div className="flex justify-between items-center">
-                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                         <Layers className="size-4" /> Global Mesh Coverage
-                      </h3>
-                   </div>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {GLOBAL_LEADERS.map((p, i) => (
-                        <Card key={i} className="glass-card group hover:border-primary/30 transition-all overflow-hidden cursor-pointer" onClick={() => openInApp(p.url)}>
-                           <CardContent className="p-6 flex items-center justify-between">
-                              <div className="flex items-center gap-4">
-                                 <div className="size-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/5 font-headline font-bold text-primary text-xl">
-                                    {p.name[0]}
-                                 </div>
-                                 <div className="space-y-0.5">
-                                    <div className="flex items-center gap-2">
-                                       <p className="text-sm font-bold text-white uppercase">{p.name}</p>
-                                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">{p.tag}</Badge>
-                                    </div>
-                                    <p className="text-[9px] text-muted-foreground font-mono uppercase tracking-widest">{p.banks} Banks • {p.countries} Countries</p>
-                                 </div>
-                              </div>
-                              <ExternalLink className="size-4 text-muted-foreground group-hover:text-primary" />
-                           </CardContent>
-                        </Card>
-                      ))}
-                   </div>
-                </section>
               </div>
 
               <div className="space-y-8">
@@ -435,7 +429,7 @@ export default function OpenBankingHubPage() {
                        {[
                          { label: "Neural Sync", val: "ACTIVE", color: "text-emerald-500" },
                          { label: "Orchestration Efficiency", val: "99.2%", color: "text-primary" },
-                         { label: "Reroute Prediction", val: "N/A (Stable)", color: "text-white" }
+                         { label: "Cross-Border Veracity", val: "99.9%", color: "text-emerald-400" }
                        ].map((s, i) => (
                          <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
                             <span className="text-[10px] text-muted-foreground uppercase font-bold">{s.label}</span>
@@ -446,15 +440,15 @@ export default function OpenBankingHubPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+                <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                    <CardHeader>
-                      <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                         <Route className="size-4" /> Fail-Safe Route
+                      <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
+                         <ShieldPlus className="size-4" /> Veracity Protocol
                       </CardTitle>
                    </CardHeader>
                    <CardContent className="space-y-4">
-                      <p className="text-[10px] text-muted-foreground italic">
-                         "Orchestrator monitoring 73+ banking canals. Automated switch triggered if latency &gt; 1500ms."
+                      <p className="text-[10px] text-muted-foreground italic leading-relaxed">
+                         "Handshake veracity ensures that Iberian cross-border PIS flows match PSD2 compliance markers with 99.9% precision."
                       </p>
                    </CardContent>
                 </Card>
@@ -462,16 +456,16 @@ export default function OpenBankingHubPage() {
                 <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
                    <CardHeader className="pb-2">
                       <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
-                         <ShieldCheck className="size-3" /> Project #51 Access
+                         <ShieldCheck className="size-3" /> Project #52 Ready
                       </CardTitle>
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[9px] text-muted-foreground leading-relaxed">
-                         "Leveraging Hosted Pages and Direct API with white-label branding injection."
+                         "Neural Audit Sentinel is active. Continuous monitoring for PSD2/GDPR drift."
                       </p>
-                      <Link href="/sovereign-gateway" className="w-full">
+                      <Link href="/neural-audit" className="w-full">
                         <Button variant="outline" className="w-full h-8 text-[9px] uppercase font-bold border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/10">
-                           View Gateway <ArrowRight className="size-3 ml-2" />
+                           Open Neural Audit <ArrowRight className="size-3 ml-2" />
                         </Button>
                       </Link>
                    </CardContent>

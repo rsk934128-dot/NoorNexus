@@ -1,4 +1,3 @@
-
 import { config } from 'dotenv';
 config();
 
@@ -26,3 +25,4 @@ import '@/ai/flows/imperial-query-flow.ts';
 import '@/ai/flows/sovereign-legacy-flow.ts';
 import '@/ai/flows/amex-on-demand-flow.ts';
 import '@/ai/flows/amex-token-strategy-flow.ts';
+import '@/ai/flows/neural-audit-flow.ts';
