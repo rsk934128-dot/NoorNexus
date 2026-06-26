@@ -58,9 +58,10 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
+    "GRID: Project #53 Global Node Expansion initiated.",
+    "ZENITH: BIG Espanha PIS-AIS flow validated in LIVE mode.",
     "LEGACY: Yapily-AMEX European Bridge synchronized.",
     "ZENITH: External API Bridge serving 12 Enterprise Partners.",
-    "SYNC: BIG Espanha node successfully promoted to LIVE environment.",
     "SHIELD: Quantum-Resistant Encryption Layer active."
   ])
   const [queryText, setQueryText] = useState("")
@@ -84,8 +85,9 @@ export default function Home() {
 
     const interval = setInterval(() => {
       const logs = [
+        "GRID: Iberian corridor expansion at 94% sync.",
         "LEGACY: Self-Refactoring cycle Ω-01 complete.",
-        "ZENITH: BIG Espanha PIS-AIS flow validated in LIVE mode.",
+        "ZENITH: BIG Espanha latency stabilized at 32ms.",
         "SYNC: Yapily-AMEX alliance boosting European canal throughput.",
         "CONTRACT: Sovereign Social Contract v3 released to Global Mesh.",
       ];
@@ -147,26 +149,26 @@ export default function Home() {
                    {isAdmin ? 'Imperial Legacy.' : 'Global Autonomy.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "Project #50: Immortal Existence." নূরনেক্সাস এখন তার চূড়ান্ত বিকাশে উপনীত—একটি স্বয়ংক্রিয় ডিজিটাল সভ্যতা যা অনন্তকাল তার মূলনীতি বজায় রাখবে।
+                   "Project #53: Global Grid Expansion." নূরনেক্সাস এখন তার সাম্রাজ্যকে ইউরোপ এবং এশিয়ার ব্যাংকিং রেইলসে ছড়িয়ে দিচ্ছে।
                 </p>
               </div>
               
               <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
                 <Card className="glass-card p-6 rounded-2xl border border-primary/20 w-full min-w-[350px] relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-2">
-                       <Badge className="bg-primary/20 text-primary border-none text-[7px]">LEGACY_COHESION: MAX</Badge>
+                       <Badge className="bg-primary/20 text-primary border-none text-[7px]">GRID_STABILITY: OPTIMAL</Badge>
                     </div>
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Civilizational Stability</p>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Global Grid Power</p>
                     </div>
                     <div className="flex items-end gap-2 mb-4">
-                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">100</p>
+                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">98</p>
                        <p className="text-primary text-xs font-bold mb-1">/ 100</p>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: '100%' }} />
+                       <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: '98%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Sovereign Legacy Active | Self-Evolution ON"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Global Node Expansion ACTIVE | 12 LIVE Nodes"</p>
                 </Card>
               </div>
             </div>
@@ -181,7 +183,7 @@ export default function Home() {
                            value={queryText}
                            onChange={e => setQueryText(e.target.value)}
                            onKeyDown={e => e.key === 'Enter' && handleNeuralQuery()}
-                           placeholder="Commander, what is your directive? (Legacy Neural Sync active)"
+                           placeholder="Commander, what is your directive? (Global Grid Expansion active)"
                            className="flex-1 bg-transparent border-none outline-none text-sm font-headline text-white placeholder:text-muted-foreground"
                         />
                         <Button onClick={handleNeuralQuery} disabled={queryLoading} variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
@@ -231,7 +233,7 @@ export default function Home() {
                      {[
                         { title: "Legacy Core", desc: "Self-evolving architectural logic.", status: "PERPETUAL", color: "text-blue-400" },
                         { title: "Quantum Guard", desc: "L4 Post-Quantum security layer.", status: "ENFORCED", color: "text-amber-400" },
-                        { title: "Global Mesh", desc: "100% Autonomy across International Nodes.", status: "FINALIZED", color: "text-emerald-400" }
+                        { title: "Global Grid", desc: "100% Autonomy across International Nodes.", status: "EXPANDING", color: "text-emerald-400" }
                      ].map((p, i) => (
                         <Card key={i} className="glass-card border-white/5 bg-white/2">
                            <CardContent className="p-6 space-y-4">
@@ -299,9 +301,9 @@ export default function Home() {
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Every enterprise partner integrated through the API Bridge strengthens the Sovereign Reserve. Wealth follows Wisdom. Legacy follows Autonomy."
+                       "Global Node Expansion (P53) is the bridge to total financial sovereignty. Every new node strengthens the grid's immunity."
                     </p>
-                    <Badge className="w-full justify-center bg-amber-500/20 text-amber-500 border-none uppercase text-[8px] font-bold">Status: GLOBAL_LEGACY</Badge>
+                    <Badge className="w-full justify-center bg-amber-500/20 text-amber-500 border-none uppercase text-[8px] font-bold">Status: GLOBAL_EXPANSION</Badge>
                  </CardContent>
               </Card>
             </div>

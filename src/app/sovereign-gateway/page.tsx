@@ -37,7 +37,8 @@ import {
   Key,
   Building2,
   BellRing,
-  Clock
+  Clock,
+  Network
 } from "lucide-react"
 
 const BLUEPRINT_STEPS = [
@@ -46,7 +47,8 @@ const BLUEPRINT_STEPS = [
   { id: "P51.3", label: "Open Banking Rail Sync", icon: Landmark, status: "SYNCED" },
   { id: "P51.4", label: "Intelligent Fallback Engine", icon: Zap, status: "HARDENED" },
   { id: "P51.5", label: "White-label Studio", icon: Palette, status: "READY" },
-  { id: "P51.6", label: "eIDAS Certificate Vault", icon: Key, status: "READY" },
+  { id: "P51.6", label: "eIDAS Certificate Vault", icon: Key, status: "LIVE" },
+  { id: "P53.1", label: "Global Node Expansion", icon: Network, status: "ACTIVE", zenith: true },
 ]
 
 export default function SovereignGatewayPage() {
@@ -75,12 +77,15 @@ export default function SovereignGatewayPage() {
                  <Badge variant="outline" className="border-purple-500/50 text-purple-500 uppercase font-bold tracking-widest px-3 h-8 bg-purple-500/5">
                    <Rocket className="size-3 mr-2" /> Project #51: Sovereign Gateway PaaS
                  </Badge>
+                 <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
+                   <Network className="size-3 mr-2" /> Project #53: Global Grid
+                 </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Global <span className="text-purple-500">Gateway.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project #51: The culmination of Mission 400. A unified PaaS gateway with SIBS Network support and eIDAS Certificate management.
+                Project #51 & #53: The Global Autonomous Financial Grid. A unified PaaS gateway scaling across continental nodes with 100% Veracity.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -200,13 +205,13 @@ export default function SovereignGatewayPage() {
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {BLUEPRINT_STEPS.map((step) => (
-                      <Card key={step.id} className="glass-card bg-white/2 border-white/5 hover:border-purple-500/30 transition-all group">
+                      <Card key={step.id} className={`glass-card bg-white/2 border-white/5 hover:border-purple-500/30 transition-all group ${step.zenith ? 'border-emerald-500/30 bg-emerald-500/5' : ''}`}>
                         <CardContent className="p-6 space-y-4">
                            <div className="flex justify-between items-start">
-                              <div className="p-3 bg-purple-500/10 rounded-xl group-hover:bg-purple-500/20 transition-colors">
-                                 <step.icon className="size-6 text-purple-400" />
+                              <div className={`p-3 rounded-xl ${step.zenith ? 'bg-emerald-500/10' : 'bg-purple-500/10'} group-hover:bg-purple-500/20 transition-colors`}>
+                                 <step.icon className={`size-6 ${step.zenith ? 'text-emerald-400' : 'text-purple-400'}`} />
                               </div>
-                              <Badge className="bg-purple-500/20 text-purple-500 border-none text-[8px]">{step.status}</Badge>
+                              <Badge className={`${step.zenith ? 'bg-emerald-500/20 text-emerald-500' : 'bg-purple-500/20 text-purple-500'} border-none text-[8px]`}>{step.status}</Badge>
                            </div>
                            <div className="space-y-1">
                               <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{step.id}</p>
@@ -220,67 +225,45 @@ export default function SovereignGatewayPage() {
             </div>
 
             <div className="space-y-8">
-              {/* Compliance Sentinel */}
+              {/* Grid Sentinel */}
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                    <ShieldCheck className="size-4" /> Compliance Sentinel
+                    <Network className="size-4" /> Project #53: Grid Scale
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                    <div className="space-y-4">
                       {[
-                        { label: "PSD2 Compliance", status: "VERIFIED", icon: CheckCircle2, color: "text-emerald-500" },
-                        { label: "SCA Verification", status: "ACTIVE", icon: Smartphone, color: "text-emerald-500" },
-                        { label: "AML Velocity Check", status: "STABLE", icon: Activity, color: "text-primary" },
-                        { label: "Data Sovereignty", status: "ENFORCED", icon: Scale, color: "text-amber-500" }
+                        { label: "Active Nodes", val: "12 LIVE", icon: Building2, color: "text-emerald-500" },
+                        { label: "Target Regions", val: "EU, ASIA, ME", icon: Globe, color: "text-primary" },
+                        { label: "Grid Stability", val: "OPTIMAL", icon: ShieldCheck, color: "text-emerald-500" },
+                        { label: "Inter-Node Latency", val: "< 120ms", icon: Activity, color: "text-amber-500" }
                       ].map((item, i) => (
                         <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
                            <div className="flex items-center gap-2">
                               <item.icon className={`size-3 ${item.color}`} />
                               <span className="text-[10px] text-muted-foreground uppercase font-bold">{item.label}</span>
                            </div>
-                           <Badge variant="outline" className={`text-[7px] border-none font-bold uppercase ${item.color} bg-white/5`}>{item.status}</Badge>
+                           <Badge variant="outline" className={`text-[7px] border-none font-bold uppercase ${item.color} bg-white/5`}>{item.val}</Badge>
                         </div>
                       ))}
                    </div>
                    <p className="text-[9px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-4">
-                      "Real-time monitoring of Strong Customer Authentication ensures 100% legal finality for every settlement."
+                      "Scaling from the Iberian corridor to the global grid. Project #53 enables autonomous node clustering for zero-downtime finance."
                    </p>
-                </CardContent>
-              </Card>
-
-              <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
-                <CardHeader>
-                  <CardTitle className="text-xs font-headline uppercase text-purple-500 flex items-center gap-2">
-                    <Sparkles className="size-4" /> Gateway Advantage
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                   <div className="space-y-3">
-                      {[
-                        { label: "Hybrid Success Rate", val: "99.98%" },
-                        { label: "White-label Latency", val: "0ms Injection" },
-                        { label: "Global Reach", val: "20+ Countries" }
-                      ].map((item, i) => (
-                        <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5 text-[9px] uppercase font-bold">
-                           <span className="text-muted-foreground">{item.label}</span>
-                           <span className="text-purple-400">{item.val}</span>
-                        </div>
-                      ))}
-                   </div>
                 </CardContent>
               </Card>
 
               <Card className="glass-card border-amber-500/20 bg-amber-500/5">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                       <ShieldAlert className="size-3" /> Zero-Trust Gate
+                       <ShieldAlert className="size-3" /> Anomaly Protection
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       "Every white-label request is hashed and verified against the Partner Mesh before branding injection."
+                       "Every LIVE node is monitored by Nora-52. Latency spikes trigger autonomous rerouting to maintain the grid's Sovereign Integrity."
                     </p>
                  </CardContent>
               </Card>

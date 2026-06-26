@@ -54,7 +54,8 @@ import {
   Merge,
   CreditCard,
   Key,
-  FileCheck
+  FileCheck,
+  Network
 } from "lucide-react"
 
 import {
@@ -85,6 +86,7 @@ const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Sovereign Gateway (P51)", url: "/sovereign-gateway", icon: Rocket, zenith: true },
+  { title: "Global Grid (P53)", url: "/sovereign-gateway", icon: Network, highlight: true },
   { title: "AMEX Token Hub", url: "/amex-tokens", icon: Key },
   { title: "AMEX Virtual Cards", url: "/amex-on-demand", icon: CreditCard },
   { title: "Enterprise Bridge", url: "/api-hub", icon: Link2 },
@@ -197,10 +199,10 @@ export function AppSidebar() {
           <SidebarMenu className="px-2">
             {USER_ITEMS.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={pathname === item.url} className={`h-11 relative ${item.zenith ? 'hover:bg-purple-500/10' : ''}`}>
+                <SidebarMenuButton asChild isActive={pathname === item.url} className={`h-11 relative ${item.zenith ? 'hover:bg-purple-500/10' : item.highlight ? 'hover:bg-emerald-500/10' : ''}`}>
                   <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
-                    <item.icon className={`size-5 ${item.zenith ? 'text-purple-500' : ''}`} />
-                    <span className={`font-medium text-sm ${item.zenith ? 'text-purple-400 font-bold' : ''}`}>{item.title}</span>
+                    <item.icon className={`size-5 ${item.zenith ? 'text-purple-500' : item.highlight ? 'text-emerald-500' : ''}`} />
+                    <span className={`font-medium text-sm ${item.zenith ? 'text-purple-400 font-bold' : item.highlight ? 'text-emerald-400 font-bold' : ''}`}>{item.title}</span>
                     {item.badge && (
                       <span className="absolute right-2 top-1/2 -translate-y-1/2 flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
