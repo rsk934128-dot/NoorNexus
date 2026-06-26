@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -50,7 +49,8 @@ import {
   Wrench,
   Truck,
   Link2,
-  LockKeyhole
+  LockKeyhole,
+  Infinity
 } from "lucide-react"
 
 import {
@@ -104,6 +104,7 @@ const USER_ITEMS = [
 ]
 
 const ADMIN_ITEMS = [
+  { title: "Sovereign Legacy", url: "/legacy", icon: Infinity },
   { title: "Imperial Oracle", url: "/oracle", icon: Compass },
   { title: "AI Governance", url: "/ai-governance", icon: BrainCircuit },
   { title: "Session Monitor", url: "/sessions", icon: Activity },
@@ -214,8 +215,8 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.url} className="h-11 hover:bg-primary/10">
                     <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
-                      <item.icon className={`size-5 ${item.title === 'Imperial Oracle' ? 'text-emerald-500' : item.title === 'Adoption Audit' ? 'text-amber-500' : 'text-primary'}`} />
-                      <span className={`font-medium text-sm ${item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : item.title === 'Adoption Audit' ? 'text-amber-500 font-bold' : ''}`}>{item.title}</span>
+                      <item.icon className={`size-5 ${item.title === 'Sovereign Legacy' ? 'text-primary' : item.title === 'Imperial Oracle' ? 'text-emerald-500' : item.title === 'Adoption Audit' ? 'text-amber-500' : 'text-primary'}`} />
+                      <span className={`font-medium text-sm ${item.title === 'Sovereign Legacy' ? 'text-primary font-bold' : item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : item.title === 'Adoption Audit' ? 'text-amber-500 font-bold' : ''}`}>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

@@ -23,3 +23,4 @@ import '@/ai/flows/imperial-oracle-flow.ts';
 import '@/ai/flows/off-ramp-flow.ts';
 import '@/ai/flows/alert-dispatcher-flow.ts';
 import '@/ai/flows/imperial-query-flow.ts';
+import '@/ai/flows/sovereign-legacy-flow.ts';

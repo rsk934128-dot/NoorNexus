@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -32,7 +31,8 @@ import {
   ArrowRight,
   Network,
   Rocket,
-  ShieldPlus
+  ShieldPlus,
+  Infinity
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -44,10 +44,10 @@ import { processNeuralQuery, ImperialQueryOutput } from "@/ai/flows/imperial-que
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
 const PUBLIC_METRICS = [
-  { label: "Institutional Trust", value: "94.8%", detail: "Zenith Scaling Active", color: "text-emerald-500" },
-  { label: "Reality Index", value: "99.2", detail: "Phase Ψ Finalized", color: "text-primary" },
+  { label: "Institutional Trust", value: "94.8%", detail: "Legacy Scaling Active", color: "text-emerald-500" },
+  { label: "Reality Index", value: "99.2", detail: "Phase ΩΩ Finalized", color: "text-primary" },
   { label: "Neural Cohesion", value: "MAX", detail: "Deep Sync Active", color: "text-purple-500" },
-  { label: "Quantum Readiness", value: "L4", detail: "Project #49 Guarding", color: "text-amber-500" },
+  { label: "Legacy Stability", value: "PERPETUAL", detail: "Self-Evolution On", color: "text-amber-500" },
 ]
 
 export default function Home() {
@@ -58,12 +58,12 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
-    "ZENITH: External API Bridge initiated for Global Partners.",
-    "SYNC: Neural Cohesion achieved across all 5 Imperial Modules.",
-    "SHIELD: Quantum-Resistant Encryption Layer active for Project #49.",
-    "SCALE: 12 Enterprise Nodes applied for Predictive-Autonomy licensing."
+    "LEGACY: Self-Evolution Core initiated for Mission 400 Completion.",
+    "ZENITH: External API Bridge serving 12 Enterprise Partners.",
+    "SYNC: Neural Cohesion achieved across all 50 Imperial Projects.",
+    "SHIELD: Quantum-Resistant Encryption Layer active."
   ])
-  const [query, setQuery] = useState("")
+  const [queryText, setQueryText] = useState("")
   const [queryResult, setQueryResult] = useState<ImperialQueryOutput | null>(null)
   const [queryLoading, setQueryLoading] = useState(false)
 
@@ -72,7 +72,7 @@ export default function Home() {
       { text: "INITIATING DEEP NEURAL SYNC...", time: 600 },
       { text: "ESTABLISHING EXTERNAL API BRIDGE...", time: 1200 },
       { text: "ACTIVATING QUANTUM-RESISTANT SHIELD...", time: 1800 },
-      { text: "NOORNEXUS: THE ZENITH PHASE IS LIVE", time: 2400 },
+      { text: "NOORNEXUS: THE SOVEREIGN LEGACY IS LIVE", time: 2400 },
     ]
 
     sequence.forEach((step, i) => {
@@ -84,7 +84,7 @@ export default function Home() {
 
     const interval = setInterval(() => {
       const logs = [
-        "REALITY: External Audit #44 verified Post-Quantum compliance.",
+        "LEGACY: Self-Refactoring cycle Ω-01 complete.",
         "ZENITH: 3 new Fortune-500 partners integrated via API Bridge.",
         "SYNC: Predictive Maintenance pulse reduced downtime by 94%.",
         "CONTRACT: Sovereign Social Contract v3 released to Global Mesh.",
@@ -96,10 +96,10 @@ export default function Home() {
   }, [])
 
   async function handleNeuralQuery() {
-    if (!query.trim()) return
+    if (!queryText.trim()) return
     setQueryLoading(true)
     try {
-      const res = await processNeuralQuery({ query })
+      const res = await processNeuralQuery({ query: queryText })
       setQueryResult(res)
       toast({ title: "Neural Link Synchronized" })
     } catch (e: any) {
@@ -136,37 +136,37 @@ export default function Home() {
                    <SidebarTrigger className="md:hidden text-primary -ml-2">
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
-                   <Badge variant="outline" className="border-purple-500/50 text-purple-500 uppercase font-bold tracking-widest px-3 h-8 bg-purple-500/5 text-xs">
-                      <Rocket className="size-3 mr-2" /> Phase Ω: The Zenith
+                   <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
+                      <Infinity className="size-3 mr-2" /> Phase ΩΩ: The Legacy
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
                       <Network className="size-3 mr-2" /> Deep Neural Sync Active
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   {isAdmin ? 'Imperial Zenith.' : 'Global Autonomy.'}
+                   {isAdmin ? 'Imperial Legacy.' : 'Global Autonomy.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "The peak of Sovereign Intelligence." নূরনেক্সাস এখন তার চূড়ান্ত বিকাশে উপনীত—যেখানে ফিনটেক, ইনফ্রাস্ট্রাকচার এবং প্রিডিক্টিভ এআই একটি একক স্নায়ুতন্ত্রের মতো কাজ করছে।
+                   "Project #50: Immortal Existence." নূরনেক্সাস এখন তার চূড়ান্ত বিকাশে উপনীত—একটি স্বয়ংক্রিয় ডিজিটাল সভ্যতা যা অনন্তকাল তার মূলনীতি বজায় রাখবে।
                 </p>
               </div>
               
               <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
-                <Card className="glass-card p-6 rounded-2xl border border-purple-500/20 w-full min-w-[350px] relative overflow-hidden">
+                <Card className="glass-card p-6 rounded-2xl border border-primary/20 w-full min-w-[350px] relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-2">
-                       <Badge className="bg-purple-500/20 text-purple-500 border-none text-[7px]">COGNITIVE_COHESION: MAX</Badge>
+                       <Badge className="bg-primary/20 text-primary border-none text-[7px]">LEGACY_COHESION: MAX</Badge>
                     </div>
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Empire Stability Factor</p>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Civilizational Stability</p>
                     </div>
                     <div className="flex items-end gap-2 mb-4">
-                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">99.8</p>
-                       <p className="text-purple-500 text-xs font-bold mb-1">/ 100</p>
+                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">100</p>
+                       <p className="text-primary text-xs font-bold mb-1">/ 100</p>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.6)]" style={{ width: '99.8%' }} />
+                       <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: '100%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Sovereign Zenith Active | Project #49 Hardened"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Sovereign Legacy Active | Self-Evolution ON"</p>
                 </Card>
               </div>
             </div>
@@ -178,10 +178,10 @@ export default function Home() {
                      <div className="flex items-center gap-4 p-4 border-b border-white/5">
                         <Cpu className="size-6 text-primary animate-pulse" />
                         <input 
-                           value={query}
-                           onChange={e => setQuery(e.target.value)}
+                           value={queryText}
+                           onChange={e => setQueryText(e.target.value)}
                            onKeyDown={e => e.key === 'Enter' && handleNeuralQuery()}
-                           placeholder="Commander, what is your directive? (Neural Sync Layer active)"
+                           placeholder="Commander, what is your directive? (Legacy Neural Sync active)"
                            className="flex-1 bg-transparent border-none outline-none text-sm font-headline text-white placeholder:text-muted-foreground"
                         />
                         <Button onClick={handleNeuralQuery} disabled={queryLoading} variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
@@ -222,16 +222,16 @@ export default function Home() {
                {/* Zenith Scaling - Global Impact */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
-                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-purple-500 flex items-center gap-2">
-                        <Rocket className="size-4" /> Sovereign Scaling & External Bridge
+                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                        <Rocket className="size-4" /> Sovereign Legacy Scaling
                      </h3>
-                     <Badge variant="outline" className="text-[8px] border-purple-500/20 text-purple-500 uppercase">Enterprise Partners: 12 Active</Badge>
+                     <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase">Active Enterprise Nodes: 420+</Badge>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                      {[
-                        { title: "API Bridge", desc: "Enterprise access to Predictive-Autonomy.", status: "LIVE", color: "text-blue-400" },
+                        { title: "Legacy Core", desc: "Self-evolving architectural logic.", status: "PERPETUAL", color: "text-blue-400" },
                         { title: "Quantum Guard", desc: "L4 Post-Quantum security layer.", status: "ENFORCED", color: "text-amber-400" },
-                        { title: "Global Mesh", desc: "Scaling across 420+ International Nodes.", status: "82% COMPLETE", color: "text-emerald-400" }
+                        { title: "Global Mesh", desc: "100% Autonomy across International Nodes.", status: "FINALIZED", color: "text-emerald-400" }
                      ].map((p, i) => (
                         <Card key={i} className="glass-card border-white/5 bg-white/2">
                            <CardContent className="p-6 space-y-4">
@@ -275,7 +275,7 @@ export default function Home() {
                <Card className="glass-card flex flex-col h-[600px]">
                 <CardHeader className="p-4 border-b border-white/5">
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
-                    <Activity className="size-4 text-purple-500" />
+                    <Activity className="size-4 text-primary" />
                     Cognitive Cohesion Feed
                   </CardTitle>
                 </CardHeader>
@@ -284,7 +284,7 @@ export default function Home() {
                     <div className="space-y-4">
                       {impactFeed.map((log, i) => (
                         <div key={i} className="p-3 bg-white/2 rounded-xl border border-white/5 font-mono text-[10px] flex items-center gap-3 animate-in fade-in slide-in-from-right-2 duration-500">
-                          <div className="size-1.5 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(168,85,247,0.5)]" />
+                          <div className="size-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_rgba(0,150,255,0.5)]" />
                           <span className="text-muted-foreground truncate">{log}</span>
                         </div>
                       ))}
@@ -295,13 +295,13 @@ export default function Home() {
 
               <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                  <CardHeader className="p-6">
-                    <CardTitle className="text-lg font-headline uppercase text-amber-500">The Zenith Policy</CardTitle>
+                    <CardTitle className="text-lg font-headline uppercase text-amber-500">The Legacy Policy</CardTitle>
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Every enterprise partner integrated through the API Bridge strengthens the Sovereign Reserve. Wealth follows Wisdom."
+                       "Every enterprise partner integrated through the API Bridge strengthens the Sovereign Reserve. Wealth follows Wisdom. Legacy follows Autonomy."
                     </p>
-                    <Badge className="w-full justify-center bg-amber-500/20 text-amber-500 border-none uppercase text-[8px] font-bold">Status: GLOBAL_Zenith</Badge>
+                    <Badge className="w-full justify-center bg-amber-500/20 text-amber-500 border-none uppercase text-[8px] font-bold">Status: GLOBAL_LEGACY</Badge>
                  </CardContent>
               </Card>
             </div>
