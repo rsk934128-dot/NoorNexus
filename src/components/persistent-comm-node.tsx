@@ -9,9 +9,9 @@ import { PhoneIncoming, ShieldCheck } from "lucide-react"
 import { useSidebar } from "@/components/ui/sidebar"
 
 /**
- * @fileOverview Global Persistent Communication Node (V5.3)
- * Fully hardened against Next.js 15 hydration mismatches.
- * This component keeps the communication hubs alive in the background with zero-reload switching.
+ * @fileOverview Global Persistent Communication Node (V5.4)
+ * Hardened against frequent/false call notification triggers.
+ * Optimized message filtering to prevent notification spam.
  */
 export function PersistentCommNode() {
   const [isMounted, setIsMounted] = useState(false)
@@ -21,16 +21,15 @@ export function PersistentCommNode() {
   const { open, isMobile } = useSidebar()
   const lastToastTime = useRef<number>(0)
 
-  // Double-pass mounting: switches to true only after initial client mount.
+  // Double-pass mounting for hydration safety
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  // Call Monitoring Logic - Only runs on the client
+  // Call Monitoring Logic
   useEffect(() => {
     if (!isMounted) return
 
-    // Request notification permission if not already granted
     if (typeof window !== "undefined" && "Notification" in window) {
       if (Notification.permission === "default") {
         Notification.requestPermission()
@@ -41,64 +40,62 @@ export function PersistentCommNode() {
       const data = event.data
       if (!data) return
 
+      // Specific filter to only detect REAL call events and ignore routine heartbeat/connection messages
       const msgStr = typeof data === 'string' ? data : JSON.stringify(data)
-      const callKeywords = /incoming|call|ring|dial|offer|invite|request_access|peer|joined|waiting|connect|rtc/i
+      
+      // Tightened Regex: Only triggers on explicit incoming call signals
+      const callKeywords = /incoming_call|call_incoming|incoming-call|trigger_ringtone|call_signal_active/i
       const isCallSignal = callKeywords.test(msgStr)
 
       if (isCallSignal) {
-        // Prevent toast spamming within 15 seconds
-        if (Date.now() - lastToastTime.current < 15000) return
+        // Increase suppression interval to 5 minutes to prevent recurring popups for the same session
+        const SPAM_THRESHOLD = 300000 
+        if (Date.now() - lastToastTime.current < SPAM_THRESHOLD) return
         lastToastTime.current = Date.now()
 
         try {
           const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3')
-          audio.volume = 0.6
-          audio.play().catch(() => console.log("Interaction required for audio play."))
+          audio.volume = 0.5
+          audio.play().catch(() => console.log("Audio feedback suppressed by browser policy."))
         } catch (e) {
-          // Silently fail if audio playback is blocked
+          // Fallback for audio failure
         }
 
         if ("Notification" in window && Notification.permission === "granted") {
           new Notification("NoorNexus | ইনকামিং কল", {
-            body: "কমান্ডার, আপনার সুরক্ষা হাবে একটি জরুরি কল এসেছে। এখনই সাড়া দিন।",
+            body: "কমান্ডার, আপনার সুরক্ষা হাবে একটি জরুরি কল এসেছে।",
             icon: 'https://picsum.photos/seed/sovereign/192/192',
-            tag: 'call-signal',
+            tag: 'active-call',
             requireInteraction: true
           })
         }
 
         toast({
           title: "🚨 ইনকামিং কল সিগন্যাল",
-          description: "সার্বভৌম নেটওয়ার্কের দুটি চ্যানেল থেকেই কানেকশন রিকোয়েস্ট এসেছে।",
+          description: "সার্বভৌম নেটওয়ার্ক থেকে একটি এনক্রিপ্টেড কল রিকোয়েস্ট এসেছে।",
           variant: "default",
-          className: "border-emerald-500/50 bg-black/90 backdrop-blur-2xl border-l-4",
+          className: "border-emerald-500/50 bg-black/95 backdrop-blur-2xl border-l-4 z-[9999]",
           action: (
             <div className="flex flex-col gap-2">
               <Button 
                 variant="default" 
                 size="sm" 
                 className="bg-emerald-500 hover:bg-emerald-600 text-white gap-2 font-bold uppercase text-[10px] glow-emerald h-10 px-4"
-                onClick={() => {
-                  router.push("/shurukkha-standard")
-                }}
+                onClick={() => router.push("/shurukkha-standard")}
               >
-                <PhoneIncoming className="size-3" />
-                Standard
+                <PhoneIncoming className="size-3" /> Standard
               </Button>
               <Button 
                 variant="outline" 
                 size="sm" 
                 className="border-emerald-500/50 text-emerald-500 hover:bg-emerald-500/10 gap-2 font-bold uppercase text-[10px] h-10 px-4"
-                onClick={() => {
-                  router.push("/shurukkha-imperial")
-                }}
+                onClick={() => router.push("/shurukkha-imperial")}
               >
-                <ShieldCheck className="size-3" />
-                Imperial
+                <ShieldCheck className="size-3" /> Imperial
               </Button>
             </div>
           ),
-          duration: 45000,
+          duration: 30000,
         })
       }
     }
@@ -107,22 +104,14 @@ export function PersistentCommNode() {
     return () => window.removeEventListener("message", handleMessage)
   }, [isMounted, router, toast])
 
-  // HYDRATION SAFETY: 
-  // Return null on both Server and first Client pass to guarantee HTML matching.
-  // The UI will appear only after the client has fully taken over.
-  if (!isMounted) {
-    return null
-  }
+  if (!isMounted) return null
 
   const isStandardActive = pathname === "/shurukkha-standard"
   const isImperialActive = pathname === "/shurukkha-imperial"
-  
-  // sidebarWidth calculation is now safe as it happens only on client
   const sidebarWidth = isMobile ? '0px' : (open ? '16rem' : '3rem')
 
   return (
     <div className="fixed inset-0 z-[40] pointer-events-none overflow-hidden">
-      {/* 1. Persistent Standard Hub (ofzc.vercel.app) */}
       <div 
         className={`absolute inset-y-0 right-0 transition-all duration-700 ease-in-out bg-white ${isStandardActive ? 'opacity-100 pointer-events-auto' : 'opacity-0'}`}
         style={{ 
@@ -140,7 +129,6 @@ export function PersistentCommNode() {
         />
       </div>
 
-      {/* 2. Persistent Imperial Hub */}
       <div 
         className={`absolute inset-y-0 right-0 transition-all duration-700 ease-in-out bg-white ${isImperialActive ? 'opacity-100 pointer-events-auto' : 'opacity-0'}`}
         style={{ 
@@ -158,7 +146,6 @@ export function PersistentCommNode() {
         />
       </div>
 
-      {/* 3. Hidden Background Stable Listener (gov.bd) */}
       <div className="absolute bottom-0 right-0 w-1 h-1 opacity-0 pointer-events-none overflow-hidden">
         <iframe 
           src="https://shurukkha-hub.sirajganj.gov.bd/dashboard" 
