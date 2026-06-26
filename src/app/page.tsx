@@ -60,7 +60,7 @@ export default function Home() {
   const [impactFeed, setImpactFeed] = useState<string[]>([
     "LEGACY: Yapily-AMEX European Bridge synchronized.",
     "ZENITH: External API Bridge serving 12 Enterprise Partners.",
-    "SYNC: Neural Cohesion achieved across all 50 Imperial Projects.",
+    "SYNC: BIG Espanha node successfully promoted to LIVE environment.",
     "SHIELD: Quantum-Resistant Encryption Layer active."
   ])
   const [queryText, setQueryText] = useState("")
@@ -85,7 +85,7 @@ export default function Home() {
     const interval = setInterval(() => {
       const logs = [
         "LEGACY: Self-Refactoring cycle Ω-01 complete.",
-        "ZENITH: 3 new Fortune-500 partners integrated via API Bridge.",
+        "ZENITH: BIG Espanha PIS-AIS flow validated in LIVE mode.",
         "SYNC: Yapily-AMEX alliance boosting European canal throughput.",
         "CONTRACT: Sovereign Social Contract v3 released to Global Mesh.",
       ];

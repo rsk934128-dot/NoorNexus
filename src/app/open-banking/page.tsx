@@ -51,6 +51,17 @@ const PROVIDER_METRICS = [
 
 const VALIDATED_NODES = [
   {
+    name: "BIG Espanha - LIVE",
+    fullName: "Banco de Investimento Global (BIG) Espanha",
+    id: "banco-de-investimento-global-espanha-sa",
+    bic: "IGSEESMMXXX",
+    country: "Portugal / Spain",
+    type: "AIS_PIS",
+    features: ["Accounts", "Balances", "Transactions", "Domestic Single Payment"],
+    status: "LIVE_ENVIRONMENT",
+    crossBorderVeracity: "100.0%"
+  },
+  {
     name: "BIG Espanha - Sandbox",
     fullName: "Banco de Investimento Global (BIG) Espanha",
     id: "banco-de-investimento-global-espanha-sa-sandbox",
@@ -205,20 +216,20 @@ export default function OpenBankingHubPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               <div className="lg:col-span-3 space-y-10">
-                {/* Validated Sandbox Nodes focus */}
+                {/* Validated Banking Nodes focus */}
                 <section className="space-y-6">
                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                      <FlaskConical className="size-4" /> Validated Sandbox Nodes
+                      <FlaskConical className="size-4" /> Validated Banking Nodes
                    </h3>
                    <div className="grid grid-cols-1 gap-4">
                       {VALIDATED_NODES.map((node, i) => (
-                        <Card key={i} className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 hover:border-emerald-500/40 transition-all">
+                        <Card key={i} className={`glass-card border-l-4 ${node.status === 'LIVE_ENVIRONMENT' ? 'border-l-primary bg-primary/5' : 'border-l-emerald-500 bg-emerald-500/5'} hover:border-white/20 transition-all`}>
                            <CardContent className="p-6">
                               <div className="flex flex-col md:flex-row justify-between gap-6">
                                  <div className="space-y-3 flex-1">
                                     <div className="flex items-center gap-3">
-                                       <div className="size-10 bg-emerald-500/10 rounded-lg flex items-center justify-center border border-emerald-500/20">
-                                          <Building2 className="size-5 text-emerald-500" />
+                                       <div className={`size-10 rounded-lg flex items-center justify-center border ${node.status === 'LIVE_ENVIRONMENT' ? 'bg-primary/10 border-primary/20 text-primary' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'}`}>
+                                          <Building2 className="size-5" />
                                        </div>
                                        <div>
                                           <p className="text-sm font-headline font-bold text-white uppercase">{node.name}</p>
@@ -236,11 +247,11 @@ export default function OpenBankingHubPage() {
                                        </div>
                                        <div className="space-y-0.5">
                                           <p className="text-[8px] text-muted-foreground uppercase font-bold">Capability</p>
-                                          <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">{node.type}</Badge>
+                                          <Badge variant="outline" className={`text-[7px] ${node.status === 'LIVE_ENVIRONMENT' ? 'border-primary/20 text-primary' : 'border-emerald-500/20 text-emerald-500'}`}>{node.type}</Badge>
                                        </div>
                                        <div className="space-y-0.5">
                                           <p className="text-[8px] text-muted-foreground uppercase font-bold">Status</p>
-                                          <Badge className="bg-emerald-500 text-[8px]">{node.status}</Badge>
+                                          <Badge className={`${node.status === 'LIVE_ENVIRONMENT' ? 'bg-primary' : 'bg-emerald-500'} text-[8px]`}>{node.status}</Badge>
                                        </div>
                                     </div>
                                  </div>
@@ -468,6 +479,19 @@ export default function OpenBankingHubPage() {
                            Open Neural Audit <ArrowRight className="size-3 ml-2" />
                         </Button>
                       </Link>
+                   </CardContent>
+                </Card>
+
+                <Card className="glass-card border-white/5">
+                   <CardHeader>
+                      <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
+                         <Activity className="size-4" /> Real-time Metrics
+                      </CardTitle>
+                   </CardHeader>
+                   <CardContent className="space-y-4">
+                      <p className="text-[10px] text-muted-foreground italic">
+                         "Orchestrator monitoring 73+ banking canals. Automated switch triggered if latency &gt; 1500ms."
+                      </p>
                    </CardContent>
                 </Card>
               </div>

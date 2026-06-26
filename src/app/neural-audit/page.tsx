@@ -36,7 +36,7 @@ export default function NeuralAuditPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [auditResult, setAuditResult] = useState<NeuralAuditOutput | null>(null)
-  const [activeNode, setActiveNode] = useState("banco-de-investimento-global-espanha-sa-sandbox")
+  const [activeNode, setActiveNode] = useState("banco-de-investimento-global-espanha-sa")
 
   const handleRunAudit = async () => {
     setLoading(true)
