@@ -12,30 +12,19 @@ import {
   Zap, 
   CheckCircle2, 
   BrainCircuit,
-  HeartPulse,
-  Database,
   ArrowRight,
   TrendingUp,
   Landmark,
-  Briefcase,
   Target,
-  Sparkles,
   Rocket,
-  Atom,
-  Building2,
-  PieChart,
-  History,
-  Lock,
-  MessageSquare,
-  Scale,
-  Globe,
-  Activity,
   Award,
   ScrollText,
-  ShieldPlus,
+  Layers,
+  MessageSquare,
   Fingerprint
 } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import Link from "next/link"
 
 export default function ProposalPage() {
   return (
@@ -60,10 +49,15 @@ export default function ProposalPage() {
                 "আপনার প্রতিষ্ঠানের জন্য স্বয়ংক্রিয় এবং সুরক্ষিত ব্যাংকিং অবকাঠামো।" নূরনেক্সাস কেবল একটি গেটওয়ে নয়; এটি আপনার ব্যবসার জন্য একটি "অটোনোমাস ফিনটেক স্নায়ুতন্ত্র"।
               </p>
             </div>
-            <div className="flex items-center gap-4">
-               <Button className="bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-primary">
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+               <Button className="bg-primary/10 text-primary border border-primary/20 font-bold h-12 uppercase tracking-widest gap-2 hover:bg-primary/20">
                  <Zap className="size-4" /> Download Pitch Deck
                </Button>
+               <Link href="/onboarding">
+                 <Button className="bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-primary">
+                   <Rocket className="size-4" /> Start Onboarding
+                 </Button>
+               </Link>
             </div>
           </header>
 
@@ -211,6 +205,25 @@ export default function ProposalPage() {
                 </CardContent>
               </Card>
 
+              {/* Project #160: Autonomous Acquisition */}
+              <Card className="glass-card border-purple-500/20 bg-purple-500/5">
+                 <CardHeader>
+                    <CardTitle className="text-xs font-headline uppercase text-purple-500 flex items-center gap-2">
+                       <Zap className="size-4" /> Project #160: Self-Acquisition
+                    </CardTitle>
+                 </CardHeader>
+                 <CardContent className="space-y-4">
+                    <p className="text-[10px] text-muted-foreground italic leading-relaxed">
+                       "Zero-Resistance acquisition active. Partners can immediately trigger onboarding handshakes from this proposal."
+                    </p>
+                    <Link href="/onboarding" className="w-full">
+                      <Button className="w-full bg-purple-500 text-white font-bold uppercase text-[10px] h-11 glow-primary gap-2">
+                         Initialize Onboarding <ArrowRight className="size-3" />
+                      </Button>
+                    </Link>
+                 </CardContent>
+              </Card>
+
               {/* Trust Factor Showcase */}
               <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
                  <CardHeader className="pb-2">
@@ -223,23 +236,6 @@ export default function ProposalPage() {
                        "আপনার কোম্পানির অর্থ কেবল একটি অ্যাকাউন্টে নেই, এটি একটি জেনিথ-ভেরিফাইড অটোনোমাস গ্রিডের সুরক্ষা ও বুদ্ধিমত্তার অধীনে পরিচালিত হচ্ছে।"
                     </p>
                     <Badge variant="outline" className="w-full justify-center h-8 border-emerald-500/30 text-emerald-500 uppercase text-[9px] font-bold">ZENITH_CERTIFIED</Badge>
-                 </CardContent>
-              </Card>
-
-              {/* Call to Action */}
-              <Card className="glass-card border-amber-500/20 bg-amber-500/5">
-                 <CardHeader>
-                    <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                       <MessageSquare className="size-4" /> Ready for Pilot?
-                    </CardTitle>
-                 </CardHeader>
-                 <CardContent className="space-y-4">
-                    <p className="text-[10px] text-muted-foreground italic">
-                       নূরনেক্সাসের এই অফিশিয়াল ম্যানিফেস্টো অনুযায়ী আপনার এন্টারপ্রাইজ পার্টনারশিপ শুরু করতে আমাদের সাথে যোগাযোগ করুন।
-                    </p>
-                    <Button className="w-full bg-amber-500 text-black font-bold uppercase text-[10px] h-11 glow-emerald">
-                       Initialize Pilot Handshake
-                    </Button>
                  </CardContent>
               </Card>
 

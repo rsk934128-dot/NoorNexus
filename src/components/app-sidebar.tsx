@@ -59,7 +59,8 @@ import {
   Lock,
   EyeOff,
   Compass as Discovery,
-  FileText
+  FileText,
+  ArrowDownToLine
 } from "lucide-react"
 
 import {
@@ -91,6 +92,7 @@ const USER_ITEMS = [
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Imperial Proposal", url: "/proposal", icon: FileText, highlight: true },
   { title: "Discovery Hub", url: "/api-hub", icon: Discovery, zenith: true },
+  { title: "Sovereign Off-Ramp", url: "/off-ramp", icon: ArrowDownToLine, highlight: true },
   { title: "Sovereign Gateway (P51)", url: "/sovereign-gateway", icon: Rocket, zenith: true },
   { title: "Enterprise Settings", url: "/enterprise-settings", icon: Settings, highlight: true },
   { title: "Global Grid (P53)", url: "/sovereign-gateway", icon: Network, highlight: true },
