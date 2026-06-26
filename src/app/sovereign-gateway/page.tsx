@@ -139,7 +139,7 @@ export default function SovereignGatewayPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground leading-relaxed italic max-w-2xl">
-                      "নূরনেক্সাস এখন কেবল একটি সফটওয়্যার নয়; এটি একটি অটোনোমাস ডিজিটাল রাষ্ট্র। মিশন ৪০০ সফলভাবে ২০টি গ্লোবাল ব্যাংকিং নোডকে একটি একক স্নায়ুতন্ত্রে সংযুক্ত করেছে।"
+                      "নূরনেক্সাস এখন কেবল একটি সফটওয়্যার নয়; এটি একটি অটোনোমাস ডিজিটাল রাষ্ট্র। মিশন ৪০০ সফলভাবে ২০টি গলোবাল ব্যাংকিং নোডকে একটি একক স্নায়ুতন্ত্রে সংযুক্ত করেছে।"
                     </p>
                   </CardContent>
                 </Card>

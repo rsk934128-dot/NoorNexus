@@ -210,7 +210,7 @@ export default function Home() {
                     <div className="space-y-1">
                        <CardTitle className="text-lg font-headline font-bold text-emerald-500 uppercase flex items-center gap-2">
                           <CheckCircle2 className="size-5" /> Mission 400: Global Handshake Verified
-                       </CardTitle>
+                       </CheckTitle>
                        <CardDescription className="text-[10px] text-emerald-100 uppercase tracking-widest">Zenith Status: VERIFIED | Latency: 26ms</CardDescription>
                     </div>
                     <div className="flex items-center gap-4">
