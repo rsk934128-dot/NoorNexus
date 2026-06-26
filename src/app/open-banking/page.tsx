@@ -51,6 +51,17 @@ const PROVIDER_METRICS = [
 
 const VALIDATED_NODES = [
   {
+    name: "AIB Ireland Personal - LIVE",
+    fullName: "Allied Irish Bank Ireland Personal",
+    id: "aib",
+    bic: "AIBKIE2DXXX",
+    country: "Ireland",
+    type: "AIS_PIS",
+    features: ["Bulk Payment", "Domestic Single", "International Single", "Future Payment", "Periodic Payments", "Direct Debit", "Scheduled Payments"],
+    status: "LIVE_ENVIRONMENT",
+    crossBorderVeracity: "100.0%"
+  },
+  {
     name: "AIB Ireland Business - LIVE",
     fullName: "Allied Irish Bank Ireland Business",
     id: "aibbusiness",
@@ -104,17 +115,6 @@ const VALIDATED_NODES = [
     features: ["Accounts", "Balances", "Transactions", "Domestic Single Payment"],
     status: "LIVE_ENVIRONMENT",
     crossBorderVeracity: "100.0%"
-  },
-  {
-    name: "BIG Espanha - Sandbox",
-    fullName: "Banco de Investimento Global (BIG) Espanha",
-    id: "banco-de-investimento-global-espanha-sa-sandbox",
-    bic: "IGSEESMMXXX",
-    country: "Portugal / Spain",
-    type: "AIS_PIS",
-    features: ["Accounts", "Balances", "Transactions", "Domestic Single Payment"],
-    status: "SYNCED",
-    crossBorderVeracity: "99.9%"
   }
 ]
 

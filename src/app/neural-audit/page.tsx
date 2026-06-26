@@ -48,7 +48,7 @@ export default function NeuralAuditPage() {
   const [loading, setLoading] = useState(false)
   const [auditResult, setAuditResult] = useState<NeuralAuditOutput | null>(null)
   const [autonomyResult, setAutonomyResult] = useState<GridAutonomyOutput | null>(null)
-  const [activeNode, setActiveNode] = useState("aibbusiness")
+  const [activeNode, setActiveNode] = useState("aib")
   
   const OFFICIAL_APP_ID = "a085f875-dac3-47ef-83dd-b00d56df81d3"
 
@@ -56,7 +56,7 @@ export default function NeuralAuditPage() {
   const [liveStats, setLiveStats] = useState({
     latency: 28,
     successRate: 100.0,
-    activeNodes: 16,
+    activeNodes: 17,
     status: "STABLE",
     failoverStatus: "ARMED",
     selfHealingStatus: "OPTIMAL"
@@ -90,9 +90,10 @@ export default function NeuralAuditPage() {
       const autonomy = await runGridAutonomy({
         region: "Global Mesh Corridor",
         detectedRegulatoryChange: "Irish Central Bank PSD2 amendment verified.",
-        currentGatewayConfig: { active_nodes: 16, self_healing: true, cross_node_balancing: true },
+        currentGatewayConfig: { active_nodes: 17, self_healing: true, cross_node_balancing: true },
         nodePerformanceData: [
-          { nodeId: "AIB-IRELAND", latency: 24, uptime: 100, roi: 94 },
+          { nodeId: "AIB-IRELAND-PERSONAL", latency: 24, uptime: 100, roi: 95 },
+          { nodeId: "AIB-IRELAND-BUSINESS", latency: 26, uptime: 100, roi: 94 },
           { nodeId: "BENELUX-CORE", latency: 28, uptime: 100, roi: 92 },
           { nodeId: "IBERIAN-BRIDGE", latency: 42, uptime: 99.9, roi: 88 }
         ],
@@ -137,7 +138,7 @@ export default function NeuralAuditPage() {
                 Neural <span className="text-emerald-500">Sentinel.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Zenith Level Traceability." নূরনেক্সাস এখন আয়ারল্যান্ড করিডোরসহ ১৬টি লাইভ নোডকে নিউরাল অডিটের আওতায় নিয়ে এসেছে।
+                "Zenith Level Traceability." নূরনেক্সাস এখন আয়ারল্যান্ড করিডোরসহ ১৭টি লাইভ নোডকে নিউরাল অডিটের আওতায় নিয়ে এসেছে।
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -162,7 +163,7 @@ export default function NeuralAuditPage() {
                 <CardHeader className="flex flex-row items-center justify-between">
                   <div className="space-y-1">
                     <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                       <Fingerprint className="size-4" /> Zenith Application Monitor (16 Nodes)
+                       <Fingerprint className="size-4" /> Zenith Application Monitor (17 Nodes)
                     </CardTitle>
                     <CardDescription className="text-xs font-mono uppercase tracking-widest">TRACE_ID: {OFFICIAL_APP_ID}</CardDescription>
                   </div>
@@ -239,7 +240,7 @@ export default function NeuralAuditPage() {
                                 <div className="h-full bg-emerald-500" style={{ width: '100%' }} />
                              </div>
                           </div>
-                          <p className="text-[10px] text-muted-foreground italic">"Automatic traffic rerouting is active across 16 high-power nodes. Irish Corridor monitored."</p>
+                          <p className="text-[10px] text-muted-foreground italic">"Automatic traffic rerouting is active across 17 high-power nodes. Irish Corridor monitored."</p>
                        </CardContent>
                     </Card>
 
@@ -300,13 +301,13 @@ export default function NeuralAuditPage() {
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
                     <Scale className="size-4" /> Judicial Traceability
-                  </CardTitle>
+                  </Scale>
                 </CardHeader>
                 <CardContent className="space-y-6">
                    <div className="space-y-4">
                       {[
                         { label: "Irish Auth Sync", val: "100%", color: "text-emerald-500" },
-                        { label: "16-Node Veracity", val: "99.9%", color: "text-primary" },
+                        { label: "17-Node Veracity", val: "99.9%", color: "text-primary" },
                         { label: "Balancing Veracity", val: "ACTIVE", color: "text-emerald-400" }
                       ].map((s, i) => (
                         <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
@@ -340,7 +341,7 @@ export default function NeuralAuditPage() {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <p className="text-[11px] text-white font-bold leading-tight">GLOBAL GRID IS IMMORTAL.</p>
-                  <p className="text-[8px] text-muted-foreground font-mono">HASH: Ω_16_NODE_STABILITY</p>
+                  <p className="text-[8px] text-muted-foreground font-mono">HASH: Ω_17_NODE_STABILITY</p>
                 </CardContent>
               </Card>
             </div>

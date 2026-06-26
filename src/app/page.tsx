@@ -62,7 +62,7 @@ export default function Home() {
   const [impactFeed, setImpactFeed] = useState<string[]>([
     "AUTH: Sovereign Handler Node (786ad.firebaseapp.com) synchronized.",
     "FORTRESS: Official App ID a085f8... secured (Zenith Status: VERIFIED).",
-    "GRID: 16 LIVE Nodes synchronized (Optimal Torque).",
+    "GRID: 17 LIVE Nodes synchronized (Optimal Torque).",
     "LIQUIDITY: Inter-node balancing active (AIB-IE <-> ABN-BE).",
     "VAULT: Project #55.5 Irish Corridor anchoring active.",
     "AUTONOMY: Self-Healing Protocol #54.2 ARMED.",
@@ -72,8 +72,8 @@ export default function Home() {
   const [queryResult, setQueryResult] = useState<ImperialQueryOutput | null>(null)
   const [queryLoading, setQueryLoading] = useState(false)
 
-  // Simulation for 16 Nodes Heatmap
-  const [nodes, setNodes] = useState(Array.from({ length: 16 }).map((_, i) => ({
+  // Simulation for 17 Nodes Heatmap
+  const [nodes, setNodes] = useState(Array.from({ length: 17 }).map((_, i) => ({
     id: i + 1,
     name: `Node-${i + 1}`,
     latency: Math.floor(Math.random() * 20) + 20,
@@ -108,7 +108,8 @@ export default function Home() {
         "BALANCER: Shifting $420K from ABN-BE to AIB-IE for liquidity sync.",
         "VAULT: Irish Corridor HNW data anchored (P55.5).",
         "HEATMAP: London-Edge latency spike detected and bypassed.",
-        "ZENITH: Global Grid Veracity confirmed at 99.99%."
+        "ZENITH: Global Grid Veracity confirmed at 99.99%.",
+        "GRID: Node-17 (AIB Ireland Personal) stabilized at 28ms."
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 5000)
@@ -161,14 +162,14 @@ export default function Home() {
                       <Infinity className="size-3 mr-2" /> Phase ΩΩ: Global Autonomy
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <ShieldCheck className="size-3 mr-2" /> 16 LIVE Nodes Verified
+                      <ShieldCheck className="size-3 mr-2" /> 17 LIVE Nodes Verified
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
                    {isAdmin ? 'Imperial Fortress.' : 'Global Grid.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "Mission 400: The Economic Nervous System." নূরনেক্সাস এখন ১৬টি লাইভ নোড এবং জেনিথ-লেভেল সিকিউরিটির মাধ্যমে সুরক্ষিত। ইন্টার-নোড লিকুইডিটি ব্যালেন্সিং এবং গ্লোবাল হিটম্যাপ এখন সক্রিয়।
+                   "Mission 400: The Economic Nervous System." নূরনেক্সাস এখন ১৭টি লাইভ নোড এবং জেনিথ-লেভেল সিকিউরিটির মাধ্যমে সুরক্ষিত। ইন্টার-নোড লিকুইডিটি ব্যালেন্সিং এবং গ্লোবাল হিটম্যাপ এখন সক্রিয়।
                 </p>
               </div>
               
@@ -187,7 +188,7 @@ export default function Home() {
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                        <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '100%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"16 LIVE Nodes | Zenith Efficiency | Inter-Node Balancing Active"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"17 LIVE Nodes | Zenith Efficiency | Inter-Node Balancing Active"</p>
                 </Card>
               </div>
             </div>
@@ -236,16 +237,16 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
-               {/* Global Latency Heatmap (16 Nodes) */}
+               {/* Global Latency Heatmap (17 Nodes) */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                       <Map className="size-4" /> Global Node Latency Heatmap (16 LIVE Nodes)
+                       <Map className="size-4" /> Global Node Latency Heatmap (17 LIVE Nodes)
                     </h3>
                     <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">REAL-TIME MONITORING</Badge>
                   </div>
                   <Card className="glass-card p-6 bg-black/40 border-white/5 relative overflow-hidden">
-                     <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
+                     <div className="grid grid-cols-4 sm:grid-cols-9 gap-3">
                         {nodes.map((node) => (
                           <div key={node.id} className="space-y-1 group relative">
                              <div 
@@ -278,7 +279,7 @@ export default function Home() {
                               <span>Delayed (&gt;60ms)</span>
                            </div>
                         </div>
-                        <p>Total Grid Torque: 96.4%</p>
+                        <p>Total Grid Torque: 98.2%</p>
                      </div>
                   </Card>
                </section>
@@ -321,7 +322,7 @@ export default function Home() {
                               <Badge className="bg-emerald-500/20 text-emerald-500 border-none">VAULTED</Badge>
                            </div>
                            <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                              "Nora-52 has verified all AIB Ireland Business transactions against the Irish Banking framework. 100% compliance recorded."
+                              "Nora-52 has verified all AIB Ireland Business and Personal transactions against the Irish Banking framework. 100% compliance recorded."
                            </p>
                         </CardContent>
                      </Card>
