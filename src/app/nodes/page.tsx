@@ -24,7 +24,11 @@ import {
   Compass,
   Building2,
   CheckCircle2,
-  Rocket
+  Rocket,
+  Flame,
+  ShieldPlus,
+  RefreshCcw,
+  Repeat
 } from "lucide-react"
 import { useFirestore, useCollection } from "@/firebase"
 import { collection, query, orderBy } from "firebase/firestore"
@@ -36,7 +40,7 @@ export default function NodesPage() {
     query(collection(db, "nodes"), orderBy("name", "asc"))
   )
 
-  const [scalingProgress, setScalingProgress] = useState(30)
+  const [replicationMode, setReplicationMode] = useState(true)
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -60,7 +64,7 @@ export default function NodesPage() {
                 Regional <span className="text-primary">Watchtower.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project #200: Node Auto-Scaling. Finalizing the 100-node cluster map for South & SE Asia corridors.
+                "Autonomous Scaling & Resilience." ১০০-নোড গ্রিড এখন সম্পূর্ণ স্বায়ত্তশাসিত এবং সেলফ-রেপ্লিকেশন মোডে সক্রিয়।
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -78,9 +82,15 @@ export default function NodesPage() {
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                       <Network className="size-4" /> 100-Node Grid Mapping (Final Execution)
+                       <Network className="size-4" /> 100-Node Grid Mapping (Phase 7)
                     </h3>
-                    <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500 uppercase">Phase 7: ACTIVE</Badge>
+                    <div className="flex items-center gap-3">
+                       <Badge variant="outline" className={`text-[8px] uppercase font-bold px-3 h-7 ${replicationMode ? 'border-emerald-500/50 text-emerald-500 bg-emerald-500/5' : 'border-white/10'}`}>
+                          <Repeat className={`size-3 mr-2 ${replicationMode ? 'animate-spin-slow' : ''}`} />
+                          Self-Replication: {replicationMode ? 'ARMED' : 'OFF'}
+                       </Badge>
+                       <Button size="sm" onClick={() => setReplicationMode(!replicationMode)} variant="ghost" className="text-[8px] uppercase font-bold text-muted-foreground h-7">Toggle Protocol</Button>
+                    </div>
                   </div>
                   <Card className="glass-card p-6 bg-black/40 border-white/5">
                      <div className="grid grid-cols-5 sm:grid-cols-10 gap-3">
@@ -154,16 +164,16 @@ export default function NodesPage() {
                      <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
                         <CardHeader>
                            <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
-                              <Globe className="size-4 text-purple-400" /> Global Intel Grid
+                              <ShieldPlus className="size-4 text-purple-400" /> Self-Healing Cluster
                            </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                            <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                              "Phase 7 finalize mapping for 100 nodes to provide a comprehensive economic view of the South Asia corridor."
+                              "Nora-50 is monitoring all 100 target nodes. Automated failover and backup node replication is active."
                            </p>
                            <div className="flex justify-between items-center text-[10px] font-mono border-t border-white/5 pt-4">
-                              <span className="uppercase text-muted-foreground">Grid Finality</span>
-                              <span className="text-primary font-bold uppercase">72H_DEADLINE</span>
+                              <span className="uppercase text-muted-foreground">Replication Protocol</span>
+                              <span className="text-primary font-bold uppercase">ARMED_L4</span>
                            </div>
                         </CardContent>
                      </Card>
@@ -206,7 +216,7 @@ export default function NodesPage() {
                        </div>
                     </div>
                     <p className="text-[9px] text-muted-foreground italic">
-                       Final 70 nodes in mapping process.
+                       Self-replication mode is monitoring connectivity gaps.
                     </p>
                  </CardContent>
               </Card>
@@ -216,11 +226,11 @@ export default function NodesPage() {
                   <CheckCircle2 className="size-20 text-emerald-500" />
                 </div>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[10px] uppercase font-bold text-emerald-500">Execution Phase 7</CardTitle>
+                  <CardTitle className="text-[10px] uppercase font-bold text-emerald-500">Self-Replication</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-[11px] text-white font-bold leading-tight">100-NODE MAPPING: ACTIVE</p>
-                  <p className="text-[8px] text-muted-foreground font-mono">DEADLINE: 72H_SYNC</p>
+                  <p className="text-[11px] text-white font-bold leading-tight">ACTIVE_PEER_SYNC: ON</p>
+                  <p className="text-[8px] text-muted-foreground font-mono">BACKUP_PROVISIONING: READY</p>
                 </CardContent>
               </Card>
             </div>

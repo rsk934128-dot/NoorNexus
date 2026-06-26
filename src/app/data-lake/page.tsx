@@ -25,15 +25,22 @@ import {
   History,
   FileSearch,
   CheckCircle2,
-  HardDrive
+  HardDrive,
+  BarChart3,
+  TrendingUp,
+  Target,
+  FileText
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { ingestToDataLake, DataLakeIngestOutput } from "@/ai/flows/data-lake-ingest-flow"
+import { generateEconomicReport, EconomicIntelligenceOutput } from "@/ai/flows/economic-intelligence-flow"
 
 export default function SovereignDataLakePage() {
   const { toast } = useToast()
   const [ingesting, setIngesting] = useState(false)
-  const [result, setResult] = useState<DataLakeIngestOutput | null>(null)
+  const [reporting, setReporting] = useState(false)
+  const [ingestResult, setIngestResult] = useState<DataLakeIngestOutput | null>(null)
+  const [intelResult, setIntelResult] = useState<EconomicIntelligenceOutput | null>(null)
   
   const [metrics, setLiveMetrics] = useState({
     storageUsed: 42.8,
@@ -61,7 +68,7 @@ export default function SovereignDataLakePage() {
         encryptionStandard: "QUANTUM_ENCRYPTED",
         targetModule: "FINTECH"
       })
-      setResult(res)
+      setIngestResult(res)
       toast({ 
         title: "Intel Sync Established", 
         description: "Project #300: Encrypted log block anchored to Data Lake." 
@@ -70,6 +77,27 @@ export default function SovereignDataLakePage() {
       toast({ title: "Ingest Failure", variant: "destructive" })
     } finally {
       setIngesting(false)
+    }
+  }
+
+  async function handleGenerateReport() {
+    setReporting(true)
+    try {
+      const res = await generateEconomicReport({
+        timeframe: "Q2 2026",
+        nodeRegion: "South & SE Asia Corridor",
+        totalVolume: 420000000,
+        marketSentiment: "Bullish adoption of Sovereign Grid Protocols."
+      })
+      setIntelResult(res)
+      toast({ 
+        title: "Intelligence Synthesized", 
+        description: "Project #400: Quarterly Outlook anchored to Imperial Archives." 
+      })
+    } catch (e: any) {
+      toast({ title: "Report Generation Failed", variant: "destructive" })
+    } finally {
+      setReporting(false)
     }
   }
 
@@ -88,36 +116,89 @@ export default function SovereignDataLakePage() {
                    <Infinity className="size-3 mr-2" /> Project #300: Sovereign Data Lake
                  </Badge>
                  <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5">
-                   <Atom className="size-3 mr-2" /> Phase 7: Economic Intelligence
+                   <Atom className="size-3 mr-2" /> Project #400: Economic Intelligence
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Intel <span className="text-emerald-500">Lake.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "The Memory of the 100-Node Empire." নূরনেক্সাস এখন ১০০টি নোড থেকে আসা প্রতিটি ট্রানজ্যাকশন ডাটাকে একটি স্বায়ত্তশাসিত ডেটা লেকে এনক্রিপ্ট করছে।
+                "The Memory & Intelligence of the Empire." নূরনেক্সাস এখন ১০০টি নোড থেকে আসা ডাটাকে একটি স্বায়ত্তশাসিত ডেটা লেকে এনক্রিপ্ট করে গ্লোবাল ইনটেলিজেন্স জেনারেট করছে।
               </p>
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-emerald-500/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Lake Integrity</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Intel Integrity</p>
                   <p className="text-2xl font-headline font-bold text-emerald-500 uppercase">SECURE_MAX</p>
                </div>
                <Button 
-                onClick={handleIngest} 
-                disabled={ingesting}
-                className="bg-emerald-500 text-white font-bold h-12 uppercase tracking-widest gap-2 glow-emerald"
+                onClick={handleGenerateReport} 
+                disabled={reporting}
+                className="bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-primary"
                >
-                 {ingesting ? <Loader2 className="size-4 animate-spin" /> : <RefreshCcw className="size-4" />}
-                 Synchronize Intel
+                 {reporting ? <Loader2 className="size-4 animate-spin" /> : <BarChart3 className="size-4" />}
+                 Generate Economic Outlook
                </Button>
             </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-8">
-              {/* Real-time Ingest Monitoring */}
-              <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              {/* Nora-40 Economic Intelligence Dispatch */}
+              {intelResult && (
+                <section className="space-y-6 animate-in fade-in zoom-in-95 duration-700">
+                  <Card className="glass-card border-t-4 border-t-primary overflow-hidden">
+                    <CardHeader className="bg-primary/10">
+                      <div className="flex justify-between items-center">
+                        <div className="space-y-1">
+                          <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
+                             <TrendingUp className="size-4 text-primary" /> Project #400: Imperial Economic Outlook
+                          </CardTitle>
+                          <CardDescription className="text-xs">Synthesis from 100-Node Data Lake Hubs.</CardDescription>
+                        </div>
+                        <Badge className="bg-emerald-500">VERIFIED_OUTLOOK</Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="p-8 space-y-8">
+                       <div className="p-6 bg-black/40 rounded-xl border border-white/5 relative overflow-hidden">
+                          <div className="absolute top-0 right-0 p-4 opacity-5">
+                             <FileText className="size-24 text-primary" />
+                          </div>
+                          <h4 className="text-[10px] font-bold text-primary uppercase mb-4 tracking-widest">Executive Summary</h4>
+                          <p className="text-lg font-headline text-white leading-relaxed italic">"{intelResult.executiveSummary}"</p>
+                       </div>
+
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          <div className="space-y-4">
+                             <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em]">Sector Risk Forecasting</h4>
+                             <div className="space-y-3">
+                                {intelResult.riskForecasting.map((risk, i) => (
+                                  <div key={i} className="p-3 bg-white/2 rounded border border-white/5 space-y-1">
+                                     <div className="flex justify-between items-center">
+                                        <span className="text-xs font-bold text-white uppercase">{risk.sector}</span>
+                                        <Badge variant="outline" className={`text-[7px] ${risk.riskScore < 30 ? 'border-emerald-500 text-emerald-500' : 'border-amber-500 text-amber-500'}`}>RISK: {risk.riskScore}%</Badge>
+                                     </div>
+                                     <p className="text-[10px] text-muted-foreground italic leading-relaxed">"{risk.mitigation}"</p>
+                                  </div>
+                                ))}
+                             </div>
+                          </div>
+                          <div className="space-y-4">
+                             <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em]">Strategic Directive</h4>
+                             <p className="text-sm text-white leading-relaxed border-l-2 border-primary/30 pl-4">{intelResult.strategicOutlook}</p>
+                             <div className="pt-4 border-t border-white/5">
+                                <p className="text-[8px] font-mono text-muted-foreground uppercase mb-1">Intelligence Seal (Nora-40)</p>
+                                <code className="text-[9px] text-primary font-mono truncate block">{intelResult.intelHash}</code>
+                             </div>
+                          </div>
+                       </div>
+                    </CardContent>
+                  </Card>
+                </section>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                  {[
                    { label: "Storage Capacity", val: `${metrics.storageUsed.toFixed(2)} PB`, icon: HardDrive, color: "text-primary" },
                    { label: "Ingest Velocity", val: `${metrics.entriesPerSec}/s`, icon: Activity, color: "text-emerald-500" },
@@ -133,7 +214,7 @@ export default function SovereignDataLakePage() {
                       </CardContent>
                    </Card>
                  ))}
-              </section>
+              </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                  {/* Ingest Terminal */}
@@ -142,7 +223,7 @@ export default function SovereignDataLakePage() {
                        <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
                           <Database className="size-4 text-primary" /> Lake Ingest Terminal
                        </CardTitle>
-                       <CardDescription>Targeting node range 1-100 for FinTech data synchronization.</CardDescription>
+                       <CardDescription>Targeting node range 1-100 for global data synchronization.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                        <div className="p-4 bg-black rounded-xl border border-white/5 space-y-4">
@@ -154,16 +235,6 @@ export default function SovereignDataLakePage() {
                              <div className="h-full bg-emerald-500 animate-pulse" style={{ width: `${metrics.activeIngestNodes}%` }} />
                           </div>
                        </div>
-                       <div className="grid grid-cols-2 gap-4">
-                          <div className="p-3 bg-white/5 rounded-lg border border-white/5 space-y-1">
-                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Standard</p>
-                             <p className="text-xs text-white font-mono">QUANTUM_AES_512</p>
-                          </div>
-                          <div className="p-3 bg-white/5 rounded-lg border border-white/5 space-y-1 text-right">
-                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Latency</p>
-                             <p className="text-xs text-white font-mono">12ms (Intel Loop)</p>
-                          </div>
-                       </div>
                        <Button onClick={handleIngest} disabled={ingesting} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary">
                           {ingesting ? <Loader2 className="size-5 animate-spin mr-2" /> : <Zap className="size-5 mr-2" />}
                           Execute Deep Ingest
@@ -172,25 +243,25 @@ export default function SovereignDataLakePage() {
                  </Card>
 
                  {/* Nora-30 Intel Summary */}
-                 <Card className={`glass-card transition-all duration-500 border-t-4 ${result ? 'border-t-emerald-500' : 'border-t-primary'}`}>
+                 <Card className={`glass-card transition-all duration-500 border-t-4 ${ingestResult ? 'border-t-emerald-500' : 'border-t-primary'}`}>
                     <CardHeader>
                        <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                          <Cpu className="size-4" /> Intel Architect (Nora-30)
+                          <Cpu className="size-4" /> Ingest Sentinel (Nora-30)
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
-                       {result ? (
+                       {ingestResult ? (
                          <div className="space-y-6 animate-in fade-in zoom-in-95">
                             <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl space-y-3">
                                <div className="flex justify-between items-center border-b border-white/5 pb-2">
                                   <span className="text-[10px] font-bold text-emerald-500 uppercase">Lake Status</span>
-                                  <Badge className="bg-emerald-500">{result.ingestStatus}</Badge>
+                                  <Badge className="bg-emerald-500">{ingestResult.ingestStatus}</Badge>
                                </div>
-                               <p className="text-xs text-white leading-relaxed italic">"{result.intelSummary}"</p>
+                               <p className="text-xs text-white leading-relaxed italic">"{ingestResult.intelSummary}"</p>
                             </div>
                             <div className="space-y-2">
                                <p className="text-[8px] font-bold text-muted-foreground uppercase">Ingest Hash (HMAC_V4_300)</p>
-                               <code className="text-[9px] font-mono text-primary block bg-black/40 p-2 rounded break-all">{result.ingestHash}</code>
+                               <code className="text-[9px] font-mono text-primary block bg-black/40 p-2 rounded break-all">{ingestResult.ingestHash}</code>
                             </div>
                          </div>
                        ) : (
@@ -210,15 +281,15 @@ export default function SovereignDataLakePage() {
                <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                        <FileSearch className="size-4" /> Intelligence Foundation
+                        <FileSearch className="size-4" /> Project #400 Mandate
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                      <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                        "The Data Lake provides the raw evidentiary baseline for our Global Economic Intelligence Reports. Every log is encrypted and isolated."
+                        "The Sovereign Economic Outlook report is the empire's primary strategic document. It is used to allocate liquidity and identify global hubs."
                      </p>
                      <div className="pt-2">
-                        <Badge variant="outline" className="w-full justify-center h-8 border-emerald-500/30 text-emerald-500 uppercase text-[9px] font-bold">SOVEREIGN_DATA_ISOLATION: MAX</Badge>
+                        <Badge variant="outline" className="w-full justify-center h-8 border-emerald-500/30 text-emerald-500 uppercase text-[9px] font-bold">INTEL_SOVEREIGNTY: MAX</Badge>
                      </div>
                   </CardContent>
                </Card>
@@ -226,21 +297,21 @@ export default function SovereignDataLakePage() {
                <Card className="glass-card">
                   <CardHeader className="pb-2">
                      <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                        <History className="size-4" /> Ingest History
+                        <History className="size-4" /> Intelligence History
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                      {[
-                       { task: "FinTech Module Ingest", nodes: "1-100", time: "2m ago" },
-                       { task: "Logistics Heartbeat", nodes: "1-20", time: "1h ago" },
-                       { task: "Governance Audit Sync", nodes: "42", time: "5h ago" }
+                       { task: "Q2 2026 Outlook", status: "FINALIZED", time: "Just now" },
+                       { task: "Q1 2026 Outlook", status: "ARCHIVED", time: "3mo ago" },
+                       { task: "2025 Annual Review", status: "ARCHIVED", time: "6mo ago" }
                      ].map((log, i) => (
                        <div key={i} className="p-2.5 bg-white/5 rounded border border-white/5 flex justify-between items-center group hover:bg-white/10 transition-all">
                           <div className="space-y-0.5">
                              <p className="text-[9px] font-bold text-white uppercase">{log.task}</p>
-                             <p className="text-[7px] text-muted-foreground uppercase">Nodes: {log.nodes} | {log.time}</p>
+                             <p className="text-[7px] text-muted-foreground uppercase">{log.time}</p>
                           </div>
-                          <CheckCircle2 className="size-3 text-emerald-500 opacity-50" />
+                          <CheckCircle2 className={`size-3 ${log.status === 'FINALIZED' ? 'text-primary' : 'text-muted-foreground opacity-50'}`} />
                        </div>
                      ))}
                   </CardContent>
@@ -249,12 +320,12 @@ export default function SovereignDataLakePage() {
                <Card className="glass-card border-amber-500/20 bg-amber-500/5">
                   <CardHeader className="pb-2">
                      <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                        <Flame className="size-3" /> Zero-Loss Guarantee
+                        <Target className="size-3" /> Predictive Confidence
                      </CardTitle>
                   </CardHeader>
                   <CardContent>
                      <p className="text-[9px] text-muted-foreground leading-relaxed">
-                        Redundant mirroring active across 3 cold-storage nodes. Intel recovery verified at 100%.
+                        Nora-40's forecasting accuracy is currently verified at 99.2% based on cross-node verification.
                      </p>
                   </CardContent>
                </Card>

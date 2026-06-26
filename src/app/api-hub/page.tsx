@@ -35,7 +35,8 @@ import {
   CheckCircle2,
   ShieldPlus,
   LockKeyhole,
-  Braces
+  Braces,
+  Play
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -47,12 +48,13 @@ export default function ApiHubPage() {
   const [query, setQuery] = useState("")
   const [apiKey, setApiKey] = useState("")
   const [messages, setMessages] = useState<any[]>([])
+  const [isSandbox, setIsSandbox] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const generateKey = () => {
-    const key = `ZENITH_SK_${Math.random().toString(16).substring(2, 32).toUpperCase()}`
+    const key = `${isSandbox ? 'SANDBOX' : 'ZENITH'}_SK_${Math.random().toString(16).substring(2, 32).toUpperCase()}`
     setApiKey(key)
-    toast({ title: "Enterprise Bridge Secret Generated", description: "Store this securely in your vault." })
+    toast({ title: isSandbox ? "Sandbox Access Key Generated" : "Enterprise Bridge Secret Generated", description: "Store this securely in your vault." })
   }
 
   async function askNora() {
@@ -95,18 +97,31 @@ export default function ApiHubPage() {
                    <Infinity className="size-3 mr-2" /> Mission 500: Project Zenith
                  </Badge>
                  <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5">
-                   <Sparkles className="size-3 mr-2" /> 100-Node Cluster ARMED
+                   <FlaskConical className="size-3 mr-2" /> Sandbox Active
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Discovery <span className="text-purple-500">Hub.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "The Digital Passport to the 100-Node Empire." এন্টারপ্রাইজ পার্টনারদের জন্য নূরনেক্সাস এখন একটি স্বায়ত্তশাসিত অনবোর্ডিং গেটওয়ে।
+                "The Digital Passport to the 100-Node Empire." এন্টারপ্রাইজ পার্টনারদের জন্য নূরনেক্সাস এখন একটি স্বায়ত্তশাসিত অনবোর্ডিং এবং স্যান্ডবক্স গেটওয়ে।
               </p>
             </div>
             <div className="flex items-center gap-4">
-               <div className="p-4 glass-card rounded-2xl border border-purple-500/20 text-center min-w-[200px]">
+               <div className="p-3 glass-card rounded-xl border border-amber-500/20 flex flex-col items-center">
+                  <p className="text-[8px] font-bold text-muted-foreground uppercase mb-1">Testing Mode</p>
+                  <div className="flex items-center gap-2">
+                     <span className={`text-[10px] font-bold ${!isSandbox ? 'text-white' : 'text-muted-foreground'}`}>LIVE</span>
+                     <div 
+                       onClick={() => setIsSandbox(!isSandbox)}
+                       className="w-10 h-5 bg-white/5 rounded-full p-1 cursor-pointer relative border border-white/10"
+                     >
+                        <div className={`absolute top-1 size-3 rounded-full transition-all duration-300 ${isSandbox ? 'right-1 bg-amber-500' : 'left-1 bg-white/40'}`} />
+                     </div>
+                     <span className={`text-[10px] font-bold ${isSandbox ? 'text-amber-500' : 'text-muted-foreground'}`}>SANDBOX</span>
+                  </div>
+               </div>
+               <div className="p-4 glass-card rounded-2xl border border-purple-500/20 text-center min-w-[150px]">
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Grid Torque</p>
                   <p className="text-2xl font-headline font-bold text-emerald-500 uppercase flex items-center gap-2 justify-center">
                     <Rocket className="size-5" /> 94%
@@ -120,9 +135,9 @@ export default function ApiHubPage() {
               <Tabs defaultValue="onboarding-api" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
                   <TabsTrigger value="onboarding-api" className="gap-2"><LockKeyhole className="size-4" /> Onboarding API</TabsTrigger>
+                  <TabsTrigger value="sandbox" className="gap-2"><FlaskConical className="size-4" /> Playground</TabsTrigger>
                   <TabsTrigger value="quickstart" className="gap-2"><Zap className="size-4" /> Quick Start</TabsTrigger>
                   <TabsTrigger value="bridge" className="gap-2"><Network className="size-4" /> Neural Bridge</TabsTrigger>
-                  <TabsTrigger value="certs" className="gap-2"><FileCheck className="size-4" /> Zenith Certs</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="onboarding-api" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
@@ -135,7 +150,7 @@ export default function ApiHubPage() {
                       </CardHeader>
                       <CardContent className="space-y-6">
                          <p className="text-xs text-muted-foreground italic leading-relaxed">
-                            "Partner applications can now connection to the NoorNexus grid programmatically. No human intervention required for Zenith L1 access."
+                            "Partner applications can now connect to the NoorNexus grid programmatically. No human intervention required for Zenith L1 access."
                          </p>
                          <div className="p-5 bg-black rounded-xl border border-white/5 space-y-4">
                             <div className="flex justify-between items-center">
@@ -144,7 +159,7 @@ export default function ApiHubPage() {
                             </div>
                             <pre className="text-[11px] text-purple-400 font-mono overflow-x-auto">
 {`{
-  "appId": "YOUR_ZENITH_KEY",
+  "appId": "YOUR_${isSandbox ? 'SANDBOX' : 'ZENITH'}_KEY",
   "intent": "SOVEREIGN_MESH_CONNECTION",
   "securityTier": "L4",
   "signature": "HMAC_V4_ENCRYPTED_AUTH"
@@ -152,10 +167,49 @@ export default function ApiHubPage() {
                             </pre>
                          </div>
                          <div className="flex items-center gap-4 pt-4">
-                            <Button size="sm" className="bg-purple-500 text-white font-bold uppercase text-[10px] gap-2">
-                               <Braces className="size-3" /> View API Specs
+                            <Button size="sm" onClick={generateKey} className="bg-purple-500 text-white font-bold uppercase text-[10px] gap-2">
+                               <Braces className="size-3" /> Get API Key
                             </Button>
-                            <Badge variant="outline" className="border-amber-500/30 text-amber-500 text-[8px] uppercase">Direct Handshake Active</Badge>
+                            {apiKey && (
+                              <code className="text-[10px] text-primary font-mono">{apiKey.substring(0, 16)}...</code>
+                            )}
+                         </div>
+                      </CardContent>
+                   </Card>
+                </TabsContent>
+
+                <TabsContent value="sandbox" className="space-y-6">
+                   <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+                      <CardHeader>
+                         <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
+                            <FlaskConical className="size-4" /> Developer Playground
+                         </CardTitle>
+                         <CardDescription>Test your integration in a zero-risk, virtualized NoorNexus environment.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                               <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Mock Transaction Tool</h4>
+                               <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-4">
+                                  <div className="space-y-2">
+                                     <label className="text-[9px] font-bold text-muted-foreground uppercase">Mock Amount (USD)</label>
+                                     <input defaultValue="5000" className="w-full bg-background/50 border border-white/10 rounded h-10 px-3 text-xs font-mono" />
+                                  </div>
+                                  <Button className="w-full bg-amber-500 text-black font-bold uppercase text-[10px] h-10 gap-2">
+                                     <Play className="size-3" /> Execute Mock Pulse
+                                  </Button>
+                               </div>
+                            </div>
+                            <div className="space-y-4">
+                               <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Simulator Logs</h4>
+                               <div className="p-4 bg-black rounded-xl border border-white/5 h-[160px] overflow-auto font-mono text-[9px] text-emerald-400 space-y-1">
+                                  <p>[12:42:01] INITIATING SANDBOX_HANDSHAKE...</p>
+                                  <p>[12:42:02] VERIFYING HMAC_V4_SANDBOX_SIG...</p>
+                                  <p>[12:42:02] MOCK_TRANSACTION_APPROVED (ID: SB-991)</p>
+                                  <p>[12:42:03] NORA-52_SIMULATOR: AUDIT_PASSED</p>
+                                  <p className="animate-pulse">_</p>
+                               </div>
+                            </div>
                          </div>
                       </CardContent>
                    </Card>
@@ -172,7 +226,7 @@ export default function ApiHubPage() {
                       <CardContent className="space-y-8">
                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {[
-                              { step: "01", title: "Generate Key", desc: "Obtain your Zenith L1 access key from the 'Keys' tab." },
+                              { step: "01", title: "Generate Key", desc: "Obtain your Zenith L1 access key from the 'API' tab." },
                               { step: "02", title: "Inject Snippet", desc: "Paste the 3-line code block into your app's <head>." },
                               { step: "03", title: "Verify Pulse", desc: "Nora-03 will automatically verify the connection." }
                             ].map((s, i) => (
@@ -192,7 +246,7 @@ export default function ApiHubPage() {
                             <pre className="text-[11px] text-emerald-400 font-mono overflow-x-auto leading-relaxed">
 {`<script src="https://cdn.noornexus.sovereign/v1/core.js" async></script>
 <script>
-  sheikh.init({ appId: 'YOUR_ZENITH_KEY', speed: 'ZENITH_TURBO' });
+  sheikh.init({ appId: 'YOUR_${isSandbox ? 'SANDBOX' : 'ZENITH'}_KEY', speed: 'ZENITH_TURBO' });
 </script>`}
                             </pre>
                             <Button 
@@ -208,66 +262,6 @@ export default function ApiHubPage() {
                          </div>
                       </CardContent>
                    </Card>
-                </TabsContent>
-
-                <TabsContent value="bridge" className="space-y-6">
-                   <Card className="glass-card border-l-4 border-l-purple-500">
-                      <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase text-purple-500 flex items-center gap-2">
-                            <Activity className="size-4" /> Neural Bridge (Project #201)
-                         </CardTitle>
-                         <CardDescription>Dynamic traffic routing across the 100-node mesh cluster.</CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-6">
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="p-5 bg-black/40 rounded-xl border border-white/5 space-y-3">
-                               <h4 className="text-[10px] font-bold uppercase text-white">Dynamic Rerouting</h4>
-                               <p className="text-[9px] text-muted-foreground italic">"Automatic fail-over if node latency > 30ms."</p>
-                               <Badge className="bg-emerald-500/20 text-emerald-500">ENFORCED</Badge>
-                            </div>
-                            <div className="p-5 bg-black/40 rounded-xl border border-white/5 space-y-3">
-                               <h4 className="text-[10px] font-bold uppercase text-white">South Asia Hub</h4>
-                               <p className="text-[9px] text-muted-foreground italic">"Optimized corridors for BDT and INR liquidity."</p>
-                               <Badge className="bg-primary/20 text-primary">SYNCED</Badge>
-                            </div>
-                         </div>
-                      </CardContent>
-                   </Card>
-                </TabsContent>
-
-                <TabsContent value="certs" className="space-y-6">
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <Card className="glass-card border-emerald-500/30 bg-emerald-500/5 relative overflow-hidden">
-                         <div className="absolute top-0 right-0 p-4 opacity-10">
-                            <ShieldPlus className="size-24 text-emerald-500" />
-                         </div>
-                         <CardHeader>
-                            <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
-                               <CheckCircle2 className="size-5" /> Zenith-Certified Node
-                            </CardTitle>
-                            <CardDescription className="text-[10px] uppercase font-mono">Immutable Infrastructure Certificate</CardDescription>
-                         </CardHeader>
-                         <CardContent className="space-y-4">
-                            <div className="p-4 bg-black/40 rounded-xl border border-emerald-500/20 space-y-3">
-                               <div className="flex justify-between items-center text-[10px] font-bold">
-                                  <span className="text-muted-foreground uppercase">Partner Node ID</span>
-                                  <span className="text-white">NODE-ZEN-42B</span>
-                               </div>
-                               <div className="flex justify-between items-center text-[10px] font-bold">
-                                  <span className="text-muted-foreground uppercase">Veracity Status</span>
-                                  <span className="text-emerald-500">ZENITH_CERTIFIED</span>
-                               </div>
-                               <div className="pt-2 border-t border-white/5">
-                                  <p className="text-[8px] font-mono text-muted-foreground uppercase mb-1">Handshake Signature</p>
-                                  <code className="text-[9px] text-emerald-400 break-all font-mono">0x_ZN_CERT_9a6c22bb3f1a4e2b8c9d...</code>
-                               </div>
-                            </div>
-                            <Button size="sm" className="w-full bg-emerald-500 text-black font-bold uppercase text-[9px] h-9">
-                               Download Certificate
-                            </Button>
-                         </CardContent>
-                      </Card>
-                   </div>
                 </TabsContent>
               </Tabs>
             </div>
