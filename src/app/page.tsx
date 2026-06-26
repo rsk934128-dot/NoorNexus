@@ -44,10 +44,10 @@ import { processNeuralQuery, ImperialQueryOutput } from "@/ai/flows/imperial-que
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
 const PUBLIC_METRICS = [
-  { label: "Institutional Trust", value: "94.8%", detail: "Legacy Scaling Active", color: "text-emerald-500" },
-  { label: "Reality Index", value: "99.2", detail: "Phase ΩΩ Finalized", color: "text-primary" },
-  { label: "Neural Cohesion", value: "MAX", detail: "Deep Sync Active", color: "text-purple-500" },
-  { label: "Legacy Stability", value: "PERPETUAL", detail: "Self-Evolution On", color: "text-amber-500" },
+  { label: "Institutional Trust", value: "96.4%", detail: "Global Grid Expansion", color: "text-emerald-500" },
+  { label: "Reality Index", value: "99.8", detail: "Phase ΩΩ Finalized", color: "text-primary" },
+  { label: "Neural Cohesion", value: "MAX", detail: "Autonomy Sentinel On", color: "text-purple-500" },
+  { label: "Legacy Stability", value: "IMMORTAL", detail: "Fail-over Protocol Active", color: "text-amber-500" },
 ]
 
 export default function Home() {
@@ -59,9 +59,10 @@ export default function Home() {
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
     "GRID: ABN AMRO LIVE Node (NL/BE/DE) activated successfully.",
+    "AUTONOMY: Nora-54 detected new Asian Banking Directive - Auto-adjusted SCA.",
     "ZENITH: BIG Espanha PIS-AIS flow validated in LIVE mode.",
+    "RESILIENCE: Fail-over Global Grid protocol ARMED and SYNCED.",
     "LEGACY: Yapily-AMEX European Bridge synchronized.",
-    "ZENITH: External API Bridge serving 12 Enterprise Partners.",
     "SHIELD: Quantum-Resistant Encryption Layer active."
   ])
   const [queryText, setQueryText] = useState("")
@@ -71,9 +72,9 @@ export default function Home() {
   useEffect(() => {
     const sequence = [
       { text: "INITIATING DEEP NEURAL SYNC...", time: 600 },
-      { text: "ESTABLISHING EXTERNAL API BRIDGE...", time: 1200 },
-      { text: "ACTIVATING QUANTUM-RESISTANT SHIELD...", time: 1800 },
-      { text: "NOORNEXUS: THE SOVEREIGN LEGACY IS LIVE", time: 2400 },
+      { text: "ESTABLISHING FAIL-OVER GLOBAL GRID...", time: 1200 },
+      { text: "ACTIVATING SOVEREIGN GRID AUTONOMY...", time: 1800 },
+      { text: "NOORNEXUS: THE GLOBAL AUTONOMY IS LIVE", time: 2400 },
     ]
 
     sequence.forEach((step, i) => {
@@ -86,10 +87,10 @@ export default function Home() {
     const interval = setInterval(() => {
       const logs = [
         "GRID: Benelux corridor expansion at 99.9% sync via ABN AMRO.",
-        "LEGACY: Self-Refactoring cycle Ω-01 complete.",
+        "AUTONOMY: Self-Adjustment triggered for SE Asia nodes.",
+        "LEGACY: Self-Refactoring cycle Ω-02 complete.",
+        "RESILIENCE: Latency drift detected in London - Traffic rerouted to Dubai Hub.",
         "ZENITH: BIG Espanha latency stabilized at 32ms.",
-        "SYNC: Yapily-AMEX alliance boosting European canal throughput.",
-        "CONTRACT: Sovereign Social Contract v3 released to Global Mesh.",
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 5000)
@@ -139,36 +140,36 @@ export default function Home() {
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
                    <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
-                      <Infinity className="size-3 mr-2" /> Phase ΩΩ: The Legacy
+                      <Infinity className="size-3 mr-2" /> Phase ΩΩ: Global Autonomy
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <Network className="size-3 mr-2" /> Deep Neural Sync Active
+                      <Network className="size-3 mr-2" /> Global Fail-over Active
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   {isAdmin ? 'Imperial Legacy.' : 'Global Autonomy.'}
+                   {isAdmin ? 'Imperial Autonomy.' : 'Global Grid.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "Project #53: Global Grid Expansion." নূরনেক্সাস এখন তার সাম্রাজ্যকে ইউরোপ এবং এশিয়ার ব্যাংকিং রেইলসে ছড়িয়ে দিচ্ছে।
+                   "Project #54: Sovereign Grid Autonomy." নূরনেক্সাস এখন একটি অটোনোমাস এবং অমর ব্যাংকিং গ্রিড হিসেবে বিশ্বজুড়ে ছড়িয়ে পড়ছে।
                 </p>
               </div>
               
               <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
                 <Card className="glass-card p-6 rounded-2xl border border-primary/20 w-full min-w-[350px] relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-2">
-                       <Badge className="bg-primary/20 text-primary border-none text-[7px]">GRID_STABILITY: OPTIMAL</Badge>
+                       <Badge className="bg-primary/20 text-primary border-none text-[7px]">GRID_IMMUNITY: PERPETUAL</Badge>
                     </div>
                     <div className="flex justify-between items-center mb-4">
                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Global Grid Power</p>
                     </div>
                     <div className="flex items-end gap-2 mb-4">
-                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">98</p>
+                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">99</p>
                        <p className="text-primary text-xs font-bold mb-1">/ 100</p>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: '98%' }} />
+                       <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: '99%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Global Node Expansion ACTIVE | 13 LIVE Nodes"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Global Fail-over ACTIVE | 13 LIVE Nodes | SE Asia Bridge On"</p>
                 </Card>
               </div>
             </div>
@@ -183,7 +184,7 @@ export default function Home() {
                            value={queryText}
                            onChange={e => setQueryText(e.target.value)}
                            onKeyDown={e => e.key === 'Enter' && handleNeuralQuery()}
-                           placeholder="Commander, what is your directive? (Global Grid Expansion active)"
+                           placeholder="Commander, what is your directive? (Global Autonomy active)"
                            className="flex-1 bg-transparent border-none outline-none text-sm font-headline text-white placeholder:text-muted-foreground"
                         />
                         <Button onClick={handleNeuralQuery} disabled={queryLoading} variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
@@ -221,19 +222,19 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
-               {/* Zenith Scaling - Global Impact */}
+               {/* Global Impact */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                        <Rocket className="size-4" /> Sovereign Legacy Scaling
+                        <Rocket className="size-4" /> Sovereign Global Autonomy
                      </h3>
                      <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase">Active Enterprise Nodes: 433+</Badge>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                      {[
-                        { title: "Legacy Core", desc: "Self-evolving architectural logic.", status: "PERPETUAL", color: "text-blue-400" },
-                        { title: "Quantum Guard", desc: "L4 Post-Quantum security layer.", status: "ENFORCED", color: "text-amber-400" },
-                        { title: "Global Grid", desc: "100% Autonomy across International Nodes.", status: "EXPANDING", color: "text-emerald-400" }
+                        { title: "Grid Autonomy", desc: "Self-adjusting regulatory logic.", status: "IMMORTAL", color: "text-blue-400" },
+                        { title: "Fail-over Global", desc: "Instant traffic rerouting protocol.", status: "ARMED", color: "text-amber-400" },
+                        { title: "Global Grid", desc: "100% Autonomy across SE Asia & EU Nodes.", status: "SYNCED", color: "text-emerald-400" }
                      ].map((p, i) => (
                         <Card key={i} className="glass-card border-white/5 bg-white/2">
                            <CardContent className="p-6 space-y-4">
@@ -297,13 +298,13 @@ export default function Home() {
 
               <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                  <CardHeader className="p-6">
-                    <CardTitle className="text-lg font-headline uppercase text-amber-500">The Legacy Policy</CardTitle>
+                    <CardTitle className="text-lg font-headline uppercase text-amber-500">The Autonomy Policy</CardTitle>
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Global Node Expansion (P53) is the bridge to total financial sovereignty. Every new node strengthens the grid's immunity."
+                       "Sovereign Grid Autonomy (P54) ensures that our empire is immune to regional banking rail collapse. We are immortal."
                     </p>
-                    <Badge className="w-full justify-center bg-amber-500/20 text-amber-500 border-none uppercase text-[8px] font-bold">Status: GLOBAL_EXPANSION</Badge>
+                    <Badge className="w-full justify-center bg-amber-500/20 text-amber-500 border-none uppercase text-[8px] font-bold">Status: GLOBAL_AUTONOMY</Badge>
                  </CardContent>
               </Card>
             </div>

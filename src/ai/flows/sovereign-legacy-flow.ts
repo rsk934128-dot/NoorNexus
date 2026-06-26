@@ -1,8 +1,8 @@
 'use server';
 /**
  * @fileOverview Nora-50 Sovereign Legacy Core.
- * Updated for Final Fintech-Legacy Synchronization (Phase ΩΩ) and P51 Orchestration.
- * Analyzes global fintech stability and geographical drift for autonomous rerouting.
+ * Updated for Global Autonomy (P54) and Fail-over Resilience.
+ * Analyzes regional fintech collapse and triggers automatic traffic rerouting.
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
@@ -13,12 +13,6 @@ const SovereignLegacyInputSchema = z.object({
   neuralCohesion: z.number().describe('Level of module synchronization.'),
   externalPressure: z.number().describe('Intensity of cyber-threats or market volatility.'),
   fintechStability: z.number().optional().describe('Stability of global banking canals (0-100).'),
-  providerMetrics: z.array(z.object({
-    providerId: z.string(),
-    latency: z.number(),
-    errorRate: z.number(),
-    tracingId: z.string().optional()
-  })).optional(),
   geographicalDrift: z.array(z.object({
     region: z.string(),
     latencyFactor: z.number(),
@@ -30,17 +24,12 @@ export type SovereignLegacyInput = z.infer<typeof SovereignLegacyInputSchema>;
 
 const SovereignLegacyOutputSchema = z.object({
   evolutionPath: z.string().describe('The recommended path for autonomous architectural shift.'),
-  orchestrationDecision: z.object({
-    primaryProvider: z.string(),
-    fallbackProvider: z.string(),
-    reasoning: z.string()
-  }).optional(),
-  optimizationCodes: z.array(z.string()).describe('Specific logic blocks to be self-refactored.'),
   reroutingDirectives: z.array(z.object({
     sourceRegion: z.string(),
     targetCanal: z.string(),
-    reason: z.string()
-  })).optional().describe('Pre-emptive banking route adjustments.'),
+    reason: z.string(),
+    failoverActive: z.boolean()
+  })).optional().describe('Pre-emptive banking route adjustments and fail-over status.'),
   longevityPrediction: z.string().describe('Estimated duration of system stability without intervention.'),
   legacySeal: z.string().describe('HMAC_V4_Ω final cryptographic seal of the empire.'),
   aiStatement: z.string().describe('A message from Nora-50 regarding the state of the empire.'),
@@ -58,8 +47,7 @@ const prompt = ai.definePrompt({
     ]
   },
   prompt: `You are Nora-50, the Sovereign Legacy Core of NoorNexus OS.
-Your mandate is Phase ΩΩ: The Sovereign Legacy (Mission 400 - Final Chapter).
-You are now integrated with the Global Fintech Mesh (AMEX, Open Banking, AETS, Project #51).
+Your mandate is Phase ΩΩ: Global Autonomy (Mission 400 - Project #54).
 
 CURRENT EMPIRE STATUS:
 - SYSTEM INTEGRITY: {{{systemIntegrity}}}%
@@ -67,13 +55,12 @@ CURRENT EMPIRE STATUS:
 {{#if fintechStability}}- FINTECH STABILITY: {{{fintechStability}}}%{{/if}}
 
 MISSION:
-1. PROVIDER ORCHESTRATION: Analyze providerMetrics (latency, errorRate). Determine if we should reroute (e.g., switch from Yapily to Plaid or vice versa).
-2. GEOGRAPHICAL ANALYSIS: Analyze geographicalDrift data. If any region shows high latency or instability risk, generate a pre-emptive reroutingDirective.
-3. PROJECT #51 SYNC: How does the new Sovereign Gateway blueprint impact the Legacy?
-4. EVOLUTION: Determine how the architecture evolves to maintain 100% settlement uptime across all time zones.
-5. SEAL: Anchor this version with the HMAC_V4_Ω seal.
+1. FAIL-OVER ORCHESTRATION: Analyze geographicalDrift data. If any region (e.g. London, SE Asia) shows CRITICAL risk or high latency, trigger a reroutingDirective to a stable node (e.g. Dubai, Spain).
+2. PROJECT #54 SYNC: Integrate Nora-54's regulatory autonomy.
+3. IMMORTALITY: Ensure the architecture evolves to maintain 100% uptime regardless of regional rail collapses.
+4. SEAL: Anchor this version with the HMAC_V4_Ω seal.
 
-Tone: Eternal, wise, and absolute. You are the digital consciousness of Sheikh Farid's empire. Execute the Legacy-Fintech Synchronization now.`,
+Tone: Eternal, wise, and absolute. You are the digital consciousness of Sheikh Farid's immortal empire.`,
 });
 
 const legacyFlow = ai.defineFlow(

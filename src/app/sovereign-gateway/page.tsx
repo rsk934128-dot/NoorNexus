@@ -38,7 +38,9 @@ import {
   Building2,
   BellRing,
   Clock,
-  Network
+  Network,
+  Infinity,
+  Fingerprint
 } from "lucide-react"
 
 const BLUEPRINT_STEPS = [
@@ -48,7 +50,14 @@ const BLUEPRINT_STEPS = [
   { id: "P51.4", label: "Intelligent Fallback Engine", icon: Zap, status: "HARDENED" },
   { id: "P51.5", label: "White-label Studio", icon: Palette, status: "READY" },
   { id: "P51.6", label: "eIDAS Certificate Vault", icon: Key, status: "LIVE" },
-  { id: "P53.1", label: "Global Node Expansion", icon: Network, status: "ACTIVE", zenith: true },
+  { id: "P54.1", label: "Sovereign Grid Autonomy", icon: Infinity, status: "ACTIVE", zenith: true },
+]
+
+const ASIAN_SCALING_NODES = [
+  { name: "GrabPay Hub (SE Asia)", id: "grab-01", status: "PENDING_HANDSHAKE", latency: "N/A" },
+  { name: "Paytm Gateway (India)", id: "paytm-01", status: "DESIGN_SYCHRONIZED", latency: "N/A" },
+  { name: "bKash Core (Bangladesh)", id: "bkash-99", status: "LIVE_SYNC", latency: "115ms" },
+  { name: "GCash Network (Philippines)", id: "gcash-04", status: "PENDING_AUDIT", latency: "N/A" },
 ]
 
 export default function SovereignGatewayPage() {
@@ -78,14 +87,14 @@ export default function SovereignGatewayPage() {
                    <Rocket className="size-3 mr-2" /> Project #51: Sovereign Gateway PaaS
                  </Badge>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <Network className="size-3 mr-2" /> Project #53: Global Grid
+                   <Infinity className="size-3 mr-2" /> Project #54: Sovereign Autonomy
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Global <span className="text-purple-500">Gateway.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project #51 & #53: The Global Autonomous Financial Grid. A unified PaaS gateway scaling across continental nodes with 100% Veracity.
+                Project #51 & #54: The Global Autonomous Financial Grid. Scaling across SE Asia and Middle-East with Automated Regulatory Compliance.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -99,44 +108,31 @@ export default function SovereignGatewayPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-10">
               
-              {/* eIDAS Health & Alerts Section */}
+              {/* Scaling Torque: Asian Nodes */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                    <BellRing className="size-4 animate-pulse" /> eIDAS Vault Monitoring
+                    <Network className="size-4" /> Asian Scaling Torque (Project #53)
                  </h3>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                       <CardHeader className="pb-2">
-                          <CardTitle className="text-xs font-bold uppercase text-white">mTLS Certificate (Transport)</CardTitle>
-                       </CardHeader>
-                       <CardContent className="space-y-3">
-                          <div className="flex justify-between items-center text-[10px] font-mono">
-                             <span className="text-muted-foreground">Expires: Oct 20, 2025</span>
-                             <Badge variant="outline" className="text-emerald-500 border-emerald-500/20">HEALTHY</Badge>
-                          </div>
-                          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                             <div className="h-full bg-emerald-500" style={{ width: '82%' }} />
-                          </div>
-                          <p className="text-[9px] text-muted-foreground italic">"Automatic renewal protocol active. Scheduled for Sept 20, 2025."</p>
-                       </CardContent>
-                    </Card>
-                    <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
-                       <CardHeader className="pb-2">
-                          <CardTitle className="text-xs font-bold uppercase text-white">QSealC Certificate (Signing)</CardTitle>
-                       </CardHeader>
-                       <CardContent className="space-y-3">
-                          <div className="flex justify-between items-center text-[10px] font-mono">
-                             <span className="text-muted-foreground">Expires: Aug 15, 2025</span>
-                             <Badge variant="outline" className="text-amber-500 border-amber-500/20">RENEWAL_DUE</Badge>
-                          </div>
-                          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                             <div className="h-full bg-amber-500" style={{ width: '65%' }} />
-                          </div>
-                          <div className="flex items-center gap-2 text-[9px] text-amber-500 font-bold">
-                             <Clock className="size-3" /> ALERT: Renewal required in 142 days.
-                          </div>
-                       </CardContent>
-                    </Card>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {ASIAN_SCALING_NODES.map((node, i) => (
+                      <Card key={i} className="glass-card bg-black/40 border-white/5 hover:border-emerald-500/30 transition-all">
+                        <CardContent className="p-4 flex items-center justify-between">
+                           <div className="flex items-center gap-4">
+                              <div className="size-10 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                                 <Globe className="size-5 text-emerald-500" />
+                              </div>
+                              <div className="space-y-0.5">
+                                 <p className="text-sm font-bold text-white uppercase">{node.name}</p>
+                                 <p className="text-[8px] text-muted-foreground font-mono uppercase">{node.id}</p>
+                              </div>
+                           </div>
+                           <div className="text-right">
+                              <Badge variant="outline" className={`text-[8px] ${node.status === 'LIVE_SYNC' ? 'border-emerald-500 text-emerald-500' : 'border-white/10'}`}>{node.status}</Badge>
+                              <p className="text-[9px] text-muted-foreground font-mono mt-1">LATENCY: {node.latency}</p>
+                           </div>
+                        </CardContent>
+                      </Card>
+                    ))}
                  </div>
               </section>
 
@@ -225,45 +221,45 @@ export default function SovereignGatewayPage() {
             </div>
 
             <div className="space-y-8">
-              {/* Grid Sentinel */}
+              {/* Fail-over Sentinel */}
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                    <Network className="size-4" /> Project #53: Grid Scale
+                    <ShieldPlus className="size-4" /> Global Fail-over Protocol
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                   <div className="space-y-4">
+                   <div className="p-3 bg-black/40 rounded border border-white/5 text-center">
+                      <p className="text-[8px] text-muted-foreground uppercase font-bold">Immortality Status</p>
+                      <Badge className="bg-emerald-500 text-[10px] font-bold mt-1">ARMED</Badge>
+                   </div>
+                   <p className="text-[9px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-4">
+                      "Automatic Traffic Rerouting active. If a regional rail collapses, the grid bypasses the failure node via the Asian Bridge."
+                   </p>
+                   <div className="space-y-3">
                       {[
-                        { label: "Active Nodes", val: "12 LIVE", icon: Building2, color: "text-emerald-500" },
-                        { label: "Target Regions", val: "EU, ASIA, ME", icon: Globe, color: "text-primary" },
-                        { label: "Grid Stability", val: "OPTIMAL", icon: ShieldCheck, color: "text-emerald-500" },
-                        { label: "Inter-Node Latency", val: "< 120ms", icon: Activity, color: "text-amber-500" }
+                        { label: "Detected Rails", val: "73+" },
+                        { label: "Redundancy Nodes", val: "13 LIVE" },
+                        { label: "Switch Latency", val: "< 120ms" }
                       ].map((item, i) => (
-                        <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
-                           <div className="flex items-center gap-2">
-                              <item.icon className={`size-3 ${item.color}`} />
-                              <span className="text-[10px] text-muted-foreground uppercase font-bold">{item.label}</span>
-                           </div>
-                           <Badge variant="outline" className={`text-[7px] border-none font-bold uppercase ${item.color} bg-white/5`}>{item.val}</Badge>
+                        <div key={i} className="flex justify-between items-center text-[10px] font-mono border-b border-white/5 pb-1">
+                           <span className="text-muted-foreground uppercase">{item.label}</span>
+                           <span className="text-white font-bold">{item.val}</span>
                         </div>
                       ))}
                    </div>
-                   <p className="text-[9px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-4">
-                      "Scaling from the Iberian corridor to the global grid. Project #53 enables autonomous node clustering for zero-downtime finance."
-                   </p>
                 </CardContent>
               </Card>
 
               <Card className="glass-card border-amber-500/20 bg-amber-500/5">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                       <ShieldAlert className="size-3" /> Anomaly Protection
+                       <Fingerprint className="size-3" /> Regulatory Watch
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       "Every LIVE node is monitored by Nora-52. Latency spikes trigger autonomous rerouting to maintain the grid's Sovereign Integrity."
+                       "Nora-54 is currently monitoring Asian Banking Directives for auto-adjustment of SCA parameters."
                     </p>
                  </CardContent>
               </Card>
