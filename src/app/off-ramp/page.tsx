@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
+import { Switch } from "@/components/ui/switch"
 import { 
   ArrowDownToLine, 
   ShieldCheck, 
@@ -26,7 +27,13 @@ import {
   Coins,
   History,
   Archive,
-  Fingerprint
+  Fingerprint,
+  FileCheck,
+  ShieldPlus,
+  ArrowRight,
+  ShieldAlert,
+  Flame,
+  Activity
 } from "lucide-react"
 import { authorizeWithdrawal, OffRampOutput } from "@/ai/flows/off-ramp-flow"
 import { runNeuralAudit } from "@/ai/flows/neural-audit-flow"
@@ -45,11 +52,13 @@ export default function OffRampPage() {
   const { toast } = useToast()
   const db = useFirestore()
   const [loading, setLoading] = useState(false)
+  const [isDryRun, setIsDryRun] = useState(true)
   const [result, setResult] = useState<OffRampOutput | null>(null)
   const [auditStep, setAuditStep] = useState<string | null>(null)
+  const [certificate, setCertificate] = useState<string | null>(null)
   
   const [form, setForm] = useState({
-    amount: 1000,
+    amount: 10,
     asset: "USDC",
     method: "MOBILE_BANKING" as any,
     destination: "+8801700000000",
@@ -58,11 +67,12 @@ export default function OffRampPage() {
   async function handleExecuteOffRamp() {
     setLoading(true)
     setResult(null)
+    setCertificate(null)
     setAuditStep("Initializing Project #161 Protocol...")
 
     try {
       // 1. Nora-12 Verification & Conversion
-      setAuditStep("Nora-12: Verifying Withdrawal Intent...")
+      setAuditStep(isDryRun ? "Nora-12: Dry Run Verification..." : "Nora-12: Verifying Withdrawal Intent...")
       const offRampData = await authorizeWithdrawal({
         ...form,
         ownerTier: 'IMPERIAL'
@@ -73,7 +83,7 @@ export default function OffRampPage() {
       const audit = await runNeuralAudit({
         nodeId: "SOV_OFF_RAMP_NODE",
         nodeType: 'AGGREGATOR',
-        region: "GLOBAL",
+        region: isDryRun ? "DRY_RUN_ISOLATION" : "GLOBAL",
         consentStatus: "Sovereign Withdrawal Authorization",
         pulseMode: true
       })
@@ -82,7 +92,7 @@ export default function OffRampPage() {
 
       // 3. Vault Anchoring (Project #55)
       setAuditStep("Project #55: Anchoring Intent to Sovereign Vault...")
-      await anchorToSovereignVault({
+      const vaultRes = await anchorToSovereignVault({
         transactionId: `OR-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
         tenantId: "SYSTEM",
         clientTier: "IMPERIAL",
@@ -91,19 +101,22 @@ export default function OffRampPage() {
       })
 
       setResult(offRampData)
+      setCertificate(`CERT-P161-${vaultRes.encryptionHash.substring(0, 16)}`)
 
       // 4. Log to Immutable Ledger
       await addDoc(collection(db, "off_ramp_ledger"), {
         ...form,
         ...offRampData,
         auditHash: audit.auditSignature,
+        vaultCertificate: `CERT-P161-${vaultRes.encryptionHash.substring(0, 16)}`,
+        isDryRun: isDryRun,
         timestamp: Date.now(),
         status: "COMPLETED"
       })
 
       toast({ 
-        title: "Off-Ramp Authorized", 
-        description: `Converted to ${offRampData.convertedAmount} ${offRampData.localCurrency}`,
+        title: isDryRun ? "Dry Run Successful" : "Off-Ramp Authorized", 
+        description: `Certificate generated: CERT-P161...`,
         className: "border-emerald-500/50 bg-emerald-500/5 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
       })
     } catch (e: any) {
@@ -128,6 +141,9 @@ export default function OffRampPage() {
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
                    <ArrowDownToLine className="size-3 mr-2" /> Project #161: Sovereign Off-Ramp
                  </Badge>
+                 <Badge variant="outline" className={`h-8 px-3 flex items-center gap-2 ${isDryRun ? 'border-amber-500/50 text-amber-500 bg-amber-500/5' : 'border-emerald-500/50 text-emerald-500 bg-emerald-500/5'}`}>
+                   <Activity className="size-3" /> {isDryRun ? 'DRY_RUN_MODE: ON' : 'PRODUCTION_MODE: ON'}
+                 </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Asset <span className="text-primary">Exit.</span>
@@ -136,10 +152,10 @@ export default function OffRampPage() {
                 Mission 500: Global Asset Liquidity. Converting digital wealth into real-world fiat with autonomous auditing and cold-storage anchoring.
               </p>
             </div>
-            <div className="flex items-center gap-4">
-               <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Exchange Veracity</p>
-                  <p className="text-2xl font-headline font-bold text-emerald-500 uppercase">100.0%</p>
+            <div className="flex flex-col items-end gap-3">
+               <div className="flex items-center gap-3 p-3 glass-card rounded-xl border-amber-500/20">
+                  <Label className="text-[10px] font-bold uppercase text-amber-500">Dry Run Protocol</Label>
+                  <Switch checked={isDryRun} onCheckedChange={setIsDryRun} />
                </div>
             </div>
           </header>
@@ -148,10 +164,10 @@ export default function OffRampPage() {
             <div className="lg:col-span-3 space-y-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                  {/* Off-Ramp Terminal */}
-                 <Card className="glass-card border-l-4 border-l-primary">
+                 <Card className={`glass-card border-l-4 transition-all duration-500 ${isDryRun ? 'border-l-amber-500' : 'border-l-primary'}`}>
                     <CardHeader>
-                       <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                          <Zap className="size-4" /> Off-Ramp Terminal
+                       <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
+                          <Zap className={`size-4 ${isDryRun ? 'text-amber-500' : 'text-primary'}`} /> Off-Ramp Terminal
                        </CardTitle>
                        <CardDescription>Initiate secure asset conversion for withdrawal.</CardDescription>
                     </CardHeader>
@@ -179,7 +195,7 @@ export default function OffRampPage() {
                                   onChange={e => setForm({...form, amount: parseFloat(e.target.value) || 0})}
                                   className="bg-background/50 border-white/10 font-headline text-lg h-12 pl-10"
                                 />
-                                <Coins className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-primary" />
+                                <Coins className={`absolute left-3 top-1/2 -translate-y-1/2 size-4 ${isDryRun ? 'text-amber-500' : 'text-primary'}`} />
                              </div>
                           </div>
                           <div className="space-y-2">
@@ -196,7 +212,7 @@ export default function OffRampPage() {
                        <Button 
                         onClick={handleExecuteOffRamp} 
                         disabled={loading}
-                        className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary"
+                        className={`w-full font-bold uppercase tracking-widest h-14 transition-all duration-500 ${isDryRun ? 'bg-amber-500 hover:bg-amber-600 text-black glow-emerald' : 'bg-primary text-primary-foreground glow-primary'}`}
                        >
                          {loading ? (
                            <div className="flex items-center gap-3">
@@ -204,7 +220,7 @@ export default function OffRampPage() {
                               <span className="text-[10px] font-mono">{auditStep}</span>
                            </div>
                          ) : (
-                           <><ArrowRightLeft className="size-5 mr-2" /> Execute Off-Ramp</>
+                           <><ArrowRightLeft className="size-5 mr-2" /> {isDryRun ? 'Execute Dry Run' : 'Execute Off-Ramp'}</>
                          )}
                        </Button>
                     </CardContent>
@@ -223,7 +239,7 @@ export default function OffRampPage() {
                             <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl space-y-4">
                                <div className="flex justify-between items-center border-b border-white/5 pb-2">
                                   <span className="text-[10px] font-bold text-emerald-500 uppercase">Conversion Logic</span>
-                                  <Badge className="bg-emerald-500">AUTHORIZED</Badge>
+                                  <Badge className="bg-emerald-500">{isDryRun ? 'DRY_RUN_PASSED' : 'AUTHORIZED'}</Badge>
                                </div>
                                <div className="text-center py-4">
                                   <p className="text-[10px] text-muted-foreground uppercase font-bold">Payout Estimate</p>
@@ -234,6 +250,17 @@ export default function OffRampPage() {
                                <p className="text-[10px] text-white italic leading-relaxed text-center">"{result.reasoning}"</p>
                             </div>
 
+                            {certificate && (
+                               <div className="p-4 bg-primary/10 border border-primary/20 rounded-xl space-y-2">
+                                  <div className="flex items-center gap-2">
+                                     <FileCheck className="size-4 text-primary" />
+                                     <p className="text-[10px] font-bold text-white uppercase tracking-widest">Digital Audit Certificate</p>
+                                  </div>
+                                  <code className="text-[9px] font-mono text-primary block break-all bg-black/40 p-2 rounded">{certificate}</code>
+                                  <p className="text-[7px] text-muted-foreground uppercase">Project #55: Anchored to Cold Storage Node 1</p>
+                               </div>
+                            )}
+
                             <div className="grid grid-cols-2 gap-4">
                                <div className="p-3 bg-black/40 rounded border border-white/5">
                                   <p className="text-[8px] text-muted-foreground uppercase mb-1">Processing Fee</p>
@@ -243,11 +270,6 @@ export default function OffRampPage() {
                                   <p className="text-[8px] text-muted-foreground uppercase mb-1">ETA Completion</p>
                                   <p className="text-xs font-mono text-white">{result.eta}</p>
                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                               <p className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest">Sovereign Off-Ramp Signature</p>
-                               <code className="text-[9px] font-mono text-primary block bg-black/40 p-2 rounded truncate">{result.securitySignature}</code>
                             </div>
                          </div>
                        ) : (
@@ -305,7 +327,7 @@ export default function OffRampPage() {
                       {[
                         { label: "Vault Sync", val: "100%", icon: Archive },
                         { label: "Audit Veracity", val: "99.9%", icon: FileText },
-                        { label: "SCA Requirement", val: "ENFORCED", icon: Lock }
+                        { label: "Certificate generation", val: "AUTOMATED", icon: Lock }
                       ].map((s, i) => (
                         <div key={i} className="flex justify-between items-center text-[10px] font-mono border-b border-white/5 pb-2">
                            <div className="flex items-center gap-2">

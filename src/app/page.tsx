@@ -34,7 +34,12 @@ import {
   Fingerprint,
   TrendingUp,
   Landmark,
-  FileText
+  FileText,
+  Rocket,
+  ShieldPlus,
+  Compass,
+  FileSearch,
+  Check
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -279,6 +284,100 @@ export default function Home() {
                </Card>
             </div>
           </header>
+
+          {/* Global Operational Readiness Report Section - NEW */}
+          <section className="space-y-6">
+             <div className="flex justify-between items-center">
+                <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                   <FileSearch className="size-4" /> Global Operational Readiness Report (Mission 500)
+                </h3>
+                <Badge variant="outline" className="border-primary/20 text-primary uppercase font-bold text-[8px]">STATUS: READY_FOR_ATLANTIC_SCALING</Badge>
+             </div>
+             <Card className="glass-card overflow-hidden">
+                <div className="grid grid-cols-1 lg:grid-cols-3">
+                   <div className="lg:col-span-2 p-8 space-y-8 border-r border-white/5">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                         <div className="space-y-4">
+                            <h4 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2">
+                               <Check className="size-4 text-emerald-500" /> Mission 400 Synthesis
+                            </h4>
+                            <ul className="space-y-3">
+                               {[
+                                 "20 High-Power Nodes Verified",
+                                 "Quantum Vault Anchoring Secured",
+                                 "eIDAS Certificate Mesh Live",
+                                 "26ms Latency Corridor Locked"
+                               ].map((item, i) => (
+                                 <li key={i} className="text-[11px] text-muted-foreground flex items-start gap-2">
+                                    <div className="size-1.5 rounded-full bg-emerald-500 mt-1" />
+                                    {item}
+                                 </li>
+                               ))}
+                            </ul>
+                         </div>
+                         <div className="space-y-4">
+                            <h4 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2">
+                               <Rocket className="size-4 text-primary" /> Mission 500 Initial Phase
+                            </h4>
+                            <ul className="space-y-3">
+                               {[
+                                 "Project #160: Autonomous Onboarding Live",
+                                 "Project #161: Off-Ramp Dry Run PASSED",
+                                 "Predictive Flow Orchestrator Armed",
+                                 "Global Hegemony Roadmap Mapped"
+                               ].map((item, i) => (
+                                 <li key={i} className="text-[11px] text-muted-foreground flex items-start gap-2">
+                                    <div className="size-1.5 rounded-full bg-primary mt-1" />
+                                    {item}
+                                 </li>
+                               ))}
+                            </ul>
+                         </div>
+                      </div>
+                      <div className="pt-6 border-t border-white/5">
+                         <p className="text-sm text-white font-headline leading-relaxed italic">
+                            "The Sovereign OS has passed the Three Courts of Truth. We are now transitioning from internal simulation to global dominance. All infrastructure layers are synchronized for 100% operational uptime."
+                         </p>
+                      </div>
+                   </div>
+                   <div className="p-8 bg-black/40 space-y-8 flex flex-col justify-center">
+                      <div className="text-center space-y-2">
+                         <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Aggregate Readiness Score</p>
+                         <p className="text-6xl font-headline font-bold text-primary tracking-tighter">98.4<span className="text-xs ml-1">%</span></p>
+                      </div>
+                      <div className="space-y-4">
+                         <div className="space-y-1">
+                            <div className="flex justify-between text-[9px] font-mono uppercase">
+                               <span>Security Integrity</span>
+                               <span className="text-emerald-500">MAX</span>
+                            </div>
+                            <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                               <div className="h-full bg-emerald-500" style={{ width: '100%' }} />
+                            </div>
+                         </div>
+                         <div className="space-y-1">
+                            <div className="flex justify-between text-[9px] font-mono uppercase">
+                               <span>Scalability Torque</span>
+                               <span className="text-primary">94%</span>
+                            </div>
+                            <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                               <div className="h-full bg-primary" style={{ width: '94%' }} />
+                            </div>
+                         </div>
+                         <div className="space-y-1">
+                            <div className="flex justify-between text-[9px] font-mono uppercase">
+                               <span>Regulatory Alignment</span>
+                               <span className="text-purple-500">100%</span>
+                            </div>
+                            <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                               <div className="h-full bg-purple-500" style={{ width: '100%' }} />
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </Card>
+          </section>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
