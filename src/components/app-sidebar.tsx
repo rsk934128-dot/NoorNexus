@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -44,7 +45,9 @@ import {
   UserCircle,
   BrainCircuit,
   Rocket,
-  Star
+  Star,
+  Factory,
+  Wrench
 } from "lucide-react"
 
 import {
@@ -75,6 +78,7 @@ const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Open Banking Hub", url: "/open-banking", icon: Landmark },
+  { title: "Industrial Hub", url: "/industrial-hub", icon: Factory },
   { title: "Builders Program", url: "/api-hub", icon: Rocket },
   { title: "Partnership Kit", url: "/docs", icon: Briefcase },
   { title: "Imperial Portfolio", url: "/portfolio", icon: Star },

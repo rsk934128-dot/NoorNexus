@@ -30,6 +30,12 @@
       "description": "Browser tab icon",
       "imageUrl": "https://picsum.photos/seed/sovereign-logo/32/32",
       "imageHint": "abstract logo"
+    },
+    {
+      "id": "industrial-coupling",
+      "description": "Heavy duty pipe coupling for physical mesh layers",
+      "imageUrl": "https://picsum.photos/seed/pipe-fit-99/600/400",
+      "imageHint": "steel coupling"
     }
   ]
 }
