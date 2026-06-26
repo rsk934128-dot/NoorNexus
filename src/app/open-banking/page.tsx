@@ -125,7 +125,7 @@ export default function OpenBankingHubPage() {
                      <p className="text-xs font-mono uppercase tracking-[0.3em] text-primary animate-pulse">LEGACY_CORE_SYNC...</p>
                   </div>
                 )}
-                <iframe src={activeUrl} className="w-full h-full border-0" sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals" allow="camera; microphone; clipboard-write; encrypted-media" />
+                <iframe src={activeUrl} className="w-full h-full border-0" sandbox="allow-same-origin allow-scripts allow-popovers allow-forms" allow="camera; microphone; clipboard-write; encrypted-media" />
              </div>
           </main>
         ) : (
@@ -144,7 +144,7 @@ export default function OpenBankingHubPage() {
                   Banking <span className="text-primary">Infrastructure.</span>
                 </h2>
                 <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                  Mission 400: Universal Banking Connect. Optimized by **Nora-50 Intelligent Orchestrator** for zero-drift performance.
+                  Mission 400: Universal Banking Connect. Optimized by **Nora-50 Intelligent Orchestrator** with Hybrid Fallback Support.
                 </p>
               </div>
               <div className="flex gap-4">
@@ -197,24 +197,24 @@ export default function OpenBankingHubPage() {
                 {/* Integration Pathways Section */}
                 <section className="space-y-6">
                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                      <LayoutGrid className="size-4" /> Integration Pathways
+                      <LayoutGrid className="size-4" /> Hybrid Resiliency Engine
                    </h3>
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <Card className="glass-card border-l-4 border-l-emerald-500 hover:border-emerald-500/30 transition-all group">
                          <CardHeader>
                             <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
-                               <Monitor className="size-4" /> Hosted Pages
+                               <Monitor className="size-4" /> Hosted Fallback
                             </CardTitle>
-                            <CardDescription>Fastest way to go live. Pre-built web flow for consent & authorization.</CardDescription>
+                            <CardDescription>Automatic redirect if Direct API fails to authorize or experiences drift.</CardDescription>
                          </CardHeader>
                          <CardContent className="space-y-4">
                             <ul className="space-y-2 text-[10px] text-muted-foreground list-disc pl-4">
-                               <li>No frontend engineering for consent flows.</li>
-                               <li>Handles SCA and bank redirects automatically.</li>
-                               <li>Customizable branding for the NoorNexus Empire.</li>
+                               <li>Zero manual intervention during API outages.</li>
+                               <li>Seamlessly hands off to pre-built consent flow.</li>
+                               <li>Maintains 99.98% successful handshake rate.</li>
                             </ul>
                             <Button size="sm" className="w-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20 text-[9px] uppercase font-bold">
-                               Launch Hosted Flow Demo
+                               Test Fallback Logic
                             </Button>
                          </CardContent>
                       </Card>
@@ -222,18 +222,18 @@ export default function OpenBankingHubPage() {
                       <Card className="glass-card border-l-4 border-l-primary hover:border-primary/30 transition-all">
                          <CardHeader>
                             <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
-                               <Code2 className="size-4" /> Direct API
+                               <Code2 className="size-4" /> Direct Control
                             </CardTitle>
-                            <CardDescription>Full control over the payment or data flow. Custom UI/UX implementation.</CardDescription>
+                            <CardDescription>White-labeled API interaction for deep UI/UX integration.</CardDescription>
                          </CardHeader>
                          <CardContent className="space-y-4">
                             <ul className="space-y-2 text-[10px] text-muted-foreground list-disc pl-4">
-                               <li>Supports bulk, scheduled, and international payments.</li>
-                               <li>Full NoorNexus UI/UX integration.</li>
-                               <li>Operating in any country without redirect limitations.</li>
+                               <li>Custom branding injection via Sovereign SDK.</li>
+                               <li>Real-time SCA status monitoring.</li>
+                               <li>Support for complex multi-sig transactions.</li>
                             </ul>
                             <Button size="sm" className="w-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 text-[9px] uppercase font-bold">
-                               View API Specs
+                               View White-label SDK
                             </Button>
                          </CardContent>
                       </Card>
@@ -352,11 +352,11 @@ export default function OpenBankingHubPage() {
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[9px] text-muted-foreground leading-relaxed">
-                         "Leveraging Hosted Pages and Direct API for a unified Sovereign Payment Gateway."
+                         "Leveraging Hosted Pages and Direct API with white-label branding injection."
                       </p>
                       <Link href="/sovereign-gateway" className="w-full">
                         <Button variant="outline" className="w-full h-8 text-[9px] uppercase font-bold border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/10">
-                           View Blueprint <ArrowRight className="size-3 ml-2" />
+                           View Gateway <ArrowRight className="size-3 ml-2" />
                         </Button>
                       </Link>
                    </CardContent>

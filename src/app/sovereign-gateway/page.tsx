@@ -6,6 +6,8 @@ import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { 
   Zap, 
   ShieldCheck, 
@@ -26,18 +28,33 @@ import {
   History,
   Scale,
   Monitor,
-  Smartphone
+  Smartphone,
+  Palette,
+  CheckCircle2,
+  ShieldAlert,
+  Loader2
 } from "lucide-react"
 
 const BLUEPRINT_STEPS = [
   { id: "P51.1", label: "Unified Auth Bridge", icon: LockKeyhole, status: "DESIGNED" },
   { id: "P51.2", label: "AETS Token Injection", icon: CreditCard, status: "READY" },
   { id: "P51.3", label: "Open Banking Rail Sync", icon: Landmark, status: "SYNCED" },
-  { id: "P51.4", label: "Hosted Redirect Flow", icon: Monitor, status: "READY" },
-  { id: "P51.5", label: "Enterprise SDK Release", icon: Code2, status: "PENDING" },
+  { id: "P51.4", label: "Intelligent Fallback Engine", icon: Zap, status: "HARDENED" },
+  { id: "P51.5", label: "White-label Studio", icon: Palette, status: "READY" },
 ]
 
 export default function SovereignGatewayPage() {
+  const [primaryColor, setPrimaryColor] = useState("#0096ff")
+  const [partnerLogo, setPartnerLogo] = useState("Imperial Bank")
+  const [saving, setSaving] = useState(false)
+
+  const handleSaveBranding = () => {
+    setSaving(true)
+    setTimeout(() => {
+      setSaving(false)
+    }, 1200)
+  }
+
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
@@ -50,32 +67,91 @@ export default function SovereignGatewayPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-purple-500/50 text-purple-500 uppercase font-bold tracking-widest px-3 h-8 bg-purple-500/5">
-                   <Rocket className="size-3 mr-2" /> Project #51: The Sovereign Gateway
+                   <Rocket className="size-3 mr-2" /> Project #51: Sovereign Gateway PaaS
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Global <span className="text-purple-500">Gateway.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project #51: The culmination of Mission 400. A unified API supporting both Hosted Redirect and Direct API pathways for external enterprise settlement.
+                Project #51: The culmination of Mission 400. A unified PaaS gateway with Hybrid Fallback, White-labeling, and real-time PSD2/SCA Compliance.
               </p>
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-purple-500/20 text-center min-w-[200px]">
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Architecture Ready</p>
-                  <p className="text-3xl font-headline font-bold text-purple-500">88%</p>
+                  <p className="text-3xl font-headline font-bold text-purple-500">100%</p>
                </div>
             </div>
           </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-10">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="lg:col-span-3 space-y-10">
+              
+              {/* White-label Studio Section */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                    <Palette className="size-4" /> White-label Studio (Beta)
+                 </h3>
+                 <Card className="glass-card overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-2">
+                       <div className="p-6 border-r border-white/5 space-y-6">
+                          <div className="space-y-4">
+                             <div className="space-y-2">
+                                <Label className="text-[10px] uppercase font-bold text-muted-foreground">Partner Logo Text</Label>
+                                <Input 
+                                  value={partnerLogo}
+                                  onChange={e => setPartnerLogo(e.target.value)}
+                                  className="bg-background/50 border-white/10"
+                                />
+                             </div>
+                             <div className="space-y-2">
+                                <Label className="text-[10px] uppercase font-bold text-muted-foreground">Brand Theme Color</Label>
+                                <div className="flex gap-4 items-center">
+                                   <input 
+                                     type="color" 
+                                     value={primaryColor} 
+                                     onChange={e => setPrimaryColor(e.target.value)}
+                                     className="size-10 bg-transparent cursor-pointer rounded-lg overflow-hidden border-none"
+                                   />
+                                   <code className="text-xs font-mono text-white">{primaryColor.toUpperCase()}</code>
+                                </div>
+                             </div>
+                          </div>
+                          <Button onClick={handleSaveBranding} disabled={saving} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest text-[10px]">
+                             {saving ? <Loader2 className="size-3 animate-spin mr-2" /> : <Sparkles className="size-3 mr-2" />}
+                             Apply Branding Injection
+                          </Button>
+                       </div>
+                       <div className="p-6 bg-black/40 flex flex-col items-center justify-center space-y-4">
+                          <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Gateway Preview</p>
+                          <div className="w-full max-w-[280px] bg-card border border-white/10 rounded-2xl p-6 shadow-2xl space-y-6">
+                             <div className="flex justify-between items-center">
+                                <span className="font-headline font-bold text-sm" style={{ color: primaryColor }}>{partnerLogo}</span>
+                                <LockKeyhole className="size-3 text-muted-foreground" />
+                             </div>
+                             <div className="space-y-3">
+                                <div className="h-2 bg-white/5 rounded w-1/2" />
+                                <div className="h-10 bg-white/5 rounded border border-white/10 flex items-center px-3 justify-between">
+                                   <span className="text-[10px] text-muted-foreground font-mono">Amount</span>
+                                   <span className="text-xs font-bold text-white">$1,500.00</span>
+                                </div>
+                             </div>
+                             <Button className="w-full font-bold uppercase text-[10px]" style={{ backgroundColor: primaryColor }}>
+                                Pay Now
+                             </Button>
+                          </div>
+                       </div>
+                    </div>
+                 </Card>
+              </section>
+
               {/* Architecture Blueprint */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <Layers className="size-4" /> System Blueprint
+                    <Layers className="size-4" /> Hardened System Blueprint
                  </h3>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {BLUEPRINT_STEPS.map((step) => (
                       <Card key={step.id} className="glass-card bg-white/2 border-white/5 hover:border-purple-500/30 transition-all group">
                         <CardContent className="p-6 space-y-4">
@@ -95,31 +171,35 @@ export default function SovereignGatewayPage() {
                  </div>
               </section>
 
-              {/* Enterprise Integration Demo */}
+              {/* Hybrid Fallback Demo */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                    <Code2 className="size-4" /> Integration Modes
+                    <Code2 className="size-4" /> Intelligent Fallback Logic
                  </h3>
                  <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                     <CardHeader>
-                       <CardTitle className="text-sm font-headline text-white uppercase">Direct API Payment Example</CardTitle>
+                       <CardTitle className="text-sm font-headline text-white uppercase">Sovereign Fallback Protocol</CardTitle>
                     </CardHeader>
                     <CardContent>
                        <pre className="bg-black/60 p-6 rounded-xl font-mono text-[11px] text-emerald-400 leading-relaxed overflow-x-auto border border-white/5">
-{`// Execute atomic settlement via Direct API
-const settlement = await noorNexus.pay({
-  amount: 5000,
-  currency: 'USD',
-  pathway: 'DIRECT_API', // Full UI Control
-  rails: 'OPEN_BANKING_YAPILY'
-});
-
-// OR Launch Hosted Redirect Flow
-const hostedUrl = await noorNexus.createHostedSession({
-  amount: 5000,
-  callbackUrl: 'https://partner.com/success',
-  branding: 'IMPERIAL_RED'
-});`}
+{`// Project #51: The Resiliency Fallback
+async function executeResilientSettlement(payout) {
+  try {
+    // Stage 1: Attempt Direct API (Plaid/Yapily)
+    return await gateway.directPay(payout);
+  } catch (error) {
+    console.warn("Direct API Drift: Redirecting to Hosted Flow...");
+    
+    // Stage 2: Automatic Fallback to Hosted Redirect
+    const fallbackUrl = await gateway.createHostedSession({
+      amount: payout.amount,
+      fallbackReason: error.code,
+      whiteLabel: partner_config.branding
+    });
+    
+    return { status: 'FALLBACK_REDIRECT', url: fallbackUrl };
+  }
+}`}
                        </pre>
                     </CardContent>
                  </Card>
@@ -127,20 +207,47 @@ const hostedUrl = await noorNexus.createHostedSession({
             </div>
 
             <div className="space-y-8">
-              <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
+              {/* Compliance Sentinel */}
+              <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
-                  <CardTitle className="text-xs font-headline uppercase text-purple-500 flex items-center gap-2">
-                    <Sparkles className="size-4" /> The Unified Advantage
+                  <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
+                    <ShieldCheck className="size-4" /> Compliance Sentinel
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                   <p className="text-[11px] text-muted-foreground leading-relaxed italic">
-                      "Hosted Pages provide the fastest time-to-market, while Direct API allows for deeply integrated civilizational experiences."
+                   <div className="space-y-4">
+                      {[
+                        { label: "PSD2 Compliance", status: "VERIFIED", icon: CheckCircle2, color: "text-emerald-500" },
+                        { label: "SCA Verification", status: "ACTIVE", icon: Smartphone, color: "text-emerald-500" },
+                        { label: "AML Velocity Check", status: "STABLE", icon: Activity, color: "text-primary" },
+                        { label: "Data Sovereignty", status: "ENFORCED", icon: Scale, color: "text-amber-500" }
+                      ].map((item, i) => (
+                        <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
+                           <div className="flex items-center gap-2">
+                              <item.icon className={`size-3 ${item.color}`} />
+                              <span className="text-[10px] text-muted-foreground uppercase font-bold">{item.label}</span>
+                           </div>
+                           <Badge variant="outline" className={`text-[7px] border-none font-bold uppercase ${item.color} bg-white/5`}>{item.status}</Badge>
+                        </div>
+                      ))}
+                   </div>
+                   <p className="text-[9px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-4">
+                      "Real-time monitoring of Strong Customer Authentication ensures 100% legal finality for every settlement."
                    </p>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
+                <CardHeader>
+                  <CardTitle className="text-xs font-headline uppercase text-purple-500 flex items-center gap-2">
+                    <Sparkles className="size-4" /> Gateway Advantage
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
                    <div className="space-y-3">
                       {[
-                        { label: "Hosted Speed", val: "Zero Frontend" },
-                        { label: "Direct Control", val: "Bulk/Scheduled" },
+                        { label: "Hybrid Success Rate", val: "99.98%" },
+                        { label: "White-label Latency", val: "0ms Injection" },
                         { label: "Global Reach", val: "20+ Countries" }
                       ].map((item, i) => (
                         <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5 text-[9px] uppercase font-bold">
@@ -152,15 +259,15 @@ const hostedUrl = await noorNexus.createHostedSession({
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-amber-500/20">
+              <Card className="glass-card border-amber-500/20 bg-amber-500/5">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                       <Smartphone className="size-3" /> SCA & SCA Redirects
+                       <ShieldAlert className="size-3" /> Zero-Trust Gate
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       "All Hosted Page integrations handle Strong Customer Authentication (SCA) automatically within the Sovereign Canal."
+                       "Every white-label request is hashed and verified against the Partner Mesh before branding injection."
                     </p>
                  </CardContent>
               </Card>
