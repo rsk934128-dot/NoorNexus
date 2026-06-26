@@ -48,7 +48,9 @@ import {
   Star,
   Factory,
   Wrench,
-  Truck
+  Truck,
+  Link2,
+  LockKeyhole
 } from "lucide-react"
 
 import {
@@ -78,10 +80,10 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
+  { title: "Enterprise Bridge", url: "/api-hub", icon: Link2, zenith: true },
   { title: "Open Banking Hub", url: "/open-banking", icon: Landmark },
   { title: "Industrial Hub", url: "/industrial-hub", icon: Factory },
   { title: "Asset Tracking (P46)", url: "/logistics", icon: Truck },
-  { title: "Builders Program", url: "/api-hub", icon: Rocket },
   { title: "Partnership Kit", url: "/docs", icon: Briefcase },
   { title: "Imperial Portfolio", url: "/portfolio", icon: Star },
   { title: "Imperial Flow Pay", url: "/flow-pay", icon: Zap },
@@ -132,11 +134,6 @@ export function AppSidebar() {
     const savedScrollPos = sessionStorage.getItem("sidebar-scroll-position")
     if (savedScrollPos && scrollRef.current) {
       scrollRef.current.scrollTop = parseInt(savedScrollPos)
-    }
-
-    const activeElement = scrollRef.current?.querySelector('[data-active="true"]')
-    if (activeElement) {
-      activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     }
   }, [pathname])
 
@@ -190,10 +187,10 @@ export function AppSidebar() {
           <SidebarMenu className="px-2">
             {USER_ITEMS.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={pathname === item.url} className="h-11 relative">
+                <SidebarMenuButton asChild isActive={pathname === item.url} className={`h-11 relative ${item.zenith ? 'hover:bg-purple-500/10' : ''}`}>
                   <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
-                    <item.icon className="size-5" />
-                    <span className="font-medium text-sm">{item.title}</span>
+                    <item.icon className={`size-5 ${item.zenith ? 'text-purple-500' : ''}`} />
+                    <span className={`font-medium text-sm ${item.zenith ? 'text-purple-400 font-bold' : ''}`}>{item.title}</span>
                     {item.badge && (
                       <span className="absolute right-2 top-1/2 -translate-y-1/2 flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -246,7 +243,7 @@ export function AppSidebar() {
                 </p>
                 <div className="flex items-center gap-1">
                    <div className={`size-1 rounded-full animate-pulse ${isAdmin ? 'bg-primary' : 'bg-emerald-500'}`} />
-                   <p className="text-[8px] text-muted-foreground uppercase font-mono">{isAdmin ? "ROOT_L4_SUPERUSER" : "Active Session"}</p>
+                   <p className="text-[8px] text-muted-foreground uppercase font-mono">{isAdmin ? "ZENITH_ROOT_L4" : "Active Session"}</p>
                 </div>
               </div>
             </div>

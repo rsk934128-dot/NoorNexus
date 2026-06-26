@@ -22,37 +22,29 @@ import {
   Award,
   Search,
   RefreshCcw,
-  ArrowRightLeft
+  ArrowRightLeft,
+  Link2,
+  Lock,
+  Network
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
-const STATUS_MAPPINGS = [
-  { provider: "bKash", code: "0000", meaning: "SUCCESS", system: "APPROVED" },
-  { provider: "bKash", code: "2023", meaning: "INSUFFICIENT_BALANCE", system: "FAILED" },
-  { provider: "Xendit", code: "PAID", meaning: "SETTLED", system: "APPROVED" },
-  { provider: "Xendit", code: "PENDING", meaning: "WAITING_PAYMENT", system: "PENDING_SOVEREIGN_SEAL" }
-]
-
-interface Message {
-  role: 'user' | 'model'
-  text: string
-}
-
 export default function ApiHubPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [query, setQuery] = useState("")
-  const [messages, setMessages] = useState<Message[]>([])
+  const [apiKey, setApiKey] = useState("")
+  const [messages, setMessages] = useState<any[]>([])
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behavior: 'smooth' })
-    }
-  }, [messages])
+  const generateKey = () => {
+    const key = `ZENITH_SK_${Math.random().toString(16).substring(2, 32).toUpperCase()}`
+    setApiKey(key)
+    toast({ title: "Enterprise Bridge Secret Generated", description: "Store this securely in your vault." })
+  }
 
   async function askNora() {
     if (!query.trim()) return
@@ -64,7 +56,7 @@ export default function ApiHubPage() {
     try {
       const result = await noraIntegrationAssistant({
         query: userMsg,
-        context: "GENERAL",
+        context: "DISCOVERY_PROTOCOL",
         history: messages.map(m => ({ role: m.role, text: m.text }))
       })
       
@@ -72,8 +64,6 @@ export default function ApiHubPage() {
         role: 'model', 
         text: result.answer
       }])
-      
-      toast({ title: "Nora-03 Dispatched Guidance" })
     } catch (e: any) {
       toast({ title: "AI Offline", description: e.message, variant: "destructive" })
     } finally {
@@ -92,117 +82,77 @@ export default function ApiHubPage() {
                  <SidebarTrigger className="md:hidden text-primary">
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
-                 <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <Rocket className="size-3 mr-2" /> Global Builders Program
+                 <Badge variant="outline" className="border-purple-500/50 text-purple-500 uppercase font-bold tracking-widest px-3 h-8 bg-purple-500/5">
+                   <Link2 className="size-3 mr-2" /> Sovereign External API Bridge
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Developer <span className="text-primary">Ecosystem.</span>
+                Empire <span className="text-purple-500">Zenith.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project 165: Integration Hub. Access standard mapping protocols for bKash, Xendit, and future gateways.
+                Project Zenith: Scaling the Predictive-Autonomy engine to external enterprise partners. Integrate the NoorNexus Snippet into your own infrastructure.
               </p>
             </div>
             <div className="flex items-center gap-4">
-               <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Builder Nodes</p>
-                  <p className="text-3xl font-headline font-bold text-primary">12 ACTIVE</p>
+               <div className="p-4 glass-card rounded-2xl border border-purple-500/20 text-center min-w-[200px]">
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Scaling Factor</p>
+                  <p className="text-3xl font-headline font-bold text-purple-500">ZENITH_L1</p>
                </div>
             </div>
           </header>
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
             <div className="xl:col-span-3 space-y-6">
-              <Tabs defaultValue="mapping" className="space-y-6">
+              <Tabs defaultValue="bridge" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
-                  <TabsTrigger value="mapping" className="gap-2"><RefreshCcw className="size-4" /> Status Mapping</TabsTrigger>
-                  <TabsTrigger value="builders" className="gap-2"><Rocket className="size-4" /> Builders Program</TabsTrigger>
-                  <TabsTrigger value="gateway" className="gap-2"><ReceiptText className="size-4" /> Partner Gateway</TabsTrigger>
+                  <TabsTrigger value="bridge" className="gap-2"><Network className="size-4" /> Enterprise Bridge</TabsTrigger>
+                  <TabsTrigger value="docs" className="gap-2"><BookOpen className="size-4" /> SDK Docs</TabsTrigger>
+                  <TabsTrigger value="keys" className="gap-2"><Key className="size-4" /> API Keys</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="mapping" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
-                   <Card className="glass-card border-l-4 border-l-emerald-500">
+                <TabsContent value="bridge" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+                   <Card className="glass-card border-l-4 border-l-purple-500">
                       <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
-                            <ArrowRightLeft className="size-4" /> Status Normalization Ledger
+                         <CardTitle className="text-sm font-headline uppercase text-purple-500 flex items-center gap-2">
+                            <Activity className="size-4" /> The Predictive-Autonomy API
                          </CardTitle>
-                         <CardDescription>Cross-provider status code mapping to Sovereign system states.</CardDescription>
-                      </CardHeader>
-                      <CardContent className="p-0">
-                         <div className="overflow-x-auto">
-                            <Table>
-                               <TableHeader>
-                                  <TableRow className="border-white/5">
-                                     <TableHead className="text-[10px] uppercase font-bold">Provider</TableHead>
-                                     <TableHead className="text-[10px] uppercase font-bold">Gateway Code</TableHead>
-                                     <TableHead className="text-[10px] uppercase font-bold">Raw Meaning</TableHead>
-                                     <TableHead className="text-[10px] uppercase font-bold">Sovereign Normalization</TableHead>
-                                  </TableRow>
-                               </TableHeader>
-                               <TableBody>
-                                  {STATUS_MAPPINGS.map((m, i) => (
-                                    <TableRow key={i} className="border-white/5 hover:bg-white/2 transition-colors">
-                                       <TableCell className="font-bold text-white text-xs">{m.provider}</TableCell>
-                                       <TableCell className="font-mono text-primary text-xs">{m.code}</TableCell>
-                                       <TableCell className="text-muted-foreground text-[10px] uppercase font-bold">{m.meaning}</TableCell>
-                                       <TableCell>
-                                          <Badge variant="outline" className={`text-[9px] uppercase ${m.system === 'APPROVED' ? 'border-emerald-500 text-emerald-500' : 'border-amber-500 text-amber-500'}`}>
-                                             {m.system}
-                                          </Badge>
-                                       </TableCell>
-                                    </TableRow>
-                                  ))}
-                               </TableBody>
-                            </Table>
-                         </div>
-                      </CardContent>
-                   </Card>
-                </TabsContent>
-
-                <TabsContent value="builders" className="space-y-6">
-                   <Card className="glass-card border-l-4 border-l-primary">
-                      <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase text-primary">The Builders Roadmap</CardTitle>
-                         <CardDescription>Path to NoorNexus Certification and Pilot Grants.</CardDescription>
+                         <CardDescription>Granting external entities access to Nora-01 and Project #47 logic.</CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-6">
-                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {[
-                              { step: "1. Certification", desc: "Pass the HMAC_V4 Security audit.", icon: Award },
-                              { step: "2. Pilot Grant", desc: "Apply for 500k Simulation Tokens.", icon: Zap },
-                              { step: "3. Mainnet Launch", desc: "Deploy to 420+ Mesh Nodes.", icon: Rocket }
-                            ].map((s, i) => (
-                              <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-2">
-                                 <s.icon className="size-6 text-primary" />
-                                 <p className="text-[10px] font-bold text-white uppercase">{s.step}</p>
-                                 <p className="text-[9px] text-muted-foreground">{s.desc}</p>
-                              </div>
-                            ))}
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="p-5 bg-black/40 rounded-xl border border-white/5 space-y-3">
+                               <h4 className="text-[10px] font-bold uppercase text-white">Endpoint: Predictive Maintenance</h4>
+                               <p className="text-[9px] text-muted-foreground italic">"Allows external industrial nodes to calculate failure probabilities using NoorNexus trained weights."</p>
+                               <code className="text-[10px] text-purple-400 block bg-black p-2 rounded">POST /v1/zenith/predict</code>
+                            </div>
+                            <div className="p-5 bg-black/40 rounded-xl border border-white/5 space-y-3">
+                               <h4 className="text-[10px] font-bold uppercase text-white">Endpoint: Sovereign Compliance</h4>
+                               <p className="text-[9px] text-muted-foreground italic">"Verify HMAC_V4 packet integrity for your own app mesh."</p>
+                               <code className="text-[10px] text-purple-400 block bg-black p-2 rounded">POST /v1/zenith/verify</code>
+                            </div>
                          </div>
                       </CardContent>
                    </Card>
                 </TabsContent>
 
-                <TabsContent value="gateway" className="space-y-6">
-                   <Card className="glass-card border-l-4 border-l-emerald-500">
+                <TabsContent value="keys" className="space-y-6">
+                   <Card className="glass-card">
                       <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase text-emerald-500">Universal Gateway Endpoints</CardTitle>
-                         <CardDescription>Standardized API for Pilot and Institutional Partners.</CardDescription>
+                         <CardTitle className="text-sm font-headline uppercase text-primary">Sovereign Key Management</CardTitle>
                       </CardHeader>
-                      <CardContent className="p-0">
-                         <div className="divide-y divide-white/5">
-                           {[
-                             { method: "POST", path: "/partner/v1/handshake", desc: "Initiate RSA-signed session." },
-                             { method: "POST", path: "/partner/v1/settle", desc: "Request atomic settlement." }
-                           ].map((ep, i) => (
-                             <div key={i} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-white/2 transition-colors">
-                               <div className="flex items-center gap-4">
-                                 <Badge className="bg-primary text-[8px]">{ep.method}</Badge>
-                                 <code className="text-xs font-mono text-white">{ep.path}</code>
-                               </div>
-                               <p className="text-[10px] text-muted-foreground uppercase">{ep.desc}</p>
-                             </div>
-                           ))}
+                      <CardContent className="space-y-6">
+                         <div className="p-6 bg-black/40 rounded-xl border border-dashed border-white/20 text-center space-y-4">
+                            {!apiKey ? (
+                              <Button onClick={generateKey} className="bg-primary text-primary-foreground font-bold uppercase tracking-widest">
+                                <Zap className="size-4 mr-2" /> Generate Zenith Key
+                              </Button>
+                            ) : (
+                              <div className="space-y-2">
+                                <p className="text-[10px] text-muted-foreground uppercase font-bold">Your Secret Bridge Key</p>
+                                <code className="text-lg font-mono text-emerald-500 bg-black p-4 rounded block break-all">{apiKey}</code>
+                                <p className="text-[8px] text-destructive uppercase font-bold animate-pulse">Never share this key. It grants Zenith Phase access.</p>
+                              </div>
+                            )}
                          </div>
                       </CardContent>
                    </Card>
@@ -214,20 +164,20 @@ export default function ApiHubPage() {
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-                    <Award className="size-4" /> Mapping Readiness
+                    <Award className="size-4" /> Zenith Licensing
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                      "We are documenting the translation layer between legacy finance and sovereign nodes. Integration speed: &lt; 2 hours per provider."
+                      "Enterprise scaling is the bridge to global dominance. We offer 99.8% precision to partners who align with our ethical framework."
                    </p>
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-l-4 border-l-amber-500 h-[450px] flex flex-col">
+              <Card className="glass-card border-l-4 border-l-purple-500 h-[450px] flex flex-col">
                 <CardHeader className="shrink-0">
-                  <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
-                    <Cpu className="size-4" /> Nora-03 Support
+                  <CardTitle className="text-xs font-headline uppercase tracking-widest text-purple-500 flex items-center gap-2">
+                    <Cpu className="size-4" /> Zenith Assistant
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col min-h-0 overflow-hidden space-y-4">
@@ -247,7 +197,7 @@ export default function ApiHubPage() {
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <input 
-                         placeholder="Mapping query..." 
+                         placeholder="Technical query..." 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}

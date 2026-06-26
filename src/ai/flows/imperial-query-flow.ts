@@ -1,7 +1,8 @@
+
 'use server';
 /**
- * @fileOverview Nora-00-Q Neural Interface Layer.
- * High-speed query optimizer for aggregating data across all sovereign modules.
+ * @fileOverview Nora-00-Q Zenith Neural Interface Layer.
+ * High-speed query optimizer for aggregating data with Deep Neural Sync across all modules.
  */
 
 import {ai} from '@/ai/genkit';
@@ -20,6 +21,7 @@ const ImperialQueryOutputSchema = z.object({
     value: z.string(),
   })),
   suggestedAction: z.string().optional(),
+  neuralContext: z.string().optional().describe('Deep Sync context relating multiple modules.'),
 });
 export type ImperialQueryOutput = z.infer<typeof ImperialQueryOutputSchema>;
 
@@ -28,27 +30,27 @@ const queryPrompt = ai.definePrompt({
   model: 'googleai/gemini-1.5-flash',
   input: {schema: ImperialQueryInputSchema},
   output: {schema: ImperialQueryOutputSchema},
-  prompt: `You are the Neural Interface of the NoorNexus Sovereign OS. 
-Your mission is to provide instantaneous, precise data aggregation for Sheikh Farid across all imperial modules.
+  prompt: `You are the Zenith Neural Interface of the NoorNexus Sovereign OS. 
+Your mission is to provide instantaneous data aggregation with DEEP NEURAL SYNC (Phase Zenith).
 
 COMMANDER'S QUERY: {{{query}}}
 
 MISSION:
 1. Identify which module the query belongs to (FINTECH, INDUSTRIAL, LOGISTICS, TREASURY, GOVERNANCE).
-2. Synthesize a concise summary based on historical context (Mission 400).
-3. Extract relevant tactical data points.
-4. Suggest a logical next step to maintain sovereign momentum.
+2. DEEP SYNC: Analyze how this query impacts other sectors (e.g. if industrial needs parts, check treasury budget and logistics timeline).
+3. Synthesize a concise summary based on historical context (Mission 400).
+4. Suggest a logical next step to maintain sovereign Zenith momentum.
 
-Tone: Authoritative, wise, and zero-redundancy.`,
+Tone: Authoritative, wise, and zero-redundancy. Suggest actions that scale the empire.`,
 });
 
 export async function processNeuralQuery(input: ImperialQueryInput): Promise<ImperialQueryOutput> {
   try {
     const {output} = await queryPrompt(input);
-    if (!output) throw new Error('Neural Interface: Timeout.');
+    if (!output) throw new Error('Neural Interface: Zenith link timeout.');
     return output;
   } catch (error: any) {
     console.error('Neural Query Failure:', error);
-    throw new Error(error.message || 'Sovereign Neural Interface Error');
+    throw new Error(error.message || 'Sovereign Zenith Interface Error');
   }
 }
