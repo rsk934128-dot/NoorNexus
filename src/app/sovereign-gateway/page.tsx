@@ -24,14 +24,17 @@ import {
   Globe,
   Activity,
   History,
-  Scale
+  Scale,
+  Monitor,
+  Smartphone
 } from "lucide-react"
 
 const BLUEPRINT_STEPS = [
   { id: "P51.1", label: "Unified Auth Bridge", icon: LockKeyhole, status: "DESIGNED" },
   { id: "P51.2", label: "AETS Token Injection", icon: CreditCard, status: "READY" },
   { id: "P51.3", label: "Open Banking Rail Sync", icon: Landmark, status: "SYNCED" },
-  { id: "P51.4", label: "Enterprise SDK Release", icon: Code2, status: "PENDING" },
+  { id: "P51.4", label: "Hosted Redirect Flow", icon: Monitor, status: "READY" },
+  { id: "P51.5", label: "Enterprise SDK Release", icon: Code2, status: "PENDING" },
 ]
 
 export default function SovereignGatewayPage() {
@@ -54,13 +57,13 @@ export default function SovereignGatewayPage() {
                 Global <span className="text-purple-500">Gateway.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project #51: The culmination of Mission 400. A unified API for external enterprises to settle values using NoorNexus's resilient banking canals and tokenized security.
+                Project #51: The culmination of Mission 400. A unified API supporting both Hosted Redirect and Direct API pathways for external enterprise settlement.
               </p>
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-purple-500/20 text-center min-w-[200px]">
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Architecture Ready</p>
-                  <p className="text-3xl font-headline font-bold text-purple-500">84%</p>
+                  <p className="text-3xl font-headline font-bold text-purple-500">88%</p>
                </div>
             </div>
           </header>
@@ -95,31 +98,28 @@ export default function SovereignGatewayPage() {
               {/* Enterprise Integration Demo */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                    <Code2 className="size-4" /> Enterprise Handshake (Mock SDK)
+                    <Code2 className="size-4" /> Integration Modes
                  </h3>
                  <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                     <CardHeader>
-                       <CardTitle className="text-sm font-headline text-white uppercase">Initialize NoorNexus Gateway</CardTitle>
+                       <CardTitle className="text-sm font-headline text-white uppercase">Direct API Payment Example</CardTitle>
                     </CardHeader>
                     <CardContent>
                        <pre className="bg-black/60 p-6 rounded-xl font-mono text-[11px] text-emerald-400 leading-relaxed overflow-x-auto border border-white/5">
-{`// Install the Sovereign SDK
-import { NoorNexus } from '@noornexus/gateway-sdk';
-
-const gateway = new NoorNexus({
-  apiKey: process.env.SOVEREIGN_SK,
-  meshNode: 'Sirajganj-Edge-01'
-});
-
-// Execute atomic settlement
-const settlement = await gateway.pay({
+{`// Execute atomic settlement via Direct API
+const settlement = await noorNexus.pay({
   amount: 5000,
   currency: 'USD',
-  rails: 'OPEN_BANKING_YAPILY',
-  tokenStrategy: 'NORA_21_HARDENED'
+  pathway: 'DIRECT_API', // Full UI Control
+  rails: 'OPEN_BANKING_YAPILY'
 });
 
-console.log('Pulse ID:', settlement.pulseId);`}
+// OR Launch Hosted Redirect Flow
+const hostedUrl = await noorNexus.createHostedSession({
+  amount: 5000,
+  callbackUrl: 'https://partner.com/success',
+  branding: 'IMPERIAL_RED'
+});`}
                        </pre>
                     </CardContent>
                  </Card>
@@ -135,13 +135,13 @@ console.log('Pulse ID:', settlement.pulseId);`}
                 </CardHeader>
                 <CardContent className="space-y-6">
                    <p className="text-[11px] text-muted-foreground leading-relaxed italic">
-                      "Project #51 eliminates the need for multiple banking integrations. A single handshake grants access to every canal in the Sovereign Mesh."
+                      "Hosted Pages provide the fastest time-to-market, while Direct API allows for deeply integrated civilizational experiences."
                    </p>
                    <div className="space-y-3">
                       {[
-                        { label: "Token Security", val: "AETS Native" },
-                        { label: "Rail Selection", val: "Autonomous" },
-                        { label: "Audit Ledger", val: "One Engine" }
+                        { label: "Hosted Speed", val: "Zero Frontend" },
+                        { label: "Direct Control", val: "Bulk/Scheduled" },
+                        { label: "Global Reach", val: "20+ Countries" }
                       ].map((item, i) => (
                         <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5 text-[9px] uppercase font-bold">
                            <span className="text-muted-foreground">{item.label}</span>
@@ -152,26 +152,15 @@ console.log('Pulse ID:', settlement.pulseId);`}
                 </CardContent>
               </Card>
 
-              <Card className="glass-card">
-                 <CardHeader>
-                    <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
-                       <Activity className="size-4" /> Market Potential
-                    </CardTitle>
-                 </CardHeader>
-                 <CardContent className="space-y-4 text-[10px] text-muted-foreground leading-relaxed">
-                    "Externalizing the Gateway will increase our Settlement Volume by an estimated 140% in Phase P9. We are building the central station for global digital commerce."
-                 </CardContent>
-              </Card>
-
               <Card className="glass-card border-amber-500/20">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                       <Scale className="size-3" /> Regulatory Shield
+                       <Smartphone className="size-3" /> SCA & SCA Redirects
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       "All external enterprise transactions are subject to Article IX Reality Audit and automatic forensic screening by Nora-01."
+                       "All Hosted Page integrations handle Strong Customer Authentication (SCA) automatically within the Sovereign Canal."
                     </p>
                  </CardContent>
               </Card>

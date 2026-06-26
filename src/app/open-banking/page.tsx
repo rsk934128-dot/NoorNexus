@@ -31,7 +31,9 @@ import {
   Code2,
   AlertTriangle,
   Network,
-  ArrowRight
+  ArrowRight,
+  LayoutGrid,
+  Monitor
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
@@ -47,7 +49,7 @@ const GLOBAL_LEADERS = [
     name: "Yapily", 
     hq: "UK", 
     banks: "2,000+", 
-    countries: "19+", 
+    countries: "20+", 
     tag: "AMEX Strategic Partner", 
     url: "https://yapily.com/", 
     alliance: "AMEX Pay with Bank Transfer",
@@ -192,38 +194,78 @@ export default function OpenBankingHubPage() {
                    </div>
                 </section>
 
-                {/* Yapily API v11.5.2 Reference */}
+                {/* Integration Pathways Section */}
+                <section className="space-y-6">
+                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                      <LayoutGrid className="size-4" /> Integration Pathways
+                   </h3>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <Card className="glass-card border-l-4 border-l-emerald-500 hover:border-emerald-500/30 transition-all group">
+                         <CardHeader>
+                            <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
+                               <Monitor className="size-4" /> Hosted Pages
+                            </CardTitle>
+                            <CardDescription>Fastest way to go live. Pre-built web flow for consent & authorization.</CardDescription>
+                         </CardHeader>
+                         <CardContent className="space-y-4">
+                            <ul className="space-y-2 text-[10px] text-muted-foreground list-disc pl-4">
+                               <li>No frontend engineering for consent flows.</li>
+                               <li>Handles SCA and bank redirects automatically.</li>
+                               <li>Customizable branding for the NoorNexus Empire.</li>
+                            </ul>
+                            <Button size="sm" className="w-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20 text-[9px] uppercase font-bold">
+                               Launch Hosted Flow Demo
+                            </Button>
+                         </CardContent>
+                      </Card>
+
+                      <Card className="glass-card border-l-4 border-l-primary hover:border-primary/30 transition-all">
+                         <CardHeader>
+                            <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
+                               <Code2 className="size-4" /> Direct API
+                            </CardTitle>
+                            <CardDescription>Full control over the payment or data flow. Custom UI/UX implementation.</CardDescription>
+                         </CardHeader>
+                         <CardContent className="space-y-4">
+                            <ul className="space-y-2 text-[10px] text-muted-foreground list-disc pl-4">
+                               <li>Supports bulk, scheduled, and international payments.</li>
+                               <li>Full NoorNexus UI/UX integration.</li>
+                               <li>Operating in any country without redirect limitations.</li>
+                            </ul>
+                            <Button size="sm" className="w-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 text-[9px] uppercase font-bold">
+                               View API Specs
+                            </Button>
+                         </CardContent>
+                      </Card>
+                   </div>
+                </section>
+
+                {/* Developer API Reference */}
                 <section className="space-y-6">
                    <div className="flex justify-between items-center">
                       <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                         <Sparkles className="size-4" /> Yapily & AMEX Alliance
+                         <Code2 className="size-4" /> Developer API Reference (v11.5.2)
                       </h3>
-                      <Badge variant="outline" className="text-[8px] border-primary/20 text-primary">v11.5.2 SYNCED</Badge>
+                      <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase">Direct Access Only</Badge>
                    </div>
                    
                    <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                      <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
-                            <Code2 className="size-4" /> Developer API Reference
-                         </CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-6">
+                      <CardContent className="p-6 space-y-6">
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-4">
                                <div className="space-y-2">
-                                  <p className="text-[10px] font-bold text-muted-foreground uppercase">Endpoint Configuration</p>
+                                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Base Endpoint</p>
                                   <div className="p-3 bg-black/40 rounded-lg space-y-2 font-mono text-[10px]">
-                                     <div className="flex justify-between"><span className="text-muted-foreground">Base:</span> <span className="text-white">https://api.yapily.com</span></div>
-                                     <div className="flex justify-between"><span className="text-muted-foreground">Auth:</span> <span className="text-white">Basic (ID:Secret)</span></div>
-                                     <div className="flex justify-between"><span className="text-muted-foreground">Type:</span> <span className="text-white">JSON / meta-data</span></div>
+                                     <div className="flex justify-between"><span className="text-muted-foreground">URL:</span> <span className="text-white">https://api.yapily.com</span></div>
+                                     <div className="flex justify-between"><span className="text-muted-foreground">Auth:</span> <span className="text-white">Basic (AppID:Secret)</span></div>
                                   </div>
                                </div>
                             </div>
                             <div className="space-y-4">
                                <div className="space-y-2">
-                                  <p className="text-[10px] font-bold text-muted-foreground uppercase">Resilient Error Handling</p>
+                                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Resilient Logic</p>
                                   <div className="p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-lg space-y-2 italic text-[10px]">
-                                     <p className="text-emerald-100 leading-relaxed">"Tracing IDs are automatically mapped to Nora-50. Successive failures trigger the Orchestrator to reroute to Plaid or other stable canals."</p>
+                                     <p className="text-emerald-100 leading-relaxed">"Tracing IDs are automatically mapped to Nora-50. Failures trigger reroute to alternative canals."</p>
                                      <div className="flex items-center gap-2 text-emerald-500 font-bold">
                                         <ShieldCheck className="size-3" /> TRACING_LINK: ACTIVE
                                      </div>
@@ -239,7 +281,7 @@ export default function OpenBankingHubPage() {
                 <section className="space-y-6">
                    <div className="flex justify-between items-center">
                       <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                         <Layers className="size-4" /> Legacy Global Mesh
+                         <Layers className="size-4" /> Global Mesh Coverage
                       </h3>
                    </div>
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -310,7 +352,7 @@ export default function OpenBankingHubPage() {
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[9px] text-muted-foreground leading-relaxed">
-                         "Leveraging Open Banking and AETS for a unified Sovereign Payment Gateway."
+                         "Leveraging Hosted Pages and Direct API for a unified Sovereign Payment Gateway."
                       </p>
                       <Link href="/sovereign-gateway" className="w-full">
                         <Button variant="outline" className="w-full h-8 text-[9px] uppercase font-bold border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/10">
