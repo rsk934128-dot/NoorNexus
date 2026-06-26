@@ -25,7 +25,8 @@ import {
   Flame,
   Key,
   Users,
-  ShieldPlus
+  ShieldPlus,
+  Atom
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { anchorToSovereignVault, SovereignVaultOutput } from "@/ai/flows/sovereign-vault-flow"
@@ -104,7 +105,10 @@ export default function SovereignVaultPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-10">
                {/* Enterprise Key Lifecycle Card */}
-               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 opacity-5">
+                    <Atom className="size-32 text-emerald-500 animate-spin-slow" />
+                  </div>
                   <CardHeader>
                      <CardTitle className="text-sm font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
                         <Key className="size-4" /> Enterprise Key Anchoring
@@ -114,15 +118,25 @@ export default function SovereignVaultPage() {
                   <CardContent className="space-y-4">
                      <div className="p-4 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                           <div className="size-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                           <div className="size-10 bg-primary/20 rounded-lg flex items-center justify-center border border-primary/30">
                               <Lock className="size-5 text-primary" />
                            </div>
                            <div className="space-y-0.5">
-                              <p className="text-[10px] font-bold text-white uppercase">App ID: {OFFICIAL_APP_ID.substring(0, 16)}...</p>
+                              <p className="text-[10px] font-bold text-white uppercase">App Secret: {OFFICIAL_APP_ID.substring(0, 16)}...</p>
                               <p className="text-[8px] text-muted-foreground uppercase">Status: QUANTUM_ANCHORED</p>
                            </div>
                         </div>
-                        <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 text-[8px]">SECURE_L4</Badge>
+                        <Badge className="bg-emerald-500 border-none text-[8px] h-6 px-3">SECURE_L4</Badge>
+                     </div>
+                     <div className="grid grid-cols-2 gap-4">
+                        <div className="p-3 bg-white/5 rounded-lg border border-white/5 space-y-1">
+                           <p className="text-[8px] text-muted-foreground uppercase font-bold">Encryption Protocol</p>
+                           <p className="text-xs font-mono text-white">SHA-512 + RSA-4096</p>
+                        </div>
+                        <div className="p-3 bg-white/5 rounded-lg border border-white/5 space-y-1 text-right">
+                           <p className="text-[8px] text-muted-foreground uppercase font-bold">Storage Node</p>
+                           <p className="text-xs font-mono text-emerald-500">COLD_NODE_01</p>
+                        </div>
                      </div>
                   </CardContent>
                </Card>

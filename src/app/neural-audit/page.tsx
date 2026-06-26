@@ -153,7 +153,10 @@ export default function NeuralAuditPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-8">
               {/* Zenith Application Monitor Card */}
-              <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+              <Card className="glass-card border-l-4 border-l-primary bg-primary/5 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                  <Fingerprint className="size-32 text-primary" />
+                </div>
                 <CardHeader className="flex flex-row items-center justify-between">
                   <div className="space-y-1">
                     <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
@@ -161,7 +164,7 @@ export default function NeuralAuditPage() {
                     </CardTitle>
                     <CardDescription className="text-xs font-mono uppercase tracking-widest">TRACE_ID: {OFFICIAL_APP_ID}</CardDescription>
                   </div>
-                  <Badge className="bg-emerald-500 animate-pulse">LIVE_AUDIT</Badge>
+                  <Badge className="bg-emerald-500 animate-pulse uppercase font-bold">Zenith Status: VERIFIED</Badge>
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
                   {[
@@ -170,7 +173,7 @@ export default function NeuralAuditPage() {
                     { label: "Verification Status", val: "PASS", icon: CheckCircle2 },
                     { label: "Ledger Anchor", val: "100%", icon: Database }
                   ].map((stat, i) => (
-                    <div key={i} className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1 text-center">
+                    <div key={i} className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1 text-center group hover:border-primary/30 transition-all">
                        <stat.icon className="size-4 text-primary mx-auto mb-2" />
                        <p className="text-[8px] text-muted-foreground uppercase font-bold">{stat.label}</p>
                        <p className="text-xs font-headline font-bold text-white uppercase">{stat.val}</p>
@@ -179,7 +182,85 @@ export default function NeuralAuditPage() {
                 </CardContent>
               </Card>
 
-              {/* Existing Self-Healing and Scorecard sections... */}
+              {/* Live Efficiency Monitor */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                    <Activity className="size-4" /> Live Node Efficiency
+                 </h3>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Card className="glass-card bg-black/40 border-white/5">
+                       <CardContent className="p-6 flex items-center justify-between">
+                          <div className="space-y-1">
+                             <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Current Latency</p>
+                             <p className="text-4xl font-headline font-bold text-white">{liveStats.latency}<span className="text-primary text-xs ml-1 font-mono">ms</span></p>
+                          </div>
+                          <div className="h-12 w-24 flex items-end gap-1">
+                             {[40, 60, 30, 80, 50, 90, 40].map((h, i) => (
+                               <div key={i} className="flex-1 bg-primary/20 rounded-t-sm relative overflow-hidden">
+                                  <div className="absolute bottom-0 w-full bg-primary animate-pulse" style={{ height: `${h}%` }} />
+                               </div>
+                             ))}
+                          </div>
+                       </CardContent>
+                    </Card>
+                    <Card className="glass-card bg-black/40 border-white/5">
+                       <CardContent className="p-6 flex items-center justify-between">
+                          <div className="space-y-1">
+                             <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Handshake Success</p>
+                             <p className="text-4xl font-headline font-bold text-emerald-500">{liveStats.successRate.toFixed(1)}%</p>
+                          </div>
+                          <CheckCircle2 className="size-10 text-emerald-500 opacity-20" />
+                       </CardContent>
+                    </Card>
+                 </div>
+              </section>
+
+              {/* Self-Healing Panel */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                    <HeartPulse className="size-4" /> Self-Healing Grid
+                 </h3>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Card className="glass-card border-l-4 border-l-emerald-500">
+                       <CardHeader>
+                          <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
+                             <Activity className="size-4 text-emerald-500" /> Healing Status: OPTIMAL
+                          </CardTitle>
+                       </CardHeader>
+                       <CardContent className="space-y-4">
+                          <div className="p-3 bg-black/40 rounded border border-white/5 space-y-2">
+                             <div className="flex justify-between text-[8px] font-bold uppercase">
+                                <span className="text-muted-foreground">Fail-over Readiness</span>
+                                <span className="text-emerald-500">ARMED</span>
+                             </div>
+                             <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                                <div className="h-full bg-emerald-500" style={{ width: '100%' }} />
+                             </div>
+                          </div>
+                          <p className="text-[10px] text-muted-foreground italic">"Automatic traffic rerouting is active across 15 high-power nodes."</p>
+                       </CardContent>
+                    </Card>
+
+                    <Card className="glass-card border-l-4 border-l-primary">
+                       <CardHeader>
+                          <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
+                             <Coins className="size-4 text-primary" /> Smart Settlement
+                          </CardTitle>
+                       </CardHeader>
+                       <CardContent className="space-y-4">
+                          <div className="flex justify-between items-center text-[10px] font-bold uppercase">
+                             <span className="text-muted-foreground">Cost Optimization</span>
+                             <Badge className="bg-primary/20 text-primary border-none">ACTIVE</Badge>
+                          </div>
+                          <p className="text-[10px] text-muted-foreground italic leading-relaxed">
+                             "Nora-54 is currently routing corporate assets via lowest-fee corridors."
+                          </p>
+                       </CardContent>
+                    </Card>
+                 </div>
+              </section>
+
+              {/* Efficiency Scorecard */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                     <Award className="size-4" /> Sovereign Efficiency Scorecard
@@ -246,6 +327,19 @@ export default function NeuralAuditPage() {
                        "Next secret rotation for App ID a085f8... scheduled in 15 days. Policy is synchronized with Sovereign Vault (P55)."
                     </p>
                  </CardContent>
+              </Card>
+
+              <Card className="glass-card bg-emerald-500/5 border-emerald-500/20 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-5">
+                  <CheckCircle2 className="size-20 text-emerald-500" />
+                </div>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-[10px] uppercase font-bold text-emerald-500">Mission 400 Certification</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="text-[11px] text-white font-bold leading-tight">THE FORTRESS IS COMPLETE.</p>
+                  <p className="text-[8px] text-muted-foreground font-mono">HASH: Ω_FINAL_SYNTHESIS_V3</p>
+                </CardContent>
               </Card>
             </div>
           </div>

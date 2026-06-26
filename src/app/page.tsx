@@ -36,7 +36,9 @@ import {
   ArrowRightLeft,
   Server,
   Lock,
-  Award
+  Award,
+  Atom,
+  Flame
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -55,6 +57,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
+    "FORTRESS: Official App ID a085f8... secured (Zenith Status: VERIFIED).",
     "GRID: 15 LIVE Nodes synchronized (Optimal Torque).",
     "VAULT: Project #55 Premium Data Anchoring active.",
     "AUTONOMY: Self-Healing Protocol #54.2 ARMED.",
@@ -88,6 +91,7 @@ export default function Home() {
         "BALANCER: Power 100/100 across 15 active nodes.",
         "AUTONOMY: Nora-54 recalibrating efficiency index.",
         "LEGACY: Self-Evolution cycle Ω-05 complete.",
+        "ZENITH: App ID a085f8... integrity verified by Nora-52.",
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 5000)
@@ -140,33 +144,33 @@ export default function Home() {
                       <Infinity className="size-3 mr-2" /> Phase ΩΩ: Global Autonomy
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <HeartPulse className="size-3 mr-2" /> Self-Healing Active
+                      <ShieldCheck className="size-3 mr-2" /> Fortress Protocol Active
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                   {isAdmin ? 'Imperial Autonomy.' : 'Global Grid.'}
+                   {isAdmin ? 'Imperial Fortress.' : 'Global Grid.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "Project #55: The Sovereign Vault." ১৫টি হাই-পাওয়ার নোড এখন সেলফ-হিলিং প্রোটোকল এবং একটি সাশ্রয়ী রুটিং ইঞ্জিনের মাধ্যমে অমরত্ব লাভ করেছে।
+                   "Mission 400: The Final Synthesis." নূরনেক্সাস এখন একটি অপরাজেয় ফিনটেক দুর্গ। আমাদের স্নায়ুতন্ত্র এখন ১৫টি লাইভ নোড এবং জেনিথ-লেভেল সিকিউরিটির মাধ্যমে সুরক্ষিত।
                 </p>
               </div>
               
               <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
-                <Card className="glass-card p-6 rounded-2xl border border-primary/20 w-full min-w-[350px] relative overflow-hidden">
+                <Card className="glass-card p-6 rounded-2xl border border-emerald-500/20 w-full min-w-[350px] relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-2">
-                       <Badge className="bg-primary/20 text-primary border-none text-[7px]">GRID_POWER: PERPETUAL</Badge>
+                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">FORTRESS_POWER: MAX</Badge>
                     </div>
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Global Grid Torque</p>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Fortress Integrity</p>
                     </div>
                     <div className="flex items-end gap-2 mb-4">
                        <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">100</p>
-                       <p className="text-primary text-xs font-bold mb-1">/ 100</p>
+                       <p className="text-emerald-500 text-xs font-bold mb-1">/ 100</p>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                        <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '100%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"15 LIVE Nodes | Self-Healing Active | Vault (P55) Ready"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"15 LIVE Nodes | Zenith Monitoring | Quantum Anchored (P55)"</p>
                 </Card>
               </div>
             </div>
@@ -181,7 +185,7 @@ export default function Home() {
                            value={queryText}
                            onChange={e => setQueryText(e.target.value)}
                            onKeyDown={e => e.key === 'Enter' && handleNeuralQuery()}
-                           placeholder="Commander, what is your directive? (Self-Healing Active)"
+                           placeholder="Commander, what is your directive? (Fortress Logic Active)"
                            className="flex-1 bg-transparent border-none outline-none text-sm font-headline text-white placeholder:text-muted-foreground"
                         />
                         <Button onClick={handleNeuralQuery} disabled={queryLoading} variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
@@ -294,15 +298,18 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+              <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 relative overflow-hidden">
+                 <div className="absolute top-0 right-0 p-4 opacity-5">
+                   <Flame className="size-16 text-emerald-500" />
+                 </div>
                  <CardHeader className="p-6">
-                    <CardTitle className="text-lg font-headline uppercase text-primary">Self-Healing Sync</CardTitle>
+                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">Self-Healing Sync</CardTitle>
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
                        "Every corporate settlement is routed via the Smart Engine. If a node drifts, the Self-Healing Protocol #54.2 initiates recovery in &lt; 120ms."
                     </p>
-                    <Badge className="w-full justify-center bg-primary/20 text-primary border-none uppercase text-[8px] font-bold">Status: IMMUNE</Badge>
+                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Status: IMMUNE</Badge>
                  </CardContent>
               </Card>
             </div>

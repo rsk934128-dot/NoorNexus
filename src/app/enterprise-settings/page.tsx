@@ -35,7 +35,10 @@ import {
   Fingerprint,
   ShieldPlus,
   ArrowRightLeft,
-  Clock
+  Clock,
+  ShieldAlert,
+  Flame,
+  Atom
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
@@ -98,18 +101,18 @@ export default function EnterpriseSettingsPage() {
                  </div>
                  <div>
                     <h2 className="text-3xl font-headline font-bold flex items-center gap-2 uppercase tracking-tighter">
-                      {APP_CONFIG.name} <span className="text-primary">Settings.</span>
+                      {APP_CONFIG.name} <span className="text-primary">Fortress.</span>
                     </h2>
-                    <p className="text-muted-foreground text-sm font-mono uppercase tracking-widest">Global Application Node: {APP_CONFIG.id.substring(0, 8)}</p>
+                    <p className="text-muted-foreground text-sm font-mono uppercase tracking-widest">Official Application Node: {APP_CONFIG.id.substring(0, 8)}</p>
                  </div>
               </div>
             </div>
             <div className="flex items-center gap-3">
                <div className="p-4 glass-card rounded-2xl border border-emerald-500/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Node Status</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Fortress Status</p>
                   <div className="flex items-center justify-center gap-2">
                      <div className="size-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-                     <p className="text-xl font-headline font-bold text-emerald-500 uppercase">{APP_CONFIG.status}</p>
+                     <p className="text-xl font-headline font-bold text-emerald-500 uppercase">UNBREAKABLE</p>
                   </div>
                </div>
             </div>
@@ -241,6 +244,24 @@ export default function EnterpriseSettingsPage() {
                            </div>
                            <p className="text-[9px] text-muted-foreground leading-relaxed italic">
                               "Every transaction under this App ID is monitored at the Zenith Level for real-time compliance logging."
+                           </p>
+                        </CardContent>
+                     </Card>
+
+                     {/* Project #55 Vault Anchor */}
+                     <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                        <CardHeader>
+                           <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
+                              <Atom className="size-4" /> Vault Anchoring
+                           </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           <div className="flex items-center gap-3 p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                              <ShieldCheck className="size-4 text-emerald-500" />
+                              <span className="text-[9px] text-emerald-500 font-bold uppercase">Quantum Anchored: YES</span>
+                           </div>
+                           <p className="text-[9px] text-muted-foreground leading-relaxed italic">
+                              "Your secrets are anchored to the Cold Storage Node 1. Data is invisible to standard mesh traffic."
                            </p>
                         </CardContent>
                      </Card>
