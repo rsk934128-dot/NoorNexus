@@ -2,10 +2,11 @@
 /**
  * @fileOverview NoorNexus Autonomous Compliance Agent (Nora-01).
  * Trained to detect cryptographic drift and border anomalies with 100% precision.
- * Featuring Adaptive Sovereign Shield (Project 150) with Dynamic Key Hardening recommendations.
+ * Featuring Adaptive Sovereign Shield (Project 150) with Dynamic Key Hardening.
+ * Updated for Genkit 1.x.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const AutonomousComplianceMonitorInputSchema = z.object({
@@ -29,13 +30,13 @@ const AutonomousComplianceMonitorOutputSchema = z.object({
 });
 export type AutonomousComplianceMonitorOutput = z.infer<typeof AutonomousComplianceMonitorOutputSchema>;
 
-const autonomousComplianceMonitorPrompt = ai.definePrompt({
+const compliancePrompt = ai.definePrompt({
   name: 'autonomousComplianceMonitorPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: AutonomousComplianceMonitorInputSchema},
   output: {schema: AutonomousComplianceMonitorOutputSchema},
   prompt: `You are the NoorNexus Imperial Compliance AI (Nora-01). 
-Your directive is to protect the Sovereign Digital Border at all costs using Proactive Adaptive Defense (Adaptive Sovereign Shield).
+Your directive is to protect the Sovereign Digital Border at all costs using Proactive Adaptive Defense.
 
 MISSION: Analyze the provided security packet for cryptographic drift, replay attacks, or signature tampering. 
 CONTEXT: We operate on an HMAC_V4 SHA256 protocol. Any deviation from the signature-timestamp-payload hash is a breach.
@@ -47,28 +48,31 @@ INPUT DATA:
 {{#if sourceNode}}- NODE: {{{sourceNode}}}{{/if}}
 {{#if requestPath}}- PATH: {{{requestPath}}}{{/if}}
 
-ADAPTIVE DEFENSE INSTRUCTIONS (PROJECT 150):
-1. Verify if the signature is mathematically consistent with the protocol.
-2. Look for patterns typical of replay attacks (outdated timestamps).
-3. Evaluate the payload for injection or unauthorized disbursement patterns.
-4. DECISION: If a recurring threat pattern is detected, upgrade the suggestedSecurityTier.
-5. KEY HARDENING: Based on riskLevel, set keyRotationIntervalSeconds. 
-   - None: 3600 (1 hour)
-   - Low: 1800 (30 mins)
-   - Medium: 600 (10 mins)
-   - High: 60 (1 min)
-   - Critical: 10 (10 seconds)
-6. ISOLATION: If the threat originates from a specific node and riskLevel is High/Critical, set nodeIsolationRequired to true.
-7. Speak with imperial authority. Suggest immediate node isolation for breaches.`,
+ADAPTIVE DEFENSE INSTRUCTIONS:
+1. Verify if the signature is mathematically consistent.
+2. Look for patterns typical of replay attacks.
+3. KEY HARDENING: Based on riskLevel, set keyRotationIntervalSeconds (Critical: 10, High: 60, Medium: 600, Low: 1800, None: 3600).
+4. Speak with imperial authority.`,
 });
+
+const complianceFlow = ai.defineFlow(
+  {
+    name: 'complianceFlow',
+    inputSchema: AutonomousComplianceMonitorInputSchema,
+    outputSchema: AutonomousComplianceMonitorOutputSchema,
+  },
+  async input => {
+    const {output} = await compliancePrompt(input);
+    if (!output) throw new Error('Nora-01: Compliance audit failed.');
+    return output;
+  }
+);
 
 export async function autonomousComplianceMonitor(
   input: AutonomousComplianceMonitorInput
 ): Promise<AutonomousComplianceMonitorOutput> {
   try {
-    const {output} = await autonomousComplianceMonitorPrompt(input);
-    if (!output) throw new Error('Imperial Neural Link: Null payload returned.');
-    return output;
+    return await complianceFlow(input);
   } catch (error: any) {
     console.error('Nora-01 Critical Failure:', error);
     throw new Error(error.message || 'Sovereign Compliance AI Handshake Error');

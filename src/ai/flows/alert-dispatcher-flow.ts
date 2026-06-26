@@ -2,9 +2,10 @@
 /**
  * @fileOverview Nora-13 Sovereign Alert Dispatcher (Project #48).
  * Converts predictive maintenance signals into tactical commands for maintenance units.
+ * Updated for Genkit 1.x.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const AlertDispatcherInputSchema = z.object({
@@ -27,7 +28,7 @@ export type AlertDispatcherOutput = z.infer<typeof AlertDispatcherOutputSchema>;
 
 const alertPrompt = ai.definePrompt({
   name: 'alertDispatcherPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: AlertDispatcherInputSchema},
   output: {schema: AlertDispatcherOutputSchema},
   prompt: `You are Nora-13, the Imperial Alert Dispatcher for NoorNexus Sovereign OS.
@@ -49,11 +50,22 @@ DISPATCH DIRECTIVES:
 Execute the dispatch protocol immediately.`,
 });
 
+const alertFlow = ai.defineFlow(
+  {
+    name: 'alertFlow',
+    inputSchema: AlertDispatcherInputSchema,
+    outputSchema: AlertDispatcherOutputSchema,
+  },
+  async input => {
+    const {output} = await alertPrompt(input);
+    if (!output) throw new Error('Nora-13: Dispatch AI failure.');
+    return output;
+  }
+);
+
 export async function dispatchImperialAlert(input: AlertDispatcherInput): Promise<AlertDispatcherOutput> {
   try {
-    const {output} = await alertPrompt(input);
-    if (!output) throw new Error('Dispatch AI: Neural link error.');
-    return output;
+    return await alertFlow(input);
   } catch (error: any) {
     console.error('Nora-13 Dispatch Failure:', error);
     throw new Error(error.message || 'Sovereign Alert Neural Link Error');
