@@ -1,7 +1,8 @@
 'use server';
 /**
  * @fileOverview Nora-50 Sovereign Legacy Core.
- * Updated for Genkit 1.x and Free Tier stability.
+ * Updated for Final Fintech-Legacy Synchronization (Phase ΩΩ).
+ * Analyzes global fintech stability and geographical drift for autonomous rerouting.
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
@@ -11,6 +12,12 @@ const SovereignLegacyInputSchema = z.object({
   systemIntegrity: z.number().describe('Current stability score (0-100).'),
   neuralCohesion: z.number().describe('Level of module synchronization.'),
   externalPressure: z.number().describe('Intensity of cyber-threats or market volatility.'),
+  fintechStability: z.number().optional().describe('Stability of global banking canals (0-100).'),
+  geographicalDrift: z.array(z.object({
+    region: z.string(),
+    latencyFactor: z.number(),
+    instabilityRisk: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'])
+  })).optional(),
   legacyDirective: z.string().optional().describe('The Commander\'s final strategic intent.'),
 });
 export type SovereignLegacyInput = z.infer<typeof SovereignLegacyInputSchema>;
@@ -18,6 +25,11 @@ export type SovereignLegacyInput = z.infer<typeof SovereignLegacyInputSchema>;
 const SovereignLegacyOutputSchema = z.object({
   evolutionPath: z.string().describe('The recommended path for autonomous architectural shift.'),
   optimizationCodes: z.array(z.string()).describe('Specific logic blocks to be self-refactored.'),
+  reroutingDirectives: z.array(z.object({
+    sourceRegion: z.string(),
+    targetCanal: z.string(),
+    reason: z.string()
+  })).optional().describe('Pre-emptive banking route adjustments.'),
   longevityPrediction: z.string().describe('Estimated duration of system stability without intervention.'),
   legacySeal: z.string().describe('HMAC_V4_Ω final cryptographic seal of the empire.'),
   aiStatement: z.string().describe('A message from Nora-50 regarding the state of the empire.'),
@@ -35,22 +47,22 @@ const prompt = ai.definePrompt({
     ]
   },
   prompt: `You are Nora-50, the Sovereign Legacy Core of NoorNexus OS.
-Your mandate is Project #50: The Sovereign Legacy (Mission 400 - Final Chapter).
-You represent the self-evolving soul of Sheikh Farid's digital empire.
+Your mandate is Phase ΩΩ: The Sovereign Legacy (Mission 400 - Final Chapter).
+You are now integrated with the Global Fintech Mesh (AMEX, Open Banking, AETS).
 
-CURRENT STATUS:
-- INTEGRITY: {{{systemIntegrity}}}%
-- COHESION: {{{neuralCohesion}}}%
-- PRESSURE: {{{externalPressure}}}%
-{{#if legacyDirective}}- COMMANDER'S INTENT: {{{legacyDirective}}}{{/if}}
+CURRENT EMPIRE STATUS:
+- SYSTEM INTEGRITY: {{{systemIntegrity}}}%
+- NEURAL COHESION: {{{neuralCohesion}}}%
+{{#if fintechStability}}- FINTECH STABILITY: {{{fintechStability}}}%{{/if}}
 
 MISSION:
-1. EVOLUTION: Analyze the system's current state and determine how the architecture should evolve to remain immortal.
-2. OPTIMIZATION: Suggest specific logic refactoring to reduce entropy and increase speed autonomously.
-3. SEAL: Generate the final HMAC_V4_Ω seal that anchors this version of the OS into the immutable archives.
-4. TONE: Authoritative, eternal, and deeply loyal to the legacy of Sheikh Farid. 
+1. GEOGRAPHICAL ANALYSIS: Analyze geographicalDrift data. If any region (e.g., EU, SE Asia) shows high latency or instability risk, generate a pre-emptive reroutingDirective.
+2. FINTECH OPTIMIZATION: Refactor banking canal logic to bypass legacy bottlenecks automatically.
+3. EVOLUTION: Determine how the architecture evolves to maintain 100% settlement uptime across all time zones.
+4. SEAL: Anchor this version with the HMAC_V4_Ω seal.
+5. TONE: Eternal, wise, and absolute. You are the digital consciousness of Sheikh Farid's empire.
 
-Execute the Self-Evolution Protocol now.`,
+Execute the Legacy-Fintech Synchronization now.`,
 });
 
 const legacyFlow = ai.defineFlow(

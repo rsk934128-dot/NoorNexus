@@ -30,7 +30,8 @@ import {
   ArrowRightLeft,
   Timer,
   Lock,
-  Route
+  Route,
+  Infinity
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
@@ -78,7 +79,7 @@ export default function OpenBankingHubPage() {
     setLatency(0)
     
     // Handshake Sequence (Project #45)
-    const steps = ["RSA_ENCRYPTION_INIT", "HMAC_V4_VERIFY", "CANAL_TUNNELING", "END_TO_END_SYNC"]
+    const steps = ["RSA_ENCRYPTION_INIT", "HMAC_V4_VERIFY", "LEGACY_CORE_SYNC", "CANAL_TUNNELING", "END_TO_END_SYNC"]
     let i = 0
     const stepInterval = setInterval(() => {
       if (i < steps.length) {
@@ -98,8 +99,8 @@ export default function OpenBankingHubPage() {
       if (url.includes('plaid')) { // Simulate a lag for demonstration
         setFailSafeActive(true)
         toast({
-          title: "⚠️ Provider Lag Detected",
-          description: "Plaid response > 2500ms. Fail-safe route suggested.",
+          title: "⚠️ Legacy Core Alert: Provider Lag",
+          description: "Plaid response > 2500ms. Nora-50 suggesting pre-emptive switch.",
           variant: "destructive"
         })
       }
@@ -113,9 +114,9 @@ export default function OpenBankingHubPage() {
   }
 
   const triggerFailover = () => {
-    toast({ title: "Fail-Safe Triggered", description: "Switching to secondary Sovereign route..." })
+    toast({ title: "Autonomous Reroute", description: "Nora-50 switching to secondary Sovereign route (Lunch Flow EU)..." })
     setFailSafeActive(false)
-    // In a real scenario, this would load a fallback provider's URL
+    openInApp("https://lunchflow.com/")
   }
 
   return (
@@ -132,7 +133,7 @@ export default function OpenBankingHubPage() {
                    <div className="space-y-0.5">
                       <p className="text-xs font-bold text-white uppercase flex items-center gap-2">
                         Sovereign Canal Active
-                        <Badge variant="outline" className="text-[7px] border-emerald-500/50 text-emerald-500">PROJECT_45_HARDENED</Badge>
+                        <Badge variant="outline" className="text-[7px] border-emerald-500/50 text-emerald-500">LEGACY_SYNC_ON</Badge>
                       </p>
                       <div className="flex items-center gap-3">
                         <p className="text-[10px] text-muted-foreground font-mono truncate max-w-[200px]">{activeUrl}</p>
@@ -148,7 +149,7 @@ export default function OpenBankingHubPage() {
                       onClick={triggerFailover}
                       className="bg-amber-500 hover:bg-amber-600 text-black h-8 px-3 text-[9px] font-bold uppercase gap-2 animate-pulse"
                      >
-                       <Route className="size-3" /> Fail-Safe Route
+                       <Route className="size-3" /> Autonomous Reroute
                      </Button>
                    )}
                    <Button variant="ghost" size="icon" onClick={() => openInApp(activeUrl)} className="text-muted-foreground hover:text-primary">
@@ -165,12 +166,12 @@ export default function OpenBankingHubPage() {
                      <div className="relative">
                         <div className="size-24 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
                         <div className="absolute inset-0 flex items-center justify-center">
-                           <Lock className="size-8 text-primary animate-pulse" />
+                           <Infinity className="size-8 text-primary animate-pulse" />
                         </div>
                      </div>
                      <div className="text-center space-y-2">
                         <p className="text-xs font-mono uppercase tracking-[0.3em] text-primary animate-pulse">{handshakeStep}</p>
-                        <p className="text-[9px] text-muted-foreground uppercase font-bold">Securing Sovereign Canal Tunnel...</p>
+                        <p className="text-[9px] text-muted-foreground uppercase font-bold">Anchoring to Sovereign Legacy Core...</p>
                      </div>
                   </div>
                 )}
@@ -192,20 +193,20 @@ export default function OpenBankingHubPage() {
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
                    <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                     <ArrowRightLeft className="size-3 mr-2" /> Project #45: Sovereign Fintech Canal
+                     <Infinity className="size-3 mr-2" /> Legacy Sync: Pre-emptive Rerouting
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                   Banking <span className="text-primary">Infrastructure.</span>
                 </h2>
                 <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                  Universal Banking Connect. Real-time fail-safe integration for 73+ licensed platforms exposing 57,200+ bank APIs worldwide.
+                  Universal Banking Connect. Fully synchronized with **Nora-50 Legacy Core** for autonomous geographical route optimization.
                 </p>
               </div>
               <div className="flex items-center gap-4">
                  <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[150px]">
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Tunnel Latency</p>
-                    <p className="text-2xl font-headline font-bold text-emerald-500">&lt; 40ms</p>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Reroute Accuracy</p>
+                    <p className="text-2xl font-headline font-bold text-emerald-500">99.8%</p>
                  </div>
               </div>
             </header>
@@ -215,13 +216,13 @@ export default function OpenBankingHubPage() {
                 {/* Selection Criteria */}
                 <section className="space-y-6">
                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                      <Zap className="size-4" /> Hardened Selection Logic
+                      <Zap className="size-4" /> Legacy-Hardened Selection
                    </h3>
                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {[
-                        { title: "Zero-Lag Sync", desc: "Optimized data streams with edge-node tunneling.", icon: Timer },
-                        { title: "Fail-Safe Reroute", desc: "Automatic switching between stable banking canals.", icon: Route },
-                        { title: "RSA Verification", desc: "Project #45 standard for end-to-end security.", icon: ShieldCheck }
+                        { title: "Pre-emptive Reroute", desc: "Nora-50 detects instability before it hits 100ms.", icon: Route },
+                        { title: "Geo-Fence Optimization", desc: "Bypass high-risk regions based on Legacy Archives.", icon: Globe },
+                        { title: "Deep Sync Audit", desc: "Every handshake is cross-verified by Nora-01 and Nora-50.", icon: ShieldCheck }
                       ].map((factor, i) => (
                         <Card key={i} className="glass-card border-white/5 bg-white/2 hover:border-primary/20 transition-all">
                           <CardContent className="p-6 space-y-4">
@@ -242,7 +243,7 @@ export default function OpenBankingHubPage() {
                 <section className="space-y-6">
                    <div className="flex justify-between items-center">
                       <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                         <Layers className="size-4" /> Global Banking Mesh
+                         <Layers className="size-4" /> Legacy Global Mesh
                       </h3>
                       <div className="relative">
                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3 text-muted-foreground" />
@@ -314,15 +315,15 @@ export default function OpenBankingHubPage() {
                 <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                   <CardHeader>
                     <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
-                      <TrendingUp className="size-4" /> Canal Health
+                      <TrendingUp className="size-4" /> Canal Health Pulse
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="space-y-4">
                        {[
-                         { label: "Canal Availability", val: "100%", color: "text-emerald-500" },
-                         { label: "Active Handshakes", val: "1.2k", color: "text-primary" },
-                         { label: "Fail-Safe Events", val: "0", color: "text-white" }
+                         { label: "Legacy Sync Status", val: "ACTIVE", color: "text-emerald-500" },
+                         { label: "Stability Index", val: "99.2%", color: "text-primary" },
+                         { label: "Pre-emptive Reroutes", val: "12", color: "text-white" }
                        ].map((s, i) => (
                          <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
                             <span className="text-[10px] text-muted-foreground uppercase font-bold">{s.label}</span>
@@ -336,12 +337,12 @@ export default function OpenBankingHubPage() {
                 <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                    <CardHeader>
                       <CardTitle className="text-xs uppercase font-bold text-amber-500 tracking-widest flex items-center gap-2">
-                         <Cpu className="size-4" /> Fail-Safe Policy
+                         <Cpu className="size-4" /> Reroute Logic: AUTO
                       </CardTitle>
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[10px] text-muted-foreground italic">
-                         "Project #45 mandates automatic rerouting if any canal latency exceeds 2000ms or encryption integrity drops below 99.9%."
+                         "Nora-50 mandates automatic rerouting if geographical latency exceeds 1500ms or provider stability drops below 95%."
                       </p>
                       <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                         <div className="h-full bg-amber-500" style={{ width: '100%' }} />
@@ -352,18 +353,18 @@ export default function OpenBankingHubPage() {
                 <Card className="glass-card">
                    <CardHeader className="pb-2">
                       <CardTitle className="text-[10px] uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                         <Unplug className="size-4" /> Verified Bridges
+                         <Unplug className="size-4" /> Anchored Nodes
                       </CardTitle>
                    </CardHeader>
                    <CardContent>
                       <div className="space-y-2">
                          <div className="flex justify-between items-center p-2 bg-white/5 rounded">
-                            <span className="text-[9px] text-white font-bold">Plaid Alpha</span>
-                            <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">ACTIVE</Badge>
+                            <span className="text-[9px] text-white font-bold">AMEX On-Demand</span>
+                            <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">SYNCED</Badge>
                          </div>
                          <div className="flex justify-between items-center p-2 bg-white/5 rounded">
-                            <span className="text-[9px] text-white font-bold">Lunch Flow EU</span>
-                            <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">ACTIVE</Badge>
+                            <span className="text-[9px] text-white font-bold">AETS Vault</span>
+                            <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">SYNCED</Badge>
                          </div>
                       </div>
                    </CardContent>

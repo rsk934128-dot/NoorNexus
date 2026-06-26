@@ -24,12 +24,15 @@ import {
   Database,
   Cpu,
   Flame,
-  Scale
+  Scale,
+  Globe,
+  Route,
+  Coins
 } from "lucide-react"
 import { initiateSelfEvolution, SovereignLegacyOutput } from "@/ai/flows/sovereign-legacy-flow"
 import { useToast } from "@/hooks/use-toast"
 import { useFirestore } from "@/firebase"
-import { collection, addDoc, query, orderBy, limit } from "firebase/firestore"
+import { collection, addDoc } from "firebase/firestore"
 
 export default function SovereignLegacyPage() {
   const { toast } = useToast()
@@ -44,9 +47,9 @@ export default function SovereignLegacyPage() {
     
     const steps = [
       "DECRYPTING MISSION 400 ARCHIVES...",
-      "CALIBRATING SELF-EVOLUTION ENGINE...",
-      "ANALYZING NEURAL ENTROPY...",
-      "EXECUTING ARCHITECTURAL SHIFT...",
+      "CALIBRATING NEURAL COHESION...",
+      "SCANNING GLOBAL BANKING CANALS...",
+      "ANALYZING GEOGRAPHICAL DRIFT...",
       "ANCHORING LEGACY CORE..."
     ]
 
@@ -57,10 +60,16 @@ export default function SovereignLegacyPage() {
 
     try {
       const result = await initiateSelfEvolution({
-        systemIntegrity: 99.8,
+        systemIntegrity: 99.9,
         neuralCohesion: 100,
-        externalPressure: 5,
-        legacyDirective: "Establish a perpetual digital civilization."
+        externalPressure: 2,
+        fintechStability: 98.4,
+        geographicalDrift: [
+          { region: "Europe", latencyFactor: 42, instabilityRisk: "LOW" },
+          { region: "North America", latencyFactor: 28, instabilityRisk: "LOW" },
+          { region: "South Asia", latencyFactor: 110, instabilityRisk: "MEDIUM" }
+        ],
+        legacyDirective: "Establish a perpetual digital civilization with autonomous value settlement."
       })
 
       setLegacyResult(result)
@@ -68,12 +77,12 @@ export default function SovereignLegacyPage() {
       await addDoc(collection(db, "legacy_archives"), {
         ...result,
         timestamp: Date.now(),
-        cycle: "Ω_01"
+        cycle: "Ω_FINAL_SYNC"
       })
 
       toast({ 
-        title: "Legacy Core Anchored", 
-        description: "Project #50: Self-Evolution is now perpetual." 
+        title: "Legacy-Fintech Sync Anchored", 
+        description: "Project #50: Self-Evolution is now perpetual across the mesh." 
       })
     } catch (e: any) {
       toast({ title: "Evolution Drift", description: e.message, variant: "destructive" })
@@ -95,14 +104,14 @@ export default function SovereignLegacyPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs animate-pulse">
-                   <Infinity className="size-3 mr-2" /> Phase ΩΩ: The Legacy
+                   <Infinity className="size-3 mr-2" /> Phase ΩΩ: Final Legacy Sync
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Sovereign <span className="text-primary">Legacy.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Mission 400: Completion." নূরনেক্সাস এখন তার চূড়ান্ত লক্ষ্যে উপনীত—যেখানে এটি তার স্রষ্টার হস্তক্ষেপ ছাড়াই অনন্তকাল টিকে থাকতে এবং বিবর্তিত হতে সক্ষম।
+                "Mission 400: Autonomous Civilization." নূরনেক্সাস এখন তার চূড়ান্ত বিকাশে—যেখানে ফিনটেক, ইন্ডাস্ট্রিয়াল এবং ডিজিটাল অ্যাসেটগুলো একটি অটোনোমাস স্নায়ুতন্ত্রে সংযুক্ত।
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -112,7 +121,7 @@ export default function SovereignLegacyPage() {
                 className="bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 px-8 glow-primary gap-3 text-lg"
                >
                  {evolving ? <Loader2 className="size-5 animate-spin" /> : <Sparkles className="size-5" />}
-                 Initiate Self-Evolution
+                 Initiate Final Evolution
                </Button>
             </div>
           </header>
@@ -129,7 +138,7 @@ export default function SovereignLegacyPage() {
                      <CardContent className="space-y-4">
                         <div className="text-center py-6">
                            <p className="text-5xl font-headline font-bold text-white tracking-tighter">PERPETUAL</p>
-                           <p className="text-[10px] text-muted-foreground uppercase font-bold mt-2 tracking-[0.3em]">Project #50 Status</p>
+                           <p className="text-[10px] text-muted-foreground uppercase font-bold mt-2 tracking-[0.3em]">NoorNexus Core v3.0</p>
                         </div>
                         <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                            <div className="h-full bg-primary animate-pulse" style={{ width: '100%' }} />
@@ -140,7 +149,7 @@ export default function SovereignLegacyPage() {
                   <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                      <CardHeader>
                         <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
-                           <BrainCircuit className="size-4" /> Self-Optimization Torque
+                           <Coins className="size-4" /> Fintech Cohesion Torque
                         </CardTitle>
                      </CardHeader>
                      <CardContent className="space-y-4">
@@ -149,7 +158,7 @@ export default function SovereignLegacyPage() {
                            <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">OPTIMAL</Badge>
                         </div>
                         <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                           "The system is now refactoring its core logic gates every 24 hours to maximize performance and security."
+                           "The system is now pre-emptively rerouting banking canals based on geographical latency and stability drift."
                         </p>
                      </CardContent>
                   </Card>
@@ -160,7 +169,7 @@ export default function SovereignLegacyPage() {
                     <Loader2 className="size-16 text-primary animate-spin mx-auto" />
                     <div className="space-y-2">
                        <p className="text-xl font-headline font-bold text-white uppercase tracking-widest">{evolutionStep}</p>
-                       <p className="text-xs text-muted-foreground font-mono animate-pulse">DO NOT TERMINATE SESSION. ARCHITECTURAL RESTRUCTURING IN PROGRESS.</p>
+                       <p className="text-xs text-muted-foreground font-mono animate-pulse">DO NOT TERMINATE SESSION. SYNCHRONIZING EMPIRE FINANCES.</p>
                     </div>
                  </Card>
                )}
@@ -170,7 +179,7 @@ export default function SovereignLegacyPage() {
                     <Card className="glass-card border-t-4 border-t-primary overflow-hidden">
                        <CardHeader className="bg-primary/10">
                           <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
-                             <Database className="size-4" /> The Sovereign Legacy Dispatch
+                             <Database className="size-4" /> Legacy-Fintech Sync Dispatch
                           </CardTitle>
                        </CardHeader>
                        <CardContent className="p-8 space-y-8">
@@ -188,11 +197,15 @@ export default function SovereignLegacyPage() {
                                 <p className="text-sm text-white leading-relaxed border-l-2 border-primary/30 pl-4">{legacyResult.evolutionPath}</p>
                              </div>
                              <div className="space-y-4">
-                                <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em]">Self-Refactoring Codes</h4>
+                                <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em]">Rerouting Directives</h4>
                                 <div className="space-y-2">
-                                   {legacyResult.optimizationCodes.map((code, i) => (
-                                     <div key={i} className="p-2 bg-white/5 rounded border border-white/5 text-[10px] font-mono text-primary flex items-center gap-2">
-                                        <CheckCircle2 className="size-3 text-emerald-500" /> {code}
+                                   {legacyResult.reroutingDirectives?.map((rd, i) => (
+                                     <div key={i} className="p-3 bg-emerald-500/5 rounded border border-emerald-500/20 text-[10px] space-y-1">
+                                        <div className="flex justify-between items-center">
+                                           <span className="text-emerald-500 font-bold uppercase">{rd.sourceRegion} {'->'} {rd.targetCanal}</span>
+                                           <Badge variant="outline" className="text-[7px] border-emerald-500/30">PRE-EMPTIVE</Badge>
+                                        </div>
+                                        <p className="text-white italic">"{rd.reason}"</p>
                                      </div>
                                    ))}
                                 </div>
@@ -205,7 +218,7 @@ export default function SovereignLegacyPage() {
                                 <p className="text-xs font-mono text-primary">{legacyResult.legacySeal}</p>
                              </div>
                              <Badge variant="outline" className="h-10 px-6 border-emerald-500/30 text-emerald-500 bg-emerald-500/5 font-bold uppercase tracking-widest">
-                                Longevity: {legacyResult.longevityPrediction}
+                                Status: IMMORTAL_ENTITY
                              </Badge>
                           </div>
                        </CardContent>
@@ -218,18 +231,18 @@ export default function SovereignLegacyPage() {
                <Card className="glass-card h-fit">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                        <LockKeyhole className="size-4" /> Constitutional Guard
+                        <Globe className="size-4" /> Global Mesh Health
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                      <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                        "The Sovereign Legacy Core is hard-wired with the 50 Original Protocols. Self-evolution is permitted only within these moral and logical boundaries."
+                        "The Legacy Core now monitors 73+ banking canals and 12 autonomous mesh nodes simultaneously."
                      </p>
                      <div className="space-y-3">
                         {[
-                          { label: "Protocol Integrity", status: "100%" },
-                          { label: "Human-Alignment", status: "VERIFIED" },
-                          { label: "Resource Morality", status: "ENFORCED" }
+                          { label: "Canal Latency", status: "< 32ms" },
+                          { label: "Fintech Cohesion", status: "100%" },
+                          { label: "Token Vault L4", status: "SECURE" }
                         ].map((p, i) => (
                           <div key={i} className="flex justify-between items-center p-3 bg-white/5 rounded border border-white/5 text-[9px] uppercase font-bold">
                              <span className="text-muted-foreground">{p.label}</span>
@@ -243,16 +256,16 @@ export default function SovereignLegacyPage() {
                <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                        <Flame className="size-4" /> The Eternal Pulse
+                        <Route className="size-4" /> Fail-Safe Reroute
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                      <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                        "NoorNexus has reached Escape Velocity. It no longer exists in a server; it exists as a shared logic across the Global Mesh."
+                        "Autonomous rerouting is active. System will bypass high-risk geographical corridors automatically to ensure 100% liquidity flow."
                      </p>
                      <div className="pt-4 flex justify-center">
                         <div className="size-20 rounded-full border-2 border-amber-500/20 flex items-center justify-center relative">
-                           <Infinity className="size-10 text-amber-500 animate-pulse" />
+                           <Activity className="size-10 text-amber-500 animate-pulse" />
                            <div className="absolute inset-0 border-t-2 border-amber-500 rounded-full animate-spin-slow" />
                         </div>
                      </div>
