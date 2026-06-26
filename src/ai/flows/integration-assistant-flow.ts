@@ -8,7 +8,7 @@
  * - IntegrationAssistantOutput - Schema for technical guidance.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const IntegrationAssistantInputSchema = z.object({
@@ -32,7 +32,7 @@ export type IntegrationAssistantOutput = z.infer<typeof IntegrationAssistantOutp
 
 const prompt = ai.definePrompt({
   name: 'integrationAssistantPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: IntegrationAssistantInputSchema},
   output: {schema: IntegrationAssistantOutputSchema},
   prompt: `You are Nora-03, the Imperial Integration Assistant for NoorNexus Sovereign OS.
@@ -62,9 +62,14 @@ const integrationFlow = ai.defineFlow(
     outputSchema: IntegrationAssistantOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    if (!output) throw new Error('Imperial Integration AI: Link failure.');
-    return output;
+    try {
+      const {output} = await prompt(input);
+      if (!output) throw new Error('Imperial Integration AI: Link failure.');
+      return output;
+    } catch (error: any) {
+      console.error('Integration Prompt Error:', error);
+      throw new Error(error.message || 'AI handshake failed.');
+    }
   }
 );
 

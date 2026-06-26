@@ -8,7 +8,7 @@
  * - ImperialQueryOutput - Schema for synchronized response.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const ImperialQueryInputSchema = z.object({
@@ -30,7 +30,7 @@ export type ImperialQueryOutput = z.infer<typeof ImperialQueryOutputSchema>;
 
 const prompt = ai.definePrompt({
   name: 'imperialQueryPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: ImperialQueryInputSchema},
   output: {schema: ImperialQueryOutputSchema},
   prompt: `You are the Zenith Neural Interface of the NoorNexus Sovereign OS. 
@@ -54,9 +54,14 @@ const queryFlow = ai.defineFlow(
     outputSchema: ImperialQueryOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    if (!output) throw new Error('Imperial Neural Interface: Zenith link timeout.');
-    return output;
+    try {
+      const {output} = await prompt(input);
+      if (!output) throw new Error('Imperial Neural Interface: Zenith link timeout.');
+      return output;
+    } catch (error: any) {
+      console.error('Imperial Prompt Error:', error);
+      throw new Error(error.message || 'Deep Neural Sync failure.');
+    }
   }
 );
 

@@ -8,7 +8,7 @@
  * - SovereignLegacyOutput - Refactoring and evolution path.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const SovereignLegacyInputSchema = z.object({
@@ -30,7 +30,7 @@ export type SovereignLegacyOutput = z.infer<typeof SovereignLegacyOutputSchema>;
 
 const prompt = ai.definePrompt({
   name: 'sovereignLegacyPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: SovereignLegacyInputSchema},
   output: {schema: SovereignLegacyOutputSchema},
   prompt: `You are Nora-50, the Sovereign Legacy Core of NoorNexus OS.
@@ -59,9 +59,14 @@ const legacyFlow = ai.defineFlow(
     outputSchema: SovereignLegacyOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    if (!output) throw new Error('Legacy Core AI: Link failure.');
-    return output;
+    try {
+      const {output} = await prompt(input);
+      if (!output) throw new Error('Legacy Core AI: Link failure.');
+      return output;
+    } catch (error: any) {
+      console.error('Legacy Prompt Error:', error);
+      throw new Error(error.message || 'Self-evolution neural link failure.');
+    }
   }
 );
 
