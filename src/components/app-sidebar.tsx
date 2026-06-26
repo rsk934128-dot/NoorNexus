@@ -83,9 +83,10 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
+  { title: "Sovereign Gateway (P51)", url: "/sovereign-gateway", icon: Rocket, zenith: true },
   { title: "AMEX Token Hub", url: "/amex-tokens", icon: Key },
   { title: "AMEX Virtual Cards", url: "/amex-on-demand", icon: CreditCard },
-  { title: "Enterprise Bridge", url: "/api-hub", icon: Link2, zenith: true },
+  { title: "Enterprise Bridge", url: "/api-hub", icon: Link2 },
   { title: "Open Banking Hub", url: "/open-banking", icon: Landmark },
   { title: "Industrial Hub", url: "/industrial-hub", icon: Factory },
   { title: "Asset Tracking (P46)", url: "/logistics", icon: Truck },

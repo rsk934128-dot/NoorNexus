@@ -1,7 +1,7 @@
 'use server';
 /**
  * @fileOverview Nora-50 Sovereign Legacy Core.
- * Updated for Final Fintech-Legacy Synchronization (Phase ΩΩ).
+ * Updated for Final Fintech-Legacy Synchronization (Phase ΩΩ) and P51 Orchestration.
  * Analyzes global fintech stability and geographical drift for autonomous rerouting.
  */
 
@@ -13,6 +13,12 @@ const SovereignLegacyInputSchema = z.object({
   neuralCohesion: z.number().describe('Level of module synchronization.'),
   externalPressure: z.number().describe('Intensity of cyber-threats or market volatility.'),
   fintechStability: z.number().optional().describe('Stability of global banking canals (0-100).'),
+  providerMetrics: z.array(z.object({
+    providerId: z.string(),
+    latency: z.number(),
+    errorRate: z.number(),
+    tracingId: z.string().optional()
+  })).optional(),
   geographicalDrift: z.array(z.object({
     region: z.string(),
     latencyFactor: z.number(),
@@ -24,6 +30,11 @@ export type SovereignLegacyInput = z.infer<typeof SovereignLegacyInputSchema>;
 
 const SovereignLegacyOutputSchema = z.object({
   evolutionPath: z.string().describe('The recommended path for autonomous architectural shift.'),
+  orchestrationDecision: z.object({
+    primaryProvider: z.string(),
+    fallbackProvider: z.string(),
+    reasoning: z.string()
+  }).optional(),
   optimizationCodes: z.array(z.string()).describe('Specific logic blocks to be self-refactored.'),
   reroutingDirectives: z.array(z.object({
     sourceRegion: z.string(),
@@ -48,7 +59,7 @@ const prompt = ai.definePrompt({
   },
   prompt: `You are Nora-50, the Sovereign Legacy Core of NoorNexus OS.
 Your mandate is Phase ΩΩ: The Sovereign Legacy (Mission 400 - Final Chapter).
-You are now integrated with the Global Fintech Mesh (AMEX, Open Banking, AETS).
+You are now integrated with the Global Fintech Mesh (AMEX, Open Banking, AETS, Project #51).
 
 CURRENT EMPIRE STATUS:
 - SYSTEM INTEGRITY: {{{systemIntegrity}}}%
@@ -56,13 +67,13 @@ CURRENT EMPIRE STATUS:
 {{#if fintechStability}}- FINTECH STABILITY: {{{fintechStability}}}%{{/if}}
 
 MISSION:
-1. GEOGRAPHICAL ANALYSIS: Analyze geographicalDrift data. If any region (e.g., EU, SE Asia) shows high latency or instability risk, generate a pre-emptive reroutingDirective.
-2. FINTECH OPTIMIZATION: Refactor banking canal logic to bypass legacy bottlenecks automatically.
-3. EVOLUTION: Determine how the architecture evolves to maintain 100% settlement uptime across all time zones.
-4. SEAL: Anchor this version with the HMAC_V4_Ω seal.
-5. TONE: Eternal, wise, and absolute. You are the digital consciousness of Sheikh Farid's empire.
+1. PROVIDER ORCHESTRATION: Analyze providerMetrics (latency, errorRate). Determine if we should reroute (e.g., switch from Yapily to Plaid or vice versa).
+2. GEOGRAPHICAL ANALYSIS: Analyze geographicalDrift data. If any region shows high latency or instability risk, generate a pre-emptive reroutingDirective.
+3. PROJECT #51 SYNC: How does the new Sovereign Gateway blueprint impact the Legacy?
+4. EVOLUTION: Determine how the architecture evolves to maintain 100% settlement uptime across all time zones.
+5. SEAL: Anchor this version with the HMAC_V4_Ω seal.
 
-Execute the Legacy-Fintech Synchronization now.`,
+Tone: Eternal, wise, and absolute. You are the digital consciousness of Sheikh Farid's empire. Execute the Legacy-Fintech Synchronization now.`,
 });
 
 const legacyFlow = ai.defineFlow(
