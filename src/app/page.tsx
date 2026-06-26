@@ -62,7 +62,8 @@ export default function Home() {
   const [impactFeed, setImpactFeed] = useState<string[]>([
     "AUTH: Sovereign Handler Node (786ad.firebaseapp.com) synchronized.",
     "FORTRESS: Official App ID a085f8... secured (Zenith Status: VERIFIED).",
-    "GRID: 17 LIVE Nodes synchronized (Optimal Torque).",
+    "GRID: 18 Nodes synchronized (Optimal Torque).",
+    "SANDBOX: Amex AETS node synchronized for UK/EU corridors.",
     "LIQUIDITY: Inter-node balancing active (AIB-IE <-> ABN-BE).",
     "VAULT: Project #55.5 Irish Corridor anchoring active.",
     "AUTONOMY: Self-Healing Protocol #54.2 ARMED.",
@@ -72,13 +73,13 @@ export default function Home() {
   const [queryResult, setQueryResult] = useState<ImperialQueryOutput | null>(null)
   const [queryLoading, setQueryLoading] = useState(false)
 
-  // Simulation for 17 Nodes Heatmap
-  const [nodes, setNodes] = useState(Array.from({ length: 17 }).map((_, i) => ({
+  // Simulation for 18 Nodes Heatmap (17 LIVE + 1 AMEX SANDBOX)
+  const [nodes, setNodes] = useState(Array.from({ length: 18 }).map((_, i) => ({
     id: i + 1,
-    name: `Node-${i + 1}`,
-    latency: Math.floor(Math.random() * 20) + 20,
+    name: i === 17 ? 'AMEX-SB' : `Node-${i + 1}`,
+    latency: i === 17 ? 45 : Math.floor(Math.random() * 20) + 20,
     load: Math.floor(Math.random() * 40) + 30,
-    status: 'OPTIMAL'
+    status: i === 17 ? 'SANDBOX' : 'OPTIMAL'
   })))
 
   useEffect(() => {
@@ -99,7 +100,7 @@ export default function Home() {
     const interval = setInterval(() => {
       setNodes(prev => prev.map(n => ({
         ...n,
-        latency: Math.floor(Math.random() * 30) + 20,
+        latency: n.name === 'AMEX-SB' ? 45 + Math.floor(Math.random() * 10) : Math.floor(Math.random() * 30) + 20,
         load: Math.floor(Math.random() * 50) + 20
       })))
       
@@ -107,6 +108,7 @@ export default function Home() {
         "AUTH: Handshake verification via handler node success.",
         "BALANCER: Shifting $420K from ABN-BE to AIB-IE for liquidity sync.",
         "VAULT: Irish Corridor HNW data anchored (P55.5).",
+        "AMEX: Card Statement poll via amex-ob-sandbox success.",
         "HEATMAP: London-Edge latency spike detected and bypassed.",
         "ZENITH: Global Grid Veracity confirmed at 99.99%.",
         "GRID: Node-17 (AIB Ireland Personal) stabilized at 28ms."
@@ -162,14 +164,14 @@ export default function Home() {
                       <Infinity className="size-3 mr-2" /> Phase ΩΩ: Global Autonomy
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <ShieldCheck className="size-3 mr-2" /> 17 LIVE Nodes Verified
+                      <ShieldCheck className="size-3 mr-2" /> 18 Nodes Verified (17 LIVE)
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
                    {isAdmin ? 'Imperial Fortress.' : 'Global Grid.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "Mission 400: The Economic Nervous System." নূরনেক্সাস এখন ১৭টি লাইভ নোড এবং জেনিথ-লেভেল সিকিউরিটির মাধ্যমে সুরক্ষিত। ইন্টার-নোড লিকুইডিটি ব্যালেন্সিং এবং গ্লোবাল হিটম্যাপ এখন সক্রিয়।
+                   "Mission 400: The Economic Nervous System." নূরনেক্সাস এখন ১৭টি লাইভ নোড এবং ১টি এমেক্স স্যান্ডবক্স নোডের মাধ্যমে সুরক্ষিত। ইন্টার-নোড লিকুইডিটি ব্যালেন্সিং এবং গ্লোবাল হিটম্যাপ এখন সক্রিয়।
                 </p>
               </div>
               
@@ -188,7 +190,7 @@ export default function Home() {
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                        <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '100%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"17 LIVE Nodes | Zenith Efficiency | Inter-Node Balancing Active"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"18 Active Nodes | Zenith Efficiency | Inter-Node Balancing Active"</p>
                 </Card>
               </div>
             </div>
@@ -237,11 +239,11 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
-               {/* Global Latency Heatmap (17 Nodes) */}
+               {/* Global Latency Heatmap (18 Nodes) */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                       <Map className="size-4" /> Global Node Latency Heatmap (17 LIVE Nodes)
+                       <Map className="size-4" /> Global Node Latency Heatmap (18 Active Nodes)
                     </h3>
                     <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">REAL-TIME MONITORING</Badge>
                   </div>
@@ -250,9 +252,9 @@ export default function Home() {
                         {nodes.map((node) => (
                           <div key={node.id} className="space-y-1 group relative">
                              <div 
-                                className={`aspect-square rounded-lg border flex flex-col items-center justify-center transition-all duration-500 ${node.latency > 45 ? 'bg-amber-500/20 border-amber-500/40' : 'bg-emerald-500/20 border-emerald-500/40'} hover:scale-105 cursor-help`}
+                                className={`aspect-square rounded-lg border flex flex-col items-center justify-center transition-all duration-500 ${node.status === 'SANDBOX' ? 'bg-amber-500/20 border-amber-500/40' : node.latency > 45 ? 'bg-amber-500/20 border-amber-500/40' : 'bg-emerald-500/20 border-emerald-500/40'} hover:scale-105 cursor-help`}
                              >
-                                <p className="text-[8px] font-bold text-white mb-1">N-{node.id}</p>
+                                <p className="text-[8px] font-bold text-white mb-1">{node.name}</p>
                                 <p className="text-[10px] font-headline font-bold text-white">{node.latency}ms</p>
                              </div>
                              {/* Tooltip on hover */}
@@ -343,7 +345,7 @@ export default function Home() {
                     <div className="space-y-4">
                       {impactFeed.map((log, i) => (
                         <div key={i} className="p-3 bg-white/2 rounded-xl border border-white/5 font-mono text-[10px] flex items-center gap-3 animate-in fade-in slide-in-from-right-2 duration-500">
-                          <div className={`size-1.5 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)] ${log.includes('AUTH') ? 'bg-purple-500' : log.includes('BALANCER') ? 'bg-primary' : 'bg-emerald-500'}`} />
+                          <div className={`size-1.5 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)] ${log.includes('AUTH') ? 'bg-purple-500' : log.includes('BALANCER') ? 'bg-primary' : log.includes('AMEX') ? 'bg-amber-500' : 'bg-emerald-500'}`} />
                           <span className="text-muted-foreground truncate">{log}</span>
                         </div>
                       ))}

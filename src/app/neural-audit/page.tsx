@@ -56,7 +56,7 @@ export default function NeuralAuditPage() {
   const [liveStats, setLiveStats] = useState({
     latency: 28,
     successRate: 100.0,
-    activeNodes: 17,
+    activeNodes: 18,
     status: "STABLE",
     failoverStatus: "ARMED",
     selfHealingStatus: "OPTIMAL"
@@ -81,7 +81,7 @@ export default function NeuralAuditPage() {
         appId: OFFICIAL_APP_ID,
         nodeId: activeNode,
         nodeType: 'ASPSP',
-        region: "Ireland - LIVE Corridor",
+        region: "Global Corridor Sync",
         consentStatus: "ACTIVE_AIS_PIS_BULK_SCA"
       })
       setAuditResult(audit)
@@ -89,9 +89,10 @@ export default function NeuralAuditPage() {
       // 2. Autonomy Calibration
       const autonomy = await runGridAutonomy({
         region: "Global Mesh Corridor",
-        detectedRegulatoryChange: "Irish Central Bank PSD2 amendment verified.",
-        currentGatewayConfig: { active_nodes: 17, self_healing: true, cross_node_balancing: true },
+        detectedRegulatoryChange: "Irish and AMEX PSD2 amendment verified.",
+        currentGatewayConfig: { active_nodes: 18, self_healing: true, cross_node_balancing: true },
         nodePerformanceData: [
+          { nodeId: "AMEX-SANDBOX-UK", latency: 45, uptime: 100, roi: 90 },
           { nodeId: "AIB-IRELAND-PERSONAL", latency: 24, uptime: 100, roi: 95 },
           { nodeId: "AIB-IRELAND-BUSINESS", latency: 26, uptime: 100, roi: 94 },
           { nodeId: "BENELUX-CORE", latency: 28, uptime: 100, roi: 92 },
@@ -106,8 +107,8 @@ export default function NeuralAuditPage() {
       setAutonomyResult(autonomy)
 
       toast({ 
-        title: "Irish Corridor Sync Finalized", 
-        description: `Project #55.5: Application ${OFFICIAL_APP_ID.substring(0, 8)} is verified for AIB-IE.` 
+        title: "Global Grid Sync Finalized", 
+        description: `Project #55.5: Amex and Irish corridors are verified for App ${OFFICIAL_APP_ID.substring(0, 8)}.` 
       })
     } catch (e: any) {
       toast({ title: "Sync Error", description: e.message, variant: "destructive" })
@@ -131,14 +132,14 @@ export default function NeuralAuditPage() {
                    <Infinity className="size-3 mr-2" /> Phase ΩΩ: Global Autonomy
                  </Badge>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <Landmark className="size-3 mr-2" /> IRISH AUDIT PULSE: ON
+                   <Landmark className="size-3 mr-2" /> GRID AUDIT PULSE: ON
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Neural <span className="text-emerald-500">Sentinel.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Zenith Level Traceability." নূরনেক্সাস এখন আয়ারল্যান্ড করিডোরসহ ১৭টি লাইভ নোডকে নিউরাল অডিটের আওতায় নিয়ে এসেছে।
+                "Zenith Level Traceability." নূরনেক্সাস এখন ১৮টি সক্রিয় নোডকে (AMEX স্যান্ডবক্সসহ) নিউরাল অডিটের আওতায় নিয়ে এসেছে।
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -163,16 +164,16 @@ export default function NeuralAuditPage() {
                 <CardHeader className="flex flex-row items-center justify-between">
                   <div className="space-y-1">
                     <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                       <Fingerprint className="size-4" /> Zenith Application Monitor (17 Nodes)
+                       <Fingerprint className="size-4" /> Zenith Application Monitor (18 Nodes)
                     </CardTitle>
                     <CardDescription className="text-xs font-mono uppercase tracking-widest">TRACE_ID: {OFFICIAL_APP_ID}</CardDescription>
                   </div>
-                  <Badge className="bg-emerald-500 animate-pulse uppercase font-bold">Irish Corridor: VERIFIED</Badge>
+                  <Badge className="bg-emerald-500 animate-pulse uppercase font-bold">Global Mesh: VERIFIED</Badge>
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
                   {[
                     { label: "Inter-Node Balancer", val: "ACTIVE", icon: ArrowRightLeft },
-                    { label: "Irish Vault Sync", val: "100%", icon: Database },
+                    { label: "Amex/Irish Sync", val: "100%", icon: Database },
                     { label: "Verification Status", val: "PASS", icon: CheckCircle2 },
                     { label: "Fail-over ARMED", val: "YES", icon: ShieldPlus }
                   ].map((stat, i) => (
@@ -240,7 +241,7 @@ export default function NeuralAuditPage() {
                                 <div className="h-full bg-emerald-500" style={{ width: '100%' }} />
                              </div>
                           </div>
-                          <p className="text-[10px] text-muted-foreground italic">"Automatic traffic rerouting is active across 17 high-power nodes. Irish Corridor monitored."</p>
+                          <p className="text-[10px] text-muted-foreground italic">"Automatic traffic rerouting is active across 18 nodes. UK Amex Sandbox and Irish corridors monitored."</p>
                        </CardContent>
                     </Card>
 
@@ -256,7 +257,7 @@ export default function NeuralAuditPage() {
                              <Badge className="bg-primary/20 text-primary border-none">DYNAMIC</Badge>
                           </div>
                           <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                             "Nora-02-B is currently shifting assets from Benelux Grid to cover AIB-Ireland bulk settlement requirements."
+                             "Nora-02-B is currently shifting assets from Benelux Grid to cover AIB-Ireland and UK AMEX settlement requirements."
                           </p>
                        </CardContent>
                     </Card>
@@ -301,13 +302,13 @@ export default function NeuralAuditPage() {
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
                     <Scale className="size-4" /> Judicial Traceability
-                  </Scale>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                    <div className="space-y-4">
                       {[
-                        { label: "Irish Auth Sync", val: "100%", color: "text-emerald-500" },
-                        { label: "17-Node Veracity", val: "99.9%", color: "text-primary" },
+                        { label: "Amex/Irish Sync", val: "100%", color: "text-emerald-500" },
+                        { label: "18-Node Veracity", val: "99.9%", color: "text-primary" },
                         { label: "Balancing Veracity", val: "ACTIVE", color: "text-emerald-400" }
                       ].map((s, i) => (
                         <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
@@ -322,12 +323,12 @@ export default function NeuralAuditPage() {
               <Card className="glass-card border-amber-500/20 bg-amber-500/5">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                       <Clock className="size-3" /> Irish Expiry Sentinel
+                       <Clock className="size-3" /> Expiry Sentinel
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       "Next secret rotation for AIB Ireland scheduled in 28 days. Policy synchronized with Irish Central Bank PSD2."
+                       "Next secret rotation for global corridors scheduled in 28 days. Policy synchronized with UK/EU Central Bank PSD2."
                     </p>
                  </CardContent>
               </Card>
@@ -341,7 +342,7 @@ export default function NeuralAuditPage() {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <p className="text-[11px] text-white font-bold leading-tight">GLOBAL GRID IS IMMORTAL.</p>
-                  <p className="text-[8px] text-muted-foreground font-mono">HASH: Ω_17_NODE_STABILITY</p>
+                  <p className="text-[8px] text-muted-foreground font-mono">HASH: Ω_18_NODE_STABILITY</p>
                 </CardContent>
               </Card>
             </div>

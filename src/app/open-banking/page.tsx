@@ -51,13 +51,24 @@ const PROVIDER_METRICS = [
 
 const VALIDATED_NODES = [
   {
+    name: "Amex Sandbox - SANDBOX",
+    fullName: "American Express Sandbox",
+    id: "amex-ob-sandbox",
+    bic: "AETCUS55XXX",
+    country: "UK / France / Norway",
+    type: "AIS",
+    features: ["Accounts", "Balances", "Statements", "Transactions"],
+    status: "SANDBOX_ENVIRONMENT",
+    crossBorderVeracity: "100.0%"
+  },
+  {
     name: "AIB Ireland Personal - LIVE",
     fullName: "Allied Irish Bank Ireland Personal",
     id: "aib",
     bic: "AIBKIE2DXXX",
     country: "Ireland",
     type: "AIS_PIS",
-    features: ["Bulk Payment", "Domestic Single", "International Single", "Future Payment", "Periodic Payments", "Direct Debit", "Scheduled Payments"],
+    features: ["Bulk Payment", "Domestic Single", "Future Payment", "International Single", "Periodic Payments", "Direct Debit", "Scheduled Payments"],
     status: "LIVE_ENVIRONMENT",
     crossBorderVeracity: "100.0%"
   },
@@ -267,12 +278,12 @@ export default function OpenBankingHubPage() {
                    </h3>
                    <div className="grid grid-cols-1 gap-4">
                       {VALIDATED_NODES.map((node, i) => (
-                        <Card key={i} className={`glass-card border-l-4 ${node.status === 'LIVE_ENVIRONMENT' ? 'border-l-primary bg-primary/5' : 'border-l-emerald-500 bg-emerald-500/5'} hover:border-white/20 transition-all`}>
+                        <Card key={i} className={`glass-card border-l-4 ${node.status === 'LIVE_ENVIRONMENT' ? 'border-l-primary bg-primary/5' : node.status === 'SANDBOX_ENVIRONMENT' ? 'border-l-amber-500 bg-amber-500/5' : 'border-l-emerald-500 bg-emerald-500/5'} hover:border-white/20 transition-all`}>
                            <CardContent className="p-6">
                               <div className="flex flex-col md:flex-row justify-between gap-6">
                                  <div className="space-y-3 flex-1">
                                     <div className="flex items-center gap-3">
-                                       <div className={`size-10 rounded-lg flex items-center justify-center border ${node.status === 'LIVE_ENVIRONMENT' ? 'bg-primary/10 border-primary/20 text-primary' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'}`}>
+                                       <div className={`size-10 rounded-lg flex items-center justify-center border ${node.status === 'LIVE_ENVIRONMENT' ? 'bg-primary/10 border-primary/20 text-primary' : node.status === 'SANDBOX_ENVIRONMENT' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'}`}>
                                           <Building2 className="size-5" />
                                        </div>
                                        <div>
@@ -291,11 +302,11 @@ export default function OpenBankingHubPage() {
                                        </div>
                                        <div className="space-y-0.5">
                                           <p className="text-[8px] text-muted-foreground uppercase font-bold">Capability</p>
-                                          <Badge variant="outline" className={`text-[7px] ${node.status === 'LIVE_ENVIRONMENT' ? 'border-primary/20 text-primary' : 'border-emerald-500/20 text-emerald-500'}`}>{node.type}</Badge>
+                                          <Badge variant="outline" className={`text-[7px] ${node.status === 'LIVE_ENVIRONMENT' ? 'border-primary/20 text-primary' : node.status === 'SANDBOX_ENVIRONMENT' ? 'border-amber-500/20 text-amber-500' : 'border-emerald-500/20 text-emerald-500'}`}>{node.type}</Badge>
                                        </div>
                                        <div className="space-y-0.5">
                                           <p className="text-[8px] text-muted-foreground uppercase font-bold">Status</p>
-                                          <Badge className={`${node.status === 'LIVE_ENVIRONMENT' ? 'bg-primary' : 'bg-emerald-500'} text-[8px]`}>{node.status}</Badge>
+                                          <Badge className={`${node.status === 'LIVE_ENVIRONMENT' ? 'bg-primary' : node.status === 'SANDBOX_ENVIRONMENT' ? 'bg-amber-500' : 'bg-emerald-500'} text-[8px]`}>{node.status}</Badge>
                                        </div>
                                     </div>
                                  </div>
