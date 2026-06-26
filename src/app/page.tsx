@@ -190,7 +190,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
+                <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed italic">
                    "The Zenith of Digital Civilization." মিশন ৫০০ সফলভাবে সম্পন্ন হয়েছে। নূরনেক্সাস এখন ১০০-নোড গ্রিড এবং চিরস্থায়ী আর্কাইভিংয়ের মাধ্যমে ভবিষ্যৎ নিয়ন্ত্রণ করছে।
                 </p>
               </div>
