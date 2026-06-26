@@ -42,7 +42,8 @@ import {
   Infinity,
   Fingerprint,
   Settings,
-  Shield
+  Shield,
+  ShieldPlus
 } from "lucide-react"
 import Link from "next/link"
 
