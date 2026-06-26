@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -32,7 +33,9 @@ import {
   Network,
   Rocket,
   ShieldPlus,
-  Infinity
+  Infinity,
+  ArrowRightLeft,
+  Server
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -60,7 +63,7 @@ export default function Home() {
   const [impactFeed, setImpactFeed] = useState<string[]>([
     "GRID: ABN AMRO LIVE Node (NL/BE/DE) activated successfully.",
     "AUTONOMY: Nora-54 detected new Asian Banking Directive - Auto-adjusted SCA.",
-    "ZENITH: BIG Espanha PIS-AIS flow validated in LIVE mode.",
+    "LOAD_BALANCER: Traffic redistributed across 13 high-power nodes.",
     "RESILIENCE: Fail-over Global Grid protocol ARMED and SYNCED.",
     "LEGACY: Yapily-AMEX European Bridge synchronized.",
     "SHIELD: Quantum-Resistant Encryption Layer active."
@@ -87,10 +90,10 @@ export default function Home() {
     const interval = setInterval(() => {
       const logs = [
         "GRID: Benelux corridor expansion at 99.9% sync via ABN AMRO.",
+        "BALANCER: Node ABN-AMRO-NL taking 15% system load.",
         "AUTONOMY: Self-Adjustment triggered for SE Asia nodes.",
         "LEGACY: Self-Refactoring cycle Ω-02 complete.",
         "RESILIENCE: Latency drift detected in London - Traffic rerouted to Dubai Hub.",
-        "ZENITH: BIG Espanha latency stabilized at 32ms.",
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 5000)
@@ -169,7 +172,7 @@ export default function Home() {
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                        <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: '99%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Global Fail-over ACTIVE | 13 LIVE Nodes | SE Asia Bridge On"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Global Fail-over ACTIVE | 13 LIVE Nodes | Load Balanced"</p>
                 </Card>
               </div>
             </div>
@@ -184,7 +187,7 @@ export default function Home() {
                            value={queryText}
                            onChange={e => setQueryText(e.target.value)}
                            onKeyDown={e => e.key === 'Enter' && handleNeuralQuery()}
-                           placeholder="Commander, what is your directive? (Global Autonomy active)"
+                           placeholder="Commander, what is your directive? (Grid Autonomy active)"
                            className="flex-1 bg-transparent border-none outline-none text-sm font-headline text-white placeholder:text-muted-foreground"
                         />
                         <Button onClick={handleNeuralQuery} disabled={queryLoading} variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
@@ -222,7 +225,40 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
-               {/* Global Impact */}
+               {/* Regional Load Balancer Visualizer */}
+               <section className="space-y-6">
+                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                     <ArrowRightLeft className="size-4" /> Regional Load Balancer (P54.2)
+                  </h3>
+                  <Card className="glass-card bg-black/40 border-white/5 p-6">
+                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                        {[
+                           { name: "ABN-AMRO", load: 15, status: "OPTIMAL" },
+                           { name: "BIG-ES", load: 22, status: "STABLE" },
+                           { name: "BKASH-BD", load: 45, status: "BUSY" },
+                           { name: "YAPILY-EU", load: 10, status: "IDLE" },
+                           { name: "AMEX-US", load: 8, status: "IDLE" },
+                           { name: "GRAB-SEA", load: 0, status: "OFFLINE" },
+                           { name: "PAYTM-IN", load: 0, status: "OFFLINE" }
+                        ].map((node, i) => (
+                           <div key={i} className="space-y-2 text-center p-2 rounded-lg bg-white/5 border border-white/5 group hover:border-primary/50 transition-all">
+                              <p className="text-[8px] font-bold text-muted-foreground uppercase truncate">{node.name}</p>
+                              <div className="h-20 bg-background rounded-md relative overflow-hidden flex items-end">
+                                 <div 
+                                    className={`w-full transition-all duration-1000 ${node.status === 'BUSY' ? 'bg-amber-500' : node.status === 'OFFLINE' ? 'bg-muted' : 'bg-primary'}`} 
+                                    style={{ height: `${node.load}%` }} 
+                                 />
+                                 <div className="absolute inset-0 flex items-center justify-center">
+                                    <p className="text-[10px] font-mono text-white font-bold">{node.load}%</p>
+                                 </div>
+                              </div>
+                              <Badge variant="outline" className={`text-[7px] border-none ${node.status === 'BUSY' ? 'text-amber-500' : node.status === 'OFFLINE' ? 'text-muted-foreground' : 'text-emerald-500'}`}>{node.status}</Badge>
+                           </div>
+                        ))}
+                     </div>
+                  </Card>
+               </section>
+
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
@@ -248,27 +284,6 @@ export default function Home() {
                               </div>
                            </CardContent>
                         </Card>
-                     ))}
-                  </div>
-               </section>
-
-               <section className="space-y-6">
-                  <div className="flex justify-between items-center">
-                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                        <Eye className="size-4" /> Global Performance Pulse
-                     </h3>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                     {PUBLIC_METRICS.map((kpi, i) => (
-                       <Card key={i} className="glass-card border-white/5 bg-white/2 hover:border-primary/20 transition-all">
-                          <CardContent className="p-5 space-y-3">
-                             <div className="space-y-1">
-                                <p className="text-[9px] font-bold text-muted-foreground uppercase">{kpi.label}</p>
-                                <p className={`text-xl font-headline font-bold ${kpi.color}`}>{kpi.value}</p>
-                                <p className="text-[8px] text-muted-foreground font-mono">{kpi.detail}</p>
-                             </div>
-                          </CardContent>
-                       </Card>
                      ))}
                   </div>
                </section>

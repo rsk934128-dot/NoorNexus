@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -30,7 +31,8 @@ import {
   BarChart3,
   RefreshCcw,
   ZapOff,
-  Infinity
+  Infinity,
+  ArrowRightLeft
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { runNeuralAudit, NeuralAuditOutput } from "@/ai/flows/neural-audit-flow"
@@ -119,7 +121,7 @@ export default function NeuralAuditPage() {
               {/* LIVE Efficiency Monitor */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <BarChart3 className="size-4" /> Global Grid Pulse (Node: {activeNode})
+                    <BarChart3 className="size-4" /> Global Grid Pulse (13 LIVE Nodes)
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {[
@@ -208,17 +210,18 @@ export default function NeuralAuditPage() {
             </div>
 
             <div className="space-y-8">
+              {/* Load Balancer Mini-status */}
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                    <ShieldPlus className="size-4" /> Grid Stabilization
+                    <ArrowRightLeft className="size-4" /> Regional Balancing
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                    <div className="space-y-4">
                       {[
                         { label: "Active Fail-overs", val: "0", color: "text-emerald-500" },
-                        { label: "Regulatory Drift", val: "0.2%", color: "text-primary" },
+                        { label: "Load Variance", val: "4.2%", color: "text-primary" },
                         { label: "Self-Evolution", status: "ACTIVE", color: "text-emerald-500" }
                       ].map((s, i) => (
                         <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
