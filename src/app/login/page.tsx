@@ -2,10 +2,10 @@
 "use client"
 
 import { useAuth, useUser } from "@/firebase"
-import { signInWithGoogle } from "@/firebase/auth/auth-service"
+import { signInWithGoogle, signInWithGithub, signInWithMicrosoft } from "@/firebase/auth/auth-service"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { LogIn, ShieldCheck, Zap } from "lucide-react"
+import { LogIn, ShieldCheck, Zap, Github, Chrome, Terminal } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -26,20 +26,25 @@ export default function LoginPage() {
     }
   }, [user, loading, router])
 
-  const handleLogin = async () => {
+  const handleAuth = async (provider: 'google' | 'github' | 'microsoft') => {
     setSigningIn(true)
     try {
-      await signInWithGoogle(auth)
-      toast({
-        title: "Access Granted",
-        description: "HMAC_V4 Handshake Successful. Welcome, Commander.",
-      })
+      let result;
+      if (provider === 'google') result = await signInWithGoogle(auth);
+      else if (provider === 'github') result = await signInWithGithub(auth);
+      else result = await signInWithMicrosoft(auth);
+
+      if (result) {
+        toast({
+          title: "Access Granted",
+          description: `Identified via ${provider.toUpperCase()}. Welcome, Commander.`,
+        })
+      }
     } catch (error: any) {
       if (error.code === 'auth/popup-closed-by-user') {
         setSigningIn(false)
         return
       }
-
       toast({
         title: "Access Denied",
         description: error.message || "Authentication protocol failed.",
@@ -68,29 +73,46 @@ export default function LoginPage() {
         <Card className="glass-card border-primary/20 bg-card/60 backdrop-blur-3xl">
           <CardHeader>
             <CardTitle className="font-headline text-center text-primary uppercase">Sovereign Gate</CardTitle>
-            <CardDescription className="text-center uppercase text-[10px] tracking-widest font-bold">Identify yourself to access the mesh nodes</CardDescription>
+            <CardDescription className="text-center uppercase text-[10px] tracking-widest font-bold">Multi-Node Identity Verification</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="p-4 bg-primary/5 border border-primary/10 rounded-xl space-y-3">
+          <CardContent className="space-y-4">
+            <div className="p-4 bg-primary/5 border border-primary/10 rounded-xl space-y-2 mb-4">
                <div className="flex items-center gap-3 text-xs text-primary font-bold">
                   <ShieldCheck className="size-4" />
                   LEVEL 4 CLEARANCE REQUIRED
                </div>
-               <p className="text-[10px] text-muted-foreground leading-relaxed font-mono">
-                  Encryption Layer: HMAC_V4 SHA256<br/>
-                  Session Monitoring: ACTIVE<br/>
-                  Zero-Trust Protocol: ENABLED
+               <p className="text-[9px] text-muted-foreground leading-relaxed font-mono">
+                  HMAC_V4 Multi-Auth Layer: ACTIVE
                </p>
             </div>
 
-            <Button 
-              onClick={handleLogin}
-              disabled={signingIn}
-              className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary text-md gap-3"
-            >
-              {signingIn ? <Zap className="size-5 animate-spin" /> : <LogIn className="size-5" />}
-              Identify with Google
-            </Button>
+            <div className="space-y-3">
+              <Button 
+                onClick={() => handleAuth('google')}
+                disabled={signingIn}
+                className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary gap-3"
+              >
+                <Chrome className="size-4" /> Identify with Google
+              </Button>
+
+              <Button 
+                onClick={() => handleAuth('github')}
+                disabled={signingIn}
+                variant="outline"
+                className="w-full border-white/10 hover:bg-white/5 text-white font-bold uppercase tracking-widest h-12 gap-3"
+              >
+                <Github className="size-4" /> Identify with GitHub
+              </Button>
+
+              <Button 
+                onClick={() => handleAuth('microsoft')}
+                disabled={signingIn}
+                variant="outline"
+                className="w-full border-white/10 hover:bg-white/5 text-white font-bold uppercase tracking-widest h-12 gap-3"
+              >
+                <Terminal className="size-4" /> Identify with Microsoft
+              </Button>
+            </div>
           </CardContent>
         </Card>
         
