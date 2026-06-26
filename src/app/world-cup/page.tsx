@@ -116,17 +116,8 @@ export default function WorldCupPage() {
     try {
       if (!document.fullscreenElement) {
         await playerRef.current.requestFullscreen();
-        // Attempt to rotate to landscape if supported (Mobile)
-        if (screen.orientation && (screen.orientation as any).lock) {
-          await (screen.orientation as any).lock('landscape').catch(() => {
-            // Silently ignore if orientation lock is not supported
-          });
-        }
       } else {
         await document.exitFullscreen();
-        if (screen.orientation && (screen.orientation as any).unlock) {
-          (screen.orientation as any).unlock();
-        }
       }
     } catch (e: any) {
       toast({ title: "Imperial Overlay Error", description: e.message, variant: "destructive" });

@@ -1,11 +1,19 @@
 
-import type {Metadata} from 'next';
+import type {Metadata, Viewport} from 'next';
 import './globals.css';
 import {SidebarProvider} from '@/components/ui/sidebar';
 import {Toaster} from '@/components/ui/toaster';
 import {FirebaseClientProvider} from '@/firebase';
 import {PersistentCommNode} from '@/components/persistent-comm-node';
 import {SessionTracker} from '@/components/session-tracker';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  minimumScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#030708',
+}
 
 export const metadata: Metadata = {
   title: 'NoorNexus | Sovereign Digital Infrastructure',
@@ -58,7 +66,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-        <meta name="theme-color" content="#030708" />
         <script dangerouslySetInnerHTML={{
           __html: `
             if ('serviceWorker' in navigator) {
