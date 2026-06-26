@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useRef, useEffect } from "react"
@@ -34,7 +33,9 @@ import {
   Sparkles,
   FileCheck,
   CheckCircle2,
-  ShieldPlus
+  ShieldPlus,
+  LockKeyhole,
+  Braces
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -101,7 +102,7 @@ export default function ApiHubPage() {
                 Discovery <span className="text-purple-500">Hub.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Scaling the Empire." নূরনেক্সাস এখন তার ১০০-নোড মেগা-মেশ ইনফ্রাস্ট্রাকচারকে এন্টারপ্রাইজ পার্টনারদের জন্য উন্মুক্ত করছে।
+                "The Digital Passport to the 100-Node Empire." এন্টারপ্রাইজ পার্টনারদের জন্য নূরনেক্সাস এখন একটি স্বায়ত্তশাসিত অনবোর্ডিং গেটওয়ে।
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -116,15 +117,51 @@ export default function ApiHubPage() {
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
             <div className="xl:col-span-3 space-y-8">
-              <Tabs defaultValue="quickstart" className="space-y-6">
+              <Tabs defaultValue="onboarding-api" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
+                  <TabsTrigger value="onboarding-api" className="gap-2"><LockKeyhole className="size-4" /> Onboarding API</TabsTrigger>
                   <TabsTrigger value="quickstart" className="gap-2"><Zap className="size-4" /> Quick Start</TabsTrigger>
                   <TabsTrigger value="bridge" className="gap-2"><Network className="size-4" /> Neural Bridge</TabsTrigger>
                   <TabsTrigger value="certs" className="gap-2"><FileCheck className="size-4" /> Zenith Certs</TabsTrigger>
-                  <TabsTrigger value="keys" className="gap-2"><Key className="size-4" /> Zenith Keys</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="quickstart" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+                <TabsContent value="onboarding-api" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+                   <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
+                      <CardHeader>
+                         <CardTitle className="text-sm font-headline uppercase text-purple-500 flex items-center gap-2">
+                            <Fingerprint className="size-4" /> Sovereign Onboarding API (v1.0)
+                         </CardTitle>
+                         <CardDescription>The Digital Passport for autonomous mesh connection.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                         <p className="text-xs text-muted-foreground italic leading-relaxed">
+                            "Partner applications can now connection to the NoorNexus grid programmatically. No human intervention required for Zenith L1 access."
+                         </p>
+                         <div className="p-5 bg-black rounded-xl border border-white/5 space-y-4">
+                            <div className="flex justify-between items-center">
+                               <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500 font-mono">POST /v1/auth/handshake</Badge>
+                               <span className="text-[9px] text-muted-foreground font-mono">Content-Type: application/json</span>
+                            </div>
+                            <pre className="text-[11px] text-purple-400 font-mono overflow-x-auto">
+{`{
+  "appId": "YOUR_ZENITH_KEY",
+  "intent": "SOVEREIGN_MESH_CONNECTION",
+  "securityTier": "L4",
+  "signature": "HMAC_V4_ENCRYPTED_AUTH"
+}`}
+                            </pre>
+                         </div>
+                         <div className="flex items-center gap-4 pt-4">
+                            <Button size="sm" className="bg-purple-500 text-white font-bold uppercase text-[10px] gap-2">
+                               <Braces className="size-3" /> View API Specs
+                            </Button>
+                            <Badge variant="outline" className="border-amber-500/30 text-amber-500 text-[8px] uppercase">Direct Handshake Active</Badge>
+                         </div>
+                      </CardContent>
+                   </Card>
+                </TabsContent>
+
+                <TabsContent value="quickstart" className="space-y-6">
                    <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                       <CardHeader>
                          <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
@@ -231,29 +268,6 @@ export default function ApiHubPage() {
                          </CardContent>
                       </Card>
                    </div>
-                </TabsContent>
-
-                <TabsContent value="keys" className="space-y-6">
-                   <Card className="glass-card">
-                      <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase text-primary">Zenith Key Management</CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-6">
-                         <div className="p-6 bg-black/40 rounded-xl border border-dashed border-white/20 text-center space-y-4">
-                            {!apiKey ? (
-                              <Button onClick={generateKey} className="bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12">
-                                <Zap className="size-4 mr-2" /> Generate Zenith Key
-                              </Button>
-                            ) : (
-                              <div className="space-y-2">
-                                <p className="text-[10px] text-muted-foreground uppercase font-bold">Your Secret Zenith Key</p>
-                                <code className="text-lg font-mono text-emerald-500 bg-black p-4 rounded block break-all">{apiKey}</code>
-                                <p className="text-[8px] text-destructive uppercase font-bold animate-pulse">Never share this key. It grants Zenith L1 access to the mesh.</p>
-                              </div>
-                            )}
-                         </div>
-                      </CardContent>
-                   </Card>
                 </TabsContent>
               </Tabs>
             </div>

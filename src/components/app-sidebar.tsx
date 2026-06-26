@@ -60,7 +60,8 @@ import {
   EyeOff,
   Compass as Discovery,
   FileText,
-  ArrowDownToLine
+  ArrowDownToLine,
+  Database
 } from "lucide-react"
 
 import {
@@ -93,6 +94,7 @@ const USER_ITEMS = [
   { title: "Imperial Proposal", url: "/proposal", icon: FileText, highlight: true },
   { title: "Discovery Hub", url: "/api-hub", icon: Discovery, zenith: true },
   { title: "Sovereign Off-Ramp", url: "/off-ramp", icon: ArrowDownToLine, highlight: true },
+  { title: "Sovereign Data Lake", url: "/data-lake", icon: Database, zenith: true },
   { title: "Sovereign Gateway (P51)", url: "/sovereign-gateway", icon: Rocket, zenith: true },
   { title: "Enterprise Settings", url: "/enterprise-settings", icon: Settings, highlight: true },
   { title: "Global Grid (P53)", url: "/sovereign-gateway", icon: Network, highlight: true },
