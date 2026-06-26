@@ -3,6 +3,10 @@
  * @fileOverview Nora-50 Sovereign Legacy Core.
  * The final milestone of Mission 400. This agent is responsible for
  * autonomous self-optimization and the perpetual evolution of the NoorNexus OS.
+ * 
+ * - initiateSelfEvolution - Triggers the architectural shift logic.
+ * - SovereignLegacyInput - Core integrity metrics.
+ * - SovereignLegacyOutput - The evolution path and optimization codes.
  */
 
 import {ai} from '@/ai/genkit';
