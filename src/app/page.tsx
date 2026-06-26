@@ -58,7 +58,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
-    "GRID: Project #53 Global Node Expansion initiated.",
+    "GRID: ABN AMRO LIVE Node (NL/BE/DE) activated successfully.",
     "ZENITH: BIG Espanha PIS-AIS flow validated in LIVE mode.",
     "LEGACY: Yapily-AMEX European Bridge synchronized.",
     "ZENITH: External API Bridge serving 12 Enterprise Partners.",
@@ -85,7 +85,7 @@ export default function Home() {
 
     const interval = setInterval(() => {
       const logs = [
-        "GRID: Iberian corridor expansion at 94% sync.",
+        "GRID: Benelux corridor expansion at 99.9% sync via ABN AMRO.",
         "LEGACY: Self-Refactoring cycle Ω-01 complete.",
         "ZENITH: BIG Espanha latency stabilized at 32ms.",
         "SYNC: Yapily-AMEX alliance boosting European canal throughput.",
@@ -168,7 +168,7 @@ export default function Home() {
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                        <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: '98%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Global Node Expansion ACTIVE | 12 LIVE Nodes"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Global Node Expansion ACTIVE | 13 LIVE Nodes"</p>
                 </Card>
               </div>
             </div>
@@ -227,7 +227,7 @@ export default function Home() {
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                         <Rocket className="size-4" /> Sovereign Legacy Scaling
                      </h3>
-                     <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase">Active Enterprise Nodes: 420+</Badge>
+                     <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase">Active Enterprise Nodes: 433+</Badge>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                      {[

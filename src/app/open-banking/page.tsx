@@ -51,6 +51,17 @@ const PROVIDER_METRICS = [
 
 const VALIDATED_NODES = [
   {
+    name: "ABN AMRO - LIVE",
+    fullName: "ABN AMRO Bank N.V.",
+    id: "abn-amro-nl",
+    bic: "ABNANL2AXXX",
+    country: "Netherlands / Belgium / Germany",
+    type: "AIS_PIS",
+    features: ["Accounts", "Balances", "Transactions", "Domestic Single Payment", "International Single Payment", "Periodic Payments"],
+    status: "LIVE_ENVIRONMENT",
+    crossBorderVeracity: "100.0%"
+  },
+  {
     name: "BIG Espanha - LIVE",
     fullName: "Banco de Investimento Global (BIG) Espanha",
     id: "banco-de-investimento-global-espanha-sa",
@@ -131,7 +142,7 @@ export default function OpenBankingHubPage() {
       setSimulatingVeracity(false)
       toast({
         title: "Cross-Border Veracity Confirmed",
-        description: "PIS-AIS handshake validated across Iberian corridor (Spain-Portugal).",
+        description: "PIS-AIS handshake validated across Iberian and Benelux corridors.",
         className: "border-emerald-500/50 bg-emerald-500/5"
       })
     }, 2000)
@@ -459,7 +470,7 @@ export default function OpenBankingHubPage() {
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                         "Handshake veracity ensures that Iberian cross-border PIS flows match PSD2 compliance markers with 99.9% precision."
+                         "Handshake veracity ensures that Iberian and Benelux cross-border PIS flows match PSD2 compliance markers with 99.9% precision."
                       </p>
                    </CardContent>
                 </Card>
