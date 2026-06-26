@@ -36,7 +36,10 @@ import {
   CreditCard,
   Database,
   Repeat,
-  FileCheck
+  FileCheck,
+  Code2,
+  Terminal,
+  AlertTriangle
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
@@ -51,7 +54,12 @@ const GLOBAL_LEADERS = [
     url: "https://yapily.com/", 
     alliance: "AMEX Pay with Bank Transfer",
     capabilities: ["Payments", "Data", "Enrichment", "Verification", "VRPs"],
-    docUrl: "https://docs.yapily.com/"
+    apiSpecs: {
+      version: "11.5.2",
+      baseUrl: "https://api.yapily.com",
+      auth: "Basic Auth (AppID:Secret)",
+      responseFormat: "JSON with Metadata"
+    }
   },
   { name: "Plaid", hq: "USA", banks: "9,706", countries: "60", tag: "Global Alpha", url: "https://plaid.com/" },
   { name: "Lunch Flow", hq: "EU", banks: "2,400", countries: "60", tag: "EU Leader", url: "https://lunchflow.com/" },
@@ -94,7 +102,6 @@ export default function OpenBankingHubPage() {
     setActiveUrl(url)
     setLatency(0)
     
-    // Handshake Sequence (Project #45)
     const steps = ["RSA_ENCRYPTION_INIT", "HMAC_V4_VERIFY", "LEGACY_CORE_SYNC", "CANAL_TUNNELING", "END_TO_END_SYNC"]
     let i = 0
     const stepInterval = setInterval(() => {
@@ -105,14 +112,13 @@ export default function OpenBankingHubPage() {
         clearInterval(stepInterval)
         setHandshakeStep("READY")
         setLoadingView(false)
-        setLatency(Math.floor(Math.random() * 80) + 20) // Random latency 20-100ms
+        setLatency(Math.floor(Math.random() * 80) + 20)
       }
     }, 400)
 
-    // Fail-Safe Monitor (Simulation)
     if (timerRef.current) clearTimeout(timerRef.current)
     timerRef.current = setTimeout(() => {
-      if (url.includes('plaid')) { // Simulate a lag for demonstration
+      if (url.includes('plaid')) {
         setFailSafeActive(true)
         toast({
           title: "⚠️ Legacy Core Alert: Provider Lag",
@@ -235,7 +241,7 @@ export default function OpenBankingHubPage() {
                       <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
                          <Sparkles className="size-4" /> Yapily & AMEX Alliance
                       </h3>
-                      <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">UK & EUROPE CORE</Badge>
+                      <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">UK & EUROPE CORE (API v11.5.2)</Badge>
                    </div>
                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                       {[
@@ -252,6 +258,54 @@ export default function OpenBankingHubPage() {
                         </div>
                       ))}
                    </div>
+
+                   {/* Yapily API Developer Reference */}
+                   <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+                      <CardHeader>
+                         <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
+                            <Code2 className="size-4" /> Yapily API Developer Reference
+                         </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                               <div className="space-y-2">
+                                  <p className="text-[10px] font-bold text-muted-foreground uppercase">Base URL</p>
+                                  <code className="text-xs font-mono text-white bg-black/40 p-2 rounded block">https://api.yapily.com</code>
+                               </div>
+                               <div className="space-y-2">
+                                  <p className="text-[10px] font-bold text-muted-foreground uppercase">Authentication</p>
+                                  <p className="text-xs text-white flex items-center gap-2 italic">
+                                     <Lock className="size-3 text-primary" /> Basic Auth (Application ID : Secret)
+                                  </p>
+                               </div>
+                            </div>
+                            <div className="space-y-4">
+                               <div className="space-y-2">
+                                  <p className="text-[10px] font-bold text-muted-foreground uppercase">Response Structure</p>
+                                  <pre className="text-[9px] font-mono text-emerald-400 bg-black/40 p-3 rounded leading-relaxed">
+{`{
+  "meta": {
+    "tracingId": "unique-request-id"
+  },
+  "data": { ... }
+}`}
+                                  </pre>
+                               </div>
+                            </div>
+                         </div>
+                         <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start gap-3">
+                            <AlertTriangle className="size-4 text-amber-500 shrink-0 mt-0.5" />
+                            <div className="space-y-1">
+                               <p className="text-[10px] font-bold text-amber-500 uppercase">Error Handling Protocol</p>
+                               <p className="text-[9px] text-muted-foreground leading-relaxed italic">
+                                  "Always save the tracingId from error responses for support. Different products use different error formats—Nora-50 will auto-map these tracing IDs to the One Engine Ledger."
+                               </p>
+                            </div>
+                         </div>
+                      </CardContent>
+                   </Card>
+
                    <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                       <CardContent className="p-6 flex flex-col md:flex-row justify-between items-center gap-6">
                          <div className="space-y-1">
