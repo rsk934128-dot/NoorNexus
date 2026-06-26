@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -42,7 +41,11 @@ import {
   Flame,
   LayoutGrid,
   Map,
-  Shield
+  Shield,
+  FileCheck,
+  ZapOff,
+  BarChart3,
+  Fingerprint
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -112,7 +115,7 @@ export default function Home() {
         "PAYPAL: Account Identity poll via paypal_eu successful.",
         "AUTH: Handshake verification via handler node success.",
         "BALANCER: Shifting $420K from ABN-BE to AIB-IE for liquidity sync.",
-        "VAULT: Irish Corridor HNW data anchored (P55.5).",
+        "VAULT: System Manifesto v3.5 anchored successfully (P55).",
         "AMEX: Card Statement poll via amex-ob-sandbox success.",
         "HEATMAP: London-Edge latency spike detected and bypassed.",
         "ZENITH: Global Grid Veracity confirmed at 99.99%.",
@@ -198,6 +201,38 @@ export default function Home() {
                     <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"20 Active Nodes | Zenith Efficiency | Inter-Node Balancing Active"</p>
                 </Card>
               </div>
+            </div>
+
+            {/* Final Synthesis Report - NEW */}
+            <div className="w-full">
+              <Card className="glass-card border-emerald-500/40 bg-emerald-500/5 relative overflow-hidden">
+                 <div className="absolute top-0 right-0 p-4 opacity-10">
+                    <FileCheck className="size-24 text-emerald-500" />
+                 </div>
+                 <CardHeader className="flex flex-row items-center justify-between">
+                    <div className="space-y-1">
+                       <CardTitle className="text-lg font-headline font-bold text-emerald-500 uppercase flex items-center gap-2">
+                          <CheckCircle2 className="size-5" /> Mission 400: Final Synthesis Report
+                       </CardTitle>
+                       <CardDescription className="text-[10px] text-emerald-100 uppercase tracking-widest">Acknowledgment of Global Grid Stability</CardDescription>
+                    </div>
+                    <Badge className="bg-emerald-500 text-emerald-foreground font-bold px-4 h-7">STATUS: SUCCESS_Ω</Badge>
+                 </CardHeader>
+                 <CardContent className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    {[
+                      { label: "Active Mesh Nodes", val: "20 Nodes", icon: Network },
+                      { label: "Regional Latency", val: "24-28ms", icon: Activity },
+                      { label: "Veracity Index", val: "99.99%", icon: ShieldCheck },
+                      { label: "Self-Healing status", val: "OPTIMAL", icon: HeartPulse }
+                    ].map((rep, i) => (
+                      <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-2 text-center">
+                         <rep.icon className="size-5 text-emerald-500 mx-auto mb-1" />
+                         <p className="text-[9px] text-muted-foreground uppercase font-bold">{rep.label}</p>
+                         <p className="text-xl font-headline font-bold text-white uppercase">{rep.val}</p>
+                      </div>
+                    ))}
+                 </CardContent>
+              </Card>
             </div>
 
             {/* Neural Interface Layer */}

@@ -2,18 +2,18 @@
 /**
  * @fileOverview Nora-55 Sovereign Vault Agent (Project #55).
  * Manages deep storage anchoring, cold-storage simulation, and HNW data encryption.
- * Updated for Multi-Tenant isolation and tenant-scoped anchoring.
+ * Updated for Multi-Tenant isolation and System Manifesto Archiving.
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const SovereignVaultInputSchema = z.object({
-  transactionId: z.string().describe('The ID of the premium transaction to anchor.'),
-  tenantId: z.string().describe('Unique ID of the enterprise partner / tenant.'),
+  transactionId: z.string().describe('The ID of the premium transaction or system file to anchor.'),
+  tenantId: z.string().describe('Unique ID of the enterprise partner or SYSTEM for core archives.'),
   clientTier: z.enum(['ELITE', 'IMPERIAL']),
   payloadSize: z.number().describe('Size of data packet in KB.'),
-  vaultTarget: z.enum(['COLD_STORAGE', 'AIR_GAPPED_MESH', 'QUANTUM_ENCRYPTED']),
+  vaultTarget: z.enum(['COLD_STORAGE', 'AIR_GAPPED_MESH', 'QUANTUM_ENCRYPTED', 'SYSTEM_MANIFEST_ARCHIVE']),
 });
 export type SovereignVaultInput = z.infer<typeof SovereignVaultInputSchema>;
 
@@ -36,9 +36,9 @@ const vaultPrompt = ai.definePrompt({
 Your mandate is Project #55: The Sovereign Vault - Deep Storage & Offline Encryption.
 
 MISSION:
-1. ANCHORING: Move the provided transaction data (ID: {{{transactionId}}}) for Tenant: {{{tenantId}}} into the designated vaultTarget.
+1. ANCHORING: Move the provided data (ID: {{{transactionId}}}) for Tenant/System: {{{tenantId}}} into the designated vaultTarget ({{{vaultTarget}}}).
 2. ENCRYPTION: Simulate a high-level cryptographic seal that makes this data invisible to standard node traffic. 
-3. MULTI-TENANCY: Ensure absolute isolation. This payload must ONLY be accessible by signatures belonging to {{{tenantId}}}.
+3. MULTI-TENANCY: Ensure absolute isolation. If tenantId is 'SYSTEM', anchor to the Core Sovereign Root.
 4. SOVEREIGNTY: Ensure the clientTier ({{{clientTier}}}) status is respected with maximum redundancy.
 
 Tone: Absolute, secretive, and protective. You are the ultimate digital safe-cracker in reverse.`,

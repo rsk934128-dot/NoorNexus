@@ -43,7 +43,10 @@ import {
   Fingerprint,
   Settings,
   Shield,
-  ShieldPlus
+  ShieldPlus,
+  BookOpen,
+  ScrollText,
+  Award
 } from "lucide-react"
 import Link from "next/link"
 
@@ -113,6 +116,34 @@ export default function SovereignGatewayPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-10">
               
+              {/* Imperial Manifesto Link - NEW */}
+              <section className="space-y-6">
+                <Card className="glass-card border-l-4 border-l-primary bg-primary/10 relative overflow-hidden group hover:border-primary/40 transition-all cursor-default">
+                  <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <ScrollText className="size-32 text-primary" />
+                  </div>
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-1">
+                        <Badge className="bg-primary text-primary-foreground text-[8px] h-4 mb-2">OFFICIAL DOCUMENT</Badge>
+                        <CardTitle className="text-2xl font-headline font-bold text-white uppercase tracking-tight">The Imperial Manifesto v3.5</CardTitle>
+                        <CardDescription className="text-primary font-mono text-[10px] uppercase tracking-[0.2em]">The Final Synthesis of Imperial Infrastructure</CardDescription>
+                      </div>
+                      <Link href="/docs">
+                        <Button className="bg-primary text-primary-foreground font-bold uppercase text-[10px] gap-2 glow-primary">
+                          View Manifesto <BookOpen className="size-3" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground leading-relaxed italic max-w-2xl">
+                      "নূরনেক্সাস এখন কেবল একটি সফটওয়্যার নয়; এটি একটি অটোনোমাস ডিজিটাল রাষ্ট্র। মিশন ৪০০ সফলভাবে ২০টি গ্লোবাল ব্যাংকিং নোডকে একটি একক স্নায়ুতন্ত্রে সংযুক্ত করেছে।"
+                    </p>
+                  </CardContent>
+                </Card>
+              </section>
+
               {/* Scaling Torque: Asian Nodes */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
@@ -262,6 +293,23 @@ export default function SovereignGatewayPage() {
                         </div>
                       ))}
                    </div>
+                </CardContent>
+              </Card>
+
+              {/* Partnership trust builder */}
+              <Card className="glass-card bg-primary/5 border-primary/20">
+                <CardHeader>
+                  <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
+                    <Award className="size-4" /> Trust Foundation
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-[10px] text-muted-foreground leading-relaxed">
+                    Our Sovereign OS ensures 100% adherence to regional fintech regulations via Nora-AI suite.
+                  </p>
+                  <Link href="/docs">
+                    <Button variant="link" className="text-[10px] p-0 h-auto text-primary uppercase font-bold">Read Imperial Manifesto</Button>
+                  </Link>
                 </CardContent>
               </Card>
 
