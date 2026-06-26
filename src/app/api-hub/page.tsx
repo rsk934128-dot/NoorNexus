@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useRef, useEffect } from "react"
@@ -26,7 +27,8 @@ import {
   Lock,
   Network,
   Infinity,
-  Fingerprint
+  Fingerprint,
+  Clock
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -95,8 +97,10 @@ export default function ApiHubPage() {
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-purple-500/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Scaling Phase</p>
-                  <p className="text-2xl font-headline font-bold text-purple-500">ZENITH_L1</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Integration Speed</p>
+                  <p className="text-2xl font-headline font-bold text-emerald-500 uppercase flex items-center gap-2 justify-center">
+                    <Clock className="size-5" /> &lt; 3.0s
+                  </p>
                </div>
             </div>
           </header>
@@ -114,38 +118,38 @@ export default function ApiHubPage() {
                    <Card className="glass-card border-l-4 border-l-purple-500">
                       <CardHeader>
                          <CardTitle className="text-sm font-headline uppercase text-purple-500 flex items-center gap-2">
-                            <Activity className="size-4" /> Predictive-Autonomy Engine (P500)
+                            <Activity className="size-4" /> PaaS Scalability Engine (Project #160)
                          </CardTitle>
-                         <CardDescription>Granting external entities access to Nora-01 and Project #47 logic via NoorNexus Snippet.</CardDescription>
+                         <CardDescription>Optimized snippet for sub-3-second enterprise integration.</CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-6">
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="p-5 bg-black/40 rounded-xl border border-white/5 space-y-3">
-                               <h4 className="text-[10px] font-bold uppercase text-white">Endpoint: Predictive Pulse</h4>
-                               <p className="text-[9px] text-muted-foreground italic">"Allows external industrial nodes to calculate failure probabilities using NoorNexus trained weights."</p>
-                               <code className="text-[10px] text-purple-400 block bg-black p-2 rounded">POST /v1/zenith/predict</code>
+                               <h4 className="text-[10px] font-bold uppercase text-white">Endpoint: PaaS Prediction</h4>
+                               <p className="text-[9px] text-muted-foreground italic">"Compute failure probabilities via Sovereign Grid weights."</p>
+                               <code className="text-[10px] text-purple-400 block bg-black p-2 rounded">POST /v1/paas/predict</code>
                             </div>
                             <div className="p-5 bg-black/40 rounded-xl border border-white/5 space-y-3">
-                               <h4 className="text-[10px] font-bold uppercase text-white">Endpoint: Sovereign Verification</h4>
-                               <p className="text-[9px] text-muted-foreground italic">"Verify HMAC_V4 packet integrity for external app meshes."</p>
-                               <code className="text-[10px] text-purple-400 block bg-black p-2 rounded">POST /v1/zenith/verify</code>
+                               <h4 className="text-[10px] font-bold uppercase text-white">Endpoint: Zenith Verify</h4>
+                               <p className="text-[9px] text-muted-foreground italic">"Verify HMAC_V4_Q packet integrity for external meshes."</p>
+                               <code className="text-[10px] text-purple-400 block bg-black p-2 rounded">POST /v1/paas/verify</code>
                             </div>
                          </div>
 
                          <div className="p-6 bg-purple-500/5 rounded-xl border border-dashed border-purple-500/20">
                             <div className="flex justify-between items-center">
                                <div className="space-y-1">
-                                  <p className="text-xs font-bold text-white uppercase">NoorNexus SDK Snippet</p>
-                                  <p className="text-[10px] text-muted-foreground">Inject the Sovereign core into any web environment.</p>
+                                  <p className="text-xs font-bold text-white uppercase">NoorNexus Sovereign Snippet</p>
+                                  <p className="text-[10px] text-emerald-400 font-bold">Latency Guarantee: &lt; 2.8s integration ready.</p>
                                </div>
                                <Button size="sm" className="bg-purple-500 text-white font-bold text-[10px] uppercase h-8">
                                   Copy Snippet
                                </Button>
                             </div>
                             <pre className="mt-4 p-4 bg-black rounded text-[10px] text-emerald-400 font-mono overflow-x-auto">
-{`<script src="https://cdn.noornexus.sovereign/v1/core.js"></script>
+{`<script src="https://cdn.noornexus.sovereign/v1/core.js" async></script>
 <script>
-  sheikh.init({ appId: 'YOUR_ZENITH_KEY', region: 'GLOBAL' });
+  sheikh.init({ appId: 'YOUR_ZENITH_KEY', speed: 'ZENITH_TURBO' });
 </script>`}
                             </pre>
                          </div>
@@ -187,7 +191,7 @@ export default function ApiHubPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                      "Enterprise scaling is the bridge to global dominance. We offer 99.8% precision to partners who align with our Sovereign Constitution."
+                      "Enterprise scaling is the bridge to global dominance. We offer 99.9% PaaS availability to partners who align with our Manifesto."
                    </p>
                 </CardContent>
               </Card>
@@ -215,7 +219,7 @@ export default function ApiHubPage() {
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <input 
-                         placeholder="Inquire about Zenith Phase..." 
+                         placeholder="Inquire about PaaS scaling..." 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}
@@ -231,17 +235,6 @@ export default function ApiHubPage() {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
-
-              <Card className="glass-card border-l-4 border-l-amber-500">
-                 <CardHeader className="pb-2">
-                    <CardTitle className="text-[10px] font-bold text-amber-500 uppercase flex items-center gap-2">
-                       <Fingerprint className="size-3" /> Identity Discovery
-                    </CardTitle>
-                 </CardHeader>
-                 <CardContent>
-                    <p className="text-[9px] text-muted-foreground italic">"All external apps must pass the 12-node identity handshake before discovery."</p>
-                 </CardContent>
               </Card>
             </div>
           </div>
