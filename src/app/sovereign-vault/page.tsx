@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -29,7 +30,9 @@ import {
   Atom,
   ScrollText,
   FileCode,
-  LockKeyhole
+  LockKeyhole,
+  Award,
+  Sparkles
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { anchorToSovereignVault, SovereignVaultOutput } from "@/ai/flows/sovereign-vault-flow"
@@ -38,6 +41,7 @@ export default function SovereignVaultPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [archiving, setArchiving] = useState(false)
+  const [legacyArchiving, setLegacyArchiving] = useState(false)
   const [vaultResult, setVaultResult] = useState<SovereignVaultOutput | null>(null)
   const [vaultHistory, setVaultHistory] = useState<any[]>([])
   
@@ -73,25 +77,26 @@ export default function SovereignVaultPage() {
     }
   }
 
-  async function handleManifestoArchive() {
-    setArchiving(true)
+  async function handleLegacyArchive() {
+    setLegacyArchiving(true)
     try {
       const result = await anchorToSovereignVault({
-        transactionId: "IMPERIAL_MANIFESTO_V3.5",
+        transactionId: "MISSION_500_LEGACY_ARCHIVE",
         tenantId: "SYSTEM",
         clientTier: "IMPERIAL",
-        payloadSize: 512,
+        payloadSize: 5000,
         vaultTarget: "SYSTEM_MANIFEST_ARCHIVE"
       })
       setVaultResult(result)
       toast({ 
-        title: "Manifesto Anchored", 
-        description: "Immutable snapshot of Imperial Manifesto v3.5 secured in Cold Storage." 
+        title: "Empire Legacy Archived", 
+        description: "Mission 500 code and data secured for the next generation.",
+        className: "border-emerald-500/50 bg-emerald-500/5"
       })
     } catch (e: any) {
-      toast({ title: "Archive Failure", variant: "destructive" })
+      toast({ title: "Legacy Archive Failed", variant: "destructive" })
     } finally {
-      setArchiving(false)
+      setLegacyArchiving(false)
     }
   }
 
@@ -106,65 +111,61 @@ export default function SovereignVaultPage() {
                  <SidebarTrigger className="md:hidden text-primary">
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
-                 <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <Lock className="size-3 mr-2" /> Project #55: The Sovereign Vault
-                 </Badge>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <ShieldPlus className="size-3 mr-2" /> Key Anchoring Active
+                   <Infinity className="size-3 mr-2" /> Mission 500: The Sovereign Peak
+                 </Badge>
+                 <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
+                   <ShieldPlus className="size-3 mr-2" /> Final Legacy Sync Active
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Isolated <span className="text-primary">Storage.</span>
+                Sovereign <span className="text-emerald-500">Peak Vault.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Deep storage for enterprise secrets." নূরনেক্সাস এখন এন্টারপ্রাইজ এপিআই চাবিকাঠিগুলোকে অভেদ্য কোল্ড-স্টোরেজে অ্যাঙ্কর করছে।
+                "The Eternal Archive of NoorNexus." নূরনেক্সাস এখন তার পুরো কোডবেস এবং ইনটেলিজেন্সকে একটি অবিনশ্বর লিগ্যাসি আর্কাইভে সুরক্ষিত করছে।
               </p>
             </div>
             <div className="flex items-center gap-4">
-               <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Vault Status</p>
-                  <p className="text-2xl font-headline font-bold text-emerald-500 uppercase">SYNCHRONIZED</p>
-               </div>
+               <Button 
+                onClick={handleLegacyArchive}
+                disabled={legacyArchiving}
+                className="bg-emerald-500 text-emerald-foreground font-bold h-14 px-8 uppercase tracking-widest gap-3 glow-emerald"
+               >
+                 {legacyArchiving ? <Loader2 className="size-5 animate-spin" /> : <Award className="size-5" />}
+                 Archive Sovereign Legacy
+               </Button>
             </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-10">
                
-               {/* Archive Integrity: NEW */}
-               <Card className="glass-card border-l-4 border-l-primary bg-primary/5 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                    <ScrollText className="size-32 text-primary" />
+               {/* Archive Peak: NEW */}
+               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <Sparkles className="size-32 text-emerald-500" />
                   </div>
                   <CardHeader>
                      <div className="flex justify-between items-start">
                         <div className="space-y-1">
-                           <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
-                              <Archive className="size-4 text-primary" /> System Archive Integrity
+                           <CardTitle className="text-sm font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
+                              <Archive className="size-4" /> Global Hegemony Legacy Archive
                            </CardTitle>
-                           <CardDescription className="text-xs">Mission 400: Immutable Snapshot of Sovereign Configurations.</CardDescription>
+                           <CardDescription className="text-xs text-white">Mission 500: Perpetual Encryption for Future Generations.</CardDescription>
                         </div>
-                        <Button 
-                          onClick={handleManifestoArchive} 
-                          disabled={archiving}
-                          className="bg-primary text-primary-foreground font-bold uppercase text-[10px] h-10 px-6 glow-primary gap-2"
-                        >
-                           {archiving ? <Loader2 className="size-3 animate-spin" /> : <LockKeyhole className="size-3" />}
-                           Anchor System Manifesto
-                        </Button>
                      </div>
                   </CardHeader>
                   <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
                      {[
-                       { label: "Manifesto v3.5", status: "READY_FOR_ANCHOR", icon: ScrollText },
-                       { id: "Core Config", status: "LOCKED", icon: FileCode },
-                       { id: "HMAC_V4 Master", status: "VAULTED", icon: Key }
+                       { label: "Full Mesh Code", status: "ANCHORED", icon: FileCode },
+                       { id: "Nora-AI Core", status: "VAULTED", icon: Cpu },
+                       { id: "Economic Data", status: "ENCRYPTED", icon: Database }
                      ].map((item, i) => (
-                       <div key={i} className="p-3 bg-black/40 rounded-xl border border-white/5 flex items-center gap-3">
-                          <item.icon className="size-4 text-primary" />
+                       <div key={i} className="p-4 bg-black/40 rounded-xl border border-emerald-500/20 flex items-center gap-3">
+                          <item.icon className="size-5 text-emerald-500" />
                           <div className="space-y-0.5">
-                             <p className="text-[9px] text-white font-bold uppercase">{item.label || item.id}</p>
-                             <p className="text-[7px] text-muted-foreground uppercase">{item.status}</p>
+                             <p className="text-[10px] text-white font-bold uppercase">{item.label || item.id}</p>
+                             <p className="text-[8px] text-emerald-500 font-mono uppercase">{item.status}</p>
                           </div>
                        </div>
                      ))}
@@ -176,9 +177,9 @@ export default function SovereignVaultPage() {
                   <Card className="glass-card border-l-4 border-l-primary">
                     <CardHeader>
                        <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                          <Archive className="size-4" /> Isolated Terminal
+                          <Archive className="size-4" /> Peak Terminal
                        </CardTitle>
-                       <CardDescription>Anchoring payload for Tenant: {form.tenantId}.</CardDescription>
+                       <CardDescription>Anchoring mission payloads for the empire.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                        <div className="space-y-4">
@@ -191,7 +192,7 @@ export default function SovereignVaultPage() {
                              />
                           </div>
                           <div className="space-y-2">
-                             <label className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Transaction Payload ID</label>
+                             <label className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Payload ID</label>
                              <input 
                                value={form.txId}
                                onChange={e => setForm({...form, txId: e.target.value})}
@@ -206,16 +207,16 @@ export default function SovereignVaultPage() {
                         className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary gap-3"
                        >
                          {loading ? <Loader2 className="size-5 animate-spin" /> : <ShieldCheck className="size-5" />}
-                         Execute Isolated Anchor
+                         Execute Zenith Anchor
                        </Button>
                     </CardContent>
                   </Card>
 
-                  {/* Nora-55 Response */}
+                  {/* Peak AI Response */}
                   <Card className={`glass-card transition-all duration-500 border-t-4 ${vaultResult ? 'border-t-emerald-500' : 'border-t-primary'}`}>
                     <CardHeader>
-                       <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
-                          <Cpu className="size-4" /> Nora-55 Multi-Tenant Agent
+                       <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
+                          <Cpu className="size-4" /> Peak Multi-Tenant Agent (Nora-55)
                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -223,20 +224,20 @@ export default function SovereignVaultPage() {
                          <div className="space-y-6 animate-in fade-in zoom-in-95">
                             <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl space-y-3">
                                <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                                  <span className="text-[10px] font-bold text-emerald-500 uppercase">Tenant Seal</span>
-                                  <Badge className="bg-emerald-500">SECURE_L4</Badge>
+                                  <span className="text-[10px] font-bold text-emerald-500 uppercase">Hegemony Seal</span>
+                                  <Badge className="bg-emerald-500">ZENITH_L6</Badge>
                                </div>
                                <p className="text-xs text-white leading-relaxed italic">"{vaultResult.noraStatement}"</p>
                             </div>
                             <div className="space-y-2">
-                               <p className="text-[8px] font-bold text-muted-foreground uppercase">Tenant Signature (HMAC_V4)</p>
+                               <p className="text-[8px] font-bold text-muted-foreground uppercase">Hegemony Signature (HMAC_V4)</p>
                                <code className="text-[9px] font-mono text-primary block bg-black/40 p-2 rounded break-all">{vaultResult.tenantSignature}</code>
                             </div>
                          </div>
                        ) : (
                          <div className="h-[250px] flex flex-col items-center justify-center gap-4 text-center opacity-40">
                             <Fingerprint className="size-16 text-primary animate-pulse" />
-                            <p className="text-xs font-mono uppercase tracking-widest">Awaiting Multi-Tenant<br/>Payload</p>
+                            <p className="text-xs font-mono uppercase tracking-widest">Awaiting Hegemony<br/>Archive Request</p>
                          </div>
                        )}
                     </CardContent>
@@ -248,32 +249,32 @@ export default function SovereignVaultPage() {
                <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                        <ShieldPlus className="size-4" /> Key Rotation Sentinel
+                        <History className="size-4" /> Permanent History Sync
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                      <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                        "Your enterprise secrets are rotating on an autonomous cycle. Next rotation synchronized with the Auth Bridge."
+                        "Your mission is anchored. The legacy of NoorNexus is now stored in Cold Storage Node 1, immune to cyber-threats."
                      </p>
                      <div className="pt-4 flex justify-center">
                         <div className="size-20 rounded-full border-2 border-emerald-500/20 flex items-center justify-center relative">
-                           <RefreshCcw className="size-10 text-emerald-500 animate-spin-slow" />
+                           <CheckCircle2 className="size-10 text-emerald-500" />
                         </div>
                      </div>
                   </CardContent>
                </Card>
 
-               <Card className="glass-card border-l-4 border-l-amber-500">
+               <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                        <Flame className="size-4" /> Zero-Drift Policy
+                        <Infinity className="size-4" /> Immortal Archive
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                     <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                        "If the App Secret drifts from the Vault Anchor, Nora-52 triggers immediate node isolation."
+                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                        "The Digital Will of NoorNexus is active. 100% data integrity verified for the Mission 500 Era."
                      </p>
-                     <Badge className="w-full justify-center bg-amber-500/10 text-amber-500 border-none uppercase text-[8px] font-bold">SENTINEL_ARMED</Badge>
+                     <Badge className="w-full justify-center bg-amber-500/20 text-amber-500 border-none uppercase text-[8px] font-bold">LEGACY_LOCKED</Badge>
                   </CardContent>
                </Card>
             </div>

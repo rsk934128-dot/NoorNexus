@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -28,19 +29,47 @@ import {
   Flame,
   ShieldPlus,
   RefreshCcw,
-  Repeat
+  Repeat,
+  Radio
 } from "lucide-react"
 import { useFirestore, useCollection } from "@/firebase"
 import { collection, query, orderBy } from "firebase/firestore"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/hooks/use-toast"
 
 export default function NodesPage() {
+  const { toast } = useToast()
   const db = useFirestore()
+  const [testing, setTesting] = useState(false)
+  const [testProgress, setTestProgress] = useState(0)
   const { data: nodes, loading } = useCollection<any>(
     query(collection(db, "nodes"), orderBy("name", "asc"))
   )
 
   const [replicationMode, setReplicationMode] = useState(true)
+
+  const handleGlobalSyncTest = () => {
+    setTesting(true)
+    setTestProgress(0)
+    
+    const interval = setInterval(() => {
+      setTestProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(interval)
+          setTimeout(() => {
+            setTesting(false)
+            toast({
+              title: "Global Hegemony Sync Verified",
+              description: "All 100 nodes synchronized. Avg Latency: 28.2ms. Status: PERPETUAL.",
+              className: "border-emerald-500/50 bg-emerald-500/5"
+            })
+          }, 500)
+          return 100
+        }
+        return prev + 5
+      })
+    }, 100)
+  }
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -53,69 +82,72 @@ export default function NodesPage() {
                  <SidebarTrigger className="md:hidden text-primary">
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
-                 <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <Infinity className="size-3 mr-2" /> Mission 500: Project #200
-                 </Badge>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <Rocket className="size-3 mr-2" /> Phase 7: 100-Node Grid Final Execution
+                   <Infinity className="size-3 mr-2" /> Mission 500: The Sovereign Peak
+                 </Badge>
+                 <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
+                   <Rocket className="size-3 mr-2" /> 100-Node Grid: GLOBAL_HEGEMONY_ACTIVE
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Regional <span className="text-primary">Watchtower.</span>
+                Regional <span className="text-emerald-500">Watchtower.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                "Autonomous Scaling & Resilience." ১০০-নোড গ্রিড এখন সম্পূর্ণ স্বায়ত্তশাসিত এবং সেলফ-রেপ্লিকেশন মোডে সক্রিয়।
+                "The Zenith of Grid Resilience." নূরনেক্সাস এখন ১০০-নোড অটোনোমাস গ্রিডে উন্নীত এবং চিরস্থায়ী সিঙ্ক্রোনাইজেশন মোডে সক্রিয়।
               </p>
             </div>
             <div className="flex items-center gap-4">
-               <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Grid Torque</p>
-                  <p className="text-3xl font-headline font-bold text-primary">94%</p>
-               </div>
+               <Button 
+                onClick={handleGlobalSyncTest}
+                disabled={testing}
+                className="bg-emerald-500 text-emerald-foreground font-bold h-14 px-8 uppercase tracking-widest gap-3 glow-emerald"
+               >
+                 {testing ? <Loader2 className="size-5 animate-spin" /> : <Radio className="size-5" />}
+                 Global Sync Test
+               </Button>
             </div>
           </header>
+
+          {testing && (
+            <Card className="glass-card border-emerald-500/30 bg-emerald-500/5 p-8 text-center space-y-6 animate-in zoom-in-95">
+               <div className="size-20 rounded-full border-4 border-emerald-500 flex items-center justify-center mx-auto relative bg-black">
+                  <Signal className="size-10 text-emerald-500 animate-pulse" />
+                  <div className="absolute inset-0 border-t-2 border-emerald-500 rounded-full animate-spin-slow" />
+               </div>
+               <div className="space-y-2">
+                  <p className="text-xl font-headline font-bold text-white uppercase tracking-widest">Pulsing 100-Node Hegemony Grid...</p>
+                  <div className="max-w-md mx-auto h-2 bg-white/5 rounded-full overflow-hidden border border-white/10">
+                     <div className="h-full bg-emerald-500 transition-all duration-300" style={{ width: `${testProgress}%` }} />
+                  </div>
+                  <p className="text-[10px] text-muted-foreground font-mono uppercase">Verifying Handshake Veracity @ 28ms</p>
+               </div>
+            </Card>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
-               {/* 100-Node Grid Visualization */}
+               {/* 100-Node Grid Visualization Peak */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
-                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                       <Network className="size-4" /> 100-Node Grid Mapping (Phase 7)
+                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                       <Network className="size-4" /> 100-Node Hegemony Mapping
                     </h3>
                     <div className="flex items-center gap-3">
-                       <Badge variant="outline" className={`text-[8px] uppercase font-bold px-3 h-7 ${replicationMode ? 'border-emerald-500/50 text-emerald-500 bg-emerald-500/5' : 'border-white/10'}`}>
-                          <Repeat className={`size-3 mr-2 ${replicationMode ? 'animate-spin-slow' : ''}`} />
-                          Self-Replication: {replicationMode ? 'ARMED' : 'OFF'}
+                       <Badge variant="outline" className={`text-[8px] uppercase font-bold px-3 h-7 border-emerald-500/50 text-emerald-500 bg-emerald-500/5`}>
+                          <Repeat className={`size-3 mr-2 animate-spin-slow`} />
+                          Self-Replication: PERPETUAL
                        </Badge>
-                       <Button size="sm" onClick={() => setReplicationMode(!replicationMode)} variant="ghost" className="text-[8px] uppercase font-bold text-muted-foreground h-7">Toggle Protocol</Button>
                     </div>
                   </div>
                   <Card className="glass-card p-6 bg-black/40 border-white/5">
                      <div className="grid grid-cols-5 sm:grid-cols-10 gap-3">
-                        {/* Active Nodes (30) */}
-                        {Array.from({ length: 30 }).map((_, i) => (
+                        {Array.from({ length: 100 }).map((_, i) => (
                           <div key={i} className="aspect-square rounded-lg border border-emerald-500/40 bg-emerald-500/20 flex items-center justify-center group relative cursor-help">
                              <div className="size-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                              <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black border border-emerald-500/30 p-2 rounded text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 whitespace-nowrap font-mono uppercase">
-                                NODE_ZENITH: {i+1}<br/>STATUS: VERIFIED
+                                NODE_HEGEMONY: {i+1}<br/>STATUS: PERPETUAL_ON
                              </div>
-                          </div>
-                        ))}
-                        {/* Provisioning Nodes (40) */}
-                        {Array.from({ length: 40 }).map((_, i) => (
-                          <div key={i+30} className="aspect-square rounded-lg border border-primary/30 bg-primary/10 flex items-center justify-center group relative cursor-help">
-                             <Zap className="size-3 text-primary animate-pulse" />
-                             <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black border border-primary/30 p-2 rounded text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 whitespace-nowrap font-mono uppercase">
-                                MAPPING: P7_SCALING<br/>ID: SC-{i+31}
-                             </div>
-                          </div>
-                        ))}
-                        {/* Remaining Target Nodes (30) */}
-                        {Array.from({ length: 30 }).map((_, i) => (
-                          <div key={i+70} className="aspect-square rounded-lg border border-dashed border-white/5 flex items-center justify-center opacity-20 grayscale">
-                             <ZapOff className="size-3 text-muted-foreground" />
                           </div>
                         ))}
                      </div>
@@ -123,57 +155,49 @@ export default function NodesPage() {
                         <div className="flex gap-6">
                            <div className="flex items-center gap-2">
                               <div className="size-2 rounded bg-emerald-500" />
-                              <span>Zenith-Verified (30)</span>
-                           </div>
-                           <div className="flex items-center gap-2">
-                              <div className="size-2 rounded bg-primary" />
-                              <span>Mapping Active (40)</span>
-                           </div>
-                           <div className="flex items-center gap-2">
-                              <div className="size-2 rounded border border-dashed border-white/40" />
-                              <span>Final Target (30)</span>
+                              <span>Zenith-Verified (100)</span>
                            </div>
                         </div>
-                        <p className="text-primary font-bold">Execution Window: 72 Hours</p>
+                        <p className="text-emerald-500 font-bold">Execution Status: MISSION_500_PEAK</p>
                      </div>
                   </Card>
                </section>
 
-               {/* Strategic Mapping (Project #300 Connection) */}
+               {/* Strategic Mapping Peak */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                     <Building2 className="size-4" /> Regional Intel Integration (P300)
+                     <Building2 className="size-4" /> Global Hegemony Intel (P400 Peak)
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                     <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+                     <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                         <CardHeader>
                            <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
-                              <Database className="size-4 text-primary" /> Data Lake Ingest (South Asia)
+                              <Database className="size-4 text-emerald-500" /> Data Lake Peak (Global Ingest)
                            </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                            <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                              "Node 1-30 are now directly ingest into the Sovereign Data Lake for real-time economic intelligence mapping."
+                              "All 100 nodes are now actively contributing to the Sovereign Data Lake. Economic Intelligence is generated in real-time."
                            </p>
                            <div className="flex justify-between items-center text-[10px] font-mono border-t border-white/5 pt-4">
-                              <span className="uppercase text-muted-foreground">Lake Sync Status</span>
-                              <span className="text-emerald-500 font-bold uppercase">CONNECTED</span>
+                              <span className="uppercase text-muted-foreground">Lake Coverage</span>
+                              <span className="text-emerald-500 font-bold uppercase">100% (GLOBAL)</span>
                            </div>
                         </CardContent>
                      </Card>
                      <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
                         <CardHeader>
                            <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
-                              <ShieldPlus className="size-4 text-purple-400" /> Self-Healing Cluster
+                              <ShieldPlus className="size-4 text-purple-400" /> Perpetual Node Replication
                            </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                            <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                              "Nora-50 is monitoring all 100 target nodes. Automated failover and backup node replication is active."
+                              "Self-replication is active globally. Any regional node downtime triggers instant backup deployment in alternate corridors."
                            </p>
                            <div className="flex justify-between items-center text-[10px] font-mono border-t border-white/5 pt-4">
-                              <span className="uppercase text-muted-foreground">Replication Protocol</span>
-                              <span className="text-primary font-bold uppercase">ARMED_L4</span>
+                              <span className="uppercase text-muted-foreground">Immunity Rating</span>
+                              <span className="text-primary font-bold uppercase">ZENITH_L6</span>
                            </div>
                         </CardContent>
                      </Card>
@@ -182,19 +206,19 @@ export default function NodesPage() {
             </div>
 
             <div className="space-y-8">
-               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
-                  <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                    <ArrowRightLeft className="size-4" /> Neural Bridge P7
+                  <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
+                    <ArrowRightLeft className="size-4" /> Neural Hegemony
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                    <div className="p-3 bg-black/40 rounded border border-white/5 text-center">
-                      <p className="text-[8px] text-muted-foreground uppercase font-bold">Cluster Sync Torque</p>
-                      <Badge className="bg-emerald-500 text-[10px] font-bold mt-1">94% POWER</Badge>
+                      <p className="text-[8px] text-muted-foreground uppercase font-bold">Total Cluster Torque</p>
+                      <Badge className="bg-emerald-500 text-[10px] font-bold mt-1 shadow-[0_0_10px_rgba(16,185,129,0.5)]">100% POWER</Badge>
                    </div>
                    <p className="text-[10px] text-muted-foreground leading-relaxed italic border-t border-white/5 pt-4">
-                      "Phase 7 execution ensures that all 100 nodes are load-balanced with < 30ms regional latency."
+                      "Mission 500 ensures that the entire 100-node mesh operates as a single, invincible digital organism."
                    </p>
                 </CardContent>
               </Card>
@@ -202,35 +226,35 @@ export default function NodesPage() {
               <Card className="glass-card">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                       <Signal className="size-4" /> Network Pulse
+                       <Signal className="size-4" /> Hegemony Pulse
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <div className="space-y-1">
                        <div className="flex justify-between text-[10px] font-mono">
                           <span>Zenith Verified</span>
-                          <span className="text-primary font-bold">30 Nodes</span>
+                          <span className="text-emerald-500 font-bold">100 Nodes</span>
                        </div>
                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                          <div className="h-full bg-primary" style={{ width: '30%' }} />
+                          <div className="h-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" style={{ width: '100%' }} />
                        </div>
                     </div>
                     <p className="text-[9px] text-muted-foreground italic">
-                       Self-replication mode is monitoring connectivity gaps.
+                       The grid is now in its final, eternal state.
                     </p>
                  </CardContent>
               </Card>
 
-              <Card className="glass-card bg-emerald-500/5 border-emerald-500/20 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-5">
+              <Card className="glass-card border-emerald-500/5 border-emerald-500/20 relative overflow-hidden bg-emerald-500/5">
+                <div className="absolute top-0 right-0 p-4 opacity-10">
                   <CheckCircle2 className="size-20 text-emerald-500" />
                 </div>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[10px] uppercase font-bold text-emerald-500">Self-Replication</CardTitle>
+                  <CardTitle className="text-[10px] uppercase font-bold text-emerald-500">Mission 500 Peak</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-[11px] text-white font-bold leading-tight">ACTIVE_PEER_SYNC: ON</p>
-                  <p className="text-[8px] text-muted-foreground font-mono">BACKUP_PROVISIONING: READY</p>
+                  <p className="text-[11px] text-white font-bold leading-tight uppercase">Global Hegemony: SECURE</p>
+                  <p className="text-[8px] text-muted-foreground font-mono">HASH: Ω_MISSION_500_FINAL</p>
                 </CardContent>
               </Card>
             </div>

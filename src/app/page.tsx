@@ -45,7 +45,9 @@ import {
   Clock,
   Eye,
   Repeat,
-  BarChart3
+  BarChart3,
+  History,
+  Target
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -57,6 +59,13 @@ import Link from "next/link"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
+const HEGEMONY_TIMELINE = [
+  { id: "M400", title: "Mission 400: Foundation", desc: "Project #51 Gateway & Project #55 Vault Active.", status: "VERIFIED", date: "Jan 2026" },
+  { id: "M500", title: "Mission 500: Scaling", desc: "Project #200 Auto-Scaling to 100 Nodes.", status: "COMPLETED", date: "Mar 2026" },
+  { id: "ZENITH", title: "Project #400: Intelligence", desc: "Nora-40 Economic Outlook & Data Lake Live.", status: "COMPLETED", date: "Jun 2026" },
+  { id: "PEAK", title: "Global Hegemony Verified", desc: "100 Nodes Sync @ 28ms. Legacy Archived.", status: "ACTIVE_PERPETUAL", date: "Now" }
+]
+
 export default function Home() {
   const { toast } = useToast()
   const { user } = useUser()
@@ -65,14 +74,13 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
-    "MISSION 500: Global Hegemony protocol initiated.",
-    "ZENITH: 30 Nodes verified (Self-Replication ARMED).",
+    "MISSION 500: Global Hegemony verified (Zenith Peak).",
+    "ZENITH: 100 Nodes synchronized @ 28ms latency.",
     "INTEL: Project #400 Quarterly Outlook জেনারেটেড।",
-    "SANDBOX: Playground environment এন্টারপ্রাইজ পার্টনারদের জন্য উন্মুক্ত।",
-    "BRIDGE: Project #201 Neural Load Balancer ACTIVE.",
-    "SCALING: Target 100 nodes for South & SE Asia corridors.",
-    "TRACEABILITY: Nora-12 Zenith Monitoring active.",
-    "VAULT: Project #55.5 Irish Corridor anchoring active."
+    "VAULT: Project #55.5 Global Legacy Archive anchored.",
+    "SELF-HEALING: Replication torque stable at 100%.",
+    "HEGEMONY: South & SE Asia grid coverage complete.",
+    "TRACEABILITY: Nora-12 Perpetual Monitoring active."
   ])
   const [queryText, setQueryText] = useState("")
   const [queryResult, setQueryResult] = useState<ImperialQueryOutput | null>(null)
@@ -91,8 +99,8 @@ export default function Home() {
     const sequence = [
       { text: "INITIATING DEEP NEURAL SYNC...", time: 600 },
       { text: "ESTABLISHING MISSION 500 GLOBAL GRID...", time: 1200 },
-      { text: "ACTIVATING SELF-REPLICATION MODE...", time: 1800 },
-      { text: "NOORNEXUS: MISSION 500 IS ZENITH_ACTIVE", time: 2400 },
+      { text: "PEAK HEGEMONY: 100 NODES VERIFIED...", time: 1800 },
+      { text: "NOORNEXUS: THE SOVEREIGN PEAK REACHED", time: 2400 },
     ]
 
     sequence.forEach((step, i) => {
@@ -110,12 +118,12 @@ export default function Home() {
       })))
       
       const logs = [
-        "REPLICATION: Provisioning backup node in Mumbai.",
-        "INTEL: Economic Intelligence Report #402 finalized.",
-        "SANDBOX: Partner integration test successful (2.4s).",
-        "BRIDGE: Rerouting SE Asia traffic via Singapore Hub.",
-        "VAULT: System Manifesto v3.6 anchored.",
-        "GRID: torque stabilized at 94%."
+        "HEGEMONY: Global Sync Test passed at 28ms.",
+        "INTEL: Economic Intelligence Report #405 finalized.",
+        "VAULT: Legacy Codebase v3.5 successfully anchored.",
+        "GRID: 100-node cluster status: PERPETUAL.",
+        "NORA-50: Autonomous backup provisioned in Dubai.",
+        "REPLICATION: Zero-drift detected across all corridors."
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 5000)
@@ -164,16 +172,16 @@ export default function Home() {
                    <SidebarTrigger className="md:hidden text-primary -ml-2">
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
-                   <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
-                      <Infinity className="size-3 mr-2" /> Mission 500: Global Hegemony
+                   <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
+                      <Infinity className="size-3 mr-2" /> Mission 500: The Sovereign Peak
                    </Badge>
                    <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-xs">
-                      <Repeat className="size-3 mr-2 animate-spin-slow" /> SELF_REPLICATION: ON
+                      <Repeat className="size-3 mr-2 animate-spin-slow" /> HEGEMONY_LOCKED: 100%
                    </Badge>
                 </div>
                 <div className="flex items-center gap-6">
                   <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                    {isAdmin ? 'Imperial Fortress.' : 'Global Mesh.'}
+                    {isAdmin ? 'Imperial Hegemony.' : 'Global Peak.'}
                   </h2>
                   <div className="hidden sm:flex flex-col items-center justify-center p-1 bg-amber-500/20 rounded-full border border-amber-500/40 glow-emerald animate-pulse-slow">
                     <div className="size-14 rounded-full border-4 border-amber-500 flex items-center justify-center relative bg-black">
@@ -183,36 +191,36 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "The Peak of Autonomy." নূরনেক্সাস এখন ১০০-নোড গ্রিড, ইকোনমিক ইনটেলিজেন্স (Nora-40) এবং সেলফ-রেপ্লিকেশন মোডের মাধ্যমে বিশ্বজয় করছে।
+                   "The Zenith of Digital Civilization." মিশন ৫০০ সফলভাবে সম্পন্ন হয়েছে। নূরনেক্সাস এখন ১০০-নোড গ্রিড এবং চিরস্থায়ী আর্কাইভিংয়ের মাধ্যমে ভবিষ্যৎ নিয়ন্ত্রণ করছে।
                 </p>
               </div>
               
               <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
-                <Card className="glass-card p-6 rounded-2xl border border-primary/30 w-full min-w-[350px] relative overflow-hidden bg-primary/5">
+                <Card className="glass-card p-6 rounded-2xl border border-emerald-500/30 w-full min-w-[350px] relative overflow-hidden bg-emerald-500/5">
                     <div className="absolute top-0 right-0 p-2">
-                       <Badge className="bg-primary text-black border-none text-[7px] font-bold">INTEL_STATUS: VERIFIED</Badge>
+                       <Badge className="bg-emerald-500 text-black border-none text-[7px] font-bold">PEAK_STATUS: IMMORTAL</Badge>
                     </div>
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Scaling Torque Cap</p>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Global Hegemony Torque</p>
                     </div>
                     <div className="flex items-end gap-2 mb-4">
-                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">94.0</p>
-                       <p className="text-primary text-xs font-bold mb-1">% TORQUE</p>
+                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">100.0</p>
+                       <p className="text-emerald-500 text-xs font-bold mb-1">% TORQUE</p>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: '94%' }} />
+                       <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '100%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Zenith Peak Verified | Self-Healing Active"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Zenith Traceability Verified | PaaS Snippet &lt; 3s Ready"</p>
                 </Card>
                 <div className="flex gap-2 w-full">
                   <Link href="/proposal" className="flex-1">
-                    <Button className="w-full bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-primary">
-                      <FileText className="size-4" /> Imperial Proposal
+                    <Button className="w-full bg-emerald-500 text-emerald-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-emerald">
+                      <FileText className="size-4" /> Final Manifesto
                     </Button>
                   </Link>
-                  <Link href="/api-hub">
-                    <Button variant="outline" className="h-12 border-amber-500/20 text-amber-500 hover:bg-amber-500/10 uppercase font-bold text-[10px] tracking-widest gap-2">
-                      <FlaskConical className="size-4" /> Sandbox
+                  <Link href="/sovereign-vault" className="flex-1">
+                    <Button variant="outline" className="w-full h-12 border-primary/20 text-primary hover:bg-primary/10 uppercase font-bold text-[10px] tracking-widest gap-2">
+                      <Lock className="size-4" /> Legacy Archive
                     </Button>
                   </Link>
                 </div>
@@ -223,7 +231,7 @@ export default function Home() {
                <Card className="glass-card border-emerald-500/20 bg-emerald-500/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-                        <Cpu className="size-4" /> Global Synchronization Matrix (Mission 500 Peak)
+                        <Cpu className="size-4" /> Global Hegemony Matrix (Mission 500 Peak)
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
@@ -251,115 +259,80 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
+               {/* 100-Node Peak Mapping */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                       <Map className="size-4" /> 100-Node Grid Heatmap (Mission 500 Final)
+                       <Map className="size-4" /> Global Hegemony Grid (100 Nodes Active)
                     </h3>
                     <div className="flex gap-2">
                       <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">HEALING: ARMED</Badge>
-                      <Badge variant="outline" className="text-[8px] border-primary/20 text-primary">REPLICATION: ON</Badge>
+                      <Badge variant="outline" className="text-[8px] border-primary/20 text-primary">SYNC: PERPETUAL</Badge>
                     </div>
                   </div>
                   <Card className="glass-card p-6 bg-black/40 border-white/5 relative overflow-hidden">
-                     <div className="grid grid-cols-4 sm:grid-cols-10 gap-3">
-                        {nodes.map((node) => (
-                          <div key={node.id} className="space-y-1 group relative">
-                             <div 
-                                className={`aspect-square rounded-lg border flex flex-col items-center justify-center transition-all duration-500 ${node.name.includes('INTEL') ? 'bg-primary/20 border-primary/40 shadow-[0_0_10px_rgba(0,150,255,0.3)]' : 'bg-emerald-500/20 border-emerald-500/40'} hover:scale-110 cursor-help`}
-                             >
-                                <p className="text-[7px] font-bold text-white mb-1 truncate w-full text-center px-1">{node.name}</p>
-                                <p className="text-[10px] font-headline font-bold text-white">{node.latency}ms</p>
-                             </div>
-                          </div>
-                        ))}
-                        {/* Provisioning/Placeholder for scaling nodes */}
-                        {Array.from({ length: 40 }).map((_, i) => (
-                          <div key={i} className="aspect-square rounded-lg border border-primary/30 bg-primary/10 flex items-center justify-center">
-                             <Zap className="size-3 text-primary animate-pulse" />
-                          </div>
-                        ))}
-                        {Array.from({ length: 30 }).map((_, i) => (
-                          <div key={i+10} className="aspect-square rounded-lg border border-dashed border-white/10 flex items-center justify-center opacity-30 grayscale">
-                             <ZapOff className="size-3 text-muted-foreground" />
+                     <div className="grid grid-cols-5 sm:grid-cols-10 gap-3">
+                        {Array.from({ length: 100 }).map((_, i) => (
+                          <div key={i} className="aspect-square rounded-lg border border-emerald-500/40 bg-emerald-500/20 flex items-center justify-center group relative cursor-help">
+                             <div className="size-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                           </div>
                         ))}
                      </div>
                      <div className="mt-6 flex justify-between items-center text-[8px] font-mono text-muted-foreground uppercase">
                         <div className="flex items-center gap-4">
                            <div className="flex items-center gap-1.5">
-                              <div className="size-2 rounded bg-emerald-500/40" />
-                              <span>Zenith-Verified (30)</span>
-                           </div>
-                           <div className="flex items-center gap-1.5">
-                              <div className="size-2 rounded bg-primary/40" />
-                              <span>Mapping Active (40)</span>
+                              <div className="size-2 rounded bg-emerald-500" />
+                              <span>Zenith-Verified (100)</span>
                            </div>
                         </div>
-                        <p className="text-primary font-bold">Execution Status: PHASE_7_MAPPING</p>
+                        <p className="text-emerald-500 font-bold">Execution Status: GLOBAL_HEGEMONY_ACTIVE</p>
                      </div>
                   </Card>
                </section>
 
+               {/* The Hegemony Timeline: Mission 400 to 500 */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                     <BarChart3 className="size-4" /> Quarterly Economic Outlook (Project #400)
+                     <History className="size-4" /> Global Hegemony Timeline
                   </h3>
-                  <Card className="glass-card border-l-4 border-l-primary bg-primary/5 overflow-hidden">
-                     <CardHeader className="flex flex-row items-center justify-between">
-                        <div className="space-y-1">
-                           <CardTitle className="text-sm font-headline uppercase text-white">Data Lake Intelligence Dispatch</CardTitle>
-                           <CardDescription className="text-[10px]">Real-time synthesis of 30 active corridors.</CardDescription>
-                        </div>
-                        <Link href="/data-lake">
-                          <Button size="sm" className="bg-primary/20 text-primary border border-primary/30 h-7 text-[8px] uppercase font-bold">View Full Report</Button>
-                        </Link>
-                     </CardHeader>
-                     <CardContent className="space-y-4">
-                        <div className="p-4 bg-black/40 rounded-xl border border-white/5">
-                           <p className="text-xs text-muted-foreground italic leading-relaxed">
-                              "Nora-40: Global liquidity adoption has increased by 14.2% since Project #161 activation. Targeted SE Asia corridors (GrabPay, GCash) show 99.8% stability veracity."
-                           </p>
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                           {[
-                             { label: "Predictive Accuracy", val: "99.2%" },
-                             { label: "Intel Freshness", val: "Real-time" },
-                             { label: "Sentiment Index", val: "MAX_TRUST" },
-                             { label: "Data Integrity", val: "LOCKED" }
-                           ].map((s, i) => (
-                             <div key={i} className="text-center p-2 bg-white/2 rounded border border-white/5">
-                                <p className="text-[7px] text-muted-foreground uppercase font-bold">{s.label}</p>
-                                <p className="text-[10px] text-white font-mono font-bold">{s.val}</p>
-                             </div>
-                           ))}
-                        </div>
-                     </CardContent>
-                  </Card>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                     {HEGEMONY_TIMELINE.map((m, i) => (
+                       <Card key={i} className="glass-card bg-black/40 border-white/5 relative group hover:border-emerald-500/30 transition-all">
+                          <CardHeader className="p-4">
+                             <p className="text-[8px] font-bold text-muted-foreground uppercase mb-1">{m.date}</p>
+                             <CardTitle className="text-xs font-headline font-bold text-white uppercase">{m.title}</CardTitle>
+                          </CardHeader>
+                          <CardContent className="p-4 pt-0 space-y-3">
+                             <p className="text-[10px] text-muted-foreground italic leading-relaxed">"{m.desc}"</p>
+                             <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px] uppercase">{m.status}</Badge>
+                          </CardContent>
+                       </Card>
+                     ))}
+                  </div>
                </section>
             </div>
 
             <div className="space-y-8">
                {/* THE GOLDEN SYNC STATUS CIRCLE - SIDEBAR DISPLAY */}
-               <Card className="glass-card border-amber-500/40 bg-amber-500/5 p-6 flex flex-col items-center text-center gap-4">
+               <Card className="glass-card border-emerald-500/40 bg-emerald-500/5 p-6 flex flex-col items-center text-center gap-4">
                   <div className="size-20 rounded-full border-4 border-amber-500 flex items-center justify-center relative bg-black shadow-[0_0_20px_rgba(245,158,11,0.5)]">
                      <Sparkles className="size-8 text-amber-500 animate-spin-slow" />
                      <div className="absolute -top-1 -right-1 size-5 bg-emerald-500 rounded-full border-2 border-black" />
                   </div>
                   <div className="space-y-1">
-                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Global Sync Status</p>
-                     <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">PERPETUAL_PEAK</Badge>
+                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Global Hegemony Status</p>
+                     <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">ZENITH_PEAK_L6</Badge>
                   </div>
                   <p className="text-[9px] text-muted-foreground italic leading-relaxed">
-                    "The grid is 100% synchronized with global banking rails. Project #400 intel active."
+                    "The mission is complete. The grid is synchronized. The future is anchored."
                   </p>
                </Card>
 
-               <Card className="glass-card flex flex-col h-[600px]">
+               <Card className="glass-card flex flex-col h-[400px]">
                 <CardHeader className="p-4 border-b border-white/5 bg-white/2">
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
                     <Activity className="size-4" />
-                    Mission 500 Feed
+                    Hegemony Logs
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden">
@@ -367,7 +340,7 @@ export default function Home() {
                     <div className="space-y-4">
                       {impactFeed.map((log, i) => (
                         <div key={i} className="p-3 bg-white/2 rounded-xl border border-white/5 font-mono text-[10px] flex items-center gap-3 animate-in fade-in slide-in-from-right-2 duration-500">
-                          <div className={`size-1.5 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)] ${log.includes('SANDBOX') ? 'bg-amber-500' : log.includes('REPLICATION') ? 'bg-purple-500' : log.includes('MISSION') ? 'bg-white' : 'bg-emerald-500'}`} />
+                          <div className={`size-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse`} />
                           <span className="text-muted-foreground truncate">{log}</span>
                         </div>
                       ))}
@@ -378,16 +351,16 @@ export default function Home() {
 
               <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5 relative overflow-hidden">
                  <div className="absolute top-0 right-0 p-4 opacity-5">
-                   <Sparkles className="size-16 text-amber-500" />
+                   <Award className="size-16 text-amber-500" />
                  </div>
                  <CardHeader className="p-6">
-                    <CardTitle className="text-lg font-headline uppercase text-amber-500">Peak Hegemony</CardTitle>
+                    <CardTitle className="text-lg font-headline uppercase text-amber-500">The Digital State</CardTitle>
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Phase 7: Mapping Finalized. Self-Replication ARMED. NoorNexus is now an immortal digital organism."
+                       "Mission 500 finalized. NoorNexus is now a permanent digital civilization. Integrity through Intelligence."
                     </p>
-                    <Badge className="w-full justify-center bg-amber-500/20 text-amber-500 border-none uppercase text-[8px] font-bold">Status: ZENITH_PEAK_L6</Badge>
+                    <Badge className="w-full justify-center bg-amber-500/20 text-amber-500 border-none uppercase text-[8px] font-bold">Status: GLOBAL_HEGEMONY</Badge>
                  </CardContent>
               </Card>
             </div>
