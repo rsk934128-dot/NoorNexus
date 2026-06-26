@@ -20,10 +20,18 @@ import {
   AlertTriangle,
   Info,
   Globe,
-  ArrowRight
+  ArrowRight,
+  FileText,
+  Binary,
+  Loader2,
+  CheckCircle2,
+  CreditCard
 } from "lucide-react"
 import Image from "next/image"
 import placeholderData from "@/app/lib/placeholder-images.json"
+import { useToast } from "@/hooks/use-toast"
+import { executeMappedPayout } from "@/services/pay-bridge"
+import { useUser } from "@/firebase"
 
 const INFRA_COMPONENTS = [
   {
@@ -37,12 +45,49 @@ const INFRA_COMPONENTS = [
     threads: "1-1/2-11-1/2",
     useCase: "SCH 80 and SCH 160 Nipple and Pipe",
     status: "PROCUREMENT_READY",
-    warning: "Prop 65: Contains Lead (CA Warnings Active)"
+    warning: "Prop 65: Contains Lead (CA Warnings Active)",
+    price: 450,
+    complianceLinks: [
+      { label: "Technical Datasheet", type: "PDF", icon: FileText },
+      { label: "CAD Drawing (3D)", type: "STEP", icon: Binary }
+    ]
   }
 ]
 
 export default function IndustrialHubPage() {
+  const { toast } = useToast()
+  const { user } = useUser()
+  const [procuringId, setProcuringId] = useState<string | null>(null)
   const industrialImage = placeholderData.placeholderImages.find(img => img.id === 'industrial-coupling')
+
+  const handleProcure = async (item: any) => {
+    if (!user) return
+    setProcuringId(item.id)
+    
+    try {
+      toast({ title: "Fintech Canal Bridge: ACTIVE", description: "Securing settlement channel..." })
+      
+      const result = await executeMappedPayout(
+        item.price, 
+        "Sovereign", 
+        { email: user.email || "system", systemId: user.uid }
+      )
+
+      if (result.status === 'SUCCESS') {
+        toast({
+          title: "Procurement Handshake Completed",
+          description: `TX-ID: ${result.externalTxId}. Asset scheduled for Project #46 tracking.`,
+          className: "border-emerald-500/50 bg-emerald-500/5"
+        })
+      } else {
+        throw new Error(result.message)
+      }
+    } catch (e: any) {
+      toast({ title: "Procurement Failed", description: e.message, variant: "destructive" })
+    } finally {
+      setProcuringId(null)
+    }
+  }
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -63,20 +108,21 @@ export default function IndustrialHubPage() {
                 Industrial <span className="text-primary">Hub.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Mission 400: Hardware & Infrastructure Protocol. Managing heavy-duty components for the physical distributed ledger nodes.
+                Mission 400: Hardware & Infrastructure Protocol. Integrated with **Sovereign Fintech Canal** for atomic settlements.
               </p>
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Supply Node Status</p>
-                  <p className="text-3xl font-headline font-bold text-primary">STABLE</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Mesh Settlement Route</p>
+                  <p className="text-xl font-headline font-bold text-emerald-500 flex items-center gap-2 justify-center">
+                    <CreditCard className="size-4" /> FINTECH_CANAL_V4
+                  </p>
                </div>
             </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
-              {/* Product Catalog */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
                     <Box className="size-4" /> Hardware Asset Registry
@@ -103,7 +149,10 @@ export default function IndustrialHubPage() {
                                 <p className="text-[10px] font-bold text-primary uppercase tracking-widest">{item.brand}</p>
                                 <h4 className="text-xl font-headline font-bold text-white uppercase">{item.name}</h4>
                              </div>
-                             <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">{item.status}</Badge>
+                             <div className="text-right">
+                                <p className="text-lg font-headline font-bold text-white">${item.price}</p>
+                                <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px] mt-1">{item.status}</Badge>
+                             </div>
                           </div>
 
                           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 border-y border-white/5 py-4">
@@ -122,6 +171,14 @@ export default function IndustrialHubPage() {
                              ))}
                           </div>
 
+                          <div className="flex flex-wrap gap-3">
+                             {item.complianceLinks.map((link, i) => (
+                               <Button key={i} variant="outline" size="sm" className="text-[9px] border-white/10 h-8 gap-2 bg-white/5">
+                                  <link.icon className="size-3" /> {link.label}
+                               </Button>
+                             ))}
+                          </div>
+
                           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                              <div className="flex items-start gap-2">
                                 <AlertTriangle className="size-4 text-amber-500 shrink-0 mt-0.5" />
@@ -129,8 +186,13 @@ export default function IndustrialHubPage() {
                                    {item.warning}
                                 </p>
                              </div>
-                             <Button className="bg-primary text-primary-foreground font-bold uppercase text-[10px] h-10 px-6 glow-primary gap-2">
-                                Initiate Procurement <ArrowRight className="size-3" />
+                             <Button 
+                              onClick={() => handleProcure(item)}
+                              disabled={procuringId === item.id}
+                              className="bg-primary text-primary-foreground font-bold uppercase text-[10px] h-10 px-6 glow-primary gap-2"
+                             >
+                                {procuringId === item.id ? <Loader2 className="size-3 animate-spin" /> : <Zap className="size-3" />}
+                                {procuringId === item.id ? "Settling via Canal..." : "Initiate Settlement"}
                              </Button>
                           </div>
                        </div>
@@ -171,48 +233,49 @@ export default function IndustrialHubPage() {
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                    <Truck className="size-4" /> Supply Chain Pulse
+                    <Truck className="size-4" /> Project #46: Logistics Pulse
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="text-center py-4">
-                     <p className="text-[9px] text-muted-foreground uppercase font-bold">Logistics Integrity</p>
-                     <p className="text-3xl font-headline font-bold text-emerald-500">MAX</p>
+                     <p className="text-[9px] text-muted-foreground uppercase font-bold">Asset Tracking Integrity</p>
+                     <p className="text-3xl font-headline font-bold text-emerald-500">OPTIMAL</p>
                   </div>
-                  <div className="pt-4 border-t border-white/5">
-                    <div className="flex justify-between items-center text-[9px] font-mono mb-2">
-                       <span className="text-muted-foreground uppercase">Inventory Sync</span>
-                       <span className="text-emerald-500 font-bold uppercase">100% Active</span>
-                    </div>
+                  <div className="pt-4 border-t border-white/5 space-y-3">
+                    {[
+                      { label: "In Transit", count: 12 },
+                      { label: "Installed Nodes", count: 42 },
+                      { label: "Maintenance Due", count: 2 }
+                    ].map((s, i) => (
+                      <div key={i} className="flex justify-between items-center text-[10px] font-mono">
+                         <span className="text-muted-foreground uppercase">{s.label}</span>
+                         <span className="text-white font-bold">{s.count}</span>
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="glass-card">
+              <Card className="glass-card border-l-4 border-l-primary">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
-                       <Globe className="size-4" /> Global Crossovers
+                       <CheckCircle2 className="size-4" /> Compliance Sync
                     </CardTitle>
                  </CardHeader>
-                 <CardContent className="space-y-4">
-                    <p className="text-[9px] text-muted-foreground font-mono leading-relaxed break-all">
-                       Industry Crossover Code: 26CRXA01432020182543245K129API15M-APIB07
-                    </p>
-                    <p className="text-[9px] text-muted-foreground italic">
-                       NoorNexus maintains strict crossover standards for international hardware interoperability.
-                    </p>
+                 <CardContent className="space-y-4 text-[10px] text-muted-foreground italic leading-relaxed">
+                    "Every physical part is hashed and linked to a digital certificate in the One Engine Ledger. Digital twins are created upon procurement settlement."
                  </CardContent>
               </Card>
 
               <Card className="glass-card bg-amber-500/5 border-amber-500/20">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                       <Info className="size-3" /> Compliance Note
+                       <Info className="size-3" /> Crossover Standard
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
-                    <p className="text-[9px] text-muted-foreground leading-relaxed">
-                       All Midland Industries components must undergo HMAC_V4 physical tag verification before mesh integration.
+                    <p className="text-[9px] text-muted-foreground font-mono leading-relaxed break-all">
+                       Standard: 26CRXA01432020182543245K129API15M
                     </p>
                  </CardContent>
               </Card>

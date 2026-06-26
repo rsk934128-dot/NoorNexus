@@ -47,7 +47,8 @@ import {
   Rocket,
   Star,
   Factory,
-  Wrench
+  Wrench,
+  Truck
 } from "lucide-react"
 
 import {
@@ -79,6 +80,7 @@ const USER_ITEMS = [
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Open Banking Hub", url: "/open-banking", icon: Landmark },
   { title: "Industrial Hub", url: "/industrial-hub", icon: Factory },
+  { title: "Asset Tracking (P46)", url: "/logistics", icon: Truck },
   { title: "Builders Program", url: "/api-hub", icon: Rocket },
   { title: "Partnership Kit", url: "/docs", icon: Briefcase },
   { title: "Imperial Portfolio", url: "/portfolio", icon: Star },
