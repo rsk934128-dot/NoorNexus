@@ -32,14 +32,28 @@ import {
   Lock,
   Route,
   Infinity,
-  Sparkles
+  Sparkles,
+  CreditCard,
+  Database,
+  Repeat,
+  FileCheck
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
 
 const GLOBAL_LEADERS = [
+  { 
+    name: "Yapily", 
+    hq: "UK", 
+    banks: "2,000+", 
+    countries: "19+", 
+    tag: "AMEX Strategic Partner", 
+    url: "https://yapily.com/", 
+    alliance: "AMEX Pay with Bank Transfer",
+    capabilities: ["Payments", "Data", "Enrichment", "Verification", "VRPs"],
+    docUrl: "https://docs.yapily.com/"
+  },
   { name: "Plaid", hq: "USA", banks: "9,706", countries: "60", tag: "Global Alpha", url: "https://plaid.com/" },
-  { name: "Yapily", hq: "UK", banks: "2,000+", countries: "19+", tag: "AMEX Partner", url: "https://yapily.com/", alliance: "AMEX European Bridge" },
   { name: "Lunch Flow", hq: "EU", banks: "2,400", countries: "60", tag: "EU Leader", url: "https://lunchflow.com/" },
   { name: "GoCardless", hq: "UK", banks: "2,228", countries: "54", tag: "PIS Expert", url: "https://gocardless.com/" },
   { name: "Volt", hq: "UK", banks: "1,668", countries: "50", tag: "Instant Payments", url: "https://volt.io/" },
@@ -215,6 +229,46 @@ export default function OpenBankingHubPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               <div className="lg:col-span-3 space-y-10">
+                {/* Yapily Deep Dive (Alliance Feature) */}
+                <section className="space-y-6">
+                   <div className="flex justify-between items-center">
+                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                         <Sparkles className="size-4" /> Yapily & AMEX Alliance
+                      </h3>
+                      <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">UK & EUROPE CORE</Badge>
+                   </div>
+                   <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                      {[
+                        { title: "Accept Payments", icon: CreditCard, desc: "Bank-to-bank instant transfers." },
+                        { title: "Access Data", icon: Database, desc: "Retrieve balances & transactions." },
+                        { title: "Enrichment", icon: Sparkles, desc: "Categorise & analyse spend." },
+                        { title: "Verification", icon: FileCheck, desc: "Confirm account ownership." },
+                        { title: "VRPs", icon: Repeat, desc: "Variable recurring payments." }
+                      ].map((cap, i) => (
+                        <div key={i} className="p-4 bg-white/2 border border-white/5 rounded-xl text-center space-y-2 group hover:border-emerald-500/30 transition-all">
+                           <cap.icon className="size-6 text-emerald-500 mx-auto" />
+                           <p className="text-[9px] font-bold text-white uppercase">{cap.title}</p>
+                           <p className="text-[8px] text-muted-foreground leading-tight">{cap.desc}</p>
+                        </div>
+                      ))}
+                   </div>
+                   <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                      <CardContent className="p-6 flex flex-col md:flex-row justify-between items-center gap-6">
+                         <div className="space-y-1">
+                            <p className="text-sm font-headline font-bold text-white uppercase tracking-widest flex items-center gap-2">
+                               <ShieldCheck className="size-4 text-emerald-500" /> AMEX European Bridge
+                            </p>
+                            <p className="text-xs text-muted-foreground italic">
+                               "Yapily and American Express have agreed to enable open banking payments across Europe, increasing innovation for merchant customers."
+                            </p>
+                         </div>
+                         <Button onClick={() => window.open('https://docs.yapily.com/', '_blank')} className="bg-emerald-500 text-white font-bold uppercase text-[10px] tracking-widest px-6 h-10 glow-emerald">
+                            Explore Developer Docs
+                         </Button>
+                      </CardContent>
+                   </Card>
+                </section>
+
                 {/* Selection Criteria */}
                 <section className="space-y-6">
                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
@@ -372,6 +426,10 @@ export default function OpenBankingHubPage() {
                          </div>
                          <div className="flex justify-between items-center p-2 bg-white/5 rounded">
                             <span className="text-[9px] text-white font-bold">AETS Vault</span>
+                            <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">SYNCED</Badge>
+                         </div>
+                         <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                            <span className="text-[9px] text-white font-bold">Yapily Mesh</span>
                             <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">SYNCED</Badge>
                          </div>
                       </div>
