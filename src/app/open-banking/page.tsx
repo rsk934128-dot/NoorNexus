@@ -35,7 +35,8 @@ import {
   LayoutGrid,
   Monitor,
   Building2,
-  CheckCircle2
+  CheckCircle2,
+  FlaskConical
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
@@ -44,6 +45,19 @@ import Link from "next/link"
 const PROVIDER_METRICS = [
   { id: "yapily", name: "Yapily (EU/UK)", latency: 32, success: 99.8, status: "OPTIMAL", icon: Globe },
   { id: "plaid", name: "Plaid (US/Global)", latency: 45, success: 99.4, status: "STABLE", icon: Network },
+]
+
+const VALIDATED_NODES = [
+  {
+    name: "BIG Espanha - Sandbox",
+    fullName: "Banco de Investimento Global (BIG) Espanha",
+    id: "banco-de-investimento-global-espanha-sa-sandbox",
+    bic: "IGSEESMMXXX",
+    country: "Portugal / Spain",
+    type: "AIS_PIS",
+    features: ["Accounts", "Balances", "Transactions", "Domestic Single Payment"],
+    status: "SYNCED"
+  }
 ]
 
 const GLOBAL_LEADERS = [
@@ -167,6 +181,60 @@ export default function OpenBankingHubPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               <div className="lg:col-span-3 space-y-10">
+                {/* Validated Sandbox Nodes focus */}
+                <section className="space-y-6">
+                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                      <FlaskConical className="size-4" /> Validated Sandbox Nodes
+                   </h3>
+                   <div className="grid grid-cols-1 gap-4">
+                      {VALIDATED_NODES.map((node, i) => (
+                        <Card key={i} className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 hover:border-emerald-500/40 transition-all">
+                           <CardContent className="p-6">
+                              <div className="flex flex-col md:flex-row justify-between gap-6">
+                                 <div className="space-y-3 flex-1">
+                                    <div className="flex items-center gap-3">
+                                       <div className="size-10 bg-emerald-500/10 rounded-lg flex items-center justify-center border border-emerald-500/20">
+                                          <Building2 className="size-5 text-emerald-500" />
+                                       </div>
+                                       <div>
+                                          <p className="text-sm font-headline font-bold text-white uppercase">{node.name}</p>
+                                          <p className="text-[10px] text-muted-foreground font-mono uppercase">{node.id}</p>
+                                       </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
+                                       <div className="space-y-0.5">
+                                          <p className="text-[8px] text-muted-foreground uppercase font-bold">BIC Code</p>
+                                          <p className="text-[10px] text-white font-mono">{node.bic}</p>
+                                       </div>
+                                       <div className="space-y-0.5">
+                                          <p className="text-[8px] text-muted-foreground uppercase font-bold">Region</p>
+                                          <p className="text-[10px] text-white font-mono">{node.country}</p>
+                                       </div>
+                                       <div className="space-y-0.5">
+                                          <p className="text-[8px] text-muted-foreground uppercase font-bold">Capability</p>
+                                          <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">{node.type}</Badge>
+                                       </div>
+                                       <div className="space-y-0.5">
+                                          <p className="text-[8px] text-muted-foreground uppercase font-bold">Status</p>
+                                          <Badge className="bg-emerald-500 text-[8px]">{node.status}</Badge>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div className="space-y-2 min-w-[200px]">
+                                    <p className="text-[8px] text-muted-foreground uppercase font-bold">Supported Features</p>
+                                    <div className="flex flex-wrap gap-1">
+                                       {node.features.map((f, j) => (
+                                         <Badge key={j} variant="secondary" className="text-[7px] bg-white/5 text-muted-foreground">{f}</Badge>
+                                       ))}
+                                    </div>
+                                 </div>
+                              </div>
+                           </CardContent>
+                        </Card>
+                      ))}
+                   </div>
+                </section>
+
                 {/* Neural Orchestrator Panel */}
                 <section className="space-y-6">
                    <div className="flex justify-between items-center">

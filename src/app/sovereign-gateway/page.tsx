@@ -34,7 +34,8 @@ import {
   ShieldAlert,
   Loader2,
   FileCheck,
-  Key
+  Key,
+  Building2
 } from "lucide-react"
 
 const BLUEPRINT_STEPS = [
@@ -43,7 +44,7 @@ const BLUEPRINT_STEPS = [
   { id: "P51.3", label: "Open Banking Rail Sync", icon: Landmark, status: "SYNCED" },
   { id: "P51.4", label: "Intelligent Fallback Engine", icon: Zap, status: "HARDENED" },
   { id: "P51.5", label: "White-label Studio", icon: Palette, status: "READY" },
-  { id: "P51.6", label: "eIDAS Certificate Vault", icon: Key, status: "IN_DEV" },
+  { id: "P51.6", label: "eIDAS Certificate Vault", icon: Key, status: "READY" },
 ]
 
 export default function SovereignGatewayPage() {
@@ -156,22 +157,24 @@ export default function SovereignGatewayPage() {
                  </h3>
                  <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                     <CardHeader>
-                       <CardTitle className="text-sm font-headline text-white uppercase">Secure Identity Management</CardTitle>
+                       <CardTitle className="text-sm font-headline text-white uppercase flex items-center gap-2">
+                          <ShieldCheck className="size-4" /> Secure Identity Management
+                       </CardTitle>
                        <CardDescription>Automated lifecycle for QWAC and QSealC certificates required for EU Open Banking.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="p-4 bg-black/40 rounded border border-white/5 space-y-3">
-                             <h4 className="text-[10px] font-bold text-primary uppercase tracking-widest">Transport Certificate</h4>
-                             <p className="text-[9px] text-muted-foreground italic">"Used for establishing secure mTLS connections with SIBS ASPSPs."</p>
+                             <h4 className="text-[10px] font-bold text-primary uppercase tracking-widest">Transport Certificate (mTLS)</h4>
+                             <p className="text-[9px] text-muted-foreground italic">"Used for BIG Espanha - Sandbox (BIC: IGSEESMMXXX) connections."</p>
                              <div className="flex justify-between items-center">
                                 <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">SYNCED</Badge>
                                 <span className="text-[8px] font-mono text-muted-foreground">Expires in 242 days</span>
                              </div>
                           </div>
                           <div className="p-4 bg-black/40 rounded border border-white/5 space-y-3">
-                             <h4 className="text-[10px] font-bold text-primary uppercase tracking-widest">Signing Certificate</h4>
-                             <p className="text-[9px] text-muted-foreground italic">"Ensures non-repudiation and integrity for SEPA CT / Instant payments."</p>
+                             <h4 className="text-[10px] font-bold text-primary uppercase tracking-widest">Signing Certificate (QSealC)</h4>
+                             <p className="text-[9px] text-muted-foreground italic">"Ensures non-repudiation for BIG Espanha Domestic Single Payments."</p>
                              <div className="flex justify-between items-center">
                                 <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">SYNCED</Badge>
                                 <span className="text-[8px] font-mono text-muted-foreground">Expires in 180 days</span>
