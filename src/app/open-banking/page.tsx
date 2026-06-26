@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect, useRef } from "react"
@@ -50,6 +51,17 @@ const PROVIDER_METRICS = [
 ]
 
 const VALIDATED_NODES = [
+  {
+    name: "PayPal EU - LIVE",
+    fullName: "PayPal Europe",
+    id: "paypal_eu",
+    bic: "PAYPALEXXX",
+    country: "AT, BE, FR, DE, ES, SE (24 Countries)",
+    type: "AIS",
+    features: ["Account", "Accounts", "Identity", "Transactions"],
+    status: "LIVE_ENVIRONMENT",
+    crossBorderVeracity: "100.0%"
+  },
   {
     name: "Amex Sandbox - SANDBOX",
     fullName: "American Express Sandbox",
@@ -186,7 +198,7 @@ export default function OpenBankingHubPage() {
       setSimulatingVeracity(false)
       toast({
         title: "Cross-Border Veracity Confirmed",
-        description: "PIS-AIS handshake validated across Iberian, Benelux and Irish corridors.",
+        description: "PIS-AIS handshake validated across PayPal EU, Amex and Irish corridors.",
         className: "border-emerald-500/50 bg-emerald-500/5"
       })
     }, 2000)
@@ -514,7 +526,7 @@ export default function OpenBankingHubPage() {
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                         "Handshake veracity ensures that Iberian, Benelux and Irish cross-border PIS flows match PSD2 compliance markers with 99.9% precision."
+                         "Handshake veracity ensures that PayPal EU, Iberian, Benelux and Irish cross-border AIS flows match PSD2 compliance markers with 99.9% precision."
                       </p>
                    </CardContent>
                 </Card>

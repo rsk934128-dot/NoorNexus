@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -48,7 +49,7 @@ export default function NeuralAuditPage() {
   const [loading, setLoading] = useState(false)
   const [auditResult, setAuditResult] = useState<NeuralAuditOutput | null>(null)
   const [autonomyResult, setAutonomyResult] = useState<GridAutonomyOutput | null>(null)
-  const [activeNode, setActiveNode] = useState("aib")
+  const [activeNode, setActiveNode] = useState("paypal_eu")
   
   const OFFICIAL_APP_ID = "a085f875-dac3-47ef-83dd-b00d56df81d3"
 
@@ -56,7 +57,7 @@ export default function NeuralAuditPage() {
   const [liveStats, setLiveStats] = useState({
     latency: 28,
     successRate: 100.0,
-    activeNodes: 18,
+    activeNodes: 19,
     status: "STABLE",
     failoverStatus: "ARMED",
     selfHealingStatus: "OPTIMAL"
@@ -89,9 +90,10 @@ export default function NeuralAuditPage() {
       // 2. Autonomy Calibration
       const autonomy = await runGridAutonomy({
         region: "Global Mesh Corridor",
-        detectedRegulatoryChange: "Irish and AMEX PSD2 amendment verified.",
-        currentGatewayConfig: { active_nodes: 18, self_healing: true, cross_node_balancing: true },
+        detectedRegulatoryChange: "PayPal EU, Irish and AMEX PSD2 amendment verified.",
+        currentGatewayConfig: { active_nodes: 19, self_healing: true, cross_node_balancing: true },
         nodePerformanceData: [
+          { nodeId: "PAYPAL-EU-CORE", latency: 32, uptime: 100, roi: 95 },
           { nodeId: "AMEX-SANDBOX-UK", latency: 45, uptime: 100, roi: 90 },
           { nodeId: "AIB-IRELAND-PERSONAL", latency: 24, uptime: 100, roi: 95 },
           { nodeId: "AIB-IRELAND-BUSINESS", latency: 26, uptime: 100, roi: 94 },
@@ -108,7 +110,7 @@ export default function NeuralAuditPage() {
 
       toast({ 
         title: "Global Grid Sync Finalized", 
-        description: `Project #55.5: Amex and Irish corridors are verified for App ${OFFICIAL_APP_ID.substring(0, 8)}.` 
+        description: `Project #55.5: PayPal, Amex and Irish corridors are verified for App ${OFFICIAL_APP_ID.substring(0, 8)}.` 
       })
     } catch (e: any) {
       toast({ title: "Sync Error", description: e.message, variant: "destructive" })
@@ -139,7 +141,7 @@ export default function NeuralAuditPage() {
                 Neural <span className="text-emerald-500">Sentinel.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Zenith Level Traceability." নূরনেক্সাস এখন ১৮টি সক্রিয় নোডকে (AMEX স্যান্ডবক্সসহ) নিউরাল অডিটের আওতায় নিয়ে এসেছে।
+                "Zenith Level Traceability." নূরনেক্সাস এখন ১৯টি সক্রিয় নোডকে (PayPal EU সহ) নিউরাল অডিটের আওতায় নিয়ে এসেছে।
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -164,7 +166,7 @@ export default function NeuralAuditPage() {
                 <CardHeader className="flex flex-row items-center justify-between">
                   <div className="space-y-1">
                     <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                       <Fingerprint className="size-4" /> Zenith Application Monitor (18 Nodes)
+                       <Fingerprint className="size-4" /> Zenith Application Monitor (19 Nodes)
                     </CardTitle>
                     <CardDescription className="text-xs font-mono uppercase tracking-widest">TRACE_ID: {OFFICIAL_APP_ID}</CardDescription>
                   </div>
@@ -173,7 +175,7 @@ export default function NeuralAuditPage() {
                 <CardContent className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
                   {[
                     { label: "Inter-Node Balancer", val: "ACTIVE", icon: ArrowRightLeft },
-                    { label: "Amex/Irish Sync", val: "100%", icon: Database },
+                    { label: "PayPal/Amex/Irish Sync", val: "100%", icon: Database },
                     { label: "Verification Status", val: "PASS", icon: CheckCircle2 },
                     { label: "Fail-over ARMED", val: "YES", icon: ShieldPlus }
                   ].map((stat, i) => (
@@ -241,7 +243,7 @@ export default function NeuralAuditPage() {
                                 <div className="h-full bg-emerald-500" style={{ width: '100%' }} />
                              </div>
                           </div>
-                          <p className="text-[10px] text-muted-foreground italic">"Automatic traffic rerouting is active across 18 nodes. UK Amex Sandbox and Irish corridors monitored."</p>
+                          <p className="text-[10px] text-muted-foreground italic">"Automatic traffic rerouting is active across 19 nodes. PayPal EU, UK Amex Sandbox and Irish corridors monitored."</p>
                        </CardContent>
                     </Card>
 
@@ -257,7 +259,7 @@ export default function NeuralAuditPage() {
                              <Badge className="bg-primary/20 text-primary border-none">DYNAMIC</Badge>
                           </div>
                           <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                             "Nora-02-B is currently shifting assets from Benelux Grid to cover AIB-Ireland and UK AMEX settlement requirements."
+                             "Nora-02-B is currently shifting assets from PayPal EU to cover AIB-Ireland and UK AMEX settlement requirements."
                           </p>
                        </CardContent>
                     </Card>
@@ -307,8 +309,8 @@ export default function NeuralAuditPage() {
                 <CardContent className="space-y-6">
                    <div className="space-y-4">
                       {[
-                        { label: "Amex/Irish Sync", val: "100%", color: "text-emerald-500" },
-                        { label: "18-Node Veracity", val: "99.9%", color: "text-primary" },
+                        { label: "PayPal/Amex/Irish Sync", val: "100%", color: "text-emerald-500" },
+                        { label: "19-Node Veracity", val: "99.9%", color: "text-primary" },
                         { label: "Balancing Veracity", val: "ACTIVE", color: "text-emerald-400" }
                       ].map((s, i) => (
                         <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
@@ -342,7 +344,7 @@ export default function NeuralAuditPage() {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <p className="text-[11px] text-white font-bold leading-tight">GLOBAL GRID IS IMMORTAL.</p>
-                  <p className="text-[8px] text-muted-foreground font-mono">HASH: Ω_18_NODE_STABILITY</p>
+                  <p className="text-[8px] text-muted-foreground font-mono">HASH: Ω_19_NODE_STABILITY</p>
                 </CardContent>
               </Card>
             </div>
