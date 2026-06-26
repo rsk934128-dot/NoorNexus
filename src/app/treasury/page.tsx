@@ -34,7 +34,8 @@ import {
   FileCheck,
   ShieldEllipsis,
   HeartPulse,
-  Landmark
+  Landmark,
+  Truck
 } from "lucide-react"
 import { authorizeWithdrawal, OffRampOutput } from "@/ai/flows/off-ramp-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -193,34 +194,23 @@ export default function TreasuryPage() {
                   </CardContent>
                 </Card>
 
-                <Card className={`glass-card border-l-4 transition-opacity duration-500 ${cbActive ? 'opacity-50 pointer-events-none border-l-muted' : 'border-l-primary'}`}>
+                <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                   <CardHeader>
-                    <CardTitle className="text-sm font-headline flex items-center gap-2 uppercase text-primary">
-                      <ArrowDownToLine className="size-4" /> Settlement Bridge
+                    <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
+                      <Truck className="size-4" /> Resource Optimizer Proposals
                     </CardTitle>
-                    <CardDescription>Generational reserve distribution.</CardDescription>
+                    <CardDescription>Budget allocation proposed by Project #47.</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid grid-cols-2 gap-4">
-                       <div className="space-y-2">
-                          <Label className="text-[10px] font-bold uppercase text-muted-foreground">Source Asset</Label>
-                          <Select value={withdrawForm.asset} onValueChange={v => setWithdrawForm({...withdrawForm, asset: v})}>
-                            <SelectTrigger className="bg-background/50 border-white/10 text-[10px] h-10"><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                               {CURRENCIES.map(c => <SelectItem key={c.code} value={c.code}>{c.code}</SelectItem>)}
-                               <SelectItem value="USDC">USDC (Stable)</SelectItem>
-                            </SelectContent>
-                          </Select>
-                       </div>
-                       <div className="space-y-2">
-                          <Label className="text-[10px] font-bold uppercase text-muted-foreground">Volume</Label>
-                          <Input type="number" value={withdrawForm.amount} onChange={e => setWithdrawForm({...withdrawForm, amount: parseInt(e.target.value) || 0})} className="bg-background/50 border-white/10 font-bold h-10" />
-                       </div>
-                    </div>
-                    <Button onClick={handleWithdraw} disabled={withdrawing || cbActive} className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary">
-                      {withdrawing ? <Loader2 className="size-4 animate-spin" /> : <Banknote className="size-5 mr-2" />}
-                      Authorize Settlement
-                    </Button>
+                  <CardContent className="space-y-4">
+                     <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-3">
+                        <div className="flex justify-between items-center">
+                           <p className="text-[10px] text-white font-bold uppercase">Node Maintenance Fund</p>
+                           <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">PROPOSED</Badge>
+                        </div>
+                        <p className="text-lg font-headline font-bold text-primary">$12,400.00</p>
+                        <p className="text-[9px] text-muted-foreground italic">Reason: 45% fail probability detected at London Mesh Node.</p>
+                        <Button size="sm" className="w-full bg-primary text-primary-foreground font-bold uppercase text-[9px]">Approve & Anchor to Ledger</Button>
+                     </div>
                   </CardContent>
                 </Card>
               </div>
