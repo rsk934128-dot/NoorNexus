@@ -61,10 +61,11 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
+    "PAYONEER: UK Business node synchronized for GBP corridors.",
     "PAYPAL: PayPal EU Identity node synchronized for 24 corridors.",
     "AUTH: Sovereign Handler Node (786ad.firebaseapp.com) synchronized.",
     "FORTRESS: Official App ID a085f8... secured (Zenith Status: VERIFIED).",
-    "GRID: 19 Nodes synchronized (Optimal Torque).",
+    "GRID: 20 Nodes synchronized (Optimal Torque).",
     "SANDBOX: Amex AETS node synchronized for UK/EU corridors.",
     "LIQUIDITY: Inter-node balancing active (AIB-IE <-> ABN-BE).",
     "VAULT: Project #55.5 Irish Corridor anchoring active.",
@@ -75,11 +76,11 @@ export default function Home() {
   const [queryResult, setQueryResult] = useState<ImperialQueryOutput | null>(null)
   const [queryLoading, setQueryLoading] = useState(false)
 
-  // Simulation for 19 Nodes Heatmap (18 LIVE + 1 AMEX SANDBOX)
-  const [nodes, setNodes] = useState(Array.from({ length: 19 }).map((_, i) => ({
+  // Simulation for 20 Nodes Heatmap
+  const [nodes, setNodes] = useState(Array.from({ length: 20 }).map((_, i) => ({
     id: i + 1,
-    name: i === 18 ? 'PAYPAL-EU' : i === 17 ? 'AMEX-SB' : `Node-${i + 1}`,
-    latency: i === 18 ? 32 : i === 17 ? 45 : Math.floor(Math.random() * 20) + 20,
+    name: i === 19 ? 'PAYONEER' : i === 18 ? 'PAYPAL-EU' : i === 17 ? 'AMEX-SB' : `Node-${i + 1}`,
+    latency: i === 19 ? 28 : i === 18 ? 32 : i === 17 ? 45 : Math.floor(Math.random() * 20) + 20,
     load: Math.floor(Math.random() * 40) + 30,
     status: i === 17 ? 'SANDBOX' : 'OPTIMAL'
   })))
@@ -102,11 +103,12 @@ export default function Home() {
     const interval = setInterval(() => {
       setNodes(prev => prev.map(n => ({
         ...n,
-        latency: n.name === 'PAYPAL-EU' ? 32 + Math.floor(Math.random() * 5) : n.name === 'AMEX-SB' ? 45 + Math.floor(Math.random() * 10) : Math.floor(Math.random() * 30) + 20,
+        latency: n.name === 'PAYONEER' ? 28 + Math.floor(Math.random() * 4) : n.name === 'PAYPAL-EU' ? 32 + Math.floor(Math.random() * 5) : n.name === 'AMEX-SB' ? 45 + Math.floor(Math.random() * 10) : Math.floor(Math.random() * 30) + 20,
         load: Math.floor(Math.random() * 50) + 20
       })))
       
       const logs = [
+        "PAYONEER: GBP Balance verification poll successful.",
         "PAYPAL: Account Identity poll via paypal_eu successful.",
         "AUTH: Handshake verification via handler node success.",
         "BALANCER: Shifting $420K from ABN-BE to AIB-IE for liquidity sync.",
@@ -114,7 +116,7 @@ export default function Home() {
         "AMEX: Card Statement poll via amex-ob-sandbox success.",
         "HEATMAP: London-Edge latency spike detected and bypassed.",
         "ZENITH: Global Grid Veracity confirmed at 99.99%.",
-        "GRID: Node-19 (PayPal EU) stabilized at 32ms."
+        "GRID: Node-20 (Payoneer UK) stabilized at 28ms."
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 5000)
@@ -167,14 +169,14 @@ export default function Home() {
                       <Infinity className="size-3 mr-2" /> Phase ΩΩ: Global Autonomy
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <ShieldCheck className="size-3 mr-2" /> 19 Nodes Verified (18 LIVE)
+                      <ShieldCheck className="size-3 mr-2" /> 20 Nodes Verified (19 LIVE)
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
                    {isAdmin ? 'Imperial Fortress.' : 'Global Grid.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "Mission 400: The Economic Nervous System." নূরনেক্সাস এখন ১৮টি লাইভ নোড (PayPal EU সহ) এবং ১টি এমেক্স স্যান্ডবক্স নোডের মাধ্যমে সুরক্ষিত। ইন্টার-নোড লিকুইডিটি ব্যালেন্সিং এবং গ্লোবাল হিটম্যাপ এখন সক্রিয়।
+                   "Mission 400: The Economic Nervous System." নূরনেক্সাস এখন ২০টি সক্রিয় নোড (Payoneer UK সহ) এবং গ্লোবাল আইডেন্টিটি রেইলসের মাধ্যমে সুরক্ষিত। ইন্টার-নোড লিকুইডিটি ব্যালেন্সিং এবং গ্লোবাল হিটম্যাপ এখন পূর্ণ শক্তিতে সক্রিয়।
                 </p>
               </div>
               
@@ -193,7 +195,7 @@ export default function Home() {
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                        <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '100%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"19 Active Nodes | Zenith Efficiency | Inter-Node Balancing Active"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"20 Active Nodes | Zenith Efficiency | Inter-Node Balancing Active"</p>
                 </Card>
               </div>
             </div>
@@ -208,7 +210,7 @@ export default function Home() {
                            value={queryText}
                            onChange={e => setQueryText(e.target.value)}
                            onKeyDown={e => e.key === 'Enter' && handleNeuralQuery()}
-                           placeholder="Commander, what is your directive? (Inter-Node Balancer Active)"
+                           placeholder="Commander, what is your directive? (20-Node Inter-Balancer Active)"
                            className="flex-1 bg-transparent border-none outline-none text-sm font-headline text-white placeholder:text-muted-foreground"
                         />
                         <Button onClick={handleNeuralQuery} disabled={queryLoading} variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
@@ -242,11 +244,11 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
-               {/* Global Latency Heatmap (19 Nodes) */}
+               {/* Global Latency Heatmap (20 Nodes) */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                       <Map className="size-4" /> Global Node Latency Heatmap (19 Active Nodes)
+                       <Map className="size-4" /> Global Node Latency Heatmap (20 Active Nodes)
                     </h3>
                     <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">REAL-TIME MONITORING</Badge>
                   </div>
@@ -255,12 +257,11 @@ export default function Home() {
                         {nodes.map((node) => (
                           <div key={node.id} className="space-y-1 group relative">
                              <div 
-                                className={`aspect-square rounded-lg border flex flex-col items-center justify-center transition-all duration-500 ${node.name === 'PAYPAL-EU' ? 'bg-primary/20 border-primary/40 shadow-[0_0_10px_rgba(0,150,255,0.3)]' : node.status === 'SANDBOX' ? 'bg-amber-500/20 border-amber-500/40' : node.latency > 45 ? 'bg-amber-500/20 border-amber-500/40' : 'bg-emerald-500/20 border-emerald-500/40'} hover:scale-105 cursor-help`}
+                                className={`aspect-square rounded-lg border flex flex-col items-center justify-center transition-all duration-500 ${node.name === 'PAYONEER' ? 'bg-primary/20 border-primary/40' : node.name === 'PAYPAL-EU' ? 'bg-primary/20 border-primary/40 shadow-[0_0_10px_rgba(0,150,255,0.3)]' : node.status === 'SANDBOX' ? 'bg-amber-500/20 border-amber-500/40' : node.latency > 45 ? 'bg-amber-500/20 border-amber-500/40' : 'bg-emerald-500/20 border-emerald-500/40'} hover:scale-105 cursor-help`}
                              >
                                 <p className="text-[8px] font-bold text-white mb-1">{node.name}</p>
                                 <p className="text-[10px] font-headline font-bold text-white">{node.latency}ms</p>
                              </div>
-                             {/* Tooltip on hover */}
                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-24 p-2 bg-black border border-white/10 rounded text-[7px] opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
                                 <p className="text-white font-bold uppercase mb-1">Node Details</p>
                                 <p className="text-muted-foreground">Load: {node.load}%</p>
@@ -311,7 +312,7 @@ export default function Home() {
                                  <div className="h-full bg-emerald-500" style={{ width: '92%' }} />
                               </div>
                            </div>
-                           <p className="text-[10px] text-muted-foreground italic">"Automatic fund shifting is active between PayPal EU and Local Corridors to maintain 100% settlement uptime."</p>
+                           <p className="text-[10px] text-muted-foreground italic">"Automatic fund shifting is active between PayPal, Payoneer and Local Corridors to maintain 100% settlement uptime."</p>
                         </CardContent>
                      </Card>
 
@@ -348,7 +349,7 @@ export default function Home() {
                     <div className="space-y-4">
                       {impactFeed.map((log, i) => (
                         <div key={i} className="p-3 bg-white/2 rounded-xl border border-white/5 font-mono text-[10px] flex items-center gap-3 animate-in fade-in slide-in-from-right-2 duration-500">
-                          <div className={`size-1.5 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)] ${log.includes('PAYPAL') ? 'bg-blue-500' : log.includes('AUTH') ? 'bg-purple-500' : log.includes('BALANCER') ? 'bg-primary' : log.includes('AMEX') ? 'bg-amber-500' : 'bg-emerald-500'}`} />
+                          <div className={`size-1.5 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)] ${log.includes('PAYPAL') ? 'bg-blue-500' : log.includes('PAYONEER') ? 'bg-cyan-500' : log.includes('AUTH') ? 'bg-purple-500' : log.includes('BALANCER') ? 'bg-primary' : log.includes('AMEX') ? 'bg-amber-500' : 'bg-emerald-500'}`} />
                           <span className="text-muted-foreground truncate">{log}</span>
                         </div>
                       ))}
@@ -366,7 +367,7 @@ export default function Home() {
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Automatic traffic rerouting is now monitoring the PayPal EU Corridor. Failures trigger immediate bypass via Middle-East Grid."
+                       "Automatic traffic rerouting is now monitoring the PayPal and Payoneer corridors. Failures trigger immediate bypass via Middle-East Grid."
                     </p>
                     <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Status: IMMUNE</Badge>
                  </CardContent>

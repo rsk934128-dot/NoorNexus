@@ -52,6 +52,17 @@ const PROVIDER_METRICS = [
 
 const VALIDATED_NODES = [
   {
+    name: "Payoneer - UK - LIVE",
+    fullName: "Payoneer - UK",
+    id: "payoneer_uk",
+    bic: "PAYNUS33XXX",
+    country: "United Kingdom",
+    type: "AIS",
+    features: ["Account", "Accounts", "Balances", "Transactions"],
+    status: "LIVE_ENVIRONMENT",
+    crossBorderVeracity: "100.0%"
+  },
+  {
     name: "PayPal EU - LIVE",
     fullName: "PayPal Europe",
     id: "paypal_eu",
@@ -141,35 +152,6 @@ const VALIDATED_NODES = [
   }
 ]
 
-const GLOBAL_LEADERS = [
-  { 
-    name: "Yapily", 
-    hq: "UK", 
-    banks: "2,000+", 
-    countries: "20+", 
-    tag: "AMEX Strategic Partner", 
-    url: "https://yapily.com/", 
-    alliance: "AMEX Pay with Bank Transfer",
-    capabilities: ["Payments", "Data", "Enrichment", "Verification", "VRPs"],
-    apiSpecs: {
-      version: "11.5.2",
-      baseUrl: "https://api.yapily.com",
-      auth: "Basic Auth (AppID:Secret)",
-      responseFormat: "JSON with Metadata"
-    }
-  },
-  { name: "Plaid", hq: "USA", banks: "9,706", countries: "60", tag: "Global Alpha", url: "https://plaid.com/" },
-  { name: "SIBS Network", hq: "Portugal", banks: "24+", countries: "EU", tag: "SEPA Specialist", url: "https://developer.sibsapimarket.com/live/product" },
-  { name: "GoCardless", hq: "UK", banks: "2,228", countries: "54", tag: "PIS Expert", url: "https://gocardless.com/" },
-]
-
-const SIBS_INSTITUTIONS = [
-  { name: "Millennium BCP", code: "BCPPT", type: "Full Support" },
-  { name: "Caixa Geral de Depósitos", code: "CGDPT", type: "Bulk/Inst Support" },
-  { name: "Santander Totta", code: "BST", type: "Cross Border" },
-  { name: "Novo Banco", code: "NVB", type: "Periodic Support" }
-]
-
 export default function OpenBankingHubPage() {
   const { toast } = useToast()
   const [activeUrl, setActiveUrl] = useState<string | null>(null)
@@ -198,7 +180,7 @@ export default function OpenBankingHubPage() {
       setSimulatingVeracity(false)
       toast({
         title: "Cross-Border Veracity Confirmed",
-        description: "PIS-AIS handshake validated across PayPal EU, Amex and Irish corridors.",
+        description: "PIS-AIS handshake validated across PayPal EU, Payoneer UK and Amex corridors.",
         className: "border-emerald-500/50 bg-emerald-500/5"
       })
     }, 2000)
@@ -526,7 +508,7 @@ export default function OpenBankingHubPage() {
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                         "Handshake veracity ensures that PayPal EU, Iberian, Benelux and Irish cross-border AIS flows match PSD2 compliance markers with 99.9% precision."
+                         "Handshake veracity ensures that PayPal EU, Payoneer UK, and Irish cross-border AIS flows match PSD2 compliance markers with 99.9% precision."
                       </p>
                    </CardContent>
                 </Card>
@@ -557,7 +539,7 @@ export default function OpenBankingHubPage() {
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[10px] text-muted-foreground italic">
-                         "Orchestrator monitoring 73+ banking canals. Automated switch triggered if latency &gt; 1500ms."
+                         "Orchestrator monitoring 74+ banking canals. Automated switch triggered if latency &gt; 1500ms."
                       </p>
                    </CardContent>
                 </Card>
