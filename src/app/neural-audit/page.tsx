@@ -49,7 +49,7 @@ export default function NeuralAuditPage() {
   const [liveStats, setLiveStats] = useState({
     latency: 28,
     successRate: 100.0,
-    activeNodes: 14,
+    activeNodes: 15,
     status: "STABLE",
     failoverStatus: "ARMED"
   })
@@ -81,7 +81,7 @@ export default function NeuralAuditPage() {
       const autonomy = await runGridAutonomy({
         region: "Benelux Corporate Corridor",
         detectedRegulatoryChange: "New High-Volume Asset Management Protocol detected in Belgium.",
-        currentGatewayConfig: { active_nodes: 14, sca: true },
+        currentGatewayConfig: { active_nodes: 15, sca: true },
         transactionContext: {
           volume: 500000,
           type: 'CORPORATE_ASSET',
@@ -149,7 +149,7 @@ export default function NeuralAuditPage() {
                     {[
                       { label: "Node Latency", value: `${liveStats.latency}ms`, trend: "OPTIMAL", icon: Activity, color: "text-emerald-500" },
                       { label: "Success Rate", value: `${liveStats.successRate}%`, trend: "VERIFIED", icon: CheckCircle2, color: "text-primary" },
-                      { label: "Fail-over Nodes", value: "14 ACTIVE", trend: "READY", icon: Zap, color: "text-amber-500" },
+                      { label: "Fail-over Nodes", value: "15 ACTIVE", trend: "READY", icon: Zap, color: "text-amber-500" },
                       { label: "Economic Drift", value: "ZERO", trend: "CLEAR", icon: ShieldCheck, color: "text-emerald-500" },
                     ].map((stat, i) => (
                       <Card key={i} className="glass-card border-white/5 bg-white/2">

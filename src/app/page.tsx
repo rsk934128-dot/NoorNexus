@@ -60,11 +60,12 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
+    "GRID: ABN AMRO BE Private Banking LIVE Node activated.",
     "GRID: ABN AMRO BE Asset Managers LIVE Node activated.",
     "GRID: ABN AMRO LIVE Node (NL/BE/DE) activated successfully.",
     "AUTONOMY: Nora-54 executing Smart Settlement Engine for Corporate Rails.",
     "SMART_ROUTING: Redirecting 500k USD payout via lowest-fee Benelux corridor.",
-    "RESILIENCE: Fail-over Global Grid protocol ARMED and SYNCED (14 Nodes).",
+    "RESILIENCE: Fail-over Global Grid protocol ARMED and SYNCED (15 Nodes).",
     "LEGACY: Yapily-AMEX European Bridge synchronized.",
     "SHIELD: Quantum-Resistant Encryption Layer active."
   ])
@@ -89,10 +90,10 @@ export default function Home() {
 
     const interval = setInterval(() => {
       const logs = [
-        "SMART_ROUTER: Node ABN-AMRO-BE-ASSET selected for low-fee corporate settlement.",
-        "BALANCER: Grid power stable across 14 LIVE nodes.",
-        "AUTONOMY: Nora-54 generated Decision Seal Ω-54-A.",
-        "LEGACY: Self-Refactoring cycle Ω-03 complete.",
+        "SMART_ROUTER: Node ABN-AMRO-BE-PRIVATE selected for high-net-worth settlement.",
+        "BALANCER: Grid power stable across 15 LIVE nodes.",
+        "AUTONOMY: Nora-54 generated Decision Seal Ω-54-B.",
+        "LEGACY: Self-Refactoring cycle Ω-04 complete.",
         "RESILIENCE: Real-time traffic balancing via Smart Engine active.",
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
@@ -153,7 +154,7 @@ export default function Home() {
                    {isAdmin ? 'Imperial Autonomy.' : 'Global Grid.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "Project #54: Sovereign Grid Autonomy." নূরনেক্সাস এখন ১৪টি লাইভ নোড এবং একটি স্মার্ট সেটেলমেন্ট ইঞ্জিনের মাধ্যমে অমরত্বের পথে।
+                   "Project #54: Sovereign Grid Autonomy." নূরনেক্সাস এখন ১৫টি লাইভ নোড এবং একটি স্মার্ট সেটেলমেন্ট ইঞ্জিনের মাধ্যমে অমরত্বের পথে।
                 </p>
               </div>
               
@@ -172,7 +173,7 @@ export default function Home() {
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                        <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '100%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"14 LIVE Corporate Nodes | Smart Settlement Optimized"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"15 LIVE Corporate Nodes | Smart Settlement Optimized"</p>
                 </Card>
               </div>
             </div>
@@ -228,18 +229,18 @@ export default function Home() {
                {/* Corporate Node Balancer */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                     <ArrowRightLeft className="size-4" /> Global Node Balancer (14 Nodes LIVE)
+                     <ArrowRightLeft className="size-4" /> Global Node Balancer (15 Nodes LIVE)
                   </h3>
                   <Card className="glass-card bg-black/40 border-white/5 p-6">
                      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
                         {[
                            { name: "ABN-AMRO", load: 12, status: "OPTIMAL" },
                            { name: "ABN-BE-ASSET", load: 5, status: "STABLE" },
+                           { name: "ABN-BE-PRIVATE", load: 3, status: "STABLE" },
                            { name: "BIG-ES", load: 18, status: "STABLE" },
                            { name: "BKASH-BD", load: 38, status: "BUSY" },
                            { name: "YAPILY-EU", load: 8, status: "IDLE" },
-                           { name: "AMEX-US", load: 4, status: "IDLE" },
-                           { name: "GRAB-SEA", load: 2, status: "ACTIVE" }
+                           { name: "AMEX-US", load: 4, status: "IDLE" }
                         ].map((node, i) => (
                            <div key={i} className="space-y-2 text-center p-2 rounded-lg bg-white/5 border border-white/5 group hover:border-primary/50 transition-all">
                               <p className="text-[8px] font-bold text-muted-foreground uppercase truncate">{node.name}</p>

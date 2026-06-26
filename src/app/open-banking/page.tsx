@@ -51,6 +51,17 @@ const PROVIDER_METRICS = [
 
 const VALIDATED_NODES = [
   {
+    name: "ABN AMRO BE (Private) - LIVE",
+    fullName: "ABN AMRO Private Banking Belgium",
+    id: "abn-amro-be-private",
+    bic: "SGPBBE99XXX",
+    country: "Belgium",
+    type: "AIS_PIS",
+    features: ["Accounts", "Balances", "Transactions", "Domestic Single Payment", "International Single Payment", "Periodic Payments"],
+    status: "LIVE_ENVIRONMENT",
+    crossBorderVeracity: "100.0%"
+  },
+  {
     name: "ABN AMRO BE (Corporate) - LIVE",
     fullName: "ABN AMRO Asset Managers Belgium",
     id: "abn-amro-be-asset",
