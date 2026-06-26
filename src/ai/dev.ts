@@ -21,3 +21,5 @@ import '@/ai/flows/inter-bank-settlement-flow.ts';
 import '@/ai/flows/trade-arbitration-flow.ts';
 import '@/ai/flows/imperial-oracle-flow.ts';
 import '@/ai/flows/off-ramp-flow.ts';
+import '@/ai/flows/alert-dispatcher-flow.ts';
+import '@/ai/flows/imperial-query-flow.ts';

@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -25,13 +26,17 @@ import {
   BrainCircuit,
   HeartPulse,
   Landmark,
-  Database
+  Database,
+  Search,
+  Cpu,
+  ArrowRight
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { useUser } from "@/firebase"
 import { SovereignLogo } from "@/components/sovereign-logo"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { processNeuralQuery, ImperialQueryOutput } from "@/ai/flows/imperial-query-flow"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
@@ -59,6 +64,9 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING REALITY SUPREMACY...")
   const [impactFeed, setImpactFeed] = useState<string[]>([])
+  const [query, setQuery] = useState("")
+  const [queryResult, setQueryResult] = useState<ImperialQueryOutput | null>(null)
+  const [queryLoading, setQueryLoading] = useState(false)
 
   useEffect(() => {
     const sequence = [
@@ -81,6 +89,20 @@ export default function Home() {
 
     return () => clearInterval(interval)
   }, [])
+
+  async function handleNeuralQuery() {
+    if (!query.trim()) return
+    setQueryLoading(true)
+    try {
+      const res = await processNeuralQuery({ query })
+      setQueryResult(res)
+      toast({ title: "Neural Link Synchronized" })
+    } catch (e: any) {
+      toast({ title: "Neural Drift Detected", description: e.message, variant: "destructive" })
+    } finally {
+      setQueryLoading(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -143,16 +165,91 @@ export default function Home() {
                 </Card>
               </div>
             </div>
+
+            {/* Neural Interface Layer */}
+            <div className="w-full">
+               <Card className="glass-card border-primary/20 overflow-hidden bg-primary/5">
+                  <CardContent className="p-0">
+                     <div className="flex items-center gap-4 p-4 border-b border-white/5">
+                        <Cpu className="size-6 text-primary animate-pulse" />
+                        <input 
+                           value={query}
+                           onChange={e => setQuery(e.target.value)}
+                           onKeyDown={e => e.key === 'Enter' && handleNeuralQuery()}
+                           placeholder="Commander, what is your directive? (Neural Interface Layer active)"
+                           className="flex-1 bg-transparent border-none outline-none text-sm font-headline text-white placeholder:text-muted-foreground"
+                        />
+                        <Button onClick={handleNeuralQuery} disabled={queryLoading} variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
+                           {queryLoading ? <Loader2 className="size-5 animate-spin" /> : <ArrowRight className="size-5" />}
+                        </Button>
+                     </div>
+                     {queryResult && (
+                        <div className="p-6 space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
+                           <div className="flex justify-between items-start">
+                              <div className="space-y-1">
+                                 <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Module: {queryResult.sourceModule}</p>
+                                 <p className="text-sm text-white leading-relaxed italic">"{queryResult.summary}"</p>
+                              </div>
+                              <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">VERIFIED_DATA</Badge>
+                           </div>
+                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                              {queryResult.dataPoints.map((dp, i) => (
+                                 <div key={i} className="p-3 bg-black/40 rounded-xl border border-white/5">
+                                    <p className="text-[8px] text-muted-foreground uppercase font-bold">{dp.label}</p>
+                                    <p className="text-xs font-mono text-white font-bold">{dp.value}</p>
+                                 </div>
+                              ))}
+                           </div>
+                           {queryResult.suggestedAction && (
+                              <div className="flex items-center gap-2 text-[10px] text-emerald-500 font-bold uppercase tracking-widest">
+                                 <Sparkles className="size-3" /> Recommended: {queryResult.suggestedAction}
+                              </div>
+                           )}
+                        </div>
+                     )}
+                  </CardContent>
+               </Card>
+            </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
+               {/* Efficiency Review - Project #45, #46, #47 Impact */}
+               <section className="space-y-6">
+                  <div className="flex justify-between items-center">
+                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                        <Activity className="size-4" /> System Health & Efficiency Report
+                     </h3>
+                     <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500 uppercase">Operational Savings: +90.2%</Badge>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                     {[
+                        { project: "Project #45", title: "Fintech Canal", impact: "Zero-Latency Settlement", stat: "99.9% Speed", color: "text-blue-400" },
+                        { project: "Project #46", title: "Logistics Mesh", impact: "Immutable Asset Tracking", stat: "100% Transparency", color: "text-purple-400" },
+                        { project: "Project #47", title: "Predictive AI", impact: "Auto-Maintenance Cycle", stat: "-45% Downtime", color: "text-emerald-400" }
+                     ].map((p, i) => (
+                        <Card key={i} className="glass-card border-white/5 bg-white/2">
+                           <CardContent className="p-6 space-y-4">
+                              <p className={`text-[9px] font-bold uppercase tracking-widest ${p.color}`}>{p.project}</p>
+                              <div className="space-y-1">
+                                 <h4 className="text-sm font-headline font-bold text-white uppercase">{p.title}</h4>
+                                 <p className="text-[10px] text-muted-foreground">{p.impact}</p>
+                              </div>
+                              <div className="pt-2 flex justify-between items-end border-t border-white/5">
+                                 <span className="text-[8px] text-muted-foreground uppercase font-bold">Performance</span>
+                                 <span className="text-xs font-headline font-bold text-white">{p.stat}</span>
+                              </div>
+                           </CardContent>
+                        </Card>
+                     ))}
+                  </div>
+               </section>
+
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                         <Eye className="size-4" /> The 3 Courts of Truth Pulse
                      </h3>
-                     <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500 uppercase">Reality Validation: LIVE</Badge>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                      {PUBLIC_METRICS.map((kpi, i) => (
@@ -168,80 +265,6 @@ export default function Home() {
                      ))}
                   </div>
                </section>
-
-               <section className="space-y-6">
-                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-amber-500 flex items-center gap-2">
-                     <Scale className="size-4" /> Institutional Reality Layers
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                     {[
-                       { title: "Technical Truth", desc: "Verifying if systems actually work under real pressure.", icon: ShieldCheck },
-                       { title: "Economic Truth", desc: "Proving if users voluntarily pay for the value created.", icon: Zap },
-                       { title: "Human Truth", desc: "Measuring independent trust and crisis recovery capacity.", icon: HeartPulse }
-                     ].map((v, i) => (
-                       <Card key={i} className="glass-card border-amber-500/10 bg-amber-500/5">
-                          <CardContent className="p-6 space-y-4">
-                             <div className="p-3 rounded-xl bg-amber-500/10 w-fit">
-                                <v.icon className="size-6 text-amber-500" />
-                             </div>
-                             <div className="space-y-1">
-                                <p className="text-sm font-headline font-bold text-white uppercase">{v.title}</p>
-                                <p className="text-xs text-muted-foreground leading-relaxed">{v.desc}</p>
-                             </div>
-                          </CardContent>
-                       </Card>
-                     ))}
-                  </div>
-               </section>
-
-               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                 <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                    <CardHeader>
-                       <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
-                          <AlertTriangle className="size-4" /> The Disappearance Test Result
-                       </CardTitle>
-                       <CardDescription className="text-xs italic">"If we vanish tomorrow, does the logic live?"</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                       {[
-                         { segment: "Autonomy Level", impact: "Self-Sustaining", stat: "84%" },
-                         { segment: "Steward Readiness", impact: "Protocol-Driven", stat: "92%" },
-                         { segment: "Legacy Stability", impact: "Immutable", stat: "96%" }
-                       ].map((s, i) => (
-                         <div key={i} className="flex justify-between items-center border-b border-white/5 pb-2">
-                            <div className="space-y-1">
-                               <p className="text-[10px] text-white font-bold uppercase">{s.segment}</p>
-                               <p className="text-[9px] text-muted-foreground">{s.impact}</p>
-                            </div>
-                            <p className="text-sm font-headline font-bold text-primary">{s.stat}</p>
-                         </div>
-                       ))}
-                    </CardContent>
-                 </Card>
-
-                 <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                    <CardHeader>
-                       <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
-                          <CheckCircle2 className="size-4" /> Earned Trust Accumulation
-                       </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                       <div className="grid grid-cols-2 gap-4">
-                          <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-center">
-                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Institutional Trust</p>
-                             <p className="text-lg font-headline font-bold text-emerald-500">92.4%</p>
-                          </div>
-                          <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-center">
-                             <p className="text-[8px] text-muted-foreground uppercase font-bold">Adoption Pulse</p>
-                             <p className="text-lg font-headline font-bold text-emerald-500">OPTIMAL</p>
-                          </div>
-                       </div>
-                       <p className="text-[10px] text-muted-foreground italic text-center">
-                          "Success is measured by the trust earned through reality, not metrics."
-                       </p>
-                    </CardContent>
-                 </Card>
-               </div>
             </div>
 
             <div className="space-y-8">

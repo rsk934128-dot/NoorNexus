@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -24,9 +25,13 @@ import {
   TrendingUp,
   BrainCircuit,
   Coins,
-  History
+  History,
+  Radio,
+  Loader2,
+  Lock
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { dispatchImperialAlert, AlertDispatcherOutput } from "@/ai/flows/alert-dispatcher-flow"
 
 const TRACKING_ASSETS = [
   { id: "NODE-BD-SIR-01", type: "High-Pressure Coupling", status: "INSTALLED", location: "Sirajganj Node 01", health: "100%", lastSync: "10m ago", failProb: 2 },
@@ -37,6 +42,8 @@ const TRACKING_ASSETS = [
 export default function LogisticsPage() {
   const { toast } = useToast()
   const [optimizing, setOptimizing] = useState(false)
+  const [dispatchingId, setDispatchingId] = useState<string | null>(null)
+  const [dispatchResult, setDispatchResult] = useState<AlertDispatcherOutput | null>(null)
 
   const runAutoBudget = () => {
     setOptimizing(true)
@@ -48,6 +55,25 @@ export default function LogisticsPage() {
         className: "border-primary bg-primary/5"
       })
     }, 1500)
+  }
+
+  async function handleDispatchAlert(asset: any) {
+    setDispatchingId(asset.id)
+    try {
+      const result = await dispatchImperialAlert({
+        nodeId: asset.id,
+        partId: asset.type,
+        failureProbability: asset.failProb,
+        location: asset.location,
+        priority: asset.failProb > 30 ? 'HIGH' : 'MEDIUM'
+      })
+      setDispatchResult(result)
+      toast({ title: "Imperial Alert Dispatched", description: "Maintenance unit notified." })
+    } catch (e: any) {
+      toast({ title: "Dispatch Failed", description: e.message, variant: "destructive" })
+    } finally {
+      setDispatchingId(null)
+    }
   }
 
   return (
@@ -126,8 +152,14 @@ export default function LogisticsPage() {
                                        {asset.health}
                                     </Badge>
                                  </div>
-                                 <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
-                                    <ArrowRight className="size-4" />
+                                 <Button 
+                                    onClick={() => handleDispatchAlert(asset)} 
+                                    disabled={dispatchingId === asset.id || asset.failProb === 0}
+                                    variant="outline" 
+                                    className="border-primary/20 text-primary hover:bg-primary/10 text-[10px] font-bold uppercase h-10 px-4"
+                                  >
+                                    {dispatchingId === asset.id ? <Loader2 className="size-3 animate-spin mr-2" /> : <Radio className="size-3 mr-2" />}
+                                    Dispatch Alert
                                  </Button>
                               </div>
                            </div>
@@ -136,6 +168,35 @@ export default function LogisticsPage() {
                     ))}
                  </div>
               </section>
+
+              {dispatchResult && (
+                 <Card className="glass-card border-emerald-500/20 bg-emerald-500/5 animate-in slide-in-from-bottom-4">
+                    <CardHeader>
+                       <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
+                          <Radio className="size-4" /> Sovereign Dispatch Confirmation (Project #48)
+                       </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                       <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-3">
+                          <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                             <p className="text-[10px] font-bold text-white uppercase">Tactical Command</p>
+                             <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">ID: {dispatchResult.dispatchId}</Badge>
+                          </div>
+                          <p className="text-xs text-emerald-100 italic leading-relaxed">"{dispatchResult.tacticalCommand}"</p>
+                          <div className="grid grid-cols-2 gap-4 pt-2">
+                             <div className="space-y-1">
+                                <p className="text-[8px] text-muted-foreground uppercase font-bold">ETA Arrival</p>
+                                <p className="text-xs text-white font-mono">{dispatchResult.estimatedArrival}</p>
+                             </div>
+                             <div className="space-y-1 text-right">
+                                <p className="text-[8px] text-muted-foreground uppercase font-bold">Sovereign Hash</p>
+                                <p className="text-[10px] text-primary font-mono truncate">{dispatchResult.securityHash}</p>
+                             </div>
+                          </div>
+                       </div>
+                    </CardContent>
+                 </Card>
+              )}
             </div>
 
             <div className="space-y-8">
