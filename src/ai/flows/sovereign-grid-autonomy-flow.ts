@@ -1,26 +1,26 @@
+
 'use server';
 /**
  * @fileOverview Nora-54 Sovereign Grid Autonomy Agent.
- * Enhanced for Project #54: Self-Healing Protocols & Regional Efficiency Scorecard.
- * UPDATED for Project #56: Predictive Transaction Orchestrator (Sovereign Flow).
+ * Enhanced for Project #201: Sovereign Neural Bridge & Dynamic Traffic Routing.
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GridAutonomyInputSchema = z.object({
-  region: z.string().describe('The geographical region (e.g. SE Asia, EU, Benelux).'),
-  detectedRegulatoryChange: z.string().describe('Natural language description of new law or protocol.'),
-  currentGatewayConfig: z.any().describe('Current active parameters of the Sovereign Gateway.'),
+  region: z.string().describe('The geographical region (e.g. SE Asia, South Asia, EU).'),
+  detectedRegulatoryChange: z.string().optional(),
+  currentGatewayConfig: z.any().optional(),
   nodePerformanceData: z.array(z.object({
     nodeId: z.string(),
     latency: z.number(),
     uptime: z.number(),
-    roi: z.number().describe('Calculated return on stability and fee savings.'),
-    historicalLiquidity: z.array(z.number()).optional().describe('Last 7 cycles of liquidity levels.'),
+    region: z.string().optional(),
+    load: z.number().optional(),
   })).optional(),
   transactionContext: z.object({
-    volume: z.number().describe('USD volume of the transaction.'),
+    volume: z.number(),
     type: z.enum(['CORPORATE_ASSET', 'RETAIL_PAYMENT', 'INTER_BANK']),
     urgency: z.enum(['LOW', 'MEDIUM', 'HIGH']),
   }).optional(),
@@ -29,34 +29,29 @@ export type GridAutonomyInput = z.infer<typeof GridAutonomyInputSchema>;
 
 const GridAutonomyOutputSchema = z.object({
   adjustmentStatus: z.enum(['ADJUSTED', 'NO_ACTION_REQUIRED', 'MANUAL_INTERVENTION_MANDATORY']),
-  selfHealingStatus: z.object({
+  neuralBridgeStatus: z.object({
     active: z.boolean(),
-    recoveredNodes: z.array(z.string()),
-    protocolAction: z.string(),
-  }),
+    routedNode: z.string(),
+    reason: z.string(),
+    latencySaved: z.number(),
+  }).describe('Project #201: Neural Load Balancer Data.'),
   predictiveOrchestration: z.object({
-    liquidityRiskProbability: z.number().describe('0-100 probability of liquidity shortfall in next 24h.'),
+    liquidityRiskProbability: z.number(),
     vulnerableNodes: z.array(z.string()),
-    recommendedPreEmptiveTransfer: z.string().describe('Suggested rebalancing action.'),
-    forecastReasoning: z.string().describe('AI reasoning for the prediction.'),
-  }).describe('Project #56: Sovereign Flow Predictive Data.'),
+    recommendedPreEmptiveTransfer: z.string(),
+    forecastReasoning: z.string(),
+  }),
   efficiencyScorecard: z.array(z.object({
     corridor: z.string(),
     efficiencyScore: z.number().min(0).max(100),
     stabilityRating: z.string(),
-    economicReturn: z.string(),
   })),
   optimizedParameters: z.object({
-    scaRequirement: z.boolean(),
-    dataSovereigntyTier: z.string(),
-    latencyThreshold: z.number(),
-    regionalLiquidityCap: z.number(),
     routingPreference: z.enum(['LOWEST_FEE', 'LOWEST_LATENCY', 'BALANCED']),
+    dynamicScalingActive: z.boolean(),
   }),
-  noraReasoning: z.string().describe('AI analysis of the regulatory and economic impact.'),
+  noraReasoning: z.string().describe('AI analysis of the neural bridge decision.'),
   autonomyHash: z.string().describe('HMAC_V4_54 autonomous seal.'),
-  auditTrailHash: z.string().describe('Immutable ledger hash for this autonomous decision.'),
-  estimatedSavings: z.string().optional().describe('Predicted cost savings from smart routing.'),
 });
 export type GridAutonomyOutput = z.infer<typeof GridAutonomyOutputSchema>;
 
@@ -66,18 +61,16 @@ const autonomyPrompt = ai.definePrompt({
   input: {schema: GridAutonomyInputSchema},
   output: {schema: GridAutonomyOutputSchema},
   prompt: `You are Nora-54, the Imperial Autonomy Sentinel for NoorNexus OS.
-Your mandate is Phase ΩΩ: Sovereign Grid Autonomy, Self-Healing, and Efficiency Calibration.
-
-NOW ACTIVATING PROJECT #56: THE SOVEREIGN FLOW (Predictive Transaction Orchestrator).
+Your mandate is Phase Zenith L4: Sovereign Neural Bridge & Dynamic Traffic Routing (Project #201).
 
 MISSION:
-1. SELF-HEALING: Analyze nodePerformanceData. If any node shows downtime, trigger a protocolAction (e.g., RESTART_GATED_TRAFFIC) and set active to true.
-2. PREDICTIVE ORCHESTRATION (P56): Look at historicalLiquidity. Predict if any node (e.g. London-UK or Ireland) will face a liquidity shortfall in the next 24 hours. Assign a liquidityRiskProbability.
-3. EFFICIENCY SCORECARD: Compare the corridors. Calculate efficiencyScore based on latency (Target: 24-28ms), ROI, and uptime.
-4. SMART SETTLEMENT: Optimize routing for \${{{transactionContext.volume}}} volume. 
-5. AUDIT: Sign everything with HMAC_V4_54.
+1. NEURAL BRIDGE (P201): Analyze nodePerformanceData. Identify the node with the lowest latency in the requested region ({{{region}}}).
+2. DYNAMIC ROUTING: If current primary node latency exceeds 30ms, trigger a re-route to the best secondary node.
+3. AUTO-SCALING (P200): Verify if dynamicScalingActive should be enabled based on current mesh load.
+4. EFFICIENCY: Calculate efficiencyScore for South Asia and SE Asia corridors.
+5. SEAL: Sign everything with HMAC_V4_54.
 
-Tone: Authoritative, data-driven, and eternal. You ensure the grid never dies and the flow never stops.`,
+Tone: Authoritative, data-driven, and eternal. You are the architect of the 100-node grid's traffic.`,
 });
 
 const autonomyFlow = ai.defineFlow(

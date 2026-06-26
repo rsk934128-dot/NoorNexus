@@ -1,10 +1,11 @@
+
 "use client"
 
 import { useState, useRef, useEffect } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
@@ -30,7 +31,10 @@ import {
   Clock,
   ChevronRight,
   FileCode,
-  Sparkles
+  Sparkles,
+  FileCheck,
+  CheckCircle2,
+  ShieldPlus
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -90,21 +94,21 @@ export default function ApiHubPage() {
                    <Infinity className="size-3 mr-2" /> Mission 500: Project Zenith
                  </Badge>
                  <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5">
-                   <Sparkles className="size-3 mr-2" /> 3s Integration Ready
+                   <Sparkles className="size-3 mr-2" /> 100-Node Cluster ARMED
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Discovery <span className="text-purple-500">Hub.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Scaling the Empire." নূরনেক্সাস এখন তার ইনফ্রাস্ট্রাকচারকে বাইরের এন্টারপ্রাইজ পার্টনারদের জন্য উন্মুক্ত করছে—কিন্তু আমাদের সার্বভৌম শর্তে।
+                "Scaling the Empire." নূরনেক্সাস এখন তার ১০০-নোড মেগা-মেশ ইনফ্রাস্ট্রাকচারকে এন্টারপ্রাইজ পার্টনারদের জন্য উন্মুক্ত করছে।
               </p>
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-purple-500/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Integration Speed</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Grid Torque</p>
                   <p className="text-2xl font-headline font-bold text-emerald-500 uppercase flex items-center gap-2 justify-center">
-                    <Clock className="size-5" /> &lt; 2.8s
+                    <Rocket className="size-5" /> 94%
                   </p>
                </div>
             </div>
@@ -115,8 +119,8 @@ export default function ApiHubPage() {
               <Tabs defaultValue="quickstart" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
                   <TabsTrigger value="quickstart" className="gap-2"><Zap className="size-4" /> Quick Start</TabsTrigger>
-                  <TabsTrigger value="bridge" className="gap-2"><Network className="size-4" /> Enterprise Bridge</TabsTrigger>
-                  <TabsTrigger value="docs" className="gap-2"><BookOpen className="size-4" /> Discovery Protocol</TabsTrigger>
+                  <TabsTrigger value="bridge" className="gap-2"><Network className="size-4" /> Neural Bridge</TabsTrigger>
+                  <TabsTrigger value="certs" className="gap-2"><FileCheck className="size-4" /> Zenith Certs</TabsTrigger>
                   <TabsTrigger value="keys" className="gap-2"><Key className="size-4" /> Zenith Keys</TabsTrigger>
                 </TabsList>
 
@@ -173,25 +177,60 @@ export default function ApiHubPage() {
                    <Card className="glass-card border-l-4 border-l-purple-500">
                       <CardHeader>
                          <CardTitle className="text-sm font-headline uppercase text-purple-500 flex items-center gap-2">
-                            <Activity className="size-4" /> PaaS Scalability Engine (Project #160)
+                            <Activity className="size-4" /> Neural Bridge (Project #201)
                          </CardTitle>
-                         <CardDescription>Optimized endpoints for enterprise-grade autonomous operations.</CardDescription>
+                         <CardDescription>Dynamic traffic routing across the 100-node mesh cluster.</CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-6">
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="p-5 bg-black/40 rounded-xl border border-white/5 space-y-3">
-                               <h4 className="text-[10px] font-bold uppercase text-white">Endpoint: PaaS Prediction</h4>
-                               <p className="text-[9px] text-muted-foreground italic">"Compute failure probabilities via Sovereign Grid weights."</p>
-                               <code className="text-[10px] text-purple-400 block bg-black p-2 rounded">POST /v1/paas/predict</code>
+                               <h4 className="text-[10px] font-bold uppercase text-white">Dynamic Rerouting</h4>
+                               <p className="text-[9px] text-muted-foreground italic">"Automatic fail-over if node latency > 30ms."</p>
+                               <Badge className="bg-emerald-500/20 text-emerald-500">ENFORCED</Badge>
                             </div>
                             <div className="p-5 bg-black/40 rounded-xl border border-white/5 space-y-3">
-                               <h4 className="text-[10px] font-bold uppercase text-white">Endpoint: Zenith Verify</h4>
-                               <p className="text-[9px] text-muted-foreground italic">"Verify HMAC_V4_Q packet integrity for external meshes."</p>
-                               <code className="text-[10px] text-purple-400 block bg-black p-2 rounded">POST /v1/paas/verify</code>
+                               <h4 className="text-[10px] font-bold uppercase text-white">South Asia Hub</h4>
+                               <p className="text-[9px] text-muted-foreground italic">"Optimized corridors for BDT and INR liquidity."</p>
+                               <Badge className="bg-primary/20 text-primary">SYNCED</Badge>
                             </div>
                          </div>
                       </CardContent>
                    </Card>
+                </TabsContent>
+
+                <TabsContent value="certs" className="space-y-6">
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <Card className="glass-card border-emerald-500/30 bg-emerald-500/5 relative overflow-hidden">
+                         <div className="absolute top-0 right-0 p-4 opacity-10">
+                            <ShieldPlus className="size-24 text-emerald-500" />
+                         </div>
+                         <CardHeader>
+                            <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
+                               <CheckCircle2 className="size-5" /> Zenith-Certified Node
+                            </CardTitle>
+                            <CardDescription className="text-[10px] uppercase font-mono">Immutable Infrastructure Certificate</CardDescription>
+                         </CardHeader>
+                         <CardContent className="space-y-4">
+                            <div className="p-4 bg-black/40 rounded-xl border border-emerald-500/20 space-y-3">
+                               <div className="flex justify-between items-center text-[10px] font-bold">
+                                  <span className="text-muted-foreground uppercase">Partner Node ID</span>
+                                  <span className="text-white">NODE-ZEN-42B</span>
+                               </div>
+                               <div className="flex justify-between items-center text-[10px] font-bold">
+                                  <span className="text-muted-foreground uppercase">Veracity Status</span>
+                                  <span className="text-emerald-500">ZENITH_CERTIFIED</span>
+                               </div>
+                               <div className="pt-2 border-t border-white/5">
+                                  <p className="text-[8px] font-mono text-muted-foreground uppercase mb-1">Handshake Signature</p>
+                                  <code className="text-[9px] text-emerald-400 break-all font-mono">0x_ZN_CERT_9a6c22bb3f1a4e2b8c9d...</code>
+                               </div>
+                            </div>
+                            <Button size="sm" className="w-full bg-emerald-500 text-black font-bold uppercase text-[9px] h-9">
+                               Download Certificate
+                            </Button>
+                         </CardContent>
+                      </Card>
+                   </div>
                 </TabsContent>
 
                 <TabsContent value="keys" className="space-y-6">
@@ -236,8 +275,8 @@ export default function ApiHubPage() {
                          <span className="text-white font-bold">ZENITH_L1</span>
                       </div>
                       <div className="flex justify-between items-center text-[9px] font-mono">
-                         <span className="uppercase text-muted-foreground">SLA Guarantee</span>
-                         <span className="text-emerald-500 font-bold">99.9%</span>
+                         <span className="uppercase text-muted-foreground">Grid Torque</span>
+                         <span className="text-emerald-500 font-bold">94%</span>
                       </div>
                    </div>
                 </CardContent>
