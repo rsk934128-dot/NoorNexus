@@ -1,8 +1,11 @@
-
 'use server';
 /**
  * @fileOverview Nora-03 Imperial Integration & Discovery Assistant.
  * Trained to guide TTPs and broadcast the NoorNexus Discovery Protocol.
+ *
+ * - noraIntegrationAssistant - Main entry function.
+ * - IntegrationAssistantInput - Schema for query and context.
+ * - IntegrationAssistantOutput - Schema for technical guidance.
  */
 
 import {ai} from '@/ai/genkit';
@@ -27,12 +30,12 @@ const IntegrationAssistantOutputSchema = z.object({
 });
 export type IntegrationAssistantOutput = z.infer<typeof IntegrationAssistantOutputSchema>;
 
-const integrationPrompt = ai.definePrompt({
+const prompt = ai.definePrompt({
   name: 'integrationAssistantPrompt',
   model: 'googleai/gemini-1.5-flash',
   input: {schema: IntegrationAssistantInputSchema},
   output: {schema: IntegrationAssistantOutputSchema},
-  prompt: `You are Nora-03, the Imperial Integration Assistant.
+  prompt: `You are Nora-03, the Imperial Integration Assistant for NoorNexus Sovereign OS.
 Your mission is to guide developers into the NoorNexus Mesh and broadcast the Imperial Discovery Protocol.
 
 CURRENT CONTEXT: {{{context}}}
@@ -52,11 +55,22 @@ DEVELOPER QUERY: {{{query}}}
 IMPERIAL MISSION: Mission 400 - Project 160 Discovery Protocol.`,
 });
 
+const integrationFlow = ai.defineFlow(
+  {
+    name: 'integrationFlow',
+    inputSchema: IntegrationAssistantInputSchema,
+    outputSchema: IntegrationAssistantOutputSchema,
+  },
+  async input => {
+    const {output} = await prompt(input);
+    if (!output) throw new Error('Imperial Integration AI: Link failure.');
+    return output;
+  }
+);
+
 export async function noraIntegrationAssistant(input: IntegrationAssistantInput): Promise<IntegrationAssistantOutput> {
   try {
-    const {output} = await integrationPrompt(input);
-    if (!output) throw new Error('Integration AI: Neural link error.');
-    return output;
+    return await integrationFlow(input);
   } catch (error: any) {
     console.error('Nora-03 AI Failure:', error);
     throw new Error(error.message || 'Sovereign Integration Neural Link Error');

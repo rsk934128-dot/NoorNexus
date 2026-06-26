@@ -1,8 +1,11 @@
-
 'use server';
 /**
  * @fileOverview Nora-00-Q Zenith Neural Interface Layer.
  * High-speed query optimizer for aggregating data with Deep Neural Sync across all modules.
+ *
+ * - processNeuralQuery - Main entry for Commander queries.
+ * - ImperialQueryInput - Schema for user query.
+ * - ImperialQueryOutput - Schema for synchronized response.
  */
 
 import {ai} from '@/ai/genkit';
@@ -25,7 +28,7 @@ const ImperialQueryOutputSchema = z.object({
 });
 export type ImperialQueryOutput = z.infer<typeof ImperialQueryOutputSchema>;
 
-const queryPrompt = ai.definePrompt({
+const prompt = ai.definePrompt({
   name: 'imperialQueryPrompt',
   model: 'googleai/gemini-1.5-flash',
   input: {schema: ImperialQueryInputSchema},
@@ -44,11 +47,22 @@ MISSION:
 Tone: Authoritative, wise, and zero-redundancy. Suggest actions that scale the empire.`,
 });
 
+const queryFlow = ai.defineFlow(
+  {
+    name: 'queryFlow',
+    inputSchema: ImperialQueryInputSchema,
+    outputSchema: ImperialQueryOutputSchema,
+  },
+  async input => {
+    const {output} = await prompt(input);
+    if (!output) throw new Error('Imperial Neural Interface: Zenith link timeout.');
+    return output;
+  }
+);
+
 export async function processNeuralQuery(input: ImperialQueryInput): Promise<ImperialQueryOutput> {
   try {
-    const {output} = await queryPrompt(input);
-    if (!output) throw new Error('Neural Interface: Zenith link timeout.');
-    return output;
+    return await queryFlow(input);
   } catch (error: any) {
     console.error('Neural Query Failure:', error);
     throw new Error(error.message || 'Sovereign Zenith Interface Error');

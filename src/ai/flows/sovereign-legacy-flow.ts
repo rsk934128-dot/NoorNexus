@@ -1,12 +1,11 @@
 'use server';
 /**
  * @fileOverview Nora-50 Sovereign Legacy Core.
- * The final milestone of Mission 400. This agent is responsible for
- * autonomous self-optimization and the perpetual evolution of the NoorNexus OS.
- * 
- * - initiateSelfEvolution - Triggers the architectural shift logic.
- * - SovereignLegacyInput - Core integrity metrics.
- * - SovereignLegacyOutput - The evolution path and optimization codes.
+ * The final milestone of Mission 400. Responsible for autonomous self-optimization.
+ *
+ * - initiateSelfEvolution - Main evolution entry.
+ * - SovereignLegacyInput - System health metrics.
+ * - SovereignLegacyOutput - Refactoring and evolution path.
  */
 
 import {ai} from '@/ai/genkit';
@@ -29,7 +28,7 @@ const SovereignLegacyOutputSchema = z.object({
 });
 export type SovereignLegacyOutput = z.infer<typeof SovereignLegacyOutputSchema>;
 
-const legacyPrompt = ai.definePrompt({
+const prompt = ai.definePrompt({
   name: 'sovereignLegacyPrompt',
   model: 'googleai/gemini-1.5-flash',
   input: {schema: SovereignLegacyInputSchema},
@@ -53,11 +52,22 @@ MISSION:
 Execute the Self-Evolution Protocol now.`,
 });
 
+const legacyFlow = ai.defineFlow(
+  {
+    name: 'legacyFlow',
+    inputSchema: SovereignLegacyInputSchema,
+    outputSchema: SovereignLegacyOutputSchema,
+  },
+  async input => {
+    const {output} = await prompt(input);
+    if (!output) throw new Error('Legacy Core AI: Link failure.');
+    return output;
+  }
+);
+
 export async function initiateSelfEvolution(input: SovereignLegacyInput): Promise<SovereignLegacyOutput> {
   try {
-    const {output} = await legacyPrompt(input);
-    if (!output) throw new Error('Legacy Core: Neural link for immortality failed.');
-    return output;
+    return await legacyFlow(input);
   } catch (error: any) {
     console.error('Nora-50 Legacy Failure:', error);
     throw new Error(error.message || 'Sovereign Legacy Handshake Error');
