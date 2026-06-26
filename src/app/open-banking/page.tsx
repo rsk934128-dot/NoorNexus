@@ -33,7 +33,9 @@ import {
   Network,
   ArrowRight,
   LayoutGrid,
-  Monitor
+  Monitor,
+  Building2,
+  CheckCircle2
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
@@ -62,8 +64,15 @@ const GLOBAL_LEADERS = [
     }
   },
   { name: "Plaid", hq: "USA", banks: "9,706", countries: "60", tag: "Global Alpha", url: "https://plaid.com/" },
-  { name: "Lunch Flow", hq: "EU", banks: "2,400", countries: "60", tag: "EU Leader", url: "https://lunchflow.com/" },
+  { name: "SIBS Network", hq: "Portugal", banks: "24+", countries: "EU", tag: "SEPA Specialist", url: "https://developer.sibsapimarket.com/live/product" },
   { name: "GoCardless", hq: "UK", banks: "2,228", countries: "54", tag: "PIS Expert", url: "https://gocardless.com/" },
+]
+
+const SIBS_INSTITUTIONS = [
+  { name: "Millennium BCP", code: "BCPPT", type: "Full Support" },
+  { name: "Caixa Geral de Depósitos", code: "CGDPT", type: "Bulk/Inst Support" },
+  { name: "Santander Totta", code: "BST", type: "Cross Border" },
+  { name: "Novo Banco", code: "NVB", type: "Periodic Support" }
 ]
 
 export default function OpenBankingHubPage() {
@@ -144,7 +153,7 @@ export default function OpenBankingHubPage() {
                   Banking <span className="text-primary">Infrastructure.</span>
                 </h2>
                 <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                  Mission 400: Universal Banking Connect. Optimized by **Nora-50 Intelligent Orchestrator** with Hybrid Fallback Support.
+                  Mission 400: Universal Banking Connect. Optimized by **Nora-50 Intelligent Orchestrator** with SIBS Network Integration.
                 </p>
               </div>
               <div className="flex gap-4">
@@ -192,6 +201,44 @@ export default function OpenBankingHubPage() {
                         </Card>
                       ))}
                    </div>
+                </section>
+
+                {/* SIBS Ecosystem Section */}
+                <section className="space-y-6">
+                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                      <Building2 className="size-4" /> SIBS Network Ecosystem (Portugal)
+                   </h3>
+                   <Card className="glass-card border-l-4 border-l-primary bg-primary/5 overflow-hidden">
+                      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                         <div className="space-y-4">
+                            <CardTitle className="text-sm font-headline uppercase text-white">Supported Capabilities</CardTitle>
+                            <div className="grid grid-cols-2 gap-3">
+                               {[
+                                 { label: "SEPA CT", status: "YES" },
+                                 { label: "SCT Inst", status: "YES" },
+                                 { label: "Periodic", status: "YES" },
+                                 { label: "Bulk Pay", status: "YES" }
+                               ].map((cap, i) => (
+                                 <div key={i} className="p-2 bg-black/40 rounded border border-white/5 flex justify-between items-center">
+                                    <span className="text-[10px] text-muted-foreground font-bold">{cap.label}</span>
+                                    <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">{cap.status}</Badge>
+                                 </div>
+                               ))}
+                            </div>
+                         </div>
+                         <div className="space-y-4">
+                            <CardTitle className="text-sm font-headline uppercase text-white">Validated ASPSPs</CardTitle>
+                            <div className="space-y-2">
+                               {SIBS_INSTITUTIONS.map((inst, i) => (
+                                 <div key={i} className="flex justify-between items-center text-[10px] font-mono border-b border-white/5 pb-1">
+                                    <span className="text-white">{inst.name}</span>
+                                    <span className="text-primary">{inst.type}</span>
+                                 </div>
+                               ))}
+                            </div>
+                         </div>
+                      </div>
+                   </Card>
                 </section>
 
                 {/* Integration Pathways Section */}

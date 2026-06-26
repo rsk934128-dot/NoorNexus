@@ -32,7 +32,9 @@ import {
   Palette,
   CheckCircle2,
   ShieldAlert,
-  Loader2
+  Loader2,
+  FileCheck,
+  Key
 } from "lucide-react"
 
 const BLUEPRINT_STEPS = [
@@ -41,6 +43,7 @@ const BLUEPRINT_STEPS = [
   { id: "P51.3", label: "Open Banking Rail Sync", icon: Landmark, status: "SYNCED" },
   { id: "P51.4", label: "Intelligent Fallback Engine", icon: Zap, status: "HARDENED" },
   { id: "P51.5", label: "White-label Studio", icon: Palette, status: "READY" },
+  { id: "P51.6", label: "eIDAS Certificate Vault", icon: Key, status: "IN_DEV" },
 ]
 
 export default function SovereignGatewayPage() {
@@ -74,7 +77,7 @@ export default function SovereignGatewayPage() {
                 Global <span className="text-purple-500">Gateway.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project #51: The culmination of Mission 400. A unified PaaS gateway with Hybrid Fallback, White-labeling, and real-time PSD2/SCA Compliance.
+                Project #51: The culmination of Mission 400. A unified PaaS gateway with SIBS Network support and eIDAS Certificate management.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -146,6 +149,39 @@ export default function SovereignGatewayPage() {
                  </Card>
               </section>
 
+              {/* Certificate Management Section */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                    <Key className="size-4" /> eIDAS Certificate Vault (P51.6)
+                 </h3>
+                 <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                    <CardHeader>
+                       <CardTitle className="text-sm font-headline text-white uppercase">Secure Identity Management</CardTitle>
+                       <CardDescription>Automated lifecycle for QWAC and QSealC certificates required for EU Open Banking.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="p-4 bg-black/40 rounded border border-white/5 space-y-3">
+                             <h4 className="text-[10px] font-bold text-primary uppercase tracking-widest">Transport Certificate</h4>
+                             <p className="text-[9px] text-muted-foreground italic">"Used for establishing secure mTLS connections with SIBS ASPSPs."</p>
+                             <div className="flex justify-between items-center">
+                                <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">SYNCED</Badge>
+                                <span className="text-[8px] font-mono text-muted-foreground">Expires in 242 days</span>
+                             </div>
+                          </div>
+                          <div className="p-4 bg-black/40 rounded border border-white/5 space-y-3">
+                             <h4 className="text-[10px] font-bold text-primary uppercase tracking-widest">Signing Certificate</h4>
+                             <p className="text-[9px] text-muted-foreground italic">"Ensures non-repudiation and integrity for SEPA CT / Instant payments."</p>
+                             <div className="flex justify-between items-center">
+                                <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">SYNCED</Badge>
+                                <span className="text-[8px] font-mono text-muted-foreground">Expires in 180 days</span>
+                             </div>
+                          </div>
+                       </div>
+                    </CardContent>
+                 </Card>
+              </section>
+
               {/* Architecture Blueprint */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
@@ -169,40 +205,6 @@ export default function SovereignGatewayPage() {
                       </Card>
                     ))}
                  </div>
-              </section>
-
-              {/* Hybrid Fallback Demo */}
-              <section className="space-y-6">
-                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                    <Code2 className="size-4" /> Intelligent Fallback Logic
-                 </h3>
-                 <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                    <CardHeader>
-                       <CardTitle className="text-sm font-headline text-white uppercase">Sovereign Fallback Protocol</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                       <pre className="bg-black/60 p-6 rounded-xl font-mono text-[11px] text-emerald-400 leading-relaxed overflow-x-auto border border-white/5">
-{`// Project #51: The Resiliency Fallback
-async function executeResilientSettlement(payout) {
-  try {
-    // Stage 1: Attempt Direct API (Plaid/Yapily)
-    return await gateway.directPay(payout);
-  } catch (error) {
-    console.warn("Direct API Drift: Redirecting to Hosted Flow...");
-    
-    // Stage 2: Automatic Fallback to Hosted Redirect
-    const fallbackUrl = await gateway.createHostedSession({
-      amount: payout.amount,
-      fallbackReason: error.code,
-      whiteLabel: partner_config.branding
-    });
-    
-    return { status: 'FALLBACK_REDIRECT', url: fallbackUrl };
-  }
-}`}
-                       </pre>
-                    </CardContent>
-                 </Card>
               </section>
             </div>
 
