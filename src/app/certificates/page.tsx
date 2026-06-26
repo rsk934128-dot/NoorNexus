@@ -31,7 +31,8 @@ import {
   ArrowRight,
   FileKey,
   Fingerprint,
-  BarChart3
+  BarChart3,
+  Landmark
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
@@ -58,7 +59,8 @@ export default function CertificateVaultPage() {
   const certificates = [
     { name: "ABN AMRO BE Corporate", type: "QSealC", scope: "AIS_PIS", status: "VALID", expiry: "2027-12-30", renewal: "AUTOMATED", tenant: "TENANT_01" },
     { name: "SIBS Portugal Portal", type: "QWAC", scope: "AIS", status: "VALID", expiry: "2026-05-15", renewal: "MANUAL", tenant: "TENANT_01" },
-    { name: "Imperial Edge Node", type: "OBIE", scope: "PIS", status: "VALID", expiry: "2027-01-10", renewal: "AUTOMATED", tenant: "TENANT_02" }
+    { name: "Imperial Edge Node", type: "OBIE", scope: "PIS", status: "VALID", expiry: "2027-01-10", renewal: "AUTOMATED", tenant: "TENANT_02" },
+    { name: "AIB Ireland Business Hub", type: "EIDAS_QSEALC", scope: "AIS_PIS", status: "VALID", expiry: "2028-06-20", renewal: "AUTOMATED", tenant: "TENANT_03" }
   ]
 
   const filteredCerts = useMemo(() => {
@@ -87,7 +89,7 @@ export default function CertificateVaultPage() {
 
       toast({
         title: "Credential Anchored",
-        description: `Successfully isolated for ${activeTenant}.`,
+        description: `Successfully isolated for ${activeTenant}. Project #55.5 sync active.`,
         className: "border-emerald-500/50 bg-emerald-500/5"
       })
 
@@ -119,17 +121,17 @@ export default function CertificateVaultPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <Lock className="size-3 mr-2" /> P51.6: Multi-Tenant Credential Vault
+                   <Lock className="size-3 mr-2" /> P51.6: Multi-Tenant Vault
                  </Badge>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <ShieldPlus className="size-3 mr-2" /> Tenant Isolation: ACTIVE
+                   <Landmark className="size-3 mr-2" /> Irish Corridor (P55.5): ACTIVE
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Imperial <span className="text-primary">Vault.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Mission 400: Sovereign Credential Mesh. Securely managing eIDAS and OBIE credentials with 100% tenant-scoped data isolation and autonomous renewal.
+                Mission 400: Sovereign Credential Mesh. Securely managing eIDAS, OBIE, and Irish Banking credentials with 100% tenant-scoped data isolation and Nora-52 compliance audit.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -153,8 +155,8 @@ export default function CertificateVaultPage() {
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
                       { label: "Valid Handshakes", val: "99.9%", icon: ShieldCheck, color: "text-emerald-500" },
-                      { label: "PIS/AIS Scope Sync", val: "ACTIVE", icon: Globe, color: "text-blue-500" },
-                      { label: "Renewal Pipeline", val: "2 Pending", icon: RefreshCcw, color: "text-amber-500" }
+                      { label: "Irish Corridor Sync", val: "100%", icon: Landmark, color: "text-blue-500" },
+                      { label: "Renewal Pipeline", val: "3 Pending", icon: RefreshCcw, color: "text-amber-500" }
                     ].map((a, i) => (
                       <Card key={i} className="glass-card border-white/5 bg-white/2">
                         <CardContent className="p-6 space-y-3">
@@ -177,7 +179,7 @@ export default function CertificateVaultPage() {
                  <Card className="glass-card border-l-4 border-l-primary">
                     <CardHeader>
                        <CardTitle className="text-sm font-headline uppercase text-white">Credential Payload</CardTitle>
-                       <CardDescription>Upload files for Tenant: {activeTenant}. Data is quantum-anchored to Project #55.</CardDescription>
+                       <CardDescription>Upload files for Tenant: {activeTenant}. Data is quantum-anchored to Project #55.5.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -191,6 +193,7 @@ export default function CertificateVaultPage() {
                                    <SelectItem value="EIDAS_QSEALC">eIDAS QSealC (Signing)</SelectItem>
                                    <SelectItem value="EIDAS_QWAC">eIDAS QWAC (Transport)</SelectItem>
                                    <SelectItem value="OBIE_SIGNING">OBIE Signing</SelectItem>
+                                   <SelectItem value="IRISH_CORP_EIDAS">Irish Corp eIDAS</SelectItem>
                                 </SelectContent>
                              </Select>
                           </div>
@@ -236,7 +239,7 @@ export default function CertificateVaultPage() {
                          className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary"
                        >
                           {loading ? <Loader2 className="size-5 animate-spin mr-2" /> : <ShieldCheck className="size-5 mr-2" />}
-                          Anchor to Tenant Vault
+                          Anchor to Tenant Vault (P55.5)
                        </Button>
                     </CardContent>
                  </Card>
@@ -307,13 +310,13 @@ export default function CertificateVaultPage() {
               <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                    <AlertTriangle className="size-4" /> Expiry Sentinel v3.4
+                    <AlertTriangle className="size-4" /> Expiry Sentinel v3.5
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="p-3 bg-black/40 rounded border border-white/5 space-y-2">
                      <p className="text-[9px] text-muted-foreground uppercase font-bold">Renewal Policy</p>
-                     <p className="text-[10px] text-white italic">"Auto-trigger CSR workflow 30 days before expiration."</p>
+                     <p className="text-[10px] text-white italic">"Auto-trigger CSR workflow 30 days before expiration for all 16 nodes."</p>
                   </div>
                   <div className="pt-2">
                      <Badge variant="outline" className="w-full justify-center h-8 border-emerald-500/30 text-emerald-500 uppercase text-[9px] font-bold">WORKFLOW_ARMED</Badge>
@@ -321,7 +324,7 @@ export default function CertificateVaultPage() {
                 </CardContent>
               </Card>
 
-              {/* Project #55 Synergy */}
+              {/* Project #55.5 Synergy */}
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                  <CardHeader>
                     <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
@@ -330,10 +333,10 @@ export default function CertificateVaultPage() {
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                       "Every isolated credential is quantum-anchored to the Sovereign Vault (Project #55) with tenant-scoped private keys."
+                       "Every isolated credential is quantum-anchored to the Sovereign Vault (Project #55.5) with Irish regulatory oversight."
                     </p>
                     <div className="flex justify-between items-center text-[9px] font-mono border-t border-white/5 pt-4">
-                       <span className="uppercase">Deep-Storage Sync</span>
+                       <span className="uppercase">Irish Grid Sync</span>
                        <span className="text-emerald-500 font-bold">100%</span>
                     </div>
                  </CardContent>
@@ -352,6 +355,7 @@ export default function CertificateVaultPage() {
                        <SelectContent>
                           <SelectItem value="TENANT_01">Partner: ABN AMRO</SelectItem>
                           <SelectItem value="TENANT_02">Partner: SIBS Hub</SelectItem>
+                          <SelectItem value="TENANT_03">Partner: AIB Ireland</SelectItem>
                        </SelectContent>
                     </Select>
                  </CardContent>

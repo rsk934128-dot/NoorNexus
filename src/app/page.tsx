@@ -38,7 +38,9 @@ import {
   Lock,
   Award,
   Atom,
-  Flame
+  Flame,
+  LayoutGrid,
+  Map
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -59,15 +61,24 @@ export default function Home() {
   const [impactFeed, setImpactFeed] = useState<string[]>([
     "FORTRESS: Official App ID a085f8... secured (Zenith Status: VERIFIED).",
     "GRID: 16 LIVE Nodes synchronized (Optimal Torque).",
-    "VAULT: Project #55 Premium Data Anchoring active.",
+    "LIQUIDITY: Inter-node balancing active (AIB-IE <-> ABN-BE).",
+    "VAULT: Project #55.5 Irish Corridor anchoring active.",
     "AUTONOMY: Self-Healing Protocol #54.2 ARMED.",
     "SCORECARD: Benelux efficiency lead confirmed (+4.2%).",
-    "RESILIENCE: Fail-over Global Grid protocol SYNCED.",
     "SHIELD: Quantum-Resistant Encryption Layer active."
   ])
   const [queryText, setQueryText] = useState("")
   const [queryResult, setQueryResult] = useState<ImperialQueryOutput | null>(null)
   const [queryLoading, setQueryLoading] = useState(false)
+
+  // Simulation for 16 Nodes Heatmap
+  const [nodes, setNodes] = useState(Array.from({ length: 16 }).map((_, i) => ({
+    id: i + 1,
+    name: `Node-${i + 1}`,
+    latency: Math.floor(Math.random() * 20) + 20,
+    load: Math.floor(Math.random() * 40) + 30,
+    status: 'OPTIMAL'
+  })))
 
   useEffect(() => {
     const sequence = [
@@ -85,14 +96,19 @@ export default function Home() {
     })
 
     const interval = setInterval(() => {
+      setNodes(prev => prev.map(n => ({
+        ...n,
+        latency: Math.floor(Math.random() * 30) + 20,
+        load: Math.floor(Math.random() * 50) + 20
+      })))
+      
       const logs = [
-        "SELF_HEAL: Re-routing traffic from London-Edge to Spain-Core.",
-        "VAULT: Premium HNW payload anchored to Cold Storage Node 1.",
-        "BALANCER: Power 100/100 across 16 active nodes.",
+        "BALANCER: Shifting $420K from ABN-BE to AIB-IE for liquidity sync.",
+        "VAULT: Irish Corridor HNW data anchored (P55.5).",
+        "HEATMAP: London-Edge latency spike detected and bypassed.",
         "AUTONOMY: Nora-54 recalibrating efficiency index.",
-        "LEGACY: Self-Evolution cycle Ω-05 complete.",
-        "ZENITH: App ID a085f8... integrity verified by Nora-52.",
-        "NODE: AIB Ireland Business LIVE activation confirmed."
+        "LEGACY: Self-Evolution cycle Ω-06 complete.",
+        "ZENITH: Global Grid Veracity confirmed at 99.99%."
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 5000)
@@ -145,24 +161,24 @@ export default function Home() {
                       <Infinity className="size-3 mr-2" /> Phase ΩΩ: Global Autonomy
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <ShieldCheck className="size-3 mr-2" /> Fortress Protocol Active
+                      <ShieldCheck className="size-3 mr-2" /> 16 LIVE Nodes Verified
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
                    {isAdmin ? 'Imperial Fortress.' : 'Global Grid.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "Mission 400: The Final Synthesis." নূরনেক্সাস এখন একটি অপরাজেয় ফিনটেক দুর্গ। আমাদের স্নায়ুতন্ত্র এখন ১৬টি লাইভ নোড এবং জেনিথ-লেভেল সিকিউরিটির মাধ্যমে সুরক্ষিত।
+                   "Mission 400: The Economic Nervous System." নূরনেক্সাস এখন ১৬টি লাইভ নোড এবং জেনিথ-লেভেল সিকিউরিটির মাধ্যমে সুরক্ষিত। ইন্টার-নোড লিকুইডিটি ব্যালেন্সিং এবং গ্লোবাল হিটম্যাপ এখন সক্রিয়।
                 </p>
               </div>
               
               <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
                 <Card className="glass-card p-6 rounded-2xl border border-emerald-500/20 w-full min-w-[350px] relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-2">
-                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">FORTRESS_POWER: MAX</Badge>
+                       <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">LIQUIDITY_SYNC: ARMED</Badge>
                     </div>
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Fortress Integrity</p>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Grid Stability Index</p>
                     </div>
                     <div className="flex items-end gap-2 mb-4">
                        <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">100</p>
@@ -171,7 +187,7 @@ export default function Home() {
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                        <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '100%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"16 LIVE Nodes | Zenith Monitoring | Quantum Anchored (P55)"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"16 LIVE Nodes | Zenith Efficiency | Inter-Node Balancing Active"</p>
                 </Card>
               </div>
             </div>
@@ -186,7 +202,7 @@ export default function Home() {
                            value={queryText}
                            onChange={e => setQueryText(e.target.value)}
                            onKeyDown={e => e.key === 'Enter' && handleNeuralQuery()}
-                           placeholder="Commander, what is your directive? (Fortress Logic Active)"
+                           placeholder="Commander, what is your directive? (Inter-Node Balancer Active)"
                            className="flex-1 bg-transparent border-none outline-none text-sm font-headline text-white placeholder:text-muted-foreground"
                         />
                         <Button onClick={handleNeuralQuery} disabled={queryLoading} variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
@@ -219,60 +235,96 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
-               {/* Efficiency Scorecard Summary */}
-               <section className="space-y-6">
-                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                     <Award className="size-4" /> Global Grid Scorecard (16 LIVE Nodes)
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                     {[
-                        { corridor: "BENELUX (ELITE)", efficiency: 96.4, status: "OPTIMAL", color: "text-emerald-400" },
-                        { corridor: "IBERIAN (BRIDGE)", efficiency: 91.2, status: "STABLE", color: "text-blue-400" },
-                        { corridor: "ASIAN (SCALING)", efficiency: 84.5, status: "BOOTING", color: "text-amber-400" }
-                     ].map((s, i) => (
-                        <Card key={i} className="glass-card border-white/5 bg-white/2">
-                           <CardContent className="p-6 space-y-3">
-                              <div className="flex justify-between items-center">
-                                 <p className="text-xs font-bold text-white uppercase">{s.corridor}</p>
-                                 <Badge variant="outline" className={`text-[7px] border-none ${s.color} bg-white/5`}>{s.status}</Badge>
-                              </div>
-                              <p className="text-3xl font-headline font-bold text-white">{s.efficiency}%</p>
-                              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                                 <div className={`h-full bg-primary`} style={{ width: `${s.efficiency}%` }} />
-                              </div>
-                           </CardContent>
-                        </Card>
-                     ))}
-                  </div>
-               </section>
-
+               
+               {/* Global Latency Heatmap (16 Nodes) */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
-                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                        <Rocket className="size-4" /> Sovereign Vault Pulse (P55)
-                     </h3>
-                     <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase">Encryption Status: SHA-512 ACTIVE</Badge>
+                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                       <Map className="size-4" /> Global Node Latency Heatmap (16 LIVE Nodes)
+                    </h3>
+                    <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">REAL-TIME MONITORING</Badge>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                     {[
-                        { title: "Cold Storage", desc: "Data invisible to mesh traffic.", status: "ANCHORED", icon: Lock },
-                        { title: "Air-Gapped Sync", desc: "Key rotation every 60s.", status: "SAFE", icon: ShieldPlus },
-                        { title: "Quantum Shield", desc: "Project #49 synergy enabled.", status: "MAX", icon: Atom }
-                     ].map((p, i) => (
-                        <Card key={i} className="glass-card border-white/5 bg-white/2">
-                           <CardContent className="p-6 space-y-4">
-                              <div className="flex items-center gap-3">
-                                 <p.icon className="size-5 text-primary" />
-                                 <h4 className="text-sm font-headline font-bold text-white uppercase">{p.title}</h4>
+                  <Card className="glass-card p-6 bg-black/40 border-white/5 relative overflow-hidden">
+                     <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
+                        {nodes.map((node) => (
+                          <div key={node.id} className="space-y-1 group relative">
+                             <div 
+                                className={`aspect-square rounded-lg border flex flex-col items-center justify-center transition-all duration-500 ${node.latency > 45 ? 'bg-amber-500/20 border-amber-500/40' : 'bg-emerald-500/20 border-emerald-500/40'} hover:scale-105 cursor-help`}
+                             >
+                                <p className="text-[8px] font-bold text-white mb-1">N-{node.id}</p>
+                                <p className="text-[10px] font-headline font-bold text-white">{node.latency}ms</p>
+                             </div>
+                             {/* Tooltip on hover */}
+                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-24 p-2 bg-black border border-white/10 rounded text-[7px] opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
+                                <p className="text-white font-bold uppercase mb-1">Node Details</p>
+                                <p className="text-muted-foreground">Load: {node.load}%</p>
+                                <p className="text-muted-foreground">Status: {node.status}</p>
+                             </div>
+                          </div>
+                        ))}
+                     </div>
+                     <div className="mt-6 flex justify-between items-center text-[8px] font-mono text-muted-foreground uppercase">
+                        <div className="flex items-center gap-4">
+                           <div className="flex items-center gap-1.5">
+                              <div className="size-2 rounded bg-emerald-500/40 border border-emerald-500/60" />
+                              <span>Optimal (&lt;35ms)</span>
+                           </div>
+                           <div className="flex items-center gap-1.5">
+                              <div className="size-2 rounded bg-amber-500/40 border border-amber-500/60" />
+                              <span>Normal (35-60ms)</span>
+                           </div>
+                           <div className="flex items-center gap-1.5">
+                              <div className="size-2 rounded bg-destructive/40 border border-destructive/60" />
+                              <span>Delayed (&gt;60ms)</span>
+                           </div>
+                        </div>
+                        <p>Total Grid Torque: 96.4%</p>
+                     </div>
+                  </Card>
+               </section>
+
+               {/* Inter-Node Liquidity Balancing Pannel */}
+               <section className="space-y-6">
+                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                     <ArrowRightLeft className="size-4" /> Inter-Node Liquidity Balancing
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+                        <CardHeader>
+                           <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
+                              <Activity className="size-4 text-primary" /> Balancer Efficiency: 99.2%
+                           </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           <div className="p-3 bg-black/40 rounded border border-white/5 space-y-2">
+                              <div className="flex justify-between text-[8px] font-bold uppercase">
+                                 <span className="text-muted-foreground">Global Reserve Coverage</span>
+                                 <span className="text-emerald-500">245%</span>
                               </div>
-                              <p className="text-[10px] text-muted-foreground">{p.desc}</p>
-                              <div className="pt-2 flex justify-between items-end border-t border-white/5">
-                                 <span className="text-[8px] text-muted-foreground uppercase font-bold">Status</span>
-                                 <span className={`text-xs font-headline font-bold text-emerald-500`}>{p.status}</span>
+                              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                                 <div className="h-full bg-emerald-500" style={{ width: '92%' }} />
                               </div>
-                           </CardContent>
-                        </Card>
-                     ))}
+                           </div>
+                           <p className="text-[10px] text-muted-foreground italic">"Automatic fund shifting is active between AIB-Ireland and ABN-Benelux to maintain 100% settlement uptime."</p>
+                        </CardContent>
+                     </Card>
+
+                     <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                        <CardHeader>
+                           <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
+                              <Rocket className="size-4 text-emerald-500" /> Irish Corridor Anchor (P55.5)
+                           </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           <div className="flex justify-between items-center text-[10px] font-bold uppercase">
+                              <span className="text-muted-foreground">Irish Data Sovereignty</span>
+                              <Badge className="bg-emerald-500/20 text-emerald-500 border-none">VAULTED</Badge>
+                           </div>
+                           <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                              "Nora-52 has verified all AIB Ireland Business transactions against the Irish Banking framework. 100% compliance recorded."
+                           </p>
+                        </CardContent>
+                     </Card>
                   </div>
                </section>
             </div>
@@ -290,7 +342,7 @@ export default function Home() {
                     <div className="space-y-4">
                       {impactFeed.map((log, i) => (
                         <div key={i} className="p-3 bg-white/2 rounded-xl border border-white/5 font-mono text-[10px] flex items-center gap-3 animate-in fade-in slide-in-from-right-2 duration-500">
-                          <div className="size-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                          <div className={`size-1.5 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)] ${log.includes('BALANCER') ? 'bg-primary' : 'bg-emerald-500'}`} />
                           <span className="text-muted-foreground truncate">{log}</span>
                         </div>
                       ))}
@@ -308,7 +360,7 @@ export default function Home() {
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Every corporate settlement is routed via the Smart Engine. If a node drifts, the Self-Healing Protocol #54.2 initiates recovery in &lt; 120ms."
+                       "Automatic traffic rerouting is now monitoring the Irish Corridor. Failures trigger immediate bypass via Benelux Grid."
                     </p>
                     <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Status: IMMUNE</Badge>
                  </CardContent>
