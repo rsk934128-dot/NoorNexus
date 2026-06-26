@@ -50,7 +50,8 @@ import {
   Truck,
   Link2,
   LockKeyhole,
-  Infinity
+  Infinity,
+  Merge
 } from "lucide-react"
 
 import {
@@ -87,6 +88,7 @@ const USER_ITEMS = [
   { title: "Partnership Kit", url: "/docs", icon: Briefcase },
   { title: "Imperial Portfolio", url: "/portfolio", icon: Star },
   { title: "Imperial Flow Pay", url: "/flow-pay", icon: Zap },
+  { title: "Fintech Fusion", url: "/fintech-fusion", icon: Merge },
   { title: "Imperial Exchange", url: "/exchange-hub", icon: CandlestickChart },
   { title: "GSMIFY Web3", url: "/gsmify-web3", icon: ShieldPlus },
   { title: "Imperial Export Hub", url: "/export-hub", icon: FileOutput },
