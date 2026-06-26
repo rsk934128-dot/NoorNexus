@@ -33,7 +33,8 @@ import {
   Radio,
   Fingerprint,
   TrendingUp,
-  Landmark
+  Landmark,
+  FileText
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -41,6 +42,7 @@ import { useUser } from "@/firebase"
 import { SovereignLogo } from "@/components/sovereign-logo"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { processNeuralQuery, ImperialQueryOutput } from "@/ai/flows/imperial-query-flow"
+import Link from "next/link"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
@@ -167,7 +169,6 @@ export default function Home() {
                   <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
                     {isAdmin ? 'Imperial Fortress.' : 'Global Grid.'}
                   </h2>
-                  {/* THE GOLDEN SYNC CIRCLE - NEW */}
                   <div className="hidden sm:flex flex-col items-center justify-center p-1 bg-amber-500/20 rounded-full border border-amber-500/40 glow-emerald animate-pulse-slow">
                     <div className="size-14 rounded-full border-4 border-amber-500 flex items-center justify-center relative bg-black">
                        <Sparkles className="size-6 text-amber-500 animate-spin-slow" />
@@ -197,10 +198,14 @@ export default function Home() {
                     </div>
                     <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Project #56: Sovereign Flow Verified | 20/20 Nodes Operational"</p>
                 </Card>
+                <Link href="/proposal" className="w-full">
+                  <Button className="w-full bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-primary">
+                    <FileText className="size-4" /> Get Imperial Proposal
+                  </Button>
+                </Link>
               </div>
             </div>
 
-            {/* Final Synthesis Report Panel */}
             <div className="w-full">
               <Card className="glass-card border-emerald-500/40 bg-emerald-500/5 relative overflow-hidden">
                  <div className="absolute top-0 right-0 p-4 opacity-10">
@@ -210,7 +215,7 @@ export default function Home() {
                     <div className="space-y-1">
                        <CardTitle className="text-lg font-headline font-bold text-emerald-500 uppercase flex items-center gap-2">
                           <CheckCircle2 className="size-5" /> Mission 400: Global Handshake Verified
-                       </CheckTitle>
+                       </CardTitle>
                        <CardDescription className="text-[10px] text-emerald-100 uppercase tracking-widest">Zenith Status: VERIFIED | Latency: 26ms</CardDescription>
                     </div>
                     <div className="flex items-center gap-4">
@@ -235,7 +240,6 @@ export default function Home() {
               </Card>
             </div>
 
-            {/* Neural Interface Layer */}
             <div className="w-full">
                <Card className="glass-card border-primary/20 overflow-hidden bg-primary/5">
                   <CardContent className="p-0">
@@ -279,7 +283,6 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
-               {/* Global Latency Heatmap (20 Nodes) */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
@@ -329,7 +332,6 @@ export default function Home() {
                   </Card>
                </section>
 
-               {/* Inter-Node Liquidity Balancing Panel */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                      <ArrowRightLeft className="size-4" /> Inter-Node Liquidity Balancing (P56)

@@ -58,7 +58,8 @@ import {
   Network,
   Lock,
   EyeOff,
-  Compass as Discovery
+  Compass as Discovery,
+  FileText
 } from "lucide-react"
 
 import {
@@ -88,6 +89,7 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
+  { title: "Imperial Proposal", url: "/proposal", icon: FileText, highlight: true },
   { title: "Discovery Hub", url: "/api-hub", icon: Discovery, zenith: true },
   { title: "Sovereign Gateway (P51)", url: "/sovereign-gateway", icon: Rocket, zenith: true },
   { title: "Enterprise Settings", url: "/enterprise-settings", icon: Settings, highlight: true },
