@@ -74,6 +74,7 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
+  { title: "Open Banking Hub", url: "/open-banking", icon: Landmark },
   { title: "Builders Program", url: "/api-hub", icon: Rocket },
   { title: "Partnership Kit", url: "/docs", icon: Briefcase },
   { title: "Imperial Portfolio", url: "/portfolio", icon: Star },
