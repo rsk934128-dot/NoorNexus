@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -53,7 +52,8 @@ import {
   LockKeyhole,
   Infinity,
   Merge,
-  CreditCard
+  CreditCard,
+  Key
 } from "lucide-react"
 
 import {
@@ -83,6 +83,7 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
+  { title: "AMEX Token Hub", url: "/amex-tokens", icon: Key },
   { title: "AMEX Virtual Cards", url: "/amex-on-demand", icon: CreditCard },
   { title: "Enterprise Bridge", url: "/api-hub", icon: Link2, zenith: true },
   { title: "Open Banking Hub", url: "/open-banking", icon: Landmark },
@@ -170,7 +171,7 @@ export function AppSidebar() {
   }
 
   return (
-    <Sidebar className="border-r border-white/5 bg-card/80 backdrop-blur-xl">
+    <Sidebar className="border-r border-white/5 bg-sidebar text-sidebar-foreground">
       <SidebarHeader className="p-4 flex flex-row items-center justify-between">
         <div className="flex items-center gap-3">
           <SovereignLogo size={36} className="shrink-0" />

@@ -25,3 +25,4 @@ import '@/ai/flows/alert-dispatcher-flow.ts';
 import '@/ai/flows/imperial-query-flow.ts';
 import '@/ai/flows/sovereign-legacy-flow.ts';
 import '@/ai/flows/amex-on-demand-flow.ts';
+import '@/ai/flows/amex-token-strategy-flow.ts';
