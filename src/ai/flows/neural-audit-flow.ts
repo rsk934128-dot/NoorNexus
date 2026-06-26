@@ -2,7 +2,7 @@
 /**
  * @fileOverview Nora-52 Neural Audit & Compliance Agent.
  * Performs real-time auditing of banking nodes against global regulatory standards (PSD2, GDPR).
- * Updated for Zenith Level Enterprise App ID monitoring.
+ * Updated for Zenith Level Enterprise App ID monitoring and Live Pulse Testing.
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
@@ -15,6 +15,7 @@ const NeuralAuditInputSchema = z.object({
   region: z.string().describe('Regulatory jurisdiction (e.g. EU, UK, US).'),
   lastTransactionHash: z.string().optional(),
   consentStatus: z.string().describe('Current user consent metadata.'),
+  pulseMode: z.boolean().optional().describe('Whether this is a live connectivity pulse test.'),
 });
 export type NeuralAuditInput = z.infer<typeof NeuralAuditInputSchema>;
 
@@ -29,6 +30,7 @@ const NeuralAuditOutputSchema = z.object({
   tacticalAction: z.string().describe('AI recommendation for node maintenance.'),
   auditSignature: z.string().describe('HMAC_V4 signed audit certificate.'),
   zenithStatus: z.string().optional().describe('Zenith Level traceability status for the App ID.'),
+  pulseSuccess: z.boolean().optional().describe('Verification of live connectivity pulse.'),
 });
 export type NeuralAuditOutput = z.infer<typeof NeuralAuditOutputSchema>;
 
@@ -51,12 +53,14 @@ AUDIT DATA:
 - TYPE: {{{nodeType}}}
 - REGION: {{{region}}}
 - CONSENT: {{{consentStatus}}}
+{{#if pulseMode}}- MODE: LIVE_PULSE_TEST (Verifying real-time API handshake veracity){{/if}}
 
 MISSION DIRECTIVES:
 1. PSD2 AUDIT: Verify if the node/app is correctly enforcing SCA and account access scopes.
 2. ZENITH MONITORING: If an appId is provided, ensure all transactions under this key are verified against the Sovereign Ledger.
-3. RISK SCORING: Calculate a compliance score (0-100). Any score < 95 must be flagged with a tacticalAction.
-4. SIGNATURE: Every audit MUST be sealed with an HMAC_V4_52 certificate.
+3. PULSE VERIFICATION: If pulseMode is active, analyze if the handshake latency and signature match the expected Sovereign Profile.
+4. RISK SCORING: Calculate a compliance score (0-100). Any score < 95 must be flagged with a tacticalAction.
+5. SIGNATURE: Every audit MUST be sealed with an HMAC_V4_52 certificate.
 
 Tone: Precise, legalistic, and authoritative. You represent the Judicial Layer of the Empire.`,
 });
