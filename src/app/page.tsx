@@ -34,7 +34,9 @@ import {
   ShieldPlus,
   Infinity,
   ArrowRightLeft,
-  Server
+  Server,
+  Lock,
+  Award
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -45,13 +47,6 @@ import { processNeuralQuery, ImperialQueryOutput } from "@/ai/flows/imperial-que
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
-const PUBLIC_METRICS = [
-  { label: "Institutional Trust", value: "96.4%", detail: "Global Grid Expansion", color: "text-emerald-500" },
-  { label: "Reality Index", value: "99.8", detail: "Phase ΩΩ Finalized", color: "text-primary" },
-  { label: "Neural Cohesion", value: "MAX", detail: "Autonomy Sentinel On", color: "text-purple-500" },
-  { label: "Legacy Stability", value: "IMMORTAL", detail: "Fail-over Protocol Active", color: "text-amber-500" },
-]
-
 export default function Home() {
   const { toast } = useToast()
   const { user } = useUser()
@@ -60,13 +55,11 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
-    "GRID: ABN AMRO BE Private Banking LIVE Node activated.",
-    "GRID: ABN AMRO BE Asset Managers LIVE Node activated.",
-    "GRID: ABN AMRO LIVE Node (NL/BE/DE) activated successfully.",
-    "AUTONOMY: Nora-54 executing Smart Settlement Engine for Corporate Rails.",
-    "SMART_ROUTING: Redirecting 500k USD payout via lowest-fee Benelux corridor.",
-    "RESILIENCE: Fail-over Global Grid protocol ARMED and SYNCED (15 Nodes).",
-    "LEGACY: Yapily-AMEX European Bridge synchronized.",
+    "GRID: 15 LIVE Nodes synchronized (Optimal Torque).",
+    "VAULT: Project #55 Premium Data Anchoring active.",
+    "AUTONOMY: Self-Healing Protocol #54.2 ARMED.",
+    "SCORECARD: Benelux efficiency lead confirmed (+4.2%).",
+    "RESILIENCE: Fail-over Global Grid protocol SYNCED.",
     "SHIELD: Quantum-Resistant Encryption Layer active."
   ])
   const [queryText, setQueryText] = useState("")
@@ -77,8 +70,8 @@ export default function Home() {
     const sequence = [
       { text: "INITIATING DEEP NEURAL SYNC...", time: 600 },
       { text: "ESTABLISHING FAIL-OVER GLOBAL GRID...", time: 1200 },
-      { text: "ACTIVATING SOVEREIGN GRID AUTONOMY...", time: 1800 },
-      { text: "NOORNEXUS: THE GLOBAL AUTONOMY IS LIVE", time: 2400 },
+      { text: "ACTIVATING SELF-HEALING PROTOCOLS...", time: 1800 },
+      { text: "NOORNEXUS: THE IMMORTAL CIVILIZATION IS LIVE", time: 2400 },
     ]
 
     sequence.forEach((step, i) => {
@@ -90,11 +83,11 @@ export default function Home() {
 
     const interval = setInterval(() => {
       const logs = [
-        "SMART_ROUTER: Node ABN-AMRO-BE-PRIVATE selected for high-net-worth settlement.",
-        "BALANCER: Grid power stable across 15 LIVE nodes.",
-        "AUTONOMY: Nora-54 generated Decision Seal Ω-54-B.",
-        "LEGACY: Self-Refactoring cycle Ω-04 complete.",
-        "RESILIENCE: Real-time traffic balancing via Smart Engine active.",
+        "SELF_HEAL: Re-routing traffic from London-Edge to Spain-Core.",
+        "VAULT: Premium HNW payload anchored to Cold Storage Node 1.",
+        "BALANCER: Power 100/100 across 15 active nodes.",
+        "AUTONOMY: Nora-54 recalibrating efficiency index.",
+        "LEGACY: Self-Evolution cycle Ω-05 complete.",
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 5000)
@@ -147,14 +140,14 @@ export default function Home() {
                       <Infinity className="size-3 mr-2" /> Phase ΩΩ: Global Autonomy
                    </Badge>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <ArrowRightLeft className="size-3 mr-2" /> Smart Settlement Engine Active
+                      <HeartPulse className="size-3 mr-2" /> Self-Healing Active
                    </Badge>
                 </div>
                 <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
                    {isAdmin ? 'Imperial Autonomy.' : 'Global Grid.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "Project #54: Sovereign Grid Autonomy." নূরনেক্সাস এখন ১৫টি লাইভ নোড এবং একটি স্মার্ট সেটেলমেন্ট ইঞ্জিনের মাধ্যমে অমরত্বের পথে।
+                   "Project #55: The Sovereign Vault." ১৫টি হাই-পাওয়ার নোড এখন সেলফ-হিলিং প্রোটোকল এবং একটি সাশ্রয়ী রুটিং ইঞ্জিনের মাধ্যমে অমরত্ব লাভ করেছে।
                 </p>
               </div>
               
@@ -173,7 +166,7 @@ export default function Home() {
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                        <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '100%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"15 LIVE Corporate Nodes | Smart Settlement Optimized"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"15 LIVE Nodes | Self-Healing Active | Vault (P55) Ready"</p>
                 </Card>
               </div>
             </div>
@@ -188,7 +181,7 @@ export default function Home() {
                            value={queryText}
                            onChange={e => setQueryText(e.target.value)}
                            onKeyDown={e => e.key === 'Enter' && handleNeuralQuery()}
-                           placeholder="Commander, what is your directive? (Smart Routing Active)"
+                           placeholder="Commander, what is your directive? (Self-Healing Active)"
                            className="flex-1 bg-transparent border-none outline-none text-sm font-headline text-white placeholder:text-muted-foreground"
                         />
                         <Button onClick={handleNeuralQuery} disabled={queryLoading} variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
@@ -202,7 +195,7 @@ export default function Home() {
                                  <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Deep Sync Module: {queryResult.sourceModule}</p>
                                  <p className="text-sm text-white leading-relaxed italic">"{queryResult.summary}"</p>
                               </div>
-                              <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">SMART_ROUTED_TRUTH</Badge>
+                              <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">AUTONOMOUS_TRUTH</Badge>
                            </div>
                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                               {queryResult.dataPoints.map((dp, i) => (
@@ -212,11 +205,6 @@ export default function Home() {
                                  </div>
                               ))}
                            </div>
-                           {queryResult.suggestedAction && (
-                              <div className="flex items-center gap-2 text-[10px] text-emerald-500 font-bold uppercase tracking-widest">
-                                 <Sparkles className="size-3" /> Autonomous Edict: {queryResult.suggestedAction}
-                              </div>
-                           )}
                         </div>
                      )}
                   </CardContent>
@@ -226,62 +214,56 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
-               {/* Corporate Node Balancer */}
+               {/* Efficiency Scorecard Summary */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                     <ArrowRightLeft className="size-4" /> Global Node Balancer (15 Nodes LIVE)
+                     <Award className="size-4" /> Global Grid Scorecard (15 LIVE Nodes)
                   </h3>
-                  <Card className="glass-card bg-black/40 border-white/5 p-6">
-                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-                        {[
-                           { name: "ABN-AMRO", load: 12, status: "OPTIMAL" },
-                           { name: "ABN-BE-ASSET", load: 5, status: "STABLE" },
-                           { name: "ABN-BE-PRIVATE", load: 3, status: "STABLE" },
-                           { name: "BIG-ES", load: 18, status: "STABLE" },
-                           { name: "BKASH-BD", load: 38, status: "BUSY" },
-                           { name: "YAPILY-EU", load: 8, status: "IDLE" },
-                           { name: "AMEX-US", load: 4, status: "IDLE" }
-                        ].map((node, i) => (
-                           <div key={i} className="space-y-2 text-center p-2 rounded-lg bg-white/5 border border-white/5 group hover:border-primary/50 transition-all">
-                              <p className="text-[8px] font-bold text-muted-foreground uppercase truncate">{node.name}</p>
-                              <div className="h-20 bg-background rounded-md relative overflow-hidden flex items-end">
-                                 <div 
-                                    className={`w-full transition-all duration-1000 ${node.status === 'BUSY' ? 'bg-amber-500' : 'bg-primary'}`} 
-                                    style={{ height: `${node.load}%` }} 
-                                 />
-                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <p className="text-[10px] font-mono text-white font-bold">{node.load}%</p>
-                                 </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                     {[
+                        { corridor: "BENELUX (ELITE)", efficiency: 96.4, status: "OPTIMAL", color: "text-emerald-400" },
+                        { corridor: "IBERIAN (BRIDGE)", efficiency: 91.2, status: "STABLE", color: "text-blue-400" },
+                        { corridor: "ASIAN (SCALING)", efficiency: 84.5, status: "BOOTING", color: "text-amber-400" }
+                     ].map((s, i) => (
+                        <Card key={i} className="glass-card border-white/5 bg-white/2">
+                           <CardContent className="p-6 space-y-3">
+                              <div className="flex justify-between items-center">
+                                 <p className="text-xs font-bold text-white uppercase">{s.corridor}</p>
+                                 <Badge variant="outline" className={`text-[7px] border-none ${s.color} bg-white/5`}>{s.status}</Badge>
                               </div>
-                              <Badge variant="outline" className={`text-[7px] border-none ${node.status === 'BUSY' ? 'text-amber-500' : 'text-emerald-500'}`}>{node.status}</Badge>
-                           </div>
-                        ))}
-                     </div>
-                  </Card>
+                              <p className="text-3xl font-headline font-bold text-white">{s.efficiency}%</p>
+                              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                                 <div className={`h-full bg-primary`} style={{ width: `${s.efficiency}%` }} />
+                              </div>
+                           </CardContent>
+                        </Card>
+                     ))}
+                  </div>
                </section>
 
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                        <Rocket className="size-4" /> Sovereign Smart Settlement
+                        <Rocket className="size-4" /> Sovereign Vault Pulse (P55)
                      </h3>
-                     <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500 uppercase">Cost Optimization: ACTIVE</Badge>
+                     <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase">Encryption Status: SHA-512 ACTIVE</Badge>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                      {[
-                        { title: "Fee Optimizer", desc: "Selecting lowest-cost corridors.", status: "SAVING 12%", color: "text-emerald-400" },
-                        { title: "Regulatory Shield", desc: "Auto-adjusting PSD2 parameters.", status: "COMPLIANT", color: "text-blue-400" },
-                        { title: "Audit Anchoring", desc: " निर्णय hashes ledger-synced.", status: "IMMUTABLE", color: "text-purple-400" }
+                        { title: "Cold Storage", desc: "Data invisible to mesh traffic.", status: "ANCHORED", icon: Lock },
+                        { title: "Air-Gapped Sync", desc: "Key rotation every 60s.", status: "SAFE", icon: ShieldPlus },
+                        { title: "Quantum Shield", desc: "Project #49 synergy enabled.", status: "MAX", icon: Atom }
                      ].map((p, i) => (
                         <Card key={i} className="glass-card border-white/5 bg-white/2">
                            <CardContent className="p-6 space-y-4">
-                              <div className="space-y-1">
+                              <div className="flex items-center gap-3">
+                                 <p.icon className="size-5 text-primary" />
                                  <h4 className="text-sm font-headline font-bold text-white uppercase">{p.title}</h4>
-                                 <p className="text-[10px] text-muted-foreground">{p.desc}</p>
                               </div>
+                              <p className="text-[10px] text-muted-foreground">{p.desc}</p>
                               <div className="pt-2 flex justify-between items-end border-t border-white/5">
                                  <span className="text-[8px] text-muted-foreground uppercase font-bold">Status</span>
-                                 <span className={`text-xs font-headline font-bold ${p.color}`}>{p.status}</span>
+                                 <span className={`text-xs font-headline font-bold text-emerald-500`}>{p.status}</span>
                               </div>
                            </CardContent>
                         </Card>
@@ -312,15 +294,15 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+              <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                  <CardHeader className="p-6">
-                    <CardTitle className="text-lg font-headline uppercase text-emerald-500">Smart Routing Policy</CardTitle>
+                    <CardTitle className="text-lg font-headline uppercase text-primary">Self-Healing Sync</CardTitle>
                  </CardHeader>
                  <CardContent className="p-6 pt-0 space-y-4">
                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Every corporate settlement is routed via the Smart Engine. By prioritizing low-fee rails, we maximize sovereign wealth preservation."
+                       "Every corporate settlement is routed via the Smart Engine. If a node drifts, the Self-Healing Protocol #54.2 initiates recovery in &lt; 120ms."
                     </p>
-                    <Badge className="w-full justify-center bg-emerald-500/20 text-emerald-500 border-none uppercase text-[8px] font-bold">Status: COST_OPTIMIZED</Badge>
+                    <Badge className="w-full justify-center bg-primary/20 text-primary border-none uppercase text-[8px] font-bold">Status: IMMUNE</Badge>
                  </CardContent>
               </Card>
             </div>

@@ -27,3 +27,4 @@ import '@/ai/flows/amex-on-demand-flow.ts';
 import '@/ai/flows/amex-token-strategy-flow.ts';
 import '@/ai/flows/neural-audit-flow.ts';
 import '@/ai/flows/sovereign-grid-autonomy-flow.ts';
+import '@/ai/flows/sovereign-vault-flow.ts';
