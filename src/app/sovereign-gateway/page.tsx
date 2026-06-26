@@ -59,6 +59,7 @@ const BLUEPRINT_STEPS = [
   { id: "P51.6", label: "eIDAS Certificate Vault", icon: Key, status: "LIVE", url: "/certificates" },
   { id: "P51.7", label: "Central Auth Handler", icon: Shield, status: "SYNCED", zenith: true },
   { id: "P54.1", label: "Sovereign Grid Autonomy", icon: Infinity, status: "ACTIVE", zenith: true },
+  { id: "P56.1", label: "Predictive Flow Hub", icon: Sparkles, status: "ARMED", zenith: true },
 ]
 
 const ASIAN_SCALING_NODES = [
@@ -116,7 +117,7 @@ export default function SovereignGatewayPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-10">
               
-              {/* Imperial Manifesto Link - NEW */}
+              {/* Imperial Manifesto Link */}
               <section className="space-y-6">
                 <Card className="glass-card border-l-4 border-l-primary bg-primary/10 relative overflow-hidden group hover:border-primary/40 transition-all cursor-default">
                   <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">

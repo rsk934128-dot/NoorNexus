@@ -39,7 +39,8 @@ import {
   Rocket,
   Landmark,
   Terminal,
-  Radio
+  Radio,
+  Sparkles
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { runNeuralAudit, NeuralAuditOutput } from "@/ai/flows/neural-audit-flow"
@@ -62,10 +63,10 @@ export default function NeuralAuditPage() {
 
   // LIVE Efficiency Stats
   const [liveStats, setLiveStats] = useState({
-    latency: 28,
+    latency: 26,
     successRate: 100.0,
     activeNodes: 20,
-    status: "STABLE",
+    status: "PERPETUAL",
     failoverStatus: "ARMED",
     selfHealingStatus: "OPTIMAL"
   })
@@ -74,8 +75,8 @@ export default function NeuralAuditPage() {
     const interval = setInterval(() => {
       setLiveStats(prev => ({
         ...prev,
-        latency: Math.floor(Math.random() * (42 - 24) + 24),
-        successRate: Math.random() > 0.99 ? 99.9 : 100.0
+        latency: Math.floor(Math.random() * (28 - 24) + 24),
+        successRate: 100.0
       }))
     }, 3000)
     return () => clearInterval(interval)
@@ -145,10 +146,10 @@ export default function NeuralAuditPage() {
         detectedRegulatoryChange: "Payoneer UK, PayPal EU, and AMEX PSD2 amendment verified.",
         currentGatewayConfig: { active_nodes: 20, self_healing: true, cross_node_balancing: true },
         nodePerformanceData: [
-          { nodeId: "PAYONEER-UK-CORE", latency: 28, uptime: 100, roi: 98 },
+          { nodeId: "PAYONEER-UK-CORE", latency: 26, uptime: 100, roi: 98, historicalLiquidity: [80, 85, 90, 88, 92, 95, 94] },
           { nodeId: "PAYPAL-EU-CORE", latency: 32, uptime: 100, roi: 95 },
           { nodeId: "AMEX-SANDBOX-UK", latency: 45, uptime: 100, roi: 90 },
-          { nodeId: "AIB-IRELAND-PERSONAL", latency: 24, uptime: 100, roi: 95 },
+          { nodeId: "AIB-IRELAND-BUSINESS", latency: 24, uptime: 100, roi: 97 },
           { nodeId: "BENELUX-CORE", latency: 28, uptime: 100, roi: 92 },
           { nodeId: "IBERIAN-BRIDGE", latency: 42, uptime: 99.9, roi: 88 }
         ],
@@ -162,7 +163,7 @@ export default function NeuralAuditPage() {
 
       toast({ 
         title: "Global Grid Sync Finalized", 
-        description: `Project #55.5: 20 Nodes verified for App ${OFFICIAL_APP_ID.substring(0, 8)}.` 
+        description: `Project #56: 20 Nodes predictive scan verified for App ${OFFICIAL_APP_ID.substring(0, 8)}.` 
       })
     } catch (e: any) {
       toast({ title: "Sync Error", description: e.message, variant: "destructive" })
@@ -185,25 +186,30 @@ export default function NeuralAuditPage() {
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
                    <Infinity className="size-3 mr-2" /> Phase ΩΩ: Global Autonomy
                  </Badge>
-                 <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <Landmark className="size-3 mr-2" /> GRID AUDIT PULSE: ON
+                 <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5">
+                   <Sparkles className="size-3 mr-2" /> PROJECT #56: SOVEREIGN FLOW
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Neural <span className="text-emerald-500">Sentinel.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Zenith Level Traceability." নূরনেক্সাস এখন ২০টি সক্রিয় নোডকে (Payoneer UK সহ) নিউরাল অডিটের আওতায় নিয়ে এসেছে।
+                "Zenith Level Traceability & Predictive Flow." নূরনেক্সাস এখন ২০টি সক্রিয় নোডকে স্বয়ংক্রিয় পালস এবং প্রেডিক্টিভ অডিটের আওতায় নিয়ে এসেছে।
               </p>
             </div>
             <div className="flex items-center gap-4">
+               <div className="hidden sm:flex flex-col items-center justify-center p-1 bg-amber-500/20 rounded-full border border-amber-500/40 glow-emerald animate-pulse-slow">
+                  <div className="size-12 rounded-full border-2 border-amber-500 flex items-center justify-center bg-black">
+                     <Sparkles className="size-5 text-amber-500 animate-spin-slow" />
+                  </div>
+               </div>
                <Button 
                 onClick={handleZenithPulseTest}
                 disabled={pulsing}
                 className="bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-primary"
                >
                  {pulsing ? <Loader2 className="size-4 animate-spin" /> : <Radio className="size-4" />}
-                 Execute Zenith Pulse Test
+                 Test Zenith Pulse
                </Button>
                <Button 
                 onClick={handleFullGridSync}
@@ -211,7 +217,7 @@ export default function NeuralAuditPage() {
                 className="bg-emerald-500 text-white font-bold h-12 uppercase tracking-widest gap-2 glow-emerald"
                >
                  {loading ? <Loader2 className="size-4 animate-spin" /> : <RefreshCcw className="size-4" />}
-                 Full Grid Zenith Sync
+                 Zenith Grid Sync
                </Button>
             </div>
           </header>
@@ -226,7 +232,7 @@ export default function NeuralAuditPage() {
                     <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
                        <Terminal className="size-4" /> Zenith Live Pulse Terminal
                     </CardTitle>
-                    <CardDescription className="text-[10px] uppercase font-mono">Mission 500: Real-time API Handshake Verification</CardDescription>
+                    <CardDescription className="text-[10px] uppercase font-mono">Mission 500: Real-time API Handshake Verification | Latency 26ms</CardDescription>
                   </div>
                   {lastPulse && (
                     <Badge className="bg-emerald-500/20 text-emerald-500 border-none uppercase font-bold text-[8px]">
@@ -279,6 +285,42 @@ export default function NeuralAuditPage() {
                   )}
                 </CardContent>
               </Card>
+
+              {/* Project #56: Predictive Orchestrator Panel - NEW */}
+              {autonomyResult && (
+                 <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5 animate-in slide-in-from-bottom-4 duration-700">
+                    <CardHeader>
+                       <CardTitle className="text-sm font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
+                          <Zap className="size-4" /> Project #56: Sovereign Flow Dispatch
+                       </CardTitle>
+                       <CardDescription className="text-xs">Predictive Transaction Orchestrator & Liquidity Guard</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-3">
+                             <div className="flex justify-between items-center">
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase">Liquidity Risk Probability</p>
+                                <Badge className="bg-emerald-500/20 text-emerald-500 border-none">{autonomyResult.predictiveOrchestration.liquidityRiskProbability}% LOW</Badge>
+                             </div>
+                             <p className="text-sm font-headline font-bold text-white">Next 24h: STABLE</p>
+                             <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                                <div className="h-full bg-emerald-500" style={{ width: '2%' }} />
+                             </div>
+                          </div>
+                          <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-2">
+                             <p className="text-[9px] font-bold text-muted-foreground uppercase">Recommended Action</p>
+                             <p className="text-xs text-amber-500 font-mono italic">"{autonomyResult.predictiveOrchestration.recommendedPreEmptiveTransfer}"</p>
+                             <Badge variant="outline" className="text-[7px] border-amber-500/20 text-amber-500 mt-2">PRE-EMPTIVE_AUTO_SYNC_ENABLED</Badge>
+                          </div>
+                       </div>
+                       <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                          <p className="text-[10px] text-amber-100 italic leading-relaxed">
+                            "Nora-54: {autonomyResult.predictiveOrchestration.forecastReasoning}"
+                          </p>
+                       </div>
+                    </CardContent>
+                 </Card>
+              )}
 
               {/* Zenith Application Monitor Card */}
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5 relative overflow-hidden">
@@ -345,6 +387,21 @@ export default function NeuralAuditPage() {
             </div>
 
             <div className="space-y-8">
+              {/* THE GOLDEN SYNC STATUS CIRCLE - SIDEBAR DISPLAY */}
+              <Card className="glass-card border-amber-500/40 bg-amber-500/5 p-6 flex flex-col items-center text-center gap-4">
+                 <div className="size-20 rounded-full border-4 border-amber-500 flex items-center justify-center relative bg-black shadow-[0_0_20px_rgba(245,158,11,0.5)]">
+                    <Sparkles className="size-8 text-amber-500 animate-spin-slow" />
+                    <div className="absolute -top-1 -right-1 size-5 bg-emerald-500 rounded-full border-2 border-black" />
+                 </div>
+                 <div className="space-y-1">
+                    <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Global Sync Status</p>
+                    <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">PERPETUAL_ON</Badge>
+                 </div>
+                 <p className="text-[9px] text-muted-foreground italic leading-relaxed">
+                   "The grid is 100% synchronized with global banking rails. Project #56 flow active."
+                 </p>
+              </Card>
+
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">

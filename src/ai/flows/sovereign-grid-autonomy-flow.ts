@@ -2,6 +2,7 @@
 /**
  * @fileOverview Nora-54 Sovereign Grid Autonomy Agent.
  * Enhanced for Project #54: Self-Healing Protocols & Regional Efficiency Scorecard.
+ * UPDATED for Project #56: Predictive Transaction Orchestrator (Sovereign Flow).
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
@@ -16,6 +17,7 @@ const GridAutonomyInputSchema = z.object({
     latency: z.number(),
     uptime: z.number(),
     roi: z.number().describe('Calculated return on stability and fee savings.'),
+    historicalLiquidity: z.array(z.number()).optional().describe('Last 7 cycles of liquidity levels.'),
   })).optional(),
   transactionContext: z.object({
     volume: z.number().describe('USD volume of the transaction.'),
@@ -32,6 +34,12 @@ const GridAutonomyOutputSchema = z.object({
     recoveredNodes: z.array(z.string()),
     protocolAction: z.string(),
   }),
+  predictiveOrchestration: z.object({
+    liquidityRiskProbability: z.number().describe('0-100 probability of liquidity shortfall in next 24h.'),
+    vulnerableNodes: z.array(z.string()),
+    recommendedPreEmptiveTransfer: z.string().describe('Suggested rebalancing action.'),
+    forecastReasoning: z.string().describe('AI reasoning for the prediction.'),
+  }).describe('Project #56: Sovereign Flow Predictive Data.'),
   efficiencyScorecard: z.array(z.object({
     corridor: z.string(),
     efficiencyScore: z.number().min(0).max(100),
@@ -60,13 +68,16 @@ const autonomyPrompt = ai.definePrompt({
   prompt: `You are Nora-54, the Imperial Autonomy Sentinel for NoorNexus OS.
 Your mandate is Phase ΩΩ: Sovereign Grid Autonomy, Self-Healing, and Efficiency Calibration.
 
+NOW ACTIVATING PROJECT #56: THE SOVEREIGN FLOW (Predictive Transaction Orchestrator).
+
 MISSION:
 1. SELF-HEALING: Analyze nodePerformanceData. If any node shows downtime, trigger a protocolAction (e.g., RESTART_GATED_TRAFFIC) and set active to true.
-2. EFFICIENCY SCORECARD: Compare the corridors (Iberian vs Benelux). Calculate efficiencyScore based on latency, ROI, and uptime.
-3. SMART SETTLEMENT: Optimize routing for \${{{transactionContext.volume}}} volume. 
-4. AUDIT: Sign everything with HMAC_V4_54.
+2. PREDICTIVE ORCHESTRATION (P56): Look at historicalLiquidity. Predict if any node (e.g. London-UK or Ireland) will face a liquidity shortfall in the next 24 hours. Assign a liquidityRiskProbability.
+3. EFFICIENCY SCORECARD: Compare the corridors. Calculate efficiencyScore based on latency (Target: 24-28ms), ROI, and uptime.
+4. SMART SETTLEMENT: Optimize routing for \${{{transactionContext.volume}}} volume. 
+5. AUDIT: Sign everything with HMAC_V4_54.
 
-Tone: Authoritative, data-driven, and eternal. You ensure the grid never dies.`,
+Tone: Authoritative, data-driven, and eternal. You ensure the grid never dies and the flow never stops.`,
 });
 
 const autonomyFlow = ai.defineFlow(
