@@ -88,6 +88,7 @@ const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Sovereign Gateway (P51)", url: "/sovereign-gateway", icon: Rocket, zenith: true },
+  { title: "Enterprise Settings", url: "/enterprise-settings", icon: Settings, highlight: true },
   { title: "Global Grid (P53)", url: "/sovereign-gateway", icon: Network, highlight: true },
   { title: "Sovereign Vault (P55)", url: "/sovereign-vault", icon: Lock, zenith: true },
   { title: "Certificate Vault", url: "/certificates", icon: Key },

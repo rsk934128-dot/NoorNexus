@@ -40,12 +40,13 @@ import {
   Clock,
   Network,
   Infinity,
-  Fingerprint
+  Fingerprint,
+  Settings
 } from "lucide-react"
 import Link from "next/link"
 
 const BLUEPRINT_STEPS = [
-  { id: "P51.1", label: "Unified Auth Bridge", icon: LockKeyhole, status: "DESIGNED" },
+  { id: "P51.1", label: "Unified Auth Bridge", icon: Settings, status: "READY", url: "/enterprise-settings" },
   { id: "P51.2", label: "AETS Token Injection", icon: CreditCard, status: "READY" },
   { id: "P51.3", label: "Open Banking Rail Sync", icon: Landmark, status: "SYNCED" },
   { id: "P51.4", label: "Intelligent Fallback Engine", icon: Zap, status: "HARDENED" },
