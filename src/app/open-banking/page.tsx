@@ -333,13 +333,13 @@ export default function OpenBankingHubPage() {
 
                 <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                    <CardHeader>
-                      <CardTitle className="text-xs uppercase font-bold text-amber-500 tracking-widest flex items-center gap-2">
+                      <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
                          <Route className="size-4" /> Fail-Safe Route
                       </CardTitle>
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[10px] text-muted-foreground italic">
-                         "Orchestrator monitoring 73+ banking canals. Automated switch triggered if latency > 1500ms."
+                         "Orchestrator monitoring 73+ banking canals. Automated switch triggered if latency &gt; 1500ms."
                       </p>
                    </CardContent>
                 </Card>
