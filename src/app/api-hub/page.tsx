@@ -1,11 +1,10 @@
-
 "use client"
 
 import { useState, useRef, useEffect } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
@@ -28,7 +27,10 @@ import {
   Network,
   Infinity,
   Fingerprint,
-  Clock
+  Clock,
+  ChevronRight,
+  FileCode,
+  Sparkles
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -87,6 +89,9 @@ export default function ApiHubPage() {
                  <Badge variant="outline" className="border-purple-500/50 text-purple-500 uppercase font-bold tracking-widest px-3 h-8 bg-purple-500/5">
                    <Infinity className="size-3 mr-2" /> Mission 500: Project Zenith
                  </Badge>
+                 <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5">
+                   <Sparkles className="size-3 mr-2" /> 3s Integration Ready
+                 </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Discovery <span className="text-purple-500">Hub.</span>
@@ -99,28 +104,78 @@ export default function ApiHubPage() {
                <div className="p-4 glass-card rounded-2xl border border-purple-500/20 text-center min-w-[200px]">
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Integration Speed</p>
                   <p className="text-2xl font-headline font-bold text-emerald-500 uppercase flex items-center gap-2 justify-center">
-                    <Clock className="size-5" /> &lt; 3.0s
+                    <Clock className="size-5" /> &lt; 2.8s
                   </p>
                </div>
             </div>
           </header>
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-            <div className="xl:col-span-3 space-y-6">
-              <Tabs defaultValue="bridge" className="space-y-6">
+            <div className="xl:col-span-3 space-y-8">
+              <Tabs defaultValue="quickstart" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
+                  <TabsTrigger value="quickstart" className="gap-2"><Zap className="size-4" /> Quick Start</TabsTrigger>
                   <TabsTrigger value="bridge" className="gap-2"><Network className="size-4" /> Enterprise Bridge</TabsTrigger>
                   <TabsTrigger value="docs" className="gap-2"><BookOpen className="size-4" /> Discovery Protocol</TabsTrigger>
                   <TabsTrigger value="keys" className="gap-2"><Key className="size-4" /> Zenith Keys</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="bridge" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+                <TabsContent value="quickstart" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+                   <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                      <CardHeader>
+                         <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
+                            <Rocket className="size-4" /> 3-Step Integration Guide
+                         </CardTitle>
+                         <CardDescription>Inject NoorNexus Core into any enterprise application in less than 3 seconds.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-8">
+                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {[
+                              { step: "01", title: "Generate Key", desc: "Obtain your Zenith L1 access key from the 'Keys' tab." },
+                              { step: "02", title: "Inject Snippet", desc: "Paste the 3-line code block into your app's <head>." },
+                              { step: "03", title: "Verify Pulse", desc: "Nora-03 will automatically verify the connection." }
+                            ].map((s, i) => (
+                              <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-2 relative overflow-hidden">
+                                 <p className="text-4xl font-headline font-bold text-emerald-500/10 absolute -right-2 -bottom-2">{s.step}</p>
+                                 <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">{s.title}</p>
+                                 <p className="text-[11px] text-muted-foreground italic leading-relaxed">"{s.desc}"</p>
+                              </div>
+                            ))}
+                         </div>
+
+                         <div className="p-6 bg-black rounded-xl border border-emerald-500/20 relative group">
+                            <div className="absolute top-0 right-0 p-4">
+                               <FileCode className="size-5 text-emerald-500/30" />
+                            </div>
+                            <h4 className="text-[10px] font-bold uppercase text-white mb-4">Sovereign Snippet (v3.5)</h4>
+                            <pre className="text-[11px] text-emerald-400 font-mono overflow-x-auto leading-relaxed">
+{`<script src="https://cdn.noornexus.sovereign/v1/core.js" async></script>
+<script>
+  sheikh.init({ appId: 'YOUR_ZENITH_KEY', speed: 'ZENITH_TURBO' });
+</script>`}
+                            </pre>
+                            <Button 
+                              size="sm" 
+                              onClick={() => {
+                                navigator.clipboard.writeText(`<script src="https://cdn.noornexus.sovereign/v1/core.js" async></script>\n<script>\n  sheikh.init({ appId: 'YOUR_ZENITH_KEY', speed: 'ZENITH_TURBO' });\n</script>`)
+                                toast({ title: "Snippet Copied" })
+                              }}
+                              className="mt-6 bg-emerald-500 text-black font-bold uppercase text-[10px] h-9 glow-emerald"
+                            >
+                               Copy Code Block
+                            </Button>
+                         </div>
+                      </CardContent>
+                   </Card>
+                </TabsContent>
+
+                <TabsContent value="bridge" className="space-y-6">
                    <Card className="glass-card border-l-4 border-l-purple-500">
                       <CardHeader>
                          <CardTitle className="text-sm font-headline uppercase text-purple-500 flex items-center gap-2">
                             <Activity className="size-4" /> PaaS Scalability Engine (Project #160)
                          </CardTitle>
-                         <CardDescription>Optimized snippet for sub-3-second enterprise integration.</CardDescription>
+                         <CardDescription>Optimized endpoints for enterprise-grade autonomous operations.</CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-6">
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -134,24 +189,6 @@ export default function ApiHubPage() {
                                <p className="text-[9px] text-muted-foreground italic">"Verify HMAC_V4_Q packet integrity for external meshes."</p>
                                <code className="text-[10px] text-purple-400 block bg-black p-2 rounded">POST /v1/paas/verify</code>
                             </div>
-                         </div>
-
-                         <div className="p-6 bg-purple-500/5 rounded-xl border border-dashed border-purple-500/20">
-                            <div className="flex justify-between items-center">
-                               <div className="space-y-1">
-                                  <p className="text-xs font-bold text-white uppercase">NoorNexus Sovereign Snippet</p>
-                                  <p className="text-[10px] text-emerald-400 font-bold">Latency Guarantee: &lt; 2.8s integration ready.</p>
-                               </div>
-                               <Button size="sm" className="bg-purple-500 text-white font-bold text-[10px] uppercase h-8">
-                                  Copy Snippet
-                               </Button>
-                            </div>
-                            <pre className="mt-4 p-4 bg-black rounded text-[10px] text-emerald-400 font-mono overflow-x-auto">
-{`<script src="https://cdn.noornexus.sovereign/v1/core.js" async></script>
-<script>
-  sheikh.init({ appId: 'YOUR_ZENITH_KEY', speed: 'ZENITH_TURBO' });
-</script>`}
-                            </pre>
                          </div>
                       </CardContent>
                    </Card>
@@ -193,6 +230,16 @@ export default function ApiHubPage() {
                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
                       "Enterprise scaling is the bridge to global dominance. We offer 99.9% PaaS availability to partners who align with our Manifesto."
                    </p>
+                   <div className="pt-2 border-t border-white/5 space-y-2">
+                      <div className="flex justify-between items-center text-[9px] font-mono">
+                         <span className="uppercase text-muted-foreground">License Tier</span>
+                         <span className="text-white font-bold">ZENITH_L1</span>
+                      </div>
+                      <div className="flex justify-between items-center text-[9px] font-mono">
+                         <span className="uppercase text-muted-foreground">SLA Guarantee</span>
+                         <span className="text-emerald-500 font-bold">99.9%</span>
+                      </div>
+                   </div>
                 </CardContent>
               </Card>
 

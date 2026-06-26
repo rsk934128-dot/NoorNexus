@@ -64,7 +64,7 @@ export default function Home() {
   const [impactFeed, setImpactFeed] = useState<string[]>([
     "MISSION 500: Global Hegemony protocol initiated.",
     "ZENITH: 20 Nodes verified (Optimal Torque).",
-    "SNIPPET: PaaS integration optimized for < 3s load time.",
+    "SNIPPET: PaaS integration optimized for &lt; 3s load time.",
     "FLOW: Project #56 Predictive Orchestrator ARMED.",
     "TRACEABILITY: Nora-12 Zenith Monitoring active for Off-Ramp.",
     "LIQUIDITY: Inter-node balancing active (AIB-IE <-> ABN-BE).",
@@ -367,7 +367,6 @@ export default function Home() {
                   </div>
                </section>
 
-               {/* Final Synthesis Report Card - Fixed Line 213 */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
                      <Award className="size-4" /> Global Operational Readiness Report
