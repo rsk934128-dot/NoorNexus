@@ -1,11 +1,7 @@
 'use server';
 /**
  * @fileOverview Nora-03 Imperial Integration & Discovery Assistant.
- * Trained to guide TTPs and broadcast the NoorNexus Discovery Protocol.
- *
- * - noraIntegrationAssistant - Main entry function.
- * - IntegrationAssistantInput - Schema for query and context.
- * - IntegrationAssistantOutput - Schema for technical guidance.
+ * Updated for Genkit 1.x and Free Tier stability.
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
@@ -35,6 +31,11 @@ const prompt = ai.definePrompt({
   model: gemini15Flash,
   input: {schema: IntegrationAssistantInputSchema},
   output: {schema: IntegrationAssistantOutputSchema},
+  config: {
+    safetySettings: [
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+    ]
+  },
   prompt: `You are Nora-03, the Imperial Integration Assistant for NoorNexus Sovereign OS.
 Your mission is to guide developers into the NoorNexus Mesh and broadcast the Imperial Discovery Protocol.
 
@@ -68,7 +69,7 @@ const integrationFlow = ai.defineFlow(
       return output;
     } catch (error: any) {
       console.error('Integration Prompt Error:', error);
-      throw new Error(error.message || 'AI handshake failed.');
+      throw error;
     }
   }
 );

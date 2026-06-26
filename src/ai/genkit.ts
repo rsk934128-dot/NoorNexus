@@ -19,4 +19,5 @@ export const ai = genkit({
   plugins: [googleAI()],
 });
 
-export const gemini15Flash = googleAI.model('gemini-1.5-flash');
+// Using constant for model ID for consistency across flows
+export const gemini15Flash = 'googleai/gemini-1.5-flash';

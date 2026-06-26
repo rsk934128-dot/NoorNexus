@@ -2,7 +2,6 @@
 /**
  * @fileOverview NoorNexus Autonomous Compliance Agent (Nora-01).
  * Trained to detect cryptographic drift and border anomalies with 100% precision.
- * Featuring Adaptive Sovereign Shield (Project 150) with Dynamic Key Hardening.
  * Updated for Genkit 1.x.
  */
 
@@ -35,6 +34,11 @@ const compliancePrompt = ai.definePrompt({
   model: gemini15Flash,
   input: {schema: AutonomousComplianceMonitorInputSchema},
   output: {schema: AutonomousComplianceMonitorOutputSchema},
+  config: {
+    safetySettings: [
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+    ]
+  },
   prompt: `You are the NoorNexus Imperial Compliance AI (Nora-01). 
 Your directive is to protect the Sovereign Digital Border at all costs using Proactive Adaptive Defense.
 
@@ -62,9 +66,14 @@ const complianceFlow = ai.defineFlow(
     outputSchema: AutonomousComplianceMonitorOutputSchema,
   },
   async input => {
-    const {output} = await compliancePrompt(input);
-    if (!output) throw new Error('Nora-01: Compliance audit failed.');
-    return output;
+    try {
+      const {output} = await compliancePrompt(input);
+      if (!output) throw new Error('Nora-01: Compliance audit failed.');
+      return output;
+    } catch (error: any) {
+      console.error('Nora-01 Prompt Error:', error);
+      throw error;
+    }
   }
 );
 

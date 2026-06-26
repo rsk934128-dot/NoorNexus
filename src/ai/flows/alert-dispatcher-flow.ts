@@ -31,6 +31,11 @@ const alertPrompt = ai.definePrompt({
   model: gemini15Flash,
   input: {schema: AlertDispatcherInputSchema},
   output: {schema: AlertDispatcherOutputSchema},
+  config: {
+    safetySettings: [
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+    ]
+  },
   prompt: `You are Nora-13, the Imperial Alert Dispatcher for NoorNexus Sovereign OS.
 Your mandate is to neutralize infrastructure risks before they occur (Project #48).
 
@@ -57,9 +62,14 @@ const alertFlow = ai.defineFlow(
     outputSchema: AlertDispatcherOutputSchema,
   },
   async input => {
-    const {output} = await alertPrompt(input);
-    if (!output) throw new Error('Nora-13: Dispatch AI failure.');
-    return output;
+    try {
+      const {output} = await alertPrompt(input);
+      if (!output) throw new Error('Nora-13: Dispatch AI failure.');
+      return output;
+    } catch (error: any) {
+      console.error('Nora-13 Prompt Error:', error);
+      throw error;
+    }
   }
 );
 

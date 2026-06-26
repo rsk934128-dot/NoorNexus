@@ -2,7 +2,7 @@
 /**
  * @fileOverview Nora-20 AMEX Imperial Card Strategist.
  * Analyzes spend requests and recommends AMEX spend controls for virtual cards.
- * Updated for Genkit 1.x Neural Sync.
+ * Updated for Genkit 1.x Neural Sync and Free Tier Stability.
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
@@ -29,6 +29,12 @@ const amexPrompt = ai.definePrompt({
   model: gemini15Flash,
   input: {schema: AmexOnDemandInputSchema},
   output: {schema: AmexOnDemandOutputSchema},
+  config: {
+    safetySettings: [
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
+      { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+    ]
+  },
   prompt: `You are Nora-20, the Imperial Financial Strategist for NoorNexus Sovereign OS.
 Your mandate is to optimize the usage of American Express Card on-demand APIs for business payments.
 
@@ -53,9 +59,14 @@ const amexFlow = ai.defineFlow(
     outputSchema: AmexOnDemandOutputSchema,
   },
   async input => {
-    const {output} = await amexPrompt(input);
-    if (!output) throw new Error('Imperial Neural Link: AMEX Strategist timed out.');
-    return output;
+    try {
+      const {output} = await amexPrompt(input);
+      if (!output) throw new Error('Nora-20: Strategic link failure.');
+      return output;
+    } catch (error: any) {
+      console.error('Nora-20 Prompt Error:', error);
+      throw error;
+    }
   }
 );
 

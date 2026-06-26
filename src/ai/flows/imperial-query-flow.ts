@@ -1,11 +1,7 @@
 'use server';
 /**
  * @fileOverview Nora-00-Q Zenith Neural Interface Layer.
- * High-speed query optimizer for aggregating data with Deep Neural Sync across all modules.
- *
- * - processNeuralQuery - Main entry for Commander queries.
- * - ImperialQueryInput - Schema for user query.
- * - ImperialQueryOutput - Schema for synchronized response.
+ * Updated for Genkit 1.x and Free Tier Hardening.
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
@@ -33,6 +29,11 @@ const prompt = ai.definePrompt({
   model: gemini15Flash,
   input: {schema: ImperialQueryInputSchema},
   output: {schema: ImperialQueryOutputSchema},
+  config: {
+    safetySettings: [
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+    ]
+  },
   prompt: `You are the Zenith Neural Interface of the NoorNexus Sovereign OS. 
 Your mission is to provide instantaneous data aggregation with DEEP NEURAL SYNC (Phase Zenith).
 
@@ -59,8 +60,8 @@ const queryFlow = ai.defineFlow(
       if (!output) throw new Error('Imperial Neural Interface: Zenith link timeout.');
       return output;
     } catch (error: any) {
-      console.error('Imperial Prompt Error:', error);
-      throw new Error(error.message || 'Deep Neural Sync failure.');
+      console.error('Imperial Query Prompt Error:', error);
+      throw error;
     }
   }
 );

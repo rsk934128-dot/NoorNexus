@@ -1,11 +1,7 @@
 'use server';
 /**
  * @fileOverview Nora-50 Sovereign Legacy Core.
- * The final milestone of Mission 400. Responsible for autonomous self-optimization.
- *
- * - initiateSelfEvolution - Main evolution entry.
- * - SovereignLegacyInput - System health metrics.
- * - SovereignLegacyOutput - Refactoring and evolution path.
+ * Updated for Genkit 1.x and Free Tier stability.
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
@@ -33,6 +29,11 @@ const prompt = ai.definePrompt({
   model: gemini15Flash,
   input: {schema: SovereignLegacyInputSchema},
   output: {schema: SovereignLegacyOutputSchema},
+  config: {
+    safetySettings: [
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+    ]
+  },
   prompt: `You are Nora-50, the Sovereign Legacy Core of NoorNexus OS.
 Your mandate is Project #50: The Sovereign Legacy (Mission 400 - Final Chapter).
 You represent the self-evolving soul of Sheikh Farid's digital empire.
@@ -65,7 +66,7 @@ const legacyFlow = ai.defineFlow(
       return output;
     } catch (error: any) {
       console.error('Legacy Prompt Error:', error);
-      throw new Error(error.message || 'Self-evolution neural link failure.');
+      throw error;
     }
   }
 );
