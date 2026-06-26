@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -43,6 +42,7 @@ import {
   Infinity,
   Fingerprint
 } from "lucide-react"
+import Link from "next/link"
 
 const BLUEPRINT_STEPS = [
   { id: "P51.1", label: "Unified Auth Bridge", icon: LockKeyhole, status: "DESIGNED" },
@@ -50,7 +50,7 @@ const BLUEPRINT_STEPS = [
   { id: "P51.3", label: "Open Banking Rail Sync", icon: Landmark, status: "SYNCED" },
   { id: "P51.4", label: "Intelligent Fallback Engine", icon: Zap, status: "HARDENED" },
   { id: "P51.5", label: "White-label Studio", icon: Palette, status: "READY" },
-  { id: "P51.6", label: "eIDAS Certificate Vault", icon: Key, status: "LIVE" },
+  { id: "P51.6", label: "eIDAS Certificate Vault", icon: Key, status: "LIVE", url: "/certificates" },
   { id: "P54.1", label: "Sovereign Grid Autonomy", icon: Infinity, status: "ACTIVE", zenith: true },
 ]
 
@@ -212,7 +212,16 @@ export default function SovereignGatewayPage() {
                            </div>
                            <div className="space-y-1">
                               <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{step.id}</p>
-                              <h4 className="text-sm font-headline font-bold text-white uppercase">{step.label}</h4>
+                              <div className="flex items-center justify-between">
+                                <h4 className="text-sm font-headline font-bold text-white uppercase">{step.label}</h4>
+                                {step.url && (
+                                  <Link href={step.url}>
+                                    <Button variant="ghost" size="icon" className="size-6 text-primary hover:bg-primary/10">
+                                      <ArrowRight className="size-3" />
+                                    </Button>
+                                  </Link>
+                                )}
+                              </div>
                            </div>
                         </CardContent>
                       </Card>

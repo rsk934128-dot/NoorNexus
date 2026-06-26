@@ -87,6 +87,7 @@ const USER_ITEMS = [
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Sovereign Gateway (P51)", url: "/sovereign-gateway", icon: Rocket, zenith: true },
   { title: "Global Grid (P53)", url: "/sovereign-gateway", icon: Network, highlight: true },
+  { title: "Certificate Vault", url: "/certificates", icon: Key },
   { title: "AMEX Token Hub", url: "/amex-tokens", icon: Key },
   { title: "AMEX Virtual Cards", url: "/amex-on-demand", icon: CreditCard },
   { title: "Enterprise Bridge", url: "/api-hub", icon: Link2 },
