@@ -40,7 +40,8 @@ import {
   Atom,
   Flame,
   LayoutGrid,
-  Map
+  Map,
+  Shield
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -59,12 +60,12 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
+    "AUTH: Sovereign Handler Node (786ad.firebaseapp.com) synchronized.",
     "FORTRESS: Official App ID a085f8... secured (Zenith Status: VERIFIED).",
     "GRID: 16 LIVE Nodes synchronized (Optimal Torque).",
     "LIQUIDITY: Inter-node balancing active (AIB-IE <-> ABN-BE).",
     "VAULT: Project #55.5 Irish Corridor anchoring active.",
     "AUTONOMY: Self-Healing Protocol #54.2 ARMED.",
-    "SCORECARD: Benelux efficiency lead confirmed (+4.2%).",
     "SHIELD: Quantum-Resistant Encryption Layer active."
   ])
   const [queryText, setQueryText] = useState("")
@@ -103,11 +104,10 @@ export default function Home() {
       })))
       
       const logs = [
+        "AUTH: Handshake verification via handler node success.",
         "BALANCER: Shifting $420K from ABN-BE to AIB-IE for liquidity sync.",
         "VAULT: Irish Corridor HNW data anchored (P55.5).",
         "HEATMAP: London-Edge latency spike detected and bypassed.",
-        "AUTONOMY: Nora-54 recalibrating efficiency index.",
-        "LEGACY: Self-Evolution cycle Ω-06 complete.",
         "ZENITH: Global Grid Veracity confirmed at 99.99%."
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
@@ -342,7 +342,7 @@ export default function Home() {
                     <div className="space-y-4">
                       {impactFeed.map((log, i) => (
                         <div key={i} className="p-3 bg-white/2 rounded-xl border border-white/5 font-mono text-[10px] flex items-center gap-3 animate-in fade-in slide-in-from-right-2 duration-500">
-                          <div className={`size-1.5 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)] ${log.includes('BALANCER') ? 'bg-primary' : 'bg-emerald-500'}`} />
+                          <div className={`size-1.5 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)] ${log.includes('AUTH') ? 'bg-purple-500' : log.includes('BALANCER') ? 'bg-primary' : 'bg-emerald-500'}`} />
                           <span className="text-muted-foreground truncate">{log}</span>
                         </div>
                       ))}

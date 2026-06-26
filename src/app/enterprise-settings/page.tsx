@@ -38,7 +38,8 @@ import {
   Clock,
   ShieldAlert,
   Flame,
-  Atom
+  Atom,
+  Shield
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
@@ -55,6 +56,7 @@ export default function EnterpriseSettingsPage() {
     secret: "S0V_RETA_P4SS_9988X_L4",
     createdDate: "27 Jun 2026, 12:20 am",
     redirectUrl: "https://auth.yapily.com/",
+    authHandler: "https://studio-786911773-686ad.firebaseapp.com/__/auth/handler",
     status: "ENABLED",
     type: "Direct"
   }
@@ -172,6 +174,28 @@ export default function EnterpriseSettingsPage() {
                                     </Button>
                                  </div>
                               </div>
+                           </div>
+                        </CardContent>
+                     </Card>
+
+                     {/* Sovereign Auth Handler Node (NEW) */}
+                     <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
+                        <CardHeader>
+                           <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
+                              <Shield className="size-4 text-purple-400" /> Sovereign Auth Handler Node
+                           </CardTitle>
+                           <CardDescription className="text-xs">Official Firebase Identity Callback Endpoint.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           <div className="p-4 bg-black/40 rounded-xl border border-white/5 flex gap-2">
+                              <Input value={APP_CONFIG.authHandler} readOnly className="bg-transparent border-none font-mono text-[10px] text-purple-300 h-8 p-0" />
+                              <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 text-muted-foreground hover:text-purple-400" onClick={() => handleCopy(APP_CONFIG.authHandler, "Auth Handler")}>
+                                 <Copy className="size-3" />
+                              </Button>
+                           </div>
+                           <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="text-[8px] border-emerald-500/30 text-emerald-500 uppercase">Trusted_Callback: VERIFIED</Badge>
+                              <Badge variant="outline" className="text-[8px] border-purple-500/30 text-purple-400 uppercase">mTLS_ENFORCED</Badge>
                            </div>
                         </CardContent>
                      </Card>

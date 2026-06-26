@@ -41,7 +41,8 @@ import {
   Network,
   Infinity,
   Fingerprint,
-  Settings
+  Settings,
+  Shield
 } from "lucide-react"
 import Link from "next/link"
 
@@ -52,6 +53,7 @@ const BLUEPRINT_STEPS = [
   { id: "P51.4", label: "Intelligent Fallback Engine", icon: Zap, status: "HARDENED" },
   { id: "P51.5", label: "White-label Studio", icon: Palette, status: "READY" },
   { id: "P51.6", label: "eIDAS Certificate Vault", icon: Key, status: "LIVE", url: "/certificates" },
+  { id: "P51.7", label: "Central Auth Handler", icon: Shield, status: "SYNCED", zenith: true },
   { id: "P54.1", label: "Sovereign Grid Autonomy", icon: Infinity, status: "ACTIVE", zenith: true },
 ]
 
