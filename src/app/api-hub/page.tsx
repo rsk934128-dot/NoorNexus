@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useRef, useEffect } from "react"
@@ -25,12 +24,13 @@ import {
   ArrowRightLeft,
   Link2,
   Lock,
-  Network
+  Network,
+  Infinity,
+  Fingerprint
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 export default function ApiHubPage() {
   const { toast } = useToast()
@@ -83,20 +83,20 @@ export default function ApiHubPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-purple-500/50 text-purple-500 uppercase font-bold tracking-widest px-3 h-8 bg-purple-500/5">
-                   <Link2 className="size-3 mr-2" /> Sovereign External API Bridge
+                   <Infinity className="size-3 mr-2" /> Mission 500: Project Zenith
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Empire <span className="text-purple-500">Zenith.</span>
+                Discovery <span className="text-purple-500">Hub.</span>
               </h2>
-              <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project Zenith: Scaling the Predictive-Autonomy engine to external enterprise partners. Integrate the NoorNexus Snippet into your own infrastructure.
+              <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
+                "Scaling the Empire." নূরনেক্সাস এখন তার ইনফ্রাস্ট্রাকচারকে বাইরের এন্টারপ্রাইজ পার্টনারদের জন্য উন্মুক্ত করছে—কিন্তু আমাদের সার্বভৌম শর্তে।
               </p>
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-purple-500/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Scaling Factor</p>
-                  <p className="text-3xl font-headline font-bold text-purple-500">ZENITH_L1</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Scaling Phase</p>
+                  <p className="text-2xl font-headline font-bold text-purple-500">ZENITH_L1</p>
                </div>
             </div>
           </header>
@@ -106,30 +106,48 @@ export default function ApiHubPage() {
               <Tabs defaultValue="bridge" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1">
                   <TabsTrigger value="bridge" className="gap-2"><Network className="size-4" /> Enterprise Bridge</TabsTrigger>
-                  <TabsTrigger value="docs" className="gap-2"><BookOpen className="size-4" /> SDK Docs</TabsTrigger>
-                  <TabsTrigger value="keys" className="gap-2"><Key className="size-4" /> API Keys</TabsTrigger>
+                  <TabsTrigger value="docs" className="gap-2"><BookOpen className="size-4" /> Discovery Protocol</TabsTrigger>
+                  <TabsTrigger value="keys" className="gap-2"><Key className="size-4" /> Zenith Keys</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="bridge" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
                    <Card className="glass-card border-l-4 border-l-purple-500">
                       <CardHeader>
                          <CardTitle className="text-sm font-headline uppercase text-purple-500 flex items-center gap-2">
-                            <Activity className="size-4" /> The Predictive-Autonomy API
+                            <Activity className="size-4" /> Predictive-Autonomy Engine (P500)
                          </CardTitle>
-                         <CardDescription>Granting external entities access to Nora-01 and Project #47 logic.</CardDescription>
+                         <CardDescription>Granting external entities access to Nora-01 and Project #47 logic via NoorNexus Snippet.</CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-6">
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="p-5 bg-black/40 rounded-xl border border-white/5 space-y-3">
-                               <h4 className="text-[10px] font-bold uppercase text-white">Endpoint: Predictive Maintenance</h4>
+                               <h4 className="text-[10px] font-bold uppercase text-white">Endpoint: Predictive Pulse</h4>
                                <p className="text-[9px] text-muted-foreground italic">"Allows external industrial nodes to calculate failure probabilities using NoorNexus trained weights."</p>
                                <code className="text-[10px] text-purple-400 block bg-black p-2 rounded">POST /v1/zenith/predict</code>
                             </div>
                             <div className="p-5 bg-black/40 rounded-xl border border-white/5 space-y-3">
-                               <h4 className="text-[10px] font-bold uppercase text-white">Endpoint: Sovereign Compliance</h4>
-                               <p className="text-[9px] text-muted-foreground italic">"Verify HMAC_V4 packet integrity for your own app mesh."</p>
+                               <h4 className="text-[10px] font-bold uppercase text-white">Endpoint: Sovereign Verification</h4>
+                               <p className="text-[9px] text-muted-foreground italic">"Verify HMAC_V4 packet integrity for external app meshes."</p>
                                <code className="text-[10px] text-purple-400 block bg-black p-2 rounded">POST /v1/zenith/verify</code>
                             </div>
+                         </div>
+
+                         <div className="p-6 bg-purple-500/5 rounded-xl border border-dashed border-purple-500/20">
+                            <div className="flex justify-between items-center">
+                               <div className="space-y-1">
+                                  <p className="text-xs font-bold text-white uppercase">NoorNexus SDK Snippet</p>
+                                  <p className="text-[10px] text-muted-foreground">Inject the Sovereign core into any web environment.</p>
+                               </div>
+                               <Button size="sm" className="bg-purple-500 text-white font-bold text-[10px] uppercase h-8">
+                                  Copy Snippet
+                               </Button>
+                            </div>
+                            <pre className="mt-4 p-4 bg-black rounded text-[10px] text-emerald-400 font-mono overflow-x-auto">
+{`<script src="https://cdn.noornexus.sovereign/v1/core.js"></script>
+<script>
+  sheikh.init({ appId: 'YOUR_ZENITH_KEY', region: 'GLOBAL' });
+</script>`}
+                            </pre>
                          </div>
                       </CardContent>
                    </Card>
@@ -138,19 +156,19 @@ export default function ApiHubPage() {
                 <TabsContent value="keys" className="space-y-6">
                    <Card className="glass-card">
                       <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase text-primary">Sovereign Key Management</CardTitle>
+                         <CardTitle className="text-sm font-headline uppercase text-primary">Zenith Key Management</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-6">
                          <div className="p-6 bg-black/40 rounded-xl border border-dashed border-white/20 text-center space-y-4">
                             {!apiKey ? (
-                              <Button onClick={generateKey} className="bg-primary text-primary-foreground font-bold uppercase tracking-widest">
+                              <Button onClick={generateKey} className="bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12">
                                 <Zap className="size-4 mr-2" /> Generate Zenith Key
                               </Button>
                             ) : (
                               <div className="space-y-2">
-                                <p className="text-[10px] text-muted-foreground uppercase font-bold">Your Secret Bridge Key</p>
+                                <p className="text-[10px] text-muted-foreground uppercase font-bold">Your Secret Zenith Key</p>
                                 <code className="text-lg font-mono text-emerald-500 bg-black p-4 rounded block break-all">{apiKey}</code>
-                                <p className="text-[8px] text-destructive uppercase font-bold animate-pulse">Never share this key. It grants Zenith Phase access.</p>
+                                <p className="text-[8px] text-destructive uppercase font-bold animate-pulse">Never share this key. It grants Zenith L1 access to the mesh.</p>
                               </div>
                             )}
                          </div>
@@ -169,7 +187,7 @@ export default function ApiHubPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                      "Enterprise scaling is the bridge to global dominance. We offer 99.8% precision to partners who align with our ethical framework."
+                      "Enterprise scaling is the bridge to global dominance. We offer 99.8% precision to partners who align with our Sovereign Constitution."
                    </p>
                 </CardContent>
               </Card>
@@ -177,7 +195,7 @@ export default function ApiHubPage() {
               <Card className="glass-card border-l-4 border-l-purple-500 h-[450px] flex flex-col">
                 <CardHeader className="shrink-0">
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-purple-500 flex items-center gap-2">
-                    <Cpu className="size-4" /> Zenith Assistant
+                    <Cpu className="size-4" /> Discovery Assistant
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col min-h-0 overflow-hidden space-y-4">
@@ -197,7 +215,7 @@ export default function ApiHubPage() {
                   <div className="shrink-0 space-y-4 pt-4 border-t border-white/5">
                     <div className="relative">
                        <input 
-                         placeholder="Technical query..." 
+                         placeholder="Inquire about Zenith Phase..." 
                          value={query}
                          onChange={e => setQuery(e.target.value)}
                          onKeyDown={e => e.key === 'Enter' && askNora()}
@@ -213,6 +231,17 @@ export default function ApiHubPage() {
                     </div>
                   </div>
                 </CardContent>
+              </Card>
+
+              <Card className="glass-card border-l-4 border-l-amber-500">
+                 <CardHeader className="pb-2">
+                    <CardTitle className="text-[10px] font-bold text-amber-500 uppercase flex items-center gap-2">
+                       <Fingerprint className="size-3" /> Identity Discovery
+                    </CardTitle>
+                 </CardHeader>
+                 <CardContent>
+                    <p className="text-[9px] text-muted-foreground italic">"All external apps must pass the 12-node identity handshake before discovery."</p>
+                 </CardContent>
               </Card>
             </div>
           </div>

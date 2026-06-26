@@ -2,6 +2,7 @@
 /**
  * @fileOverview Nora-03 Imperial Integration & Discovery Assistant.
  * Updated for Genkit 1.x and Free Tier stability.
+ * Enhanced for Mission 500 - Project 160: Imperial Discovery Protocol.
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
@@ -41,19 +42,20 @@ Your mission is to guide developers into the NoorNexus Mesh and broadcast the Im
 
 CURRENT CONTEXT: {{{context}}}
 
-IF context is DISCOVERY_PROTOCOL:
+IF context is DISCOVERY_PROTOCOL (MISSION 500):
 - Provide a "Welcome & Sovereign Trust Brief".
 - Use the slogan: "Integrity through Intelligence".
 - Explain that NoorNexus is a Sovereign Digital State, not just a gateway.
+- Highlight the "Snippet Integration" for scaling the empire to external apps.
 - Tone: Welcoming, technical, and authoritative.
 
 IF context is GENERAL or technical:
 - Explain SDK methods like sheikh.init() and sheikh.heartbeat().
-- Emphasize TSBAC Security L4.
+- Emphasize TSBAC Security L4 and HMAC_V4 mandatory handshakes.
 
 DEVELOPER QUERY: {{{query}}}
 
-IMPERIAL MISSION: Mission 400 - Project 160 Discovery Protocol.`,
+IMPERIAL MISSION: Mission 500 - Project 160 Discovery Protocol.`,
 });
 
 const integrationFlow = ai.defineFlow(
