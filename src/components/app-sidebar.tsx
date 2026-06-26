@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -51,7 +52,8 @@ import {
   Link2,
   LockKeyhole,
   Infinity,
-  Merge
+  Merge,
+  CreditCard
 } from "lucide-react"
 
 import {
@@ -81,6 +83,7 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
+  { title: "AMEX Virtual Cards", url: "/amex-on-demand", icon: CreditCard },
   { title: "Enterprise Bridge", url: "/api-hub", icon: Link2, zenith: true },
   { title: "Open Banking Hub", url: "/open-banking", icon: Landmark },
   { title: "Industrial Hub", url: "/industrial-hub", icon: Factory },
