@@ -58,7 +58,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
-    "LEGACY: Self-Evolution Core initiated for Mission 400 Completion.",
+    "LEGACY: Yapily-AMEX European Bridge synchronized.",
     "ZENITH: External API Bridge serving 12 Enterprise Partners.",
     "SYNC: Neural Cohesion achieved across all 50 Imperial Projects.",
     "SHIELD: Quantum-Resistant Encryption Layer active."
@@ -86,7 +86,7 @@ export default function Home() {
       const logs = [
         "LEGACY: Self-Refactoring cycle Ω-01 complete.",
         "ZENITH: 3 new Fortune-500 partners integrated via API Bridge.",
-        "SYNC: Predictive Maintenance pulse reduced downtime by 94%.",
+        "SYNC: Yapily-AMEX alliance boosting European canal throughput.",
         "CONTRACT: Sovereign Social Contract v3 released to Global Mesh.",
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))

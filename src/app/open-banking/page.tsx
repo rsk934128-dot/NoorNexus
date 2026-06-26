@@ -31,16 +31,17 @@ import {
   Timer,
   Lock,
   Route,
-  Infinity
+  Infinity,
+  Sparkles
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
 
 const GLOBAL_LEADERS = [
   { name: "Plaid", hq: "USA", banks: "9,706", countries: "60", tag: "Global Alpha", url: "https://plaid.com/" },
+  { name: "Yapily", hq: "UK", banks: "2,000+", countries: "19+", tag: "AMEX Partner", url: "https://yapily.com/", alliance: "AMEX European Bridge" },
   { name: "Lunch Flow", hq: "EU", banks: "2,400", countries: "60", tag: "EU Leader", url: "https://lunchflow.com/" },
   { name: "GoCardless", hq: "UK", banks: "2,228", countries: "54", tag: "PIS Expert", url: "https://gocardless.com/" },
-  { name: "YAXI", hq: "UK", banks: "1,921", countries: "40", tag: "High Coverage", url: "https://yapi.com/" },
   { name: "Volt", hq: "UK", banks: "1,668", countries: "50", tag: "Instant Payments", url: "https://volt.io/" },
   { name: "Salt Edge", hq: "Canada", banks: "1,586", countries: "73", tag: "Compliance King", url: "https://saltedge.com/" },
 ]
@@ -52,6 +53,7 @@ const REGIONAL_PROVIDERS = {
     { name: "Finicity", banks: "2", countries: "2", url: "https://finicity.com/" },
   ],
   europe: [
+    { name: "Yapily", banks: "2,000", countries: "19", url: "https://yapily.com/" },
     { name: "Lunch Flow", banks: "2,400", countries: "60", url: "https://lunchflow.com/" },
     { name: "GoCardless", banks: "2,228", banks: "2,228", countries: "54", url: "https://gocardless.com/" },
     { name: "Tink", banks: "511", countries: "46", url: "https://tink.com/" },
@@ -114,9 +116,9 @@ export default function OpenBankingHubPage() {
   }
 
   const triggerFailover = () => {
-    toast({ title: "Autonomous Reroute", description: "Nora-50 switching to secondary Sovereign route (Lunch Flow EU)..." })
+    toast({ title: "Autonomous Reroute", description: "Nora-50 switching to secondary Sovereign route (Yapily EU)..." })
     setFailSafeActive(false)
-    openInApp("https://lunchflow.com/")
+    openInApp("https://yapily.com/")
   }
 
   return (
@@ -274,6 +276,12 @@ export default function OpenBankingHubPage() {
                                           <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">{p.tag}</Badge>
                                        </div>
                                        <p className="text-[9px] text-muted-foreground font-mono uppercase tracking-widest">{p.banks} Banks • {p.countries} Countries</p>
+                                       {p.alliance && (
+                                         <div className="flex items-center gap-1 mt-1">
+                                            <Sparkles className="size-2 text-amber-500" />
+                                            <p className="text-[8px] text-amber-500 font-bold uppercase">{p.alliance}</p>
+                                         </div>
+                                       )}
                                     </div>
                                  </div>
                                  <Button variant="ghost" size="icon" className="text-muted-foreground group-hover:text-primary">
