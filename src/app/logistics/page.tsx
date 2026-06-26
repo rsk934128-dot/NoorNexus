@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -22,7 +21,7 @@ import {
   AlertTriangle,
   Search,
   LayoutGrid,
-  TrendingDown,
+  TrendingUp,
   BrainCircuit,
   Coins,
   History
