@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -42,11 +41,11 @@ export default function NeuralAuditPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [auditResult, setAuditResult] = useState<NeuralAuditOutput | null>(null)
-  const [activeNode, setActiveNode] = useState("abn-amro-nl")
+  const [activeNode, setActiveNode] = useState("abn-amro-be-asset")
   
   // LIVE Efficiency Stats (Simulated)
   const [liveStats, setLiveStats] = useState({
-    latency: 32,
+    latency: 28,
     successRate: 100.0,
     uptime: "99.99%",
     status: "STABLE",
@@ -57,8 +56,8 @@ export default function NeuralAuditPage() {
     const interval = setInterval(() => {
       setLiveStats(prev => ({
         ...prev,
-        latency: Math.floor(Math.random() * (45 - 28) + 28),
-        successRate: Math.random() > 0.99 ? 99.8 : 100.0
+        latency: Math.floor(Math.random() * (42 - 24) + 24),
+        successRate: Math.random() > 0.99 ? 99.9 : 100.0
       }))
     }, 3000)
     return () => clearInterval(interval)
@@ -71,11 +70,11 @@ export default function NeuralAuditPage() {
       const result = await runNeuralAudit({
         nodeId: activeNode,
         nodeType: 'ASPSP',
-        region: "Global Mesh - LIVE",
-        consentStatus: "ACTIVE_AIS_PIS_SCOPE_L4_LIVE"
+        region: "Belgium - Corporate LIVE",
+        consentStatus: "ACTIVE_AIS_PIS_ASSET_MGMT_L4"
       })
       setAuditResult(result)
-      toast({ title: "Neural Audit Finalized", description: "Grid compliance synchronized." })
+      toast({ title: "Neural Audit Finalized", description: "Corporate grid compliance synchronized." })
     } catch (e: any) {
       toast({ title: "Audit Link Error", description: e.message, variant: "destructive" })
     } finally {
@@ -105,7 +104,7 @@ export default function NeuralAuditPage() {
                 Compliance <span className="text-emerald-500">Sentinel.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                Project #52 & #54: Real-time Compliance & Grid Autonomy. Nora-52 and Nora-54 ensure 100% legal veracity and fail-safe regional immunity.
+                Project #52 & #54: Real-time Compliance & Grid Autonomy. Nora-52 and Nora-54 ensure 100% legal veracity for Private & Corporate corridors.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -121,7 +120,7 @@ export default function NeuralAuditPage() {
               {/* LIVE Efficiency Monitor */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <BarChart3 className="size-4" /> Global Grid Pulse (13 LIVE Nodes)
+                    <BarChart3 className="size-4" /> Global Grid Pulse (14 LIVE Nodes)
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {[
@@ -152,7 +151,7 @@ export default function NeuralAuditPage() {
                     <CardTitle className="text-sm font-headline uppercase tracking-widest text-primary flex items-center gap-2">
                        <Atom className="size-4" /> Autonomy Configuration
                     </CardTitle>
-                    <CardDescription>Target: Global Grid Expansion (P54)</CardDescription>
+                    <CardDescription>Target: Belgium Corporate Corridor (P54)</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="space-y-2">
@@ -162,13 +161,17 @@ export default function NeuralAuditPage() {
                           <Badge className="bg-emerald-500 text-[8px]">LIVE</Badge>
                        </div>
                     </div>
+                    <div className="space-y-2">
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase">Business Type</p>
+                       <Badge variant="outline" className="text-[9px] border-primary/30 text-primary">PRIVATE_ASSET_MGMT</Badge>
+                    </div>
                     <Button 
                       onClick={handleRunAudit} 
                       disabled={loading}
                       className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary"
                     >
                        {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <Zap className="size-4 mr-2" />}
-                       Execute Neural Sync (LIVE)
+                       Execute Corporate Neural Sync
                     </Button>
                   </CardContent>
                 </Card>
@@ -201,7 +204,7 @@ export default function NeuralAuditPage() {
                     <Card className="glass-card flex flex-col items-center justify-center py-20 gap-4 border-dashed opacity-40 h-full">
                        <Eye className="size-12 text-primary animate-pulse" />
                        <p className="text-xs font-mono uppercase tracking-widest text-center leading-relaxed">
-                          Await Autonomy Dispatch.<br/>Monitoring SE Asia & EU Rails.
+                          Await Corporate Dispatch.<br/>Monitoring Asset Mgmt Rails.
                        </p>
                     </Card>
                   )}
@@ -221,7 +224,7 @@ export default function NeuralAuditPage() {
                    <div className="space-y-4">
                       {[
                         { label: "Active Fail-overs", val: "0", color: "text-emerald-500" },
-                        { label: "Load Variance", val: "4.2%", color: "text-primary" },
+                        { label: "Load Variance", val: "3.8%", color: "text-primary" },
                         { label: "Self-Evolution", status: "ACTIVE", color: "text-emerald-500" }
                       ].map((s, i) => (
                         <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
@@ -233,7 +236,7 @@ export default function NeuralAuditPage() {
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-amber-500/20">
+              <Card className="glass-card border-amber-500/20 bg-amber-500/5">
                  <CardHeader className="pb-2">
                     <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
                        <ZapOff className="size-3" /> Anomaly Protection
@@ -241,7 +244,7 @@ export default function NeuralAuditPage() {
                  </CardHeader>
                  <CardContent>
                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                       "Regional rail collapse protection is ARMED. Traffic will automatically bypass SE Asia failures via European nodes."
+                       "Corporate rail protection is ARMED. Traffic will automatically bypass any asset management drift via alternate Benelux nodes."
                     </p>
                  </CardContent>
               </Card>

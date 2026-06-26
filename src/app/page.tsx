@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -61,9 +60,10 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
+    "GRID: ABN AMRO BE Asset Managers LIVE Node activated.",
     "GRID: ABN AMRO LIVE Node (NL/BE/DE) activated successfully.",
     "AUTONOMY: Nora-54 detected new Asian Banking Directive - Auto-adjusted SCA.",
-    "LOAD_BALANCER: Traffic redistributed across 13 high-power nodes.",
+    "LOAD_BALANCER: Traffic redistributed across 14 high-power nodes.",
     "RESILIENCE: Fail-over Global Grid protocol ARMED and SYNCED.",
     "LEGACY: Yapily-AMEX European Bridge synchronized.",
     "SHIELD: Quantum-Resistant Encryption Layer active."
@@ -90,7 +90,7 @@ export default function Home() {
     const interval = setInterval(() => {
       const logs = [
         "GRID: Benelux corridor expansion at 99.9% sync via ABN AMRO.",
-        "BALANCER: Node ABN-AMRO-NL taking 15% system load.",
+        "BALANCER: Node ABN-AMRO-BE-ASSET taking 8% system load.",
         "AUTONOMY: Self-Adjustment triggered for SE Asia nodes.",
         "LEGACY: Self-Refactoring cycle Ω-02 complete.",
         "RESILIENCE: Latency drift detected in London - Traffic rerouted to Dubai Hub.",
@@ -172,7 +172,7 @@ export default function Home() {
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                        <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: '99%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Global Fail-over ACTIVE | 13 LIVE Nodes | Load Balanced"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Global Fail-over ACTIVE | 14 LIVE Nodes | Load Balanced"</p>
                 </Card>
               </div>
             </div>
@@ -233,13 +233,13 @@ export default function Home() {
                   <Card className="glass-card bg-black/40 border-white/5 p-6">
                      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
                         {[
-                           { name: "ABN-AMRO", load: 15, status: "OPTIMAL" },
+                           { name: "ABN-AMRO", load: 12, status: "OPTIMAL" },
+                           { name: "ABN-BE-ASSET", load: 8, status: "STABLE" },
                            { name: "BIG-ES", load: 22, status: "STABLE" },
                            { name: "BKASH-BD", load: 45, status: "BUSY" },
                            { name: "YAPILY-EU", load: 10, status: "IDLE" },
                            { name: "AMEX-US", load: 8, status: "IDLE" },
-                           { name: "GRAB-SEA", load: 0, status: "OFFLINE" },
-                           { name: "PAYTM-IN", load: 0, status: "OFFLINE" }
+                           { name: "GRAB-SEA", load: 0, status: "OFFLINE" }
                         ].map((node, i) => (
                            <div key={i} className="space-y-2 text-center p-2 rounded-lg bg-white/5 border border-white/5 group hover:border-primary/50 transition-all">
                               <p className="text-[8px] font-bold text-muted-foreground uppercase truncate">{node.name}</p>
@@ -264,7 +264,7 @@ export default function Home() {
                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                         <Rocket className="size-4" /> Sovereign Global Autonomy
                      </h3>
-                     <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase">Active Enterprise Nodes: 433+</Badge>
+                     <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase">Active Enterprise Nodes: 434+</Badge>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                      {[
