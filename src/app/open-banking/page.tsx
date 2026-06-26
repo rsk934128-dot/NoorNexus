@@ -51,6 +51,17 @@ const PROVIDER_METRICS = [
 
 const VALIDATED_NODES = [
   {
+    name: "AIB Ireland Business - LIVE",
+    fullName: "Allied Irish Bank Ireland Business",
+    id: "aibbusiness",
+    bic: "AIBKIE2DXXX",
+    country: "Ireland",
+    type: "AIS_PIS",
+    features: ["Bulk Payment", "Domestic Single", "International Single", "Future Payment", "Periodic Payments", "Direct Debits"],
+    status: "LIVE_ENVIRONMENT",
+    crossBorderVeracity: "100.0%"
+  },
+  {
     name: "ABN AMRO BE (Private) - LIVE",
     fullName: "ABN AMRO Private Banking Belgium",
     id: "abn-amro-be-private",
@@ -164,7 +175,7 @@ export default function OpenBankingHubPage() {
       setSimulatingVeracity(false)
       toast({
         title: "Cross-Border Veracity Confirmed",
-        description: "PIS-AIS handshake validated across Iberian and Benelux corridors.",
+        description: "PIS-AIS handshake validated across Iberian, Benelux and Irish corridors.",
         className: "border-emerald-500/50 bg-emerald-500/5"
       })
     }, 2000)
@@ -339,7 +350,7 @@ export default function OpenBankingHubPage() {
                    </div>
                 </section>
 
-                {/* SIBS Ecosystem Section */}
+                {/* SIBS Network Ecosystem Section */}
                 <section className="space-y-6">
                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                       <Building2 className="size-4" /> SIBS Network Ecosystem (Portugal)
@@ -492,7 +503,7 @@ export default function OpenBankingHubPage() {
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                         "Handshake veracity ensures that Iberian and Benelux cross-border PIS flows match PSD2 compliance markers with 99.9% precision."
+                         "Handshake veracity ensures that Iberian, Benelux and Irish cross-border PIS flows match PSD2 compliance markers with 99.9% precision."
                       </p>
                    </CardContent>
                 </Card>

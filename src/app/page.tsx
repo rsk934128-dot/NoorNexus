@@ -58,7 +58,7 @@ export default function Home() {
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [impactFeed, setImpactFeed] = useState<string[]>([
     "FORTRESS: Official App ID a085f8... secured (Zenith Status: VERIFIED).",
-    "GRID: 15 LIVE Nodes synchronized (Optimal Torque).",
+    "GRID: 16 LIVE Nodes synchronized (Optimal Torque).",
     "VAULT: Project #55 Premium Data Anchoring active.",
     "AUTONOMY: Self-Healing Protocol #54.2 ARMED.",
     "SCORECARD: Benelux efficiency lead confirmed (+4.2%).",
@@ -88,10 +88,11 @@ export default function Home() {
       const logs = [
         "SELF_HEAL: Re-routing traffic from London-Edge to Spain-Core.",
         "VAULT: Premium HNW payload anchored to Cold Storage Node 1.",
-        "BALANCER: Power 100/100 across 15 active nodes.",
+        "BALANCER: Power 100/100 across 16 active nodes.",
         "AUTONOMY: Nora-54 recalibrating efficiency index.",
         "LEGACY: Self-Evolution cycle Ω-05 complete.",
         "ZENITH: App ID a085f8... integrity verified by Nora-52.",
+        "NODE: AIB Ireland Business LIVE activation confirmed."
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 5000)
@@ -151,7 +152,7 @@ export default function Home() {
                    {isAdmin ? 'Imperial Fortress.' : 'Global Grid.'}
                 </h2>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:xl leading-relaxed italic">
-                   "Mission 400: The Final Synthesis." নূরনেক্সাস এখন একটি অপরাজেয় ফিনটেক দুর্গ। আমাদের স্নায়ুতন্ত্র এখন ১৫টি লাইভ নোড এবং জেনিথ-লেভেল সিকিউরিটির মাধ্যমে সুরক্ষিত।
+                   "Mission 400: The Final Synthesis." নূরনেক্সাস এখন একটি অপরাজেয় ফিনটেক দুর্গ। আমাদের স্নায়ুতন্ত্র এখন ১৬টি লাইভ নোড এবং জেনিথ-লেভেল সিকিউরিটির মাধ্যমে সুরক্ষিত।
                 </p>
               </div>
               
@@ -170,7 +171,7 @@ export default function Home() {
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                        <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '100%' }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"15 LIVE Nodes | Zenith Monitoring | Quantum Anchored (P55)"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"16 LIVE Nodes | Zenith Monitoring | Quantum Anchored (P55)"</p>
                 </Card>
               </div>
             </div>
@@ -221,7 +222,7 @@ export default function Home() {
                {/* Efficiency Scorecard Summary */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                     <Award className="size-4" /> Global Grid Scorecard (15 LIVE Nodes)
+                     <Award className="size-4" /> Global Grid Scorecard (16 LIVE Nodes)
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                      {[

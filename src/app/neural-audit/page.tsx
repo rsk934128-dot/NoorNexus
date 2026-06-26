@@ -55,7 +55,7 @@ export default function NeuralAuditPage() {
   const [liveStats, setLiveStats] = useState({
     latency: 28,
     successRate: 100.0,
-    activeNodes: 15,
+    activeNodes: 16,
     status: "STABLE",
     failoverStatus: "ARMED",
     selfHealingStatus: "OPTIMAL"
@@ -80,7 +80,7 @@ export default function NeuralAuditPage() {
         appId: OFFICIAL_APP_ID,
         nodeId: activeNode,
         nodeType: 'ASPSP',
-        region: "Belgium - Private LIVE",
+        region: "Global - Multi-Node LIVE",
         consentStatus: "ACTIVE_AIS_PIS_HNW_L4"
       })
       setAuditResult(audit)
@@ -89,10 +89,11 @@ export default function NeuralAuditPage() {
       const autonomy = await runGridAutonomy({
         region: "Global Mesh Corridor",
         detectedRegulatoryChange: "New Sovereign Autonomy Protocol #54 established.",
-        currentGatewayConfig: { active_nodes: 15, self_healing: true },
+        currentGatewayConfig: { active_nodes: 16, self_healing: true },
         nodePerformanceData: [
           { nodeId: "BENELUX-CORE", latency: 28, uptime: 100, roi: 92 },
-          { nodeId: "IBERIAN-BRIDGE", latency: 42, uptime: 99.9, roi: 88 }
+          { nodeId: "IBERIAN-BRIDGE", latency: 42, uptime: 99.9, roi: 88 },
+          { nodeId: "IRISH-BUSINESS", latency: 35, uptime: 100, roi: 94 }
         ],
         transactionContext: {
           volume: 1200000,
@@ -104,7 +105,7 @@ export default function NeuralAuditPage() {
 
       toast({ 
         title: "Zenith Level Sync Finalized", 
-        description: `Application ${OFFICIAL_APP_ID.substring(0, 8)} is verified.` 
+        description: `Application ${OFFICIAL_APP_ID.substring(0, 8)} is verified across 16 nodes.` 
       })
     } catch (e: any) {
       toast({ title: "Sync Error", description: e.message, variant: "destructive" })
@@ -237,7 +238,7 @@ export default function NeuralAuditPage() {
                                 <div className="h-full bg-emerald-500" style={{ width: '100%' }} />
                              </div>
                           </div>
-                          <p className="text-[10px] text-muted-foreground italic">"Automatic traffic rerouting is active across 15 high-power nodes."</p>
+                          <p className="text-[10px] text-muted-foreground italic">"Automatic traffic rerouting is active across 16 high-power nodes."</p>
                        </CardContent>
                     </Card>
 
@@ -253,7 +254,7 @@ export default function NeuralAuditPage() {
                              <Badge className="bg-primary/20 text-primary border-none">ACTIVE</Badge>
                           </div>
                           <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                             "Nora-54 is currently routing corporate assets via lowest-fee corridors."
+                             "Nora-54 is currently routing corporate assets via lowest-fee corridors including Irish Business bridge."
                           </p>
                        </CardContent>
                     </Card>
