@@ -24,7 +24,9 @@ import {
   MessageSquare,
   Fingerprint,
   Loader2,
-  FileDown
+  FileDown,
+  Globe,
+  Scale
 } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Link from "next/link"
@@ -43,12 +45,52 @@ export default function ProposalPage() {
 
     // Simulate high-level encryption and packaging process
     setTimeout(() => {
-      setDownloading(false)
-      toast({
-        title: "Download Successful",
-        description: "Pitch_Deck_v3.5_Sovereign.pdf has been dispatched to your local node.",
-        className: "border-emerald-500/50 bg-emerald-500/5"
-      })
+      try {
+        // Create a mock PDF content (using text for demonstration, but browser treats as PDF file)
+        const mockContent = `
+          NOORNEXUS SOVEREIGN OS - MISSION 500 PITCH DECK
+          -----------------------------------------------
+          INTEGRITY THROUGH INTELLIGENCE
+          
+          Commander: Sheikh Farid
+          Status: GLOBAL_HEGEMONY
+          Phase: Zenith Peak
+          
+          CORE CAPABILITIES:
+          - 100-Node Autonomous Grid
+          - Sovereign Data Lake (Project #300)
+          - Economic Intelligence (Project #400)
+          - Zenith Traceability < 28ms
+          
+          This is an official document of the NoorNexus Sovereign Infrastructure.
+        `;
+        
+        const blob = new Blob([mockContent], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "NoorNexus_Pitch_Deck_v3.5_Sovereign.pdf";
+        document.body.appendChild(a);
+        a.click();
+        
+        // Cleanup
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        setDownloading(false)
+        toast({
+          title: "Download Successful",
+          description: "Pitch_Deck_v3.5_Sovereign.pdf has been dispatched to your local node.",
+          className: "border-emerald-500/50 bg-emerald-500/5"
+        })
+      } catch (err) {
+        setDownloading(false)
+        toast({
+          title: "Download Failed",
+          description: "The secure transmission was interrupted.",
+          variant: "destructive"
+        })
+      }
     }, 2500)
   }
 
