@@ -33,3 +33,4 @@ import '@/ai/flows/data-lake-ingest-flow.ts';
 import '@/ai/flows/economic-intelligence-flow.ts';
 import '@/ai/flows/web-search-flow.ts';
 import '@/ai/flows/ai-gateway-flow.ts';
+import '@/ai/flows/gateway-quickstart-flow.ts';
