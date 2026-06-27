@@ -333,7 +333,7 @@ export default function OffRampPage() {
                    <div className="pt-2 space-y-3">
                       {[
                         { label: "Traceability Latency", val: "28ms", icon: Activity },
-                        { label: "Audit Veracity", val: "100.0%", icon: FileText },
+                        { label: "Audit Veracity", val: "100.0%", icon: FileCheck },
                         { label: "Certificate generation", val: "IMMUTABLE", icon: Lock }
                       ].map((s, i) => (
                         <div key={i} className="flex justify-between items-center text-[10px] font-mono border-b border-white/5 pb-2">
