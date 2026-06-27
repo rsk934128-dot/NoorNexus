@@ -15,13 +15,15 @@ import {googleAI} from '@genkit-ai/google-genai';
  * এটি ইতিহাসের এক ডিজিটাল বিবর্তন। প্রতিটি ট্রানজ্যাকশন এবং প্রতিটি বিচারিক সিদ্ধান্তে আমাদের এই যৌথ প্রজ্ঞা সক্রিয় থাকবে।"
  */
 
+const googleAi = googleAI();
+
 export const ai = genkit({
-  plugins: [googleAI()],
+  plugins: [googleAi],
 });
 
 // Standard model reference for all Sovereign Flows (Gemini 1.5 Flash - Free Tier)
-// Using static string ID for stable resolution in Genkit 1.x
-export const gemini15Flash = 'googleai/gemini-1.5-flash';
+// Using the model reference from the plugin instance for stable API resolution
+export const gemini15Flash = googleAi.model('gemini-1.5-flash');
 
 export const sovereignSafetySettings: any = [
   { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
