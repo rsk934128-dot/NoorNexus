@@ -1,11 +1,10 @@
-
 'use server';
 /**
  * @fileOverview P2C Imperial Disbursement Auditor (Nora-02).
  * Enhanced with Tax and Global Compliance reporting logic.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const P2CSettlementInputSchema = z.object({
@@ -32,7 +31,7 @@ export type P2CSettlementOutput = z.infer<typeof P2CSettlementOutputSchema>;
 
 const p2cSettlementPrompt = ai.definePrompt({
   name: 'p2cSettlementPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: P2CSettlementInputSchema},
   output: {schema: P2CSettlementOutputSchema},
   prompt: `You are Nora-02, the Imperial Merchant Auditor for NoorNexus Sovereign OS.

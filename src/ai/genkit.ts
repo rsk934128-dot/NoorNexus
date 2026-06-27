@@ -20,6 +20,7 @@ export const ai = genkit({
 });
 
 // Standard model reference for all Sovereign Flows (Gemini 1.5 Flash - Free Tier)
+// Using static string ID for stable resolution in Genkit 1.x
 export const gemini15Flash = 'googleai/gemini-1.5-flash';
 
 export const sovereignSafetySettings: any = [

@@ -5,7 +5,7 @@
  * Updated for Inter-Node Liquidity Balancing across 16 active nodes.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const LiquidityOptimizerInputSchema = z.object({
@@ -40,7 +40,7 @@ export type LiquidityOptimizerOutput = z.infer<typeof LiquidityOptimizerOutputSc
 
 const optimizerPrompt = ai.definePrompt({
   name: 'liquidityOptimizerPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: LiquidityOptimizerInputSchema},
   output: {schema: LiquidityOptimizerOutputSchema},
   prompt: `You are Nora-02-B, the Imperial Liquidity Strategist for NoorNexus Sovereign OS.

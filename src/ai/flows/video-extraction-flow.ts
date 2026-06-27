@@ -2,7 +2,7 @@
 /**
  * @fileOverview Nora-60 Video Extraction Agent (Project #60).
  * Simulates YouTube metadata extraction and provides download coordinates.
- * Updated with Sovereign Safety Settings to prevent extraction drift.
+ * Updated with Sovereign Safety Settings and explicit model reference.
  */
 
 import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
