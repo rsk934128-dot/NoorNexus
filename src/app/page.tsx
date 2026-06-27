@@ -6,7 +6,6 @@ import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { 
   ShieldCheck, 
   Menu, 
@@ -42,7 +41,9 @@ import {
   Server,
   LayoutGrid,
   Link2,
-  BatteryCharging
+  BatteryCharging,
+  History,
+  Shield
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -50,11 +51,17 @@ import { useUser, useFirestore, useCollection } from "@/firebase"
 import { SovereignLogo } from "@/components/sovereign-logo"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import Link from "next/link"
-import { formatDistanceToNow } from "date-fns"
 import { collection, query, orderBy, limit } from "firebase/firestore"
 import { processNeuralQuery, ImperialQueryOutput } from "@/ai/flows/imperial-query-flow"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
+
+const EVOLUTION_MILESTONES = [
+  { id: 450, label: "Background Persistence", desc: "Active Apps background mode optimized.", status: "COMPLETED", color: "text-emerald-500" },
+  { id: 460, label: "Sovereign Shield Matrix", desc: "Hardened logs & MITM tracking active.", status: "COMPLETED", color: "text-primary" },
+  { id: 470, label: "Immortal Process Guard", desc: "System level signing protocol hardened.", status: "COMPLETED", color: "text-purple-500" },
+  { id: 480, label: "Global AI Bridge", desc: "Omni-Device cognitive mesh established.", status: "COMPLETED", color: "text-amber-500" }
+]
 
 export default function Home() {
   const { toast } = useToast()
@@ -70,7 +77,6 @@ export default function Home() {
   const [aiResult, setAiResult] = useState<ImperialQueryOutput | null>(null)
   const [aiPulses, setAiPulses] = useState(15420)
   
-  // Real-time Citizen Pulse
   const { data: allSessions } = useCollection<any>(
     query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(100))
   )
@@ -214,6 +220,34 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
+               {/* Evolution Milestone Tracker */}
+               <section className="space-y-6">
+                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                    <History className="size-4" /> Sovereign Evolution Milestones
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     {EVOLUTION_MILESTONES.map((m) => (
+                       <Card key={m.id} className="glass-card border-white/5 bg-black/40 overflow-hidden group hover:border-emerald-500/20 transition-all">
+                          <CardContent className="p-6">
+                             <div className="flex justify-between items-start">
+                                <div className="space-y-2">
+                                   <div className="flex items-center gap-2">
+                                      <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Project #{m.id}</p>
+                                      <Badge className="bg-emerald-500 text-black text-[7px] h-4 font-bold">{m.status}</Badge>
+                                   </div>
+                                   <h4 className={`text-lg font-headline font-bold text-white uppercase ${m.color}`}>{m.label}</h4>
+                                   <p className="text-[11px] text-muted-foreground italic leading-relaxed">"{m.desc}"</p>
+                                </div>
+                                <div className={`p-2 rounded-lg bg-emerald-500/10 ${m.color}`}>
+                                   <Check className="size-5" />
+                                </div>
+                             </div>
+                          </CardContent>
+                       </Card>
+                     ))}
+                  </div>
+               </section>
+
                {/* Zenith AI Intelligence Interface */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
@@ -305,6 +339,24 @@ export default function Home() {
                   <p className="text-[9px] text-muted-foreground italic leading-relaxed">
                     "Active apps run in background. This improves functionality but consumes more power."
                   </p>
+               </Card>
+
+               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+                  <CardHeader>
+                     <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
+                        <Shield className="size-4" /> Immortal Guard Status
+                     </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                     <div className="p-3 bg-black/40 rounded border border-white/5 flex justify-between items-center">
+                        <span className="text-[10px] text-muted-foreground uppercase">Kernel Signing</span>
+                        <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">VERIFIED</Badge>
+                     </div>
+                     <div className="p-3 bg-black/40 rounded border border-white/5 flex justify-between items-center">
+                        <span className="text-[10px] text-muted-foreground uppercase">Background Canal</span>
+                        <Badge className="bg-primary/20 text-primary border-none text-[8px]">IMMORTAL</Badge>
+                     </div>
+                  </CardContent>
                </Card>
 
                <Card className="glass-card flex flex-col h-[400px]">

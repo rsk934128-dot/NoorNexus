@@ -63,7 +63,8 @@ import {
   LayoutGrid,
   Youtube,
   Download,
-  Mic2
+  Mic2,
+  BatteryCharging
 } from "lucide-react"
 
 import {
@@ -224,19 +225,29 @@ export function AppSidebar() {
 
   return (
     <Sidebar className="border-r border-white/5 bg-sidebar text-sidebar-foreground">
-      <SidebarHeader className="p-4 flex flex-row items-center justify-between shrink-0">
-        <div className="flex items-center gap-3">
-          <SovereignLogo size={36} className="shrink-0" />
-          <div className="min-w-0">
-            <h1 className="text-lg font-headline font-bold text-primary tracking-tight truncate">NoorNexus</h1>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Imperial OS v3</p>
+      <SidebarHeader className="p-4 flex flex-col gap-4 shrink-0">
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex items-center gap-3">
+            <SovereignLogo size={36} className="shrink-0" />
+            <div className="min-w-0">
+              <h1 className="text-lg font-headline font-bold text-primary tracking-tight truncate">NoorNexus</h1>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Imperial OS v3</p>
+            </div>
           </div>
+          {isMobile && (
+            <Button variant="ghost" size="icon" onClick={() => setOpenMobile(false)} className="md:hidden text-muted-foreground">
+              <X className="size-5" />
+            </Button>
+          )}
         </div>
-        {isMobile && (
-          <Button variant="ghost" size="icon" onClick={() => setOpenMobile(false)} className="md:hidden text-muted-foreground">
-            <X className="size-5" />
-          </Button>
-        )}
+        
+        <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-between">
+           <div className="flex items-center gap-2">
+              <BatteryCharging className="size-3 text-emerald-500 animate-pulse" />
+              <span className="text-[8px] font-bold text-emerald-500 uppercase">Always Alive Mode</span>
+           </div>
+           <div className="size-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.8)]" />
+        </div>
       </SidebarHeader>
       
       <SidebarSeparator />
