@@ -38,7 +38,8 @@ const INITIAL_LINKS = [
   { id: "3", name: "Binance Exchange", url: "https://www.binance.com", category: "Crypto", status: "VERIFIED" },
   { id: "4", name: "JamesEdition Jets", url: "https://www.jamesedition.com/jets", category: "Aerospace", status: "VERIFIED" },
   { id: "5", name: "Yapily Console", url: "https://console.yapily.com/", category: "Infrastructure", status: "VERIFIED" },
-  { id: "6", name: "RedotPay Business", url: "https://business.redotpay.com/biz/home/", category: "Fintech", status: "VERIFIED" }
+  { id: "6", name: "RedotPay Business", url: "https://business.redotpay.com/biz/home/", category: "Fintech", status: "VERIFIED" },
+  { id: "7", name: "SSLCommerz Onboarding", url: "https://join.sslcommerz.com/upload-information", category: "Fintech", status: "VERIFIED" }
 ]
 
 export default function SovereignBazaarPage() {

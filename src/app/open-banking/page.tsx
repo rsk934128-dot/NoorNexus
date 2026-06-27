@@ -39,7 +39,8 @@ import {
   FlaskConical,
   ShieldPlus,
   ArrowRightLeft,
-  Key
+  Key,
+  UserPlus
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
@@ -273,20 +274,19 @@ export default function OpenBankingHubPage() {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               <div className="lg:col-span-3 space-y-10">
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                    {/* Yapily Console Access */}
                    <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/10 relative overflow-hidden group hover:border-amber-500/40 transition-all cursor-pointer" onClick={() => openInApp("https://console.yapily.com/")}>
                       <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
                          <Key className="size-32 text-amber-500" />
                       </div>
-                      <CardHeader>
+                      <CardHeader className="pb-2">
                          <Badge className="bg-amber-500 text-black border-none text-[8px] h-4 mb-2 uppercase font-bold">Infrastructure Console</Badge>
-                         <CardTitle className="text-2xl font-headline font-bold text-white uppercase tracking-tight">Yapily Console</CardTitle>
-                         <CardDescription className="text-amber-500 font-mono text-[10px] uppercase tracking-[0.2em]">Manage 74+ Banking Canals</CardDescription>
+                         <CardTitle className="text-xl font-headline font-bold text-white uppercase tracking-tight">Yapily Console</CardTitle>
                       </CardHeader>
-                      <CardContent className="flex items-center gap-4">
-                         <p className="text-[11px] text-muted-foreground leading-relaxed italic">
-                            কমান্ডার, এখান থেকে আপনি নূরনেক্সাস সাম্রাজ্যের মূল ব্যাংকিং রেইলস নিয়ন্ত্রণ করতে পারবেন।
+                      <CardContent>
+                         <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                            Manage 74+ banking canals from the core mMainframe terminal.
                          </p>
                       </CardContent>
                    </Card>
@@ -296,14 +296,29 @@ export default function OpenBankingHubPage() {
                       <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
                          <CreditCard className="size-32 text-primary" />
                       </div>
-                      <CardHeader>
-                         <Badge className="bg-primary text-primary-foreground border-none text-[8px] h-4 mb-2 uppercase font-bold">Card Settlement Hub</Badge>
-                         <CardTitle className="text-2xl font-headline font-bold text-white uppercase tracking-tight">RedotPay Business</CardTitle>
-                         <CardDescription className="text-primary font-mono text-[10px] uppercase tracking-[0.2em]">Sovereign Card Distribution Node</CardDescription>
+                      <CardHeader className="pb-2">
+                         <Badge className="bg-primary text-primary-foreground border-none text-[8px] h-4 mb-2 uppercase font-bold">Settlement Hub</Badge>
+                         <CardTitle className="text-xl font-headline font-bold text-white uppercase tracking-tight">RedotPay Biz</CardTitle>
                       </CardHeader>
-                      <CardContent className="flex items-center gap-4">
-                         <p className="text-[11px] text-muted-foreground leading-relaxed italic">
-                            ক্রিপ্টো-টু-ফিয়াট সেটেলমেন্ট এবং গ্লোবাল কার্ড ইস্যুয়েন্স নোড হিসেবে এটি ব্যবহৃত হবে।
+                      <CardContent>
+                         <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                            Sovereign card distribution and crypto-to-fiat conversion node.
+                         </p>
+                      </CardContent>
+                   </Card>
+
+                   {/* SSLCommerz Onboarding */}
+                   <Card className="glass-card border-l-4 border-l-red-500 bg-red-500/10 relative overflow-hidden group hover:border-red-500/40 transition-all cursor-pointer" onClick={() => openInApp("https://join.sslcommerz.com/upload-information")}>
+                      <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                         <UserPlus className="size-32 text-red-500" />
+                      </div>
+                      <CardHeader className="pb-2">
+                         <Badge className="bg-red-500 text-white border-none text-[8px] h-4 mb-2 uppercase font-bold">Acquiring Node</Badge>
+                         <CardTitle className="text-xl font-headline font-bold text-white uppercase tracking-tight">SSLCommerz Join</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                         <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                            Direct merchant onboarding and information upload portal.
                          </p>
                       </CardContent>
                    </Card>
