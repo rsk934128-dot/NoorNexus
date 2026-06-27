@@ -92,13 +92,15 @@ export default function NodesPage() {
                 Regional <span className="text-emerald-500">Watchtower.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                "The Zenith of Grid Resilience." ১০০-নোড অটোনোমাস গ্রিডের রিয়েল-টাইম ইউজার কানেক্টিভিটি এবং নোড স্ট্যাটাস।
+                "The Zenith of Grid Resilience." ১০০-নোড অটোনোমাস গ্রিডের রিয়েল-টাইম কানেক্টিভিটি এবং প্রতিটি কমান্ডারের সেশন এখন ট্র্যাক করা হচ্ছে।
               </p>
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[150px]">
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Active Citizens</p>
-                  <p className="text-2xl font-headline font-bold text-primary">{sessions.length}</p>
+                  <p className="text-2xl font-headline font-bold text-primary">
+                    {sessions.filter((s:any) => s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000)).length}
+                  </p>
                </div>
                <Button 
                 onClick={handleGlobalSyncTest}
@@ -110,21 +112,6 @@ export default function NodesPage() {
                </Button>
             </div>
           </header>
-
-          {testing && (
-            <Card className="glass-card border-emerald-500/30 bg-emerald-500/5 p-8 text-center space-y-6 animate-in zoom-in-95">
-               <div className="size-20 rounded-full border-4 border-emerald-500 flex items-center justify-center mx-auto relative bg-black">
-                  <Signal className="size-10 text-emerald-500 animate-pulse" />
-                  <div className="absolute inset-0 border-t-2 border-emerald-500 rounded-full animate-spin-slow" />
-               </div>
-               <div className="space-y-2">
-                  <p className="text-xl font-headline font-bold text-white uppercase tracking-widest">Pulsing 100-Node Hegemony Grid...</p>
-                  <div className="max-w-md mx-auto h-2 bg-white/5 rounded-full overflow-hidden border border-white/10">
-                     <div className="h-full bg-emerald-500 transition-all duration-300" style={{ width: `${testProgress}%` }} />
-                  </div>
-               </div>
-            </Card>
-          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
@@ -139,18 +126,72 @@ export default function NodesPage() {
                   <Card className="glass-card p-6 bg-black/40 border-white/5">
                      <div className="grid grid-cols-5 sm:grid-cols-10 gap-3">
                         {Array.from({ length: 100 }).map((_, i) => {
-                          const hasUser = sessions.some((s:any) => parseInt(s.assignedNode?.split('-')[2]) === i + 1);
+                          const hasOnlineUser = sessions.some((s:any) => {
+                             const isOnline = s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000);
+                             const nodeMatch = s.assignedNode?.includes(`-${String(i+1).padStart(2, '0')}`);
+                             return isOnline && nodeMatch;
+                          });
                           return (
-                            <div key={i} className={`aspect-square rounded-lg border flex items-center justify-center group relative cursor-help transition-all duration-500 ${hasUser ? 'bg-primary/20 border-primary animate-pulse shadow-[0_0_10px_rgba(0,150,255,0.4)]' : 'bg-emerald-500/20 border-emerald-500/40'}`}>
-                               <div className={`size-1.5 rounded-full ${hasUser ? 'bg-primary' : 'bg-emerald-500'}`} />
-                               <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black border border-white/10 p-2 rounded text-[7px] text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 whitespace-nowrap font-mono uppercase">
-                                  NODE_{i+1}: {hasUser ? 'COMM_ACTIVE' : 'STANDBY'}<br/>
-                                  USERS: {sessions.filter((s:any) => parseInt(s.assignedNode?.split('-')[2]) === i + 1).length}
+                            <div key={i} className={`aspect-square rounded-lg border flex items-center justify-center group relative cursor-help transition-all duration-500 ${hasOnlineUser ? 'bg-primary/30 border-primary animate-pulse shadow-[0_0_15px_rgba(0,150,255,0.6)] scale-105 z-10' : 'bg-emerald-500/10 border-emerald-500/20 opacity-40'}`}>
+                               <div className={`size-1.5 rounded-full ${hasOnlineUser ? 'bg-white shadow-[0_0_5px_white]' : 'bg-emerald-500/40'}`} />
+                               <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-black border border-white/10 p-2 rounded text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 whitespace-nowrap font-mono uppercase">
+                                  NODE_{i+1}: {hasOnlineUser ? 'COMM_ACTIVE' : 'STANDBY'}<br/>
+                                  USERS: {sessions.filter((s:any) => s.assignedNode?.includes(`-${String(i+1).padStart(2, '0')}`)).length}
                                </div>
                             </div>
                           )
                         })}
                      </div>
+                  </Card>
+               </section>
+
+               <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+                    <CardHeader>
+                      <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
+                        <Users className="size-4" /> Regional Citizen Hubs
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {["South Asia", "Middle East", "Europe", "SE Asia"].map((region, i) => {
+                        const count = sessions.filter((s:any) => s.assignedRegion?.includes(region)).length;
+                        const online = sessions.filter((s:any) => s.assignedRegion?.includes(region) && s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000)).length;
+                        return (
+                          <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
+                            <span className="text-xs font-bold text-white uppercase">{region}</span>
+                            <div className="flex gap-4 items-center">
+                               <div className="text-right">
+                                  <p className="text-[8px] text-muted-foreground uppercase">Online</p>
+                                  <p className="text-sm font-headline font-bold text-emerald-500">{online}</p>
+                               </div>
+                               <div className="text-right">
+                                  <p className="text-[8px] text-muted-foreground uppercase">Total</p>
+                                  <p className="text-sm font-headline font-bold text-primary">{count}</p>
+                               </div>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </CardContent>
+                  </Card>
+
+                  <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+                    <CardHeader>
+                      <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
+                        <Activity className="size-4" /> Global Handshake Latency
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex flex-col items-center justify-center py-10">
+                       <p className="text-5xl font-headline font-bold text-white tracking-tighter">28.2<span className="text-amber-500 text-lg ml-1">ms</span></p>
+                       <p className="text-[10px] text-muted-foreground uppercase font-bold mt-2">Average Veracity Time</p>
+                       <div className="mt-6 flex gap-1 items-end h-12">
+                          {[40, 65, 30, 85, 45, 90, 42, 70, 55, 80].map((h, i) => (
+                            <div key={i} className="w-2 bg-amber-500/20 rounded-t-sm relative overflow-hidden">
+                               <div className="absolute bottom-0 w-full bg-amber-500 animate-pulse" style={{ height: `${h}%` }} />
+                            </div>
+                          ))}
+                       </div>
+                    </CardContent>
                   </Card>
                </section>
             </div>
@@ -159,11 +200,13 @@ export default function NodesPage() {
                <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                    <Users className="size-4" /> Live Connection Pulse
+                    <Users className="size-4" /> Imperial Registry Sync
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4 text-[10px] text-muted-foreground leading-relaxed italic">
-                   "The Watchtower is monitoring {sessions.length} active commanders across {new Set(sessions.map((s:any) => s.assignedRegion)).size} regions."
+                <CardContent className="space-y-4">
+                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                      "Total of {sessions.length} Unique Identities are anchored in the Sovereign Registry. Mission 500 Hegemony TORQUE is stable."
+                   </p>
                 </CardContent>
               </Card>
 
@@ -175,8 +218,8 @@ export default function NodesPage() {
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <div className="p-3 bg-amber-500/5 rounded border border-amber-500/20 text-center">
-                       <p className="text-[8px] text-muted-foreground uppercase">Identity Drift</p>
-                       <Badge variant="outline" className="text-emerald-500 border-emerald-500/20 text-[8px] mt-1">ZERO_DRIFT</Badge>
+                       <p className="text-[8px] text-muted-foreground uppercase">Identity Pulse</p>
+                       <Badge variant="outline" className="text-emerald-500 border-emerald-500/20 text-[8px] mt-1 uppercase">AUTHENTIC_100%</Badge>
                     </div>
                  </CardContent>
               </Card>

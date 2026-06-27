@@ -6,9 +6,9 @@ import { useUser, useFirestore } from "@/firebase"
 import { doc, setDoc, serverTimestamp } from "firebase/firestore"
 
 /**
- * @fileOverview SessionTracker Component (V4.0 - Multi-Device Support)
+ * @fileOverview SessionTracker Component (V4.1 - Multi-Device & Persistence)
  * নূরনেক্সাস সাম্রাজ্যের প্রতিটি কানেকশনকে একটি ইউনিক সেশন আইডি দিয়ে ট্র্যাক করে। 
- * একই একাউন্ট ভিন্ন ডিভাইসে ব্যবহার করলেও এখন আলাদাভাবে দেখা যাবে।
+ * এটি প্রতিটি ইউজারের সেশন হিস্ট্রি এবং লাইভ পালস স্টোর করে।
  */
 export function SessionTracker() {
   const { user } = useUser()
@@ -35,10 +35,12 @@ export function SessionTracker() {
             { id: "NODE-BD-01", region: "South Asia (Sirajganj)" },
             { id: "NODE-AE-04", region: "Middle East (Dubai)" },
             { id: "NODE-UK-12", region: "Europe (London)" },
-            { id: "NODE-TH-09", region: "SE Asia (Bangkok)" }
+            { id: "NODE-TH-09", region: "SE Asia (Bangkok)" },
+            { id: "NODE-SG-05", region: "SE Asia (Singapore)" },
+            { id: "NODE-US-01", region: "North America (Phoenix)" }
           ]
           
-          // Assigned node based on session ID for variation
+          // Assigned node based on session ID for deterministic distribution
           const nodeIndex = sessionIdRef.current.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % hubs.length
           const assignedHub = hubs[nodeIndex]
 
@@ -66,7 +68,6 @@ export function SessionTracker() {
             ipSimulated: `103.23.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`
           }, { merge: true })
           
-          console.log(`[Pulse] Session ${sessionIdRef.current} anchored for ${user.email}`);
         } catch (error) {
           console.error("[SessionTracker] Heartbeat failure:", error)
         }

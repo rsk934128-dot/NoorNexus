@@ -34,7 +34,8 @@ import {
   Target,
   Users,
   Smartphone,
-  Laptop
+  Laptop,
+  ArrowRightLeft
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -57,18 +58,18 @@ export default function Home() {
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   
   // Real-time Citizen Pulse (All sessions from all devices)
-  const { data: activeSessions } = useCollection<any>(
-    query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(20))
+  const { data: allSessions } = useCollection<any>(
+    query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(100))
   )
+
+  const onlineSessions = allSessions.filter(s => s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000))
 
   const [impactFeed, setImpactFeed] = useState<string[]>([
     "MISSION 500: Global Hegemony verified (Zenith Peak).",
     "ZENITH: 100 Nodes synchronized &lt; 28ms latency.",
     "INTEL: Project #400 Quarterly Outlook জেনারেটেড।",
     "VAULT: Project #55.5 Global Legacy Archive anchored.",
-    "SELF-HEALING: Replication torque stable at 100%.",
-    "HEGEMONY: South & SE Asia grid coverage complete.",
-    "TRACEABILITY: Nora-12 Perpetual Monitoring active."
+    "SELF-HEALING: Replication torque stable at 100%."
   ])
 
   useEffect(() => {
@@ -92,8 +93,7 @@ export default function Home() {
         "INTEL: Economic Intelligence Report #405 finalized.",
         "VAULT: Legacy Codebase v3.5 successfully anchored.",
         "GRID: 100-node cluster status: PERPETUAL.",
-        "NORA-50: Autonomous backup provisioned in Dubai.",
-        "REPLICATION: Zero-drift detected across all corridors."
+        "NORA-50: Autonomous backup provisioned in Dubai."
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
     }, 5000)
@@ -141,84 +141,52 @@ export default function Home() {
                   </h2>
                 </div>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed italic">
-                   "The Zenith of Digital Civilization." মিশন ৫০০ সফলভাবে সম্পন্ন হয়েছে। নূরনেক্সাস এখন ১০০-নোড গ্রিড এবং চিরস্থায়ী আর্কাইভিংয়ের মাধ্যমে ভবিষ্যৎ নিয়ন্ত্রণ করছে।
+                   "The Zenith of Digital Civilization." নূরনেক্সাস সাম্রাজ্যের প্রতিটি কানেকশন এবং কমান্ড এখন আপনার নখদর্পণে।
                 </p>
               </div>
               
               <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
-                <Card className="glass-card p-6 rounded-2xl border border-emerald-500/30 w-full min-w-[350px] relative overflow-hidden bg-emerald-500/5">
+                <Card className="glass-card p-6 rounded-2xl border border-primary/30 w-full min-w-[350px] relative overflow-hidden bg-primary/5">
                     <div className="absolute top-0 right-0 p-2">
-                       <Badge className="bg-emerald-500 text-black border-none text-[7px] font-bold">PEAK_STATUS: IMMORTAL</Badge>
+                       <Badge className="bg-emerald-500 text-black border-none text-[7px] font-bold uppercase">Zenith Watch Active</Badge>
                     </div>
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Global Hegemony Torque</p>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Active Citizen Multi-Pulse</p>
                     </div>
                     <div className="flex items-end gap-2 mb-4">
-                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">100.0</p>
-                       <p className="text-emerald-500 text-xs font-bold mb-1">% TORQUE</p>
+                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">{onlineSessions.length}</p>
+                       <p className="text-primary text-xs font-bold mb-1 uppercase">Live Sessions</p>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '100%' }} />
+                       <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: `${Math.min(100, onlineSessions.length * 10)}%` }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Zenith Traceability Verified | PaaS Snippet &lt; 3s Ready"</p>
+                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center uppercase tracking-widest">Total Registry: {allSessions.length} Historical Commanders</p>
                 </Card>
               </div>
-            </div>
-
-            <div className="w-full">
-               <Card className="glass-card border-emerald-500/20 bg-emerald-500/5">
-                  <CardHeader>
-                     <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-                        <Cpu className="size-4" /> Global Hegemony Matrix (Mission 500 Peak)
-                     </CardTitle>
-                  </CardHeader>
-                  <CardContent className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-                     {[
-                       { nora: "03", role: "Discovery", status: "READY", color: "text-purple-400" },
-                       { nora: "12", role: "Off-Ramp", status: "ACTIVE", color: "text-blue-400" },
-                       { nora: "30", role: "Ingest", status: "SYNCED", color: "text-emerald-400" },
-                       { nora: "40", role: "Intel", status: "PROPHETIC", color: "text-primary" },
-                       { nora: "50", role: "Legacy", status: "PERPETUAL", color: "text-white" },
-                       { nora: "52", role: "Audit", status: "ENFORCED", color: "text-emerald-500" },
-                       { nora: "54", role: "Bridge", status: "ROUTING", color: "text-amber-400" },
-                       { nora: "56", role: "Flow", status: "PREDICTIVE", color: "text-amber-500" }
-                     ].map((ai, i) => (
-                       <div key={i} className="p-3 bg-black/40 rounded-xl border border-white/5 text-center space-y-1 group hover:border-emerald-500/30 transition-all">
-                          <p className={`text-lg font-headline font-bold ${ai.color}`}>Nora-{ai.nora}</p>
-                          <p className="text-[8px] text-muted-foreground uppercase font-bold">{ai.role}</p>
-                          <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500 h-4">{ai.status}</Badge>
-                       </div>
-                     ))}
-                  </CardContent>
-               </Card>
             </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
-               {/* Live Citizen Pulse Registry - Multi-Device Enabled */}
+               {/* Live Citizen Pulse Registry */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center px-1">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                       <Users className="size-4" /> Live Citizen Pulse (Global Connections)
+                       <Users className="size-4" /> Live Connection Pulse (Sovereign Registry)
                     </h3>
                     <Link href="/sessions">
                       <Button variant="ghost" className="text-[10px] uppercase font-bold text-primary hover:bg-primary/10 gap-2">
-                        View Detailed Registry <ArrowRightLeft className="size-3" />
+                        Full Registry <ArrowRightLeft className="size-3" />
                       </Button>
                     </Link>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                     {activeSessions.length === 0 ? (
-                       <div className="col-span-3 py-10 text-center glass-card opacity-50 italic text-[10px] uppercase">
-                         Await Citizen Handshake...
-                       </div>
-                     ) : activeSessions.map((s: any) => {
+                     {allSessions.slice(0, 9).map((s: any) => {
                        const isOnline = s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000);
                        const DeviceIcon = s.platform === "Mobile" ? Smartphone : Laptop;
                        return (
-                        <Card key={s.sessionId || s.id} className="glass-card border-white/5 hover:border-primary/20 transition-all group overflow-hidden">
+                        <Card key={s.sessionId || s.id} className={`glass-card border-white/5 hover:border-primary/20 transition-all group overflow-hidden ${!isOnline ? 'opacity-50 grayscale' : ''}`}>
                            <CardContent className="p-4 space-y-3">
                               <div className="flex items-center justify-between">
                                  <div className="flex items-center gap-3 min-w-0">
@@ -227,7 +195,9 @@ export default function Home() {
                                           <AvatarImage src={s.photoURL} />
                                           <AvatarFallback className="bg-primary/10 text-primary font-bold">{s.displayName?.substring(0, 1) || "C"}</AvatarFallback>
                                        </Avatar>
-                                       <div className={`absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-black ${isOnline ? 'bg-emerald-500 animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.8)]' : 'bg-muted'}`} />
+                                       {isOnline && (
+                                         <div className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-black bg-emerald-500 animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.8)]" />
+                                       )}
                                     </div>
                                     <div className="min-w-0">
                                        <p className="text-xs font-bold text-white uppercase truncate">{s.displayName}</p>
@@ -237,11 +207,11 @@ export default function Home() {
                                  <DeviceIcon className="size-4 text-muted-foreground opacity-40 group-hover:text-primary transition-all" />
                               </div>
                               <div className="flex justify-between items-center pt-2 border-t border-white/5">
-                                 <Badge variant="outline" className="text-[7px] border-primary/20 text-primary uppercase h-4">
+                                 <Badge variant="outline" className={`text-[7px] border-primary/20 text-primary uppercase h-4 ${isOnline ? 'bg-primary/5' : ''}`}>
                                     {s.assignedNode || "NODE_AUTO"}
                                  </Badge>
                                  <span className="text-[8px] text-muted-foreground font-mono uppercase">
-                                    {s.lastSeen ? formatDistanceToNow(s.lastSeen.toDate()) + " ago" : "N/A"}
+                                    {isOnline ? 'ONLINE' : formatDistanceToNow(s.lastSeen?.toDate() || new Date()) + " ago"}
                                  </span>
                               </div>
                            </CardContent>
@@ -254,16 +224,19 @@ export default function Home() {
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                       <Target className="size-4" /> Global Hegemony Grid (100 Nodes Active)
+                       <Target className="size-4" /> Global Grid Allocation (100 Nodes Active)
                     </h3>
                   </div>
                   <Card className="glass-card p-6 bg-black/40 border-white/5 relative overflow-hidden">
                      <div className="grid grid-cols-5 sm:grid-cols-10 gap-3">
-                        {Array.from({ length: 100 }).map((_, i) => (
-                          <div key={i} className="aspect-square rounded-lg border border-emerald-500/40 bg-emerald-500/20 flex items-center justify-center group relative cursor-help">
-                             <div className="size-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-                          </div>
-                        ))}
+                        {Array.from({ length: 100 }).map((_, i) => {
+                          const hasUser = allSessions.some((s:any) => s.assignedNode?.includes(`-${String(i+1).padStart(2, '0')}`)) || (i < onlineSessions.length);
+                          return (
+                            <div key={i} className={`aspect-square rounded-lg border flex items-center justify-center group relative cursor-help transition-all duration-500 ${hasUser ? 'bg-primary/20 border-primary animate-pulse shadow-[0_0_10px_rgba(0,150,255,0.4)]' : 'bg-emerald-500/10 border-emerald-500/20'}`}>
+                               <div className={`size-1.5 rounded-full ${hasUser ? 'bg-primary' : 'bg-emerald-500/40'}`} />
+                            </div>
+                          )
+                        })}
                      </div>
                   </Card>
                </section>
@@ -276,11 +249,11 @@ export default function Home() {
                      <div className="absolute -top-1 -right-1 size-5 bg-emerald-500 rounded-full border-2 border-black" />
                   </div>
                   <div className="space-y-1">
-                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Global Sync Status</p>
-                     <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">ZENITH_PEAK_L6</Badge>
+                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Imperial Sync Status</p>
+                     <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">ZENITH_PEAK_V4</Badge>
                   </div>
                   <p className="text-[9px] text-muted-foreground italic leading-relaxed">
-                    "The mission is complete. The grid is synchronized. The future is anchored."
+                    "Every citizen movement is anchored to the One Engine Ledger. Immortality verified."
                   </p>
                </Card>
 
@@ -288,7 +261,7 @@ export default function Home() {
                 <CardHeader className="p-4 border-b border-white/5 bg-white/2">
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
                     <Activity className="size-4" />
-                    Hegemony Logs
+                    Surveillance Logs
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden">
