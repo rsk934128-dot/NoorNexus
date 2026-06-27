@@ -131,7 +131,6 @@ export default function EnterpriseSettingsPage() {
             <TabsList className="bg-white/5 border border-white/10 p-1 h-12">
               <TabsTrigger value="settings" className="gap-2 px-6"><Settings className="size-4" /> App Settings</TabsTrigger>
               <TabsTrigger value="permissions" className="gap-2 px-6"><ShieldQuestion className="size-4" /> System Permissions</TabsTrigger>
-              <TabsTrigger value="security" className="size-4"><ShieldEllipsis className="size-4" /> Security</TabsTrigger>
             </TabsList>
 
             <TabsContent value="settings" className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -189,6 +188,19 @@ export default function EnterpriseSettingsPage() {
                         <CardContent className="text-center space-y-4">
                            <p className="text-3xl font-headline font-bold text-white">SECURE</p>
                            <p className="text-[9px] text-muted-foreground italic">"Background Execution: ENABLED via android.uid.system signature."</p>
+                        </CardContent>
+                     </Card>
+
+                     <Card className="glass-card border-amber-500/20 bg-amber-500/5">
+                        <CardHeader className="pb-2">
+                           <CardTitle className="text-[10px] font-bold uppercase text-amber-500 flex items-center gap-2">
+                              <ShieldAlert className="size-3" /> Process Policy
+                           </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                           <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                              "Active apps: these apps still run in the background even when not in use. This improves their functionality but consumes more power."
+                           </p>
                         </CardContent>
                      </Card>
                   </div>

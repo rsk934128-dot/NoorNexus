@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -47,7 +48,8 @@ import {
   UserCog,
   Shield,
   FileCode,
-  Sparkles
+  Sparkles,
+  Vault
 } from "lucide-react"
 import {
   Dialog,
@@ -228,7 +230,7 @@ export default function CitizenPortalPage() {
                             </DialogTrigger>
                             <DialogContent className="glass-card border-primary/20 bg-black/95 text-white sm:max-w-[425px]">
                                <DialogHeader>
-                                  <DialogTitle className="text-xl font-headline font-bold uppercase tracking-tight flex items-center gap-3 text-primary">
+                                  <DialogTitle className="text-xl font-headline font-bold uppercase tracking-tight text-white flex items-center gap-3 text-primary">
                                      <UserCog className="size-6" /> Profile Preferences
                                   </DialogTitle>
                                   <DialogDescription className="text-muted-foreground text-xs uppercase tracking-widest font-mono">
@@ -293,6 +295,34 @@ export default function CitizenPortalPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
+               
+               {/* Integrated Family Asset Management (NEW) */}
+               <section className="space-y-6">
+                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                     <Vault className="size-4" /> Integrated Family Assets
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     {[
+                       { label: "Treasury Balance", value: "$124,500", icon: Coins, color: "text-primary" },
+                       { label: "Imperial Gold Bond", value: "1.2 KG", icon: Gem, color: "text-amber-500" },
+                       { label: "Legacy Reserved Fund", value: "$42,000", icon: Landmark, color: "text-emerald-500" },
+                       { label: "System Maintenance", value: "Verified", icon: Cpu, color: "text-purple-500" }
+                     ].map((asset, i) => (
+                       <Card key={i} className="glass-card border-white/5 bg-black/40 hover:border-emerald-500/20 transition-all group">
+                          <CardContent className="p-5 flex items-center gap-4">
+                             <div className={`p-3 rounded-xl bg-white/5 border border-white/10 group-hover:bg-emerald-500/10 transition-colors`}>
+                                <asset.icon className={`size-5 ${asset.color}`} />
+                             </div>
+                             <div className="space-y-0.5">
+                                <p className="text-[10px] font-bold text-muted-foreground uppercase">{asset.label}</p>
+                                <p className="text-lg font-headline font-bold text-white uppercase">{asset.value}</p>
+                             </div>
+                          </CardContent>
+                       </Card>
+                     ))}
+                  </div>
+               </section>
+
                {/* Digital Will Visual */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-amber-500 flex items-center gap-2">
@@ -344,36 +374,6 @@ export default function CitizenPortalPage() {
                         </div>
                      </CardContent>
                   </Card>
-               </section>
-
-               {/* Activity & History */}
-               <section className="space-y-6">
-                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-muted-foreground flex items-center gap-2">
-                     <Activity className="size-4" /> Civilization History
-                  </h3>
-                  <div className="space-y-3">
-                     {[
-                       { action: "Digital Will Anchored", impact: "Secured", time: "Just now", icon: Lock },
-                       { action: "Family Shield Multi-Sync", impact: "Synced", time: "2h ago", icon: Shield },
-                       { action: "Imperial Senate Proposal #490", impact: "+5 Power", time: "1d ago", icon: Scale },
-                       { action: "Legacy Core Evolution (Phase Ω)", impact: "Immortal", time: "3d ago", icon: Sparkles }
-                     ].map((log, i) => (
-                       <div key={i} className="p-4 bg-white/2 border border-white/5 rounded-2xl flex items-center justify-between hover:bg-white/5 transition-all">
-                          <div className="flex items-center gap-4">
-                             <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                                <log.icon className="size-4" />
-                             </div>
-                             <div className="space-y-0.5">
-                                <p className="text-xs font-bold text-white uppercase">{log.action}</p>
-                                <p className="text-[8px] text-muted-foreground uppercase font-mono">{log.time}</p>
-                             </div>
-                          </div>
-                          <div className="text-right">
-                             <p className="text-xs font-bold text-emerald-500">{log.impact}</p>
-                          </div>
-                       </div>
-                     ))}
-                  </div>
                </section>
             </div>
 
