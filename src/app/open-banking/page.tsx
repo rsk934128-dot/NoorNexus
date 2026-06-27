@@ -273,25 +273,41 @@ export default function OpenBankingHubPage() {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               <div className="lg:col-span-3 space-y-10">
                 
-                {/* Imperial Console Access Card: NEW */}
-                <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/10 relative overflow-hidden group hover:border-amber-500/40 transition-all cursor-pointer" onClick={() => openInApp("https://console.yapily.com/")}>
-                   <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                      <Key className="size-32 text-amber-500" />
-                   </div>
-                   <CardHeader>
-                      <Badge className="bg-amber-500 text-black border-none text-[8px] h-4 mb-2 uppercase font-bold">Infrastructure Console</Badge>
-                      <CardTitle className="text-2xl font-headline font-bold text-white uppercase tracking-tight">Access Imperial Console</CardTitle>
-                      <CardDescription className="text-amber-500 font-mono text-[10px] uppercase tracking-[0.2em]">Manage 74+ Banking Canals via Yapily Mesh</CardDescription>
-                   </CardHeader>
-                   <CardContent className="flex items-center gap-4">
-                      <p className="text-sm text-muted-foreground leading-relaxed italic max-w-xl">
-                         "কমান্ডার, এখান থেকে আপনি সরাসরি নূরনেক্সাস সাম্রাজ্যের মূল ব্যাংকিং রেইলস এবং এপিআই কি-সমূহ নিয়ন্ত্রণ করতে পারবেন।"
-                      </p>
-                      <Button className="bg-amber-500 text-black font-bold uppercase text-[10px] h-10 px-6 gap-2 glow-emerald shrink-0">
-                         Open Terminal <Monitor className="size-3" />
-                      </Button>
-                   </CardContent>
-                </Card>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                   {/* Yapily Console Access */}
+                   <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/10 relative overflow-hidden group hover:border-amber-500/40 transition-all cursor-pointer" onClick={() => openInApp("https://console.yapily.com/")}>
+                      <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                         <Key className="size-32 text-amber-500" />
+                      </div>
+                      <CardHeader>
+                         <Badge className="bg-amber-500 text-black border-none text-[8px] h-4 mb-2 uppercase font-bold">Infrastructure Console</Badge>
+                         <CardTitle className="text-2xl font-headline font-bold text-white uppercase tracking-tight">Yapily Console</CardTitle>
+                         <CardDescription className="text-amber-500 font-mono text-[10px] uppercase tracking-[0.2em]">Manage 74+ Banking Canals</CardDescription>
+                      </CardHeader>
+                      <CardContent className="flex items-center gap-4">
+                         <p className="text-[11px] text-muted-foreground leading-relaxed italic">
+                            কমান্ডার, এখান থেকে আপনি নূরনেক্সাস সাম্রাজ্যের মূল ব্যাংকিং রেইলস নিয়ন্ত্রণ করতে পারবেন।
+                         </p>
+                      </CardContent>
+                   </Card>
+
+                   {/* RedotPay Business Access */}
+                   <Card className="glass-card border-l-4 border-l-primary bg-primary/10 relative overflow-hidden group hover:border-primary/40 transition-all cursor-pointer" onClick={() => openInApp("https://business.redotpay.com/biz/home/")}>
+                      <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                         <CreditCard className="size-32 text-primary" />
+                      </div>
+                      <CardHeader>
+                         <Badge className="bg-primary text-primary-foreground border-none text-[8px] h-4 mb-2 uppercase font-bold">Card Settlement Hub</Badge>
+                         <CardTitle className="text-2xl font-headline font-bold text-white uppercase tracking-tight">RedotPay Business</CardTitle>
+                         <CardDescription className="text-primary font-mono text-[10px] uppercase tracking-[0.2em]">Sovereign Card Distribution Node</CardDescription>
+                      </CardHeader>
+                      <CardContent className="flex items-center gap-4">
+                         <p className="text-[11px] text-muted-foreground leading-relaxed italic">
+                            ক্রিপ্টো-টু-ফিয়াট সেটেলমেন্ট এবং গ্লোবাল কার্ড ইস্যুয়েন্স নোড হিসেবে এটি ব্যবহৃত হবে।
+                         </p>
+                      </CardContent>
+                   </Card>
+                </div>
 
                 {/* Validated Banking Nodes focus */}
                 <section className="space-y-6">
@@ -361,64 +377,28 @@ export default function OpenBankingHubPage() {
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {PROVIDER_METRICS.map((m) => (
                         <Card key={m.id} className={`glass-card border-l-4 transition-all ${activeProvider === m.id ? 'border-l-emerald-500 bg-emerald-500/5' : 'border-l-primary opacity-60'}`}>
-                           <CardContent className="p-6 flex items-center justify-between">
-                              <div className="flex items-center gap-4">
-                                 <div className={`p-3 rounded-xl ${activeProvider === m.id ? 'bg-emerald-500/20 text-emerald-500' : 'bg-primary/10 text-primary'}`}>
-                                    <m.icon className="size-6" />
-                                 </div>
-                                 <div className="space-y-0.5">
-                                    <p className="text-sm font-headline font-bold text-white uppercase">{m.name}</p>
-                                    <div className="flex gap-4 text-[9px] font-mono text-muted-foreground uppercase">
-                                       <span>Latency: <span className="text-white">{m.latency}ms</span></span>
-                                       <span>Uptime: <span className="text-white">{m.success}%</span></span>
+                           <CardContent className="p-6">
+                              <div className="flex items-center justify-between">
+                                 <div className="flex items-center gap-4">
+                                    <div className={`p-3 rounded-xl ${activeProvider === m.id ? 'bg-emerald-500/20 text-emerald-500' : 'bg-primary/10 text-primary'}`}>
+                                       <m.icon className="size-6" />
+                                    </div>
+                                    <div className="space-y-0.5">
+                                       <p className="text-sm font-headline font-bold text-white uppercase">{m.name}</p>
+                                       <div className="flex gap-4 text-[9px] font-mono text-muted-foreground uppercase">
+                                          <span>Latency: <span className="text-white">{m.latency}ms</span></span>
+                                          <span>Uptime: <span className="text-white">{m.success}%</span></span>
+                                       </div>
                                     </div>
                                  </div>
+                                 {activeProvider === m.id && (
+                                   <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px] animate-pulse">ACTIVE_ROUTE</Badge>
+                                 )}
                               </div>
-                              {activeProvider === m.id && (
-                                <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px] animate-pulse">ACTIVE_ROUTE</Badge>
-                              )}
                            </CardContent>
                         </Card>
                       ))}
                    </div>
-                </section>
-
-                {/* SIBS Network Ecosystem Section */}
-                <section className="space-y-6">
-                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                      <Building2 className="size-4" /> SIBS Network Ecosystem (Portugal)
-                   </h3>
-                   <Card className="glass-card border-l-4 border-l-primary bg-primary/5 overflow-hidden">
-                      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-                         <div className="space-y-4">
-                            <CardTitle className="text-sm font-headline uppercase text-white">Supported Capabilities</CardTitle>
-                            <div className="grid grid-cols-2 gap-3">
-                               {[
-                                 { label: "SEPA CT", status: "YES" },
-                                 { label: "SCT Inst", status: "YES" },
-                                 { label: "Periodic", status: "YES" },
-                                 { label: "Bulk Pay", status: "YES" }
-                               ].map((cap, i) => (
-                                 <div key={i} className="p-2 bg-black/40 rounded border border-white/5 flex justify-between items-center">
-                                    <span className="text-[10px] text-muted-foreground font-bold">{cap.label}</span>
-                                    <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">{cap.status}</Badge>
-                                 </div>
-                               ))}
-                            </div>
-                         </div>
-                         <div className="space-y-4">
-                            <CardTitle className="text-sm font-headline uppercase text-white">Validated ASPSPs</CardTitle>
-                            <div className="space-y-2">
-                               {SIBS_INSTITUTIONS.map((inst, i) => (
-                                 <div key={i} className="flex justify-between items-center text-[10px] font-mono border-b border-white/5 pb-1">
-                                    <span className="text-white">{inst.name}</span>
-                                    <span className="text-primary">{inst.type}</span>
-                                 </div>
-                               ))}
-                            </div>
-                         </div>
-                      </div>
-                   </Card>
                 </section>
               </div>
 
@@ -484,7 +464,7 @@ export default function OpenBankingHubPage() {
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[10px] text-muted-foreground italic">
-                         "Orchestrator monitoring 74+ banking canals. Automated switch triggered if latency &gt; 1500ms."
+                         "Orchestrator monitoring 74+ banking canals. Automated switch triggered if latency > 1500ms."
                       </p>
                    </CardContent>
                 </Card>

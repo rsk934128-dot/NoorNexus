@@ -26,7 +26,8 @@ import {
   Lock,
   Cpu,
   Database,
-  Link2
+  Link2,
+  CreditCard
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
@@ -36,7 +37,8 @@ const INITIAL_LINKS = [
   { id: "2", name: "Alibaba B2B", url: "https://www.alibaba.com", category: "Wholesale", status: "VERIFIED" },
   { id: "3", name: "Binance Exchange", url: "https://www.binance.com", category: "Crypto", status: "VERIFIED" },
   { id: "4", name: "JamesEdition Jets", url: "https://www.jamesedition.com/jets", category: "Aerospace", status: "VERIFIED" },
-  { id: "5", name: "Yapily Console", url: "https://console.yapily.com/", category: "Infrastructure", status: "VERIFIED" }
+  { id: "5", name: "Yapily Console", url: "https://console.yapily.com/", category: "Infrastructure", status: "VERIFIED" },
+  { id: "6", name: "RedotPay Business", url: "https://business.redotpay.com/biz/home/", category: "Fintech", status: "VERIFIED" }
 ]
 
 export default function SovereignBazaarPage() {
@@ -180,7 +182,7 @@ export default function SovereignBazaarPage() {
                          <div className="flex justify-between items-start">
                             <div className="flex gap-4">
                                <div className={`p-3 rounded-xl ${link.status === 'VERIFIED' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>
-                                  <ShoppingBag className="size-6" />
+                                  {link.category === 'Fintech' ? <CreditCard className="size-6" /> : <ShoppingBag className="size-6" />}
                                </div>
                                <div className="space-y-1">
                                   <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{link.category}</p>

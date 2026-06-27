@@ -36,7 +36,8 @@ import {
   Radio,
   AlertTriangle,
   ShieldAlert,
-  Key
+  Key,
+  CreditCard
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { executeZenithSearch, WebSearchOutput } from "@/ai/flows/web-search-flow"
@@ -45,14 +46,14 @@ import { useSearchParams } from "next/navigation"
 
 const QUICK_LINKS = [
   { name: "Banking Console", url: "https://console.yapily.com/", icon: Key, color: "text-amber-500" },
+  { name: "RedotPay Biz", url: "https://business.redotpay.com/biz/home/", icon: CreditCard, color: "text-primary" },
   { name: "Aerospace", url: "https://www.jamesedition.com/jets", icon: Plane, color: "text-purple-500" },
   { name: "Maritime", url: "https://www.yachtworld.com/", icon: Ship, color: "text-blue-500" },
   { name: "Gold/Precious", url: "https://www.kitco.com/", icon: Gem, color: "text-amber-500" },
-  { name: "Luxury Cars", url: "https://www.dupontregistry.com/", icon: Car, color: "text-primary" },
   { name: "Global Trade", url: "https://www.trademap.org/", icon: Globe, color: "text-emerald-500" },
 ]
 
-const KNOWN_IFRAME_BLOCKERS = ['amazon.com', 'google.com', 'facebook.com', 'github.com', 'alibaba.com', 'twitter.com', 'linkedin.com', 'yapily.com'];
+const KNOWN_IFRAME_BLOCKERS = ['amazon.com', 'google.com', 'facebook.com', 'github.com', 'alibaba.com', 'twitter.com', 'linkedin.com', 'yapily.com', 'redotpay.com'];
 
 function BrowserContent() {
   const { toast } = useToast()
