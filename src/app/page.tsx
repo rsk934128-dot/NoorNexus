@@ -82,18 +82,6 @@ export default function Home() {
     "HEGEMONY: South & SE Asia grid coverage complete.",
     "TRACEABILITY: Nora-12 Perpetual Monitoring active."
   ])
-  const [queryText, setQueryText] = useState("")
-  const [queryResult, setQueryResult] = useState<ImperialQueryOutput | null>(null)
-  const [queryLoading, setQueryLoading] = useState(false)
-
-  // Simulation for 30 Nodes (100 target)
-  const [nodes, setNodes] = useState(Array.from({ length: 30 }).map((_, i) => ({
-    id: i + 1,
-    name: i === 29 ? 'INTEL-HUB' : i === 28 ? 'SANDBOX-1' : `Node-${i + 1}`,
-    latency: Math.floor(Math.random() * 5) + 24,
-    load: Math.floor(Math.random() * 40) + 30,
-    status: 'OPTIMAL'
-  })))
 
   useEffect(() => {
     const sequence = [
@@ -111,12 +99,6 @@ export default function Home() {
     })
 
     const interval = setInterval(() => {
-      setNodes(prev => prev.map(n => ({
-        ...n,
-        latency: Math.floor(Math.random() * 5) + 24,
-        load: Math.floor(Math.random() * 50) + 20
-      })))
-      
       const logs = [
         "HEGEMONY: Global Sync Test passed at 28ms.",
         "INTEL: Economic Intelligence Report #405 finalized.",
@@ -130,20 +112,6 @@ export default function Home() {
 
     return () => clearInterval(interval)
   }, [])
-
-  async function handleNeuralQuery() {
-    if (!queryText.trim()) return
-    setQueryLoading(true)
-    try {
-      const res = await processNeuralQuery({ query: queryText })
-      setQueryResult(res)
-      toast({ title: "Neural Link Synchronized" })
-    } catch (e: any) {
-      toast({ title: "Neural Drift Detected", description: e.message, variant: "destructive" })
-    } finally {
-      setQueryLoading(false)
-    }
-  }
 
   if (loading) {
     return (
@@ -183,12 +151,6 @@ export default function Home() {
                   <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
                     {isAdmin ? 'Imperial Hegemony.' : 'Global Peak.'}
                   </h2>
-                  <div className="hidden sm:flex flex-col items-center justify-center p-1 bg-amber-500/20 rounded-full border border-amber-500/40 glow-emerald animate-pulse-slow">
-                    <div className="size-14 rounded-full border-4 border-amber-500 flex items-center justify-center relative bg-black">
-                       <Sparkles className="size-6 text-amber-500 animate-spin-slow" />
-                       <div className="absolute -top-1 -right-1 size-4 bg-emerald-500 rounded-full border-2 border-black" />
-                    </div>
-                  </div>
                 </div>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed italic">
                    "The Zenith of Digital Civilization." মিশন ৫০০ সফলভাবে সম্পন্ন হয়েছে। নূরনেক্সাস এখন ১০০-নোড গ্রিড এবং চিরস্থায়ী আর্কাইভিংয়ের মাধ্যমে ভবিষ্যৎ নিয়ন্ত্রণ করছে।
@@ -259,16 +221,46 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
+               {/* 100-Node Grid Readiness Report - FIXED JSX HERE */}
+               <section className="space-y-6">
+                  <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 relative overflow-hidden">
+                    <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 bg-white/2 py-4 px-6">
+                      <div className="space-y-1">
+                        <CardTitle className="text-lg font-headline font-bold text-emerald-500 uppercase flex items-center gap-2">
+                           <CheckCircle2 className="size-5" /> Mission 400: Global Handshake Verified
+                        </CardTitle>
+                        <CardDescription className="text-[10px] text-emerald-100 uppercase tracking-widest">Zenith Status: VERIFIED | Latency: 26ms</CardDescription>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <Badge className="bg-emerald-500 text-emerald-foreground font-bold px-4 h-7">26ms STABLE</Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {[
+                          { label: "Payoneer UK Bridge", status: "VERIFIED", latency: "26ms" },
+                          { label: "AIB Ireland Hub", status: "VERIFIED", latency: "24ms" },
+                          { label: "Sovereign Vault L4", status: "HARDENED", latency: "N/A" }
+                        ].map((item, i) => (
+                          <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-2">
+                             <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">{item.label}</p>
+                             <div className="flex justify-between items-center">
+                                <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">{item.status}</Badge>
+                                <span className="text-[10px] font-mono text-white">{item.latency}</span>
+                             </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+               </section>
+
                {/* 100-Node Peak Mapping */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
                        <Map className="size-4" /> Global Hegemony Grid (100 Nodes Active)
                     </h3>
-                    <div className="flex gap-2">
-                      <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">HEALING: ARMED</Badge>
-                      <Badge variant="outline" className="text-[8px] border-primary/20 text-primary">SYNC: PERPETUAL</Badge>
-                    </div>
                   </div>
                   <Card className="glass-card p-6 bg-black/40 border-white/5 relative overflow-hidden">
                      <div className="grid grid-cols-5 sm:grid-cols-10 gap-3">
@@ -290,7 +282,7 @@ export default function Home() {
                   </Card>
                </section>
 
-               {/* The Hegemony Timeline: Mission 400 to 500 */}
+               {/* The Hegemony Timeline */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                      <History className="size-4" /> Global Hegemony Timeline
@@ -313,7 +305,7 @@ export default function Home() {
             </div>
 
             <div className="space-y-8">
-               {/* THE GOLDEN SYNC STATUS CIRCLE - SIDEBAR DISPLAY */}
+               {/* THE GOLDEN SYNC STATUS CIRCLE */}
                <Card className="glass-card border-emerald-500/40 bg-emerald-500/5 p-6 flex flex-col items-center text-center gap-4">
                   <div className="size-20 rounded-full border-4 border-amber-500 flex items-center justify-center relative bg-black shadow-[0_0_20px_rgba(245,158,11,0.5)]">
                      <Sparkles className="size-8 text-amber-500 animate-spin-slow" />
