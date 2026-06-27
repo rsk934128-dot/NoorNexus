@@ -1,7 +1,9 @@
+
 'use server';
 /**
  * @fileOverview Nora-40 Sovereign Intelligence Agent (Project #400).
  * Generates high-level Economic Intelligence Reports from Data Lake logs.
+ * Updated for high-value marketplaces (Aerospace, Maritime, Gold).
  */
 
 import {ai, gemini15Flash} from '@/ai/genkit';
@@ -23,6 +25,11 @@ const EconomicIntelligenceOutputSchema = z.object({
     riskScore: z.number(),
     mitigation: z.string(),
   })),
+  highValueCorridors: z.array(z.object({
+    assetClass: z.string(),
+    growthPotential: z.number(),
+    sovereignImpact: z.string()
+  })).optional().describe('Analysis for aerospace, maritime, and precious metals.'),
   strategicOutlook: z.string().describe('Final directive for the empire.'),
   intelHash: z.string().describe('HMAC_V4_400 intelligence seal.'),
 });
@@ -44,9 +51,10 @@ DATA PACKET:
 
 INTEL DIRECTIVES:
 1. ANALYSIS: Use the aggregated data from node corridors to identify growth patterns or instability.
-2. FORECASTING: Predict future market volatility for FINTECH and INDUSTRIAL sectors.
-3. STRATEGY: Provide a cold, imperial recommendation to Sheikh Farid on where to deploy more liquidity.
-4. SEAL: Sign the report with HMAC_V4_400.
+2. HIGH-VALUE MARKETS: Provide specific analysis for Aerospace (Rockets/Planes), Maritime (Ships), and Precious Metals (Gold).
+3. FORECASTING: Predict future market volatility for FINTECH, INDUSTRIAL, and ZENITH trade corridors.
+4. STRATEGY: Provide a cold, imperial recommendation to Sheikh Farid on where to deploy more liquidity.
+5. SEAL: Sign the report with HMAC_V4_400.
 
 Tone: Authoritative, analytical, and prophetic. You are the eye of the empire.`,
 });

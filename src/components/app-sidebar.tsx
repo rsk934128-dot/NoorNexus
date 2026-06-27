@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -51,7 +52,9 @@ import {
   PieChart,
   ChevronUp,
   ChevronDown,
-  Lightbulb
+  Lightbulb,
+  Coins,
+  ShoppingCart
 } from "lucide-react"
 
 import {
@@ -81,6 +84,7 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
+  { title: "Zenith Markets", url: "/zenith-markets", icon: ShoppingCart, highlight: true },
   { title: "Imperial Proposal", url: "/proposal", icon: FileText, highlight: true },
   { title: "Imperial Mail", url: "/gmail", icon: Mail, highlight: true },
   { title: "Discovery Hub", url: "/api-hub", icon: Compass, zenith: true },
