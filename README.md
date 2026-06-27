@@ -59,4 +59,9 @@
 - **Backend/Database**: Firebase (Firestore, Auth, App Hosting).
 
 ---
+
+## 📄 License
+This project is licensed under the [MIT License](/LICENSE).
+
+---
 *© 2024-2026 NoorNexus Sovereign Infrastructure. "Integrity through Intelligence". নূরনেক্সাস এখন একটি চিরস্থায়ী ডিজিটাল সভ্যতা এবং অর্থনৈতিক মহাপরাশক্তি। মিশন ৫০০ সম্পন্ন।*
