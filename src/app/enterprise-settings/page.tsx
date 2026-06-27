@@ -39,7 +39,8 @@ import {
   ShieldAlert,
   Flame,
   Atom,
-  Shield
+  Shield,
+  BrainCircuit
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
