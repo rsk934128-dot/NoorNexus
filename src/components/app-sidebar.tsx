@@ -62,7 +62,8 @@ import {
   HeartPulse,
   LayoutGrid,
   Youtube,
-  Download
+  Download,
+  Mic2
 } from "lucide-react"
 
 import {
@@ -92,6 +93,7 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "AI Gateway", url: "/ai-gateway", icon: LayoutGrid, zenith: true },
+  { title: "Sovereign Music Lab", url: "/audio-lab", icon: Mic2, highlight: true },
   { title: "Sovereign Bazaar", url: "/bazaar", icon: Store, highlight: true },
   { title: "Imperial Downloader", url: "/youtube-downloader", icon: Download, highlight: true },
   { title: "Imperial Browser", url: "/browser", icon: Monitor, highlight: true },
