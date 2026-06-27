@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -228,9 +227,7 @@ export function AppSidebar() {
       
       <SidebarSeparator />
       
-      {/* Scrollable Container with Hover Zones */}
       <div className="relative flex flex-col flex-1 overflow-hidden min-h-0 group">
-        {/* Scroll Up Hover Zone */}
         <div 
           onMouseEnter={() => startScroll('up')} 
           onMouseLeave={stopScroll}
@@ -285,7 +282,6 @@ export function AppSidebar() {
           )}
         </SidebarContent>
 
-        {/* Scroll Down Hover Zone */}
         <div 
           onMouseEnter={() => startScroll('down')} 
           onMouseLeave={stopScroll}
