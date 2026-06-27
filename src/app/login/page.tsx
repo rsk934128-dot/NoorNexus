@@ -4,8 +4,21 @@
 import { useAuth, useUser } from "@/firebase"
 import { signInWithGoogle, signInWithGithub, signInWithMicrosoft } from "@/firebase/auth/auth-service"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { LogIn, ShieldCheck, Zap, Github, Chrome, Terminal, Loader2, Sparkles, Radio } from "lucide-react"
+import { 
+  LogIn, 
+  ShieldCheck, 
+  Zap, 
+  Github, 
+  Chrome, 
+  Terminal, 
+  Loader2, 
+  Sparkles, 
+  Radio,
+  Shield,
+  Lock
+} from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState, useCallback } from "react"
 import { useToast } from "@/hooks/use-toast"
