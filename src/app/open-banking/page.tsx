@@ -61,11 +61,11 @@ const SIBS_INSTITUTIONS = [
 
 const VALIDATED_NODES = [
   {
-    name: "Payoneer - UK - LIVE",
-    fullName: "Payoneer - UK",
-    id: "payoneer_uk",
+    name: "Payoneer - EU - LIVE",
+    fullName: "Payoneer - EU",
+    id: "payoneer",
     bic: "PAYNUS33XXX",
-    country: "United Kingdom",
+    country: "AT, BE, FR, DE, ES, SE (24 Countries)",
     type: "AIS",
     features: ["Account", "Accounts", "Balances", "Transactions"],
     status: "LIVE_ENVIRONMENT",
@@ -76,7 +76,7 @@ const VALIDATED_NODES = [
     fullName: "PayPal Europe",
     id: "paypal_eu",
     bic: "PAYPALEXXX",
-    country: "AT, BE, FR, DE, ES, SE (24 Countries)",
+    country: "EU Corridor",
     type: "AIS",
     features: ["Account", "Accounts", "Identity", "Transactions"],
     status: "LIVE_ENVIRONMENT",
@@ -103,61 +103,6 @@ const VALIDATED_NODES = [
     features: ["Bulk Payment", "Domestic Single", "Future Payment", "International Single", "Periodic Payments", "Direct Debit", "Scheduled Payments"],
     status: "LIVE_ENVIRONMENT",
     crossBorderVeracity: "100.0%"
-  },
-  {
-    name: "AIB Ireland Business - LIVE",
-    fullName: "Allied Irish Bank Ireland Business",
-    id: "aibbusiness",
-    bic: "AIBKIE2DXXX",
-    country: "Ireland",
-    type: "AIS_PIS",
-    features: ["Bulk Payment", "Domestic Single", "International Single", "Future Payment", "Periodic Payments", "Direct Debits"],
-    status: "LIVE_ENVIRONMENT",
-    crossBorderVeracity: "100.0%"
-  },
-  {
-    name: "ABN AMRO BE (Private) - LIVE",
-    fullName: "ABN AMRO Private Banking Belgium",
-    id: "abn-amro-be-private",
-    bic: "SGPBBE99XXX",
-    country: "Belgium",
-    type: "AIS_PIS",
-    features: ["Accounts", "Balances", "Transactions", "Domestic Single Payment", "International Single Payment", "Periodic Payments"],
-    status: "LIVE_ENVIRONMENT",
-    crossBorderVeracity: "100.0%"
-  },
-  {
-    name: "ABN AMRO BE (Corporate) - LIVE",
-    fullName: "ABN AMRO Asset Managers Belgium",
-    id: "abn-amro-be-asset",
-    bic: "SGPBBE99XXX",
-    country: "Belgium",
-    type: "AIS_PIS",
-    features: ["Accounts", "Balances", "Transactions", "Domestic Single Payment", "International Single Payment", "Periodic Payments"],
-    status: "LIVE_ENVIRONMENT",
-    crossBorderVeracity: "100.0%"
-  },
-  {
-    name: "ABN AMRO - LIVE",
-    fullName: "ABN AMRO Bank N.V.",
-    id: "abn-amro-nl",
-    bic: "ABNANL2AXXX",
-    country: "Netherlands / Belgium / Germany",
-    type: "AIS_PIS",
-    features: ["Accounts", "Balances", "Transactions", "Domestic Single Payment", "International Single Payment", "Periodic Payments"],
-    status: "LIVE_ENVIRONMENT",
-    crossBorderVeracity: "100.0%"
-  },
-  {
-    name: "BIG Espanha - LIVE",
-    fullName: "Banco de Investimento Global (BIG) Espanha",
-    id: "banco-de-investimento-global-espanha-sa",
-    bic: "IGSEESMMXXX",
-    country: "Portugal / Spain",
-    type: "AIS_PIS",
-    features: ["Accounts", "Balances", "Transactions", "Domestic Single Payment"],
-    status: "LIVE_ENVIRONMENT",
-    crossBorderVeracity: "100.0%"
   }
 ]
 
@@ -168,7 +113,6 @@ export default function OpenBankingHubPage() {
   const [loadingView, setLoadingView] = useState(false)
   const [orchestrating, setOrchestrating] = useState(false)
   const [activeProvider, setActiveProvider] = useState("yapily")
-  const [simulatingVeracity, setSimulatingVeracity] = useState(false)
 
   const handleOrchestration = () => {
     setOrchestrating(true)
@@ -182,18 +126,6 @@ export default function OpenBankingHubPage() {
         className: "border-emerald-500/50 bg-emerald-500/5"
       })
     }, 1500)
-  }
-
-  const handleSimulateVeracity = () => {
-    setSimulatingVeracity(true)
-    setTimeout(() => {
-      setSimulatingVeracity(false)
-      toast({
-        title: "Cross-Border Veracity Confirmed",
-        description: "PIS-AIS handshake validated across PayPal EU, Payoneer UK and Amex corridors.",
-        className: "border-emerald-500/50 bg-emerald-500/5"
-      })
-    }, 2000)
   }
 
   const openInApp = (url: string) => {
@@ -251,18 +183,10 @@ export default function OpenBankingHubPage() {
                   Banking <span className="text-primary">Infrastructure.</span>
                 </h2>
                 <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                  Mission 400: Universal Banking Connect. Optimized by **Nora-50 Intelligent Orchestrator** with Cross-Border Veracity.
+                  Mission 400: Universal Banking Connect. Optimized by **Nora-50 Intelligent Orchestrator**.
                 </p>
               </div>
               <div className="flex gap-4">
-                 <Button 
-                  onClick={handleSimulateVeracity}
-                  disabled={simulatingVeracity}
-                  className="bg-emerald-500 text-white font-bold h-12 uppercase tracking-widest gap-2 glow-emerald"
-                 >
-                   {simulatingVeracity ? <Loader2 className="size-4 animate-spin" /> : <ArrowRightLeft className="size-4" />}
-                   Simulate Cross-Border Veracity
-                 </Button>
                  <Link href="/sovereign-gateway">
                    <Button className="bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-primary">
                      <Zap className="size-4" /> Project #51 Blueprint
@@ -331,12 +255,12 @@ export default function OpenBankingHubPage() {
                    </h3>
                    <div className="grid grid-cols-1 gap-4">
                       {VALIDATED_NODES.map((node, i) => (
-                        <Card key={i} className={`glass-card border-l-4 ${node.status === 'LIVE_ENVIRONMENT' ? 'border-l-primary bg-primary/5' : node.status === 'SANDBOX_ENVIRONMENT' ? 'border-l-amber-500 bg-amber-500/5' : 'border-l-emerald-500 bg-emerald-500/5'} hover:border-white/20 transition-all`}>
+                        <Card key={i} className={`glass-card border-l-4 ${node.status === 'LIVE_ENVIRONMENT' ? 'border-l-primary bg-primary/5' : 'border-l-amber-500 bg-amber-500/5'} hover:border-white/20 transition-all`}>
                            <CardContent className="p-6">
                               <div className="flex flex-col md:flex-row justify-between gap-6">
                                  <div className="space-y-3 flex-1">
                                     <div className="flex items-center gap-3">
-                                       <div className={`size-10 rounded-lg flex items-center justify-center border ${node.status === 'LIVE_ENVIRONMENT' ? 'bg-primary/10 border-primary/20 text-primary' : node.status === 'SANDBOX_ENVIRONMENT' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'}`}>
+                                       <div className={`size-10 rounded-lg flex items-center justify-center border ${node.status === 'LIVE_ENVIRONMENT' ? 'bg-primary/10 border-primary/20 text-primary' : 'bg-amber-500/10 border-amber-500/20 text-amber-500'}`}>
                                           <Building2 className="size-5" />
                                        </div>
                                        <div>
@@ -355,11 +279,11 @@ export default function OpenBankingHubPage() {
                                        </div>
                                        <div className="space-y-0.5">
                                           <p className="text-[8px] text-muted-foreground uppercase font-bold">Capability</p>
-                                          <Badge variant="outline" className={`text-[7px] ${node.status === 'LIVE_ENVIRONMENT' ? 'border-primary/20 text-primary' : node.status === 'SANDBOX_ENVIRONMENT' ? 'border-amber-500/20 text-amber-500' : 'border-emerald-500/20 text-emerald-500'}`}>{node.type}</Badge>
+                                          <Badge variant="outline" className={`text-[7px] ${node.status === 'LIVE_ENVIRONMENT' ? 'border-primary/20 text-primary' : 'border-amber-500/20 text-amber-500'}`}>{node.type}</Badge>
                                        </div>
                                        <div className="space-y-0.5">
                                           <p className="text-[8px] text-muted-foreground uppercase font-bold">Status</p>
-                                          <Badge className={`${node.status === 'LIVE_ENVIRONMENT' ? 'bg-primary' : node.status === 'SANDBOX_ENVIRONMENT' ? 'bg-amber-500' : 'bg-emerald-500'} text-[8px]`}>{node.status}</Badge>
+                                          <Badge className={`${node.status === 'LIVE_ENVIRONMENT' ? 'bg-primary' : 'bg-amber-500'} text-[8px]`}>{node.status}</Badge>
                                        </div>
                                     </div>
                                  </div>
@@ -440,19 +364,6 @@ export default function OpenBankingHubPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                   <CardHeader>
-                      <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                         <ShieldPlus className="size-4" /> Veracity Protocol
-                      </CardTitle>
-                   </CardHeader>
-                   <CardContent className="space-y-4">
-                      <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                         "Handshake veracity ensures that PayPal EU, Payoneer UK, and Irish cross-border AIS flows match PSD2 compliance markers with 99.9% precision."
-                      </p>
-                   </CardContent>
-                </Card>
-
                 <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
                    <CardHeader className="pb-2">
                       <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
@@ -479,7 +390,7 @@ export default function OpenBankingHubPage() {
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[10px] text-muted-foreground italic">
-                         "Orchestrator monitoring 74+ banking canals. Automated switch triggered if latency {" > "} 1500ms."
+                         "Orchestrator monitoring 74+ banking canals. Automated switch triggered if latency {">"} 1500ms."
                       </p>
                    </CardContent>
                 </Card>
