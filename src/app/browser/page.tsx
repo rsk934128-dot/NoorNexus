@@ -118,7 +118,7 @@ function BrowserContent() {
     
     toast({
       title: "Establishing Web Bridge",
-      description: blocksIframe ? "High-Security Node Detected." : "Uplink initiated through Sovereign Tunnel.",
+      description: blocksIframe ? "High-Security Node Detected. Auth might require Direct Tunnel." : "Uplink initiated with Auth-Pass-through.",
       className: blocksIframe ? "border-amber-500/50 bg-amber-500/5" : "border-primary/50 bg-primary/5"
     })
 
@@ -218,7 +218,7 @@ function BrowserContent() {
 
            <div className="hidden sm:flex items-center gap-2">
               <Badge variant="outline" className={`border-emerald-500/20 text-emerald-500 uppercase text-[8px] h-11 px-3 bg-emerald-500/5`}>
-                {isInternalPage ? 'SOVEREIGN_RESOLVED' : 'AES_256_ACTIVE'}
+                {isInternalPage ? 'SOVEREIGN_RESOLVED' : 'AUTH_PASS: ACTIVE'}
               </Badge>
            </div>
         </div>
@@ -437,7 +437,7 @@ function BrowserContent() {
              <div className="text-center space-y-4 max-w-md">
                 <h3 className="text-2xl font-headline font-bold text-white uppercase tracking-tighter">High-Security Node Block</h3>
                 <p className="text-xs text-muted-foreground leading-relaxed italic">
-                   "কমান্ডার, {activeUrl.replace('https://', '')} তার নিজস্ব সিকিউরিটি পলিসির (SAMEORIGIN) কারণে এনক্রিপ্টেড আইফ্রেম টানেলে লোড হতে বাধা দিচ্ছে। এটি বাইপাস করার জন্য আপনাকে সরাসরি টানেল (Direct Tunnel) ব্যবহার করতে হবে।"
+                   "কমান্ডার, {activeUrl.replace('https://', '')} তার নিজস্ব সিকিউরিটি পলিসির (SAMEORIGIN) কারণে এনক্রিপ্টেড আইফ্রেম টানেলে লোড হতে বাধা দিচ্ছে। গুগল লগইন বা এই ধরণের সিকিউর অ্যাকশন সম্পন্ন করার জন্য আপনাকে সরাসরি টানেল (Direct Tunnel) ব্যবহার করতে হবে।"
                 </p>
              </div>
              <div className="flex gap-4">
@@ -466,8 +466,8 @@ function BrowserContent() {
               src={activeUrl} 
               className="w-full h-full border-0"
               title="Imperial Web Canal"
-              allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture"
-              sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals"
+              allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; payment"
+              sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
             />
           </div>
         )}
@@ -478,7 +478,7 @@ function BrowserContent() {
               <div className="space-y-0.5">
                 <p className="text-[9px] font-bold text-white uppercase leading-none">Canal Secure</p>
                 <p className="text-[7px] text-emerald-500/60 font-mono uppercase leading-none">
-                   {isInternalPage ? 'MESH_RESOLVED' : showBypassWarning ? 'HANDSHAKE_GATED' : 'Handshake Verified'}
+                   {isInternalPage ? 'MESH_RESOLVED' : showBypassWarning ? 'HANDSHAKE_GATED' : 'Auth Handshake: ENABLED'}
                 </p>
               </div>
           </div>

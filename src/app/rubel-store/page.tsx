@@ -73,8 +73,8 @@ export default function RubelStorePage() {
                   src="https://rubel-store.vercel.app/" 
                   className="w-full h-full border-0 bg-white"
                   title="Rubel Store External Integration"
-                  allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                  sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation allow-orientation-lock"
+                  allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; payment"
+                  sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
                   allowFullScreen
                 />
               </CardContent>

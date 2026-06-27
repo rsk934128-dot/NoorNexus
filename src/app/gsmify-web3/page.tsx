@@ -73,8 +73,8 @@ export default function GsmifyWeb3Page() {
                   src="https://gsmify-connect.vercel.app/dashboard/web3" 
                   className="w-full h-full border-0 bg-white"
                   title="GSMIFY Web3 Hub Integration"
-                  allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                  sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation allow-orientation-lock"
+                  allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; payment"
+                  sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
                   allowFullScreen
                 />
               </CardContent>
