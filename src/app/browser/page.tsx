@@ -30,7 +30,8 @@ import {
   Link2,
   LayoutGrid,
   Radio,
-  ArrowRight
+  ArrowRight,
+  CheckCircle2
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { executeZenithSearch, WebSearchOutput } from "@/ai/flows/web-search-flow"
