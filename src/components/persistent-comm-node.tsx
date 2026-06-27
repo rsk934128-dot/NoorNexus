@@ -139,6 +139,7 @@ export function PersistentCommNode() {
           title="Standard Hub Node"
           allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
           sandbox="allow-same-origin allow-scripts allow-popovers allow-forms"
+          loading="lazy"
         />
       </div>
 
@@ -156,6 +157,7 @@ export function PersistentCommNode() {
           title="Imperial Hub Node"
           allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
           sandbox="allow-same-origin allow-scripts allow-popovers allow-forms"
+          loading="lazy"
         />
       </div>
 
@@ -165,6 +167,7 @@ export function PersistentCommNode() {
           title="Stable Persistent Listener"
           allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
           sandbox="allow-same-origin allow-scripts allow-popovers allow-forms"
+          loading="lazy"
         />
       </div>
     </div>

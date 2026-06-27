@@ -69,7 +69,8 @@ import {
   Github,
   CloudUpload,
   Search,
-  Slash
+  Slash,
+  ArrowRight
 } from "lucide-react"
 
 import {
@@ -94,7 +95,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { SovereignLogo } from "@/components/sovereign-logo"
-import { Input } from "@/components/ui/input"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
@@ -182,14 +182,16 @@ export function AppSidebar() {
 
   const isAdmin = user?.email === ADMIN_EMAIL
 
-  // Filter items based on search query
+  // Optimized Search Filter
   const filteredUserItems = React.useMemo(() => {
+    if (!searchQuery) return USER_ITEMS
     return USER_ITEMS.filter(item => 
       item.title.toLowerCase().includes(searchQuery.toLowerCase())
     )
   }, [searchQuery])
 
   const filteredAdminItems = React.useMemo(() => {
+    if (!searchQuery) return ADMIN_ITEMS
     return ADMIN_ITEMS.filter(item => 
       item.title.toLowerCase().includes(searchQuery.toLowerCase())
     )
@@ -275,7 +277,6 @@ export function AppSidebar() {
       
       <SidebarSeparator />
       
-      {/* Imperial Search Hub */}
       <div className="px-4 py-3">
          <div className="relative group">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
@@ -318,7 +319,11 @@ export function AppSidebar() {
                 {filteredUserItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={pathname === item.url} className={`h-11 relative ${item.zenith ? 'hover:bg-purple-500/10' : item.highlight ? 'hover:bg-emerald-500/10' : ''}`}>
-                      <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
+                      <Link 
+                        href={item.url} 
+                        prefetch={false}
+                        onClick={() => isMobile && setOpenMobile(false)}
+                      >
                         <item.icon className={`size-5 ${item.zenith ? 'text-purple-500' : item.highlight ? 'text-emerald-500' : (item.title === 'Imperial Mail' ? 'text-red-500' : (item.title === 'GitHub Reports' ? 'text-white' : ''))}`} />
                         <span className={`font-medium text-sm ${item.zenith ? 'text-purple-400 font-bold' : item.highlight ? 'text-emerald-400 font-bold' : (item.title === 'Imperial Mail' ? 'text-red-400 font-bold' : (item.title === 'GitHub Reports' ? 'text-white font-bold' : ''))}`}>{item.title}</span>
                         {item.badge && (
@@ -344,7 +349,11 @@ export function AppSidebar() {
                 {filteredAdminItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={pathname === item.url} className="h-11 hover:bg-primary/10">
-                      <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
+                      <Link 
+                        href={item.url} 
+                        prefetch={false}
+                        onClick={() => isMobile && setOpenMobile(false)}
+                      >
                         <item.icon className={`size-5 ${item.title === 'App Hegemony Health' ? 'text-emerald-500' : item.title === 'Feature Intelligence' ? 'text-purple-500' : item.title === 'Sovereign Legacy' ? 'text-primary' : item.title === 'Imperial Oracle' ? 'text-emerald-500' : item.title === 'Neural Audit (P52)' ? 'text-emerald-400' : item.title === 'Adoption Audit' ? 'text-amber-500' : 'text-primary'}`} />
                         <span className={`font-medium text-sm ${item.title === 'App Hegemony Health' ? 'text-emerald-400 font-bold' : item.title === 'Feature Intelligence' ? 'text-purple-400 font-bold' : item.title === 'Sovereign Legacy' ? 'text-primary font-bold' : item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : item.title === 'Neural Audit (P52)' ? 'text-emerald-400 font-bold' : item.title === 'Adoption Audit' ? 'text-amber-500 font-bold' : ''}`}>{item.title}</span>
                       </Link>
