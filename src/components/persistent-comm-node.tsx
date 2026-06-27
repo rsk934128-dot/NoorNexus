@@ -5,14 +5,14 @@ import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
-import { PhoneIncoming, ShieldCheck, Zap, Activity, Cloud, Radio, BellRing, PhoneCall } from "lucide-react"
+import { PhoneIncoming, ShieldCheck, Zap, Activity, Cloud, Radio, BellRing, PhoneCall, Globe, MessageSquare } from "lucide-react"
 import { useSidebar } from "@/components/ui/sidebar"
 import { Badge } from "@/components/ui/badge"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 /**
- * @fileOverview Global Persistent Communication Node (V5.6 - Sovereign Calling Edition)
- * নূরনেক্সাস সাম্রাজ্যের প্রতিটি পেজে "Sovereign Cloud Node: Standard" কলিং লোগো এবং পারসিস্টেন্স নিশ্চিত করে।
+ * @fileOverview Global Persistent Communication Node (V5.7 - Multi-Hub Edition)
+ * নূরনেক্সাস সাম্রাজ্যের প্রতিটি পেজে "Shurukkha" এবং "Famelack" হাবের পারসিস্টেন্স নিশ্চিত করে।
  */
 export function PersistentCommNode() {
   const [isMounted, setIsMounted] = useState(false)
@@ -106,12 +106,39 @@ export function PersistentCommNode() {
 
   const isStandardActive = pathname === "/shurukkha-standard"
   const isImperialActive = pathname === "/shurukkha-imperial"
+  const isFamelackActive = pathname === "/famelack"
+  
   const sidebarWidth = isMobile ? '0px' : (open ? '16rem' : '3rem')
 
   return (
     <>
-      {/* Persistent Floating Cloud Node Logo */}
-      <div className="fixed bottom-6 right-6 z-[100] pointer-events-auto">
+      {/* Imperial Comm Cluster (Floating Buttons) */}
+      <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-4 items-center pointer-events-auto">
+        
+        {/* Famelack Hub Trigger */}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="relative group">
+                <Button 
+                  onClick={() => router.push("/famelack")}
+                  className={`size-12 rounded-xl p-0 flex items-center justify-center transition-all duration-500 shadow-2xl border ${isFamelackActive ? 'bg-primary border-primary glow-primary scale-110' : 'bg-black/80 border-white/10 hover:border-primary/50'}`}
+                >
+                  <Globe className={`size-5 ${isFamelackActive ? 'text-white animate-pulse' : 'text-primary'}`} />
+                </Button>
+                <div className="absolute right-16 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 backdrop-blur-md border border-primary/30 px-3 py-1.5 rounded-lg whitespace-nowrap pointer-events-none">
+                   <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Famelack Hub</p>
+                   <p className="text-[8px] text-white/60 uppercase font-mono">STATUS: SYNCED</p>
+                </div>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="left" className="bg-black/90 border-primary/50">
+               <p className="text-[10px] font-bold uppercase">Open Famelack Hub</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        {/* Shurukkha Hub Trigger */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -121,7 +148,7 @@ export function PersistentCommNode() {
                 )}
                 <Button 
                   onClick={() => router.push("/shurukkha-standard")}
-                  className={`size-14 rounded-full p-0 flex items-center justify-center transition-all duration-500 shadow-2xl border-2 ${isIncoming ? 'bg-destructive animate-bounce border-white' : 'bg-emerald-500 border-emerald-400/50 hover:scale-110 glow-emerald'}`}
+                  className={`size-14 rounded-full p-0 flex items-center justify-center transition-all duration-500 shadow-2xl border-2 ${isIncoming ? 'bg-destructive animate-bounce border-white' : isStandardActive ? 'bg-emerald-500 border-white glow-emerald scale-110' : 'bg-emerald-500/80 border-emerald-400/30 hover:scale-110 glow-emerald'}`}
                 >
                   {isIncoming ? (
                     <PhoneIncoming className="size-6 text-white animate-pulse" />
@@ -156,6 +183,7 @@ export function PersistentCommNode() {
           </div>
         )}
 
+        {/* Shurukkha Standard Hub Overlay */}
         <div 
           className={`absolute inset-y-0 right-0 transition-all duration-700 ease-in-out bg-white ${isStandardActive ? 'opacity-100 pointer-events-auto' : 'opacity-0'}`}
           style={{ 
@@ -174,6 +202,7 @@ export function PersistentCommNode() {
           />
         </div>
 
+        {/* Shurukkha Imperial Hub Overlay */}
         <div 
           className={`absolute inset-y-0 right-0 transition-all duration-700 ease-in-out bg-white ${isImperialActive ? 'opacity-100 pointer-events-auto' : 'opacity-0'}`}
           style={{ 
@@ -188,6 +217,25 @@ export function PersistentCommNode() {
             title="Imperial Hub Node"
             allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
             sandbox="allow-same-origin allow-scripts allow-popovers allow-forms"
+            loading="lazy"
+          />
+        </div>
+
+        {/* Famelack Hub Overlay */}
+        <div 
+          className={`absolute inset-y-0 right-0 transition-all duration-700 ease-in-out bg-white ${isFamelackActive ? 'opacity-100 pointer-events-auto' : 'opacity-0'}`}
+          style={{ 
+            left: isFamelackActive ? sidebarWidth : '100%', 
+            top: isFamelackActive ? '0' : '0',
+            visibility: isFamelackActive ? 'visible' : 'hidden'
+          }}
+        >
+          <iframe 
+            src="https://famelack.com/" 
+            className="w-full h-full border-0"
+            title="Famelack Hub Node"
+            allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media; payment"
+            sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
             loading="lazy"
           />
         </div>
