@@ -50,11 +50,43 @@ export default function ApiHubPage() {
   const [messages, setMessages] = useState<any[]>([])
   const [isSandbox, setIsSandbox] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
+  
+  // Mock Pulse States
+  const [mockAmount, setMockAmount] = useState("5000")
+  const [pulsing, setPulsing] = useState(false)
+  const [simulatorLogs, setSimulatorLogs] = useState<string[]>([
+    `[${new Date().toLocaleTimeString()}] INITIATING SANDBOX_ENVIRONMENT...`,
+    `[${new Date().toLocaleTimeString()}] WAITING FOR HANDSHAKE...`
+  ])
 
   const generateKey = () => {
     const key = `${isSandbox ? 'SANDBOX' : 'ZENITH'}_SK_${Math.random().toString(16).substring(2, 32).toUpperCase()}`
     setApiKey(key)
     toast({ title: isSandbox ? "Sandbox Access Key Generated" : "Enterprise Bridge Secret Generated", description: "Store this securely in your vault." })
+  }
+
+  const executeMockPulse = async () => {
+    setPulsing(true)
+    const timestamp = () => new Date().toLocaleTimeString()
+    
+    setSimulatorLogs(prev => [...prev, `[${timestamp()}] STARTING MOCK_PULSE: $${mockAmount}`])
+    
+    await new Promise(r => setTimeout(r, 800))
+    setSimulatorLogs(prev => [...prev, `[${timestamp()}] VERIFYING HMAC_V4_SANDBOX_SIG...`])
+    
+    await new Promise(r => setTimeout(r, 600))
+    setSimulatorLogs(prev => [...prev, `[${timestamp()}] GATEWAY_RESPONSE: 200_OK`])
+    
+    await new Promise(r => setTimeout(r, 400))
+    const txId = `SB-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
+    setSimulatorLogs(prev => [...prev, `[${timestamp()}] MOCK_TRANSACTION_APPROVED (ID: ${txId})`])
+    
+    setPulsing(false)
+    toast({
+      title: "Mock Pulse Successful",
+      description: `Transaction ${txId} approved in sandbox environment.`,
+      className: "border-amber-500/50 bg-amber-500/5"
+    })
   }
 
   async function askNora() {
@@ -193,21 +225,29 @@ export default function ApiHubPage() {
                                <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-4">
                                   <div className="space-y-2">
                                      <label className="text-[9px] font-bold text-muted-foreground uppercase">Mock Amount (USD)</label>
-                                     <input defaultValue="5000" className="w-full bg-background/50 border border-white/10 rounded h-10 px-3 text-xs font-mono" />
+                                     <input 
+                                        value={mockAmount} 
+                                        onChange={e => setMockAmount(e.target.value)}
+                                        className="w-full bg-background/50 border border-white/10 rounded h-10 px-3 text-xs font-mono text-white outline-none focus:ring-1 focus:ring-amber-500" 
+                                      />
                                   </div>
-                                  <Button className="w-full bg-amber-500 text-black font-bold uppercase text-[10px] h-10 gap-2">
-                                     <Play className="size-3" /> Execute Mock Pulse
+                                  <Button 
+                                    onClick={executeMockPulse}
+                                    disabled={pulsing}
+                                    className="w-full bg-amber-500 text-black font-bold uppercase text-[10px] h-10 gap-2 glow-emerald transition-all"
+                                  >
+                                     {pulsing ? <Loader2 className="size-3 animate-spin" /> : <Play className="size-3" />}
+                                     Execute Mock Pulse
                                   </Button>
                                </div>
                             </div>
                             <div className="space-y-4">
                                <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Simulator Logs</h4>
-                               <div className="p-4 bg-black rounded-xl border border-white/5 h-[160px] overflow-auto font-mono text-[9px] text-emerald-400 space-y-1">
-                                  <p>[12:42:01] INITIATING SANDBOX_HANDSHAKE...</p>
-                                  <p>[12:42:02] VERIFYING HMAC_V4_SANDBOX_SIG...</p>
-                                  <p>[12:42:02] MOCK_TRANSACTION_APPROVED (ID: SB-991)</p>
-                                  <p>[12:42:03] NORA-52_SIMULATOR: AUDIT_PASSED</p>
-                                  <p className="animate-pulse">_</p>
+                               <div className="p-4 bg-black rounded-xl border border-white/5 h-[200px] overflow-auto font-mono text-[9px] text-emerald-400 space-y-1">
+                                  {simulatorLogs.map((log, i) => (
+                                    <p key={i}>{log}</p>
+                                  ))}
+                                  {pulsing && <p className="animate-pulse">_</p>}
                                </div>
                             </div>
                          </div>
