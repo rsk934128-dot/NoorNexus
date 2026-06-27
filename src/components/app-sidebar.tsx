@@ -45,7 +45,8 @@ import {
   Shield,
   ShoppingBag,
   Maximize2,
-  HardDrive
+  HardDrive,
+  Mail
 } from "lucide-react"
 
 import {
@@ -76,6 +77,7 @@ const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Imperial Proposal", url: "/proposal", icon: FileText, highlight: true },
+  { title: "Imperial Mail", url: "/gmail", icon: Mail, highlight: true },
   { title: "Discovery Hub", url: "/api-hub", icon: Compass, zenith: true },
   { title: "Imperial Drive", url: "/drive", icon: HardDrive, zenith: true },
   { title: "Sovereign Off-Ramp", url: "/off-ramp", icon: ArrowDownToLine, highlight: true },
@@ -200,8 +202,8 @@ export function AppSidebar() {
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild isActive={pathname === item.url} className={`h-11 relative ${item.zenith ? 'hover:bg-purple-500/10' : item.highlight ? 'hover:bg-emerald-500/10' : ''}`}>
                   <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
-                    <item.icon className={`size-5 ${item.zenith ? 'text-purple-500' : item.highlight ? 'text-emerald-500' : ''}`} />
-                    <span className={`font-medium text-sm ${item.zenith ? 'text-purple-400 font-bold' : item.highlight ? 'text-emerald-400 font-bold' : ''}`}>{item.title}</span>
+                    <item.icon className={`size-5 ${item.zenith ? 'text-purple-500' : item.highlight ? 'text-emerald-500' : (item.title === 'Imperial Mail' ? 'text-red-500' : '')}`} />
+                    <span className={`font-medium text-sm ${item.zenith ? 'text-purple-400 font-bold' : item.highlight ? 'text-emerald-400 font-bold' : (item.title === 'Imperial Mail' ? 'text-red-400 font-bold' : '')}`}>{item.title}</span>
                     {item.badge && (
                       <span className="absolute right-2 top-1/2 -translate-y-1/2 flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
