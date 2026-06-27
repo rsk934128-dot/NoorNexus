@@ -479,7 +479,7 @@ export default function OpenBankingHubPage() {
                    </CardHeader>
                    <CardContent className="space-y-4">
                       <p className="text-[10px] text-muted-foreground italic">
-                         "Orchestrator monitoring 74+ banking canals. Automated switch triggered if latency > 1500ms."
+                         "Orchestrator monitoring 74+ banking canals. Automated switch triggered if latency {" > "} 1500ms."
                       </p>
                    </CardContent>
                 </Card>
