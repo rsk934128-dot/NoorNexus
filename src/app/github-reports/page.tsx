@@ -29,7 +29,8 @@ import {
   Award,
   Code2,
   Terminal,
-  ArrowRight
+  ArrowRight,
+  Lock
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useUser } from "@/firebase"
