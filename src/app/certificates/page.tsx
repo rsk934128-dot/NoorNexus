@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useMemo } from "react"
@@ -308,7 +307,7 @@ export default function CertificateVaultPage() {
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                       "Service Worker (SW v3.5) listening for push events. Latency minimized to < 10ms for signal reception."
+                       "Service Worker (SW v3.5) listening for push events. Latency minimized to &lt; 10ms for signal reception."
                     </p>
                     <div className="flex justify-between items-center text-[9px] font-mono border-t border-white/5 pt-4">
                        <span className="uppercase text-muted-foreground">SW Connection</span>
