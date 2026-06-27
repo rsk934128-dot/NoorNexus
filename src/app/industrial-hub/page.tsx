@@ -22,7 +22,8 @@ import {
   Binary,
   Loader2,
   Database,
-  LockKeyhole
+  LockKeyhole,
+  CheckCircle2
 } from "lucide-react"
 import Image from "next/image"
 import placeholderData from "@/app/lib/placeholder-images.json"
