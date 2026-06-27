@@ -66,7 +66,8 @@ import {
   Mic2,
   BatteryCharging,
   HeartHandshake,
-  Github
+  Github,
+  CloudUpload
 } from "lucide-react"
 
 import {
@@ -96,6 +97,7 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "AI Gateway", url: "/ai-gateway", icon: LayoutGrid, zenith: true },
+  { title: "Imperial Deploy", url: "/imperial-deploy", icon: CloudUpload, zenith: true },
   { title: "GitHub Reports", url: "/github-reports", icon: Github, highlight: true },
   { title: "Citizen & Family Hub", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Sovereign Music Lab", url: "/audio-lab", icon: Mic2, highlight: true },
