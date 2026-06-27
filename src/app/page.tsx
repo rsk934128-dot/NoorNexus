@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -55,6 +54,7 @@ export default function Home() {
   const isAdmin = user?.email === ADMIN_EMAIL
 
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   
   // Real-time Citizen Pulse (All sessions from all devices)
@@ -73,6 +73,7 @@ export default function Home() {
   ])
 
   useEffect(() => {
+    setMounted(true)
     const sequence = [
       { text: "INITIATING DEEP NEURAL SYNC...", time: 600 },
       { text: "ESTABLISHING MISSION 500 GLOBAL GRID...", time: 1200 },
@@ -211,7 +212,7 @@ export default function Home() {
                                     {s.assignedNode || "NODE_AUTO"}
                                  </Badge>
                                  <span className="text-[8px] text-muted-foreground font-mono uppercase">
-                                    {isOnline ? 'ONLINE' : formatDistanceToNow(s.lastSeen?.toDate() || new Date()) + " ago"}
+                                    {isOnline ? 'ONLINE' : (mounted && s.lastSeen ? formatDistanceToNow(s.lastSeen.toDate()) + " ago" : "STANDBY")}
                                  </span>
                               </div>
                            </CardContent>

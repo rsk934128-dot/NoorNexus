@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -48,6 +47,7 @@ export default function SessionMonitorPage() {
   const { user, loading: authLoading } = useUser()
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("")
+  const [mounted, setMounted] = useState(false)
   
   const isAdmin = user?.email === ADMIN_EMAIL
 
@@ -69,6 +69,7 @@ export default function SessionMonitorPage() {
   const onlineCount = sessions.filter(s => s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000)).length
 
   useEffect(() => {
+    setMounted(true)
     if (!authLoading && !user) {
       router.push("/login")
     }
@@ -233,10 +234,10 @@ export default function SessionMonitorPage() {
                               <td className="px-6 py-4 text-right">
                                  <div className="space-y-0.5">
                                     <p className="text-[10px] text-white font-bold uppercase">
-                                      {s.lastSeen ? formatDistanceToNow(s.lastSeen.toDate()) + " ago" : "Unknown"}
+                                      {mounted && s.lastSeen ? formatDistanceToNow(s.lastSeen.toDate()) + " ago" : "Unknown"}
                                     </p>
                                     <p className="text-[8px] text-muted-foreground font-mono uppercase">
-                                      {s.lastSeen ? s.lastSeen.toDate().toLocaleTimeString() : "N/A"}
+                                      {mounted && s.lastSeen ? s.lastSeen.toDate().toLocaleTimeString() : "N/A"}
                                     </p>
                                  </div>
                               </td>

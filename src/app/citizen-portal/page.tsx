@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -49,7 +50,14 @@ import { SovereignLogo } from "@/components/sovereign-logo"
 export default function CitizenPortalPage() {
   const { user } = useUser()
   const db = useFirestore()
+  const [mounted, setMounted] = useState(false)
+  const [fallbackDid, setFallbackDid] = useState("")
   
+  useEffect(() => {
+    setMounted(true)
+    setFallbackDid(`did:noornexus:${Math.random().toString(36).substring(2, 20)}`)
+  }, [])
+
   // Fetch real identity data
   const { data: identities } = useCollection<any>(
     user ? query(collection(db, "identities"), where("owner", "==", user.email), limit(1)) : null
@@ -173,8 +181,8 @@ export default function CitizenPortalPage() {
                            <div className="space-y-6 flex-1">
                               <div className="space-y-2">
                                  <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Decentralized Identity (DID)</p>
-                                 <code className="text-xs font-mono text-white block bg-black/40 p-4 rounded-xl border border-white/10 break-all">
-                                    {myIdentity?.did || `did:noornexus:${Math.random().toString(36).substring(2, 20)}`}
+                                 <code className="text-xs font-mono text-white block bg-black/40 p-4 rounded-xl border border-white/10 break-all min-h-[48px]">
+                                    {mounted ? (myIdentity?.did || fallbackDid) : "did:noornexus:INITIALIZING..."}
                                  </code>
                               </div>
                               <div className="grid grid-cols-2 gap-8">
