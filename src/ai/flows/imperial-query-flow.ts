@@ -27,8 +27,7 @@ const fetchImperialStats = ai.defineTool(
     }),
   },
   async () => {
-    // In a real environment, this calls fetch('/api/gateway')
-    // Simulating internal gateway call for server-side execution
+    // Simulating internal gateway call
     return {
       totalTransactions: 15420,
       volume24h: 12560000,

@@ -34,7 +34,10 @@ import {
   Users,
   Smartphone,
   Laptop,
-  ArrowRightLeft
+  ArrowRightLeft,
+  Send,
+  Loader2,
+  Terminal
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -44,6 +47,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
 import { collection, query, orderBy, limit } from "firebase/firestore"
+import { processNeuralQuery, ImperialQueryOutput } from "@/ai/flows/imperial-query-flow"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
@@ -56,8 +60,11 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
+  const [aiQuery, setAiQuery] = useState("")
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiResult, setAiResult] = useState<ImperialQueryOutput | null>(null)
   
-  // Real-time Citizen Pulse (All sessions from all devices)
+  // Real-time Citizen Pulse
   const { data: allSessions } = useCollection<any>(
     query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(100))
   )
@@ -66,7 +73,7 @@ export default function Home() {
 
   const [impactFeed, setImpactFeed] = useState<string[]>([
     "MISSION 500: Global Hegemony verified (Zenith Peak).",
-    "ZENITH: 100 Nodes synchronized &lt; 28ms latency.",
+    "ZENITH: 100 Nodes synchronized < 28ms latency.",
     "INTEL: Project #400 Quarterly Outlook জেনারেটেড।",
     "VAULT: Project #55.5 Global Legacy Archive anchored.",
     "SELF-HEALING: Replication torque stable at 100%."
@@ -101,6 +108,22 @@ export default function Home() {
 
     return () => clearInterval(interval)
   }, [])
+
+  const handleAiQuery = async () => {
+    if (!aiQuery.trim()) return
+    setAiLoading(true)
+    setAiResult(null)
+    try {
+      const result = await processNeuralQuery({ query: aiQuery })
+      setAiResult(result)
+      toast({ title: "Zenith Insight Dispatched" })
+    } catch (e: any) {
+      toast({ title: "Neural Error", description: e.message, variant: "destructive" })
+    } finally {
+      setAiLoading(false)
+      setAiQuery("")
+    }
+  }
 
   if (loading) {
     return (
@@ -170,6 +193,63 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
+               {/* Zenith AI Intelligence Interface */}
+               <section className="space-y-6">
+                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                    <BrainCircuit className="size-4" /> Zenith Neural Interface (Nora-00-Q)
+                  </h3>
+                  <Card className="glass-card border-primary/20 bg-primary/5 overflow-hidden">
+                    <CardContent className="p-6 space-y-6">
+                      <div className="flex gap-4">
+                        <div className="flex-1 relative">
+                          <Terminal className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-primary opacity-50" />
+                          <input 
+                            value={aiQuery}
+                            onChange={(e) => setAiQuery(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleAiQuery()}
+                            placeholder="Ask Nora about grid stats or metrics..." 
+                            className="w-full bg-black/40 border border-white/10 rounded-xl h-12 pl-10 pr-12 text-sm outline-none focus:ring-1 focus:ring-primary font-mono text-white"
+                          />
+                          <Button 
+                            onClick={handleAiQuery}
+                            disabled={aiLoading}
+                            variant="ghost" 
+                            size="icon" 
+                            className="absolute right-1 top-1/2 -translate-y-1/2 text-primary hover:bg-primary/10"
+                          >
+                            {aiLoading ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+                          </Button>
+                        </div>
+                      </div>
+
+                      {aiResult && (
+                        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                          <div className="p-4 bg-black/60 rounded-xl border border-white/5 space-y-3">
+                             <div className="flex justify-between items-center">
+                                <Badge className="bg-primary/20 text-primary border-none text-[8px]">SOURCE: {aiResult.sourceModule}</Badge>
+                                <span className="text-[8px] text-muted-foreground font-mono uppercase">Tools Used: {aiResult.actionTaken || "Internal Logic"}</span>
+                             </div>
+                             <p className="text-sm text-white leading-relaxed italic">"{aiResult.summary}"</p>
+                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+                                {aiResult.dataPoints.map((dp, i) => (
+                                  <div key={i} className="space-y-1">
+                                     <p className="text-[8px] text-muted-foreground uppercase font-bold">{dp.label}</p>
+                                     <p className="text-xs font-headline font-bold text-primary truncate">{dp.value}</p>
+                                  </div>
+                                ))}
+                             </div>
+                             {aiResult.resiliencyReport && (
+                               <div className="pt-3 border-t border-white/5">
+                                  <p className="text-[8px] text-emerald-500 font-mono italic">Resiliency: {aiResult.resiliencyReport}</p>
+                               </div>
+                             )}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+               </section>
+
                {/* Live Citizen Pulse Registry */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center px-1">
@@ -220,26 +300,6 @@ export default function Home() {
                        )
                      })}
                   </div>
-               </section>
-
-               <section className="space-y-6">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                       <Target className="size-4" /> Global Grid Allocation (100 Nodes Active)
-                    </h3>
-                  </div>
-                  <Card className="glass-card p-6 bg-black/40 border-white/5 relative overflow-hidden">
-                     <div className="grid grid-cols-5 sm:grid-cols-10 gap-3">
-                        {Array.from({ length: 100 }).map((_, i) => {
-                          const hasUser = allSessions.some((s:any) => s.assignedNode?.includes(`-${String(i+1).padStart(2, '0')}`)) || (i < onlineSessions.length);
-                          return (
-                            <div key={i} className={`aspect-square rounded-lg border flex items-center justify-center group relative cursor-help transition-all duration-500 ${hasUser ? 'bg-primary/20 border-primary animate-pulse shadow-[0_0_10px_rgba(0,150,255,0.4)]' : 'bg-emerald-500/10 border-emerald-500/20'}`}>
-                               <div className={`size-1.5 rounded-full ${hasUser ? 'bg-primary' : 'bg-emerald-500/40'}`} />
-                            </div>
-                          )
-                        })}
-                     </div>
-                  </Card>
                </section>
             </div>
 
