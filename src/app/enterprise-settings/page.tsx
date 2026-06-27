@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -40,7 +41,9 @@ import {
   Flame,
   Atom,
   Shield,
-  BrainCircuit
+  BrainCircuit,
+  Mail,
+  ShieldEllipsis
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
@@ -50,16 +53,32 @@ export default function EnterpriseSettingsPage() {
   const [showSecret, setShowSecret] = useState(false)
   const [rotationDays, setRotationDays] = useState(15)
   
-  // Official App Config from the Lead Architect
+  // Official App Config & Security Template from the Lead Architect
   const APP_CONFIG = {
     name: "NoorNexus",
-    id: "a085f875-dac3-47ef-83dd-b00d56df81d3",
+    id: "studio-786911773-686ad",
     secret: "S0V_RETA_P4SS_9988X_L4",
     createdDate: "27 Jun 2026, 12:20 am",
     redirectUrl: "https://auth.yapily.com/",
     authHandler: "https://studio-786911773-686ad.firebaseapp.com/__/auth/handler",
+    fromEmail: "noreply@studio-786911773-686ad.firebaseapp.com",
     status: "ENABLED",
     type: "Direct"
+  }
+
+  const MFA_TEMPLATE = {
+    subject: "You've added 2 step verification to your NoorNexus account.",
+    body: `Hello %DISPLAY_NAME%,
+
+Your account in NoorNexus has been updated with %SECOND_FACTOR% for 2-step verification.
+
+If you didn't add this 2-step verification, click the link below to remove it.
+
+https://studio-786911773-686ad.firebaseapp.com/__/auth/action?mode=action&oobCode=code
+
+Thanks,
+
+Your NoorNexus team`
   }
 
   const handleCopy = (text: string, label: string) => {
@@ -95,7 +114,7 @@ export default function EnterpriseSettingsPage() {
                    <Settings className="size-3 mr-2" /> Application Lifecycle Management
                  </Badge>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <ShieldPlus className="size-3 mr-2" /> Nora-52 Audited
+                   <ShieldPlus className="size-3 mr-2" /> 2-Step Verification Active
                  </Badge>
               </div>
               <div className="flex items-center gap-4">
@@ -106,7 +125,7 @@ export default function EnterpriseSettingsPage() {
                     <h2 className="text-3xl font-headline font-bold flex items-center gap-2 uppercase tracking-tighter">
                       {APP_CONFIG.name} <span className="text-primary">Fortress.</span>
                     </h2>
-                    <p className="text-muted-foreground text-sm font-mono uppercase tracking-widest">Official Application Node: {APP_CONFIG.id.substring(0, 8)}</p>
+                    <p className="text-muted-foreground text-sm font-mono uppercase tracking-widest">Project ID: {APP_CONFIG.id}</p>
                  </div>
               </div>
             </div>
@@ -123,7 +142,8 @@ export default function EnterpriseSettingsPage() {
 
           <Tabs defaultValue="settings" className="space-y-8">
             <TabsList className="bg-white/5 border border-white/10 p-1 h-12">
-              <TabsTrigger value="settings" className="gap-2 px-6"><Settings className="size-4" /> Application Settings</TabsTrigger>
+              <TabsTrigger value="settings" className="gap-2 px-6"><Settings className="size-4" /> App Settings</TabsTrigger>
+              <TabsTrigger value="security" className="gap-2 px-6"><ShieldEllipsis className="size-4" /> Security Protocols</TabsTrigger>
               <TabsTrigger value="auth-bridge" className="gap-2 px-6"><ArrowRightLeft className="size-4" /> Unified Auth Bridge</TabsTrigger>
               <TabsTrigger value="analytics" className="gap-2 px-6"><BarChart3 className="size-4" /> Traffic Analytics</TabsTrigger>
             </TabsList>
@@ -179,7 +199,7 @@ export default function EnterpriseSettingsPage() {
                         </CardContent>
                      </Card>
 
-                     {/* Sovereign Auth Handler Node (NEW) */}
+                     {/* Sovereign Auth Handler Node */}
                      <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
                         <CardHeader>
                            <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
@@ -200,83 +220,31 @@ export default function EnterpriseSettingsPage() {
                            </div>
                         </CardContent>
                      </Card>
-
-                     {/* Secret Rotation Policy Panel */}
-                     <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                        <CardHeader>
-                           <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-                              <ShieldCheck className="size-4" /> Secret Rotation Policy (Project #55 Sync)
-                           </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex items-center justify-between">
-                           <div className="space-y-1">
-                              <p className="text-xs text-white font-bold uppercase">Next Scheduled Rotation</p>
-                              <p className="text-[10px] text-muted-foreground">Automatically anchored to Sovereign Vault.</p>
-                           </div>
-                           <div className="text-right">
-                              <p className="text-2xl font-headline font-bold text-emerald-500">{rotationDays} Days</p>
-                              <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">HEALTHY</Badge>
-                           </div>
-                        </CardContent>
-                     </Card>
-
-                     {/* Open Banking redirect URL */}
-                     <Card className="glass-card">
-                        <CardHeader>
-                           <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center justify-between">
-                              <span className="flex items-center gap-2"><Globe className="size-4 text-primary" /> Open Banking Redirect</span>
-                           </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                           <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-2">
-                              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Current Auth Endpoint</Label>
-                              <code className="text-xs font-mono text-primary block">{APP_CONFIG.redirectUrl}</code>
-                           </div>
-                        </CardContent>
-                     </Card>
                   </div>
 
                   <div className="space-y-8">
-                     {/* OAuth Orchestrator (SSO for Finance) */}
-                     <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
+                     {/* 2-Step Verification Info Card */}
+                     <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                         <CardHeader>
-                           <CardTitle className="text-xs font-headline uppercase tracking-widest text-purple-500 flex items-center gap-2">
-                              <ArrowRightLeft className="size-4" /> OAuth Orchestrator
+                           <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
+                              <ShieldCheck className="size-4" /> Identity Protection
                            </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-6">
                            <div className="p-3 bg-black/40 rounded-xl border border-white/5 text-center space-y-2">
-                              <p className="text-[10px] text-muted-foreground uppercase font-bold">SSO Finance Status</p>
-                              <Badge className="bg-purple-500 text-[10px] font-bold">ENABLED</Badge>
+                              <p className="text-[10px] text-muted-foreground uppercase font-bold">2-Step Verification</p>
+                              <Badge className="bg-emerald-500 text-black text-[10px] font-bold">ACTIVE</Badge>
                            </div>
                            <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                              "Acts as a Single Sign-On for enterprise partners. Partners authorize banking data via NoorNexus Unified Auth Bridge."
-                           </p>
-                        </CardContent>
-                     </Card>
-
-                     {/* Nora-52 Zenith Integration */}
-                     <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                        <CardHeader>
-                           <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                              <BrainCircuit className="size-4" /> Zenith Integration
-                           </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                           <div className="flex justify-between items-center text-[10px] font-bold uppercase border-b border-white/5 pb-2">
-                              <span className="text-muted-foreground">Nora-52 Link</span>
-                              <Badge variant="outline" className="border-emerald-500/20 text-emerald-500 bg-emerald-500/5 uppercase font-bold">ACTIVE</Badge>
-                           </div>
-                           <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                              "Every transaction under this App ID is monitored at the Zenith Level for real-time compliance logging."
+                              "Security Level 4 is enforced. Every sensitive configuration change requires a secondary neural pulse confirmation."
                            </p>
                         </CardContent>
                      </Card>
 
                      {/* Project #55 Vault Anchor */}
-                     <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                     <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                         <CardHeader>
-                           <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
+                           <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
                               <Atom className="size-4" /> Vault Anchoring
                            </CardTitle>
                         </CardHeader>
@@ -285,24 +253,67 @@ export default function EnterpriseSettingsPage() {
                               <ShieldCheck className="size-4 text-emerald-500" />
                               <span className="text-[9px] text-emerald-500 font-bold uppercase">Quantum Anchored: YES</span>
                            </div>
-                           <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                              "Your secrets are anchored to the Cold Storage Node 1. Data is invisible to standard mesh traffic."
-                           </p>
                         </CardContent>
                      </Card>
+                  </div>
+               </div>
+            </TabsContent>
 
-                     {/* Safety Zone */}
-                     <Card className="glass-card border-t-4 border-t-destructive/40 bg-destructive/5">
+            <TabsContent value="security" className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="lg:col-span-2 space-y-8">
+                     <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                         <CardHeader>
-                           <CardTitle className="text-[10px] font-bold text-destructive uppercase tracking-widest">Node Dissolution</CardTitle>
+                           <CardTitle className="text-sm font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
+                              <Mail className="size-5" /> 2-Step Verification Template
+                           </CardTitle>
+                           <CardDescription className="text-xs">Automated security dispatch configuration.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                           <div className="space-y-4">
+                              <div className="space-y-2">
+                                 <Label className="text-[10px] uppercase font-bold text-muted-foreground">Sender Email</Label>
+                                 <Input value={APP_CONFIG.fromEmail} readOnly className="bg-background/50 border-white/10 font-mono text-xs h-10" />
+                              </div>
+                              <div className="space-y-2">
+                                 <Label className="text-[10px] uppercase font-bold text-muted-foreground">Email Subject</Label>
+                                 <Input value={MFA_TEMPLATE.subject} readOnly className="bg-background/50 border-white/10 font-bold text-xs h-10" />
+                              </div>
+                              <div className="space-y-2">
+                                 <Label className="text-[10px] uppercase font-bold text-muted-foreground">Email Content Block</Label>
+                                 <div className="p-4 bg-black/60 rounded-xl border border-white/5">
+                                    <pre className="text-[10px] text-muted-foreground font-mono leading-relaxed whitespace-pre-wrap">
+                                       {MFA_TEMPLATE.body}
+                                    </pre>
+                                 </div>
+                              </div>
+                           </div>
+                           <Button variant="outline" className="w-full border-primary/20 text-primary uppercase font-bold text-[10px] tracking-widest h-11 gap-2">
+                              <Settings className="size-3" /> Edit Security Templates
+                           </Button>
+                        </CardContent>
+                     </Card>
+                  </div>
+
+                  <div className="space-y-8">
+                     <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+                        <CardHeader>
+                           <CardTitle className="text-xs font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
+                              <ShieldAlert className="size-4" /> Vulnerability Watch
+                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                           <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                              "Terminating the application will dissolve all 57,200+ banking canal connections."
+                           <div className="flex justify-between items-center text-[10px] font-mono border-b border-white/5 pb-2">
+                              <span className="text-muted-foreground uppercase">Brute Force Guard</span>
+                              <span className="text-emerald-500 font-bold">ACTIVE</span>
+                           </div>
+                           <div className="flex justify-between items-center text-[10px] font-mono border-b border-white/5 pb-2">
+                              <span className="text-muted-foreground uppercase">Account Takeover Shield</span>
+                              <span className="text-emerald-500 font-bold">STABLE</span>
+                           </div>
+                           <p className="text-[9px] text-muted-foreground italic leading-relaxed">
+                              "Nora-01 is monitoring for suspicious authorization patterns across all 100 nodes."
                            </p>
-                           <Button className="w-full bg-destructive/10 text-destructive hover:bg-destructive hover:text-white border border-destructive/20 font-bold uppercase text-[10px] tracking-widest h-11">
-                              Delete Application Node
-                           </Button>
                         </CardContent>
                      </Card>
                   </div>
@@ -313,15 +324,15 @@ export default function EnterpriseSettingsPage() {
                <Card className="glass-card border-l-4 border-l-purple-500">
                   <CardHeader>
                      <CardTitle className="text-sm font-headline uppercase text-purple-500 flex items-center gap-2">
-                        <Fingerprint className="size-5" /> SSO Finance Configuration
+                        <Fingerprint className="size-5" /> Unified Auth Configuration
                      </CardTitle>
-                     <CardDescription>Enterprise Single Sign-On for global banking authorization.</CardDescription>
+                     <CardDescription>Enterprise Single Sign-On and Multi-Factor Authentication.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                      <div className="p-6 bg-black/40 rounded-xl border border-dashed border-white/20 text-center space-y-4">
-                        <p className="text-xs text-muted-foreground font-mono uppercase tracking-[0.2em]">Partner Authorization Proxy: ACTIVE</p>
+                        <p className="text-xs text-muted-foreground font-mono uppercase tracking-[0.2em]">MFA Enrollment Provider: FIREBASE_AETS</p>
                         <Button className="bg-purple-500 text-white font-bold uppercase tracking-widest h-12 px-8">
-                           Configure SSO Proxy
+                           Sync MFA Policies
                         </Button>
                      </div>
                   </CardContent>
