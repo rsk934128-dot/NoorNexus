@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -21,12 +22,36 @@ import {
   ScrollText,
   Layers,
   MessageSquare,
-  Fingerprint
+  Fingerprint,
+  Loader2,
+  FileDown
 } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Link from "next/link"
+import { useToast } from "@/hooks/use-toast"
 
 export default function ProposalPage() {
+  const { toast } = useToast()
+  const [downloading, setDownloading] = useState(false)
+
+  const handleDownloadPitch = () => {
+    setDownloading(true)
+    toast({
+      title: "Initiating Secure Download",
+      description: "Packaging Mission 500 Pitch Deck from Imperial Vault...",
+    })
+
+    // Simulate high-level encryption and packaging process
+    setTimeout(() => {
+      setDownloading(false)
+      toast({
+        title: "Download Successful",
+        description: "Pitch_Deck_v3.5_Sovereign.pdf has been dispatched to your local node.",
+        className: "border-emerald-500/50 bg-emerald-500/5"
+      })
+    }, 2500)
+  }
+
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
@@ -50,8 +75,13 @@ export default function ProposalPage() {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-4">
-               <Button className="bg-primary/10 text-primary border border-primary/20 font-bold h-12 uppercase tracking-widest gap-2 hover:bg-primary/20">
-                 <Zap className="size-4" /> Download Pitch Deck
+               <Button 
+                onClick={handleDownloadPitch}
+                disabled={downloading}
+                className="bg-primary/10 text-primary border border-primary/20 font-bold h-12 uppercase tracking-widest gap-2 hover:bg-primary/20"
+               >
+                 {downloading ? <Loader2 className="size-4 animate-spin" /> : <FileDown className="size-4" />}
+                 {downloading ? "Packaging Deck..." : "Download Pitch Deck"}
                </Button>
                <Link href="/onboarding">
                  <Button className="bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-primary">
