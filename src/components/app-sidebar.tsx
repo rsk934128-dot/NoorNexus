@@ -67,7 +67,9 @@ import {
   BatteryCharging,
   HeartHandshake,
   Github,
-  CloudUpload
+  CloudUpload,
+  Search,
+  Slash
 } from "lucide-react"
 
 import {
@@ -81,7 +83,8 @@ import {
   SidebarSeparator,
   useSidebar,
   SidebarGroup,
-  SidebarGroupLabel
+  SidebarGroupLabel,
+  SidebarGroupContent
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -91,6 +94,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { SovereignLogo } from "@/components/sovereign-logo"
+import { Input } from "@/components/ui/input"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
@@ -171,11 +175,25 @@ export function AppSidebar() {
   const { toast } = useToast()
   const { setOpenMobile, isMobile, state } = useSidebar()
   const [isFullscreen, setIsFullscreen] = React.useState(false)
+  const [searchQuery, setSearchQuery] = React.useState("")
   
   const scrollRef = React.useRef<HTMLDivElement>(null)
   const scrollInterval = React.useRef<NodeJS.Timeout | null>(null)
 
   const isAdmin = user?.email === ADMIN_EMAIL
+
+  // Filter items based on search query
+  const filteredUserItems = React.useMemo(() => {
+    return USER_ITEMS.filter(item => 
+      item.title.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  }, [searchQuery])
+
+  const filteredAdminItems = React.useMemo(() => {
+    return ADMIN_ITEMS.filter(item => 
+      item.title.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  }, [searchQuery])
 
   React.useEffect(() => {
     const savedScrollPos = sessionStorage.getItem("sidebar-scroll-position")
@@ -257,6 +275,28 @@ export function AppSidebar() {
       
       <SidebarSeparator />
       
+      {/* Imperial Search Hub */}
+      <div className="px-4 py-3">
+         <div className="relative group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+            <input 
+               type="text"
+               value={searchQuery}
+               onChange={(e) => setSearchQuery(e.target.value)}
+               placeholder="Find Imperial Node..."
+               className="w-full bg-black/40 border border-white/10 rounded-xl h-9 pl-9 pr-8 text-[11px] font-mono text-white outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-muted-foreground/30"
+            />
+            {searchQuery && (
+              <button 
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white"
+              >
+                <X className="size-3" />
+              </button>
+            )}
+         </div>
+      </div>
+
       <div className="relative flex flex-col flex-1 overflow-hidden min-h-0 group">
         <div 
           onMouseEnter={() => startScroll('up')} 
@@ -269,35 +309,39 @@ export function AppSidebar() {
         </div>
 
         <SidebarContent ref={scrollRef} onScroll={handleScroll} className="scrollbar-hide">
-          <SidebarGroup>
-            <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-muted-foreground px-4 mb-2">Imperial Services</SidebarGroupLabel>
-            <SidebarMenu className="px-2">
-              {USER_ITEMS.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname === item.url} className={`h-11 relative ${item.zenith ? 'hover:bg-purple-500/10' : item.highlight ? 'hover:bg-emerald-500/10' : ''}`}>
-                    <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
-                      <item.icon className={`size-5 ${item.zenith ? 'text-purple-500' : item.highlight ? 'text-emerald-500' : (item.title === 'Imperial Mail' ? 'text-red-500' : (item.title === 'GitHub Reports' ? 'text-white' : ''))}`} />
-                      <span className={`font-medium text-sm ${item.zenith ? 'text-purple-400 font-bold' : item.highlight ? 'text-emerald-400 font-bold' : (item.title === 'Imperial Mail' ? 'text-red-400 font-bold' : (item.title === 'GitHub Reports' ? 'text-white font-bold' : ''))}`}>{item.title}</span>
-                      {item.badge && (
-                        <span className="absolute right-2 top-1/2 -translate-y-1/2 flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                        </span>
-                      )}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroup>
-
-          {isAdmin && (
-            <SidebarGroup className="mt-4">
-              <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-primary px-4 mb-2 flex items-center gap-2">
-                <ShieldCheck className="size-3" /> Sovereign Commands
+          {(filteredUserItems.length > 0) && (
+            <SidebarGroup>
+              <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-muted-foreground px-4 mb-2">
+                {searchQuery ? "Search Results" : "Imperial Services"}
               </SidebarGroupLabel>
               <SidebarMenu className="px-2">
-                {ADMIN_ITEMS.map((item) => (
+                {filteredUserItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={pathname === item.url} className={`h-11 relative ${item.zenith ? 'hover:bg-purple-500/10' : item.highlight ? 'hover:bg-emerald-500/10' : ''}`}>
+                      <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
+                        <item.icon className={`size-5 ${item.zenith ? 'text-purple-500' : item.highlight ? 'text-emerald-500' : (item.title === 'Imperial Mail' ? 'text-red-500' : (item.title === 'GitHub Reports' ? 'text-white' : ''))}`} />
+                        <span className={`font-medium text-sm ${item.zenith ? 'text-purple-400 font-bold' : item.highlight ? 'text-emerald-400 font-bold' : (item.title === 'Imperial Mail' ? 'text-red-400 font-bold' : (item.title === 'GitHub Reports' ? 'text-white font-bold' : ''))}`}>{item.title}</span>
+                        {item.badge && (
+                          <span className="absolute right-2 top-1/2 -translate-y-1/2 flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                          </span>
+                        )}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroup>
+          )}
+
+          {(isAdmin && filteredAdminItems.length > 0) && (
+            <SidebarGroup className="mt-4">
+              <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-primary px-4 mb-2 flex items-center gap-2">
+                <ShieldCheck className="size-3" /> {searchQuery ? "Admin Results" : "Sovereign Commands"}
+              </SidebarGroupLabel>
+              <SidebarMenu className="px-2">
+                {filteredAdminItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={pathname === item.url} className="h-11 hover:bg-primary/10">
                       <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
@@ -309,6 +353,13 @@ export function AppSidebar() {
                 ))}
               </SidebarMenu>
             </SidebarGroup>
+          )}
+
+          {searchQuery && filteredUserItems.length === 0 && filteredAdminItems.length === 0 && (
+            <div className="px-4 py-8 text-center space-y-3 opacity-40">
+               <Slash className="size-8 text-muted-foreground mx-auto" />
+               <p className="text-[10px] font-mono uppercase tracking-widest">No Node Found</p>
+            </div>
           )}
         </SidebarContent>
 
