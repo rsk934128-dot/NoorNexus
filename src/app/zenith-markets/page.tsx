@@ -162,10 +162,10 @@ export default function ZenithMarketsPage() {
                       <ArrowLeft className="size-5" />
                    </Button>
                    <div className="space-y-0.5">
-                      <p className="text-xs font-bold text-white uppercase flex items-center gap-2">
+                      <div className="text-xs font-bold text-white uppercase flex items-center gap-2">
                         Imperial Live Terminal
                         <Badge variant="outline" className="text-[7px] border-amber-500/50 text-amber-500">ZENITH_UPLINK</Badge>
-                      </p>
+                      </div>
                       <p className="text-[10px] text-muted-foreground font-mono truncate max-w-[300px]">{viewUrl}</p>
                    </div>
                 </div>

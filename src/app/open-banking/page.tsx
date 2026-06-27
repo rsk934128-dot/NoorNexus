@@ -210,10 +210,10 @@ export default function OpenBankingHubPage() {
                       <ArrowLeft className="size-5" />
                    </Button>
                    <div className="space-y-0.5">
-                      <p className="text-xs font-bold text-white uppercase flex items-center gap-2">
+                      <div className="text-xs font-bold text-white uppercase flex items-center gap-2">
                         Sovereign Canal Active
                         <Badge variant="outline" className="text-[7px] border-emerald-500/50 text-emerald-500">REALITY_SYNC_ON</Badge>
-                      </p>
+                      </div>
                       <p className="text-[10px] text-muted-foreground font-mono truncate max-w-[200px]">{activeUrl}</p>
                    </div>
                 </div>
@@ -230,7 +230,7 @@ export default function OpenBankingHubPage() {
                      <p className="text-xs font-mono uppercase tracking-[0.3em] text-primary animate-pulse">LEGACY_CORE_SYNC...</p>
                   </div>
                 )}
-                <iframe src={activeUrl} className="w-full h-full border-0" sandbox="allow-same-origin allow-scripts allow-popovers allow-forms" allow="camera; microphone; clipboard-write; encrypted-media" />
+                <iframe src={activeUrl} className="w-full h-full border-0" sandbox="allow-same-origin allow-scripts allow-popovers allow-forms" allow="camera; microphone; clipboard-write; encrypted-media" title="Banking Node View" />
              </div>
           </main>
         ) : (
