@@ -2,6 +2,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -148,7 +149,6 @@ export default function AiGatewayPage() {
             </TabsList>
 
             <TabsContent value="overview" className="space-y-8 animate-in fade-in slide-in-from-bottom-2">
-               {/* Quick Analytics Matrix */}
                <section className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   {[
                     { label: "Recovered", val: metrics.requests > 0 ? metrics.recovered : 0, icon: RefreshCcw, color: "text-emerald-500" },
@@ -169,7 +169,6 @@ export default function AiGatewayPage() {
                   ))}
                </section>
 
-               {/* Usage Area Chart */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center px-1">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
@@ -241,7 +240,7 @@ export default function AiGatewayPage() {
                      </CardHeader>
                      <CardContent className="p-0">
                         <div className="p-6 bg-black font-mono text-[11px] leading-relaxed text-purple-300 relative group">
-                           <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                           <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-10 transition-opacity">
                               <Button variant="ghost" size="icon" className="size-8" onClick={() => toast({ title: "Code Copied" })}>
                                  <Copy className="size-3" />
                               </Button>
