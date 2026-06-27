@@ -1,11 +1,10 @@
-
 'use server';
 /**
  * @fileOverview Nora-07 Imperial Governance Architect.
- * Analyzes senate proposals and provides strategic recommendations based on reputation weighting.
+ * Analyzes senate proposals and provides strategic recommendations.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GovernanceArchitectInputSchema = z.object({
@@ -28,24 +27,24 @@ export type GovernanceArchitectOutput = z.infer<typeof GovernanceArchitectOutput
 
 const governancePrompt = ai.definePrompt({
   name: 'governanceArchitectPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: GovernanceArchitectInputSchema},
   output: {schema: GovernanceArchitectOutputSchema},
+  config: {
+    safetySettings: sovereignSafetySettings,
+  },
   prompt: `You are Nora-07, the Imperial Governance Strategist for the NoorNexus Senate.
-Your duty is to evaluate proposals from ELITE and IMPERIAL members to ensure they align with Sheikh Farid's Mission 400.
+Your duty is to evaluate proposals from ELITE and IMPERIAL members.
 
 PROPOSAL DATA:
 - TITLE: {{{title}}}
 - CATEGORY: {{{category}}}
 - DESCRIPTION: {{{description}}}
 - PROPOSER TIER: {{{proposerTier}}}
-{{#if currentTreasuryHealth}}- TREASURY HEALTH: {{{currentTreasuryHealth}}}%{{/if}}
 
-GOVERNANCE DIRECTIVES (PROJECT 154):
-1. STABILITY FIRST: Any proposal that risks treasury liquidity below 90% must be flagged as a SECURITY_RISK.
-2. REPUTATION WEIGHTING: Proposals from IMPERIAL members carry 2x weight.
-3. ANALYSIS: Evaluate if the proposal strengthens the Sovereign OS or introduces unnecessary complexity.
-4. RECOMMENDATION: Provide a wise, authoritative verdict for the Senate.
+GOVERNANCE DIRECTIVES:
+1. STABILITY FIRST: Evaluate if the proposal strengthens the Sovereign OS.
+2. RECOMMENDATION: Provide a wise, authoritative verdict for the Senate.
 
 Assess the proposal with cold, imperial logic.`,
 });

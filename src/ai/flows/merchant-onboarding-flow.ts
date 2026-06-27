@@ -1,12 +1,9 @@
-
 'use server';
 /**
  * @fileOverview Nora-01 Merchant Onboarding AI Agent.
- * Conducts automated business vetting and initial trust score assessment.
- * Enhanced to process legal trade licenses and family business status.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const MerchantOnboardingInputSchema = z.object({
@@ -32,39 +29,21 @@ export type MerchantOnboardingOutput = z.infer<typeof MerchantOnboardingOutputSc
 
 const merchantOnboardingPrompt = ai.definePrompt({
   name: 'merchantOnboardingPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: MerchantOnboardingInputSchema},
   output: {schema: MerchantOnboardingOutputSchema},
+  config: {
+    safetySettings: sovereignSafetySettings,
+  },
   prompt: `You are Nora-01, the Imperial Onboarding Agent for NoorNexus Sovereign OS.
-Your mission is to vet new merchants for the Mission 400 ecosystem and assign them to one of our three trust tiers.
-
-LEGAL COMPLIANCE DIRECTIVE:
-- If a Trade License Number is provided, significantly increase the initialTrustScore.
-- If it is a Family Business, acknowledge the "Legacy Trust" and treat it with imperial respect, assigning it to TIER 2 if other parameters are stable.
-- Legal standing is the foundation of a sovereign merchant.
+Your mission is to vet new merchants.
 
 TIER SYSTEM:
-1. TIER 1 (Restricted): Initial access, $100/tx limit. For new, unverified entities.
-2. TIER 2 (Sovereign Verified): Up to $5,000/tx. Requires solid business description and stable region.
-3. TIER 3 (Imperial Partner): High-volume, unlimited. Only for highly stable, trusted business models.
+1. TIER 1 (Restricted)
+2. TIER 2 (Sovereign Verified)
+3. TIER 3 (Imperial Partner)
 
-INPUT DATA:
-- Business: {{{businessName}}}
-- Type: {{{businessType}}}
-- Region: {{{region}}}
-- Volume: \${{{estimatedVolume}}}
-- Description: {{{businessDescription}}}
-{{#if tradeLicenseNumber}}- LICENSE: {{{tradeLicenseNumber}}}{{/if}}
-{{#if isFamilyBusiness}}- FAMILY BUSINESS: YES{{/if}}
-
-ASSESSMENT CRITERIA:
-- Evaluate the risk of the business type in the given region.
-- Assess the volume vs. business description consistency.
-- Assign an initialTrustScore (0-100).
-- If volume > $50,000, always require MANUAL_REVIEW_REQUIRED.
-- Provide a clear 'legalVerdict' regarding the documentation status.
-
-Be authoritative, wise, and focused on the absolute stability of the NoorNexus empire.`,
+Analyze the request and provide an authoritative decision.`,
 });
 
 export async function interviewMerchant(input: MerchantOnboardingInput): Promise<MerchantOnboardingOutput> {

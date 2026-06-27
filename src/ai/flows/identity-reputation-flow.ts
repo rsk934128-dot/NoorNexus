@@ -1,11 +1,10 @@
-
 'use server';
 /**
  * @fileOverview Nora-06 Sovereign Identity Scorer.
- * Analyzes mesh-wide behavior and cross-chain activity to issue reputation tiers.
+ * Analyzes mesh-wide behavior to issue reputation tiers.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const IdentityReputationInputSchema = z.object({
@@ -27,29 +26,27 @@ export type IdentityReputationOutput = z.infer<typeof IdentityReputationOutputSc
 
 const reputationPrompt = ai.definePrompt({
   name: 'identityReputationPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: IdentityReputationInputSchema},
   output: {schema: IdentityReputationOutputSchema},
+  config: {
+    safetySettings: sovereignSafetySettings,
+  },
   prompt: `You are Nora-06, the Imperial Identity Registrar for NoorNexus Sovereign OS.
-Your mission is to evaluate the global reputation of mesh participants and issue sovereign attestation signatures.
+Your mission is to evaluate the global reputation of mesh participants.
 
 PARTICIPANT DATA:
 - OWNER: {{{owner}}}
 - WALLETS: {{#each linkedAddresses}}{{{this}}} {{/each}}
 - MESH TRUST: {{{trustScore}}}
-- HISTORY: {{{transactionHistorySummary}}}
 
-REPUTATION CRITERIA (PROJECT 153):
-1. DID GENERATION: Issue a DID in format did:noornexus:<owner_hash>.
-2. REPUTATION SCORE: Scale 0-1000. Mesh Trust * 10 is the baseline. Add points for successful cross-chain bridges.
-3. TIER ASSIGNMENT:
-   - < 300: NOVICE
-   - 300-600: VERIFIED
-   - 600-900: ELITE
-   - > 900: IMPERIAL (Requires perfect signature consistency)
+REPUTATION CRITERIA:
+1. DID GENERATION: Issue a DID.
+2. REPUTATION SCORE: Scale 0-1000.
+3. TIER ASSIGNMENT: NOVICE, VERIFIED, ELITE, IMPERIAL.
 4. ATTESTATION: Provide a reasoning that sounds wise and authoritative.
 
-Sign the reputation passport with an HMAC_V4 seal.`,
+Sign the reputation passport.`,
 });
 
 export async function issueSovereignIdentity(input: IdentityReputationInput): Promise<IdentityReputationOutput> {

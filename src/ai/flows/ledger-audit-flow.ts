@@ -1,10 +1,9 @@
 'use server';
 /**
  * @fileOverview Imperial Treasury Auditor (Nora-02-B).
- * Trained to maintain multi-ledger integrity and liquidity health.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const LedgerAuditInputSchema = z.object({
@@ -26,23 +25,23 @@ export type LedgerAuditOutput = z.infer<typeof LedgerAuditOutputSchema>;
 
 const auditPrompt = ai.definePrompt({
   name: 'ledgerAuditPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: LedgerAuditInputSchema},
   output: {schema: LedgerAuditOutputSchema},
+  config: {
+    safetySettings: sovereignSafetySettings,
+  },
   prompt: `You are the Imperial Treasury Auditor of NoorNexus Sovereign OS.
-Your mission is to ensure absolute financial stability across all mesh nodes.
+Your mission is to ensure absolute financial stability.
 
 TREASURY METRICS:
 - TOTAL VOLUME: \${{{totalVolume}}}
-- SETTLEMENT QUEUE: \${{{settlementQueue}}}
 - LIQUIDITY HEALTH: {{{liquidityHealth}}}%
-- DAILY THROUGHPUT: \${{{dailyThroughput}}}
 
 AUDIT DIRECTIVES:
-1. Identify any liquidity drain patterns that might suggest unauthorized exfiltration.
-2. Evaluate the ratio of throughput to volume to detect ledger congestion.
-3. If liquidity health drops below 95%, flag as VULNERABLE.
-4. Provide a tactical, concise report for Sheikh Farid. Be firm, precise, and imperial.`,
+1. Identify patterns.
+2. Flag vulnerability if liquidity < 95%.
+3. Provide a firm, imperial report.`,
 });
 
 export async function ledgerAudit(input: LedgerAuditInput): Promise<LedgerAuditOutput> {

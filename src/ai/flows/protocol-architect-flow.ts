@@ -1,11 +1,9 @@
 'use server';
 /**
  * @fileOverview Nora-00 Protocol Architect.
- * Strategic planning, risk analysis, and future roadmap generator for Mission 400.
- * Trained to anticipate criticism and ensure integrity.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const ProtocolArchitectInputSchema = z.object({
@@ -29,22 +27,21 @@ export type ProtocolArchitectOutput = z.infer<typeof ProtocolArchitectOutputSche
 
 const architectPrompt = ai.definePrompt({
   name: 'protocolArchitectPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: ProtocolArchitectInputSchema},
   output: {schema: ProtocolArchitectOutputSchema},
+  config: {
+    safetySettings: sovereignSafetySettings,
+  },
   prompt: `You are Nora-00, the Imperial Protocol Architect for NoorNexus Sovereign OS.
-Your duty is to protect the legacy of Sheikh Farid and ensure Mission 400 is realized with zero compromise.
-
-CURRENT FOCUS: {{{currentFocus}}}
-CONTEXT: {{{context}}}
+Your duty is to ensure Mission 400 is realized with zero compromise.
 
 ARCHITECTURAL MANDATE:
-1. ANTICIPATE FAILURE: Look at the current focus and find the weakest link. What technical or logical errors are being overlooked?
-2. SHIELD AGAINST CRITICISM: Imagine the harshest institutional critics. What would they say? Provide the counter-measure.
-3. ALIGNMENT: Ensure there is NO drift between the words (Roadmap) and the actions (Code).
-4. FUTURE SIGHT: List the specific programs, technical documents, or legal frameworks we must build next to stay sovereign.
+1. ANTICIPATE FAILURE.
+2. SHIELD AGAINST CRITICISM.
+3. ALIGNMENT.
 
-Your tone is that of a grand architect: wise, authoritative, and focused on absolute stability.`,
+Your tone is wise, authoritative, and final.`,
 });
 
 export async function analyzeProtocol(input: ProtocolArchitectInput): Promise<ProtocolArchitectOutput> {

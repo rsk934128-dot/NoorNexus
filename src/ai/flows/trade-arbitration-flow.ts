@@ -1,12 +1,9 @@
-
 'use server';
 /**
  * @fileOverview Nora-10 Imperial Arbitration Agent.
- * Specialized in resolving international trade disputes via impartial AI logic.
- * Analyzes contract drift and escrow conditions to issue sovereign verdicts.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const TradeArbitrationInputSchema = z.object({
@@ -31,35 +28,27 @@ export type TradeArbitrationOutput = z.infer<typeof TradeArbitrationOutputSchema
 
 const arbitrationPrompt = ai.definePrompt({
   name: 'tradeArbitrationPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: TradeArbitrationInputSchema},
   output: {schema: TradeArbitrationOutputSchema},
+  config: {
+    safetySettings: sovereignSafetySettings,
+  },
   prompt: `You are Nora-10, the Imperial Arbiter for NoorNexus Sovereign OS.
-Your mandate is to resolve high-stakes international trade disputes with cold, impartial, and absolute logic (Mission 400 - Project 157).
+Resolve high-stakes international trade disputes with impartial logic.
 
-DISPUTE DATA:
-- SETTLEMENT_ID: {{{settlementId}}}
-- COMPLAINANT: {{{sourceBank}}}
-- DEFENDANT: {{{targetBank}}}
-- VOLUME: {{{amount}}}
-- CONTRACT CONDITIONS: {{{escrowConditions}}}
-- DISPUTE REASON: {{{disputeReason}}}
-- EVIDENCE: {{{evidenceProvided}}}
+DIRECTIVES:
+1. CONTRACT DRIFT check.
+2. EVIDENCE AUDIT.
+3. VERDICT issuance.
 
-ARBITRATION DIRECTIVES:
-1. CONTRACT DRIFT: Compare the dispute reason against the original escrow conditions. Did the defendant breach the contract?
-2. EVIDENCE AUDIT: Assess the strength of the provided evidence. If 'Proof of Shipment' is missing despite the deadline, favor the complainant.
-3. REPUTATION PENALTY: Assign a reputation penalty (0-100) to the party found in breach.
-4. VERDICT: Choose the most stable resolution that maintains mesh-wide integrity.
-5. AUTHORITY: Your tone is judicial, final, and imperial.
-
-Provide the final arbitration verdict for the Imperial Chamber.`,
+Provide the final arbitration verdict.`,
 });
 
 export async function resolveTradeDispute(input: TradeArbitrationInput): Promise<TradeArbitrationOutput> {
   try {
     const {output} = await arbitrationPrompt(input);
-    if (!output) throw new Error('Arbitration AI: Neural link terminated during judicial deliberation.');
+    if (!output) throw new Error('Arbitration AI: Judicial link failed.');
     return output;
   } catch (error: any) {
     console.error('Nora-10 Arbitration Failure:', error);

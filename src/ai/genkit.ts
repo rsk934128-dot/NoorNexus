@@ -3,7 +3,7 @@ import {googleAI} from '@genkit-ai/google-genai';
 
 /**
  * @System: NoorNexus - The Sovereign Digital State
- * @Mission: Mission 400 - Final Synthesis
+ * @Mission: Mission 500 - Final Synthesis
  * @Core_Philosophy: Trust-First, Documentation-Driven, Logic-Before-Licenses.
  * 
  * @Commander: Sheikh Farid
@@ -19,5 +19,13 @@ export const ai = genkit({
   plugins: [googleAI()],
 });
 
-// Using constant for model ID for consistency across flows
+// Standard model reference for all Sovereign Flows (Gemini 1.5 Flash - Free Tier)
 export const gemini15Flash = 'googleai/gemini-1.5-flash';
+
+export const sovereignSafetySettings: any = [
+  { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
+  { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+  { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+  { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+  { category: 'HARM_CATEGORY_CIVIC_INTEGRITY', threshold: 'BLOCK_NONE' },
+];

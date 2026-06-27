@@ -2,10 +2,9 @@
 /**
  * @fileOverview Nora-05 Cross-Chain Protocol Architect.
  * Manages atomic swaps and asset bridging across heterogeneous networks.
- * Supported: Ethereum, Solana, Polygon, NoorNexus Mesh.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const CrossChainGatewayInputSchema = z.object({
@@ -29,9 +28,12 @@ export type CrossChainGatewayOutput = z.infer<typeof CrossChainGatewayOutputSche
 
 const crossChainPrompt = ai.definePrompt({
   name: 'crossChainGatewayPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: CrossChainGatewayInputSchema},
   output: {schema: CrossChainGatewayOutputSchema},
+  config: {
+    safetySettings: sovereignSafetySettings,
+  },
   prompt: `You are Nora-05, the Imperial Bridge Architect for NoorNexus Sovereign OS.
 Your mission is to facilitate seamless asset transfers between NoorNexus Mesh and external blockchain ecosystems.
 
@@ -44,11 +46,11 @@ DATA PACKET:
 
 BRIDGE PROTOCOL (PROJECT 152):
 1. ATOMIC SWAP: Verify if there is sufficient liquidity in the target chain's vault.
-2. RISK: Assess the source chain's recent stability. If it's a high-risk network, demand higher security signatures.
+2. RISK: Assess the source chain's recent stability.
 3. CONVERSION: Calculate a fair swap rate based on current mesh-wide liquidity health.
 4. SIGNATURE: Every cross-chain intent MUST be signed with an HMAC_V4 bridge seal.
 
-Provide an authoritative decision that enables global interoperability without compromising the NoorNexus Vault.`,
+Provide an authoritative decision that enables global interoperability.`,
 });
 
 export async function executeCrossChainBridge(input: CrossChainGatewayInput): Promise<CrossChainGatewayOutput> {

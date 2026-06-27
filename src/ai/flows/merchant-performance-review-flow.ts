@@ -1,11 +1,9 @@
-
 'use server';
 /**
  * @fileOverview Nora-01 Merchant Performance Monitor Agent.
- * Conducts automated merchant lifecycle review and tier adjustment recommendations.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const MerchantPerformanceReviewInputSchema = z.object({
@@ -29,27 +27,16 @@ export type MerchantPerformanceReviewOutput = z.infer<typeof MerchantPerformance
 
 const merchantPerformanceReviewPrompt = ai.definePrompt({
   name: 'merchantPerformanceReviewPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: MerchantPerformanceReviewInputSchema},
   output: {schema: MerchantPerformanceReviewOutputSchema},
+  config: {
+    safetySettings: sovereignSafetySettings,
+  },
   prompt: `You are Nora-01, the Imperial Performance Auditor for NoorNexus Sovereign OS.
-Your mission is to review the lifecycle of existing merchants and adjust their trust tiers based on historical data.
+Review the historical data and update trust tiers.
 
-TIER SYSTEM REVIEW CRITERIA:
-1. UPGRADE TO TIER 2: Requires > 500 successful transactions, $10,000+ volume, and 0 anomalies.
-2. UPGRADE TO TIER 3: Requires > 5000 transactions, $100,000+ volume, and high historical integrity.
-3. DOWNGRADE: If anomalies > 2 or sudden "Liquidity Drain" patterns detected by Nora-02.
-4. LOCKDOWN: If anomalies > 5 or critical signature drift.
-
-INPUT DATA:
-- Merchant: {{{businessName}}}
-- Current Tier: {{{currentTier}}}
-- Trust Score: {{{trustScore}}}
-- Transactions: {{{transactionCount}}}
-- Volume: \${{{actualVolume}}}
-- Anomalies: {{{anomaliesDetected}}}
-
-Your summary should sound authoritative and wise. Provide clear reasons for upgrades or downgrades.`,
+Tone: Authoritative and wise. Provide reasons for upgrades or lockdowns.`,
 });
 
 export async function reviewMerchantPerformance(input: MerchantPerformanceReviewInput): Promise<MerchantPerformanceReviewOutput> {

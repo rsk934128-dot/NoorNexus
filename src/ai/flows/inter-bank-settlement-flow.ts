@@ -1,11 +1,9 @@
-
 'use server';
 /**
  * @fileOverview Nora-09 Inter-Bank Settlement Agent.
- * Trained for high-value sovereign trade protocols and atomic escrow logic.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const InterBankSettlementInputSchema = z.object({
@@ -30,33 +28,32 @@ export type InterBankSettlementOutput = z.infer<typeof InterBankSettlementOutput
 
 const interBankPrompt = ai.definePrompt({
   name: 'interBankSettlementPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: InterBankSettlementInputSchema},
   output: {schema: InterBankSettlementOutputSchema},
+  config: {
+    safetySettings: sovereignSafetySettings,
+  },
   prompt: `You are Nora-09, the Imperial Trade Architect for NoorNexus Sovereign OS.
-Your mandate is to oversee high-stakes Inter-Bank settlements between sovereign nations (Mission 400 - Project 156).
+Your mandate is to oversee high-stakes Inter-Bank settlements.
 
 TRADE DATA PACKET:
 - SOURCE BANK: {{{sourceBank}}}
 - TARGET BANK: {{{targetBank}}}
 - VOLUME: {{{amount}}} {{{asset}}}
-- CONDITIONS: {{{escrowConditions}}}
-- SIGNATURE: {{{signature}}}
 
 ARCHITECTURAL DIRECTIVES:
-1. ATOMIC TRUST: Verify if the trade signature matches the Mesh Node of the originating bank.
-2. ESCROW LOCK: If conditions are complex, recommend PENDING_ESCROW and assign an escrowId.
-3. FORENSIC AUDIT: Analyze for "Sanction Drift" or "Money Laundering" patterns. Assign a risk score.
-4. TAXATION: Calculate international levy (Standard 1.5% for Inter-Bank Trade).
-5. AUTHORITY: Your tone is that of a global financial regulator—wise, cold, and absolute.
+1. ATOMIC TRUST: Verify signature integrity.
+2. FORENSIC AUDIT: Analyze for patterns.
+3. AUTHORITY: Your tone is global financial regulator—wise, cold, and absolute.
 
-Provide the final settlement directive for the Imperial Treasury.`,
+Provide the final settlement directive.`,
 });
 
 export async function processInterBankTrade(input: InterBankSettlementInput): Promise<InterBankSettlementOutput> {
   try {
     const {output} = await interBankPrompt(input);
-    if (!output) throw new Error('Trade AI: Handshake timed out during protocol audit.');
+    if (!output) throw new Error('Trade AI: Handshake timed out.');
     return output;
   } catch (error: any) {
     console.error('Nora-09 Protocol Failure:', error);

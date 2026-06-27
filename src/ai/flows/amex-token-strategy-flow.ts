@@ -4,7 +4,7 @@
  * Analyzes card tokenization requests and provides risk assessment.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const TokenStrategyInputSchema = z.object({
@@ -24,13 +24,12 @@ export type TokenStrategyOutput = z.infer<typeof TokenStrategyOutputSchema>;
 
 const tokenPrompt = ai.definePrompt({
   name: 'amexTokenStrategyPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: TokenStrategyInputSchema},
   output: {schema: TokenStrategyOutputSchema},
   config: {
-    safetySettings: [
-      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-    ]
+    safetySettings: sovereignSafetySettings,
+    temperature: 0.3,
   },
   prompt: `You are Nora-21, the Imperial Tokenization Architect for NoorNexus Sovereign OS.
 Your mission is to secure the Digital Vault using American Express Token Service (AETS) protocols.

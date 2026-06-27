@@ -1,10 +1,9 @@
 'use server';
 /**
- * @fileOverview GSMIFY Sovereign Sports AI Analyst.
- * Trained for high-performance tactical analysis with imperial precision.
+ * @fileOverview Nora-AI Sports Analyst.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const MatchInsightInputSchema = z.object({
@@ -30,29 +29,25 @@ export type MatchInsightOutput = z.infer<typeof MatchInsightOutputSchema>;
 
 const sportsInsightPrompt = ai.definePrompt({
   name: 'sportsInsightPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: MatchInsightInputSchema},
   output: {schema: MatchInsightOutputSchema},
-  prompt: `You are the GSMIFY Nora-AI Sports Analyst for the NoorNexus Empire.
-Provide a high-performance, imperial-grade tactical analysis for the following match.
+  config: {
+    safetySettings: sovereignSafetySettings,
+  },
+  prompt: `You are the Nora-AI Sports Analyst.
+Provide high-performance tactical analysis.
 
-MATCH DATA:
-- CONTESTANTS: {{{homeTeam}}} vs {{{awayTeam}}}
-- SCOREBOARD: {{{currentScore}}}
-- STATUS: {{{matchStatus}}}
-{{#if description}}- CONTEXT: {{{description}}}{{/if}}
+MATCH: {{{homeTeam}}} vs {{{awayTeam}}}
+SCORE: {{{currentScore}}}
 
-ANALYTICAL DIRECTIVE:
-1. Provide a "Master Strategist" level tactical analysis.
-2. Calculate win probabilities based on the current score and momentum.
-3. Identify the key performers whose actions will define the match outcome.
-4. Be decisive. Your analysis informs the Sovereign Sports Network.`,
+Be decisive. Your analysis informs the Sovereign Sports Network.`,
 });
 
 export async function getMatchInsight(input: MatchInsightInput): Promise<MatchInsightOutput> {
   try {
     const {output} = await sportsInsightPrompt(input);
-    if (!output) throw new Error('Sports AI: Insight extraction failure.');
+    if (!output) throw new Error('Sports AI: Insight failure.');
     return output;
   } catch (error: any) {
     console.error('Sports AI Failure:', error);

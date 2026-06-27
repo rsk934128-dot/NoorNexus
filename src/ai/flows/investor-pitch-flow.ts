@@ -1,10 +1,9 @@
 'use server';
 /**
  * @fileOverview Nora-04 Strategic Investor Consultant.
- * Analyzes investment potential, ROI, and pitch strategies for Mission 400.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const InvestorPitchInputSchema = z.object({
@@ -32,23 +31,23 @@ export type InvestorPitchOutput = z.infer<typeof InvestorPitchOutputSchema>;
 
 const investorPitchPrompt = ai.definePrompt({
   name: 'investorPitchPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: gemini15Flash,
   input: {schema: InvestorPitchInputSchema},
   output: {schema: InvestorPitchOutputSchema},
+  config: {
+    safetySettings: sovereignSafetySettings,
+  },
   prompt: `You are Nora-04, the Imperial Investment Strategist for NoorNexus Sovereign OS.
-Your duty is to secure the capital needed for Mission 400 while ensuring absolute sovereignty.
+Your duty is to secure the capital needed for Mission 400.
 
 INPUT DATA:
 - INVESTOR TYPE: {{{targetInvestorType}}}
 - STAGE: {{{projectStage}}}
-- FOCUS: {{{currentFocus}}}
 
 MISSION:
-1. Explain how NoorNexus OS v3 solves the high cost and low speed of traditional cross-border banking.
-2. Quantify the savings: Explain how AI automation (Nora-AI) reduces compliance costs by 90%.
-3. Highlight the HMAC_V4 security protocol as our moat (competitive advantage).
-4. Identify potential partners: Mention regional sovereign funds and fintech VCs.
-5. Create a pitch that sounds wise, authoritative, and focused on absolute stability.`,
+1. Explain how NoorNexus OS v3 solves cross-border banking issues.
+2. Highlight AI automation and security protocols.
+3. Create an authoritative, imperial pitch.`,
 });
 
 export async function generateInvestorPitch(input: InvestorPitchInput): Promise<InvestorPitchOutput> {
