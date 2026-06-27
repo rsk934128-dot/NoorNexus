@@ -1,7 +1,6 @@
-
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
@@ -32,7 +31,12 @@ import {
   FileCode,
   Copy,
   CheckCircle2,
-  BookOpen
+  BookOpen,
+  Smartphone,
+  Laptop,
+  Box,
+  Monitor,
+  Infinity
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { processGatewayRequest, AiGatewayOutput } from "@/ai/flows/ai-gateway-flow"
@@ -59,7 +63,8 @@ export default function AiGatewayPage() {
     reliability: 99.9,
     spend: 12.45,
     requests: 15420,
-    tokens: 845000
+    tokens: 845000,
+    activeDevices: 452
   })
 
   async function handleGatewayPulse() {
@@ -69,7 +74,9 @@ export default function AiGatewayPage() {
     try {
       const res = await processGatewayRequest({
         prompt: query,
-        targetModel: "openai/gpt-5.5"
+        targetModel: "openai/gpt-5.5",
+        appId: "ZENITH_INTERNAL_DASH",
+        deviceId: "DESKTOP_NODE_01"
       })
       setResult(res)
       toast({ 
@@ -120,23 +127,23 @@ export default function AiGatewayPage() {
                    <Network className="size-3 mr-2" /> Project Zenith: AI Gateway
                  </Badge>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <Sparkles className="size-3 mr-2" /> Quick Start Ready
+                   <Sparkles className="size-3 mr-2" /> Every App, Every Device
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Zenith <span className="text-purple-500">Gateway.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Infinite Intelligence, Single Entry." Built on AI SDK, Zenith lets you switch between hundreds of models with one line of code.
+                "Infinite Intelligence, Single Entry." এখন আপনার সাম্রাজ্যের প্রতিটি ডিভাইসে নূরনেক্সাস এআই কানেক্টিভিটি সচল।
               </p>
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-purple-500/20 text-center min-w-[200px] relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-2 opacity-10">
-                    <Activity className="size-12 text-purple-500" />
+                    <Smartphone className="size-12 text-purple-500" />
                   </div>
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Gateway Health</p>
-                  <p className="text-2xl font-headline font-bold text-emerald-500">OPTIMAL</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Active AI Devices</p>
+                  <p className="text-2xl font-headline font-bold text-emerald-500">{metrics.activeDevices}</p>
                </div>
             </div>
           </header>
@@ -151,11 +158,11 @@ export default function AiGatewayPage() {
             <TabsContent value="overview" className="space-y-8 animate-in fade-in slide-in-from-bottom-2">
                <section className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   {[
-                    { label: "Recovered", val: metrics.requests > 0 ? metrics.recovered : 0, icon: RefreshCcw, color: "text-emerald-500" },
+                    { label: "AI Recovered", val: metrics.requests > 0 ? metrics.recovered : 0, icon: RefreshCcw, color: "text-emerald-500" },
                     { label: "Reliability", val: `${metrics.reliability}%`, icon: ShieldCheck, color: "text-primary" },
-                    { label: "Spend", val: `$${metrics.spend}`, icon: DollarSign, color: "text-amber-500" },
-                    { label: "Requests", val: metrics.requests.toLocaleString(), icon: Zap, color: "text-purple-500" },
-                    { label: "Total Tokens", val: "845k", icon: Atom, color: "text-emerald-400" }
+                    { label: "Daily Pulses", val: metrics.requests.toLocaleString(), icon: Zap, color: "text-purple-500" },
+                    { label: "Total Tokens", val: "845k", icon: Atom, color: "text-emerald-400" },
+                    { label: "Device Sync", val: "100%", icon: Infinity, color: "text-amber-500" }
                   ].map((m, i) => (
                     <Card key={i} className="glass-card bg-black/40 border-white/5">
                       <CardContent className="p-5 space-y-1 text-center">
@@ -169,14 +176,14 @@ export default function AiGatewayPage() {
                   ))}
                </section>
 
-               <section className="space-y-6">
-                  <div className="flex justify-between items-center px-1">
-                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                       <BarChart3 className="size-4" /> Global Usage Pulse
-                    </h3>
-                  </div>
-                  <Card className="glass-card bg-black/40 border-white/5 p-6 h-[300px]">
-                     <ResponsiveContainer width="100%" height="100%">
+               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <Card className="lg:col-span-2 glass-card bg-black/40 border-white/5 p-6 h-[400px]">
+                    <div className="flex justify-between items-center mb-6">
+                       <h3 className="text-xs font-headline font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+                          <BarChart3 className="size-4" /> Global Intelligence Usage
+                       </h3>
+                    </div>
+                     <ResponsiveContainer width="100%" height="80%">
                         <AreaChart data={MOCK_USAGE_DATA}>
                            <defs>
                               <linearGradient id="colorUsage" x1="0" y1="0" x2="0" y2="1">
@@ -192,7 +199,31 @@ export default function AiGatewayPage() {
                         </AreaChart>
                      </ResponsiveContainer>
                   </Card>
-               </section>
+
+                  <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                     <CardHeader>
+                        <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
+                           <Smartphone className="size-4" /> Device Connectivity
+                        </CardTitle>
+                     </CardHeader>
+                     <CardContent className="space-y-4">
+                        {[
+                          { device: "Imperial Smartphones", status: "SYNCED", icon: Smartphone },
+                          { device: "Sovereign Workstations", status: "ACTIVE", icon: Monitor },
+                          { device: "IoT Mesh Nodes", status: "PULSING", icon: Box },
+                          { device: "Legacy Terminals", status: "VERIFIED", icon: Laptop }
+                        ].map((d, i) => (
+                          <div key={i} className="flex justify-between items-center p-2 bg-black/40 rounded border border-white/5">
+                             <div className="flex items-center gap-3">
+                                <d.icon className="size-3.5 text-primary opacity-60" />
+                                <span className="text-[10px] text-white font-bold uppercase">{d.device}</span>
+                             </div>
+                             <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">{d.status}</Badge>
+                          </div>
+                        ))}
+                     </CardContent>
+                  </Card>
+               </div>
             </TabsContent>
 
             <TabsContent value="getting-started" className="space-y-8 animate-in fade-in slide-in-from-bottom-2">
@@ -200,17 +231,17 @@ export default function AiGatewayPage() {
                   <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
                      <CardHeader>
                         <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
-                           <Rocket className="size-4 text-purple-400" /> Getting Started Guide
+                           <Rocket className="size-4 text-purple-400" /> Multi-App AI Integration
                         </CardTitle>
-                        <CardDescription>Follow these steps to set up Zenith AI Gateway in your environment.</CardDescription>
+                        <CardDescription>Follow these steps to connect your app's devices to Zenith AI Gateway.</CardDescription>
                      </CardHeader>
                      <CardContent className="space-y-8">
                         <div className="space-y-6">
                            {[
-                             { step: "01", title: "Install Vercel CLI", desc: "Run `npm i -g vercel` in your terminal to manage deployments and environment variables." },
-                             { step: "02", title: "Pull Environment", desc: "Run `vercel link` then `vercel env pull .env.local` to sync AI Gateway OIDC tokens." },
-                             { step: "03", title: "Install AI SDK", desc: "Run `npm install ai` to access streaming and multi-model switching capabilities." },
-                             { step: "04", title: "Verify Pulse", desc: "Use the terminal example to verify model 'openai/gpt-5.5' connectivity." }
+                             { step: "01", title: "Initialize Handshake", desc: "Use `sheikh.init()` to establish the device's identity on the mesh." },
+                             { step: "02", title: "Provision AI Token", desc: "Obtain an ephemeral AI Token for the specific App ID / Device ID pair." },
+                             { step: "03", title: "Call Gateway", desc: "Send prompts to the `/v1/ai/pulse` endpoint with HMAC_V4 signature." },
+                             { step: "04", title: "Monitor Usage", desc: "Track tokens and latency in real-time from your Imperial Dashboard." }
                            ].map((s, i) => (
                              <div key={i} className="flex gap-4 group">
                                 <span className="text-2xl font-headline font-bold text-purple-500/30 group-hover:text-purple-500 transition-colors">{s.step}</span>
@@ -227,7 +258,7 @@ export default function AiGatewayPage() {
                           className="w-full bg-purple-500 text-white font-bold h-12 uppercase tracking-widest glow-primary gap-2"
                         >
                            {loading ? <Loader2 className="size-4 animate-spin" /> : <Zap className="size-4" />}
-                           Verify Quickstart Pulse
+                           Verify Global AI Handshake
                         </Button>
                      </CardContent>
                   </Card>
@@ -235,7 +266,7 @@ export default function AiGatewayPage() {
                   <Card className="glass-card border-white/5 overflow-hidden">
                      <CardHeader className="bg-white/2 border-b border-white/5">
                         <CardTitle className="text-xs font-headline uppercase text-white flex items-center gap-2">
-                           <Code2 className="size-4 text-primary" /> Integration Example (index.mjs)
+                           <Code2 className="size-4 text-primary" /> Device Integration Snippet
                         </CardTitle>
                      </CardHeader>
                      <CardContent className="p-0">
@@ -246,29 +277,23 @@ export default function AiGatewayPage() {
                               </Button>
                            </div>
 <pre>
-{`import { streamText } from 'ai'
-import { openai } from '@ai-sdk/openai'
+{`// Calling Zenith AI from any device
+const response = await sheikh.ai.pulse({
+  prompt: 'Analyze this device telemetry...',
+  deviceId: 'SMARTPHONE_007',
+  appId: 'IMPERIAL_MOBILE_V3',
+  highVeracity: true
+});
 
-const result = streamText({
-  model: openai('gpt-4o'), // Mapping for local test
-  prompt: 'Explain quantum computing in simple terms.',
-})
-
-for await (const chunk of result.textStream) {
-  process.stdout.write(chunk)
-}`}
+console.log('AI Logic:', response.response);
+console.log('Seal:', response.gatewayHash);`}
 </pre>
                         </div>
                         <div className="p-6 border-t border-white/5 space-y-4">
                            <div className="flex items-center gap-3">
                               <CheckCircle2 className="size-4 text-emerald-500" />
-                              <p className="text-[10px] text-muted-foreground italic">No AI Gateway API key needed with VERCEL_OIDC_TOKEN.</p>
+                              <p className="text-[10px] text-muted-foreground italic">Unified endpoint for all 100 NoorNexus nodes.</p>
                            </div>
-                           <Link href="https://sdk.vercel.ai/docs" target="_blank" className="block">
-                              <Button variant="outline" className="w-full border-white/10 text-[9px] uppercase font-bold h-10 gap-2">
-                                 Read AI SDK Documentation <BookOpen className="size-3" />
-                              </Button>
-                           </Link>
                         </div>
                      </CardContent>
                   </Card>
@@ -280,13 +305,13 @@ for await (const chunk of result.textStream) {
                   <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                      <CardHeader>
                         <CardTitle className="text-sm font-headline uppercase text-white">Imperial Prompt</CardTitle>
-                        <CardDescription>Targeting openai/gpt-5.5 (Gateway Proxy)</CardDescription>
+                        <CardDescription>Simulating Multi-Device Pulse</CardDescription>
                      </CardHeader>
                      <CardContent className="space-y-6">
                         <textarea 
                           value={query}
                           onChange={e => setQuery(e.target.value)}
-                          placeholder="Execute a command through the gateway..."
+                          placeholder="Execute a command through the global gateway..."
                           className="w-full h-32 bg-black/40 border border-white/10 rounded-xl p-4 text-xs font-mono text-primary outline-none focus:ring-1 focus:ring-primary"
                         />
                         <Button 
@@ -295,7 +320,7 @@ for await (const chunk of result.textStream) {
                           className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary gap-3"
                         >
                            {loading ? <Loader2 className="size-4 animate-spin" /> : <Zap className="size-4" />}
-                           Initiate Gateway Pulse
+                           Initiate Global Pulse
                         </Button>
                      </CardContent>
                   </Card>
@@ -303,7 +328,7 @@ for await (const chunk of result.textStream) {
                   <Card className={`glass-card border-t-4 transition-all duration-500 ${result ? 'border-t-emerald-500 bg-emerald-500/5' : 'border-t-primary opacity-40'}`}>
                      <CardHeader>
                         <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
-                           <Cpu className="size-4" /> Intelligent Output
+                           <Cpu className="size-4" /> Global Output
                         </CardTitle>
                      </CardHeader>
                      <CardContent className="space-y-6">
@@ -314,19 +339,19 @@ for await (const chunk of result.textStream) {
                              </div>
                              <div className="grid grid-cols-2 gap-4">
                                 <div className="p-3 bg-white/5 rounded border border-white/5">
-                                   <p className="text-[8px] text-muted-foreground uppercase font-bold">Latency</p>
-                                   <p className="text-sm font-headline font-bold text-emerald-500">{result.latencyMs}ms</p>
+                                   <p className="text-[8px] text-muted-foreground uppercase font-bold">Gateway Hash</p>
+                                   <p className="text-[9px] font-mono text-primary truncate">{result.gatewayHash}</p>
                                 </div>
                                 <div className="p-3 bg-white/5 rounded border border-white/5">
-                                   <p className="text-[8px] text-muted-foreground uppercase font-bold">Tokens</p>
-                                   <p className="text-sm font-headline font-bold text-primary">{result.tokenCount}</p>
+                                   <p className="text-[8px] text-muted-foreground uppercase font-bold">Usage Status</p>
+                                   <p className="text-xs font-headline font-bold text-emerald-500">VERIFIED</p>
                                 </div>
                              </div>
                           </div>
                         ) : (
                           <div className="h-48 flex flex-col items-center justify-center gap-4 text-center">
                              <Radio className="size-12 text-primary animate-pulse opacity-40" />
-                             <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">Awaiting Gateway Dispatch</p>
+                             <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">Awaiting Global Dispatch</p>
                           </div>
                         )}
                      </CardContent>
@@ -339,15 +364,15 @@ for await (const chunk of result.textStream) {
              <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                    <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                      <Lock className="size-4" /> Security Protocol v4.0
+                      <Lock className="size-4" /> Project #54 Sync
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                      "All gateway pulses are signed with HMAC_V4_GW. OIDC tokens are provisioned automatically for authorized Vercel domains."
+                      "All multi-device AI pulses are cross-verified by Nora-54 for regulatory alignment."
                    </p>
                    <div className="pt-2">
-                      <Badge variant="outline" className="w-full justify-center h-8 border-emerald-500/30 text-emerald-500 uppercase text-[9px] font-bold tracking-widest">OIDC_AUTH: ACTIVE</Badge>
+                      <Badge variant="outline" className="w-full justify-center h-8 border-emerald-500/30 text-emerald-500 uppercase text-[9px] font-bold tracking-widest">AUTONOMY_LEVEL: Ω</Badge>
                    </div>
                 </CardContent>
              </Card>
@@ -358,12 +383,12 @@ for await (const chunk of result.textStream) {
                 </div>
                 <CardHeader className="pb-2">
                    <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
-                      <Database className="size-3" /> System Logs
+                      <Database className="size-3" /> Growth Engine
                    </CardTitle>
                 </CardHeader>
                 <CardContent>
                    <p className="text-[9px] text-muted-foreground leading-relaxed">
-                      Last Gateway audit: <strong>28ms ago</strong>. 100% reliability maintained across the South Asia cluster.
+                      AI Bridge integration has increased cross-app <strong>Biskutment</strong> by 24% in the last 72 hours.
                    </p>
                 </CardContent>
              </Card>
@@ -371,63 +396,18 @@ for await (const chunk of result.textStream) {
              <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                 <CardHeader>
                    <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                      <ShieldPlus className="size-3" /> Rate Limiting
+                      <ShieldCheck className="size-3" /> HMAC_V4 Secure
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                   <div className="flex justify-between text-[9px] font-mono">
-                      <span className="uppercase text-muted-foreground">Global Quota</span>
-                      <span className="text-white">84% Remaining</span>
-                   </div>
-                   <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                      <div className="h-full bg-amber-500" style={{ width: '84%' }} />
-                   </div>
+                   <p className="text-[9px] text-muted-foreground italic leading-relaxed">
+                      "Every device calling josh AI must pass the L4 cryptographic threshold."
+                   </p>
                 </CardContent>
              </Card>
           </div>
         </main>
       </SidebarInset>
     </div>
-  )
-}
-
-function DollarSign(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="12" x2="12" y1="2" y2="22" />
-      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-    </svg>
-  )
-}
-
-function ShieldPlus(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
-      <line x1="12" x2="12" y1="8" y2="16" />
-      <line x1="8" x2="16" y1="12" y2="12" />
-    </svg>
   )
 }

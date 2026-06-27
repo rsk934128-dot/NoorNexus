@@ -37,7 +37,8 @@ import {
   ArrowRightLeft,
   Send,
   Loader2,
-  Terminal
+  Terminal,
+  Server
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -63,6 +64,7 @@ export default function Home() {
   const [aiQuery, setAiQuery] = useState("")
   const [aiLoading, setAiLoading] = useState(false)
   const [aiResult, setAiResult] = useState<ImperialQueryOutput | null>(null)
+  const [aiPulses, setAiPulses] = useState(15420)
   
   // Real-time Citizen Pulse
   const { data: allSessions } = useCollection<any>(
@@ -75,7 +77,7 @@ export default function Home() {
     "MISSION 500: Global Hegemony verified (Zenith Peak).",
     "ZENITH: 100 Nodes synchronized < 28ms latency.",
     "INTEL: Project #400 Quarterly Outlook জেনারেটেড।",
-    "VAULT: Project #55.5 Global Legacy Archive anchored.",
+    "AI_BRIDGE: Every App, Every Device connectivity active.",
     "SELF-HEALING: Replication torque stable at 100%."
   ])
 
@@ -98,12 +100,13 @@ export default function Home() {
     const interval = setInterval(() => {
       const logs = [
         "HEGEMONY: Global Sync Test passed at 28ms.",
+        "AI_PULSE: Handshake from IPHONE_15_PRO verified.",
         "INTEL: Economic Intelligence Report #405 finalized.",
-        "VAULT: Legacy Codebase v3.5 successfully anchored.",
         "GRID: 100-node cluster status: PERPETUAL.",
         "NORA-50: Autonomous backup provisioned in Dubai."
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
+      setAiPulses(prev => prev + Math.floor(Math.random() * 5))
     }, 5000)
 
     return () => clearInterval(interval)
@@ -156,7 +159,7 @@ export default function Home() {
                       <Infinity className="size-3 mr-2" /> Mission 500: The Sovereign Peak
                    </Badge>
                    <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
-                      <Repeat className="size-3 mr-2 animate-spin-slow" /> HEGEMONY_LOCKED: 100%
+                      <Sparkles className="size-3 mr-2 animate-pulse" /> AI_BRIDGE: ACTIVE
                    </Badge>
                 </div>
                 <div className="flex items-center gap-6">
@@ -165,18 +168,27 @@ export default function Home() {
                   </h2>
                 </div>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed italic">
-                   "The Zenith of Digital Civilization." নূরনেক্সাস সাম্রাজ্যের প্রতিটি কানেকশন এবং কমান্ড এখন আপনার নখদর্পণে।
+                   "Infinite Connectivity, Unified Intelligence." আপনার প্রতিটি অ্যাপ এবং ডিভাইস এখন জেমিনি এআই-এর সাথে সংযুক্ত।
                 </p>
               </div>
               
-              <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
-                {/* Fixed Firebase Performance error by using sovereign-stats-card class instead of long inline Tailwind list */}
-                <Card className="sovereign-stats-card">
-                    <div className="absolute top-0 right-0 p-2">
-                       <Badge className="bg-emerald-500 text-black border-none text-[7px] font-bold uppercase">Zenith Watch Active</Badge>
-                    </div>
+              <div className="flex flex-col sm:flex-row items-center gap-6 w-full lg:w-auto">
+                <Card className="sovereign-stats-card bg-emerald-500/5 border-emerald-500/20">
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Active Citizen Multi-Pulse</p>
+                       <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Global AI Pulses</p>
+                    </div>
+                    <div className="flex items-end gap-2 mb-4">
+                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">{aiPulses.toLocaleString()}</p>
+                       <p className="text-emerald-500 text-xs font-bold mb-1 uppercase">Total Dispatches</p>
+                    </div>
+                    <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                       <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '84%' }} />
+                    </div>
+                </Card>
+                
+                <Card className="sovereign-stats-card">
+                    <div className="flex justify-between items-center mb-4">
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Citizen Multi-Pulse</p>
                     </div>
                     <div className="flex items-end gap-2 mb-4">
                        <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">{onlineSessions.length}</p>
@@ -185,7 +197,6 @@ export default function Home() {
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                        <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: `${Math.min(100, onlineSessions.length * 10)}%` }} />
                     </div>
-                    <p className="text-[9px] text-muted-foreground mt-3 italic text-center uppercase tracking-widest">Total Registry: {allSessions.length} Historical Commanders</p>
                 </Card>
               </div>
             </div>
@@ -208,7 +219,7 @@ export default function Home() {
                             value={aiQuery}
                             onChange={(e) => setAiQuery(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleAiQuery()}
-                            placeholder="Ask Nora about grid stats or metrics..." 
+                            placeholder="Command the AI bridge (e.g. 'Sync with SMARTPHONE_NODE')..." 
                             className="w-full bg-black/40 border border-white/10 rounded-xl h-12 pl-10 pr-12 text-sm outline-none focus:ring-1 focus:ring-primary font-mono text-white"
                           />
                           <Button 
@@ -239,11 +250,6 @@ export default function Home() {
                                   </div>
                                 ))}
                              </div>
-                             {aiResult.resiliencyReport && (
-                               <div className="pt-3 border-t border-white/5">
-                                  <p className="text-[8px] text-emerald-500 font-mono italic">Resiliency: {aiResult.resiliencyReport}</p>
-                               </div>
-                             )}
                           </div>
                         </div>
                       )}
@@ -251,55 +257,27 @@ export default function Home() {
                   </Card>
                </section>
 
-               {/* Live Citizen Pulse Registry */}
+               {/* Multi-Device Mesh Visual */}
                <section className="space-y-6">
-                  <div className="flex justify-between items-center px-1">
-                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                       <Users className="size-4" /> Live Connection Pulse (Sovereign Registry)
-                    </h3>
-                    <Link href="/sessions">
-                      <Button variant="ghost" className="text-[10px] uppercase font-bold text-primary hover:bg-primary/10 gap-2">
-                        Full Registry <ArrowRightLeft className="size-3" />
-                      </Button>
-                    </Link>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                     {allSessions.slice(0, 9).map((s: any) => {
-                       const isOnline = s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000);
-                       const DeviceIcon = s.platform === "Mobile" ? Smartphone : Laptop;
-                       return (
-                        <Card key={s.sessionId || s.id} className={`glass-card border-white/5 hover:border-primary/20 transition-all group overflow-hidden ${!isOnline ? 'opacity-50 grayscale' : ''}`}>
-                           <CardContent className="p-4 space-y-3">
-                              <div className="flex items-center justify-between">
-                                 <div className="flex items-center gap-3 min-w-0">
-                                    <div className="relative">
-                                       <Avatar className="size-10 border border-primary/20">
-                                          <AvatarImage src={s.photoURL} />
-                                          <AvatarFallback className="bg-primary/10 text-primary font-bold">{s.displayName?.substring(0, 1) || "C"}</AvatarFallback>
-                                       </Avatar>
-                                       {isOnline && (
-                                         <div className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-black bg-emerald-500 animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.8)]" />
-                                       )}
-                                    </div>
-                                    <div className="min-w-0">
-                                       <p className="text-xs font-bold text-white uppercase truncate">{s.displayName}</p>
-                                       <p className="text-[8px] text-muted-foreground font-mono uppercase truncate">{s.assignedRegion || "Global Mesh"}</p>
-                                    </div>
-                                 </div>
-                                 <DeviceIcon className="size-4 text-muted-foreground opacity-40 group-hover:text-primary transition-all" />
-                              </div>
-                              <div className="flex justify-between items-center pt-2 border-t border-white/5">
-                                 <Badge variant="outline" className={`text-[7px] border-primary/20 text-primary uppercase h-4 ${isOnline ? 'bg-primary/5' : ''}`}>
-                                    {s.assignedNode || "NODE_AUTO"}
-                                 </Badge>
-                                 <span className="text-[8px] text-muted-foreground font-mono uppercase">
-                                    {isOnline ? 'ONLINE' : (mounted && s.lastSeen ? formatDistanceToNow(s.lastSeen.toDate()) + " ago" : "STANDBY")}
-                                 </span>
-                              </div>
-                           </CardContent>
-                        </Card>
-                       )
-                     })}
+                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                    <Server className="size-4" /> Multi-Device AI Connectivity
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                     {[
+                       { name: "Smartphone Node", count: 242, icon: Smartphone, color: "text-primary" },
+                       { name: "Workstation Hub", count: 156, icon: Monitor, color: "text-emerald-500" },
+                       { name: "Enterprise SDKs", count: 54, icon: Code2, color: "text-purple-500" }
+                     ].map((mesh, i) => (
+                       <Card key={i} className="glass-card bg-black/40 border-white/5 hover:border-emerald-500/20 transition-all cursor-pointer">
+                          <CardContent className="p-6 flex items-center justify-between">
+                             <div className="space-y-1">
+                                <p className="text-[10px] font-bold text-muted-foreground uppercase">{mesh.name}</p>
+                                <p className="text-2xl font-headline font-bold text-white">{mesh.count}</p>
+                             </div>
+                             <mesh.icon className={`size-8 ${mesh.color} opacity-20`} />
+                          </CardContent>
+                       </Card>
+                     ))}
                   </div>
                </section>
             </div>
@@ -311,11 +289,11 @@ export default function Home() {
                      <div className="absolute -top-1 -right-1 size-5 bg-emerald-500 rounded-full border-2 border-black" />
                   </div>
                   <div className="space-y-1">
-                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Imperial Sync Status</p>
-                     <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">ZENITH_PEAK_V4</Badge>
+                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Global AI Bridge</p>
+                     <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">DEVICE_SYNC_MAX</Badge>
                   </div>
                   <p className="text-[9px] text-muted-foreground italic leading-relaxed">
-                    "Every citizen movement is anchored to the One Engine Ledger. Immortality verified."
+                    "Every connected device is now a thinking node in the NoorNexus Empire."
                   </p>
                </Card>
 

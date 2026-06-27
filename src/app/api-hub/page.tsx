@@ -36,7 +36,9 @@ import {
   ShieldPlus,
   LockKeyhole,
   Braces,
-  Play
+  Play,
+  Monitor,
+  Smartphone
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -128,15 +130,15 @@ export default function ApiHubPage() {
                  <Badge variant="outline" className="border-purple-500/50 text-purple-500 uppercase font-bold tracking-widest px-3 h-8 bg-purple-500/5">
                    <Infinity className="size-3 mr-2" /> Mission 500: Project Zenith
                  </Badge>
-                 <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5">
-                   <FlaskConical className="size-3 mr-2" /> Sandbox Active
+                 <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
+                   <Cpu className="size-3 mr-2" /> AI Bridge Ready
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Discovery <span className="text-purple-500">Hub.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "The Digital Passport to the 100-Node Empire." এন্টারপ্রাইজ পার্টনারদের জন্য নূরনেক্সাস এখন একটি স্বায়ত্তশাসিত অনবোর্ডিং এবং স্যান্ডবক্স গেটওয়ে।
+                "The Digital Passport to the 100-Node Empire." এখন আপনার যেকোনো অ্যাপ বা ডিভাইসকে নূরনেক্সাস এআই-এর সাথে কানেক্ট করুন ৩ সেকেন্ডেই।
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -165,11 +167,10 @@ export default function ApiHubPage() {
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
             <div className="xl:col-span-3 space-y-8">
               <Tabs defaultValue="onboarding-api" className="space-y-6">
-                <TabsList className="bg-white/5 border border-white/10 p-1">
-                  <TabsTrigger value="onboarding-api" className="gap-2"><LockKeyhole className="size-4" /> Onboarding API</TabsTrigger>
-                  <TabsTrigger value="sandbox" className="gap-2"><FlaskConical className="size-4" /> Playground</TabsTrigger>
-                  <TabsTrigger value="quickstart" className="gap-2"><Zap className="size-4" /> Quick Start</TabsTrigger>
-                  <TabsTrigger value="bridge" className="gap-2"><Network className="size-4" /> Neural Bridge</TabsTrigger>
+                <TabsList className="bg-white/5 border border-white/10 p-1 h-12">
+                  <TabsTrigger value="onboarding-api" className="gap-2 px-6"><LockKeyhole className="size-4" /> Onboarding API</TabsTrigger>
+                  <TabsTrigger value="ai-bridge" className="gap-2 px-6"><Sparkles className="size-4" /> AI Bridge</TabsTrigger>
+                  <TabsTrigger value="quickstart" className="gap-2 px-6"><Zap className="size-4" /> Quick Start</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="onboarding-api" className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
@@ -210,45 +211,44 @@ export default function ApiHubPage() {
                    </Card>
                 </TabsContent>
 
-                <TabsContent value="sandbox" className="space-y-6">
-                   <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+                <TabsContent value="ai-bridge" className="space-y-6">
+                   <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                       <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
-                            <FlaskConical className="size-4" /> Developer Playground
+                         <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
+                            <Sparkles className="size-4" /> Multi-Device AI Bridge
                          </CardTitle>
-                         <CardDescription>Test your integration in a zero-risk, virtualized NoorNexus environment.</CardDescription>
+                         <CardDescription>Connect every device in your organization to NoorNexus AI Intelligence.</CardDescription>
                       </CardHeader>
-                      <CardContent className="space-y-6">
+                      <CardContent className="space-y-8">
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-4">
-                               <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Mock Transaction Tool</h4>
-                               <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-4">
-                                  <div className="space-y-2">
-                                     <label className="text-[9px] font-bold text-muted-foreground uppercase">Mock Amount (USD)</label>
-                                     <input 
-                                        value={mockAmount} 
-                                        onChange={e => setMockAmount(e.target.value)}
-                                        className="w-full bg-background/50 border border-white/10 rounded h-10 px-3 text-xs font-mono text-white outline-none focus:ring-1 focus:ring-amber-500" 
-                                      />
+                               <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Connect Smartphones</h4>
+                               <div className="p-4 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between">
+                                  <div className="flex items-center gap-3">
+                                     <Smartphone className="size-6 text-primary" />
+                                     <span className="text-[10px] text-muted-foreground uppercase">NoorNexus Mobile SDK</span>
                                   </div>
-                                  <Button 
-                                    onClick={executeMockPulse}
-                                    disabled={pulsing}
-                                    className="w-full bg-amber-500 text-black font-bold uppercase text-[10px] h-10 gap-2 glow-emerald transition-all"
-                                  >
-                                     {pulsing ? <Loader2 className="size-3 animate-spin" /> : <Play className="size-3" />}
-                                     Execute Mock Pulse
-                                  </Button>
+                                  <Badge className="bg-primary/20 text-primary">v2.1 Ready</Badge>
                                </div>
+                               <pre className="p-4 bg-black rounded-lg text-[9px] text-purple-300 font-mono">
+{`sheikh.ai.pulse({
+  prompt: 'Device ID check...',
+  deviceId: 'IPHONE_15_PRO'
+})`}
+                               </pre>
                             </div>
                             <div className="space-y-4">
-                               <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Simulator Logs</h4>
-                               <div className="p-4 bg-black rounded-xl border border-white/5 h-[200px] overflow-auto font-mono text-[9px] text-emerald-400 space-y-1">
-                                  {simulatorLogs.map((log, i) => (
-                                    <p key={i}>{log}</p>
-                                  ))}
-                                  {pulsing && <p className="animate-pulse">_</p>}
+                               <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Connect Workstations</h4>
+                               <div className="p-4 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between">
+                                  <div className="flex items-center gap-3">
+                                     <Monitor className="size-6 text-primary" />
+                                     <span className="text-[10px] text-muted-foreground uppercase">Desktop Bridge (CLI)</span>
+                                  </div>
+                                  <Badge className="bg-primary/20 text-primary">Active</Badge>
                                </div>
+                               <pre className="p-4 bg-black rounded-lg text-[9px] text-purple-300 font-mono">
+{`nexus ai --prompt "Global Audit"`}
+                               </pre>
                             </div>
                          </div>
                       </CardContent>
