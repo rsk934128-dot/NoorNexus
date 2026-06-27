@@ -54,7 +54,12 @@ const QUICK_LINKS = [
   { name: "Gold/Precious", url: "https://www.kitco.com/", icon: Gem, color: "text-amber-500" },
 ]
 
-const KNOWN_IFRAME_BLOCKERS = ['amazon.com', 'google.com', 'facebook.com', 'github.com', 'alibaba.com', 'twitter.com', 'linkedin.com', 'yapily.com', 'redotpay.com', 'sslcommerz.com', 'wikipedia.org'];
+// Websites that explicitly block iframes via X-Frame-Options or CSP
+const KNOWN_IFRAME_BLOCKERS = [
+  'amazon.com', 'google.com', 'facebook.com', 'github.com', 
+  'alibaba.com', 'twitter.com', 'linkedin.com', 'yapily.com', 
+  'redotpay.com', 'sslcommerz.com', 'wikipedia.org', 'netflix.com'
+];
 
 function BrowserContent() {
   const { toast } = useToast()
@@ -116,11 +121,20 @@ function BrowserContent() {
     setActiveUrl(finalUrl)
     setUrlInput(finalUrl)
     
-    toast({
-      title: "Establishing Web Bridge",
-      description: blocksIframe ? "High-Security Node Detected. Auth might require Direct Tunnel." : "Uplink initiated with Auth-Pass-through.",
-      className: blocksIframe ? "border-amber-500/50 bg-amber-500/5" : "border-primary/50 bg-primary/5"
-    })
+    if (blocksIframe) {
+      toast({
+        title: "High-Security Node Detected",
+        description: "This portal requires a Direct Tunnel for authentication.",
+        variant: "default",
+        className: "border-amber-500/50 bg-amber-500/5"
+      })
+    } else {
+      toast({
+        title: "Establishing Web Bridge",
+        description: "Uplink initiated with Auth-Pass-through.",
+        className: "border-primary/50 bg-primary/5"
+      })
+    }
 
     setTimeout(() => setLoading(false), 1000)
   }
@@ -218,7 +232,7 @@ function BrowserContent() {
 
            <div className="hidden sm:flex items-center gap-2">
               <Badge variant="outline" className={`border-emerald-500/20 text-emerald-500 uppercase text-[8px] h-11 px-3 bg-emerald-500/5`}>
-                {isInternalPage ? 'SOVEREIGN_RESOLVED' : 'AUTH_PASS: ACTIVE'}
+                {isInternalPage ? 'SOVEREIGN_RESOLVED' : showBypassWarning ? 'DIRECT_REQUIRED' : 'AUTH_PASS: ACTIVE'}
               </Badge>
            </div>
         </div>
@@ -437,7 +451,7 @@ function BrowserContent() {
              <div className="text-center space-y-4 max-w-md">
                 <h3 className="text-2xl font-headline font-bold text-white uppercase tracking-tighter">High-Security Node Block</h3>
                 <p className="text-xs text-muted-foreground leading-relaxed italic">
-                   "কমান্ডার, {activeUrl.replace('https://', '')} তার নিজস্ব সিকিউরিটি পলিসির (SAMEORIGIN) কারণে এনক্রিপ্টেড আইফ্রেম টানেলে লোড হতে বাধা দিচ্ছে। গুগল লগইন বা এই ধরণের সিকিউর অ্যাকশন সম্পন্ন করার জন্য আপনাকে সরাসরি টানেল (Direct Tunnel) ব্যবহার করতে হবে।"
+                   "কমান্ডার, আপনার অনুরোধ করা সাইটটি (যেমন: গুগল বা অন্যান্য হাই-সিকিউরিটি পোর্টাল) নিরাপত্তার কারণে আইফ্রেম টানেলে লোড হতে বাধা দিচ্ছে। লগইন বা সিকিউর অ্যাকশন সম্পন্ন করার জন্য আপনাকে সরাসরি টানেল (Direct Tunnel) ব্যবহার করতে হবে।"
                 </p>
              </div>
              <div className="flex gap-4">
@@ -456,7 +470,7 @@ function BrowserContent() {
                 </Button>
              </div>
              <div className="pt-12 flex flex-col items-center gap-4 opacity-40">
-                <p className="text-[8px] font-mono uppercase tracking-[0.5em]">Security Protocol v4.5 Enforcement</p>
+                <p className="text-[8px] font-mono uppercase tracking-[0.5em]">Sovereign Auth Pass Protocol v4.5</p>
              </div>
           </div>
         ) : (
@@ -478,7 +492,7 @@ function BrowserContent() {
               <div className="space-y-0.5">
                 <p className="text-[9px] font-bold text-white uppercase leading-none">Canal Secure</p>
                 <p className="text-[7px] text-emerald-500/60 font-mono uppercase leading-none">
-                   {isInternalPage ? 'MESH_RESOLVED' : showBypassWarning ? 'HANDSHAKE_GATED' : 'Auth Handshake: ENABLED'}
+                   {isInternalPage ? 'MESH_RESOLVED' : showBypassWarning ? 'DIRECT_LINK_GATED' : 'Auth Handshake: ENABLED'}
                 </p>
               </div>
           </div>
@@ -491,9 +505,9 @@ function BrowserContent() {
              NoorNexus Imperial Web Gateway | SSL: SHA-256 Encrypted
            </p>
            <div className="flex items-center gap-2">
-              <div className={`size-1.5 rounded-full ${isSearchMode ? 'bg-amber-500' : isInternalPage ? 'bg-purple-500' : showBypassWarning ? 'bg-destructive' : 'bg-emerald-500'} animate-pulse shadow-[0_0_8px_rgba(0,150,255,0.4)]`} />
-              <span className={`text-[8px] font-bold uppercase ${isSearchMode ? 'text-amber-500' : isInternalPage ? 'text-purple-500' : showBypassWarning ? 'text-destructive' : 'text-emerald-500'}`}>
-                {isSearchMode ? 'AI Search Pulse: READY' : isInternalPage ? 'INTERNAL NODE: CONNECTED' : showBypassWarning ? 'ACCESS: DIRECT_ONLY' : 'Canal Uplink: STABLE'}
+              <div className={`size-1.5 rounded-full ${isSearchMode ? 'bg-amber-500' : isInternalPage ? 'bg-purple-500' : showBypassWarning ? 'bg-amber-600' : 'bg-emerald-500'} animate-pulse shadow-[0_0_8px_rgba(0,150,255,0.4)]`} />
+              <span className={`text-[8px] font-bold uppercase ${isSearchMode ? 'text-amber-500' : isInternalPage ? 'text-purple-500' : showBypassWarning ? 'text-amber-600' : 'text-emerald-500'}`}>
+                {isSearchMode ? 'AI Search Pulse: READY' : isInternalPage ? 'INTERNAL NODE: CONNECTED' : showBypassWarning ? 'ACCESS: DIRECT_TUNNEL' : 'Canal Uplink: STABLE'}
               </span>
            </div>
         </div>
