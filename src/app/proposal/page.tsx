@@ -32,16 +32,50 @@ import {
   Waves,
   Mail,
   Quote,
-  Presentation
+  Presentation,
+  Calendar as CalendarIcon,
+  Clock,
+  Building,
+  User
 } from "lucide-react"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogDescription, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger,
+  DialogFooter
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 import { SovereignLogo } from "@/components/sovereign-logo"
+import { useFirestore, useUser } from "@/firebase"
+import { collection, addDoc, serverTimestamp } from "firebase/firestore"
 
 export default function ProposalPage() {
   const { toast } = useToast()
+  const db = useFirestore()
+  const { user } = useUser()
   const [downloading, setDownloading] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [date, setDate] = useState<Date>()
+
+  // Form State
+  const [pocForm, setPocForm] = useState({
+    name: "",
+    org: "",
+    intent: "Proof of Concept Integration",
+    message: ""
+  })
 
   const handleDownloadPitch = () => {
     setDownloading(true)
@@ -94,6 +128,47 @@ export default function ProposalPage() {
         })
       }
     }, 2500)
+  }
+
+  const handleScheduleMeeting = async () => {
+    if (!date || !pocForm.name || !pocForm.org) {
+      toast({
+        title: "Incomplete Protocol",
+        description: "Please provide all required credentials and a valid solar date.",
+        variant: "destructive"
+      })
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      await addDoc(collection(db, "poc_meetings"), {
+        ...pocForm,
+        proposedDate: date.toISOString(),
+        status: "PENDING_HANDSHAKE",
+        submittedBy: user?.email || "anonymous_node",
+        timestamp: serverTimestamp(),
+        protocolVersion: "v3.5"
+      })
+
+      toast({
+        title: "PoC Handshake Dispatched",
+        description: "Commander Farid has been notified. Check your imperial mail for confirmation.",
+        className: "border-emerald-500/50 bg-emerald-500/5 glow-emerald"
+      })
+      
+      setIsDialogOpen(false)
+      setPocForm({ name: "", org: "", intent: "Proof of Concept Integration", message: "" })
+      setDate(undefined)
+    } catch (e: any) {
+      toast({
+        title: "Neural Transmission Error",
+        description: e.message,
+        variant: "destructive"
+      })
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -260,7 +335,7 @@ export default function ProposalPage() {
                  </CardContent>
               </Card>
 
-              {/* Call to Action Card */}
+              {/* Call to Action Card with Functional Dialog */}
               <Card className="glass-card border-amber-500/20 bg-amber-500/5 p-6 flex flex-col items-center text-center gap-4">
                  <div className="size-16 rounded-full bg-amber-500/10 flex items-center justify-center border border-amber-500/30">
                     <Mail className="size-8 text-amber-500" />
@@ -269,14 +344,134 @@ export default function ProposalPage() {
                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Connect with Architect</p>
                     <p className="text-[10px] text-muted-foreground uppercase font-mono">rubels1k994@gmail.com</p>
                  </div>
-                 <Button className="w-full bg-amber-500 text-black font-bold uppercase text-[10px] h-10 glow-emerald">
-                    Schedule PoC Meeting
-                 </Button>
+                 
+                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogTrigger asChild>
+                       <Button className="w-full bg-amber-500 text-black font-bold uppercase text-[10px] h-11 glow-emerald gap-2">
+                          <Presentation className="size-4" /> Schedule PoC Meeting
+                       </Button>
+                    </DialogTrigger>
+                    <DialogContent className="glass-card border-primary/20 bg-black/95 text-white sm:max-w-[500px]">
+                       <DialogHeader>
+                          <div className="size-12 rounded-xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20 mb-4">
+                             <Handshake className="size-6 text-amber-500" />
+                          </div>
+                          <DialogTitle className="text-xl font-headline font-bold uppercase tracking-tight text-white flex items-center gap-3">
+                             Schedule PoC Handshake
+                          </DialogTitle>
+                          <DialogDescription className="text-muted-foreground text-xs uppercase tracking-widest font-mono">
+                             Initiate institutional integration and value settlement protocols.
+                          </DialogDescription>
+                       </DialogHeader>
+                       
+                       <div className="grid gap-6 py-6">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                             <div className="space-y-2">
+                                <Label className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
+                                   <User className="size-3" /> Partner Name
+                                </Label>
+                                <Input 
+                                   value={pocForm.name}
+                                   onChange={e => setPocForm({...pocForm, name: e.target.value})}
+                                   placeholder="Your Full Name" 
+                                   className="bg-white/5 border-white/10 h-10" 
+                                />
+                             </div>
+                             <div className="space-y-2">
+                                <Label className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
+                                   <Building className="size-3" /> Organization
+                                </Label>
+                                <Input 
+                                   value={pocForm.org}
+                                   onChange={e => setPocForm({...pocForm, org: e.target.value})}
+                                   placeholder="Entity Name" 
+                                   className="bg-white/5 border-white/10 h-10" 
+                                />
+                             </div>
+                          </div>
+
+                          <div className="space-y-2">
+                             <Label className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
+                                <CalendarIcon className="size-3" /> Proposed Meeting Date
+                             </Label>
+                             <Popover>
+                                <PopoverTrigger asChild>
+                                   <Button
+                                      variant={"outline"}
+                                      className={cn(
+                                         "w-full justify-start text-left font-normal bg-white/5 border-white/10 h-10",
+                                         !date && "text-muted-foreground"
+                                      )}
+                                   >
+                                      <CalendarIcon className="mr-2 h-4 w-4" />
+                                      {date ? format(date, "PPP") : <span>Pick a date</span>}
+                                   </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0 glass-card bg-black/95 border-primary/20" align="start">
+                                   <Calendar
+                                      mode="single"
+                                      selected={date}
+                                      onSelect={setDate}
+                                      initialFocus
+                                   />
+                                </PopoverContent>
+                             </Popover>
+                          </div>
+
+                          <div className="space-y-2">
+                             <Label className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
+                                <MessageSquare className="size-3" /> Integration Intent
+                             </Label>
+                             <Textarea 
+                                value={pocForm.message}
+                                onChange={e => setPocForm({...pocForm, message: e.target.value})}
+                                placeholder="Describe your integration requirements..." 
+                                className="bg-white/5 border-white/10 min-h-[100px] text-xs" 
+                             />
+                          </div>
+                       </div>
+
+                       <DialogFooter>
+                          <Button 
+                             onClick={handleScheduleMeeting}
+                             disabled={submitting}
+                             className="w-full bg-amber-500 text-black font-bold uppercase h-12 glow-emerald gap-2"
+                          >
+                             {submitting ? <Loader2 className="size-4 animate-spin" /> : <Rocket className="size-4" />}
+                             Broadcast Meeting Request
+                          </Button>
+                       </DialogFooter>
+                    </DialogContent>
+                 </Dialog>
               </Card>
             </div>
           </div>
         </main>
       </SidebarInset>
     </div>
+  )
+}
+
+function Handshake(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m11 17 2 2 4-4" />
+      <path d="m18 10 1-1a2 2 0 0 0-3-3l-2.26 2.26a.45.45 0 0 1-.63 0L11 6a2 2 0 0 0-3 3l2 2" />
+      <path d="m14 14 2 2" />
+      <path d="m3 7 3-3 4.5 4.5" />
+      <path d="M6.3 20.3a2.1 2.1 0 1 1-3-3" />
+      <path d="m18 14-3 3" />
+    </svg>
   )
 }
