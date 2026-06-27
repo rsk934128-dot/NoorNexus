@@ -3,13 +3,14 @@
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
-import { ShieldCheck, RefreshCcw, Cloud, Sparkles, Loader2 } from "lucide-react"
+import { ShieldCheck, RefreshCcw, Cloud, Sparkles, Loader2, Radio, Smartphone, Activity } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 
 /**
- * @fileOverview Shurukkha Hub Standard Edition (UI Shell)
- * এই পেজটি এখন আর রিলোড হয় না। কন্টেন্টটি PersistentCommNode থেকে সরাসরি প্রদর্শিত হয়।
+ * @fileOverview Shurukkha Hub Standard Edition (Dashboard)
+ * নূরনেক্সাস অপারেটিং সিস্টেমের জন্য একটি প্রিমিয়াম ক্লাউড নোড ইন্টারফেস।
  */
 export default function ShurukkhaStandardPage() {
   const refreshFrame = () => {
@@ -52,14 +53,39 @@ export default function ShurukkhaStandardPage() {
             </div>
           </header>
 
-          <div className="flex-1 flex flex-col items-center justify-center gap-4 bg-black/20 text-center p-6">
-            <Loader2 className="size-10 text-emerald-500 animate-spin" />
-            <p className="text-sm font-mono text-emerald-500/60 uppercase tracking-widest">
-              Sovereign Handshake Active...
-            </p>
-            <p className="text-[10px] text-muted-foreground italic">
-              (The hub is active and persistent in the background for zero-reload calling)
-            </p>
+          <div className="flex-1 overflow-hidden bg-black/20 w-full p-0 m-0 relative">
+            {/* The actual hub content is rendered by PersistentCommNode via Iframe overlay */}
+            <div className="size-full flex flex-col items-center justify-center gap-8 p-6 text-center">
+               <div className="relative">
+                  <div className="size-32 rounded-full border-4 border-emerald-500/20 flex items-center justify-center">
+                     <Radio className="size-16 text-emerald-500 animate-pulse" />
+                  </div>
+                  <div className="absolute inset-0 border-t-2 border-emerald-500 rounded-full animate-spin-slow" />
+               </div>
+               
+               <div className="space-y-3 max-w-md">
+                  <h3 className="text-2xl font-headline font-bold text-white uppercase tracking-widest">Node Synchronized</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed italic">
+                     "কমান্ডার, আপনার স্ট্যান্ডার্ড সুরক্ষা নোডটি বর্তমানে পারসিস্টেন্ট ব্যাকগ্রাউন্ড মোডে সচল। আপনি এখন নিরবিচ্ছিন্নভাবে সিগন্যাল রিসিভ করতে পারবেন।"
+                  </p>
+               </div>
+
+               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
+                  {[
+                    { label: "Signal Integrity", val: "100%", icon: Activity },
+                    { label: "Handshake", val: "Verified", icon: ShieldCheck },
+                    { label: "Device Sync", val: "Active", icon: Smartphone }
+                  ].map((stat, i) => (
+                    <Card key={i} className="glass-card bg-emerald-500/5 border-emerald-500/20">
+                       <CardContent className="p-4 space-y-1">
+                          <stat.icon className="size-4 text-emerald-500 mx-auto mb-2" />
+                          <p className="text-[8px] text-muted-foreground uppercase font-bold">{stat.label}</p>
+                          <p className="text-xs font-headline font-bold text-white uppercase">{stat.val}</p>
+                       </CardContent>
+                    </Card>
+                  ))}
+               </div>
+            </div>
           </div>
           
           <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full">
