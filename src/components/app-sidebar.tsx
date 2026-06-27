@@ -60,7 +60,9 @@ import {
   Presentation,
   FlaskConical,
   HeartPulse,
-  LayoutGrid
+  LayoutGrid,
+  Youtube,
+  Download
 } from "lucide-react"
 
 import {
@@ -91,6 +93,7 @@ const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "AI Gateway", url: "/ai-gateway", icon: LayoutGrid, zenith: true },
   { title: "Sovereign Bazaar", url: "/bazaar", icon: Store, highlight: true },
+  { title: "Imperial Downloader", url: "/youtube-downloader", icon: Download, highlight: true },
   { title: "Imperial Browser", url: "/browser", icon: Monitor, highlight: true },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Imperial Pitch Deck", url: "/pitch-deck", icon: Presentation, highlight: true },

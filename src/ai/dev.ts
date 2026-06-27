@@ -34,3 +34,4 @@ import '@/ai/flows/economic-intelligence-flow.ts';
 import '@/ai/flows/web-search-flow.ts';
 import '@/ai/flows/ai-gateway-flow.ts';
 import '@/ai/flows/gateway-quickstart-flow.ts';
+import '@/ai/flows/video-extraction-flow.ts';
