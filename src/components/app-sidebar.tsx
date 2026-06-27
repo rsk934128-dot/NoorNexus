@@ -159,13 +159,15 @@ export function AppSidebar() {
   }
 
   const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch((e) => toast({ title: "Fullscreen Error", description: e.message, variant: "destructive" }))
-      setIsFullscreen(true)
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen()
-        setIsFullscreen(false)
+    if (typeof document !== 'undefined') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((e) => toast({ title: "Fullscreen Error", description: e.message, variant: "destructive" }))
+        setIsFullscreen(true)
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen()
+          setIsFullscreen(false)
+        }
       }
     }
   }
@@ -231,6 +233,8 @@ export function AppSidebar() {
           </SidebarGroup>
         )}
       </SidebarContent>
+
+      <SidebarSeparator />
 
       <SidebarFooter className="p-4 space-y-4">
         <button onClick={toggleFullscreen} className="w-full py-2.5 bg-primary/5 rounded border border-primary/20 text-[9px] uppercase font-bold text-primary hover:bg-primary/10 transition-all flex items-center justify-center gap-2 group">
