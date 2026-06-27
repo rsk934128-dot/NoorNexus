@@ -38,7 +38,9 @@ import {
   Braces,
   Play,
   Monitor,
-  Smartphone
+  Smartphone,
+  Repeat,
+  UserCog
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -157,7 +159,7 @@ export default function ApiHubPage() {
                </div>
                <div className="p-4 glass-card rounded-2xl border border-purple-500/20 text-center min-w-[150px]">
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Grid Torque</p>
-                  <p className="text-2xl font-headline font-bold text-emerald-500 uppercase flex items-center gap-2 justify-center">
+                  <p className="text-2xl font-headline font-bold text-emerald-500 uppercase flex items-center justify-center gap-2">
                     <Rocket className="size-5" /> 94%
                   </p>
                </div>
@@ -169,8 +171,8 @@ export default function ApiHubPage() {
               <Tabs defaultValue="onboarding-api" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1 h-12">
                   <TabsTrigger value="onboarding-api" className="gap-2 px-6"><LockKeyhole className="size-4" /> Onboarding API</TabsTrigger>
+                  <TabsTrigger value="profile-mgmt" className="gap-2 px-6"><UserCog className="size-4" /> Profile Management</TabsTrigger>
                   <TabsTrigger value="omni-sync" className="gap-2 px-6"><Repeat className="size-4" /> Omni-Device Sync</TabsTrigger>
-                  <TabsTrigger value="ai-bridge" className="gap-2 px-6"><Sparkles className="size-4" /> AI Bridge</TabsTrigger>
                   <TabsTrigger value="quickstart" className="gap-2 px-6"><Zap className="size-4" /> Quick Start</TabsTrigger>
                 </TabsList>
 
@@ -212,6 +214,35 @@ export default function ApiHubPage() {
                    </Card>
                 </TabsContent>
 
+                <TabsContent value="profile-mgmt" className="space-y-6">
+                   <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                      <CardHeader>
+                         <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
+                            <UserCog className="size-4" /> Unified Profile Script (v3.5)
+                         </CardTitle>
+                         <CardDescription>Shared session and identity logic for the NoorNexus suite.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                         <p className="text-xs text-muted-foreground italic leading-relaxed">
+                            "পার্টনাররা এখন একটি সিঙ্গেল হুক ব্যবহার করে ইউজারের জিমেইল প্রোফাইল এবং প্রিফারেন্স শেয়ার করতে পারবে।"
+                         </p>
+                         <div className="p-5 bg-black rounded-xl border border-white/5">
+                            <pre className="text-[10px] text-emerald-400 font-mono overflow-x-auto leading-relaxed">
+{`// Unified Imperial Profile Management
+sheikh.profile.sync({
+  gmailId: 'user@gmail.com',
+  persistAcrossApps: true,
+  onSync: (context) => {
+    console.log('Handshake with Mesh Node:', context.nodeId);
+    console.log('Active Devices:', context.activeDevices);
+  }
+});`}
+                            </pre>
+                         </div>
+                      </CardContent>
+                   </Card>
+                </TabsContent>
+
                 <TabsContent value="omni-sync" className="space-y-6">
                    <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                       <CardHeader>
@@ -244,50 +275,6 @@ export default function ApiHubPage() {
                                   <span>App Mesh</span>
                                   <span>SYNCED</span>
                                </div>
-                            </div>
-                         </div>
-                      </CardContent>
-                   </Card>
-                </TabsContent>
-
-                <TabsContent value="ai-bridge" className="space-y-6">
-                   <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                      <CardHeader>
-                         <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
-                            <Sparkles className="size-4" /> Multi-Device AI Bridge
-                         </CardTitle>
-                         <CardDescription>Connect every device in your organization to NoorNexus AI Intelligence.</CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-8">
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="space-y-4">
-                               <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Connect Smartphones</h4>
-                               <div className="p-4 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between">
-                                  <div className="flex items-center gap-3">
-                                     <Smartphone className="size-6 text-primary" />
-                                     <span className="text-[10px] text-muted-foreground uppercase">NoorNexus Mobile SDK</span>
-                                  </div>
-                                  <Badge className="bg-primary/20 text-primary">v2.1 Ready</Badge>
-                               </div>
-                               <pre className="p-4 bg-black rounded-lg text-[9px] text-purple-300 font-mono">
-{`sheikh.ai.pulse({
-  prompt: 'Analyze this device telemetry...',
-  deviceId: 'IPHONE_15_PRO'
-})`}
-                               </pre>
-                            </div>
-                            <div className="space-y-4">
-                               <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Connect Workstations</h4>
-                               <div className="p-4 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between">
-                                  <div className="flex items-center gap-3">
-                                     <Monitor className="size-6 text-primary" />
-                                     <span className="text-[10px] text-muted-foreground uppercase">Desktop Bridge (CLI)</span>
-                                  </div>
-                                  <Badge className="bg-primary/20 text-primary">Active</Badge>
-                               </div>
-                               <pre className="p-4 bg-black rounded-lg text-[9px] text-purple-300 font-mono">
-{`nexus ai --prompt "Global Audit"`}
-                               </pre>
                             </div>
                          </div>
                       </CardContent>

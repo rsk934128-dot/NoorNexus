@@ -16,67 +16,58 @@ import {
   Lock, 
   Infinity, 
   Search,
-  ArrowRightLeft,
-  Atom,
-  Flame,
-  PieChart,
-  History,
   CheckCircle2,
   Inbox,
-  Send,
-  Trash2,
   Star,
-  FileText,
-  ExternalLink,
-  ChevronRight,
-  Database,
+  Activity,
+  UserCircle,
   Smartphone,
-  MailSearch,
-  Activity
+  Laptop,
+  Monitor,
+  LayoutGrid,
+  Link2,
+  Fingerprint,
+  Radio
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useUser, useCollection, useFirestore } from "@/firebase"
+import { collection, query, where, limit } from "firebase/firestore"
 
 export default function ImperialMailPage() {
   const { toast } = useToast()
-  const [connecting, setConnecting] = useState(false)
-  const [connected, setConnected] = useState(false)
+  const { user } = useUser()
+  const db = useFirestore()
   const [syncing, setSyncing] = useState(false)
-  const [inbox, setInbox] = useState<any[]>([
-    { id: "1", from: "Google Cloud", subject: "Imperial Node Authorization", time: "10m ago", read: false },
-    { id: "2", from: "Sovereign Registry", subject: "New Citizen Verification Request", time: "1h ago", read: true },
-    { id: "3", from: "Nora-AI", subject: "Weekly Economic Intel Report Ready", time: "5h ago", read: true }
-  ])
+  
+  // Fetch sessions for this specific user across all devices
+  const { data: mySessions } = useCollection<any>(
+    user ? query(collection(db, "user_sessions"), where("email", "==", user.email), limit(10)) : null
+  )
 
-  const handleConnectGmail = () => {
-    setConnecting(true)
-    setTimeout(() => {
-      setConnecting(false)
-      setConnected(true)
-      toast({
-        title: "Gmail Handshake Established",
-        description: "Imperial node now linked with your Google account.",
-        className: "border-emerald-500/50 bg-emerald-500/5"
-      })
-    }, 2000)
-  }
-
-  const handleSyncInbox = () => {
+  const handleSyncProfile = () => {
     setSyncing(true)
     toast({
-      title: "Pulsing Inbox...",
-      description: "Fetching latest encrypted dispatches from Google servers.",
+      title: "Pulsing Unified Profile...",
+      description: "Synchronizing Gmail session across 100-node mesh.",
     })
     
     setTimeout(() => {
       setSyncing(false)
       toast({
-        title: "Inbox Synchronized",
-        description: "Zero bit-drift detected in communication channel.",
+        title: "Omni-Sync Verified",
+        description: "Your Gmail identity is now anchored in all active apps.",
         className: "border-emerald-500/50 bg-emerald-500/5"
       })
-    }, 1500)
+    }, 2000)
   }
+
+  const linkedApps = [
+    { name: "FusionPay", status: "SYNCED", icon: LayoutGrid },
+    { name: "Bazaar Hub", status: "SYNCED", icon: Activity },
+    { name: "Sovereign Vault", status: "SECURED", icon: Lock },
+    { name: "Imperial Drive", status: "ACTIVE", icon: Infinity }
+  ]
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -90,118 +81,126 @@ export default function ImperialMailPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-red-500/50 text-red-500 uppercase font-bold tracking-widest px-3 h-8 bg-red-500/5">
-                   <Mail className="size-3 mr-2" /> Project #58: Imperial Mail
+                   <Mail className="size-3 mr-2" /> Project #170: Unified Identity
                  </Badge>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <Lock className="size-3 mr-2" /> OAUTH_L4 Secure
+                   <UserCircle className="size-3 mr-2" /> GMAIL_BRIDGE: ACTIVE
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Imperial <span className="text-red-500">Mail.</span>
+                Identity <span className="text-red-500">Hub.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "The Imperial Communication Canal." জিমেইল এখন নূরনেক্সাস সাম্রাজ্যের সাথে সিঙ্ক্রোনাইজড। সকল অফিশিয়াল মেইল এখন এখান থেকেই নিয়ন্ত্রিত হবে।
+                "Universal Auth, Seamless Experience." আপনার একটি মাত্র জিমেইল আইডি এখন নূরনেক্সাস সাম্রাজ্যের প্রতিটি অ্যাপের চাবিকাঠি।
               </p>
             </div>
             <div className="flex items-center gap-4">
-               {!connected ? (
-                 <Button 
-                  onClick={handleConnectGmail} 
-                  disabled={connecting}
-                  className="bg-red-500 text-white font-bold h-12 uppercase tracking-widest gap-2 glow-destructive"
-                 >
-                   {connecting ? <Loader2 className="size-4 animate-spin" /> : <Inbox className="size-4" />}
-                   Connect Gmail Hub
-                 </Button>
-               ) : (
-                 <div className="p-4 glass-card rounded-2xl border border-emerald-500/20 text-center min-w-[200px]">
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Hub Status</p>
-                    <div className="flex items-center justify-center gap-2">
-                       <div className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-                       <p className="text-xl font-headline font-bold text-emerald-500 uppercase">SYNCHRONIZED</p>
-                    </div>
-                 </div>
-               )}
+               <div className="p-4 glass-card rounded-2xl border border-red-500/20 text-center min-w-[200px] bg-red-500/5">
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Unified Session Status</p>
+                  <div className="flex items-center justify-center gap-2">
+                     <div className="size-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                     <p className="text-xl font-headline font-bold text-emerald-500 uppercase">SYNCHRONIZED</p>
+                  </div>
+               </div>
+               <Button 
+                onClick={handleSyncProfile} 
+                disabled={syncing}
+                className="bg-red-500 text-white font-bold h-12 uppercase tracking-widest gap-2 glow-destructive"
+               >
+                 {syncing ? <Loader2 className="size-4 animate-spin" /> : <RefreshCcw className="size-4" />}
+                 Full Profile Sync
+               </Button>
             </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-3 space-y-8">
+            <div className="lg:col-span-3 space-y-10">
               
-              <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                 {[
-                   { label: "Unread Dispatches", val: "3", icon: Inbox, color: "text-red-500" },
-                   { label: "Canal Latency", val: "94ms", icon: Activity, color: "text-emerald-500" },
-                   { label: "Auth Protocol", val: "OAuth 2.0", icon: ShieldCheck, color: "text-amber-500" }
-                 ].map((m, i) => (
-                   <Card key={i} className="glass-card bg-black/40 border-white/5">
-                      <CardContent className="p-6 flex items-center justify-between">
-                         <div className="space-y-1">
-                            <p className="text-[10px] font-bold text-muted-foreground uppercase">{m.label}</p>
-                            <p className="text-xl font-headline font-bold text-white">{m.val}</p>
-                         </div>
-                         <m.icon className={`size-8 ${m.color} opacity-20`} />
-                      </CardContent>
-                   </Card>
-                 ))}
+              {/* Profile Details */}
+              <Card className="glass-card border-l-4 border-l-red-500 overflow-hidden">
+                <CardContent className="p-8">
+                  <div className="flex flex-col md:flex-row items-center gap-8">
+                    <div className="relative group">
+                       <div className="absolute -inset-2 bg-red-500/20 rounded-full blur-xl group-hover:bg-red-500/40 transition-all" />
+                       <img src={user?.photoURL || ""} className="size-24 rounded-full border-4 border-black relative z-10" />
+                       <div className="absolute -bottom-1 -right-1 size-7 bg-emerald-500 rounded-full border-4 border-black z-20 flex items-center justify-center">
+                          <CheckCircle2 className="size-3 text-white" />
+                       </div>
+                    </div>
+                    <div className="text-center md:text-left space-y-2">
+                       <h3 className="text-2xl font-headline font-bold text-white uppercase tracking-tight">{user?.displayName || "Imperial Commander"}</h3>
+                       <p className="text-primary font-mono text-xs uppercase tracking-[0.2em]">{user?.email}</p>
+                       <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
+                          <Badge variant="outline" className="text-[8px] border-emerald-500/20 text-emerald-500">OAUTH_L4_VERIFIED</Badge>
+                          <Badge variant="outline" className="text-[8px] border-white/10 text-muted-foreground uppercase">ID: {user?.uid.substring(0, 12)}...</Badge>
+                       </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Omni-Device Grid */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                    <Smartphone className="size-4" /> Omni-Device Handshake Matrix
+                 </h3>
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {mySessions?.map((s: any, i: number) => (
+                      <Card key={i} className="glass-card bg-black/40 border-white/5 hover:border-primary/20 transition-all">
+                        <CardContent className="p-5 space-y-4">
+                           <div className="flex justify-between items-start">
+                              <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                                 {s.platform === 'Mobile' ? <Smartphone className="size-5" /> : <Laptop className="size-5" />}
+                              </div>
+                              <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">ACTIVE</Badge>
+                           </div>
+                           <div className="space-y-1">
+                              <p className="text-[10px] font-bold text-white uppercase">{s.deviceInfo || "Imperial Device"}</p>
+                              <p className="text-[8px] text-muted-foreground font-mono uppercase">{s.assignedRegion}</p>
+                           </div>
+                           <div className="pt-2 border-t border-white/5 flex justify-between items-center text-[8px] font-mono">
+                              <span className="text-muted-foreground uppercase">Last Pulse</span>
+                              <span className="text-primary">{s.lastAction}</span>
+                           </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                 </div>
               </section>
 
-              <div className="space-y-6">
-                 <div className="flex justify-between items-center px-1">
-                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                       <MailSearch className="size-4" /> Imperial Inbox
-                    </h3>
-                    <Button onClick={handleSyncInbox} disabled={!connected || syncing} variant="ghost" size="sm" className="h-8 text-primary hover:bg-primary/10">
-                       {syncing ? <Loader2 className="size-3 animate-spin mr-2" /> : <RefreshCcw className="size-3 mr-2" />}
-                       Refresh Feed
-                    </Button>
+              {/* Linked Imperial Apps */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                    <LayoutGrid className="size-4" /> Integrated Imperial Apps
+                 </h3>
+                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {linkedApps.map((app, i) => (
+                      <Card key={i} className="glass-card bg-black/40 border-white/5 text-center p-6 space-y-3 group hover:border-emerald-500/30 transition-all">
+                         <div className="size-12 rounded-xl bg-white/5 flex items-center justify-center mx-auto border border-white/10 group-hover:bg-emerald-500/10 transition-colors">
+                            <app.icon className="size-6 text-muted-foreground group-hover:text-emerald-500" />
+                         </div>
+                         <p className="text-[10px] font-bold text-white uppercase tracking-widest">{app.name}</p>
+                         <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">{app.status}</Badge>
+                      </Card>
+                    ))}
                  </div>
-                 
-                 <Card className="glass-card overflow-hidden">
-                    <ScrollArea className="h-[400px]">
-                       <div className="divide-y divide-white/5">
-                          {!connected ? (
-                            <div className="flex flex-col items-center justify-center py-20 gap-4 opacity-40">
-                               <Lock className="size-12 text-muted-foreground" />
-                               <p className="text-xs font-mono uppercase tracking-widest text-center">Connection to Google Hub Required<br/>Initialize handshake to view messages.</p>
-                            </div>
-                          ) : inbox.map((mail) => (
-                            <div key={mail.id} className="p-4 hover:bg-white/5 transition-all group flex items-center justify-between gap-4">
-                               <div className="flex items-center gap-4 min-w-0">
-                                  <div className={`size-2 rounded-full ${mail.read ? 'bg-white/10' : 'bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]'}`} />
-                                  <div className="min-w-0">
-                                     <p className="text-xs font-bold text-white uppercase truncate">{mail.from}</p>
-                                     <p className="text-[11px] text-muted-foreground truncate">{mail.subject}</p>
-                                  </div>
-                               </div>
-                               <div className="flex items-center gap-4 shrink-0">
-                                  <span className="text-[9px] font-mono text-muted-foreground uppercase">{mail.time}</span>
-                                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                     <Button variant="ghost" size="icon" className="size-7 text-muted-foreground hover:text-white"><Star className="size-3.5" /></Button>
-                                     <Button variant="ghost" size="icon" className="size-7 text-muted-foreground hover:text-destructive"><Trash2 className="size-3.5" /></Button>
-                                  </div>
-                               </div>
-                            </div>
-                          ))}
-                       </div>
-                    </ScrollArea>
-                 </Card>
-              </div>
+              </section>
             </div>
 
+            {/* Sidebar Security */}
             <div className="space-y-8">
                <Card className="glass-card border-l-4 border-l-red-500 bg-red-500/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase text-red-500 flex items-center gap-2">
-                        <ShieldCheck className="size-4" /> Communications Guard
+                        <Lock className="size-4" /> Unified Vault Policy
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                      <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                        "Your imperial communications are protected by mTLS and OAuth 2.0. Every outbound notification is hashed and logged in the Sovereign Ledger."
+                        "One Gmail, One Identity. নূরনেক্সাসের প্রতিটি অ্যাপে আপনার প্রোফাইল এখন স্বয়ংক্রিয়ভাবে সিঙ্ক্রোনাইজড। প্রোফাইল এডিট করলে তা সব অ্যাপে একযোগে আপডেট হবে।"
                      </p>
                      <div className="pt-2">
-                        <Badge variant="outline" className="w-full justify-center h-8 border-red-500/30 text-red-500 uppercase text-[9px] font-bold">COMM_ENCRYPTED</Badge>
+                        <Badge variant="outline" className="w-full justify-center h-8 border-red-500/30 text-red-500 uppercase text-[9px] font-bold">PROFILE_LOCK: ON</Badge>
                      </div>
                   </CardContent>
                </Card>
@@ -209,30 +208,33 @@ export default function ImperialMailPage() {
                <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                   <CardHeader className="pb-2">
                      <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                        <History className="size-4" /> Dispatch History
+                        <Fingerprint className="size-4" /> Multi-App Torque
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                     <div className="flex justify-between items-center text-[9px] font-mono uppercase">
-                        <span className="text-muted-foreground">Mails Sent</span>
-                        <span className="text-white font-bold">142</span>
+                     <div className="flex justify-between items-center text-[10px] font-mono uppercase">
+                        <span className="text-muted-foreground">Sync Velocity</span>
+                        <span className="text-emerald-500 font-bold">MAX</span>
                      </div>
-                     <div className="flex justify-between items-center text-[9px] font-mono uppercase">
-                        <span className="text-muted-foreground">Alerts Broadcast</span>
-                        <span className="text-emerald-500 font-bold">57</span>
+                     <div className="flex justify-between items-center text-[10px] font-mono uppercase">
+                        <span className="text-muted-foreground">Latency Gap</span>
+                        <span className="text-white">28ms</span>
                      </div>
+                     <p className="text-[9px] text-muted-foreground leading-relaxed italic">
+                        "জেমিনি এআই আপনার প্রোফাইল থেকে লার্নিং নিয়ে প্রতিটি অ্যাপে বুদ্ধিমান পরামর্শ দেবে।"
+                     </p>
                   </CardContent>
                </Card>
 
                <Card className="glass-card border-white/5">
                   <CardHeader className="pb-2">
                      <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
-                        <Database className="size-3" /> Integrity Check
+                        <Radio className="size-3" /> Grid Identity Check
                      </CardTitle>
                   </CardHeader>
                   <CardContent>
                      <p className="text-[9px] text-muted-foreground leading-relaxed">
-                        Last handshake verified by <strong>Nora-01</strong>. Session token is active and valid for the next 4 hours.
+                        Last identity pulse verified at <strong>Sirajganj Edge Node</strong>. Veracity confirmed for Project #170.
                      </p>
                   </CardContent>
                </Card>
