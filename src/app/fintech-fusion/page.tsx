@@ -34,6 +34,7 @@ import {
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useUser, useFirestore } from "@/firebase"
+import Link from "next/link"
 
 export default function FintechFusionPage() {
   const { toast } = useToast()
@@ -245,14 +246,18 @@ export default function FintechFusionPage() {
 
                       {/* Rapid Actions */}
                       <div className="grid grid-cols-2 gap-4">
-                         <Button variant="outline" className="h-20 border-white/10 flex flex-col gap-2 hover:bg-primary/10 hover:border-primary/30 group">
-                            <ArrowUpRight className="size-5 text-muted-foreground group-hover:text-primary" />
-                            <span className="text-[9px] font-bold uppercase tracking-widest">Settle Out</span>
-                         </Button>
-                         <Button variant="outline" className="h-20 border-white/10 flex flex-col gap-2 hover:bg-emerald-500/10 hover:border-emerald-500/30 group">
-                            <ArrowDownLeft className="size-5 text-muted-foreground group-hover:text-emerald-500" />
-                            <span className="text-[9px] font-bold uppercase tracking-widest">Top Up</span>
-                         </Button>
+                         <Link href="/off-ramp" className="block">
+                           <Button variant="outline" className="w-full h-20 border-white/10 flex flex-col gap-2 hover:bg-primary/10 hover:border-primary/30 group">
+                              <ArrowUpRight className="size-5 text-muted-foreground group-hover:text-primary" />
+                              <span className="text-[9px] font-bold uppercase tracking-widest">Settle Out</span>
+                           </Button>
+                         </Link>
+                         <Link href="/remittance" className="block">
+                           <Button variant="outline" className="w-full h-20 border-white/10 flex flex-col gap-2 hover:bg-emerald-500/10 hover:border-emerald-500/30 group">
+                              <ArrowDownLeft className="size-5 text-muted-foreground group-hover:text-emerald-500" />
+                              <span className="text-[9px] font-bold uppercase tracking-widest">Top Up</span>
+                           </Button>
+                         </Link>
                       </div>
                    </div>
                 </div>
