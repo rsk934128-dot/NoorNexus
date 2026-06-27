@@ -1,84 +1,38 @@
+"use client"
 
-import type {Metadata, Viewport} from 'next';
 import './globals.css';
 import {SidebarProvider} from '@/components/ui/sidebar';
 import {Toaster} from '@/components/ui/toaster';
 import {FirebaseClientProvider} from '@/firebase';
 import {PersistentCommNode} from '@/components/persistent-comm-node';
 import {SessionTracker} from '@/components/session-tracker';
+import {useEffect} from 'react';
+import {initSyncEngine} from '@/services/sync-engine';
 
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  minimumScale: 1,
-  viewportFit: 'cover',
-  themeColor: '#030708',
-}
-
-export const metadata: Metadata = {
-  title: 'NoorNexus | Sovereign Digital Infrastructure',
-  description: 'HMAC_V4 Protected Digital Empire by Sheikh Farid',
-  manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'black-translucent',
-    title: 'NoorNexus',
-  },
-  formatDetection: {
-    telephone: false,
-  },
-  icons: {
-    icon: 'https://picsum.photos/seed/sovereign-logo/32/32',
-    apple: 'https://picsum.photos/seed/sovereign-logo/180/180',
-  },
-  openGraph: {
-    title: 'NoorNexus | Sovereign Digital Infrastructure',
-    description: 'HMAC_V4 Protected Digital Empire by Sheikh Farid',
-    url: 'https://noornexus.sovereign',
-    siteName: 'NoorNexus OS',
-    images: [
-      {
-        url: 'https://picsum.photos/seed/sovereign-brand/1200/630',
-        width: 1200,
-        height: 630,
-        alt: 'NoorNexus Sovereign Logo',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'NoorNexus | Sovereign Digital Infrastructure',
-    description: 'HMAC_V4 Protected Digital Empire by Sheikh Farid',
-    images: ['https://picsum.photos/seed/sovereign-brand/1200/630'],
-  },
-};
+/**
+ * @fileOverview Root Layout (V4.2 - Sovereign OS Edition)
+ * নূরনেক্সাস অপারেটিং সিস্টেমের কেন্দ্রীয় লেআউট।
+ */
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
+  useEffect(() => {
+    // Initialize Offline-First Sync Engine on client mount
+    initSyncEngine();
+  }, []);
+
   return (
     <html lang="en" className="dark">
       <head>
+        <title>NoorNexus | Sovereign Digital Infrastructure</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            if ('serviceWorker' in navigator) {
-              window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(function(registration) {
-                  console.log('Nora-SW Registered: ', registration.scope);
-                }, function(err) {
-                  console.log('Nora-SW Registration failed: ', err);
-                });
-              });
-            }
-          `
-        }} />
       </head>
       <body className="font-body antialiased selection:bg-primary/30 selection:text-primary">
         <FirebaseClientProvider>

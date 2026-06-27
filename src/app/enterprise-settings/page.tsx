@@ -46,17 +46,21 @@ import {
   ShieldQuestion,
   UserCheck,
   Smartphone,
-  BellRing
+  BellRing,
+  CloudOff,
+  CloudDownload
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Switch } from "@/components/ui/switch"
 import { requestNotificationPermission } from "@/services/notification-service"
+import { getPendingTasks, processSyncQueue } from "@/services/sync-engine"
 
 export default function EnterpriseSettingsPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [showSecret, setShowSecret] = useState(false)
   const [notificationsAllowed, setNotificationsAllowed] = useState(false)
+  const [pendingTasks, setPendingTasks] = useState<any[]>([])
   
   // Official App Config & Security Template
   const APP_CONFIG = {
@@ -75,6 +79,7 @@ export default function EnterpriseSettingsPage() {
     if (typeof window !== 'undefined' && 'Notification' in window) {
       setNotificationsAllowed(Notification.permission === 'granted');
     }
+    setPendingTasks(getPendingTasks());
   }, []);
 
   const handleCopy = (text: string, label: string) => {
@@ -102,6 +107,13 @@ export default function EnterpriseSettingsPage() {
     } else {
       toast({ title: "Notifications Blocked", description: "Please enable manually in browser settings.", variant: "destructive" });
     }
+  }
+
+  const handleForceSync = async () => {
+    setLoading(true);
+    await processSyncQueue();
+    setPendingTasks(getPendingTasks());
+    setLoading(false);
   }
 
   return (
@@ -148,6 +160,7 @@ export default function EnterpriseSettingsPage() {
           <Tabs defaultValue="settings" className="space-y-8">
             <TabsList className="bg-white/5 border border-white/10 p-1 h-12">
               <TabsTrigger value="settings" className="gap-2 px-6"><Settings className="size-4" /> App Settings</TabsTrigger>
+              <TabsTrigger value="sync" className="gap-2 px-6"><CloudOff className="size-4" /> Offline Ledger</TabsTrigger>
               <TabsTrigger value="permissions" className="gap-2 px-6"><ShieldQuestion className="size-4" /> System Permissions</TabsTrigger>
             </TabsList>
 
@@ -183,20 +196,6 @@ export default function EnterpriseSettingsPage() {
                            </div>
                         </CardContent>
                      </Card>
-
-                     <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
-                        <CardHeader>
-                           <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
-                              <Shield className="size-4 text-purple-400" /> Auth Handler Node
-                           </CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-4 bg-black/40 rounded-xl border border-white/5 flex gap-2">
-                           <Input value={APP_CONFIG.authHandler} readOnly className="bg-transparent border-none font-mono text-[10px] text-purple-300 h-8 p-0" />
-                           <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => handleCopy(APP_CONFIG.authHandler, "Auth Handler")}>
-                              <Copy className="size-3" />
-                           </Button>
-                        </CardContent>
-                     </Card>
                   </div>
                   <div className="space-y-8">
                      <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
@@ -208,17 +207,70 @@ export default function EnterpriseSettingsPage() {
                            <p className="text-[9px] text-muted-foreground italic">"Background Execution: ENABLED via android.uid.system signature."</p>
                         </CardContent>
                      </Card>
+                  </div>
+               </div>
+            </TabsContent>
 
-                     <Card className="glass-card border-amber-500/20 bg-amber-500/5">
-                        <CardHeader className="pb-2">
-                           <CardTitle className="text-[10px] font-bold uppercase text-amber-500 flex items-center gap-2">
-                              <ShieldAlert className="size-3" /> Process Policy
+            <TabsContent value="sync" className="space-y-8 animate-in fade-in duration-500">
+               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="lg:col-span-2 space-y-8">
+                     <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+                        <CardHeader>
+                           <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
+                              <Database className="size-4" /> Offline Task Ledger
+                           </CardTitle>
+                           <CardDescription className="text-xs">Tasks queued while the system node was disconnected.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           {pendingTasks.length === 0 ? (
+                             <div className="py-20 flex flex-col items-center justify-center gap-4 text-center opacity-40">
+                                <CheckCircle2 className="size-12 text-emerald-500" />
+                                <p className="text-xs font-mono uppercase tracking-widest text-white">Mainframe fully synchronized</p>
+                             </div>
+                           ) : (
+                             <div className="space-y-3">
+                                {pendingTasks.map((task, i) => (
+                                  <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between group hover:border-amber-500/20 transition-all">
+                                     <div className="flex items-center gap-4">
+                                        <div className="size-10 rounded-lg bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
+                                           <Clock className="size-5 text-amber-500" />
+                                        </div>
+                                        <div className="space-y-0.5">
+                                           <p className="text-sm font-bold text-white uppercase">{task.action}</p>
+                                           <p className="text-[10px] text-muted-foreground font-mono">{task.id}</p>
+                                        </div>
+                                     </div>
+                                     <Badge variant="outline" className="border-amber-500/30 text-amber-500 uppercase text-[8px]">PENDING_SYNC</Badge>
+                                  </div>
+                                ))}
+                                <Button 
+                                  onClick={handleForceSync}
+                                  disabled={loading}
+                                  className="w-full mt-4 bg-amber-500 text-black font-bold uppercase h-12 glow-emerald"
+                                >
+                                   {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : <CloudDownload className="size-4 mr-2" />}
+                                   Force Manual Sync
+                                </Button>
+                             </div>
+                           )}
+                        </CardContent>
+                     </Card>
+                  </div>
+                  <div className="space-y-8">
+                     <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+                        <CardHeader>
+                           <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
+                              <ShieldPlus className="size-4" /> Sync Torque
                            </CardTitle>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="space-y-4">
                            <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                              "Active apps: these apps still run in the background even when not in use. This improves their functionality but consumes more power."
+                              "নূরনেক্সাস সিনক্রোনাইজেশন ইঞ্জিন ইন্টারনেট ফিরে আসা মাত্রই সেকেন্ডের মধ্যে আপনার সকল পেন্ডিং কাজ শেষ করে দেবে।"
                            </p>
+                           <div className="flex justify-between items-center text-[9px] font-mono border-t border-white/5 pt-4">
+                              <span className="uppercase text-muted-foreground">Queue Mode</span>
+                              <span className="text-emerald-500 font-bold uppercase">READY</span>
+                           </div>
                         </CardContent>
                      </Card>
                   </div>
@@ -263,20 +315,6 @@ export default function EnterpriseSettingsPage() {
                                 </div>
                              </div>
                            ))}
-                        </CardContent>
-                     </Card>
-                  </div>
-                  <div className="space-y-8">
-                     <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                        <CardHeader>
-                           <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
-                              <Smartphone className="size-4" /> Persistence Policy
-                           </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                           <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                              "নূরনেক্সাসের প্রতিটি ইউনিট সিস্টেমের কাছ থেকে 'Background Execution' পারমিশন গ্রহণ করে। এটি জেমিনিকে স্বয়ংক্রিয়ভাবে আপনার ডেটা প্রসেস করতে সাহায্য করে।"
-                           </p>
                         </CardContent>
                      </Card>
                   </div>
