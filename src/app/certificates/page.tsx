@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useMemo } from "react"
@@ -30,7 +31,8 @@ import {
   Landmark,
   Settings2,
   Cpu,
-  Smartphone
+  Smartphone,
+  BatteryCharging
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
@@ -117,7 +119,7 @@ export default function CertificateVaultPage() {
                 Platform <span className="text-primary">Vault.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                "Breaking the Browser Sandbox." Managing platform-level signatures to enable background persistence, auto-granted hardware permissions, and device owner policies.
+                "Breaking the Browser Sandbox." Managing platform-level signatures to enable background persistence and "Active App" mode across the empire.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -157,6 +159,19 @@ export default function CertificateVaultPage() {
                     ))}
                  </div>
               </section>
+
+              <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+                <CardHeader className="pb-2">
+                   <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
+                      <BatteryCharging className="size-5" /> Active Apps Persistence Policy
+                   </CardTitle>
+                </CardHeader>
+                <CardContent>
+                   <p className="text-sm text-muted-foreground leading-relaxed italic">
+                      "Active apps: these apps still run in the background even when not in use. This improves their functionality but consumes more power. The android.uid.system signature grants NoorNexus OS the authority to maintain these persistent canals."
+                   </p>
+                </CardContent>
+              </Card>
 
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
@@ -300,14 +315,14 @@ export default function CertificateVaultPage() {
               </Card>
 
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                 <CardHeader>
+                 <CardHeader className="pb-2">
                     <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
                        <Zap className="size-4" /> Background Sync Node
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                       "Service Worker (SW v3.5) listening for push events. Latency minimized to &lt; 10ms for signal reception."
+                       "Service Worker (SW v3.5) listening for push events. Latency minimized to < 10ms for signal reception."
                     </p>
                     <div className="flex justify-between items-center text-[9px] font-mono border-t border-white/5 pt-4">
                        <span className="uppercase text-muted-foreground">SW Connection</span>

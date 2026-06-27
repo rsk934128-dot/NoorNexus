@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -39,7 +40,10 @@ import {
   Infinity,
   Link2,
   Share2,
-  LayoutGrid
+  LayoutGrid,
+  ZapOff,
+  BatteryCharging,
+  Info
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { processGatewayRequest, AiGatewayOutput } from "@/ai/flows/ai-gateway-flow"
@@ -56,10 +60,10 @@ const MOCK_USAGE_DATA = [
 ]
 
 const CONNECTED_MESH = [
-  { device: "Imperial iPhone 15 Pro", apps: ["FusionPay", "Bazaar", "Mail"], status: "SYNCED", icon: Smartphone },
-  { device: "Sovereign Workstation M3", apps: ["All Imperial Apps"], status: "SYNCED", icon: Laptop },
-  { device: "Sirajganj Edge Node", apps: ["Data Lake", "Legacy"], status: "PULSING", icon: Monitor },
-  { device: "Android Pilot Node", apps: ["Onboarding"], status: "CONNECTED", icon: Smartphone },
+  { device: "Imperial iPhone 15 Pro", apps: ["FusionPay", "Bazaar", "Mail"], status: "SYNCED", icon: Smartphone, persistence: true },
+  { device: "Sovereign Workstation M3", apps: ["All Imperial Apps"], status: "SYNCED", icon: Laptop, persistence: true },
+  { device: "Sirajganj Edge Node", apps: ["Data Lake", "Legacy"], status: "PULSING", icon: Monitor, persistence: true },
+  { device: "Android Pilot Node", apps: ["Onboarding"], status: "CONNECTED", icon: Smartphone, persistence: false },
 ]
 
 export default function AiGatewayPage() {
@@ -74,7 +78,8 @@ export default function AiGatewayPage() {
     spend: 12.45,
     requests: 15420,
     tokens: 845000,
-    activeDevices: 452
+    activeDevices: 452,
+    backgroundApps: 12
   })
 
   async function handleGatewayPulse() {
@@ -146,7 +151,7 @@ export default function AiGatewayPage() {
                 Zenith <span className="text-purple-500">Gateway.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Universal Connectivity, Single AI Brain." আপনার প্রতিটি ডিভাইস এখন প্রতিটি অ্যাপের সাথে সিনক্রোনাইজড।
+                "Universal Connectivity, Single AI Brain." আপনার প্রতিটি ডিভাইস এখন প্রতিটি অ্যাপের সাথে ব্যাকগ্রাউন্ডে সচল।
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -173,9 +178,9 @@ export default function AiGatewayPage() {
                   {[
                     { label: "AI Recovered", val: metrics.requests > 0 ? metrics.recovered : 0, icon: RefreshCcw, color: "text-emerald-500" },
                     { label: "Reliability", val: `${metrics.reliability}%`, icon: ShieldCheck, color: "text-primary" },
-                    { label: "Omni Pulses", val: metrics.requests.toLocaleString(), icon: Zap, color: "text-purple-500" },
+                    { label: "Background Apps", val: metrics.backgroundApps, icon: BatteryCharging, color: "text-amber-500" },
                     { label: "Cognitive Load", val: "Optimal", icon: Atom, color: "text-emerald-400" },
-                    { label: "Sync Velocity", val: "100%", icon: Infinity, color: "text-amber-500" }
+                    { label: "Sync Velocity", val: "100%", icon: Infinity, color: "text-purple-500" }
                   ].map((m, i) => (
                     <Card key={i} className="glass-card bg-black/40 border-white/5">
                       <CardContent className="p-5 space-y-1 text-center">
@@ -264,7 +269,12 @@ export default function AiGatewayPage() {
                                       <p className="text-[8px] text-muted-foreground font-mono uppercase">{node.status}</p>
                                    </div>
                                 </div>
-                                <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">ACTIVE</Badge>
+                                <div className="flex flex-col items-end gap-2">
+                                   <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">ACTIVE</Badge>
+                                   {node.persistence && (
+                                     <Badge variant="outline" className="border-amber-500/30 text-amber-500 text-[7px] animate-pulse">PERSISTENT</Badge>
+                                   )}
+                                </div>
                              </div>
                              <div className="space-y-2">
                                 <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Linked Apps</p>
@@ -280,6 +290,19 @@ export default function AiGatewayPage() {
                           </div>
                         ))}
                      </div>
+
+                     <Card className="glass-card border-amber-500/20 bg-amber-500/5 mt-8">
+                        <CardHeader className="pb-2">
+                           <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
+                              <Info className="size-4" /> Background Persistence Advisory
+                           </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                           <p className="text-[11px] text-muted-foreground leading-relaxed italic">
+                              "Active apps: these apps still run in the background even when not in use. This improves their functionality but consumes more power. L4 encryption and neural sync remain active during background cycles to ensure zero-latency handshakes."
+                           </p>
+                        </CardContent>
+                     </Card>
                   </CardContent>
                </Card>
             </TabsContent>
@@ -311,7 +334,7 @@ export default function AiGatewayPage() {
                            ))}
                         </div>
                         <Button 
-                          onClick={handleQuickstartTest}
+                          onClick={handleQuickstartTest} 
                           disabled={loading}
                           className="w-full bg-purple-500 text-white font-bold h-12 uppercase tracking-widest glow-primary gap-2"
                         >
@@ -339,7 +362,8 @@ export default function AiGatewayPage() {
 const sync = await sheikh.ai.bridge({
   deviceId: 'MACBOOK_PRO_M3',
   apps: ['FUSION_PAY', 'BAZAAR', 'MAIL'],
-  omniContext: true
+  omniContext: true,
+  backgroundActive: true // Enable persistence
 });
 
 // Calling AI with Cross-App knowledge

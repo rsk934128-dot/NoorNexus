@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -40,7 +41,8 @@ import {
   Terminal,
   Server,
   LayoutGrid,
-  Link2
+  Link2,
+  BatteryCharging
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -80,6 +82,7 @@ export default function Home() {
     "ZENITH: 100 Nodes synchronized < 28ms latency.",
     "INTEL: Project #400 Quarterly Outlook জেনারেটেড।",
     "AI_BRIDGE: Omni-Device cognitive mesh connectivity active.",
+    "PERSISTENCE: Active Apps background mode optimized.",
     "SYNC: Unified Device Identity (UDI) established across mesh."
   ])
 
@@ -105,6 +108,7 @@ export default function Home() {
         "AI_PULSE: Cross-App handshake from MACBOOK_HUB verified.",
         "MESH: Cognitive synchronization at 100% capacity.",
         "GRID: 100-node cluster status: PERPETUAL.",
+        "PERSISTENCE: 12 Active Apps running in background.",
         "SYNC: Device M3-HUB linked to all 42 Imperial Apps."
       ];
       setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
@@ -163,6 +167,9 @@ export default function Home() {
                    <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
                       <Link2 className="size-3 mr-2 animate-pulse" /> COGNITIVE_MESH: ACTIVE
                    </Badge>
+                   <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-[9px]">
+                      <BatteryCharging className="size-3 mr-2" /> BACKGROUND_PERSISTENCE: ON
+                   </Badge>
                 </div>
                 <div className="flex items-center gap-6">
                   <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
@@ -170,7 +177,7 @@ export default function Home() {
                   </h2>
                 </div>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed italic">
-                   "Omni-App Sync, Unified Intelligence." আপনার প্রতিটি ডিভাইস এখন নূরনেক্সাস সাম্রাজ্যের সকল অ্যাপের সাথে জেমিনি এআই-এর মাধ্যমে যুক্ত।
+                   "Omni-App Sync, Unified Intelligence." আপনার প্রতিটি ডিভাইস এখন নূরনেক্সাস সাম্রাজ্যের সকল অ্যাপের সাথে ব্যাকগ্রাউন্ডে সচল।
                 </p>
               </div>
               
@@ -288,15 +295,15 @@ export default function Home() {
             <div className="space-y-8">
                <Card className="glass-card border-emerald-500/40 bg-emerald-500/5 p-6 flex flex-col items-center text-center gap-4">
                   <div className="size-20 rounded-full border-4 border-amber-500 flex items-center justify-center relative bg-black shadow-[0_0_20px_rgba(245,158,11,0.5)]">
-                     <Link2 className="size-8 text-amber-500 animate-pulse" />
+                     <BatteryCharging className="size-8 text-amber-500 animate-pulse" />
                      <div className="absolute -top-1 -right-1 size-5 bg-emerald-500 rounded-full border-2 border-black" />
                   </div>
                   <div className="space-y-1">
-                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Unified Intelligence</p>
-                     <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">OMNI_SYNC_MAX</Badge>
+                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Persistence Mode</p>
+                     <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">ALWAYS_ALIVE</Badge>
                   </div>
                   <p className="text-[9px] text-muted-foreground italic leading-relaxed">
-                    "Every connected device is now a bridge between all apps in the empire."
+                    "Active apps run in background. This improves functionality but consumes more power."
                   </p>
                </Card>
 
