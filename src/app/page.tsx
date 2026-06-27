@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -292,7 +293,7 @@ export default function Home() {
                      <div className="absolute -top-1 -right-1 size-5 bg-emerald-500 rounded-full border-2 border-black" />
                   </div>
                   <div className="space-y-1">
-                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Global Hegemony Status</p>
+                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Global Sync Status</p>
                      <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">ZENITH_PEAK_L6</Badge>
                   </div>
                   <p className="text-[9px] text-muted-foreground italic leading-relaxed">
