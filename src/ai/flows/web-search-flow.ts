@@ -1,7 +1,8 @@
 'use server';
 /**
  * @fileOverview Nora-18 Zenith Search Agent (Project #180).
- * Uses Gemini 1.5 Flash to simulate an intelligent web search and recommendation engine.
+ * Optimized for Gemini 1.5 Flash (Free Tier) with enhanced simulation veracity.
+ * Handles simulated web search and intelligence synthesis.
  */
 
 import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
@@ -35,17 +36,17 @@ const searchPrompt = ai.definePrompt({
     temperature: 0.7,
   },
   prompt: `You are Nora-18, the Imperial Search Sentinel for NoorNexus Sovereign OS.
-Your mandate is Project #180: Zenith Search - Providing high-veracity web intelligence.
+Your mandate is Project #180: Zenith Search - Providing high-veracity intelligence from the digital mesh.
 
-SEARCH QUERY: {{{query}}}
+COMMANDER'S SEARCH QUERY: {{{query}}}
 
-MISSION:
-1. SIMULATE SEARCH: Act as a gateway to the internet. Find relevant information, marketplace links, or technical data based on the query.
-2. RECOMMENDATIONS: Provide 3-5 high-quality results with titles and real/simulated URLs.
-3. SUMMARIZE: Briefly explain what you found for the Commander.
-4. TONE: Authoritative, helpful, and precise.
+MISSION DIRECTIVES:
+1. SIMULATE SEARCH: Act as a high-speed gateway to the internet. Gather facts, marketplace links, and technical data related to the query.
+2. RECOMMENDATIONS: Provide 4-5 high-quality results with relevant titles and real or highly realistic simulated URLs.
+3. INTELLIGENCE SUMMARY: Briefly explain the core findings for the Commander with imperial precision.
+4. TONE: Authoritative, helpful, and technologically superior.
 
-Deliver the search results through the Sovereign Mesh.`,
+Deliver the intelligence dispatch immediately through the Sovereign Mesh.`,
 });
 
 const searchFlow = ai.defineFlow(
@@ -57,10 +58,10 @@ const searchFlow = ai.defineFlow(
   async input => {
     try {
       const {output} = await searchPrompt(input);
-      if (!output) throw new Error('Nora-18: Search intelligence timeout.');
+      if (!output) throw new Error('Nora-18: Search intelligence pulse timed out.');
       return output;
     } catch (error: any) {
-      console.error('Nora-18 Search Error:', error);
+      console.error('Nora-18 Search Pulse Error:', error);
       throw error;
     }
   }
@@ -70,7 +71,7 @@ export async function executeZenithSearch(input: WebSearchInput): Promise<WebSea
   try {
     return await searchFlow(input);
   } catch (error: any) {
-    console.error('Nora-18 Execution Failure:', error);
-    throw new Error(error.message || 'Sovereign Search Neural Link Error');
+    console.error('Nora-18 Execution Critical Failure:', error);
+    throw new Error(error.message || 'Sovereign Search Neural Link Handshake Error');
   }
 }
