@@ -44,7 +44,8 @@ import {
   History,
   Shield,
   HeartHandshake,
-  MessageSquare
+  MessageSquare,
+  ArrowRight
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -279,7 +280,7 @@ export default function Home() {
                                 <div className="space-y-2">
                                    <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Protocol #{m.id}</p>
                                    <h4 className={`text-lg font-headline font-bold text-white uppercase ${m.color}`}>{m.label}</h4>
-                                   <p className="text-[11px] text-muted-foreground italic leading-relaxed">"{m.desc}"</p>
+                                   <p className="text-sm text-muted-foreground italic leading-relaxed">"{m.desc}"</p>
                                 </div>
                                 <div className={`p-2 rounded-lg bg-emerald-500/10 ${m.color}`}>
                                    <Check className="size-5" />
