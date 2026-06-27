@@ -1,7 +1,6 @@
-
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -12,25 +11,21 @@ import { Label } from "@/components/ui/label"
 import { 
   Store, 
   ShieldCheck, 
-  Zap, 
   Loader2, 
   Menu, 
   Globe, 
   Search, 
   Plus, 
   Trash2, 
-  CheckCircle2, 
-  AlertTriangle,
   RefreshCcw,
   ExternalLink,
   Monitor,
   Activity,
-  ArrowRight,
-  Database,
+  ShoppingBag,
+  History,
   Lock,
   Cpu,
-  ShoppingBag,
-  History
+  Database
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
@@ -78,8 +73,12 @@ export default function SovereignBazaarPage() {
   }
 
   const launchInTerminal = (url: string) => {
-    // Navigate to browser page with state
     router.push(`/browser?url=${encodeURIComponent(url)}`)
+  }
+
+  const openDirect = (url: string) => {
+    window.open(url, '_blank')
+    toast({ title: "Direct Tunnel Established", description: "Opening marketplace in secondary node." })
   }
 
   const filteredLinks = links.filter(l => 
@@ -120,7 +119,6 @@ export default function SovereignBazaarPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-8">
               
-              {/* Add New Link Module */}
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                  <CardHeader>
                     <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
@@ -155,7 +153,6 @@ export default function SovereignBazaarPage() {
                  </CardContent>
               </Card>
 
-              {/* Link Registry Search */}
               <div className="flex justify-between items-center px-1">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                     <Activity className="size-4" /> Marketplace Link Registry
@@ -171,7 +168,6 @@ export default function SovereignBazaarPage() {
                  </div>
               </div>
 
-              {/* Links Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                  {filteredLinks.length === 0 && (
                    <p className="col-span-2 text-center py-20 text-xs text-muted-foreground italic uppercase tracking-widest">No links found in the bazaar registry.</p>
@@ -212,13 +208,20 @@ export default function SovereignBazaarPage() {
                                     Verify Pulse
                                  </Button>
                                ) : (
-                                 <Button 
-                                  onClick={() => launchInTerminal(link.url)}
-                                  className="h-8 text-[9px] uppercase font-bold bg-emerald-500 text-white px-4 glow-emerald gap-2"
-                                 >
-                                    <Monitor className="size-3" />
-                                    Launch in Terminal
-                                 </Button>
+                                 <div className="flex gap-2">
+                                    <Button 
+                                      onClick={() => openDirect(link.url)}
+                                      className="h-8 text-[9px] uppercase font-bold bg-amber-500 text-white px-4 gap-2"
+                                    >
+                                       <ExternalLink className="size-3" /> Direct
+                                    </Button>
+                                    <Button 
+                                      onClick={() => launchInTerminal(link.url)}
+                                      className="h-8 text-[9px] uppercase font-bold bg-emerald-500 text-white px-4 glow-emerald gap-2"
+                                    >
+                                       <Monitor className="size-3" /> Terminal
+                                    </Button>
+                                 </div>
                                )}
                             </div>
                          </div>
@@ -229,7 +232,6 @@ export default function SovereignBazaarPage() {
             </div>
 
             <div className="space-y-8">
-               {/* Bazaar Policy */}
                <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
@@ -246,7 +248,6 @@ export default function SovereignBazaarPage() {
                   </CardContent>
                </Card>
 
-               {/* Verification Stats */}
                <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                   <CardHeader className="pb-2">
                      <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">

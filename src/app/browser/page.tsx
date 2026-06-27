@@ -22,14 +22,10 @@ import {
   Gem,
   Car,
   ExternalLink,
-  ChevronRight,
-  ShieldAlert,
   Menu,
   Cpu,
   Sparkles,
   Link2,
-  LayoutGrid,
-  Radio,
   ArrowRight,
   CheckCircle2,
   Database,
@@ -37,7 +33,9 @@ import {
   HardDrive,
   Infinity,
   Fingerprint,
-  Box
+  Radio,
+  AlertTriangle,
+  ShieldAlert
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { executeZenithSearch, WebSearchOutput } from "@/ai/flows/web-search-flow"
@@ -52,6 +50,8 @@ const QUICK_LINKS = [
   { name: "Global Trade", url: "https://www.trademap.org/", icon: Globe, color: "text-emerald-500" },
 ]
 
+const KNOWN_IFRAME_BLOCKERS = ['amazon.com', 'google.com', 'facebook.com', 'github.com', 'alibaba.com', 'twitter.com', 'linkedin.com'];
+
 function BrowserContent() {
   const { toast } = useToast()
   const searchParams = useSearchParams()
@@ -60,10 +60,10 @@ function BrowserContent() {
   const [loading, setLoading] = useState(false)
   const [isSearchMode, setIsSearchMode] = useState(true)
   const [isInternalPage, setIsInternalPage] = useState(false)
+  const [showBypassWarning, setShowBypassWarning] = useState(false)
   const [searchResult, setSearchResult] = useState<WebSearchOutput | null>(null)
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
-  // Handle URL from search params (e.g. from Bazaar)
   useEffect(() => {
     const url = searchParams.get('url')
     if (url) {
@@ -75,18 +75,17 @@ function BrowserContent() {
     let target = url || urlInput
     if (!target.trim()) return
 
-    // Internal Resolver: Check if it's a .sovereign simulated domain
     if (target.includes('.sovereign')) {
       setLoading(true)
       setIsSearchMode(false)
       setIsInternalPage(true)
+      setShowBypassWarning(false)
       setActiveUrl(target)
       setUrlInput(target)
       setTimeout(() => setLoading(false), 800)
       return
     }
 
-    // Improved detection: Is it a URL or a Search Query?
     const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i
     const isUrl = urlPattern.test(target)
 
@@ -99,16 +98,21 @@ function BrowserContent() {
       target = `https://${target}`
     }
     
+    // Check for iframe blockers
+    const domain = target.toLowerCase();
+    const blocksIframe = KNOWN_IFRAME_BLOCKERS.some(b => domain.includes(b));
+    
     setLoading(true)
     setIsSearchMode(false)
     setIsInternalPage(false)
+    setShowBypassWarning(blocksIframe)
     setActiveUrl(target)
     setUrlInput(target)
     
     toast({
       title: "Establishing Web Bridge",
-      description: `Uplink initiated for node ${target.substring(0, 30)}...`,
-      className: "border-primary/50 bg-primary/5"
+      description: blocksIframe ? "High-Security Node Detected." : "Uplink initiated through Sovereign Tunnel.",
+      className: blocksIframe ? "border-amber-500/50 bg-amber-500/5" : "border-primary/50 bg-primary/5"
     })
 
     setTimeout(() => setLoading(false), 1200)
@@ -119,6 +123,7 @@ function BrowserContent() {
     setLoading(true)
     setIsSearchMode(true)
     setIsInternalPage(false)
+    setShowBypassWarning(false)
     setSearchResult(null)
     setUrlInput(query)
 
@@ -147,7 +152,6 @@ function BrowserContent() {
 
   return (
     <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0 relative">
-      {/* Address Bar Terminal */}
       <header className="px-4 py-3 flex flex-col sm:flex-row items-center gap-4 border-b border-white/5 bg-background/50 backdrop-blur-md shrink-0 w-full z-50">
         <div className="flex items-center gap-3 w-full sm:w-auto">
            <SidebarTrigger className="md:hidden text-primary">
@@ -164,7 +168,7 @@ function BrowserContent() {
 
         <div className="flex-1 flex items-center gap-2 w-full">
            <div className="flex items-center gap-1 bg-white/5 rounded-lg border border-white/10 p-1">
-              <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-white" onClick={() => {setIsSearchMode(true); setSearchResult(null); setUrlInput("");}}>
+              <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-white" onClick={() => {setIsSearchMode(true); setSearchResult(null); setUrlInput(""); setShowBypassWarning(false);}}>
                  <ArrowLeft className="size-4" />
               </Button>
               <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-white" onClick={handleRefresh}>
@@ -211,7 +215,6 @@ function BrowserContent() {
         </div>
       </header>
 
-      {/* Quick Channels */}
       <div className="px-4 py-2 border-b border-white/5 bg-black/20 overflow-x-auto flex items-center gap-4 no-scrollbar shrink-0">
          <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest shrink-0 flex items-center gap-2">
            <Radio className="size-3" /> Sovereign Channels:
@@ -230,7 +233,6 @@ function BrowserContent() {
          ))}
       </div>
 
-      {/* Terminal Content Area */}
       <div className="flex-1 overflow-hidden bg-black/40 w-full relative">
         {loading && (
            <div className="absolute inset-0 z-50 bg-background/80 backdrop-blur-xl flex flex-col items-center justify-center gap-8">
@@ -254,7 +256,6 @@ function BrowserContent() {
             <div className="max-w-5xl mx-auto p-6 sm:p-12 space-y-12">
               {searchResult ? (
                 <div className="space-y-12 animate-in fade-in slide-in-from-bottom-6 duration-700">
-                  {/* Nora Intelligence Summary */}
                   <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5 relative overflow-hidden p-8">
                     <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
                        <Sparkles className="size-32 text-amber-500" />
@@ -277,7 +278,6 @@ function BrowserContent() {
                     </div>
                   </Card>
 
-                  {/* Search Results Hub */}
                   <div className="space-y-8">
                      <div className="flex items-center justify-between px-2">
                         <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.5em]">Verified Knowledge Hubs</h4>
@@ -297,7 +297,7 @@ function BrowserContent() {
                                      </div>
                                      <h5 className="text-sm font-bold text-white uppercase group-hover:text-primary transition-colors truncate">{res.title}</h5>
                                   </div>
-                               </div>
+                                </div>
                                <p className="text-[11px] text-muted-foreground leading-relaxed italic flex-1">"{res.snippet}"</p>
                                <div className="pt-4 mt-auto flex items-center justify-between border-t border-white/5">
                                   <code className="text-[9px] font-mono text-primary/40 truncate max-w-[200px]">{res.url}</code>
@@ -311,7 +311,6 @@ function BrowserContent() {
                      </div>
                   </div>
 
-                  {/* Strategic Directive Footer */}
                   <div className="p-6 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-6">
                      <div className="flex items-center gap-4">
                         <div className="size-10 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
@@ -421,6 +420,36 @@ function BrowserContent() {
                 <p className="text-[8px] font-mono uppercase tracking-[0.5em]">NoorNexus Internal Infrastructure Only</p>
              </div>
           </div>
+        ) : showBypassWarning ? (
+          <div className="h-full w-full bg-background flex flex-col items-center justify-center p-6 space-y-8 animate-in fade-in">
+             <div className="size-20 rounded-full bg-amber-500/20 flex items-center justify-center border border-amber-500/40 glow-emerald">
+                <ShieldAlert className="size-10 text-amber-500" />
+             </div>
+             <div className="text-center space-y-4 max-w-md">
+                <h3 className="text-2xl font-headline font-bold text-white uppercase tracking-tighter">High-Security Node Block</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed italic">
+                   "কমান্ডার, {activeUrl.replace('https://', '')} তার নিজস্ব সিকিউরিটি পলিসির (SAMEORIGIN) কারণে এনক্রিপ্টেড আইফ্রেম টানেলে লোড হতে বাধা দিচ্ছে। এটি বাইপাস করার জন্য আপনাকে সরাসরি টানেল (Direct Tunnel) ব্যবহার করতে হবে।"
+                </p>
+             </div>
+             <div className="flex gap-4">
+                <Button 
+                  onClick={() => window.open(activeUrl, '_blank')}
+                  className="bg-amber-500 text-black font-bold uppercase text-[10px] h-12 px-8 glow-emerald gap-2"
+                >
+                   <ExternalLink className="size-4" /> Open Direct Tunnel
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => setIsSearchMode(true)}
+                  className="border-white/10 text-white font-bold uppercase text-[10px] h-12 px-8"
+                >
+                   Return to Terminal
+                </Button>
+             </div>
+             <div className="pt-12 flex flex-col items-center gap-4 opacity-40">
+                <p className="text-[8px] font-mono uppercase tracking-[0.5em]">Security Protocol v4.5 Enforcement</p>
+             </div>
+          </div>
         ) : (
           <div className="h-full w-full bg-white relative">
             <iframe 
@@ -434,14 +463,13 @@ function BrowserContent() {
           </div>
         )}
 
-        {/* Shield Indicator Overlay */}
         <div className="absolute bottom-6 left-6 pointer-events-none">
           <div className="p-3 glass-card rounded-lg flex items-center gap-3 border-emerald-500/20 bg-black/60 shadow-2xl">
               <ShieldCheck className="size-4 text-emerald-500" />
               <div className="space-y-0.5">
                 <p className="text-[9px] font-bold text-white uppercase leading-none">Canal Secure</p>
                 <p className="text-[7px] text-emerald-500/60 font-mono uppercase leading-none">
-                   {isInternalPage ? 'MESH_RESOLVED' : 'Handshake Verified'}
+                   {isInternalPage ? 'MESH_RESOLVED' : showBypassWarning ? 'HANDSHAKE_GATED' : 'Handshake Verified'}
                 </p>
               </div>
           </div>
@@ -454,9 +482,9 @@ function BrowserContent() {
              NoorNexus Imperial Web Gateway | SSL: SHA-256 Encrypted
            </p>
            <div className="flex items-center gap-2">
-              <div className={`size-1.5 rounded-full ${isSearchMode ? 'bg-amber-500' : isInternalPage ? 'bg-purple-500' : 'bg-emerald-500'} animate-pulse shadow-[0_0_8px_rgba(0,150,255,0.4)]`} />
-              <span className={`text-[8px] font-bold uppercase ${isSearchMode ? 'text-amber-500' : isInternalPage ? 'text-purple-500' : 'text-emerald-500'}`}>
-                {isSearchMode ? 'AI Search Pulse: READY' : isInternalPage ? 'INTERNAL NODE: CONNECTED' : 'Canal Uplink: STABLE'}
+              <div className={`size-1.5 rounded-full ${isSearchMode ? 'bg-amber-500' : isInternalPage ? 'bg-purple-500' : showBypassWarning ? 'bg-destructive' : 'bg-emerald-500'} animate-pulse shadow-[0_0_8px_rgba(0,150,255,0.4)]`} />
+              <span className={`text-[8px] font-bold uppercase ${isSearchMode ? 'text-amber-500' : isInternalPage ? 'text-purple-500' : showBypassWarning ? 'text-destructive' : 'text-emerald-500'}`}>
+                {isSearchMode ? 'AI Search Pulse: READY' : isInternalPage ? 'INTERNAL NODE: CONNECTED' : showBypassWarning ? 'ACCESS: DIRECT_ONLY' : 'Canal Uplink: STABLE'}
               </span>
            </div>
         </div>
