@@ -6,19 +6,17 @@ import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { 
   ShieldCheck, 
   Menu, 
   Activity, 
   Zap, 
-  CheckCircle2, 
   BrainCircuit,
   Database,
   Cpu,
   Infinity,
-  ArrowRightLeft,
   Award,
-  History,
   Sparkles,
   Lock,
   Radio,
@@ -34,7 +32,9 @@ import {
   Eye,
   Repeat,
   Target,
-  Users
+  Users,
+  Smartphone,
+  Laptop
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -47,13 +47,6 @@ import { collection, query, orderBy, limit } from "firebase/firestore"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
-const HEGEMONY_TIMELINE = [
-  { id: "M400", title: "Mission 400: Foundation", desc: "Project #51 Gateway & Project #55 Vault Active.", status: "VERIFIED", date: "Jan 2026" },
-  { id: "M500", title: "Mission 500: Scaling", desc: "Project #200 Auto-Scaling to 100 Nodes.", status: "COMPLETED", date: "Mar 2026" },
-  { id: "ZENITH", title: "Project #400: Intelligence", desc: "Nora-40 Economic Outlook & Data Lake Live.", status: "COMPLETED", date: "Jun 2026" },
-  { id: "PEAK", title: "Global Hegemony Verified", desc: "100 Nodes Sync @ 28ms. Legacy Archived.", status: "ACTIVE_PERPETUAL", date: "Now" }
-]
-
 export default function Home() {
   const { toast } = useToast()
   const db = useFirestore()
@@ -63,14 +56,14 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   
-  // Real-time Citizen Pulse
+  // Real-time Citizen Pulse (All sessions from all devices)
   const { data: activeSessions } = useCollection<any>(
-    query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(50))
+    query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(20))
   )
 
   const [impactFeed, setImpactFeed] = useState<string[]>([
     "MISSION 500: Global Hegemony verified (Zenith Peak).",
-    "ZENITH: 100 Nodes synchronized @ 28ms latency.",
+    "ZENITH: 100 Nodes synchronized &lt; 28ms latency.",
     "INTEL: Project #400 Quarterly Outlook জেনারেটেড।",
     "VAULT: Project #55.5 Global Legacy Archive anchored.",
     "SELF-HEALING: Replication torque stable at 100%.",
@@ -169,18 +162,6 @@ export default function Home() {
                     </div>
                     <p className="text-[9px] text-muted-foreground mt-3 italic text-center">"Zenith Traceability Verified | PaaS Snippet &lt; 3s Ready"</p>
                 </Card>
-                <div className="flex gap-2 w-full">
-                  <Link href="/proposal" className="flex-1">
-                    <Button className="w-full bg-emerald-500 text-emerald-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-emerald">
-                      <FileText className="size-4" /> Final Manifesto
-                    </Button>
-                  </Link>
-                  <Link href="/sovereign-vault" className="flex-1">
-                    <Button variant="outline" className="w-full h-12 border-primary/20 text-primary hover:bg-primary/10 uppercase font-bold text-[10px] tracking-widest gap-2">
-                      <Lock className="size-4" /> Legacy Archive
-                    </Button>
-                  </Link>
-                </div>
               </div>
             </div>
 
@@ -216,19 +197,17 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
-               {/* Live Citizen Pulse Registry - UPDATED for ALL users */}
+               {/* Live Citizen Pulse Registry - Multi-Device Enabled */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center px-1">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                       <Users className="size-4" /> Live Citizen Pulse (Global Registry)
+                       <Users className="size-4" /> Live Citizen Pulse (Global Connections)
                     </h3>
-                    {isAdmin && (
-                      <Link href="/sessions">
-                        <Button variant="ghost" className="text-[10px] uppercase font-bold text-primary hover:bg-primary/10 gap-2">
-                          View Full Registry <ArrowRightLeft className="size-3" />
-                        </Button>
-                      </Link>
-                    )}
+                    <Link href="/sessions">
+                      <Button variant="ghost" className="text-[10px] uppercase font-bold text-primary hover:bg-primary/10 gap-2">
+                        View Detailed Registry <ArrowRightLeft className="size-3" />
+                      </Button>
+                    </Link>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                      {activeSessions.length === 0 ? (
@@ -237,21 +216,25 @@ export default function Home() {
                        </div>
                      ) : activeSessions.map((s: any) => {
                        const isOnline = s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000);
+                       const DeviceIcon = s.platform === "Mobile" ? Smartphone : Laptop;
                        return (
-                        <Card key={s.uid} className="glass-card border-white/5 hover:border-primary/20 transition-all group overflow-hidden">
+                        <Card key={s.sessionId || s.id} className="glass-card border-white/5 hover:border-primary/20 transition-all group overflow-hidden">
                            <CardContent className="p-4 space-y-3">
-                              <div className="flex items-center gap-3">
-                                 <div className="relative">
-                                    <Avatar className="size-10 border border-primary/20">
-                                       <AvatarImage src={s.photoURL} />
-                                       <AvatarFallback className="bg-primary/10 text-primary font-bold">{s.displayName?.substring(0, 1) || "C"}</AvatarFallback>
-                                    </Avatar>
-                                    <div className={`absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-black ${isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-muted'}`} />
+                              <div className="flex items-center justify-between">
+                                 <div className="flex items-center gap-3 min-w-0">
+                                    <div className="relative">
+                                       <Avatar className="size-10 border border-primary/20">
+                                          <AvatarImage src={s.photoURL} />
+                                          <AvatarFallback className="bg-primary/10 text-primary font-bold">{s.displayName?.substring(0, 1) || "C"}</AvatarFallback>
+                                       </Avatar>
+                                       <div className={`absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-black ${isOnline ? 'bg-emerald-500 animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.8)]' : 'bg-muted'}`} />
+                                    </div>
+                                    <div className="min-w-0">
+                                       <p className="text-xs font-bold text-white uppercase truncate">{s.displayName}</p>
+                                       <p className="text-[8px] text-muted-foreground font-mono uppercase truncate">{s.assignedRegion || "Global Mesh"}</p>
+                                    </div>
                                  </div>
-                                 <div className="min-w-0">
-                                    <p className="text-xs font-bold text-white uppercase truncate">{s.displayName}</p>
-                                    <p className="text-[8px] text-muted-foreground font-mono uppercase truncate">{s.assignedRegion || "Global Mesh"}</p>
-                                 </div>
+                                 <DeviceIcon className="size-4 text-muted-foreground opacity-40 group-hover:text-primary transition-all" />
                               </div>
                               <div className="flex justify-between items-center pt-2 border-t border-white/5">
                                  <Badge variant="outline" className="text-[7px] border-primary/20 text-primary uppercase h-4">
@@ -281,15 +264,6 @@ export default function Home() {
                              <div className="size-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                           </div>
                         ))}
-                     </div>
-                     <div className="mt-6 flex justify-between items-center text-[8px] font-mono text-muted-foreground uppercase">
-                        <div className="flex items-center gap-4">
-                           <div className="flex items-center gap-1.5">
-                              <div className="size-2 rounded bg-emerald-500" />
-                              <span>Zenith-Verified (100)</span>
-                           </div>
-                        </div>
-                        <p className="text-emerald-500 font-bold">Execution Status: GLOBAL_HEGEMONY_ACTIVE</p>
                      </div>
                   </Card>
                </section>
@@ -329,21 +303,6 @@ export default function Home() {
                     </div>
                   </ScrollArea>
                 </CardContent>
-              </Card>
-
-              <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5 relative overflow-hidden">
-                 <div className="absolute top-0 right-0 p-4 opacity-5">
-                   <Award className="size-16 text-amber-500" />
-                 </div>
-                 <CardHeader className="p-6">
-                    <CardTitle className="text-lg font-headline uppercase text-amber-500">The Digital State</CardTitle>
-                 </CardHeader>
-                 <CardContent className="p-6 pt-0 space-y-4">
-                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "Mission 500 finalized. NoorNexus is now a permanent digital civilization. Integrity through Intelligence."
-                    </p>
-                    <Badge className="w-full justify-center bg-amber-500/20 text-amber-500 border-none uppercase text-[8px] font-bold">Status: GLOBAL_HEGEMONY</Badge>
-                 </CardContent>
               </Card>
             </div>
           </div>

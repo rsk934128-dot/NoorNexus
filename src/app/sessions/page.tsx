@@ -74,17 +74,15 @@ export default function SessionMonitorPage() {
   useEffect(() => {
     if (!authLoading && !user) {
       router.push("/login")
-    } else if (!authLoading && !isAdmin) {
-      router.push("/")
     }
-  }, [user, authLoading, isAdmin, router])
+  }, [user, authLoading, router])
 
-  if (authLoading || (!isAdmin && user)) {
+  if (authLoading) {
     return (
       <div className="h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-4">
           <Loader2 className="animate-spin text-primary size-10 mx-auto" />
-          <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">Verifying Root Privileges...</p>
+          <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">Verifying Connection...</p>
         </div>
       </div>
     )
@@ -106,15 +104,15 @@ export default function SessionMonitorPage() {
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-3 uppercase tracking-tighter">
-                Sovereign <span className="text-primary">Watchtower.</span>
+                Sovereign <span className="text-primary">Registry.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                "Real-time Intelligence of the Empire." নূরনেক্সাস সাম্রাজ্যের প্রতিটি ইউজার এবং তাদের কমান্ড হিস্ট্রি রিয়েল-টাইমে পর্যবেক্ষণ করা হচ্ছে।
+                "Real-time Multi-Device Monitoring." নূরনেক্সাস সাম্রাজ্যের প্রতিটি সেশন এবং কানেকশন এখন ট্র্যাক করা হচ্ছে।
               </p>
             </div>
             <div className="flex flex-col items-end gap-3">
                <div className="p-4 glass-card rounded-2xl border border-primary/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Total Registered Users</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Total Active Sessions</p>
                   <p className="text-3xl font-headline font-bold text-emerald-500">{sessions.length}</p>
                </div>
                <div className="relative w-full md:w-64">
@@ -132,33 +130,11 @@ export default function SessionMonitorPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-8">
-              {/* Distribution Overview */}
-              <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                 {regionStats.map((reg, i) => (
-                   <Card key={i} className="glass-card bg-black/40 border-white/5 group hover:border-primary/30 transition-all">
-                      <CardContent className="p-4 space-y-2 text-center">
-                         <MapPin className="size-4 text-primary mx-auto opacity-50 group-hover:opacity-100 transition-opacity" />
-                         <p className="text-[9px] font-bold text-muted-foreground uppercase truncate">{reg.name}</p>
-                         <p className="text-xl font-headline font-bold text-white">{reg.count}</p>
-                      </CardContent>
-                   </Card>
-                 ))}
-                 {regionStats.length === 0 && (
-                   <div className="col-span-4 py-10 text-center glass-card border-dashed">
-                      <p className="text-xs text-muted-foreground uppercase font-mono">Scanning Global Hubs...</p>
-                   </div>
-                 )}
-              </section>
-
-              {/* Main Registry Table */}
               <Card className="glass-card overflow-hidden border-t-4 border-t-primary">
                 <CardHeader className="border-b border-white/5 bg-white/2 flex flex-row items-center justify-between py-4 px-6">
                   <div className="flex items-center gap-4">
                     <Users className="size-5 text-primary" />
-                    <CardTitle className="text-sm font-headline uppercase tracking-widest">Sovereign Identity Matrix</CardTitle>
-                  </div>
-                  <div className="flex items-center gap-3">
-                     <Badge className="bg-emerald-500/20 text-emerald-500 border-none animate-pulse">ACTIVE_SURVEILLANCE</Badge>
+                    <CardTitle className="text-sm font-headline uppercase tracking-widest">Global Connection Matrix</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
@@ -166,9 +142,9 @@ export default function SessionMonitorPage() {
                     <table className="w-full text-left">
                       <thead>
                         <tr className="bg-muted/30 text-[9px] uppercase font-bold text-muted-foreground tracking-widest border-b border-white/5">
-                          <th className="px-6 py-4">Commander Identity</th>
+                          <th className="px-6 py-4">Identity & Device</th>
                           <th className="px-6 py-4">Sovereign Node</th>
-                          <th className="px-6 py-4">Current Pulse</th>
+                          <th className="px-6 py-4">Last Activity</th>
                           <th className="px-6 py-4">Status</th>
                           <th className="px-6 py-4 text-right">Last Sync</th>
                         </tr>
@@ -181,16 +157,11 @@ export default function SessionMonitorPage() {
                               <p className="text-[10px] font-mono text-muted-foreground uppercase">Decrypting Identity Records...</p>
                             </td>
                           </tr>
-                        ) : filteredSessions.length === 0 ? (
-                          <tr>
-                            <td colSpan={5} className="px-6 py-20 text-center italic text-muted-foreground">
-                              No active identities detected in the mesh.
-                            </td>
-                          </tr>
                         ) : filteredSessions.map((s: any) => {
-                          const isOnline = s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000); // Online if seen within 2 mins
+                          const isOnline = s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000);
+                          const DeviceIcon = s.platform === "Mobile" ? Smartphone : Laptop;
                           return (
-                            <tr key={s.id} className="hover:bg-white/2 transition-colors group">
+                            <tr key={s.sessionId || s.id} className="hover:bg-white/2 transition-colors group">
                               <td className="px-6 py-4">
                                 <div className="flex items-center gap-3">
                                    <Avatar className="size-10 border border-primary/20 shrink-0">
@@ -198,7 +169,10 @@ export default function SessionMonitorPage() {
                                       <AvatarFallback className="bg-primary/10 text-primary font-bold">{s.displayName?.substring(0, 2).toUpperCase() || "C"}</AvatarFallback>
                                    </Avatar>
                                    <div className="min-w-0">
-                                      <p className="text-sm font-bold text-white uppercase truncate">{s.displayName}</p>
+                                      <div className="flex items-center gap-2">
+                                         <p className="text-sm font-bold text-white uppercase truncate">{s.displayName}</p>
+                                         <DeviceIcon className="size-3 text-primary opacity-50" />
+                                      </div>
                                       <p className="text-[9px] text-muted-foreground font-mono truncate">{s.email}</p>
                                    </div>
                                 </div>
@@ -215,15 +189,9 @@ export default function SessionMonitorPage() {
                                  </div>
                               </td>
                               <td className="px-6 py-4">
-                                 <div className="space-y-1">
-                                    <div className="flex items-center gap-2">
-                                       <MousePointer2 className="size-3 text-primary" />
-                                       <span className="text-[10px] text-white font-mono uppercase truncate max-w-[120px]">{s.lastAction || "/dashboard"}</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                       {s.userAgent?.includes('Mobi') ? <Smartphone className="size-3 text-muted-foreground" /> : <Laptop className="size-3 text-muted-foreground" />}
-                                       <span className="text-[8px] text-muted-foreground font-mono uppercase">{s.platform || "Sovereign_OS"}</span>
-                                    </div>
+                                 <div className="flex items-center gap-2">
+                                    <MousePointer2 className="size-3 text-primary" />
+                                    <span className="text-[10px] text-white font-mono uppercase truncate max-w-[120px]">{s.lastAction || "/dashboard"}</span>
                                  </div>
                               </td>
                               <td className="px-6 py-4">
@@ -258,55 +226,14 @@ export default function SessionMonitorPage() {
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                    <ShieldPlus className="size-4" /> Global Surveillance
+                    <ShieldPlus className="size-4" /> Multi-Device Guard
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                   <div className="p-3 bg-black/40 rounded-xl border border-white/5 text-center">
-                      <p className="text-[8px] text-muted-foreground uppercase font-bold">Registry Torque</p>
-                      <Badge className="bg-primary text-[10px] font-bold mt-1">MAX ACTIVE</Badge>
-                   </div>
                    <p className="text-[9px] text-muted-foreground leading-relaxed italic">
-                      "Every identity is anchored to an Imperial Handshake. Zero-trust traceability is enforced for all {sessions.length} recorded accounts."
+                      "Every unique browser session is now anchored to an Imperial Handshake. Multi-device tracking is 100% active."
                    </p>
                 </CardContent>
-              </Card>
-
-              <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                 <CardHeader>
-                    <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                       <Zap className="size-4" /> Real-time Intel
-                    </CardTitle>
-                 </CardHeader>
-                 <CardContent className="space-y-4">
-                    <div className="space-y-3">
-                       <div className="flex justify-between items-center text-[10px] font-mono border-b border-white/5 pb-2">
-                          <span className="text-muted-foreground uppercase">Online Now</span>
-                          <span className="text-emerald-500 font-bold">
-                            {sessions.filter((s: any) => s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000)).length}
-                          </span>
-                       </div>
-                       <div className="flex justify-between items-center text-[10px] font-mono border-b border-white/5 pb-2">
-                          <span className="text-muted-foreground uppercase">Mobile Traffic</span>
-                          <span className="text-primary font-bold">
-                            {Math.round((sessions.filter((s: any) => s.userAgent?.includes('Mobi')).length / (sessions.length || 1)) * 100)}%
-                          </span>
-                       </div>
-                    </div>
-                 </CardContent>
-              </Card>
-
-              <Card className="glass-card border-amber-500/20 bg-amber-500/5">
-                 <CardHeader className="pb-2">
-                    <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                       <ShieldCheck className="size-3" /> Identity Integrity
-                    </CardTitle>
-                 </CardHeader>
-                 <CardContent>
-                    <p className="text-[9px] text-muted-foreground leading-relaxed">
-                       No identity spoofing detected in the current cluster. All registered commanders are verified against the Sovereign Root.
-                    </p>
-                 </CardContent>
               </Card>
             </div>
           </div>
