@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -46,15 +45,18 @@ import {
   ShieldEllipsis,
   ShieldQuestion,
   UserCheck,
-  Smartphone
+  Smartphone,
+  BellRing
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Switch } from "@/components/ui/switch"
+import { requestNotificationPermission } from "@/services/notification-service"
 
 export default function EnterpriseSettingsPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const [showSecret, setShowSecret] = useState(false)
+  const [notificationsAllowed, setNotificationsAllowed] = useState(false)
   
   // Official App Config & Security Template
   const APP_CONFIG = {
@@ -68,6 +70,12 @@ export default function EnterpriseSettingsPage() {
     status: "ENABLED",
     type: "Direct"
   }
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      setNotificationsAllowed(Notification.permission === 'granted');
+    }
+  }, []);
 
   const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text)
@@ -86,11 +94,21 @@ export default function EnterpriseSettingsPage() {
     }, 2000)
   }
 
+  const handleNotificationToggle = async () => {
+    const granted = await requestNotificationPermission();
+    setNotificationsAllowed(granted);
+    if (granted) {
+      toast({ title: "Imperial Notifications Enabled", description: "Matrix sync: ACTIVE." });
+    } else {
+      toast({ title: "Notifications Blocked", description: "Please enable manually in browser settings.", variant: "destructive" });
+    }
+  }
+
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20 overflow-x-hidden">
           <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
@@ -109,7 +127,7 @@ export default function EnterpriseSettingsPage() {
                     N
                  </div>
                  <div>
-                    <h2 className="text-3xl font-headline font-bold flex items-center gap-2 uppercase tracking-tighter">
+                    <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-2 uppercase tracking-tighter">
                       {APP_CONFIG.name} <span className="text-primary">Fortress.</span>
                     </h2>
                     <p className="text-muted-foreground text-sm font-mono uppercase tracking-widest">Project ID: {APP_CONFIG.id}</p>
@@ -219,15 +237,16 @@ export default function EnterpriseSettingsPage() {
                         </CardHeader>
                         <CardContent className="space-y-6">
                            {[
-                             { name: "profile", label: "Identity Profile", desc: "Access to name, photo and bio for Gemini personalization.", status: "REQUIRED" },
-                             { name: "email", label: "Sovereign Gmail", desc: "Core identifier for cross-app synchronization.", status: "REQUIRED" },
-                             { name: "openid", label: "Session OpenID", desc: "Unified authentication bridge token.", status: "REQUIRED" },
-                             { name: "background", label: "Always-Alive Execution", desc: "Permission to run foreground services regardless of usage.", status: "ENABLED" }
+                             { name: "profile", label: "Identity Profile", desc: "Access to name, photo and bio for Gemini personalization.", status: "REQUIRED", toggle: false },
+                             { name: "email", label: "Sovereign Gmail", desc: "Core identifier for cross-app synchronization.", status: "REQUIRED", toggle: false },
+                             { name: "openid", label: "Session OpenID", desc: "Unified authentication bridge token.", status: "REQUIRED", toggle: false },
+                             { name: "background", label: "Always-Alive Execution", desc: "Permission to run foreground services regardless of usage.", status: "ENABLED", toggle: false },
+                             { name: "notifications", label: "Imperial Matrix Notifications", desc: "Push API for real-time alerts from Nora-AI and Fortress.", status: notificationsAllowed ? "GRANTED" : "DISABLED", toggle: true, action: handleNotificationToggle, val: notificationsAllowed }
                            ].map((perm, i) => (
                              <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between group hover:border-amber-500/20 transition-all">
                                 <div className="flex items-center gap-4">
                                    <div className="size-10 rounded-lg bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
-                                      <ShieldCheck className="size-5 text-amber-500" />
+                                      {perm.name === 'notifications' ? <BellRing className="size-5 text-amber-500" /> : <ShieldCheck className="size-5 text-amber-500" />}
                                    </div>
                                    <div className="space-y-0.5">
                                       <p className="text-sm font-bold text-white uppercase">{perm.label}</p>
@@ -235,8 +254,12 @@ export default function EnterpriseSettingsPage() {
                                    </div>
                                 </div>
                                 <div className="flex flex-col items-end gap-2">
-                                   <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">{perm.status}</Badge>
-                                   <Switch checked={true} disabled />
+                                   <Badge className={`${perm.status === 'GRANTED' || perm.status === 'REQUIRED' || perm.status === 'ENABLED' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-red-500/20 text-red-500'} border-none text-[8px]`}>{perm.status}</Badge>
+                                   {perm.toggle ? (
+                                      <Switch checked={perm.val} onCheckedChange={perm.action} />
+                                   ) : (
+                                      <Switch checked={true} disabled />
+                                   )}
                                 </div>
                              </div>
                            ))}

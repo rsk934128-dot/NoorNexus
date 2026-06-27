@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -43,11 +42,13 @@ import {
   LayoutGrid,
   ZapOff,
   BatteryCharging,
-  Info
+  Info,
+  BellRing
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { processGatewayRequest, AiGatewayOutput } from "@/ai/flows/ai-gateway-flow"
 import { executeGatewayQuickstart } from "@/ai/flows/gateway-quickstart-flow"
+import { sendSovereignNotification } from "@/services/notification-service"
 import { ResponsiveContainer, Area, AreaChart, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts"
 
 const MOCK_USAGE_DATA = [
@@ -106,6 +107,14 @@ export default function AiGatewayPage() {
     }
   }
 
+  async function handleTestNotification() {
+    await sendSovereignNotification(
+      "Imperial Pulse Detected",
+      "Commander, the Zenith Gateway has synchronized your devices. System integrity 100%."
+    );
+    toast({ title: "Imperial Alert Dispatched", description: "Check your system notifications." });
+  }
+
   async function handleQuickstartTest() {
     setLoading(true)
     setResult(null)
@@ -155,6 +164,9 @@ export default function AiGatewayPage() {
               </p>
             </div>
             <div className="flex items-center gap-4">
+               <Button onClick={handleTestNotification} variant="outline" className="border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/10 h-12 uppercase font-bold tracking-widest gap-2">
+                  <BellRing className="size-4" /> Test Imperial Alert
+               </Button>
                <div className="p-4 glass-card rounded-2xl border border-purple-500/20 text-center min-w-[200px] relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-2 opacity-10">
                     <Smartphone className="size-12 text-purple-500" />
@@ -204,7 +216,7 @@ export default function AiGatewayPage() {
                      <ResponsiveContainer width="100%" height="80%">
                         <AreaChart data={MOCK_USAGE_DATA}>
                            <defs>
-                              <linearGradient id="colorUsage" x1="0" y1="0" x2="0" y2="1">
+                              <linearGradient id="colorUsage" x1="0" x2="0" x2="0" y2="1">
                                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
                                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
                               </linearGradient>
@@ -409,7 +421,7 @@ const response = await sheikh.ai.pulse({
                      </CardContent>
                   </Card>
 
-                  <Card className={`glass-card border-t-4 transition-all duration-500 ${result ? 'border-t-emerald-500 bg-emerald-500/5' : 'border-t-primary opacity-40'}`}>
+                  <Card className={`glass-card border-t-4 transition-all duration-500 ${result ? 'border-t-emerald-500' : 'border-t-primary'}`}>
                      <CardHeader>
                         <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
                            <Cpu className="size-4" /> Mesh Output

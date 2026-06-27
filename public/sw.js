@@ -1,59 +1,36 @@
-
 /**
- * @fileOverview NoorNexus Sovereign Service Worker (v3.5)
- * Handles background push notifications, synchronization, and "Always Alive" signals.
+ * @fileOverview NoorNexus Sovereign Service Worker (V1.0)
+ * handles background push notifications and offline caching for Mission 500.
  */
 
-self.addEventListener('install', (event) => {
-  self.skipWaiting();
-  console.log('[Sovereign-SW] Lifecycle: INSTALLED');
-});
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
-  console.log('[Sovereign-SW] Lifecycle: ACTIVE_AND_READY');
-});
-
-// Background Push Listener
-self.addEventListener('push', (event) => {
-  const data = event.data ? event.data.json() : { title: 'NoorNexus Pulse', body: 'New Imperial Dispatch Received.' };
-  
-  const options = {
-    body: data.body,
-    icon: 'https://picsum.photos/seed/sovereign/192/192',
-    badge: 'https://picsum.photos/seed/sovereign/96/96',
-    vibrate: [200, 100, 200],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: '1'
-    },
-    actions: [
-      { action: 'accept', title: 'Accept Handshake', icon: 'https://picsum.photos/seed/check/96/96' },
-      { action: 'close', title: 'Ignore', icon: 'https://picsum.photos/seed/cross/96/96' },
-    ]
-  };
-
-  event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
-});
-
-// Always Alive - Background Sync Listener
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'imperial-heartbeat') {
-    event.waitUntil(sendHeartbeatToMainframe());
+self.addEventListener('push', function(event) {
+  if (event.data) {
+    const data = event.data.json();
+    const options = {
+      body: data.body,
+      icon: 'https://picsum.photos/seed/sovereign/192/192',
+      badge: 'https://picsum.photos/seed/sovereign/192/192',
+      vibrate: [100, 50, 100],
+      data: {
+        dateOfArrival: Date.now(),
+        primaryKey: '1'
+      },
+      actions: [
+        {action: 'explore', title: 'Open Dashboard', icon: 'https://picsum.photos/seed/dash/128/128'},
+        {action: 'close', title: 'Dismiss', icon: 'https://picsum.photos/seed/close/128/128'},
+      ]
+    };
+    event.waitUntil(
+      self.registration.showNotification(data.title, options)
+    );
   }
 });
 
-async function sendHeartbeatToMainframe() {
-  console.log('[Sovereign-SW] Background Heartbeat: PULSING...');
-  // Logic to sync pending ledger entries while offline
-  return Promise.resolve();
-}
-
-self.addEventListener('notificationclick', (event) => {
+self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-  if (event.action === 'accept') {
-    clients.openWindow('/');
+  if (event.action === 'explore') {
+    event.waitUntil(
+      clients.openWindow('/')
+    );
   }
 });
