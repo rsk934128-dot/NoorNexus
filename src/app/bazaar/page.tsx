@@ -29,7 +29,8 @@ import {
   Database,
   Lock,
   Cpu,
-  ShoppingBag
+  ShoppingBag,
+  History
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
