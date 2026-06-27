@@ -28,11 +28,29 @@ import {
   Loader2,
   FileText,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  Settings,
+  RefreshCcw,
+  ShieldPlus,
+  ArrowRightLeft,
+  SlidersHorizontal,
+  LayoutGrid
 } from "lucide-react"
 import { generateEconomicReport, EconomicIntelligenceOutput } from "@/ai/flows/economic-intelligence-flow"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import { Slider } from "@/components/ui/slider"
 
 const REVENUE_STREAMS = [
   { 
@@ -43,7 +61,9 @@ const REVENUE_STREAMS = [
     growth: "+14.2%", 
     icon: Coins, 
     color: "text-emerald-500",
-    description: "Income generated from 74+ banking canals and 100 node mesh."
+    description: "Income generated from 74+ banking canals and 100 node mesh.",
+    paramLabel: "Levy Percentage",
+    currentVal: 0.05
   },
   { 
     id: "ai_licensing", 
@@ -53,7 +73,9 @@ const REVENUE_STREAMS = [
     growth: "+22.5%", 
     icon: Cpu, 
     color: "text-purple-500",
-    description: "Subscription fees for Nora-40 intelligence and Nora-52 audit logs."
+    description: "Subscription fees for Nora-40 intelligence and Nora-52 audit logs.",
+    paramLabel: "Enterprise Tier Price (USD)",
+    currentVal: 2500
   },
   { 
     id: "gateway_paas", 
@@ -63,7 +85,9 @@ const REVENUE_STREAMS = [
     growth: "+8.9%", 
     icon: Zap, 
     color: "text-primary",
-    description: "Enterprise partners paying for dedicated gateway access (Project #51)."
+    description: "Enterprise partners paying for dedicated gateway access (Project #51).",
+    paramLabel: "Monthly License Fee",
+    currentVal: 5000
   },
   { 
     id: "industrial_markup", 
@@ -73,7 +97,9 @@ const REVENUE_STREAMS = [
     growth: "+5.1%", 
     icon: Building2, 
     color: "text-amber-500",
-    description: "Procurement revenue from high-pressure coupling and node hardware."
+    description: "Procurement revenue from high-pressure coupling and node hardware.",
+    paramLabel: "Asset Markup %",
+    currentVal: 3.5
   }
 ]
 
@@ -81,6 +107,9 @@ export default function RevenueMatrixPage() {
   const { toast } = useToast()
   const [analyzing, setAnalyzing] = useState(false)
   const [intel, setIntel] = useState<EconomicIntelligenceOutput | null>(null)
+  const [selectedChannel, setSelectedChannel] = useState<any>(null)
+  const [manageDialogOpen, setManageDialogOpen] = useState(false)
+  const [savingParam, setSavingParam] = useState(false)
   
   const [totals, setTotals] = useState({
     totalRevenue: 12560000,
@@ -108,6 +137,24 @@ export default function RevenueMatrixPage() {
     } finally {
       setAnalyzing(false)
     }
+  }
+
+  const handleManageChannel = (channel: any) => {
+    setSelectedChannel(channel)
+    setManageDialogOpen(true)
+  }
+
+  const handleSaveParameters = () => {
+    setSavingParam(true)
+    setTimeout(() => {
+      setSavingParam(false)
+      setManageDialogOpen(false)
+      toast({
+        title: "Economic Parameters Updated",
+        description: `${selectedChannel.name} parameters anchored to Sovereign Vault.`,
+        className: "border-emerald-500/50 bg-emerald-500/5"
+      })
+    }, 1500)
   }
 
   return (
@@ -151,7 +198,6 @@ export default function RevenueMatrixPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-10">
                
-               {/* Live Revenue Pulse */}
                <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   {[
                     { label: "Daily Yield", val: `$${totals.dailyProfit.toLocaleString()}`, icon: TrendingUp, color: "text-emerald-500" },
@@ -171,7 +217,6 @@ export default function RevenueMatrixPage() {
                   ))}
                </section>
 
-               {/* Revenue Streams Grid */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                      <PieChart className="size-4" /> Active Revenue Channels
@@ -196,7 +241,12 @@ export default function RevenueMatrixPage() {
                              </div>
                              <div className="pt-4 mt-4 border-t border-white/5 flex justify-between items-center">
                                 <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Channel Status: OPTIMAL</span>
-                                <Button variant="ghost" size="sm" className="text-[9px] uppercase font-bold text-primary gap-2 h-7">
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  className="text-[9px] uppercase font-bold text-primary gap-2 h-7 hover:bg-primary/10"
+                                  onClick={() => handleManageChannel(stream)}
+                                >
                                    Manage Channel <ArrowUpRight className="size-3" />
                                 </Button>
                              </div>
@@ -206,7 +256,6 @@ export default function RevenueMatrixPage() {
                   </div>
                </section>
 
-               {/* Nora-40 Economic Insight */}
                {intel && (
                  <section className="animate-in fade-in zoom-in-95 duration-700">
                     <Card className="glass-card border-t-4 border-t-emerald-500 bg-emerald-500/5">
@@ -307,6 +356,74 @@ export default function RevenueMatrixPage() {
           </div>
         </main>
       </SidebarInset>
+
+      {/* Management Dialog */}
+      {selectedChannel && (
+        <Dialog open={manageDialogOpen} onOpenChange={setManageDialogOpen}>
+          <DialogContent className="glass-card border-primary/20 bg-black/95 text-white sm:max-w-[500px]">
+             <DialogHeader>
+                <div className={`size-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 mb-4`}>
+                   <selectedChannel.icon className={`size-6 ${selectedChannel.color}`} />
+                </div>
+                <DialogTitle className="text-xl font-headline font-bold uppercase tracking-tight text-white flex items-center gap-3">
+                   Manage: {selectedChannel.name}
+                </DialogTitle>
+                <DialogDescription className="text-muted-foreground text-xs uppercase tracking-widest font-mono">
+                   Economic Parameter Optimization Hub.
+                </DialogDescription>
+             </DialogHeader>
+             
+             <div className="grid gap-6 py-6">
+                <div className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-4">
+                   <div className="flex items-center justify-between">
+                      <Label className="text-xs font-bold uppercase text-primary">Channel Status</Label>
+                      <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">ACTIVE_YIELD</Badge>
+                   </div>
+                   <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                         <p className="text-[10px] text-white font-bold uppercase">Maintenance Mode</p>
+                         <p className="text-[8px] text-muted-foreground">Suspend yield for protocol upgrades.</p>
+                      </div>
+                      <Switch />
+                   </div>
+                </div>
+
+                <div className="space-y-4">
+                   <div className="flex justify-between items-end">
+                      <Label className="text-xs font-bold uppercase text-primary">{selectedChannel.paramLabel}</Label>
+                      <span className="text-lg font-headline font-bold text-white">
+                        {selectedChannel.id.includes('markup') || selectedChannel.id.includes('levy') ? `${selectedChannel.currentVal}%` : `$${selectedChannel.currentVal}`}
+                      </span>
+                   </div>
+                   <Slider defaultValue={[selectedChannel.currentVal]} max={selectedChannel.id.includes('tier') ? 10000 : 10} step={0.1} />
+                   <div className="flex justify-between text-[8px] text-muted-foreground font-mono uppercase">
+                      <span>Min Safe</span>
+                      <span>Max Optimization</span>
+                   </div>
+                </div>
+
+                <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
+                   <h5 className="text-[10px] font-bold text-primary uppercase flex items-center gap-2">
+                      <TrendingUp className="size-3" /> Predictive Yield Impact
+                   </h5>
+                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                      "Adjusting this parameter may result in a <span className="text-emerald-500 font-bold">+2.4% yield increase</span> while maintaining partner retention."
+                   </p>
+                </div>
+             </div>
+
+             <DialogFooter className="flex flex-col sm:flex-row gap-3">
+                <Button variant="outline" className="flex-1 border-white/10 uppercase font-bold text-[10px] h-11" onClick={() => setManageDialogOpen(false)}>
+                   Cancel Audit
+                </Button>
+                <Button className="flex-1 bg-primary text-primary-foreground font-bold uppercase h-11 glow-primary" onClick={handleSaveParameters} disabled={savingParam}>
+                   {savingParam ? <Loader2 className="size-4 animate-spin" /> : <ShieldCheck className="size-4 mr-2" />}
+                   Anchor Parameters
+                </Button>
+             </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   )
 }
