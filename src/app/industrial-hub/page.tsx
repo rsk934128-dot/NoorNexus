@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -8,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
-  Factory, 
+  Building2, 
   ShieldCheck, 
   Zap, 
   Menu, 
@@ -121,7 +120,7 @@ export default function IndustrialHubPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <Lock className="size-3 mr-2" /> Immutable Physical Layer
+                   <LockKeyhole className="size-3 mr-2" /> Immutable Physical Layer
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">

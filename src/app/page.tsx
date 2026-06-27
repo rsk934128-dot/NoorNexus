@@ -54,7 +54,6 @@ import { useToast } from "@/hooks/use-toast"
 import { useUser } from "@/firebase"
 import { SovereignLogo } from "@/components/sovereign-logo"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { processNeuralQuery, ImperialQueryOutput } from "@/ai/flows/imperial-query-flow"
 import Link from "next/link"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
@@ -143,7 +142,7 @@ export default function Home() {
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
                       <Infinity className="size-3 mr-2" /> Mission 500: The Sovereign Peak
                    </Badge>
-                   <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-xs">
+                   <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
                       <Repeat className="size-3 mr-2 animate-spin-slow" /> HEGEMONY_LOCKED: 100%
                    </Badge>
                 </div>
@@ -221,7 +220,6 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
-               {/* 100-Node Grid Readiness Report - FIXED JSX HERE */}
                <section className="space-y-6">
                   <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 relative overflow-hidden">
                     <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 bg-white/2 py-4 px-6">
@@ -255,7 +253,6 @@ export default function Home() {
                   </Card>
                </section>
 
-               {/* 100-Node Peak Mapping */}
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
@@ -282,7 +279,6 @@ export default function Home() {
                   </Card>
                </section>
 
-               {/* The Hegemony Timeline */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
                      <History className="size-4" /> Global Hegemony Timeline
@@ -305,7 +301,6 @@ export default function Home() {
             </div>
 
             <div className="space-y-8">
-               {/* THE GOLDEN SYNC STATUS CIRCLE */}
                <Card className="glass-card border-emerald-500/40 bg-emerald-500/5 p-6 flex flex-col items-center text-center gap-4">
                   <div className="size-20 rounded-full border-4 border-amber-500 flex items-center justify-center relative bg-black shadow-[0_0_20px_rgba(245,158,11,0.5)]">
                      <Sparkles className="size-8 text-amber-500 animate-spin-slow" />
