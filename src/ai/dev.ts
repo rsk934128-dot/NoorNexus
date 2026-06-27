@@ -36,3 +36,5 @@ import '@/ai/flows/ai-gateway-flow.ts';
 import '@/ai/flows/gateway-quickstart-flow.ts';
 import '@/ai/flows/video-extraction-flow.ts';
 import '@/ai/flows/audio-synthesis-flow.ts';
+import '@/ai/flows/predictive-flow-orchestrator.ts';
+import '@/ai/flows/github-intelligence-flow.ts';

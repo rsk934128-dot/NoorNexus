@@ -11,23 +11,20 @@ import {
 } from 'firebase/auth';
 
 /**
- * @fileOverview Sovereign Identity Services (V4.2 - System Level Permissions)
- * Supports Google, GitHub, and Microsoft with full OAuth scope synchronization.
- * নূরনেক্সাস সাম্রাজ্যের প্রতিটি প্রোফাইল এখন জেমিনি এআই-এর সাথে কাজ করার জন্য প্রয়োজনীয় পারমিশন বহন করবে।
+ * @fileOverview Sovereign Identity Services (V4.2 - GitHub Reports Sync)
+ * নূরনেক্সাস সাম্রাজ্যের প্রতিটি প্রোফাইল এখন গিটহাব রিপোর্ট সিঙ্ক করার জন্য প্রয়োজনীয় পারমিশন বহন করবে।
  */
 
 export const signInWithGoogle = async (auth: Auth) => {
   const provider = new GoogleAuthProvider();
   
-  // Adding specific scopes for System-Level Access
   provider.addScope('https://www.googleapis.com/auth/userinfo.email');
   provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
   provider.addScope('openid');
   
-  // Custom Parameters for Background Execution Handshake
   provider.setCustomParameters({
     prompt: 'select_account',
-    access_type: 'offline', // Ensures long-lived refresh tokens
+    access_type: 'offline',
   });
 
   try {
@@ -40,11 +37,14 @@ export const signInWithGoogle = async (auth: Auth) => {
 
 export const signInWithGithub = async (auth: Auth) => {
   const provider = new GithubAuthProvider();
+  // Expanded Scopes for Project Reports & Repository Data
   provider.addScope('user:email');
   provider.addScope('read:user');
+  provider.addScope('repo'); // Permission to read repository data
   
   try {
     const result = await signInWithPopup(auth, provider);
+    // Note: To use the access token for GitHub API calls, you'd extract it from result.credential
     return result.user;
   } catch (error) {
     throw error;
