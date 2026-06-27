@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -46,9 +47,11 @@ import {
   ShieldPlus,
   BookOpen,
   ScrollText,
-  Award
+  Award,
+  Link2
 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 const BLUEPRINT_STEPS = [
   { id: "P51.1", label: "Unified Auth Bridge", icon: Settings, status: "READY", url: "/enterprise-settings" },
@@ -63,22 +66,33 @@ const BLUEPRINT_STEPS = [
 ]
 
 const ASIAN_SCALING_NODES = [
-  { name: "GrabPay Hub (SE Asia)", id: "grab-01", status: "PENDING_HANDSHAKE", latency: "N/A" },
+  { name: "GrabPay Hub (SE Asia)", id: "grab-01", status: "PENDING_HANDSHAKE", latency: "N/A", url: "/off-ramp" },
   { name: "Paytm Gateway (India)", id: "paytm-01", status: "DESIGN_SYCHRONIZED", latency: "N/A" },
-  { name: "bKash Core (Bangladesh)", id: "bkash-99", status: "LIVE_SYNC", latency: "115ms" },
+  { name: "bKash Core (Bangladesh)", id: "bkash-99", status: "LIVE_SYNC", latency: "115ms", url: "/fintech-fusion" },
   { name: "GCash Network (Philippines)", id: "gcash-04", status: "PENDING_AUDIT", latency: "N/A" },
 ]
 
 export default function SovereignGatewayPage() {
+  const router = useRouter()
   const [primaryColor, setPrimaryColor] = useState("#0096ff")
   const [partnerLogo, setPartnerLogo] = useState("Imperial Bank")
   const [saving, setSaving] = useState(false)
+  const [syncingNodeId, setSyncingNodeId] = useState<string | null>(null)
 
   const handleSaveBranding = () => {
     setSaving(true)
     setTimeout(() => {
       setSaving(false)
     }, 1200)
+  }
+
+  const handleNodeSync = (node: any) => {
+    if (!node.url) return
+    setSyncingNodeId(node.id)
+    setTimeout(() => {
+      setSyncingNodeId(null)
+      router.push(node.url)
+    }, 1000)
   }
 
   return (
@@ -152,10 +166,10 @@ export default function SovereignGatewayPage() {
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {ASIAN_SCALING_NODES.map((node, i) => (
-                      <Card key={i} className="glass-card bg-black/40 border-white/5 hover:border-emerald-500/30 transition-all">
+                      <Card key={i} className="glass-card bg-black/40 border-white/5 hover:border-emerald-500/30 transition-all group">
                         <CardContent className="p-4 flex items-center justify-between">
                            <div className="flex items-center gap-4">
-                              <div className="size-10 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                              <div className="size-10 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-all">
                                  <Globe className="size-5 text-emerald-500" />
                               </div>
                               <div className="space-y-0.5">
@@ -163,9 +177,22 @@ export default function SovereignGatewayPage() {
                                  <p className="text-[8px] text-muted-foreground font-mono uppercase">{node.id}</p>
                               </div>
                            </div>
-                           <div className="text-right">
-                              <Badge variant="outline" className={`text-[8px] ${node.status === 'LIVE_SYNC' ? 'border-emerald-500 text-emerald-500' : 'border-white/10'}`}>{node.status}</Badge>
-                              <p className="text-[9px] text-muted-foreground font-mono mt-1">LATENCY: {node.latency}</p>
+                           <div className="text-right flex flex-col items-end gap-2">
+                              <div className="flex flex-col items-end">
+                                <Badge variant="outline" className={`text-[7px] ${node.status === 'LIVE_SYNC' ? 'border-emerald-500 text-emerald-500' : 'border-white/10'}`}>{node.status}</Badge>
+                                <p className="text-[9px] text-muted-foreground font-mono mt-1">LATENCY: {node.latency}</p>
+                              </div>
+                              {node.url && (
+                                <Button 
+                                  size="sm" 
+                                  onClick={() => handleNodeSync(node)}
+                                  disabled={syncingNodeId === node.id}
+                                  className="h-7 text-[8px] uppercase font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20 gap-2"
+                                >
+                                  {syncingNodeId === node.id ? <Loader2 className="size-2.5 animate-spin" /> : <Link2 className="size-2.5" />}
+                                  {node.status === 'PENDING_HANDSHAKE' ? 'Link Node' : 'Enter Node'}
+                                </Button>
+                              )}
                            </div>
                         </CardContent>
                       </Card>
