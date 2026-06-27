@@ -41,8 +41,23 @@ import {
   LockKeyhole,
   History,
   MapPin,
-  Box
+  Box,
+  Bell,
+  Languages,
+  UserCog,
+  Shield
 } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter
+} from "@/components/ui/dialog"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 import { useUser, useFirestore, useCollection } from "@/firebase"
 import { collection, query, where, limit } from "firebase/firestore"
 import { SovereignLogo } from "@/components/sovereign-logo"
@@ -54,7 +69,16 @@ export default function CitizenPortalPage() {
   const db = useFirestore()
   const [mounted, setMounted] = useState(false)
   const [fallbackDid, setFallbackDid] = useState("")
+  const [prefDialogOpen, setPrefDialogOpen] = useState(false)
   
+  // User Preference States
+  const [prefs, setPrefs] = useState({
+    notifications: true,
+    biometrics: true,
+    language: "bn",
+    stealthMode: false
+  })
+
   useEffect(() => {
     setMounted(true)
     setFallbackDid(`did:noornexus:${Math.random().toString(36).substring(2, 20)}`)
@@ -67,11 +91,12 @@ export default function CitizenPortalPage() {
   const myIdentity = identities?.[0]
 
   const handleShareIdentity = async () => {
+    if (!mounted) return
     const did = myIdentity?.did || fallbackDid
     const shareData = {
       title: 'NoorNexus Sovereign Identity',
       text: `Verify my Sovereign Identity on NoorNexus. DID: ${did}`,
-      url: typeof window !== 'undefined' ? window.location.href : 'https://noornexus.sovereign'
+      url: window.location.href
     };
 
     try {
@@ -86,6 +111,15 @@ export default function CitizenPortalPage() {
       console.log('Error sharing:', err);
     }
   };
+
+  const handleSavePrefs = () => {
+    toast({
+      title: "Preferences Synchronized",
+      description: "Neural profile updated with new parameters.",
+      className: "border-emerald-500/50 bg-emerald-500/5"
+    })
+    setPrefDialogOpen(false)
+  }
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -179,9 +213,82 @@ export default function CitizenPortalPage() {
                          <Button onClick={handleShareIdentity} className="bg-emerald-500 text-white font-bold uppercase text-[10px] h-10 px-6 glow-emerald gap-2">
                             <Share2 className="size-3" /> Share Identity
                          </Button>
-                         <Button variant="outline" className="border-white/10 text-white font-bold uppercase text-[10px] h-10 px-6 hover:bg-white/5 gap-2">
-                            <Settings className="size-3" /> Preferences
-                         </Button>
+                         
+                         <Dialog open={prefDialogOpen} onOpenChange={setPrefDialogOpen}>
+                            <DialogTrigger asChild>
+                               <Button variant="outline" className="border-white/10 text-white font-bold uppercase text-[10px] h-10 px-6 hover:bg-white/5 gap-2">
+                                  <Settings className="size-3" /> Preferences
+                               </Button>
+                            </DialogTrigger>
+                            <DialogContent className="glass-card border-primary/20 bg-black/95 text-white sm:max-w-[425px]">
+                               <DialogHeader>
+                                  <DialogTitle className="text-xl font-headline font-bold uppercase tracking-tight flex items-center gap-3 text-primary">
+                                     <UserCog className="size-6" /> Profile Preferences
+                                  </DialogTitle>
+                                  <DialogDescription className="text-muted-foreground text-xs uppercase tracking-widest font-mono">
+                                     Configure your sovereign experience.
+                                  </DialogDescription>
+                               </DialogHeader>
+                               <div className="grid gap-6 py-6">
+                                  <div className="flex items-center justify-between">
+                                     <div className="space-y-0.5">
+                                        <Label className="text-sm font-bold uppercase">System Notifications</Label>
+                                        <p className="text-[10px] text-muted-foreground">Receive real-time grid alerts.</p>
+                                     </div>
+                                     <Switch 
+                                        checked={prefs.notifications} 
+                                        onCheckedChange={(v) => setPrefs({...prefs, notifications: v})} 
+                                     />
+                                  </div>
+                                  <div className="flex items-center justify-between">
+                                     <div className="space-y-0.5">
+                                        <Label className="text-sm font-bold uppercase">Biometric Auth</Label>
+                                        <p className="text-[10px] text-muted-foreground">Enable L4 fingerprint verification.</p>
+                                     </div>
+                                     <Switch 
+                                        checked={prefs.biometrics} 
+                                        onCheckedChange={(v) => setPrefs({...prefs, biometrics: v})} 
+                                     />
+                                  </div>
+                                  <div className="flex items-center justify-between">
+                                     <div className="space-y-0.5">
+                                        <Label className="text-sm font-bold uppercase">Identity Stealth</Label>
+                                        <p className="text-[10px] text-muted-foreground">Hide profile from public citizen pulses.</p>
+                                     </div>
+                                     <Switch 
+                                        checked={prefs.stealthMode} 
+                                        onCheckedChange={(v) => setPrefs({...prefs, stealthMode: v})} 
+                                     />
+                                  </div>
+                                  <div className="space-y-3">
+                                     <Label className="text-xs font-bold uppercase text-primary flex items-center gap-2">
+                                        <Languages className="size-3" /> Interface Language
+                                     </Label>
+                                     <div className="grid grid-cols-2 gap-2">
+                                        <Button 
+                                          variant={prefs.language === 'bn' ? 'default' : 'outline'} 
+                                          className="text-[10px] uppercase font-bold h-9"
+                                          onClick={() => setPrefs({...prefs, language: 'bn'})}
+                                        >
+                                           বাংলা (Bengali)
+                                        </Button>
+                                        <Button 
+                                          variant={prefs.language === 'en' ? 'default' : 'outline'} 
+                                          className="text-[10px] uppercase font-bold h-9"
+                                          onClick={() => setPrefs({...prefs, language: 'en'})}
+                                        >
+                                           English
+                                        </Button>
+                                     </div>
+                                  </div>
+                               </div>
+                               <DialogFooter>
+                                  <Button onClick={handleSavePrefs} className="w-full bg-primary text-primary-foreground font-bold uppercase h-12 glow-primary">
+                                     <Shield className="size-4 mr-2" /> Sync with Vault
+                                  </Button>
+                               </DialogFooter>
+                            </DialogContent>
+                         </Dialog>
                       </div>
                    </div>
                 </div>
@@ -219,7 +326,10 @@ export default function CitizenPortalPage() {
                                  </div>
                               </div>
                            </div>
-                           <div className="w-full sm:w-32 h-32 bg-white rounded-xl flex items-center justify-center p-2">
+                           <div className="w-full sm:w-32 h-32 bg-white rounded-xl flex items-center justify-center p-2 relative overflow-hidden group/qr">
+                              <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/qr:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                                 <Unlock className="size-8 text-primary" />
+                              </div>
                               {/* QR Code Placeholder */}
                               <div className="size-full border-2 border-dashed border-black/20 flex items-center justify-center">
                                  <Database className="size-12 text-black/20" />
@@ -298,9 +408,26 @@ export default function CitizenPortalPage() {
 
                <Card className="glass-card bg-amber-500/5 border-amber-500/20">
                   <CardHeader className="pb-2">
-                     <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                        <ShieldAlert className="size-3" /> Security Advisories
-                     </CardTitle>
+                     <Dialog>
+                        <DialogTrigger asChild>
+                           <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2 cursor-pointer hover:opacity-80">
+                              <ShieldAlert className="size-3" /> Security Advisories (1)
+                           </CardTitle>
+                        </DialogTrigger>
+                        <DialogContent className="glass-card border-amber-500/20 bg-black/95">
+                           <DialogHeader>
+                              <DialogTitle className="text-amber-500 flex items-center gap-2 uppercase font-headline">
+                                 <ShieldAlert className="size-5" /> Security Protocol v3.5
+                              </DialogTitle>
+                           </DialogHeader>
+                           <div className="p-4 bg-amber-500/10 rounded-xl border border-amber-500/20 space-y-4">
+                              <p className="text-xs text-white leading-relaxed font-mono">
+                                 [WARNING] Session integrity detected from multiple regions. A fresh MFA pulse is required to maintain L4 access level.
+                              </p>
+                              <Button className="w-full bg-amber-500 text-black font-bold uppercase">Execute MFA Pulse</Button>
+                           </div>
+                        </DialogContent>
+                     </Dialog>
                   </CardHeader>
                   <CardContent className="space-y-3">
                      <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1">
