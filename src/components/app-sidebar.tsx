@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -57,7 +58,8 @@ import {
   Monitor,
   Store,
   Presentation,
-  FlaskConical
+  FlaskConical,
+  HeartPulse
 } from "lucide-react"
 
 import {
@@ -128,6 +130,7 @@ const USER_ITEMS = [
 ]
 
 const ADMIN_ITEMS = [
+  { title: "App Hegemony Health", url: "/health", icon: HeartPulse },
   { title: "Feature Intelligence", url: "/rollouts", icon: FlaskConical },
   { title: "Strategic Roadmap", url: "/strategy", icon: Lightbulb },
   { title: "Sovereign Legacy", url: "/legacy", icon: Infinity },
@@ -275,8 +278,8 @@ export function AppSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={pathname === item.url} className="h-11 hover:bg-primary/10">
                       <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
-                        <item.icon className={`size-5 ${item.title === 'Feature Intelligence' ? 'text-purple-500' : item.title === 'Sovereign Legacy' ? 'text-primary' : item.title === 'Imperial Oracle' ? 'text-emerald-500' : item.title === 'Neural Audit (P52)' ? 'text-emerald-400' : item.title === 'Adoption Audit' ? 'text-amber-500' : 'text-primary'}`} />
-                        <span className={`font-medium text-sm ${item.title === 'Feature Intelligence' ? 'text-purple-400 font-bold' : item.title === 'Sovereign Legacy' ? 'text-primary font-bold' : item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : item.title === 'Neural Audit (P52)' ? 'text-emerald-400 font-bold' : item.title === 'Adoption Audit' ? 'text-amber-500 font-bold' : ''}`}>{item.title}</span>
+                        <item.icon className={`size-5 ${item.title === 'App Hegemony Health' ? 'text-emerald-500' : item.title === 'Feature Intelligence' ? 'text-purple-500' : item.title === 'Sovereign Legacy' ? 'text-primary' : item.title === 'Imperial Oracle' ? 'text-emerald-500' : item.title === 'Neural Audit (P52)' ? 'text-emerald-400' : item.title === 'Adoption Audit' ? 'text-amber-500' : 'text-primary'}`} />
+                        <span className={`font-medium text-sm ${item.title === 'App Hegemony Health' ? 'text-emerald-400 font-bold' : item.title === 'Feature Intelligence' ? 'text-purple-400 font-bold' : item.title === 'Sovereign Legacy' ? 'text-primary font-bold' : item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : item.title === 'Neural Audit (P52)' ? 'text-emerald-400 font-bold' : item.title === 'Adoption Audit' ? 'text-amber-500 font-bold' : ''}`}>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

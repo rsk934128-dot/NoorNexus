@@ -4,7 +4,14 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { getAnalytics, Analytics } from 'firebase/analytics';
+import { getPerformance, FirebasePerformance } from 'firebase/performance';
 import { firebaseConfig } from './config';
+
+/**
+ * @fileOverview NoorNexus Firebase Kernel (V4.5)
+ * Initializing Analytics and Performance Monitoring for Mission 500.
+ */
 
 export function initializeFirebase() {
   // Ensure we only initialize once
@@ -12,7 +19,16 @@ export function initializeFirebase() {
   const firestore = getFirestore(app);
   const auth = getAuth(app);
 
-  return { app, firestore, auth };
+  let analytics: Analytics | null = null;
+  let performance: FirebasePerformance | null = null;
+
+  // These services are only available in the browser
+  if (typeof window !== 'undefined') {
+    analytics = getAnalytics(app);
+    performance = getPerformance(app);
+  }
+
+  return { app, firestore, auth, analytics, performance };
 }
 
 export * from './provider';
