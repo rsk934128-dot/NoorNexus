@@ -36,6 +36,12 @@
       "description": "Heavy duty pipe coupling for physical mesh layers",
       "imageUrl": "https://picsum.photos/seed/pipe-fit-99/600/400",
       "imageHint": "steel coupling"
+    },
+    {
+      "id": "fintech-cockpit",
+      "description": "High-tech financial dashboard visualization",
+      "imageUrl": "https://picsum.photos/seed/fusion-cockpit/1200/600",
+      "imageHint": "financial dashboard"
     }
   ]
 }
