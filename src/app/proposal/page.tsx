@@ -31,7 +31,8 @@ import {
   HeartHandshake,
   Waves,
   Mail,
-  Quote
+  Quote,
+  Presentation
 } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Link from "next/link"
@@ -118,6 +119,11 @@ export default function ProposalPage() {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-4">
+               <Link href="/pitch-deck">
+                  <Button className="bg-emerald-500 text-white font-bold h-12 uppercase tracking-widest gap-2 glow-emerald">
+                    <Presentation className="size-4" /> Launch Pitch Deck
+                  </Button>
+               </Link>
                <Button 
                 onClick={handleDownloadPitch}
                 disabled={downloading}
@@ -126,11 +132,6 @@ export default function ProposalPage() {
                  {downloading ? <Loader2 className="size-4 animate-spin" /> : <FileDown className="size-4" />}
                  Download Prospectus
                </Button>
-               <Link href="/onboarding">
-                 <Button className="bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-primary">
-                   <Rocket className="size-4" /> Start Integration
-                 </Button>
-               </Link>
             </div>
           </header>
 
@@ -179,7 +180,7 @@ export default function ProposalPage() {
                           </div>
 
                           <p>
-                             আমরা বিশ্বাস করি, আপনার প্রতিষ্ঠানের বর্তমান ফিনটেক ইকোসিস্টেমের সাথে আমাদের FusionPay ইন্টিগ্রেট করলে গ্লোবাল ক্রস-বর্ডার পেমেন্ট এবং সেটেলমেন্ট ব্যবস্থায় এক যুগান্তকারী পরিবর্তন আসবে। আমরা আমাদের API-First Architecture এবং Sandbox Mode-এর মাধ্যমে আপনার টেকনিক্যাল টিমের সাথে সরাসরি ইন্টিগ্রেশন প্রক্রিয়ায় অংশ নিতে প্রস্তুত।
+                             আমরা বিশ্বাস করি, আপনার প্রতিষ্ঠানের বর্তমান ফিনটেক ইকোসিস্টেমের সাথে আমাদের FusionPay ইন্টিগ্রেট করলে গ্লোবাল ক্রস-বর্ডার পেমেন্ট এবং সেটেলমেন্ট ব্যবস্থায় এক যুগান্তকারী পরিবর্তন আসবে। আমরা আমাদের API-First Architecture and Sandbox Mode-এর মাধ্যমে আপনার টেকনিক্যাল টিমের সাথে সরাসরি ইন্টিগ্রেশন প্রক্রিয়ায় অংশ নিতে প্রস্তুত।
                           </p>
 
                           <div className="pt-8 space-y-1">

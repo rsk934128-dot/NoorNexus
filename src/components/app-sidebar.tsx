@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -55,7 +56,8 @@ import {
   Coins,
   ShoppingCart,
   Monitor,
-  Store
+  Store,
+  Presentation
 } from "lucide-react"
 
 import {
@@ -87,6 +89,7 @@ const USER_ITEMS = [
   { title: "Sovereign Bazaar", url: "/bazaar", icon: Store, highlight: true },
   { title: "Imperial Browser", url: "/browser", icon: Monitor, highlight: true },
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
+  { title: "Imperial Pitch Deck", url: "/pitch-deck", icon: Presentation, highlight: true },
   { title: "Zenith Markets", url: "/zenith-markets", icon: ShoppingCart, highlight: true },
   { title: "Imperial Proposal", url: "/proposal", icon: FileText, highlight: true },
   { title: "Imperial Mail", url: "/gmail", icon: Mail, highlight: true },
