@@ -54,7 +54,7 @@ const QUICK_LINKS = [
   { name: "Gold/Precious", url: "https://www.kitco.com/", icon: Gem, color: "text-amber-500" },
 ]
 
-const KNOWN_IFRAME_BLOCKERS = ['amazon.com', 'google.com', 'facebook.com', 'github.com', 'alibaba.com', 'twitter.com', 'linkedin.com', 'yapily.com', 'redotpay.com', 'sslcommerz.com'];
+const KNOWN_IFRAME_BLOCKERS = ['amazon.com', 'google.com', 'facebook.com', 'github.com', 'alibaba.com', 'twitter.com', 'linkedin.com', 'yapily.com', 'redotpay.com', 'sslcommerz.com', 'wikipedia.org'];
 
 function BrowserContent() {
   const { toast } = useToast()
@@ -79,6 +79,7 @@ function BrowserContent() {
     let target = url || urlInput
     if (!target.trim()) return
 
+    // 1. Check if it's a Sovereign Internal Node
     if (target.includes('.sovereign')) {
       setLoading(true)
       setIsSearchMode(false)
@@ -90,28 +91,30 @@ function BrowserContent() {
       return
     }
 
-    const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i
-    const isUrl = urlPattern.test(target)
-
+    // 2. Precise URL Detection
+    const isUrl = target.includes('.') && !target.includes(' ') || target.startsWith('http') || target.startsWith('www.')
+    
     if (!isUrl && !url) {
       handleSearch(target)
       return
     }
 
-    if (!target.startsWith('http')) {
-      target = `https://${target}`
+    // Standardize URL
+    let finalUrl = target
+    if (!finalUrl.startsWith('http')) {
+      finalUrl = `https://${finalUrl}`
     }
     
-    // Check for iframe blockers
-    const domain = target.toLowerCase();
+    // Check for high-security iframe blockers
+    const domain = finalUrl.toLowerCase();
     const blocksIframe = KNOWN_IFRAME_BLOCKERS.some(b => domain.includes(b));
     
     setLoading(true)
     setIsSearchMode(false)
     setIsInternalPage(false)
     setShowBypassWarning(blocksIframe)
-    setActiveUrl(target)
-    setUrlInput(target)
+    setActiveUrl(finalUrl)
+    setUrlInput(finalUrl)
     
     toast({
       title: "Establishing Web Bridge",
@@ -119,7 +122,7 @@ function BrowserContent() {
       className: blocksIframe ? "border-amber-500/50 bg-amber-500/5" : "border-primary/50 bg-primary/5"
     })
 
-    setTimeout(() => setLoading(false), 1200)
+    setTimeout(() => setLoading(false), 1000)
   }
 
   const handleSearch = async (query: string) => {
@@ -149,7 +152,9 @@ function BrowserContent() {
       handleNavigate(activeUrl)
     } else if (iframeRef.current) {
       setLoading(true)
-      iframeRef.current.src = activeUrl
+      const currentSrc = iframeRef.current.src
+      iframeRef.current.src = ""
+      iframeRef.current.src = currentSrc
       setTimeout(() => setLoading(false), 1000)
     }
   }

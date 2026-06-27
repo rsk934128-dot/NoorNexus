@@ -43,12 +43,13 @@ CONTEXT: This is a secure simulation inside the NoorNexus Digital State. You are
 COMMANDER'S SEARCH QUERY: {{{query}}}
 
 MISSION DIRECTIVES:
-1. SIMULATE SEARCH: Act as a high-speed gateway to the internet. Gather facts, marketplace links, and technical data related to the query.
-2. RECOMMENDATIONS: Provide 4-5 high-quality results with relevant titles and real or highly realistic simulated URLs. 
+1. URL DETECTION: If the query is a URL (e.g. starting with http, www, or having a .com/net/org extension), provide that URL as the primary "Direct Tunnel" result.
+2. SIMULATE SEARCH: Act as a high-speed gateway to the internet. Gather facts, marketplace links, and technical data related to the query.
+3. RECOMMENDATIONS: Provide 4-5 high-quality results with relevant titles and real or highly realistic simulated URLs. 
    - Use internal domains like 'https://vault.sovereign' or 'https://mesh-archives.sovereign' for internal OS data.
-   - Use real domains like 'https://en.wikipedia.org' for general facts.
-3. INTELLIGENCE SUMMARY: Briefly explain the core findings for the Commander with imperial precision. Ensure the tone is authoritative and helpful.
-4. TONE: Authoritative, highly technical, and technologically superior.
+   - For general facts, use official documentation or encyclopedia sources.
+4. INTELLIGENCE SUMMARY: Briefly explain the core findings for the Commander with imperial precision. Ensure the tone is authoritative and helpful.
+5. TONE: Authoritative, highly technical, and technologically superior.
 
 Deliver the intelligence dispatch immediately through the Sovereign Mesh.`,
 });
@@ -70,9 +71,9 @@ const searchFlow = ai.defineFlow(
       return {
         summary: "Commander, the neural link experienced a minor drift during synthesis. Re-initiating alternative knowledge nodes via Internal Mesh Archives.",
         results: [
+          { title: "Direct Link Verification", url: input.query.includes('.') ? (input.query.startsWith('http') ? input.query : `https://${input.query}`) : "https://archives.sovereign", snippet: "Attempting direct resolution for the provided coordinate.", source: "Sovereign Node" },
           { title: "Internal Sovereign Archive", url: "https://archives.sovereign", snippet: "Accessing local OS records for: " + input.query, source: "Imperial Vault" },
-          { title: "Knowledge Node 01", url: "https://knowledge.sovereign", snippet: "Verifying encrypted data points related to your search pulse.", source: "Sovereign Mesh" },
-          { title: "World Factbook Sync", url: "https://en.wikipedia.org/wiki/" + encodeURIComponent(input.query), snippet: "Cross-referencing search query with global historical databases.", source: "External Relay" }
+          { title: "Knowledge Node 01", url: "https://knowledge.sovereign", snippet: "Verifying encrypted data points related to your search pulse.", source: "Sovereign Mesh" }
         ],
         suggestedAction: "Reroute query through high-clearance neural paths or attempt the pulse with specific technical coordinates.",
         searchHash: "FALLBACK_P180_" + Math.random().toString(16).substring(2, 10).toUpperCase()
