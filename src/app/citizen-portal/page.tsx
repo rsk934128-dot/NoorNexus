@@ -46,8 +46,10 @@ import {
 import { useUser, useFirestore, useCollection } from "@/firebase"
 import { collection, query, where, limit } from "firebase/firestore"
 import { SovereignLogo } from "@/components/sovereign-logo"
+import { useToast } from "@/hooks/use-toast"
 
 export default function CitizenPortalPage() {
+  const { toast } = useToast()
   const { user } = useUser()
   const db = useFirestore()
   const [mounted, setMounted] = useState(false)
@@ -63,6 +65,27 @@ export default function CitizenPortalPage() {
     user ? query(collection(db, "identities"), where("owner", "==", user.email), limit(1)) : null
   )
   const myIdentity = identities?.[0]
+
+  const handleShareIdentity = async () => {
+    const did = myIdentity?.did || fallbackDid
+    const shareData = {
+      title: 'NoorNexus Sovereign Identity',
+      text: `Verify my Sovereign Identity on NoorNexus. DID: ${did}`,
+      url: typeof window !== 'undefined' ? window.location.href : 'https://noornexus.sovereign'
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        toast({ title: "Identity Shared", description: "Your credentials have been broadcasted via System Mesh." });
+      } else {
+        await navigator.clipboard.writeText(did);
+        toast({ title: "DID Copied", description: "Identity hash anchored to your clipboard buffer." });
+      }
+    } catch (err) {
+      console.log('Error sharing:', err);
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -153,7 +176,7 @@ export default function CitizenPortalPage() {
                       </div>
                       
                       <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
-                         <Button className="bg-emerald-500 text-white font-bold uppercase text-[10px] h-10 px-6 glow-emerald gap-2">
+                         <Button onClick={handleShareIdentity} className="bg-emerald-500 text-white font-bold uppercase text-[10px] h-10 px-6 glow-emerald gap-2">
                             <Share2 className="size-3" /> Share Identity
                          </Button>
                          <Button variant="outline" className="border-white/10 text-white font-bold uppercase text-[10px] h-10 px-6 hover:bg-white/5 gap-2">
