@@ -226,7 +226,7 @@ export default function Home() {
                           { label: "Sovereign Vault L4", status: "HARDENED", latency: "N/A" }
                         ].map((item, i) => (
                           <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-2">
-                             <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">{item.label}</p>
+                             <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{item.label}</p>
                              <div className="flex justify-between items-center">
                                 <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">{item.status}</Badge>
                                 <span className="text-[10px] font-mono text-white">{item.latency}</span>
