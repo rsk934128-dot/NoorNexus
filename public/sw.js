@@ -1,44 +1,36 @@
+
 /**
- * @fileOverview NoorNexus PWA Service Worker (Nora-SW)
- * Handles background sync, caching, and Imperial Push Notifications.
+ * @fileOverview NoorNexus Sovereign Service Worker (v3.5)
+ * Handles background push notifications, synchronization, and "Always Alive" signals.
  */
 
-const CACHE_NAME = 'noornexus-v1';
-const ASSETS_TO_CACHE = [
-  '/',
-  '/manifest.json',
-  'https://picsum.photos/seed/sovereign-logo/32/32'
-];
-
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
+  self.skipWaiting();
+  console.log('[Sovereign-SW] Lifecycle: INSTALLED');
 });
 
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
-  );
+self.addEventListener('activate', (event) => {
+  event.waitUntil(clients.claim());
+  console.log('[Sovereign-SW] Lifecycle: ACTIVE_AND_READY');
 });
 
-// --- IMPERIAL NOTIFICATION LOGIC ---
-
+// Background Push Listener
 self.addEventListener('push', (event) => {
-  const data = event.data ? event.data.json() : { title: 'NoorNexus Alert', body: 'Incoming Secure Signal detected.' };
+  const data = event.data ? event.data.json() : { title: 'NoorNexus Pulse', body: 'New Imperial Dispatch Received.' };
   
   const options = {
     body: data.body,
-    icon: 'https://picsum.photos/seed/sovereign-logo/192/192',
-    badge: 'https://picsum.photos/seed/sovereign-logo/32/32',
+    icon: 'https://picsum.photos/seed/sovereign/192/192',
+    badge: 'https://picsum.photos/seed/sovereign/96/96',
     vibrate: [200, 100, 200],
     data: {
-      url: data.url || '/'
-    }
+      dateOfArrival: Date.now(),
+      primaryKey: '1'
+    },
+    actions: [
+      { action: 'accept', title: 'Accept Handshake', icon: 'https://picsum.photos/seed/check/96/96' },
+      { action: 'close', title: 'Ignore', icon: 'https://picsum.photos/seed/cross/96/96' },
+    ]
   };
 
   event.waitUntil(
@@ -46,9 +38,22 @@ self.addEventListener('push', (event) => {
   );
 });
 
+// Always Alive - Background Sync Listener
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'imperial-heartbeat') {
+    event.waitUntil(sendHeartbeatToMainframe());
+  }
+});
+
+async function sendHeartbeatToMainframe() {
+  console.log('[Sovereign-SW] Background Heartbeat: PULSING...');
+  // Logic to sync pending ledger entries while offline
+  return Promise.resolve();
+}
+
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  event.waitUntil(
-    clients.openWindow(event.notification.data.url)
-  );
+  if (event.action === 'accept') {
+    clients.openWindow('/');
+  }
 });
