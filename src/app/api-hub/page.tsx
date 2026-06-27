@@ -131,14 +131,14 @@ export default function ApiHubPage() {
                    <Infinity className="size-3 mr-2" /> Mission 500: Project Zenith
                  </Badge>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <Cpu className="size-3 mr-2" /> AI Bridge Ready
+                   <Link2 className="size-3 mr-2" /> Omni-App Integration
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Discovery <span className="text-purple-500">Hub.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "The Digital Passport to the 100-Node Empire." এখন আপনার যেকোনো অ্যাপ বা ডিভাইসকে নূরনেক্সাস এআই-এর সাথে কানেক্ট করুন ৩ সেকেন্ডেই।
+                "The Digital Passport to the 100-Node Empire." আপনার প্রতিটি ডিভাইসের জন্য একটি সিঙ্গেল আইডেন্টিটি যা সকল অ্যাপে কাজ করবে।
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -169,6 +169,7 @@ export default function ApiHubPage() {
               <Tabs defaultValue="onboarding-api" className="space-y-6">
                 <TabsList className="bg-white/5 border border-white/10 p-1 h-12">
                   <TabsTrigger value="onboarding-api" className="gap-2 px-6"><LockKeyhole className="size-4" /> Onboarding API</TabsTrigger>
+                  <TabsTrigger value="omni-sync" className="gap-2 px-6"><Repeat className="size-4" /> Omni-Device Sync</TabsTrigger>
                   <TabsTrigger value="ai-bridge" className="gap-2 px-6"><Sparkles className="size-4" /> AI Bridge</TabsTrigger>
                   <TabsTrigger value="quickstart" className="gap-2 px-6"><Zap className="size-4" /> Quick Start</TabsTrigger>
                 </TabsList>
@@ -211,6 +212,44 @@ export default function ApiHubPage() {
                    </Card>
                 </TabsContent>
 
+                <TabsContent value="omni-sync" className="space-y-6">
+                   <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+                      <CardHeader>
+                         <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
+                            <Repeat className="size-4" /> Unified Device Identity (UDI)
+                         </CardTitle>
+                         <CardDescription>Establish a single identity for your device that spans all apps in the empire.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                         <p className="text-xs text-muted-foreground leading-relaxed italic">
+                            "UDI eliminates the need for repeated logins and device authorization across the NoorNexus suite. One device, one empire-wide heartbeat."
+                         </p>
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-3">
+                               <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">UDI Initialization</h4>
+                               <pre className="text-[10px] text-amber-400 font-mono">
+{`sheikh.udi.sync({
+  deviceId: 'MAC_NODE_01',
+  scope: 'EMPIRE_WIDE'
+});`}
+                               </pre>
+                            </div>
+                            <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-3">
+                               <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Status Pulse</h4>
+                               <div className="flex justify-between items-center text-[9px] font-mono uppercase text-emerald-500">
+                                  <span>Device Hub</span>
+                                  <span>CONNECTED</span>
+                               </div>
+                               <div className="flex justify-between items-center text-[9px] font-mono uppercase text-emerald-500">
+                                  <span>App Mesh</span>
+                                  <span>SYNCED</span>
+                               </div>
+                            </div>
+                         </div>
+                      </CardContent>
+                   </Card>
+                </TabsContent>
+
                 <TabsContent value="ai-bridge" className="space-y-6">
                    <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                       <CardHeader>
@@ -232,7 +271,7 @@ export default function ApiHubPage() {
                                </div>
                                <pre className="p-4 bg-black rounded-lg text-[9px] text-purple-300 font-mono">
 {`sheikh.ai.pulse({
-  prompt: 'Device ID check...',
+  prompt: 'Analyze this device telemetry...',
   deviceId: 'IPHONE_15_PRO'
 })`}
                                </pre>
@@ -286,13 +325,13 @@ export default function ApiHubPage() {
                             <pre className="text-[11px] text-emerald-400 font-mono overflow-x-auto leading-relaxed">
 {`<script src="https://cdn.noornexus.sovereign/v1/core.js" async></script>
 <script>
-  sheikh.init({ appId: 'YOUR_${isSandbox ? 'SANDBOX' : 'ZENITH'}_KEY', speed: 'ZENITH_TURBO' });
+  sheikh.init({ appId: 'YOUR_${isSandbox ? 'SANDBOX' : 'ZENITH'}_KEY', omniSync: true });
 </script>`}
                             </pre>
                             <Button 
                               size="sm" 
                               onClick={() => {
-                                navigator.clipboard.writeText(`<script src="https://cdn.noornexus.sovereign/v1/core.js" async></script>\n<script>\n  sheikh.init({ appId: 'YOUR_ZENITH_KEY', speed: 'ZENITH_TURBO' });\n</script>`)
+                                navigator.clipboard.writeText(`<script src="https://cdn.noornexus.sovereign/v1/core.js" async></script>\n<script>\n  sheikh.init({ appId: 'YOUR_ZENITH_KEY', omniSync: true });\n</script>`)
                                 toast({ title: "Snippet Copied" })
                               }}
                               className="mt-6 bg-emerald-500 text-black font-bold uppercase text-[10px] h-9 glow-emerald"

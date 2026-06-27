@@ -36,7 +36,10 @@ import {
   Laptop,
   Box,
   Monitor,
-  Infinity
+  Infinity,
+  Link2,
+  Share2,
+  LayoutGrid
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { processGatewayRequest, AiGatewayOutput } from "@/ai/flows/ai-gateway-flow"
@@ -50,6 +53,13 @@ const MOCK_USAGE_DATA = [
   { time: "12:00", requests: 540, latency: 38 },
   { time: "16:00", requests: 420, latency: 32 },
   { time: "20:00", requests: 210, latency: 28 },
+]
+
+const CONNECTED_MESH = [
+  { device: "Imperial iPhone 15 Pro", apps: ["FusionPay", "Bazaar", "Mail"], status: "SYNCED", icon: Smartphone },
+  { device: "Sovereign Workstation M3", apps: ["All Imperial Apps"], status: "SYNCED", icon: Laptop },
+  { device: "Sirajganj Edge Node", apps: ["Data Lake", "Legacy"], status: "PULSING", icon: Monitor },
+  { device: "Android Pilot Node", apps: ["Onboarding"], status: "CONNECTED", icon: Smartphone },
 ]
 
 export default function AiGatewayPage() {
@@ -76,12 +86,13 @@ export default function AiGatewayPage() {
         prompt: query,
         targetModel: "openai/gpt-5.5",
         appId: "ZENITH_INTERNAL_DASH",
-        deviceId: "DESKTOP_NODE_01"
+        deviceId: "DESKTOP_NODE_01",
+        enableOmniSync: true
       })
       setResult(res)
       toast({ 
         title: "Zenith Gateway Pulse Verified", 
-        description: "Cognitive payload successfully routed." 
+        description: "Omni-Device context successfully synthesized." 
       })
     } catch (e: any) {
       toast({ title: "Gateway Drift Detected", variant: "destructive" })
@@ -99,7 +110,8 @@ export default function AiGatewayPage() {
         response: res.response,
         modelUsed: res.modelUsed,
         latencyMs: 1250,
-        tokenCount: 450
+        tokenCount: 450,
+        activeSyncs: ["DEFAULT_HUB"]
       })
       toast({ 
         title: "Quickstart Verified", 
@@ -127,14 +139,14 @@ export default function AiGatewayPage() {
                    <Network className="size-3 mr-2" /> Project Zenith: AI Gateway
                  </Badge>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <Sparkles className="size-3 mr-2" /> Every App, Every Device
+                   <Sparkles className="size-3 mr-2" /> Omni-Device Sync
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Zenith <span className="text-purple-500">Gateway.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Infinite Intelligence, Single Entry." এখন আপনার সাম্রাজ্যের প্রতিটি ডিভাইসে নূরনেক্সাস এআই কানেক্টিভিটি সচল।
+                "Universal Connectivity, Single AI Brain." আপনার প্রতিটি ডিভাইস এখন প্রতিটি অ্যাপের সাথে সিনক্রোনাইজড।
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -142,7 +154,7 @@ export default function AiGatewayPage() {
                   <div className="absolute top-0 right-0 p-2 opacity-10">
                     <Smartphone className="size-12 text-purple-500" />
                   </div>
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Active AI Devices</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Omni-Connected Devices</p>
                   <p className="text-2xl font-headline font-bold text-emerald-500">{metrics.activeDevices}</p>
                </div>
             </div>
@@ -151,6 +163,7 @@ export default function AiGatewayPage() {
           <Tabs defaultValue="overview" className="space-y-8">
             <TabsList className="bg-white/5 border border-white/10 p-1 h-12">
                <TabsTrigger value="overview" className="gap-2 px-6"><Activity className="size-4" /> Overview</TabsTrigger>
+               <TabsTrigger value="mesh" className="gap-2 px-6"><Link2 className="size-4" /> Mesh Management</TabsTrigger>
                <TabsTrigger value="getting-started" className="gap-2 px-6"><Rocket className="size-4" /> Getting Started</TabsTrigger>
                <TabsTrigger value="playground" className="gap-2 px-6"><Terminal className="size-4" /> Playground</TabsTrigger>
             </TabsList>
@@ -160,9 +173,9 @@ export default function AiGatewayPage() {
                   {[
                     { label: "AI Recovered", val: metrics.requests > 0 ? metrics.recovered : 0, icon: RefreshCcw, color: "text-emerald-500" },
                     { label: "Reliability", val: `${metrics.reliability}%`, icon: ShieldCheck, color: "text-primary" },
-                    { label: "Daily Pulses", val: metrics.requests.toLocaleString(), icon: Zap, color: "text-purple-500" },
-                    { label: "Total Tokens", val: "845k", icon: Atom, color: "text-emerald-400" },
-                    { label: "Device Sync", val: "100%", icon: Infinity, color: "text-amber-500" }
+                    { label: "Omni Pulses", val: metrics.requests.toLocaleString(), icon: Zap, color: "text-purple-500" },
+                    { label: "Cognitive Load", val: "Optimal", icon: Atom, color: "text-emerald-400" },
+                    { label: "Sync Velocity", val: "100%", icon: Infinity, color: "text-amber-500" }
                   ].map((m, i) => (
                     <Card key={i} className="glass-card bg-black/40 border-white/5">
                       <CardContent className="p-5 space-y-1 text-center">
@@ -180,7 +193,7 @@ export default function AiGatewayPage() {
                   <Card className="lg:col-span-2 glass-card bg-black/40 border-white/5 p-6 h-[400px]">
                     <div className="flex justify-between items-center mb-6">
                        <h3 className="text-xs font-headline font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-                          <BarChart3 className="size-4" /> Global Intelligence Usage
+                          <BarChart3 className="size-4" /> Global Mesh Intelligence Usage
                        </h3>
                     </div>
                      <ResponsiveContainer width="100%" height="80%">
@@ -203,22 +216,25 @@ export default function AiGatewayPage() {
                   <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                      <CardHeader>
                         <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
-                           <Smartphone className="size-4" /> Device Connectivity
+                           <Share2 className="size-4" /> Active Mesh Sync
                         </CardTitle>
                      </CardHeader>
                      <CardContent className="space-y-4">
                         {[
-                          { device: "Imperial Smartphones", status: "SYNCED", icon: Smartphone },
-                          { device: "Sovereign Workstations", status: "ACTIVE", icon: Monitor },
-                          { device: "IoT Mesh Nodes", status: "PULSING", icon: Box },
-                          { device: "Legacy Terminals", status: "VERIFIED", icon: Laptop }
+                          { device: "Imperial Mobile", app: "FusionPay", icon: Smartphone },
+                          { device: "Sovereign Workstation", app: "Bazaar Hub", icon: Laptop },
+                          { device: "IoT Core Node", app: "Industrial Hub", icon: Box },
+                          { device: "External API", app: "Partner Node", icon: Link2 }
                         ].map((d, i) => (
                           <div key={i} className="flex justify-between items-center p-2 bg-black/40 rounded border border-white/5">
                              <div className="flex items-center gap-3">
                                 <d.icon className="size-3.5 text-primary opacity-60" />
-                                <span className="text-[10px] text-white font-bold uppercase">{d.device}</span>
+                                <div className="space-y-0.5">
+                                   <p className="text-[9px] text-white font-bold uppercase">{d.device}</p>
+                                   <p className="text-[7px] text-muted-foreground uppercase">{d.app}</p>
+                                </div>
                              </div>
-                             <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">{d.status}</Badge>
+                             <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">SYNCED</Badge>
                           </div>
                         ))}
                      </CardContent>
@@ -226,22 +242,64 @@ export default function AiGatewayPage() {
                </div>
             </TabsContent>
 
+            <TabsContent value="mesh" className="space-y-8 animate-in fade-in slide-in-from-bottom-2">
+               <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
+                  <CardHeader>
+                     <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
+                        <LayoutGrid className="size-4 text-purple-400" /> Omni-Device App Mapping
+                     </CardTitle>
+                     <CardDescription>Manage the cognitive link between your devices and the imperial app suite.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {CONNECTED_MESH.map((node, i) => (
+                          <div key={i} className="p-5 bg-black/40 rounded-2xl border border-white/5 hover:border-purple-500/30 transition-all group">
+                             <div className="flex justify-between items-start mb-4">
+                                <div className="flex items-center gap-4">
+                                   <div className="size-10 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20 group-hover:bg-purple-500/20 transition-all">
+                                      <node.icon className="size-5 text-purple-400" />
+                                   </div>
+                                   <div>
+                                      <p className="text-sm font-bold text-white uppercase">{node.device}</p>
+                                      <p className="text-[8px] text-muted-foreground font-mono uppercase">{node.status}</p>
+                                   </div>
+                                </div>
+                                <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">ACTIVE</Badge>
+                             </div>
+                             <div className="space-y-2">
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Linked Apps</p>
+                                <div className="flex flex-wrap gap-2">
+                                   {node.apps.map((app, j) => (
+                                     <Badge key={j} variant="outline" className="text-[7px] border-white/10 text-white bg-white/5">{app}</Badge>
+                                   ))}
+                                   <Badge variant="outline" className="text-[7px] border-primary/20 text-primary cursor-pointer hover:bg-primary/10">
+                                      <Link2 className="size-2 mr-1" /> Add App
+                                   </Badge>
+                                </div>
+                             </div>
+                          </div>
+                        ))}
+                     </div>
+                  </CardContent>
+               </Card>
+            </TabsContent>
+
             <TabsContent value="getting-started" className="space-y-8 animate-in fade-in slide-in-from-bottom-2">
                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
                      <CardHeader>
                         <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
-                           <Rocket className="size-4 text-purple-400" /> Multi-App AI Integration
+                           <Rocket className="size-4 text-purple-400" /> Omni-Device AI Handshake
                         </CardTitle>
-                        <CardDescription>Follow these steps to connect your app's devices to Zenith AI Gateway.</CardDescription>
+                        <CardDescription>Follow these steps to establish a cognitive mesh across your apps.</CardDescription>
                      </CardHeader>
                      <CardContent className="space-y-8">
                         <div className="space-y-6">
                            {[
-                             { step: "01", title: "Initialize Handshake", desc: "Use `sheikh.init()` to establish the device's identity on the mesh." },
-                             { step: "02", title: "Provision AI Token", desc: "Obtain an ephemeral AI Token for the specific App ID / Device ID pair." },
-                             { step: "03", title: "Call Gateway", desc: "Send prompts to the `/v1/ai/pulse` endpoint with HMAC_V4 signature." },
-                             { step: "04", title: "Monitor Usage", desc: "Track tokens and latency in real-time from your Imperial Dashboard." }
+                             { step: "01", title: "Initialize Omni-Hub", desc: "Use `sheikh.init()` with the `omniSync: true` flag." },
+                             { step: "02", title: "Register Device ID", desc: "Assign a unique ID to your device node for cross-app tracking." },
+                             { step: "03", title: "Establish Knowledge Bridge", desc: "Allow AI to pull context from other apps to assist your current workflow." },
+                             { step: "04", title: "Monitor Unified Pulse", desc: "Track total cognitive token usage across all linked devices." }
                            ].map((s, i) => (
                              <div key={i} className="flex gap-4 group">
                                 <span className="text-2xl font-headline font-bold text-purple-500/30 group-hover:text-purple-500 transition-colors">{s.step}</span>
@@ -258,7 +316,7 @@ export default function AiGatewayPage() {
                           className="w-full bg-purple-500 text-white font-bold h-12 uppercase tracking-widest glow-primary gap-2"
                         >
                            {loading ? <Loader2 className="size-4 animate-spin" /> : <Zap className="size-4" />}
-                           Verify Global AI Handshake
+                           Verify Global Cognitive Mesh
                         </Button>
                      </CardContent>
                   </Card>
@@ -266,7 +324,7 @@ export default function AiGatewayPage() {
                   <Card className="glass-card border-white/5 overflow-hidden">
                      <CardHeader className="bg-white/2 border-b border-white/5">
                         <CardTitle className="text-xs font-headline uppercase text-white flex items-center gap-2">
-                           <Code2 className="size-4 text-primary" /> Device Integration Snippet
+                           <Code2 className="size-4 text-primary" /> Multi-App Integration Snippet
                         </CardTitle>
                      </CardHeader>
                      <CardContent className="p-0">
@@ -277,22 +335,24 @@ export default function AiGatewayPage() {
                               </Button>
                            </div>
 <pre>
-{`// Calling Zenith AI from any device
-const response = await sheikh.ai.pulse({
-  prompt: 'Analyze this device telemetry...',
-  deviceId: 'SMARTPHONE_007',
-  appId: 'IMPERIAL_MOBILE_V3',
-  highVeracity: true
+{`// Establishing Omni-Device AI Mesh
+const sync = await sheikh.ai.bridge({
+  deviceId: 'MACBOOK_PRO_M3',
+  apps: ['FUSION_PAY', 'BAZAAR', 'MAIL'],
+  omniContext: true
 });
 
-console.log('AI Logic:', response.response);
-console.log('Seal:', response.gatewayHash);`}
+// Calling AI with Cross-App knowledge
+const response = await sheikh.ai.pulse({
+  prompt: 'What was my last transaction in FusionPay?',
+  appId: 'ZENITH_TERMINAL'
+});`}
 </pre>
                         </div>
                         <div className="p-6 border-t border-white/5 space-y-4">
                            <div className="flex items-center gap-3">
                               <CheckCircle2 className="size-4 text-emerald-500" />
-                              <p className="text-[10px] text-muted-foreground italic">Unified endpoint for all 100 NoorNexus nodes.</p>
+                              <p className="text-[10px] text-muted-foreground italic">Unified knowledge shared across all 100 NoorNexus nodes.</p>
                            </div>
                         </div>
                      </CardContent>
@@ -304,14 +364,14 @@ console.log('Seal:', response.gatewayHash);`}
                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                      <CardHeader>
-                        <CardTitle className="text-sm font-headline uppercase text-white">Imperial Prompt</CardTitle>
-                        <CardDescription>Simulating Multi-Device Pulse</CardDescription>
+                        <CardTitle className="text-sm font-headline uppercase text-white">Imperial Omni-Prompt</CardTitle>
+                        <CardDescription>Simulating Cross-App Intelligence Pulse</CardDescription>
                      </CardHeader>
                      <CardContent className="space-y-6">
                         <textarea 
                           value={query}
                           onChange={e => setQuery(e.target.value)}
-                          placeholder="Execute a command through the global gateway..."
+                          placeholder="Execute a command using knowledge from all devices..."
                           className="w-full h-32 bg-black/40 border border-white/10 rounded-xl p-4 text-xs font-mono text-primary outline-none focus:ring-1 focus:ring-primary"
                         />
                         <Button 
@@ -320,7 +380,7 @@ console.log('Seal:', response.gatewayHash);`}
                           className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-12 glow-primary gap-3"
                         >
                            {loading ? <Loader2 className="size-4 animate-spin" /> : <Zap className="size-4" />}
-                           Initiate Global Pulse
+                           Initiate Mesh Pulse
                         </Button>
                      </CardContent>
                   </Card>
@@ -328,7 +388,7 @@ console.log('Seal:', response.gatewayHash);`}
                   <Card className={`glass-card border-t-4 transition-all duration-500 ${result ? 'border-t-emerald-500 bg-emerald-500/5' : 'border-t-primary opacity-40'}`}>
                      <CardHeader>
                         <CardTitle className="text-sm font-headline uppercase text-white flex items-center gap-2">
-                           <Cpu className="size-4" /> Global Output
+                           <Cpu className="size-4" /> Mesh Output
                         </CardTitle>
                      </CardHeader>
                      <CardContent className="space-y-6">
@@ -339,19 +399,19 @@ console.log('Seal:', response.gatewayHash);`}
                              </div>
                              <div className="grid grid-cols-2 gap-4">
                                 <div className="p-3 bg-white/5 rounded border border-white/5">
-                                   <p className="text-[8px] text-muted-foreground uppercase font-bold">Gateway Hash</p>
+                                   <p className="text-[8px] text-muted-foreground uppercase font-bold">Mesh Hash</p>
                                    <p className="text-[9px] font-mono text-primary truncate">{result.gatewayHash}</p>
                                 </div>
                                 <div className="p-3 bg-white/5 rounded border border-white/5">
-                                   <p className="text-[8px] text-muted-foreground uppercase font-bold">Usage Status</p>
-                                   <p className="text-xs font-headline font-bold text-emerald-500">VERIFIED</p>
+                                   <p className="text-[8px] text-muted-foreground uppercase font-bold">Active Syncs</p>
+                                   <p className="text-[9px] font-bold text-emerald-500">{result.activeSyncs?.length || 4} NODES ACTIVE</p>
                                 </div>
                              </div>
                           </div>
                         ) : (
                           <div className="h-48 flex flex-col items-center justify-center gap-4 text-center">
                              <Radio className="size-12 text-primary animate-pulse opacity-40" />
-                             <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">Awaiting Global Dispatch</p>
+                             <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">Awaiting Mesh Dispatch</p>
                           </div>
                         )}
                      </CardContent>
@@ -364,15 +424,15 @@ console.log('Seal:', response.gatewayHash);`}
              <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                    <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                      <Lock className="size-4" /> Project #54 Sync
+                      <Lock className="size-4" /> Omni-Sync Integrity
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                      "All multi-device AI pulses are cross-verified by Nora-54 for regulatory alignment."
+                      "Cross-device data pulls are restricted by L4 encryption and require a secondary biometric pulse."
                    </p>
                    <div className="pt-2">
-                      <Badge variant="outline" className="w-full justify-center h-8 border-emerald-500/30 text-emerald-500 uppercase text-[9px] font-bold tracking-widest">AUTONOMY_LEVEL: Ω</Badge>
+                      <Badge variant="outline" className="w-full justify-center h-8 border-emerald-500/30 text-emerald-500 uppercase text-[9px] font-bold tracking-widest">UDT_AUTH: ACTIVE</Badge>
                    </div>
                 </CardContent>
              </Card>
@@ -383,12 +443,12 @@ console.log('Seal:', response.gatewayHash);`}
                 </div>
                 <CardHeader className="pb-2">
                    <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
-                      <Database className="size-3" /> Growth Engine
+                      <Database className="size-3" /> Cognitive Growth
                    </CardTitle>
                 </CardHeader>
                 <CardContent>
                    <p className="text-[9px] text-muted-foreground leading-relaxed">
-                      AI Bridge integration has increased cross-app <strong>Biskutment</strong> by 24% in the last 72 hours.
+                      Unified device identity has increased operational efficiency by <strong>42%</strong> across the empire.
                    </p>
                 </CardContent>
              </Card>
@@ -396,12 +456,12 @@ console.log('Seal:', response.gatewayHash);`}
              <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                 <CardHeader>
                    <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2">
-                      <ShieldCheck className="size-3" /> HMAC_V4 Secure
+                      <ShieldCheck className="size-3" /> Zero-Drift Mesh
                    </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                    <p className="text-[9px] text-muted-foreground italic leading-relaxed">
-                      "Every device calling josh AI must pass the L4 cryptographic threshold."
+                      "Each device handshake is verified against the 100-node grid for absolute veracity."
                    </p>
                 </CardContent>
              </Card>
