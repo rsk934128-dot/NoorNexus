@@ -29,11 +29,13 @@ import {
   AlertTriangle,
   Radio,
   Sparkles,
-  Link2
+  Link2,
+  Database
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { processVideoExtraction, VideoExtractionOutput } from "@/ai/flows/video-extraction-flow"
 import { Progress } from "@/components/ui/progress"
+import Link from "next/link"
 
 export default function YoutubeDownloaderPage() {
   const { toast } = useToast()
@@ -273,12 +275,12 @@ export default function YoutubeDownloaderPage() {
                         "Media can be archived directly to Imperial Drive (Project #57) for generational redundancy."
                      </p>
                      <div className="flex gap-2 mt-4">
-                        <Link2 href="/drive" className="flex-1">
-                           <Button variant="outline" className="w-full h-8 text-[8px] uppercase font-bold border-white/10">Drive</Button>
-                        </Link2>
-                        <Link2 href="/sovereign-vault" className="flex-1">
-                           <Button variant="outline" className="w-full h-8 text-[8px] uppercase font-bold border-white/10">Vault</Button>
-                        </Link2>
+                        <Link href="/drive" className="flex-1">
+                           <Button variant="outline" className="w-full h-8 text-[9px] uppercase font-bold border-white/10">Drive</Button>
+                        </Link>
+                        <Link href="/sovereign-vault" className="flex-1">
+                           <Button variant="outline" className="w-full h-8 text-[9px] uppercase font-bold border-white/10">Vault</Button>
+                        </Link>
                      </div>
                   </CardContent>
                </Card>
