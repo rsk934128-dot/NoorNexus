@@ -38,11 +38,13 @@ import {
   CheckCircle2,
   FlaskConical,
   ShieldPlus,
-  ArrowRightLeft
+  ArrowRightLeft,
+  Key
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 const PROVIDER_METRICS = [
   { id: "yapily", name: "Yapily (EU/UK)", latency: 32, success: 99.8, status: "OPTIMAL", icon: Globe },
@@ -160,6 +162,7 @@ const VALIDATED_NODES = [
 
 export default function OpenBankingHubPage() {
   const { toast } = useToast()
+  const router = useRouter()
   const [activeUrl, setActiveUrl] = useState<string | null>(null)
   const [loadingView, setLoadingView] = useState(false)
   const [orchestrating, setOrchestrating] = useState(false)
@@ -193,9 +196,7 @@ export default function OpenBankingHubPage() {
   }
 
   const openInApp = (url: string) => {
-    setLoadingView(true)
-    setActiveUrl(url)
-    setTimeout(() => setLoadingView(false), 1000)
+    router.push(`/browser?url=${encodeURIComponent(url)}`)
   }
 
   return (
@@ -271,6 +272,27 @@ export default function OpenBankingHubPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               <div className="lg:col-span-3 space-y-10">
+                
+                {/* Imperial Console Access Card: NEW */}
+                <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/10 relative overflow-hidden group hover:border-amber-500/40 transition-all cursor-pointer" onClick={() => openInApp("https://console.yapily.com/")}>
+                   <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                      <Key className="size-32 text-amber-500" />
+                   </div>
+                   <CardHeader>
+                      <Badge className="bg-amber-500 text-black border-none text-[8px] h-4 mb-2 uppercase font-bold">Infrastructure Console</Badge>
+                      <CardTitle className="text-2xl font-headline font-bold text-white uppercase tracking-tight">Access Imperial Console</CardTitle>
+                      <CardDescription className="text-amber-500 font-mono text-[10px] uppercase tracking-[0.2em]">Manage 74+ Banking Canals via Yapily Mesh</CardDescription>
+                   </CardHeader>
+                   <CardContent className="flex items-center gap-4">
+                      <p className="text-sm text-muted-foreground leading-relaxed italic max-w-xl">
+                         "কমান্ডার, এখান থেকে আপনি সরাসরি নূরনেক্সাস সাম্রাজ্যের মূল ব্যাংকিং রেইলস এবং এপিআই কি-সমূহ নিয়ন্ত্রণ করতে পারবেন।"
+                      </p>
+                      <Button className="bg-amber-500 text-black font-bold uppercase text-[10px] h-10 px-6 gap-2 glow-emerald shrink-0">
+                         Open Terminal <Monitor className="size-3" />
+                      </Button>
+                   </CardContent>
+                </Card>
+
                 {/* Validated Banking Nodes focus */}
                 <section className="space-y-6">
                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
@@ -396,89 +418,6 @@ export default function OpenBankingHubPage() {
                             </div>
                          </div>
                       </div>
-                   </Card>
-                </section>
-
-                {/* Integration Pathways Section */}
-                <section className="space-y-6">
-                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                      <LayoutGrid className="size-4" /> Hybrid Resiliency Engine
-                   </h3>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <Card className="glass-card border-l-4 border-l-emerald-500 hover:border-emerald-500/30 transition-all group">
-                         <CardHeader>
-                            <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
-                               <Monitor className="size-4" /> Hosted Fallback
-                            </CardTitle>
-                            <CardDescription>Automatic redirect if Direct API fails to authorize or experiences drift.</CardDescription>
-                         </CardHeader>
-                         <CardContent className="space-y-4">
-                            <ul className="space-y-2 text-[10px] text-muted-foreground list-disc pl-4">
-                               <li>Zero manual intervention during API outages.</li>
-                               <li>Seamlessly hands off to pre-built consent flow.</li>
-                               <li>Maintains 99.98% successful handshake rate.</li>
-                            </ul>
-                            <Button size="sm" className="w-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20 text-[9px] uppercase font-bold">
-                               Test Fallback Logic
-                            </Button>
-                         </CardContent>
-                      </Card>
-
-                      <Card className="glass-card border-l-4 border-l-primary hover:border-primary/30 transition-all">
-                         <CardHeader>
-                            <CardTitle className="text-sm font-headline uppercase text-primary flex items-center gap-2">
-                               <Code2 className="size-4" /> Direct Control
-                            </CardTitle>
-                            <CardDescription>White-labeled API interaction for deep UI/UX integration.</CardDescription>
-                         </CardHeader>
-                         <CardContent className="space-y-4">
-                            <ul className="space-y-2 text-[10px] text-muted-foreground list-disc pl-4">
-                               <li>Custom branding injection via Sovereign SDK.</li>
-                               <li>Real-time SCA status monitoring.</li>
-                               <li>Support for complex multi-sig transactions.</li>
-                            </ul>
-                            <Button size="sm" className="w-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 text-[9px] uppercase font-bold">
-                               View White-label SDK
-                            </Button>
-                         </CardContent>
-                      </Card>
-                   </div>
-                </section>
-
-                {/* Developer API Reference */}
-                <section className="space-y-6">
-                   <div className="flex justify-between items-center">
-                      <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                         <Code2 className="size-4" /> Developer API Reference (v11.5.2)
-                      </h3>
-                      <Badge variant="outline" className="text-[8px] border-primary/20 text-primary uppercase">Direct Access Only</Badge>
-                   </div>
-                   
-                   <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                      <CardContent className="p-6 space-y-6">
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="space-y-4">
-                               <div className="space-y-2">
-                                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Base Endpoint</p>
-                                  <div className="p-3 bg-black/40 rounded-lg space-y-2 font-mono text-[10px]">
-                                     <div className="flex justify-between"><span className="text-muted-foreground">URL:</span> <span className="text-white">https://api.yapily.com</span></div>
-                                     <div className="flex justify-between"><span className="text-muted-foreground">Auth:</span> <span className="text-white">Basic (AppID:Secret)</span></div>
-                                  </div>
-                               </div>
-                            </div>
-                            <div className="space-y-4">
-                               <div className="space-y-2">
-                                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Resilient Logic</p>
-                                  <div className="p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-lg space-y-2 italic text-[10px]">
-                                     <p className="text-emerald-100 leading-relaxed">"Tracing IDs are automatically mapped to Nora-50. Failures trigger reroute to alternative canals."</p>
-                                     <div className="flex items-center gap-2 text-emerald-500 font-bold">
-                                        <ShieldCheck className="size-3" /> TRACING_LINK: ACTIVE
-                                     </div>
-                                  </div>
-                               </div>
-                            </div>
-                         </div>
-                      </CardContent>
                    </Card>
                 </section>
               </div>

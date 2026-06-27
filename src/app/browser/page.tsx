@@ -35,7 +35,8 @@ import {
   Fingerprint,
   Radio,
   AlertTriangle,
-  ShieldAlert
+  ShieldAlert,
+  Key
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { executeZenithSearch, WebSearchOutput } from "@/ai/flows/web-search-flow"
@@ -43,6 +44,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { useSearchParams } from "next/navigation"
 
 const QUICK_LINKS = [
+  { name: "Banking Console", url: "https://console.yapily.com/", icon: Key, color: "text-amber-500" },
   { name: "Aerospace", url: "https://www.jamesedition.com/jets", icon: Plane, color: "text-purple-500" },
   { name: "Maritime", url: "https://www.yachtworld.com/", icon: Ship, color: "text-blue-500" },
   { name: "Gold/Precious", url: "https://www.kitco.com/", icon: Gem, color: "text-amber-500" },
@@ -50,7 +52,7 @@ const QUICK_LINKS = [
   { name: "Global Trade", url: "https://www.trademap.org/", icon: Globe, color: "text-emerald-500" },
 ]
 
-const KNOWN_IFRAME_BLOCKERS = ['amazon.com', 'google.com', 'facebook.com', 'github.com', 'alibaba.com', 'twitter.com', 'linkedin.com'];
+const KNOWN_IFRAME_BLOCKERS = ['amazon.com', 'google.com', 'facebook.com', 'github.com', 'alibaba.com', 'twitter.com', 'linkedin.com', 'yapily.com'];
 
 function BrowserContent() {
   const { toast } = useToast()

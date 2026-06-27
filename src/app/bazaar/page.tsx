@@ -25,7 +25,8 @@ import {
   History,
   Lock,
   Cpu,
-  Database
+  Database,
+  Link2
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
@@ -34,7 +35,8 @@ const INITIAL_LINKS = [
   { id: "1", name: "Amazon Global", url: "https://www.amazon.com", category: "General", status: "VERIFIED" },
   { id: "2", name: "Alibaba B2B", url: "https://www.alibaba.com", category: "Wholesale", status: "VERIFIED" },
   { id: "3", name: "Binance Exchange", url: "https://www.binance.com", category: "Crypto", status: "VERIFIED" },
-  { id: "4", name: "JamesEdition Jets", url: "https://www.jamesedition.com/jets", category: "Aerospace", status: "VERIFIED" }
+  { id: "4", name: "JamesEdition Jets", url: "https://www.jamesedition.com/jets", category: "Aerospace", status: "VERIFIED" },
+  { id: "5", name: "Yapily Console", url: "https://console.yapily.com/", category: "Infrastructure", status: "VERIFIED" }
 ]
 
 export default function SovereignBazaarPage() {
