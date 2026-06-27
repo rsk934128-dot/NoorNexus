@@ -49,7 +49,9 @@ import {
   HardDrive,
   Mail,
   DollarSign,
-  PieChart
+  PieChart,
+  ChevronUp,
+  ChevronDown
 } from "lucide-react"
 
 import {
@@ -139,9 +141,11 @@ export function AppSidebar() {
   const auth = useAuth()
   const { user } = useUser()
   const { toast } = useToast()
-  const { setOpenMobile, isMobile } = useSidebar()
+  const { setOpenMobile, isMobile, state } = useSidebar()
   const [isFullscreen, setIsFullscreen] = React.useState(false)
+  
   const scrollRef = React.useRef<HTMLDivElement>(null)
+  const scrollInterval = React.useRef<NodeJS.Timeout | null>(null)
 
   const isAdmin = user?.email === ADMIN_EMAIL
 
@@ -154,6 +158,22 @@ export function AppSidebar() {
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     sessionStorage.setItem("sidebar-scroll-position", e.currentTarget.scrollTop.toString())
+  }
+
+  const startScroll = (direction: 'up' | 'down') => {
+    if (scrollInterval.current) clearInterval(scrollInterval.current)
+    scrollInterval.current = setInterval(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollTop += direction === 'up' ? -15 : 15
+      }
+    }, 20)
+  }
+
+  const stopScroll = () => {
+    if (scrollInterval.current) {
+      clearInterval(scrollInterval.current)
+      scrollInterval.current = null
+    }
   }
 
   const handleLogout = async () => {
@@ -182,7 +202,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar className="border-r border-white/5 bg-sidebar text-sidebar-foreground">
-      <SidebarHeader className="p-4 flex flex-row items-center justify-between">
+      <SidebarHeader className="p-4 flex flex-row items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
           <SovereignLogo size={36} className="shrink-0" />
           <div className="min-w-0">
@@ -196,55 +216,81 @@ export function AppSidebar() {
           </Button>
         )}
       </SidebarHeader>
+      
       <SidebarSeparator />
       
-      <SidebarContent ref={scrollRef} onScroll={handleScroll}>
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-muted-foreground px-4 mb-2">Mesh Services</SidebarGroupLabel>
-          <SidebarMenu className="px-2">
-            {USER_ITEMS.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={pathname === item.url} className={`h-11 relative ${item.zenith ? 'hover:bg-purple-500/10' : item.highlight ? 'hover:bg-emerald-500/10' : ''}`}>
-                  <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
-                    <item.icon className={`size-5 ${item.zenith ? 'text-purple-500' : item.highlight ? 'text-emerald-500' : (item.title === 'Imperial Mail' ? 'text-red-500' : '')}`} />
-                    <span className={`font-medium text-sm ${item.zenith ? 'text-purple-400 font-bold' : item.highlight ? 'text-emerald-400 font-bold' : (item.title === 'Imperial Mail' ? 'text-red-400 font-bold' : '')}`}>{item.title}</span>
-                    {item.badge && (
-                      <span className="absolute right-2 top-1/2 -translate-y-1/2 flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                      </span>
-                    )}
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
+      {/* Scrollable Container with Hover Zones */}
+      <div className="relative flex flex-col flex-1 overflow-hidden min-h-0 group">
+        {/* Scroll Up Hover Zone */}
+        <div 
+          onMouseEnter={() => startScroll('up')} 
+          onMouseLeave={stopScroll}
+          className="absolute top-0 left-0 right-0 h-10 z-50 bg-gradient-to-b from-sidebar to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-ns-resize flex items-center justify-center pointer-events-auto"
+        >
+          <div className="bg-primary/20 backdrop-blur-md rounded-full p-1 border border-primary/20">
+             <ChevronUp className="size-4 text-primary animate-bounce" />
+          </div>
+        </div>
 
-        {isAdmin && (
-          <SidebarGroup className="mt-4">
-            <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-primary px-4 mb-2 flex items-center gap-2">
-              <ShieldCheck className="size-3" /> Sovereign Commands
-            </SidebarGroupLabel>
+        <SidebarContent ref={scrollRef} onScroll={handleScroll} className="scrollbar-hide">
+          <SidebarGroup>
+            <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-muted-foreground px-4 mb-2">Mesh Services</SidebarGroupLabel>
             <SidebarMenu className="px-2">
-              {ADMIN_ITEMS.map((item) => (
+              {USER_ITEMS.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname === item.url} className="h-11 hover:bg-primary/10">
+                  <SidebarMenuButton asChild isActive={pathname === item.url} className={`h-11 relative ${item.zenith ? 'hover:bg-purple-500/10' : item.highlight ? 'hover:bg-emerald-500/10' : ''}`}>
                     <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
-                      <item.icon className={`size-5 ${item.title === 'Sovereign Legacy' ? 'text-primary' : item.title === 'Imperial Oracle' ? 'text-emerald-500' : item.title === 'Neural Audit (P52)' ? 'text-emerald-400' : item.title === 'Adoption Audit' ? 'text-amber-500' : 'text-primary'}`} />
-                      <span className={`font-medium text-sm ${item.title === 'Sovereign Legacy' ? 'text-primary font-bold' : item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : item.title === 'Neural Audit (P52)' ? 'text-emerald-400 font-bold' : item.title === 'Adoption Audit' ? 'text-amber-500 font-bold' : ''}`}>{item.title}</span>
+                      <item.icon className={`size-5 ${item.zenith ? 'text-purple-500' : item.highlight ? 'text-emerald-500' : (item.title === 'Imperial Mail' ? 'text-red-500' : '')}`} />
+                      <span className={`font-medium text-sm ${item.zenith ? 'text-purple-400 font-bold' : item.highlight ? 'text-emerald-400 font-bold' : (item.title === 'Imperial Mail' ? 'text-red-400 font-bold' : '')}`}>{item.title}</span>
+                      {item.badge && (
+                        <span className="absolute right-2 top-1/2 -translate-y-1/2 flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                      )}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroup>
-        )}
-      </SidebarContent>
+
+          {isAdmin && (
+            <SidebarGroup className="mt-4">
+              <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-primary px-4 mb-2 flex items-center gap-2">
+                <ShieldCheck className="size-3" /> Sovereign Commands
+              </SidebarGroupLabel>
+              <SidebarMenu className="px-2">
+                {ADMIN_ITEMS.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={pathname === item.url} className="h-11 hover:bg-primary/10">
+                      <Link href={item.url} onClick={() => isMobile && setOpenMobile(false)}>
+                        <item.icon className={`size-5 ${item.title === 'Sovereign Legacy' ? 'text-primary' : item.title === 'Imperial Oracle' ? 'text-emerald-500' : item.title === 'Neural Audit (P52)' ? 'text-emerald-400' : item.title === 'Adoption Audit' ? 'text-amber-500' : 'text-primary'}`} />
+                        <span className={`font-medium text-sm ${item.title === 'Sovereign Legacy' ? 'text-primary font-bold' : item.title === 'Imperial Oracle' ? 'text-emerald-500 font-bold' : item.title === 'Neural Audit (P52)' ? 'text-emerald-400 font-bold' : item.title === 'Adoption Audit' ? 'text-amber-500 font-bold' : ''}`}>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroup>
+          )}
+        </SidebarContent>
+
+        {/* Scroll Down Hover Zone */}
+        <div 
+          onMouseEnter={() => startScroll('down')} 
+          onMouseLeave={stopScroll}
+          className="absolute bottom-0 left-0 right-0 h-10 z-50 bg-gradient-to-t from-sidebar to-transparent opacity-0 group-hover:opacity-100 transition-opacity cursor-ns-resize flex items-center justify-center pointer-events-auto"
+        >
+          <div className="bg-primary/20 backdrop-blur-md rounded-full p-1 border border-primary/20">
+             <ChevronDown className="size-4 text-primary animate-bounce" />
+          </div>
+        </div>
+      </div>
 
       <SidebarSeparator />
 
-      <SidebarFooter className="p-4 space-y-4">
+      <SidebarFooter className="p-4 space-y-4 shrink-0">
         <button onClick={toggleFullscreen} className="w-full py-2.5 bg-primary/5 rounded border border-primary/20 text-[9px] uppercase font-bold text-primary hover:bg-primary/10 transition-all flex items-center justify-center gap-2 group">
           <Maximize2 className="size-3" /> {isFullscreen ? "Exit Fullscreen" : "Go Fullscreen"}
         </button>
