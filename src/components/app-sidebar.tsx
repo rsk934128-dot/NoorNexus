@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -51,7 +50,8 @@ import {
   DollarSign,
   PieChart,
   ChevronUp,
-  ChevronDown
+  ChevronDown,
+  Lightbulb
 } from "lucide-react"
 
 import {
@@ -118,6 +118,7 @@ const USER_ITEMS = [
 ]
 
 const ADMIN_ITEMS = [
+  { title: "Strategic Roadmap", url: "/strategy", icon: Lightbulb },
   { title: "Sovereign Legacy", url: "/legacy", icon: Infinity },
   { title: "Imperial Oracle", url: "/oracle", icon: Compass },
   { title: "Revenue Matrix", url: "/revenue", icon: DollarSign },

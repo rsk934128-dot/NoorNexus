@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -34,7 +33,8 @@ import {
   ShieldPlus,
   ArrowRightLeft,
   SlidersHorizontal,
-  LayoutGrid
+  LayoutGrid,
+  Rocket
 } from "lucide-react"
 import { generateEconomicReport, EconomicIntelligenceOutput } from "@/ai/flows/economic-intelligence-flow"
 import { useToast } from "@/hooks/use-toast"
@@ -51,6 +51,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Slider } from "@/components/ui/slider"
+import Link from "next/link"
 
 const REVENUE_STREAMS = [
   { 
@@ -326,17 +327,16 @@ export default function RevenueMatrixPage() {
               <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                  <CardHeader>
                     <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                       <History className="size-4" /> Treasury Sync
+                       <History className="size-4" /> Strategic Expansion
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
-                    <div className="p-3 bg-black/40 rounded-xl border border-white/5 text-center">
-                       <p className="text-[8px] text-muted-foreground uppercase font-bold">Reserves status</p>
-                       <p className="text-xl font-headline font-bold text-white uppercase">HEALTHY</p>
-                    </div>
-                    <Button variant="outline" className="w-full text-[9px] uppercase font-bold border-amber-500/20 text-amber-500 h-9">
-                       Open Treasury Ledger <ArrowRight className="size-3 ml-2" />
-                    </Button>
+                    <p className="text-[10px] text-muted-foreground italic mb-4">"Nora-40 has identified 4 new revenue frontiers for Mission 500."</p>
+                    <Link href="/strategy" className="w-full">
+                      <Button variant="outline" className="w-full text-[9px] uppercase font-bold border-emerald-500/20 text-emerald-500 h-9 gap-2">
+                         Open Strategy Roadmap <Rocket className="size-3" />
+                      </Button>
+                    </Link>
                  </CardContent>
               </Card>
 
