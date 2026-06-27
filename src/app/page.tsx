@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -32,14 +33,17 @@ import {
   Waves,
   Eye,
   Repeat,
-  Target
+  Target,
+  Users
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
-import { useUser } from "@/firebase"
+import { useUser, useFirestore, useCollection } from "@/firebase"
 import { SovereignLogo } from "@/components/sovereign-logo"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import Link from "next/link"
+import { formatDistanceToNow } from "date-fns"
+import { collection, query, orderBy, limit } from "firebase/firestore"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
@@ -52,11 +56,18 @@ const HEGEMONY_TIMELINE = [
 
 export default function Home() {
   const { toast } = useToast()
+  const db = useFirestore()
   const { user } = useUser()
   const isAdmin = user?.email === ADMIN_EMAIL
 
   const [loading, setLoading] = useState(true)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
+  
+  // Real-time Citizen Pulse
+  const { data: activeSessions } = useCollection<any>(
+    query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(50))
+  )
+
   const [impactFeed, setImpactFeed] = useState<string[]>([
     "MISSION 500: Global Hegemony verified (Zenith Peak).",
     "ZENITH: 100 Nodes synchronized @ 28ms latency.",
@@ -205,37 +216,56 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
+               {/* Live Citizen Pulse Registry - UPDATED for ALL users */}
                <section className="space-y-6">
-                  <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 relative overflow-hidden">
-                    <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 bg-white/2 py-4 px-6">
-                      <div className="space-y-1">
-                        <CardTitle className="text-lg font-headline font-bold text-emerald-500 uppercase flex items-center gap-2">
-                           <CheckCircle2 className="size-5" /> Mission 400: Global Handshake Verified
-                        </CardTitle>
-                        <CardDescription className="text-[10px] text-emerald-100 uppercase tracking-widest">Zenith Status: VERIFIED | Latency: 26ms</CardDescription>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <Badge className="bg-emerald-500 text-emerald-foreground font-bold px-4 h-7">26ms STABLE</Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="p-6">
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {[
-                          { label: "Payoneer UK Bridge", status: "VERIFIED", latency: "26ms" },
-                          { label: "AIB Ireland Hub", status: "VERIFIED", latency: "24ms" },
-                          { label: "Sovereign Vault L4", status: "HARDENED", latency: "N/A" }
-                        ].map((item, i) => (
-                          <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-2">
-                             <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{item.label}</p>
-                             <div className="flex justify-between items-center">
-                                <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">{item.status}</Badge>
-                                <span className="text-[10px] font-mono text-white">{item.latency}</span>
-                             </div>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <div className="flex justify-between items-center px-1">
+                    <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                       <Users className="size-4" /> Live Citizen Pulse (Global Registry)
+                    </h3>
+                    {isAdmin && (
+                      <Link href="/sessions">
+                        <Button variant="ghost" className="text-[10px] uppercase font-bold text-primary hover:bg-primary/10 gap-2">
+                          View Full Registry <ArrowRightLeft className="size-3" />
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                     {activeSessions.length === 0 ? (
+                       <div className="col-span-3 py-10 text-center glass-card opacity-50 italic text-[10px] uppercase">
+                         Await Citizen Handshake...
+                       </div>
+                     ) : activeSessions.map((s: any) => {
+                       const isOnline = s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000);
+                       return (
+                        <Card key={s.uid} className="glass-card border-white/5 hover:border-primary/20 transition-all group overflow-hidden">
+                           <CardContent className="p-4 space-y-3">
+                              <div className="flex items-center gap-3">
+                                 <div className="relative">
+                                    <Avatar className="size-10 border border-primary/20">
+                                       <AvatarImage src={s.photoURL} />
+                                       <AvatarFallback className="bg-primary/10 text-primary font-bold">{s.displayName?.substring(0, 1) || "C"}</AvatarFallback>
+                                    </Avatar>
+                                    <div className={`absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-black ${isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-muted'}`} />
+                                 </div>
+                                 <div className="min-w-0">
+                                    <p className="text-xs font-bold text-white uppercase truncate">{s.displayName}</p>
+                                    <p className="text-[8px] text-muted-foreground font-mono uppercase truncate">{s.assignedRegion || "Global Mesh"}</p>
+                                 </div>
+                              </div>
+                              <div className="flex justify-between items-center pt-2 border-t border-white/5">
+                                 <Badge variant="outline" className="text-[7px] border-primary/20 text-primary uppercase h-4">
+                                    {s.assignedNode || "NODE_AUTO"}
+                                 </Badge>
+                                 <span className="text-[8px] text-muted-foreground font-mono uppercase">
+                                    {s.lastSeen ? formatDistanceToNow(s.lastSeen.toDate()) + " ago" : "N/A"}
+                                 </span>
+                              </div>
+                           </CardContent>
+                        </Card>
+                       )
+                     })}
+                  </div>
                </section>
 
                <section className="space-y-6">
@@ -262,26 +292,6 @@ export default function Home() {
                         <p className="text-emerald-500 font-bold">Execution Status: GLOBAL_HEGEMONY_ACTIVE</p>
                      </div>
                   </Card>
-               </section>
-
-               <section className="space-y-6">
-                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                     <History className="size-4" /> Global Hegemony Timeline
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                     {HEGEMONY_TIMELINE.map((m, i) => (
-                       <Card key={i} className="glass-card bg-black/40 border-white/5 relative group hover:border-emerald-500/30 transition-all">
-                          <CardHeader className="p-4">
-                             <p className="text-[8px] font-bold text-muted-foreground uppercase mb-1">{m.date}</p>
-                             <CardTitle className="text-xs font-headline font-bold text-white uppercase">{m.title}</CardTitle>
-                          </CardHeader>
-                          <CardContent className="p-4 pt-0 space-y-3">
-                             <p className="text-[10px] text-muted-foreground italic leading-relaxed">"{m.desc}"</p>
-                             <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px] uppercase">{m.status}</Badge>
-                          </CardContent>
-                       </Card>
-                     ))}
-                  </div>
                </section>
             </div>
 
