@@ -1,4 +1,3 @@
-
 {
   "placeholderImages": [
     {
@@ -42,6 +41,12 @@
       "description": "High-tech financial dashboard visualization",
       "imageUrl": "https://picsum.photos/seed/fusion-cockpit/1200/600",
       "imageHint": "financial dashboard"
+    },
+    {
+      "id": "video-thumbnail",
+      "description": "YouTube video placeholder for extractor",
+      "imageUrl": "https://picsum.photos/seed/video-v60/800/600",
+      "imageHint": "video preview"
     }
   ]
 }

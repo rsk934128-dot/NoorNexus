@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -36,6 +35,8 @@ import { useToast } from "@/hooks/use-toast"
 import { processVideoExtraction, VideoExtractionOutput } from "@/ai/flows/video-extraction-flow"
 import { Progress } from "@/components/ui/progress"
 import Link from "next/link"
+import Image from "next/image"
+import placeholderData from "@/app/lib/placeholder-images.json"
 
 export default function YoutubeDownloaderPage() {
   const { toast } = useToast()
@@ -45,19 +46,27 @@ export default function YoutubeDownloaderPage() {
   const [url, setUrl] = useState("")
   const [result, setResult] = useState<VideoExtractionOutput | null>(null)
 
+  const mediaPlaceholder = placeholderData.placeholderImages.find(img => img.id === 'video-thumbnail')
+
   async function handleExtract() {
     if (!url.trim()) return
     setLoading(true)
     setResult(null)
     try {
+      toast({ title: "Initiating Media Pulse", description: "Querying Nora-60 Extractor..." })
       const res = await processVideoExtraction({ url })
       setResult(res)
       toast({ 
         title: "Media Pulse Established", 
-        description: "Nora-60 has extracted the video coordinates." 
+        description: "Nora-60 has extracted the video coordinates successfully." 
       })
     } catch (e: any) {
-      toast({ title: "Extraction Drift", variant: "destructive" })
+      console.error(e)
+      toast({ 
+        title: "Extraction Drift", 
+        description: e.message || "Drift detected in media canal. Check URL integrity.",
+        variant: "destructive" 
+      })
     } finally {
       setLoading(false)
     }
@@ -76,8 +85,8 @@ export default function YoutubeDownloaderPage() {
             setDownloading(false)
             toast({
               title: "Download Finalized",
-              description: `Video ${result?.title} (${quality.label}) has been anchored.`,
-              className: "border-emerald-500/50 bg-emerald-500/5"
+              description: `Video anchored to Sovereign Vault (${quality.label}).`,
+              className: "border-emerald-500/50 bg-emerald-500/5 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
             })
           }, 500)
           return 100
@@ -115,7 +124,9 @@ export default function YoutubeDownloaderPage() {
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-red-500/20 text-center min-w-[200px]">
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Extractor Integrity</p>
-                  <p className="text-2xl font-headline font-bold text-emerald-500">OPTIMAL</p>
+                  <p className="text-2xl font-headline font-bold text-emerald-500 uppercase flex items-center justify-center gap-2">
+                     <CheckCircle2 className="size-5" /> OPTIMAL
+                  </p>
                </div>
             </div>
           </header>
@@ -131,7 +142,7 @@ export default function YoutubeDownloaderPage() {
                   <CardDescription>Enter the YouTube URL to initiate extraction handshake.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="flex gap-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
                     <div className="flex-1 relative">
                        <Youtube className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-red-500" />
                        <Input 
@@ -159,10 +170,12 @@ export default function YoutubeDownloaderPage() {
                   <Card className="glass-card border-white/5 overflow-hidden">
                     <div className="flex flex-col md:flex-row">
                       <div className="md:w-1/3 relative aspect-video md:aspect-auto bg-black/40 border-r border-white/5 overflow-hidden group">
-                         <img 
-                          src={`https://picsum.photos/seed/${result.extractionHash}/800/600`} 
+                         <Image 
+                          src={mediaPlaceholder?.imageUrl || `https://picsum.photos/seed/${result.extractionHash}/800/600`} 
                           alt="Thumbnail" 
+                          fill
                           className="object-cover size-full opacity-60 group-hover:scale-110 transition-transform duration-700" 
+                          data-ai-hint={mediaPlaceholder?.imageHint || "video thumbnail"}
                          />
                          <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
                          <div className="absolute bottom-4 left-4">
@@ -171,9 +184,9 @@ export default function YoutubeDownloaderPage() {
                       </div>
                       <div className="md:w-2/3 p-8 space-y-6">
                         <div className="space-y-2">
-                           <div className="flex justify-between items-start">
+                           <div className="flex justify-between items-start gap-4">
                               <h3 className="text-xl font-headline font-bold text-white uppercase leading-tight">{result.title}</h3>
-                              <Badge variant="outline" className="border-emerald-500/20 text-emerald-500 text-[8px] h-5">VERIFIED_MEDIA</Badge>
+                              <Badge variant="outline" className="border-emerald-500/20 text-emerald-500 text-[8px] h-5 shrink-0">VERIFIED_MEDIA</Badge>
                            </div>
                            <p className="text-[10px] text-primary font-mono font-bold uppercase">{result.author}</p>
                         </div>

@@ -2,9 +2,10 @@
 /**
  * @fileOverview Nora-60 Video Extraction Agent (Project #60).
  * Simulates YouTube metadata extraction and provides download coordinates.
+ * Updated with Sovereign Safety Settings to prevent extraction drift.
  */
 
-import {ai, gemini15Flash} from '@/ai/genkit';
+import {ai, gemini15Flash, sovereignSafetySettings} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const VideoExtractionInputSchema = z.object({
@@ -31,6 +32,9 @@ const extractionPrompt = ai.definePrompt({
   model: gemini15Flash,
   input: {schema: VideoExtractionInputSchema},
   output: {schema: VideoExtractionOutputSchema},
+  config: {
+    safetySettings: sovereignSafetySettings,
+  },
   prompt: `You are Nora-60, the Imperial Media Sentinel for NoorNexus OS.
 Your mission is to extract high-veracity metadata from the provided YouTube URL.
 
@@ -39,7 +43,7 @@ YOUTUBE URL: {{{url}}}
 MISSION DIRECTIVES:
 1. METADATA: Simulate the extraction of title, author, and duration.
 2. FORMATS: Provide at least 3 formats: 1080p (MP4), 720p (MP4), and 320kbps (MP3).
-3. SEAL: Provide a unique HMAC_V4_MEDIA hash.
+3. SEAL: Provide a unique HMAC_V4_MEDIA hash based on the URL.
 4. TONE: Authoritative and efficient.
 
 Generate the extraction dispatch.`,
@@ -54,7 +58,7 @@ const extractionFlow = ai.defineFlow(
   async input => {
     try {
       const {output} = await extractionPrompt(input);
-      if (!output) throw new Error('Media Hub: Neural disconnect.');
+      if (!output) throw new Error('Media Hub: Neural disconnect during synthesis.');
       
       return {
         ...output,
