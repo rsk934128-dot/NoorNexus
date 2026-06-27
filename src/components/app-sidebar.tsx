@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -64,7 +63,8 @@ import {
   Youtube,
   Download,
   Mic2,
-  BatteryCharging
+  BatteryCharging,
+  HeartHandshake
 } from "lucide-react"
 
 import {
@@ -94,11 +94,11 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "AI Gateway", url: "/ai-gateway", icon: LayoutGrid, zenith: true },
+  { title: "Citizen & Family Hub", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Sovereign Music Lab", url: "/audio-lab", icon: Mic2, highlight: true },
   { title: "Sovereign Bazaar", url: "/bazaar", icon: Store, highlight: true },
   { title: "Imperial Downloader", url: "/youtube-downloader", icon: Download, highlight: true },
   { title: "Imperial Browser", url: "/browser", icon: Monitor, highlight: true },
-  { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Imperial Pitch Deck", url: "/pitch-deck", icon: Presentation, highlight: true },
   { title: "Zenith Markets", url: "/zenith-markets", icon: ShoppingCart, highlight: true },
   { title: "Imperial Proposal", url: "/proposal", icon: FileText, highlight: true },
@@ -243,8 +243,8 @@ export function AppSidebar() {
         
         <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-between">
            <div className="flex items-center gap-2">
-              <BatteryCharging className="size-3 text-emerald-500 animate-pulse" />
-              <span className="text-[8px] font-bold text-emerald-500 uppercase">Always Alive Mode</span>
+              <HeartHandshake className="size-3 text-emerald-500 animate-pulse" />
+              <span className="text-[8px] font-bold text-emerald-500 uppercase">Family Shield Active</span>
            </div>
            <div className="size-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.8)]" />
         </div>
@@ -265,7 +265,7 @@ export function AppSidebar() {
 
         <SidebarContent ref={scrollRef} onScroll={handleScroll} className="scrollbar-hide">
           <SidebarGroup>
-            <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-muted-foreground px-4 mb-2">Mesh Services</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-muted-foreground px-4 mb-2">Imperial Services</SidebarGroupLabel>
             <SidebarMenu className="px-2">
               {USER_ITEMS.map((item) => (
                 <SidebarMenuItem key={item.title}>
@@ -334,7 +334,7 @@ export function AppSidebar() {
               </Avatar>
               <div className="flex-1 min-w-0">
                 <p className={`text-[10px] font-bold truncate uppercase ${isAdmin ? 'text-primary' : ''}`}>
-                  {isAdmin ? "Imperial Admin" : (user.displayName || "Commander")}
+                  {isAdmin ? "Imperial Admin" : (user.displayName || "Commander Farid")}
                 </p>
                 <div className="flex items-center gap-1">
                    <div className={`size-1 rounded-full animate-pulse ${isAdmin ? 'bg-primary' : 'bg-emerald-500'}`} />

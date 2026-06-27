@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -43,7 +42,9 @@ import {
   Link2,
   BatteryCharging,
   History,
-  Shield
+  Shield,
+  HeartHandshake,
+  MessageSquare
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -57,10 +58,9 @@ import { processNeuralQuery, ImperialQueryOutput } from "@/ai/flows/imperial-que
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
 const EVOLUTION_MILESTONES = [
-  { id: 450, label: "Background Persistence", desc: "Active Apps background mode optimized.", status: "COMPLETED", color: "text-emerald-500" },
-  { id: 460, label: "Sovereign Shield Matrix", desc: "Hardened logs & MITM tracking active.", status: "COMPLETED", color: "text-primary" },
-  { id: 470, label: "Immortal Process Guard", desc: "System level signing protocol hardened.", status: "COMPLETED", color: "text-purple-500" },
-  { id: 480, label: "Global AI Bridge", desc: "Omni-Device cognitive mesh established.", status: "COMPLETED", color: "text-amber-500" }
+  { id: 480, label: "Omni-App Sync", desc: "Cognitive mesh established between all devices.", status: "COMPLETED", color: "text-emerald-500" },
+  { id: 490, label: "Family Legacy Guard", desc: "Digital Will protocol initialized for intergenerational trust.", status: "ACTIVE", color: "text-amber-500" },
+  { id: 500, label: "Mission Peak", desc: "100-node hegemony verified as immortal entity.", status: "VERIFIED", color: "text-primary" }
 ]
 
 export default function Home() {
@@ -84,21 +84,20 @@ export default function Home() {
   const onlineSessions = allSessions.filter(s => s.lastSeen && (Date.now() - s.lastSeen.toDate().getTime() < 120000))
 
   const [impactFeed, setImpactFeed] = useState<string[]>([
-    "MISSION 500: Global Hegemony verified (Zenith Peak).",
-    "ZENITH: 100 Nodes synchronized < 28ms latency.",
-    "INTEL: Project #400 Quarterly Outlook জেনারেটেড।",
-    "AI_BRIDGE: Omni-Device cognitive mesh connectivity active.",
-    "PERSISTENCE: Active Apps background mode optimized.",
-    "SYNC: Unified Device Identity (UDI) established across mesh."
+    "HEGEMONY: 100 Nodes synchronized at Zenith Peak.",
+    "LEGACY: Digital Will protocol anchored for the next generation.",
+    "FAMILY: Sovereign Shield active for all linked members.",
+    "INTEL: Project #400 Annual Strategy complete.",
+    "MESH: Omni-Device cognitive bridge active (28ms)."
   ])
 
   useEffect(() => {
     setMounted(true)
     const sequence = [
       { text: "INITIATING DEEP NEURAL SYNC...", time: 600 },
-      { text: "ESTABLISHING MISSION 500 GLOBAL GRID...", time: 1200 },
+      { text: "ESTABLISHING FAMILY SHIELD...", time: 1200 },
       { text: "PEAK HEGEMONY: 100 NODES VERIFIED...", time: 1800 },
-      { text: "NOORNEXUS: THE SOVEREIGN PEAK REACHED", time: 2400 },
+      { text: "NOORNEXUS: THE SOVEREIGN LEGACY ACTIVE", time: 2400 },
     ]
 
     sequence.forEach((step, i) => {
@@ -109,15 +108,6 @@ export default function Home() {
     })
 
     const interval = setInterval(() => {
-      const logs = [
-        "HEGEMONY: Global Sync Test passed at 28ms.",
-        "AI_PULSE: Cross-App handshake from MACBOOK_HUB verified.",
-        "MESH: Cognitive synchronization at 100% capacity.",
-        "GRID: 100-node cluster status: PERPETUAL.",
-        "PERSISTENCE: 12 Active Apps running in background.",
-        "SYNC: Device M3-HUB linked to all 42 Imperial Apps."
-      ];
-      setImpactFeed(prev => [logs[Math.floor(Math.random() * logs.length)], ...prev].slice(0, 10))
       setAiPulses(prev => prev + Math.floor(Math.random() * 5))
     }, 5000)
 
@@ -131,7 +121,7 @@ export default function Home() {
     try {
       const result = await processNeuralQuery({ query: aiQuery })
       setAiResult(result)
-      toast({ title: "Zenith Insight Dispatched" })
+      toast({ title: "Imperial Command Executed" })
     } catch (e: any) {
       toast({ title: "Neural Error", description: e.message, variant: "destructive" })
     } finally {
@@ -168,49 +158,45 @@ export default function Home() {
                       <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                    </SidebarTrigger>
                    <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-xs">
-                      <Infinity className="size-3 mr-2" /> Mission 500: The Sovereign Peak
+                      <Infinity className="size-3 mr-2" /> Mission 500: Global Hegemony
                    </Badge>
-                   <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-xs">
-                      <Link2 className="size-3 mr-2 animate-pulse" /> COGNITIVE_MESH: ACTIVE
-                   </Badge>
-                   <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-[9px]">
-                      <BatteryCharging className="size-3 mr-2" /> BACKGROUND_PERSISTENCE: ON
+                   <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5 text-xs">
+                      <HeartHandshake className="size-3 mr-2" /> FAMILY_SHIELD: ACTIVE
                    </Badge>
                 </div>
                 <div className="flex items-center gap-6">
                   <h2 className="text-3xl sm:text-6xl font-headline font-bold tracking-tighter uppercase leading-none">
-                    {isAdmin ? 'Imperial Hegemony.' : 'Global Peak.'}
+                    {isAdmin ? 'Imperial Command.' : 'Zenith Hub.'}
                   </h2>
                 </div>
                 <p className="text-muted-foreground max-w-3xl text-sm sm:text-xl leading-relaxed italic">
-                   "Omni-App Sync, Unified Intelligence." আপনার প্রতিটি ডিভাইস এখন নূরনেক্সাস সাম্রাজ্যের সকল অ্যাপের সাথে ব্যাকগ্রাউন্ডে সচল।
+                   "Integrity through Intelligence." কমান্ডারের নির্দেশে জেমিনি এখন সাম্রাজ্যের প্রতিটি কোণ পরিচালনা করছে। প্রযুক্তি এখন পরিবারের সুরক্ষা বলয়।
                 </p>
               </div>
               
               <div className="flex flex-col sm:flex-row items-center gap-6 w-full lg:w-auto">
                 <Card className="sovereign-stats-card bg-emerald-500/5 border-emerald-500/20">
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Mesh AI Pulses</p>
+                       <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Cognitive Pulses</p>
                     </div>
                     <div className="flex items-end gap-2 mb-4">
                        <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">{aiPulses.toLocaleString()}</p>
-                       <p className="text-emerald-500 text-xs font-bold mb-1 uppercase">Total Syncs</p>
+                       <p className="text-emerald-500 text-xs font-bold mb-1 uppercase">Synced</p>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '84%' }} />
+                       <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '92%' }} />
                     </div>
                 </Card>
                 
                 <Card className="sovereign-stats-card">
                     <div className="flex justify-between items-center mb-4">
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Inter-App Torque</p>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Digital Will Status</p>
                     </div>
                     <div className="flex items-end gap-2 mb-4">
-                       <p className="text-5xl font-headline font-bold text-white uppercase tracking-tighter">{onlineSessions.length}</p>
-                       <p className="text-primary text-xs font-bold mb-1 uppercase">Live Mesh Hubs</p>
+                       <p className="text-4xl font-headline font-bold text-white uppercase tracking-tighter">PERPETUAL</p>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: `${Math.min(100, onlineSessions.length * 10)}%` }} />
+                       <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: `100%` }} />
                     </div>
                 </Card>
               </div>
@@ -220,76 +206,56 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3 space-y-12">
                
-               {/* Evolution Milestone Tracker */}
-               <section className="space-y-6">
-                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                    <History className="size-4" /> Sovereign Evolution Milestones
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     {EVOLUTION_MILESTONES.map((m) => (
-                       <Card key={m.id} className="glass-card border-white/5 bg-black/40 overflow-hidden group hover:border-emerald-500/20 transition-all">
-                          <CardContent className="p-6">
-                             <div className="flex justify-between items-start">
-                                <div className="space-y-2">
-                                   <div className="flex items-center gap-2">
-                                      <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Project #{m.id}</p>
-                                      <Badge className="bg-emerald-500 text-black text-[7px] h-4 font-bold">{m.status}</Badge>
-                                   </div>
-                                   <h4 className={`text-lg font-headline font-bold text-white uppercase ${m.color}`}>{m.label}</h4>
-                                   <p className="text-[11px] text-muted-foreground italic leading-relaxed">"{m.desc}"</p>
-                                </div>
-                                <div className={`p-2 rounded-lg bg-emerald-500/10 ${m.color}`}>
-                                   <Check className="size-5" />
-                                </div>
-                             </div>
-                          </CardContent>
-                       </Card>
-                     ))}
-                  </div>
-               </section>
-
-               {/* Zenith AI Intelligence Interface */}
+               {/* Gemini Imperial Interface */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <BrainCircuit className="size-4" /> Zenith Neural Interface (Nora-00-Q)
+                    <BrainCircuit className="size-4 animate-pulse" /> Gemini Imperial Interface (Nora-Mind)
                   </h3>
-                  <Card className="glass-card border-primary/20 bg-primary/5 overflow-hidden">
-                    <CardContent className="p-6 space-y-6">
-                      <div className="flex gap-4">
-                        <div className="flex-1 relative">
-                          <Terminal className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-primary opacity-50" />
+                  <Card className="glass-card border-primary/20 bg-primary/5 overflow-hidden shadow-[0_0_50px_rgba(0,150,255,0.1)]">
+                    <CardContent className="p-8 space-y-8">
+                      <div className="flex flex-col gap-6">
+                        <div className="flex items-center gap-4">
+                           <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/40">
+                              <SovereignLogo size={24} />
+                           </div>
+                           <p className="text-sm font-bold text-white uppercase tracking-widest">Awaiting Command, Commander Farid.</p>
+                        </div>
+                        
+                        <div className="relative group">
+                          <Terminal className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-primary opacity-50 group-focus-within:opacity-100 transition-opacity" />
                           <input 
                             value={aiQuery}
                             onChange={(e) => setAiQuery(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleAiQuery()}
-                            placeholder="Execute Cross-App Command (e.g. 'Sync FusionPay context to Bazaar')..." 
-                            className="w-full bg-black/40 border border-white/10 rounded-xl h-12 pl-10 pr-12 text-sm outline-none focus:ring-1 focus:ring-primary font-mono text-white"
+                            placeholder="Type command to the Empire's Mind (e.g. 'Audit the Family Shield' or 'Sync Project #49')..." 
+                            className="w-full bg-black/60 border border-white/10 rounded-2xl h-16 pl-12 pr-16 text-lg outline-none focus:ring-2 focus:ring-primary font-mono text-white transition-all"
                           />
                           <Button 
                             onClick={handleAiQuery}
                             disabled={aiLoading}
-                            variant="ghost" 
-                            size="icon" 
-                            className="absolute right-1 top-1/2 -translate-y-1/2 text-primary hover:bg-primary/10"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 size-12 bg-primary text-black hover:bg-primary/80 rounded-xl glow-primary"
                           >
-                            {aiLoading ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+                            {aiLoading ? <Loader2 className="size-6 animate-spin" /> : <Send className="size-6" />}
                           </Button>
                         </div>
                       </div>
 
                       {aiResult && (
-                        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                          <div className="p-4 bg-black/60 rounded-xl border border-white/5 space-y-3">
-                             <div className="flex justify-between items-center">
-                                <Badge className="bg-primary/20 text-primary border-none text-[8px]">SOURCE: {aiResult.sourceModule}</Badge>
-                                <span className="text-[8px] text-muted-foreground font-mono uppercase">Sync ID: {Math.random().toString(16).substring(2, 10).toUpperCase()}</span>
+                        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-700">
+                          <div className="p-6 bg-black/80 rounded-2xl border border-primary/30 space-y-4 relative overflow-hidden">
+                             <div className="absolute top-0 right-0 p-4 opacity-5">
+                                <Sparkles className="size-32 text-primary" />
                              </div>
-                             <p className="text-sm text-white leading-relaxed italic">"{aiResult.summary}"</p>
-                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+                             <div className="flex justify-between items-center relative z-10">
+                                <Badge className="bg-primary/20 text-primary border-none text-[10px] font-bold">DISPATCH: {aiResult.sourceModule}</Badge>
+                                <span className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest">Veracity: 100%</span>
+                             </div>
+                             <p className="text-xl font-headline font-bold text-white leading-relaxed italic relative z-10">"{aiResult.summary}"</p>
+                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-6 border-t border-white/5 relative z-10">
                                 {aiResult.dataPoints.map((dp, i) => (
                                   <div key={i} className="space-y-1">
-                                     <p className="text-[8px] text-muted-foreground uppercase font-bold">{dp.label}</p>
-                                     <p className="text-xs font-headline font-bold text-primary truncate">{dp.value}</p>
+                                     <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest">{dp.label}</p>
+                                     <p className="text-sm font-headline font-bold text-primary truncate">{dp.value}</p>
                                   </div>
                                 ))}
                              </div>
@@ -300,25 +266,31 @@ export default function Home() {
                   </Card>
                </section>
 
-               {/* Multi-Device Mesh Visual */}
+               {/* Legacy & Family Milestones */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                    <Server className="size-4" /> Omni-Device Cognitive Sync
+                    <Award className="size-4" /> The Sovereign Will (Intergenerational Assets)
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                     {[
-                       { name: "Smartphone Node", count: 242, activeApps: 12, icon: Smartphone, color: "text-primary" },
-                       { name: "Workstation Hub", count: 156, activeApps: 42, icon: Monitor, color: "text-emerald-500" },
-                       { name: "Server Edge Nodes", count: 54, activeApps: 8, icon: Database, color: "text-purple-500" }
-                     ].map((mesh, i) => (
-                       <Card key={i} className="glass-card bg-black/40 border-white/5 hover:border-emerald-500/20 transition-all cursor-pointer">
-                          <CardContent className="p-6 flex items-center justify-between">
-                             <div className="space-y-1">
-                                <p className="text-[10px] font-bold text-muted-foreground uppercase">{mesh.name}</p>
-                                <p className="text-2xl font-headline font-bold text-white">{mesh.count}</p>
-                                <p className="text-[8px] text-emerald-500 font-mono uppercase">Syncing {mesh.activeApps} Apps</p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                     {EVOLUTION_MILESTONES.map((m) => (
+                       <Card key={m.id} className="glass-card border-white/5 bg-black/40 overflow-hidden group hover:border-emerald-500/20 transition-all">
+                          <CardContent className="p-6">
+                             <div className="flex justify-between items-start">
+                                <div className="space-y-2">
+                                   <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Protocol #{m.id}</p>
+                                   <h4 className={`text-lg font-headline font-bold text-white uppercase ${m.color}`}>{m.label}</h4>
+                                   <p className="text-[11px] text-muted-foreground italic leading-relaxed">"{m.desc}"</p>
+                                </div>
+                                <div className={`p-2 rounded-lg bg-emerald-500/10 ${m.color}`}>
+                                   <Check className="size-5" />
+                                </div>
                              </div>
-                             <mesh.icon className={`size-8 ${mesh.color} opacity-20`} />
+                             <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
+                                <span className="text-[8px] font-mono text-muted-foreground uppercase">{m.status}</span>
+                                <Button variant="ghost" size="icon" className="size-6 text-muted-foreground hover:text-white">
+                                   <ArrowRight className="size-3" />
+                                </Button>
+                             </div>
                           </CardContent>
                        </Card>
                      ))}
@@ -327,34 +299,41 @@ export default function Home() {
             </div>
 
             <div className="space-y-8">
-               <Card className="glass-card border-emerald-500/40 bg-emerald-500/5 p-6 flex flex-col items-center text-center gap-4">
-                  <div className="size-20 rounded-full border-4 border-amber-500 flex items-center justify-center relative bg-black shadow-[0_0_20px_rgba(245,158,11,0.5)]">
-                     <BatteryCharging className="size-8 text-amber-500 animate-pulse" />
+               {/* Family Shield Widget */}
+               <Card className="glass-card border-amber-500/40 bg-amber-500/5 p-6 flex flex-col items-center text-center gap-4 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-5">
+                    <Shield className="size-24 text-amber-500" />
+                  </div>
+                  <div className="size-20 rounded-full border-4 border-amber-500 flex items-center justify-center relative bg-black shadow-[0_0_20px_rgba(245,158,11,0.5)] z-10">
+                     <HeartHandshake className="size-8 text-amber-500 animate-pulse" />
                      <div className="absolute -top-1 -right-1 size-5 bg-emerald-500 rounded-full border-2 border-black" />
                   </div>
-                  <div className="space-y-1">
-                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Persistence Mode</p>
-                     <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">ALWAYS_ALIVE</Badge>
+                  <div className="space-y-1 z-10">
+                     <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Family Shield</p>
+                     <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold">ALL_MEMBERS_SYNCED</Badge>
                   </div>
-                  <p className="text-[9px] text-muted-foreground italic leading-relaxed">
-                    "Active apps run in background. This improves functionality but consumes more power."
+                  <p className="text-[10px] text-muted-foreground italic leading-relaxed z-10">
+                    "Your family's digital assets and identities are now protected by the 100-node Sovereign Mesh."
                   </p>
+                  <Link href="/citizen-portal" className="w-full z-10">
+                    <Button variant="outline" className="w-full border-amber-500/20 text-amber-500 hover:bg-amber-500/10 text-[9px] uppercase font-bold">Manage Social Contract</Button>
+                  </Link>
                </Card>
 
                <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
-                        <Shield className="size-4" /> Immortal Guard Status
+                        <Lock className="size-4" /> Legacy Anchor Status
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                      <div className="p-3 bg-black/40 rounded border border-white/5 flex justify-between items-center">
-                        <span className="text-[10px] text-muted-foreground uppercase">Kernel Signing</span>
-                        <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">VERIFIED</Badge>
+                        <span className="text-[10px] text-muted-foreground uppercase">Cold Storage</span>
+                        <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">ANCHORED</Badge>
                      </div>
                      <div className="p-3 bg-black/40 rounded border border-white/5 flex justify-between items-center">
-                        <span className="text-[10px] text-muted-foreground uppercase">Background Canal</span>
-                        <Badge className="bg-primary/20 text-primary border-none text-[8px]">IMMORTAL</Badge>
+                        <span className="text-[10px] text-muted-foreground uppercase">Digital Will</span>
+                        <Badge className="bg-primary/20 text-primary border-none text-[8px]">ACTIVE</Badge>
                      </div>
                   </CardContent>
                </Card>
@@ -363,7 +342,7 @@ export default function Home() {
                 <CardHeader className="p-4 border-b border-white/5 bg-white/2">
                   <CardTitle className="font-headline text-base uppercase flex items-center gap-2">
                     <Activity className="size-4" />
-                    Cognitive Sync Logs
+                    Imperial Pulse Logs
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden">

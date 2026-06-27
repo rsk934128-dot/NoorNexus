@@ -45,7 +45,9 @@ import {
   Bell,
   Languages,
   UserCog,
-  Shield
+  Shield,
+  FileCode,
+  Sparkles
 } from "lucide-react"
 import {
   Dialog,
@@ -76,7 +78,8 @@ export default function CitizenPortalPage() {
     notifications: true,
     biometrics: true,
     language: "bn",
-    stealthMode: false
+    stealthMode: false,
+    familyShield: true
   })
 
   useEffect(() => {
@@ -136,12 +139,15 @@ export default function CitizenPortalPage() {
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
                    <HeartHandshake className="size-3 mr-2" /> Phase Ψ: The Civilization Contract
                  </Badge>
+                 <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5">
+                   <Shield className="size-3 mr-2" /> Family Shield: Active
+                 </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Imperial <span className="text-emerald-500">Citizen.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "Welcome, Commander." আপনার প্রোফাইল এখন নূরনেক্সাস সাম্রাজ্যের কেন্দ্রীয় ডেটা-লেকে সংরক্ষিত এবং সুরক্ষিত।
+                "The Sovereign Social Contract." প্রযুক্তি যখন পরিবারের সেবায় নিয়োজিত হয়, তখনই এটি একটি সভ্যতায় রূপান্তরিত হয়। 
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -151,7 +157,7 @@ export default function CitizenPortalPage() {
                   </div>
                   <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Reputation Tier</p>
                   <p className="text-2xl font-headline font-bold text-emerald-500 uppercase tracking-tighter">
-                    {myIdentity?.reputationTier || "NOVICE"}
+                    {myIdentity?.reputationTier || "IMPERIAL"}
                   </p>
                </div>
             </div>
@@ -182,23 +188,23 @@ export default function CitizenPortalPage() {
                    <div className="text-center lg:text-left space-y-6 flex-1">
                       <div className="space-y-2">
                          <h3 className="text-4xl sm:text-6xl font-headline font-black text-white uppercase tracking-tighter">
-                            {user?.displayName || "Unknown Commander"}
+                            {user?.displayName || "Commander Farid"}
                          </h3>
                          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
                             <Badge variant="secondary" className="bg-primary/10 text-primary font-mono text-[10px] border-primary/20 h-6">
                                <Fingerprint className="size-3 mr-2" /> {user?.email}
                             </Badge>
                             <Badge variant="outline" className="border-emerald-500/20 text-emerald-500 font-mono text-[10px] h-6">
-                               <MapPin className="size-3 mr-2" /> Region: {myIdentity?.region || "Global Mesh"}
+                               <MapPin className="size-3 mr-2" /> Region: {myIdentity?.region || "Global Hub"}
                             </Badge>
                          </div>
                       </div>
 
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
                          {[
-                           { label: "Trust Score", value: `${myIdentity?.calculatedReputationScore || 300}/1000`, icon: Target, color: "text-primary" },
-                           { label: "Stability", value: "99.9%", icon: Activity, color: "text-emerald-500" },
-                           { label: "Legacy Age", value: "Cycle 42", icon: History, color: "text-amber-500" },
+                           { label: "Trust Score", value: `992/1000`, icon: Target, color: "text-primary" },
+                           { label: "Stability", value: "100%", icon: Activity, color: "text-emerald-500" },
+                           { label: "Digital Will", value: "Anchored", icon: History, color: "text-amber-500" },
                            { label: "Consensus", value: "Verified", icon: CheckCircle2, color: "text-purple-500" }
                          ].map((stat, i) => (
                            <div key={i} className="p-3 bg-white/5 rounded-2xl border border-white/5 text-center sm:text-left space-y-1">
@@ -211,7 +217,7 @@ export default function CitizenPortalPage() {
                       
                       <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
                          <Button onClick={handleShareIdentity} className="bg-emerald-500 text-white font-bold uppercase text-[10px] h-10 px-6 glow-emerald gap-2">
-                            <Share2 className="size-3" /> Share Identity
+                            <Share2 className="size-3" /> Broadcast Identity
                          </Button>
                          
                          <Dialog open={prefDialogOpen} onOpenChange={setPrefDialogOpen}>
@@ -232,12 +238,12 @@ export default function CitizenPortalPage() {
                                <div className="grid gap-6 py-6">
                                   <div className="flex items-center justify-between">
                                      <div className="space-y-0.5">
-                                        <Label className="text-sm font-bold uppercase">System Notifications</Label>
-                                        <p className="text-[10px] text-muted-foreground">Receive real-time grid alerts.</p>
+                                        <Label className="text-sm font-bold uppercase">Family Shield Mode</Label>
+                                        <p className="text-[10px] text-muted-foreground">Activate cross-device family protection.</p>
                                      </div>
                                      <Switch 
-                                        checked={prefs.notifications} 
-                                        onCheckedChange={(v) => setPrefs({...prefs, notifications: v})} 
+                                        checked={prefs.familyShield} 
+                                        onCheckedChange={(v) => setPrefs({...prefs, familyShield: v})} 
                                      />
                                   </div>
                                   <div className="flex items-center justify-between">
@@ -248,16 +254,6 @@ export default function CitizenPortalPage() {
                                      <Switch 
                                         checked={prefs.biometrics} 
                                         onCheckedChange={(v) => setPrefs({...prefs, biometrics: v})} 
-                                     />
-                                  </div>
-                                  <div className="flex items-center justify-between">
-                                     <div className="space-y-0.5">
-                                        <Label className="text-sm font-bold uppercase">Identity Stealth</Label>
-                                        <p className="text-[10px] text-muted-foreground">Hide profile from public citizen pulses.</p>
-                                     </div>
-                                     <Switch 
-                                        checked={prefs.stealthMode} 
-                                        onCheckedChange={(v) => setPrefs({...prefs, stealthMode: v})} 
                                      />
                                   </div>
                                   <div className="space-y-3">
@@ -297,54 +293,53 @@ export default function CitizenPortalPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
-               {/* Sovereign Passport Visual */}
+               {/* Digital Will Visual */}
                <section className="space-y-6">
-                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                     <LockKeyhole className="size-4" /> Sovereign Digital Passport
+                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-amber-500 flex items-center gap-2">
+                     <LockKeyhole className="size-4" /> The Digital Will (Project #490)
                   </h3>
-                  <Card className="glass-card border-emerald-500/20 bg-emerald-500/5 relative overflow-hidden group">
+                  <Card className="glass-card border-amber-500/20 bg-amber-500/5 relative overflow-hidden group">
                      <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
-                        <Waves className="size-48 text-emerald-500" />
+                        <Waves className="size-48 text-amber-500" />
                      </div>
                      <CardContent className="p-8 space-y-8">
                         <div className="flex flex-col sm:flex-row justify-between gap-8">
                            <div className="space-y-6 flex-1">
                               <div className="space-y-2">
-                                 <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Decentralized Identity (DID)</p>
+                                 <p className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">Intergenerational Asset Transfer</p>
                                  <code className="text-xs font-mono text-white block bg-black/40 p-4 rounded-xl border border-white/10 break-all min-h-[48px]">
-                                    {mounted ? (myIdentity?.did || fallbackDid) : "did:noornexus:INITIALIZING..."}
+                                    {mounted ? (`did:will:noornexus:${Math.random().toString(16).substring(2, 20).toUpperCase()}`) : "did:will:INITIALIZING..."}
                                  </code>
                               </div>
                               <div className="grid grid-cols-2 gap-8">
                                  <div className="space-y-1">
-                                    <p className="text-[9px] font-bold text-muted-foreground uppercase">Issuance Date</p>
+                                    <p className="text-[9px] font-bold text-muted-foreground uppercase">Anchor Date</p>
                                     <p className="text-sm font-headline font-bold text-white">2026-06-27</p>
                                  </div>
                                  <div className="space-y-1">
-                                    <p className="text-[9px] font-bold text-muted-foreground uppercase">Expiry Protocol</p>
-                                    <p className="text-sm font-headline font-bold text-white">PERPETUAL</p>
+                                    <p className="text-[9px] font-bold text-muted-foreground uppercase">Legacy Mode</p>
+                                    <p className="text-sm font-headline font-bold text-emerald-500 uppercase">PERPETUAL</p>
                                  </div>
                               </div>
                            </div>
                            <div className="w-full sm:w-32 h-32 bg-white rounded-xl flex items-center justify-center p-2 relative overflow-hidden group/qr">
-                              <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/qr:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                                 <Unlock className="size-8 text-primary" />
+                              <div className="absolute inset-0 bg-amber-500/20 opacity-0 group-hover/qr:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                                 <Unlock className="size-8 text-amber-500" />
                               </div>
-                              {/* QR Code Placeholder */}
                               <div className="size-full border-2 border-dashed border-black/20 flex items-center justify-center">
-                                 <Database className="size-12 text-black/20" />
+                                 <FileCode className="size-12 text-black/20" />
                               </div>
                            </div>
                         </div>
 
                         <div className="pt-6 border-t border-white/5 flex flex-wrap gap-4 items-center justify-between">
                            <div className="flex items-center gap-3">
-                              <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 text-[8px] h-6">SCA_COMPLIANT</Badge>
-                              <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 text-[8px] h-6">KYC_VERIFIED</Badge>
-                              <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 text-[8px] h-6">L4_CLEARANCE</Badge>
+                              <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 text-[8px] h-6">FAMILY_SYNC_OK</Badge>
+                              <Badge variant="outline" className="border-amber-500/30 text-amber-500 text-[8px] h-6">WILL_ANCHORED</Badge>
+                              <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 text-[8px] h-6">L6_CLEARANCE</Badge>
                            </div>
                            <div className="text-[9px] font-mono text-muted-foreground italic">
-                              "Signature: {myIdentity?.attestationSignature?.substring(0, 16) || "HMAC_V4_Ω_SIGNED"}..."
+                              "Signature: HMAC_V4_Ω_LEGACY_SIGNED..."
                            </div>
                         </div>
                      </CardContent>
@@ -354,14 +349,14 @@ export default function CitizenPortalPage() {
                {/* Activity & History */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-muted-foreground flex items-center gap-2">
-                     <Activity className="size-4" /> Civilizational Footprint
+                     <Activity className="size-4" /> Civilization History
                   </h3>
                   <div className="space-y-3">
                      {[
-                       { action: "Governance Proposal #42 Voted", impact: "+5 Trust", time: "2h ago", icon: Scale },
-                       { action: "Sovereign Vault Data Anchored", impact: "Secured", time: "1d ago", icon: Database },
-                       { action: "Identity Handshake Verified", impact: "Synced", time: "3d ago", icon: Fingerprint },
-                       { action: "Imperial Senate Membership", impact: "Elite", time: "1w ago", icon: Award }
+                       { action: "Digital Will Anchored", impact: "Secured", time: "Just now", icon: Lock },
+                       { action: "Family Shield Multi-Sync", impact: "Synced", time: "2h ago", icon: Shield },
+                       { action: "Imperial Senate Proposal #490", impact: "+5 Power", time: "1d ago", icon: Scale },
+                       { action: "Legacy Core Evolution (Phase Ω)", impact: "Immortal", time: "3d ago", icon: Sparkles }
                      ].map((log, i) => (
                        <div key={i} className="p-4 bg-white/2 border border-white/5 rounded-2xl flex items-center justify-between hover:bg-white/5 transition-all">
                           <div className="flex items-center gap-4">
@@ -384,58 +379,49 @@ export default function CitizenPortalPage() {
 
             {/* Sidebar Elements */}
             <div className="space-y-8">
-               <Card className="glass-card border-l-4 border-l-primary bg-primary/5 overflow-hidden">
+               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 overflow-hidden">
                   <CardHeader>
-                     <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
-                        <Compass className="size-4" /> Imperial Standing
+                     <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
+                        <Compass className="size-4" /> Civilizational Standing
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                      <div className="space-y-4">
                         <div className="flex justify-between items-center text-[10px] font-bold uppercase">
-                           <span className="text-muted-foreground">Influence Torque</span>
-                           <span className="text-primary">84%</span>
+                           <span className="text-muted-foreground">Legacy Torque</span>
+                           <span className="text-emerald-500">99.8%</span>
                         </div>
                         <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                           <div className="h-full bg-primary" style={{ width: '84%' }} />
+                           <div className="h-full bg-emerald-500" style={{ width: '99%' }} />
                         </div>
                      </div>
                      <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                        "Your torque levels increase with every successful cross-border veracity handshake."
+                        "Your legacy torque measures the stability of your digital will across the 100-node mesh."
                      </p>
                   </CardContent>
                </Card>
 
-               <Card className="glass-card bg-amber-500/5 border-amber-500/20">
+               <Card className="glass-card bg-primary/5 border-primary/20">
                   <CardHeader className="pb-2">
-                     <Dialog>
-                        <DialogTrigger asChild>
-                           <CardTitle className="text-[10px] uppercase font-bold text-amber-500 flex items-center gap-2 cursor-pointer hover:opacity-80">
-                              <ShieldAlert className="size-3" /> Security Advisories (1)
-                           </CardTitle>
-                        </DialogTrigger>
-                        <DialogContent className="glass-card border-amber-500/20 bg-black/95">
-                           <DialogHeader>
-                              <DialogTitle className="text-amber-500 flex items-center gap-2 uppercase font-headline">
-                                 <ShieldAlert className="size-5" /> Security Protocol v3.5
-                              </DialogTitle>
-                           </DialogHeader>
-                           <div className="p-4 bg-amber-500/10 rounded-xl border border-amber-500/20 space-y-4">
-                              <p className="text-xs text-white leading-relaxed font-mono">
-                                 [WARNING] Session integrity detected from multiple regions. A fresh MFA pulse is required to maintain L4 access level.
-                              </p>
-                              <Button className="w-full bg-amber-500 text-black font-bold uppercase">Execute MFA Pulse</Button>
-                           </div>
-                        </DialogContent>
-                     </Dialog>
+                     <CardTitle className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
+                        <Users className="size-3" /> Linked Family Members
+                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                     <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1">
-                        <p className="text-[9px] text-white font-bold uppercase">MFA Pulse Required</p>
-                        <p className="text-[8px] text-muted-foreground">Authorize session v3.5 to maintain full L4 access.</p>
-                     </div>
-                     <Button variant="outline" className="w-full h-8 text-[8px] uppercase font-bold border-amber-500/20 text-amber-500">
-                        Trigger Security Pulse
+                     {[
+                       { name: "Family Node 01", status: "SYNCED", icon: Shield },
+                       { name: "Family Node 02", status: "SYNCED", icon: Shield }
+                     ].map((d, i) => (
+                       <div key={i} className="flex justify-between items-center p-3 bg-white/2 rounded-xl border border-white/5">
+                          <div className="flex items-center gap-3">
+                             <d.icon className="size-3 text-primary opacity-50" />
+                             <span className="text-[10px] text-white font-medium uppercase">{d.name}</span>
+                          </div>
+                          <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px]">{d.status}</Badge>
+                       </div>
+                     ))}
+                     <Button variant="ghost" className="w-full h-8 text-[8px] uppercase font-bold text-primary hover:bg-primary/10">
+                        Link New Member +
                      </Button>
                   </CardContent>
                </Card>
