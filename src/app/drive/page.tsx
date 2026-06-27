@@ -34,7 +34,8 @@ import {
   ChevronRight,
   Database,
   CloudUpload,
-  FolderOpen
+  FolderOpen,
+  Activity
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useUser } from "@/firebase"
