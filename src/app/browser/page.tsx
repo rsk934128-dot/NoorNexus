@@ -31,7 +31,13 @@ import {
   LayoutGrid,
   Radio,
   ArrowRight,
-  CheckCircle2
+  CheckCircle2,
+  Database,
+  History,
+  HardDrive,
+  Infinity,
+  Fingerprint,
+  Box
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { executeZenithSearch, WebSearchOutput } from "@/ai/flows/web-search-flow"
@@ -53,6 +59,7 @@ function BrowserContent() {
   const [activeUrl, setActiveUrl] = useState("https://www.google.com")
   const [loading, setLoading] = useState(false)
   const [isSearchMode, setIsSearchMode] = useState(true)
+  const [isInternalPage, setIsInternalPage] = useState(false)
   const [searchResult, setSearchResult] = useState<WebSearchOutput | null>(null)
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
@@ -67,6 +74,17 @@ function BrowserContent() {
   const handleNavigate = async (url?: string) => {
     let target = url || urlInput
     if (!target.trim()) return
+
+    // Internal Resolver: Check if it's a .sovereign simulated domain
+    if (target.includes('.sovereign')) {
+      setLoading(true)
+      setIsSearchMode(false)
+      setIsInternalPage(true)
+      setActiveUrl(target)
+      setUrlInput(target)
+      setTimeout(() => setLoading(false), 800)
+      return
+    }
 
     // Improved detection: Is it a URL or a Search Query?
     const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i
@@ -83,6 +101,7 @@ function BrowserContent() {
     
     setLoading(true)
     setIsSearchMode(false)
+    setIsInternalPage(false)
     setActiveUrl(target)
     setUrlInput(target)
     
@@ -99,6 +118,7 @@ function BrowserContent() {
     if (!query.trim()) return
     setLoading(true)
     setIsSearchMode(true)
+    setIsInternalPage(false)
     setSearchResult(null)
     setUrlInput(query)
 
@@ -116,6 +136,8 @@ function BrowserContent() {
   const handleRefresh = () => {
     if (isSearchMode && urlInput) {
       handleSearch(urlInput)
+    } else if (isInternalPage) {
+      handleNavigate(activeUrl)
     } else if (iframeRef.current) {
       setLoading(true)
       iframeRef.current.src = activeUrl
@@ -152,7 +174,7 @@ function BrowserContent() {
            
            <div className="flex-1 relative group">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
-                 <Lock className={`size-3 ${isSearchMode ? 'text-amber-500' : 'text-emerald-500'}`} />
+                 <Lock className={`size-3 ${isSearchMode ? 'text-amber-500' : isInternalPage ? 'text-purple-500' : 'text-emerald-500'}`} />
               </div>
               <Input 
                 value={urlInput}
@@ -182,8 +204,8 @@ function BrowserContent() {
            </div>
 
            <div className="hidden sm:flex items-center gap-2">
-              <Badge variant="outline" className="border-emerald-500/20 text-emerald-500 uppercase text-[8px] h-11 px-3 bg-emerald-500/5">
-                AES_256_ACTIVE
+              <Badge variant="outline" className={`border-emerald-500/20 text-emerald-500 uppercase text-[8px] h-11 px-3 bg-emerald-500/5`}>
+                {isInternalPage ? 'SOVEREIGN_RESOLVED' : 'AES_256_ACTIVE'}
               </Badge>
            </div>
         </div>
@@ -332,6 +354,73 @@ function BrowserContent() {
               )}
             </div>
           </ScrollArea>
+        ) : isInternalPage ? (
+          <div className="h-full w-full bg-background flex flex-col items-center justify-center p-6 space-y-12 animate-in fade-in">
+             <div className="max-w-4xl w-full space-y-12">
+                <div className="flex flex-col md:flex-row items-center gap-12 border-b border-white/5 pb-12">
+                   <div className="size-32 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center glow-primary shrink-0">
+                      <Infinity className="size-16 text-primary" />
+                   </div>
+                   <div className="space-y-4 text-center md:text-left">
+                      <h3 className="text-3xl font-headline font-bold text-white uppercase tracking-tighter">Sovereign Mesh Node: {activeUrl.replace('https://', '').replace('.sovereign', '')}</h3>
+                      <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                         <Badge variant="outline" className="border-emerald-500/20 text-emerald-500 uppercase text-[8px] h-6">Local_Resolution: SUCCESS</Badge>
+                         <Badge variant="outline" className="border-primary/20 text-primary uppercase text-[8px] h-6">Node_Status: SYNCHRONIZED</Badge>
+                         <Badge variant="outline" className="border-amber-500/20 text-amber-500 uppercase text-[8px] h-6">Veracity: 100%</Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground italic leading-relaxed">
+                         "Internal Sovereign archives are isolated from the public internet. This interface provides direct access to the One Engine Ledger records for this node."
+                      </p>
+                   </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                   {[
+                     { label: "Storage Health", val: "99.9%", icon: HardDrive },
+                     { label: "Audit Signature", val: "HMAC_V4", icon: Fingerprint },
+                     { label: "Recent Sync", val: "28ms ago", icon: RefreshCcw }
+                   ].map((item, i) => (
+                     <Card key={i} className="glass-card bg-white/2 border-white/5">
+                        <CardContent className="p-6 space-y-2 text-center">
+                           <item.icon className="size-6 text-primary mx-auto mb-2 opacity-50" />
+                           <p className="text-[10px] font-bold text-muted-foreground uppercase">{item.label}</p>
+                           <p className="text-lg font-headline font-bold text-white uppercase">{item.val}</p>
+                        </CardContent>
+                     </Card>
+                   ))}
+                </div>
+
+                <Card className="glass-card border-white/5 bg-black/40">
+                   <CardHeader className="py-4 border-b border-white/5">
+                      <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
+                         <Database className="size-4" /> Node Registry Logs
+                      </CardTitle>
+                   </CardHeader>
+                   <CardContent className="p-6">
+                      <div className="space-y-3">
+                         {[
+                           { action: "Handshake Authorized", status: "SUCCESS", id: "P-42" },
+                           { action: "Ledger Reconciliation", status: "FINALIZED", id: "P-43" },
+                           { action: "Sovereign Vault Uplink", status: "ANCHORED", id: "P-44" }
+                         ].map((log, i) => (
+                           <div key={i} className="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5 font-mono text-[10px]">
+                              <div className="flex items-center gap-3">
+                                 <span className="text-muted-foreground">[{log.id}]</span>
+                                 <span className="text-white uppercase">{log.action}</span>
+                              </div>
+                              <span className="text-emerald-500 font-bold">{log.status}</span>
+                           </div>
+                         ))}
+                      </div>
+                   </CardContent>
+                </Card>
+             </div>
+
+             <div className="flex flex-col items-center gap-4 text-center opacity-40">
+                <ShieldCheck className="size-10 text-emerald-500" />
+                <p className="text-[8px] font-mono uppercase tracking-[0.5em]">NoorNexus Internal Infrastructure Only</p>
+             </div>
+          </div>
         ) : (
           <div className="h-full w-full bg-white relative">
             <iframe 
@@ -351,7 +440,9 @@ function BrowserContent() {
               <ShieldCheck className="size-4 text-emerald-500" />
               <div className="space-y-0.5">
                 <p className="text-[9px] font-bold text-white uppercase leading-none">Canal Secure</p>
-                <p className="text-[7px] text-emerald-500/60 font-mono uppercase leading-none">Handshake Verified</p>
+                <p className="text-[7px] text-emerald-500/60 font-mono uppercase leading-none">
+                   {isInternalPage ? 'MESH_RESOLVED' : 'Handshake Verified'}
+                </p>
               </div>
           </div>
         </div>
@@ -363,9 +454,9 @@ function BrowserContent() {
              NoorNexus Imperial Web Gateway | SSL: SHA-256 Encrypted
            </p>
            <div className="flex items-center gap-2">
-              <div className={`size-1.5 rounded-full ${isSearchMode ? 'bg-amber-500' : 'bg-emerald-500'} animate-pulse shadow-[0_0_8px_rgba(0,150,255,0.4)]`} />
-              <span className={`text-[8px] font-bold uppercase ${isSearchMode ? 'text-amber-500' : 'text-emerald-500'}`}>
-                {isSearchMode ? 'AI Search Pulse: READY' : 'Canal Uplink: STABLE'}
+              <div className={`size-1.5 rounded-full ${isSearchMode ? 'bg-amber-500' : isInternalPage ? 'bg-purple-500' : 'bg-emerald-500'} animate-pulse shadow-[0_0_8px_rgba(0,150,255,0.4)]`} />
+              <span className={`text-[8px] font-bold uppercase ${isSearchMode ? 'text-amber-500' : isInternalPage ? 'text-purple-500' : 'text-emerald-500'}`}>
+                {isSearchMode ? 'AI Search Pulse: READY' : isInternalPage ? 'INTERNAL NODE: CONNECTED' : 'Canal Uplink: STABLE'}
               </span>
            </div>
         </div>
