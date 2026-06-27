@@ -8,28 +8,18 @@ import { Button } from "@/components/ui/button"
 import { 
   ShieldCheck, 
   Menu, 
-  Loader2, 
   Activity, 
   Zap, 
   CheckCircle2, 
   BrainCircuit,
-  HeartPulse,
   Database,
   Cpu,
-  ArrowRight,
-  Network,
   Infinity,
   ArrowRightLeft,
-  Server,
   Award,
-  Atom,
-  Flame,
-  Map,
-  FileCheck,
-  RefreshCcw,
+  History,
   Sparkles,
   Lock,
-  Search,
   Radio,
   Fingerprint,
   TrendingUp,
@@ -38,15 +28,10 @@ import {
   Rocket,
   ShieldPlus,
   Compass,
-  FileSearch,
   Check,
   Waves,
-  ZapOff,
-  Clock,
   Eye,
   Repeat,
-  BarChart3,
-  History,
   Target
 } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -256,7 +241,7 @@ export default function Home() {
                <section className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                       <Map className="size-4" /> Global Hegemony Grid (100 Nodes Active)
+                       <Target className="size-4" /> Global Hegemony Grid (100 Nodes Active)
                     </h3>
                   </div>
                   <Card className="glass-card p-6 bg-black/40 border-white/5 relative overflow-hidden">

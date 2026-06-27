@@ -18,15 +18,11 @@ import {
   Truck,
   AlertTriangle,
   Info,
-  Globe,
-  ArrowRight,
   FileText,
   Binary,
   Loader2,
-  CheckCircle2,
-  CreditCard,
-  Lock,
-  Database
+  Database,
+  LockKeyhole
 } from "lucide-react"
 import Image from "next/image"
 import placeholderData from "@/app/lib/placeholder-images.json"
@@ -77,7 +73,6 @@ export default function IndustrialHubPage() {
       )
 
       if (result.status === 'SUCCESS') {
-        // SECURITY HARDENING: Log to Immutable Audit Ledger
         const auditHash = `0x_IMMU_${Math.random().toString(16).substring(2, 32)}`
         await addDoc(collection(db, "audit_logs"), {
           action: "INDUSTRIAL_PROCUREMENT",
@@ -194,7 +189,7 @@ export default function IndustrialHubPage() {
                              {item.complianceLinks.map((link, i) => (
                                <Button key={i} variant="outline" size="sm" className="text-[9px] border-white/10 h-8 gap-2 bg-white/5">
                                   <link.icon className="size-3" /> {link.label}
-                               </Button>
+                                </Button>
                              ))}
                           </div>
 

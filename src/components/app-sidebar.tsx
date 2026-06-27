@@ -10,19 +10,30 @@ import {
   Settings,
   Trophy,
   Radar,
-  ChevronRight,
   LogOut,
   LogIn,
   X,
   Globe,
-  Crown,
   Building2,
-  Code2,
-  BookOpen,
-  TrendingUp,
-  Maximize2,
-  Minimize2,
-  Wallet,
+  Star,
+  Zap,
+  FileOutput,
+  CandlestickChart,
+  UserCircle,
+  BrainCircuit,
+  Rocket,
+  Truck,
+  Infinity,
+  Merge,
+  CreditCard,
+  Key,
+  FileCheck,
+  Network,
+  Lock,
+  Compass as Discovery,
+  FileText,
+  ArrowDownToLine,
+  Database,
   UserPlus,
   Users,
   Link as LinkIcon,
@@ -31,36 +42,10 @@ import {
   Landmark,
   Scale,
   Compass,
-  Award,
-  ShieldAlert,
   ShieldPlus,
   Shield,
-  Phone,
   ShoppingBag,
-  Briefcase,
-  Zap,
-  FileOutput,
-  CandlestickChart,
-  UserCircle,
-  BrainCircuit,
-  Rocket,
-  Star,
-  Wrench,
-  Truck,
-  Link2,
-  LockKeyhole,
-  Infinity,
-  Merge,
-  CreditCard,
-  Key,
-  FileCheck,
-  Network,
-  Lock,
-  EyeOff,
-  Compass as Discovery,
-  FileText,
-  ArrowDownToLine,
-  Database
+  Maximize2
 } from "lucide-react"
 
 import {
@@ -104,7 +89,7 @@ const USER_ITEMS = [
   { title: "Open Banking Hub", url: "/open-banking", icon: Landmark },
   { title: "Industrial Hub", url: "/industrial-hub", icon: Building2 },
   { title: "Asset Tracking (P46)", url: "/logistics", icon: Truck },
-  { title: "Partnership Kit", url: "/docs", icon: Briefcase },
+  { title: "Partnership Kit", url: "/docs", icon: Building2 },
   { title: "Imperial Portfolio", url: "/portfolio", icon: Star },
   { title: "Imperial Flow Pay", url: "/flow-pay", icon: Zap },
   { title: "Fintech Fusion", url: "/fintech-fusion", icon: Merge },
@@ -130,12 +115,12 @@ const ADMIN_ITEMS = [
   { title: "Neural Audit (P52)", url: "/neural-audit", icon: FileCheck },
   { title: "AI Governance", url: "/ai-governance", icon: BrainCircuit },
   { title: "Session Monitor", url: "/sessions", icon: Activity },
-  { title: "Adoption Audit", url: "/assessment", icon: Award },
+  { title: "Adoption Audit", url: "/assessment", icon: Building2 },
   { title: "Pilot Lifecycle", url: "/merchants", icon: Users },
   { title: "Arbitration Chamber", url: "/arbitration", icon: Scale },
   { title: "Border Monitor", url: "/border-monitor", icon: Radar },
   { title: "Compliance Agent", url: "/compliance", icon: ShieldCheck },
-  { title: "Sovereign Treasury", url: "/treasury", icon: Wallet },
+  { title: "Sovereign Treasury", url: "/treasury", icon: Landmark },
   { title: "One Engine Ledger", url: "/ledger", icon: Layers },
   { title: "Node Watchtower", url: "/nodes", icon: Activity },
   { title: "Imperial Parameters", url: "/ecosystem", icon: Settings },
@@ -230,7 +215,7 @@ export function AppSidebar() {
         {isAdmin && (
           <SidebarGroup className="mt-4">
             <SidebarGroupLabel className="text-[9px] uppercase tracking-[0.2em] font-bold text-primary px-4 mb-2 flex items-center gap-2">
-              <ShieldAlert className="size-3" /> Sovereign Commands
+              <ShieldCheck className="size-3" /> Sovereign Commands
             </SidebarGroupLabel>
             <SidebarMenu className="px-2">
               {ADMIN_ITEMS.map((item) => (
@@ -250,7 +235,7 @@ export function AppSidebar() {
 
       <SidebarFooter className="p-4 space-y-4">
         <button onClick={toggleFullscreen} className="w-full py-2.5 bg-primary/5 rounded border border-primary/20 text-[9px] uppercase font-bold text-primary hover:bg-primary/10 transition-all flex items-center justify-center gap-2 group">
-          {isFullscreen ? <><Maximize2 className="size-3" /> Exit Fullscreen</> : <><Maximize2 className="size-3" /> Go Fullscreen</>}
+          <Maximize2 className="size-3" /> {isFullscreen ? "Exit Fullscreen" : "Go Fullscreen"}
         </button>
 
         {user ? (
