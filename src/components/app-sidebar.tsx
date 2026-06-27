@@ -44,7 +44,8 @@ import {
   ShieldPlus,
   Shield,
   ShoppingBag,
-  Maximize2
+  Maximize2,
+  HardDrive
 } from "lucide-react"
 
 import {
@@ -76,6 +77,7 @@ const USER_ITEMS = [
   { title: "Citizen Portal", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Imperial Proposal", url: "/proposal", icon: FileText, highlight: true },
   { title: "Discovery Hub", url: "/api-hub", icon: Compass, zenith: true },
+  { title: "Imperial Drive", url: "/drive", icon: HardDrive, zenith: true },
   { title: "Sovereign Off-Ramp", url: "/off-ramp", icon: ArrowDownToLine, highlight: true },
   { title: "Sovereign Data Lake", url: "/data-lake", icon: Database, zenith: true },
   { title: "Sovereign Gateway (P51)", url: "/sovereign-gateway", icon: Rocket, zenith: true },
