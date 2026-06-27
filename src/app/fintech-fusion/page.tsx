@@ -1,15 +1,16 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { Card, CardContent } from "@/components/ui/card"
-import { ExternalLink, ShieldCheck, RefreshCcw, Sparkles, Merge } from "lucide-react"
+import { ExternalLink, ShieldCheck, RefreshCcw, Sparkles, Merge, Globe, Zap } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
 /**
- * @fileOverview Imperial Fintech Fusion Page
- * This page integrates the Fintech Fusion app into the NoorNexus Sovereign OS.
+ * @fileOverview Imperial Fintech Fusion Page (Omega Edition)
+ * This page integrates the latest Fintech Fusion (FusionPay) app into the NoorNexus Sovereign OS.
  */
 export default function FintechFusionPage() {
   const refreshFrame = () => {
@@ -30,18 +31,18 @@ export default function FintechFusionPage() {
               </div>
               <div className="min-w-0">
                 <h2 className="text-xl sm:text-2xl font-headline font-bold uppercase tracking-tight text-primary truncate leading-none flex items-center gap-2">
-                  Fintech Fusion
+                  Fintech Fusion <span className="text-emerald-500">Omega</span>
                   <Sparkles className="size-4 text-amber-500 animate-pulse" />
                 </h2>
                 <div className="flex items-center gap-2 mt-1">
-                  <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase truncate">Sovereign Aggregation Node</p>
+                  <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase truncate">Global Smart Wallet & Settlement Node</p>
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Badge variant="outline" className="hidden sm:flex border-emerald-500/50 text-emerald-500 uppercase items-center gap-1.5 h-7 bg-emerald-500/5">
                 <ShieldCheck className="size-3.5" />
-                <span className="text-[10px] font-bold">L4 Integration</span>
+                <span className="text-[10px] font-bold">ISO 20022 Certified</span>
               </Badge>
               <Button 
                 variant="ghost" 
@@ -52,7 +53,7 @@ export default function FintechFusionPage() {
                 <RefreshCcw className="size-4" />
               </Button>
               <a 
-                href="https://fintech-fusion-cl9a.vercel.app/" 
+                href="https://fintech-fusion-omega.vercel.app/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-xs font-bold text-muted-foreground hover:text-primary transition-colors bg-white/5 px-4 py-2 rounded-md border border-white/10"
@@ -70,9 +71,9 @@ export default function FintechFusionPage() {
               <CardContent className="p-0 h-full w-full">
                 <iframe 
                   id="fusion-iframe"
-                  src="https://fintech-fusion-cl9a.vercel.app/" 
+                  src="https://fintech-fusion-omega.vercel.app/" 
                   className="w-full h-full border-0 bg-white"
-                  title="Fintech Fusion External Integration"
+                  title="Fintech Fusion Omega Integration"
                   allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                   sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation allow-orientation-lock"
                   allowFullScreen
@@ -83,7 +84,7 @@ export default function FintechFusionPage() {
           
           <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full">
             <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.4em]">
-              NoorNexus OS Fusion Sync | Endpoint: fintech-fusion-cl9a
+              NoorNexus OS Fusion Sync | Endpoint: fintech-fusion-omega
             </p>
           </footer>
         </main>

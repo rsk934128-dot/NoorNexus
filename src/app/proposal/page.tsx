@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -26,11 +27,16 @@ import {
   Loader2,
   FileDown,
   Globe,
-  Scale
+  Scale,
+  HeartHandshake,
+  Waves,
+  Mail,
+  Quote
 } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
+import { SovereignLogo } from "@/components/sovereign-logo"
 
 export default function ProposalPage() {
   const { toast } = useToast()
@@ -40,27 +46,24 @@ export default function ProposalPage() {
     setDownloading(true)
     toast({
       title: "Initiating Secure Download",
-      description: "Packaging Mission 500 Pitch Deck from Imperial Vault...",
+      description: "Packaging FusionPay Enterprise Prospectus from Imperial Vault...",
     })
 
-    // Simulate high-level encryption and packaging process
     setTimeout(() => {
       try {
-        // Create a mock PDF content (using text for demonstration, but browser treats as PDF file)
         const mockContent = `
-          NOORNEXUS SOVEREIGN OS - MISSION 500 PITCH DECK
+          FUSIONPAY | ENTERPRISE INTEGRATION PROSPECTUS
           -----------------------------------------------
           INTEGRITY THROUGH INTELLIGENCE
           
-          Commander: Sheikh Farid
-          Status: GLOBAL_HEGEMONY
-          Phase: Zenith Peak
+          Founder: Engineer Sheikh Farid
+          Organization: NoorNexus Sovereign Infrastructure
+          Standard: ISO 20022 Certified Architecture
           
-          CORE CAPABILITIES:
-          - 100-Node Autonomous Grid
-          - Sovereign Data Lake (Project #300)
-          - Economic Intelligence (Project #400)
-          - Zenith Traceability < 28ms
+          PROPOSAL SUMMARY:
+          - Global Settlement Node (bKash to SWIFT/PayPal)
+          - AI-Native Decision Engine (Nora-AI Integration)
+          - Seamless Scalability (T+0 Liquidity)
           
           This is an official document of the NoorNexus Sovereign Infrastructure.
         `;
@@ -69,25 +72,23 @@ export default function ProposalPage() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = "NoorNexus_Pitch_Deck_v3.5_Sovereign.pdf";
+        a.download = "FusionPay_Enterprise_Prospectus_v3.pdf";
         document.body.appendChild(a);
         a.click();
         
-        // Cleanup
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
 
         setDownloading(false)
         toast({
           title: "Download Successful",
-          description: "Pitch_Deck_v3.5_Sovereign.pdf has been dispatched to your local node.",
+          description: "FusionPay_Prospectus.pdf has been dispatched.",
           className: "border-emerald-500/50 bg-emerald-500/5"
         })
       } catch (err) {
         setDownloading(false)
         toast({
           title: "Download Failed",
-          description: "The secure transmission was interrupted.",
           variant: "destructive"
         })
       }
@@ -106,14 +107,14 @@ export default function ProposalPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-[10px]">
-                   <Award className="size-3 mr-2" /> Official Partnership Proposal
+                   <HeartHandshake className="size-3 mr-2" /> Executive Integration Hub
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
-                Imperial <span className="text-primary">Proposal.</span>
+                Imperial <span className="text-primary">Prospectus.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "আপনার প্রতিষ্ঠানের জন্য স্বয়ংক্রিয় এবং সুরক্ষিত ব্যাংকিং অবকাঠামো।" নূরনেক্সাস কেবল একটি গেটওয়ে নয়; এটি আপনার ব্যবসার জন্য একটি "অটোনোমাস ফিনটেক স্নায়ুতন্ত্র"।
+                "Establishing the bridge between local wallets and global institutions." নূরনেক্সাস এখন ফিউশনপে-এর মাধ্যমে বিশ্বব্যাপী মার্চেন্ট এবং ব্যাংক ইন্টিগ্রেশনের জন্য প্রস্তুত।
               </p>
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -123,11 +124,11 @@ export default function ProposalPage() {
                 className="bg-primary/10 text-primary border border-primary/20 font-bold h-12 uppercase tracking-widest gap-2 hover:bg-primary/20"
                >
                  {downloading ? <Loader2 className="size-4 animate-spin" /> : <FileDown className="size-4" />}
-                 {downloading ? "Packaging Deck..." : "Download Pitch Deck"}
+                 Download Prospectus
                </Button>
                <Link href="/onboarding">
                  <Button className="bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-primary">
-                   <Rocket className="size-4" /> Start Onboarding
+                   <Rocket className="size-4" /> Start Integration
                  </Button>
                </Link>
             </div>
@@ -136,191 +137,140 @@ export default function ProposalPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-12">
               
-              {/* কেন নূরনেক্সাস বেছে নেবেন? */}
+              {/* Executive Proposal Draft */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <Target className="size-4" /> কেন নূরনেক্সাস বেছে নেবেন? (Core Value)
+                    <ScrollText className="size-4" /> FusionPay এন্টারপ্রাইজ ইন্টিগ্রেশন (Draft)
                  </h3>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {[
-                      { 
-                        title: "অজেয় নিরাপত্তা (Zenith Security)", 
-                        desc: "প্রতিটি ট্রানজ্যাকশন Nora-52 এআই দ্বারা অডিট এবং ভেরিফাইড। আপনার ডেটা আমাদের কোয়ান্টাম-অ্যাঙ্করড ভল্টে সুরক্ষিত।",
-                        icon: ShieldCheck,
-                        color: "text-emerald-500",
-                        bg: "bg-emerald-500/10"
-                      },
-                      { 
-                        title: "প্রেডিক্টিভ ইন্টেলিজেন্স", 
-                        desc: "লিকুইডিটি সংকট বা পেমেন্ট ব্যর্থ হওয়ার আগেই আমাদের সিস্টেম প্রেডিক্ট করে আপনাকে সতর্ক করবে (Project #56)।",
-                        icon: BrainCircuit,
-                        color: "text-amber-500",
-                        bg: "bg-amber-500/10"
-                      },
-                      { 
-                        title: "একীভূত কন্ট্রোল সেন্টার", 
-                        desc: "মাল্টি-ব্যাংকিং একাউন্টের তথ্য এখন একটি ড্যাশবোর্ডেই। আপনার পুরো ব্যবসার আর্থিক প্রবাহ আমাদের নিয়ন্ত্রণে।",
-                        icon: Landmark,
-                        color: "text-primary",
-                        bg: "bg-primary/10"
-                      },
-                      { 
-                        title: "অপারেশনাল দক্ষতা", 
-                        desc: "বাল্ক পেমেন্ট, অটোমেশন এবং স্মার্ট রাউটিং-এর মাধ্যমে ট্রানজ্যাকশন খরচ এবং সময় সাশ্রয় করুন।",
-                        icon: Zap,
-                        color: "text-purple-500",
-                        bg: "bg-purple-500/10"
-                      }
-                    ].map((v, i) => (
-                      <Card key={i} className="glass-card border-white/5 hover:border-primary/20 transition-all group">
-                        <CardContent className="p-6 space-y-4">
-                           <div className={`size-10 rounded-xl ${v.bg} flex items-center justify-center shrink-0`}>
-                              <v.icon className={`size-6 ${v.color}`} />
-                           </div>
-                           <div className="space-y-2">
-                              <h4 className="font-headline font-bold text-white uppercase text-sm">{v.title}</h4>
-                              <p className="text-xs text-muted-foreground leading-relaxed italic">"{v.desc}"</p>
-                           </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                 </div>
-              </section>
+                 <Card className="glass-card border-white/10 bg-black/40 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-5">
+                       <SovereignLogo size={200} />
+                    </div>
+                    <CardContent className="p-8 sm:p-12 space-y-8 relative z-10">
+                       <div className="border-l-4 border-l-primary pl-6 space-y-4">
+                          <h4 className="text-xl font-headline font-bold text-white uppercase tracking-tight">প্রস্তাবনা: FusionPay এন্টারপ্রাইজ ইন্টিগ্রেশন</h4>
+                          <p className="text-[10px] text-primary font-mono uppercase tracking-widest">To: CEO / CTO / Financial Institutions</p>
+                       </div>
 
-              {/* আমাদের ফিচার সেট */}
-              <section className="space-y-6">
-                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
-                    <Layers className="size-4" /> আমাদের ফিচার সেট (Capabilities)
-                 </h3>
-                 <Card className="glass-card border-white/5 overflow-hidden">
-                    <Table>
-                       <TableHeader className="bg-white/2">
-                          <TableRow className="border-white/5">
-                             <TableHead className="text-[10px] uppercase font-bold text-primary">ফিচার ক্যাটাগরি</TableHead>
-                             <TableHead className="text-[10px] uppercase font-bold text-primary">বিস্তারিত বর্ণনা</TableHead>
-                             <TableHead className="text-right text-[10px] uppercase font-bold text-primary">স্ট্যাটাস</TableHead>
-                          </TableRow>
-                       </TableHeader>
-                       <TableBody>
-                          {[
-                            { cat: "স্মার্ট পেমেন্ট", desc: "বাল্ক পেমেন্ট, পিরিওডিক সেটেলমেন্ট এবং অটোমেটেড কারেন্সি এক্সচেঞ্জ (EUR, GBP, BDT)।", status: "READY" },
-                            { cat: "রিস্ক ম্যানেজমেন্ট", desc: "রিয়েল-টাইম ট্রানজ্যাকশন অডিট এবং Nora-54 দ্বারা ০.০২% রিস্ক প্রেডিকশন।", status: "ENFORCED" },
-                            { cat: "গ্লোবাল কানেক্টিভিটি", desc: "AIB, Payoneer সহ ইউরোপ ও যুক্তরাজ্যের প্রধান ব্যাংকিং রেইলসের সাথে সরাসরি ইন্টিগ্রেশন।", status: "LIVE" },
-                            { cat: "কমপ্লায়েন্স হাব", desc: "eIDAS, OBIE এবং GDPR স্ট্যান্ডার্ড অনুযায়ী অটোমেটেড অডিট রিপোর্ট জেনারেশন।", status: "VERIFIED" }
-                          ].map((row, i) => (
-                            <TableRow key={i} className="border-white/5 hover:bg-white/2 transition-colors">
-                               <TableCell className="font-headline font-bold text-white text-xs uppercase">{row.cat}</TableCell>
-                               <TableCell className="text-xs text-muted-foreground leading-relaxed italic">{row.desc}</TableCell>
-                               <TableCell className="text-right">
-                                  <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px]">{row.status}</Badge>
-                               </TableCell>
-                            </TableRow>
-                          ))}
-                       </TableBody>
-                    </Table>
+                       <div className="space-y-6 text-sm text-muted-foreground leading-relaxed">
+                          <p>শ্রদ্ধেয় সংশ্লিষ্ট কর্তৃপক্ষের দৃষ্টি আকর্ষণ করছি,</p>
+                          <p>
+                             আমি <strong>ইঞ্জিনিয়ার শেখ ফরিদ</strong>, নূরনেক্সাস (NoorNexus) প্ল্যাটফর্মের প্রতিষ্ঠাতা এবং প্রধান আর্কিটেক্ট। আমি অত্যন্ত আনন্দের সাথে জানাচ্ছি যে, আমরা আমাদের <strong>FusionPay</strong> প্ল্যাটফর্মের মাধ্যমে একটি ISO 20022 সার্টিফাইড গ্লোবাল ফিনটেক ইনফ্রাস্ট্রাকচার তৈরি করেছি।
+                          </p>
+                          
+                          <div className="space-y-4 py-4">
+                             <h5 className="font-bold text-white uppercase text-xs flex items-center gap-2">
+                                <Zap className="size-3 text-primary" /> মূল বৈশিষ্ট্যসমূহ:
+                             </h5>
+                             <ul className="space-y-3 list-none pl-4">
+                                <li className="flex gap-3">
+                                   <div className="size-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                                   <p><span className="text-white font-bold">গ্লোবাল লিকুইডিটি নোড:</span> এটি লোকাল পেমেন্ট সিস্টেম (যেমন: bKash, SSLCommerz) এবং গ্লোবাল সেটেলমেন্ট নেটওয়ার্কের (যেমন: PayPal, Stripe, SWIFT) মধ্যে একটি শক্তিশালী সেতু হিসেবে কাজ করে।</p>
+                                </li>
+                                <li className="flex gap-3">
+                                   <div className="size-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                                   <p><span className="text-white font-bold">এআই-নেটিভ ডিসিশন ইঞ্জিন:</span> লেনদেনের নিরাপত্তা নিশ্চিত করতে আমাদের রিয়েল-টাইম ফ্রড স্কোরিং এবং অ্যানোমালি ডিটেকশন সিস্টেম রয়েছে।</p>
+                                </li>
+                                <li className="flex gap-3">
+                                   <div className="size-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                                   <p><span className="text-white font-bold">বিরামহীন স্কেলেবিলিটি:</span> এটি টি+০ (T+0) লিকুইডিটি ডেসপ্যাচ নিশ্চিত করার লক্ষ্যে কাজ করে, যা ব্যবসায়িক গতিশীলতা বহুগুণ বাড়িয়ে দেয়।</p>
+                                </li>
+                             </ul>
+                          </div>
+
+                          <p>
+                             আমরা বিশ্বাস করি, আপনার প্রতিষ্ঠানের বর্তমান ফিনটেক ইকোসিস্টেমের সাথে আমাদের FusionPay ইন্টিগ্রেট করলে গ্লোবাল ক্রস-বর্ডার পেমেন্ট এবং সেটেলমেন্ট ব্যবস্থায় এক যুগান্তকারী পরিবর্তন আসবে। আমরা আমাদের API-First Architecture এবং Sandbox Mode-এর মাধ্যমে আপনার টেকনিক্যাল টিমের সাথে সরাসরি ইন্টিগ্রেশন প্রক্রিয়ায় অংশ নিতে প্রস্তুত।
+                          </p>
+
+                          <div className="pt-8 space-y-1">
+                             <p className="text-white font-bold italic">ধন্যবাদান্তে,</p>
+                             <p className="text-primary font-headline font-bold text-lg uppercase tracking-tight">ইঞ্জিনিয়ার শেখ ফরিদ</p>
+                             <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-[0.2em]">প্রতিষ্ঠাতা ও প্রধান আর্কিটেক্ট, নূরনেক্সাস (NoorNexus)</p>
+                          </div>
+                       </div>
+                    </CardContent>
                  </Card>
               </section>
 
-              {/* আপনার প্রতিষ্ঠানের জন্য সুবিধা */}
+              {/* Strategic Roadmap for Partners */}
               <section className="space-y-6">
-                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
-                    <TrendingUp className="size-4" /> আপনার প্রতিষ্ঠানের জন্য সুবিধা (Impact)
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                    <Waves className="size-4" /> Strategic Value Roadmap
                  </h3>
-                 <div className="space-y-4">
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
-                      { title: "অপারেশনাল কস্ট রিডাকশন", desc: "ম্যানুয়াল কাজ কমিয়ে এবং স্মার্ট রাউটিং ব্যবহার করে লেনদেন খরচ সর্বনিম্নে নামিয়ে আনা।", impact: "-85% Costs" },
-                      { title: "ঝুঁকি নিরসন", desc: "সাইবার হামলা বা ফিন্যান্সিয়াল ফ্রড হওয়ার আগেই সিস্টেমের স্বয়ংক্রিয় সতর্কবার্তা এবং আইসোলেশন।", impact: "Zero Fraud" },
-                      { title: "জিরো-টাচ ম্যানেজমেন্ট", desc: "আপনার এআই সেন্টিনেল Nora-54 সারাক্ষণ আপনার ব্যবসার আর্থিক স্বাস্থ্যের পাহারায় নিযুক্ত।", impact: "24/7 Auto" }
-                    ].map((item, i) => (
-                      <div key={i} className="p-4 bg-white/2 border border-white/5 rounded-xl flex items-center justify-between group hover:border-primary/30 transition-all">
-                         <div className="flex items-center gap-4">
-                            <div className="size-2 rounded-full bg-primary animate-pulse" />
-                            <div className="space-y-0.5">
-                               <p className="text-xs font-bold text-white uppercase">{item.title}</p>
-                               <p className="text-[10px] text-muted-foreground">{item.desc}</p>
-                            </div>
-                         </div>
-                         <div className="text-right shrink-0 ml-4">
-                            <p className="text-xs font-headline font-bold text-emerald-500 uppercase">{item.impact}</p>
-                         </div>
-                      </div>
+                      { step: "Phase 1", label: "Sandbox Bridge", desc: "Test connections via sim_fusion node." },
+                      { step: "Phase 2", label: "Liquidity Sync", desc: "Establish T+0 settlement rills." },
+                      { step: "Phase 3", label: "Global Launch", desc: "Scale to 100-node hegemony." }
+                    ].map((s, i) => (
+                      <Card key={i} className="glass-card border-white/5 bg-white/2 p-4 text-center space-y-2">
+                         <p className="text-[9px] font-bold text-primary uppercase">{s.step}</p>
+                         <h4 className="text-xs font-bold text-white uppercase">{s.label}</h4>
+                         <p className="text-[10px] text-muted-foreground italic leading-relaxed">"{s.desc}"</p>
+                      </Card>
                     ))}
                  </div>
               </section>
             </div>
 
             <div className="space-y-8">
-              {/* The NoorNexus Promise */}
-              <Card className="glass-card border-l-4 border-l-primary bg-primary/5 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-5">
-                   <Award className="size-24 text-primary" />
-                </div>
+              {/* Certification & Standards */}
+              <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 relative overflow-hidden">
                 <CardHeader>
-                  <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                    <Rocket className="size-4" /> The NoorNexus Promise
+                  <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
+                    <ShieldCheck className="size-4" /> Compliance Standards
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                   <p className="text-[11px] text-muted-foreground leading-relaxed italic">
-                      "নূরনেক্সাস আপনাকে কেবল একটি টুল দিচ্ছে না, দিচ্ছে আপনার ব্যবসার **ডিজিটাল সার্বভৌমত্ব**। আমাদের সিস্টেমের ল্যাটেন্সি (২৪-২৮ms) আপনাকে বিশ্বের সবচেয়ে দ্রুতগতির ব্যাংকিং অভিজ্ঞতা প্রদান করবে।"
-                   </p>
-                   <div className="pt-4 border-t border-white/5 space-y-3">
-                      <div className="flex justify-between items-center text-[10px] font-mono">
-                         <span className="text-muted-foreground uppercase">Veracity Guarantee</span>
-                         <span className="text-emerald-500 font-bold">100.0%</span>
-                      </div>
-                      <div className="flex justify-between items-center text-[10px] font-mono">
-                         <span className="text-muted-foreground uppercase">Network Latency</span>
-                         <span className="text-primary font-bold">26ms</span>
-                      </div>
+                <CardContent className="space-y-4">
+                   <div className="space-y-3">
+                      {[
+                        { label: "Messaging", val: "ISO 20022" },
+                        { label: "Encryption", val: "SHA-256" },
+                        { label: "Security", val: "TLS 1.2+" },
+                        { label: "Audit", val: "Nora-52 Oracle" }
+                      ].map((item, i) => (
+                        <div key={i} className="flex justify-between items-center text-[10px] font-mono border-b border-white/5 pb-1">
+                           <span className="uppercase text-muted-foreground">{item.label}</span>
+                           <span className="text-emerald-500 font-bold">{item.val}</span>
+                        </div>
+                      ))}
                    </div>
                 </CardContent>
               </Card>
 
-              {/* Project #160: Autonomous Acquisition */}
-              <Card className="glass-card border-purple-500/20 bg-purple-500/5">
+              {/* Pitch Deck Quick Stats */}
+              <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                  <CardHeader>
-                    <CardTitle className="text-xs font-headline uppercase text-purple-500 flex items-center gap-2">
-                       <Zap className="size-4" /> Project #160: Self-Acquisition
+                    <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
+                       <TrendingUp className="size-4" /> Performance Benchmarks
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-4">
-                    <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                       "Zero-Resistance acquisition active. Partners can immediately trigger onboarding handshakes from this proposal."
-                    </p>
-                    <Link href="/onboarding" className="w-full">
-                      <Button className="w-full bg-purple-500 text-white font-bold uppercase text-[10px] h-11 glow-primary gap-2">
-                         Initialize Onboarding <ArrowRight className="size-3" />
-                      </Button>
-                    </Link>
-                 </CardContent>
-              </Card>
-
-              {/* Trust Factor Showcase */}
-              <Card className="glass-card bg-emerald-500/5 border-emerald-500/20">
-                 <CardHeader className="pb-2">
-                    <CardTitle className="text-[10px] uppercase font-bold text-emerald-500 flex items-center gap-2">
-                       <ShieldCheck className="size-3" /> Trust & Authority
-                    </CardTitle>
-                 </CardHeader>
-                 <CardContent className="space-y-4">
-                    <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                       "আপনার কোম্পানির অর্থ কেবল একটি অ্যাকাউন্টে নেই, এটি একটি জেনিথ-ভেরিফাইড অটোনোমাস গ্রিডের সুরক্ষা ও বুদ্ধিমত্তার অধীনে পরিচালিত হচ্ছে।"
-                    </p>
-                    <Badge variant="outline" className="w-full justify-center h-8 border-emerald-500/30 text-emerald-500 uppercase text-[9px] font-bold">ZENITH_CERTIFIED</Badge>
-                 </CardContent>
-              </Card>
-
-              <Card className="glass-card">
-                 <CardHeader className="pb-2">
-                    <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground">Digital Sovereignty Seal</CardTitle>
-                 </CardHeader>
-                 <CardContent className="flex justify-center py-6">
-                    <div className="size-24 rounded-full border-4 border-primary/20 flex items-center justify-center relative bg-black shadow-[0_0_20px_rgba(0,150,255,0.2)]">
-                       <Fingerprint className="size-10 text-primary animate-pulse" />
-                       <div className="absolute inset-0 border-t-2 border-primary rounded-full animate-spin-slow" />
+                    <div className="space-y-1">
+                       <div className="flex justify-between text-[10px] font-bold uppercase">
+                          <span className="text-muted-foreground">Settlement Latency</span>
+                          <span className="text-primary">28ms</span>
+                       </div>
+                       <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-full bg-primary" style={{ width: '96%' }} />
+                       </div>
                     </div>
+                    <p className="text-[10px] text-muted-foreground italic">"Outperforming traditional banking rails by 12x in cross-border corridors."</p>
                  </CardContent>
+              </Card>
+
+              {/* Call to Action Card */}
+              <Card className="glass-card border-amber-500/20 bg-amber-500/5 p-6 flex flex-col items-center text-center gap-4">
+                 <div className="size-16 rounded-full bg-amber-500/10 flex items-center justify-center border border-amber-500/30">
+                    <Mail className="size-8 text-amber-500" />
+                 </div>
+                 <div className="space-y-1">
+                    <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Connect with Architect</p>
+                    <p className="text-[10px] text-muted-foreground uppercase font-mono">rubels1k994@gmail.com</p>
+                 </div>
+                 <Button className="w-full bg-amber-500 text-black font-bold uppercase text-[10px] h-10 glow-emerald">
+                    Schedule PoC Meeting
+                 </Button>
               </Card>
             </div>
           </div>

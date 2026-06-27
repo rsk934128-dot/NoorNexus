@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -27,12 +28,16 @@ import {
   Cpu,
   Database,
   Link2,
-  CreditCard
+  CreditCard,
+  Merge,
+  Zap,
+  Sparkles
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 
 const INITIAL_LINKS = [
+  { id: "fusion-omega", name: "Fintech Fusion Omega", url: "https://fintech-fusion-omega.vercel.app/", category: "Settlement", status: "VERIFIED", premium: true },
   { id: "1", name: "Amazon Global", url: "https://www.amazon.com", category: "General", status: "VERIFIED" },
   { id: "2", name: "Alibaba B2B", url: "https://www.alibaba.com", category: "Wholesale", status: "VERIFIED" },
   { id: "3", name: "Binance Exchange", url: "https://www.binance.com", category: "Crypto", status: "VERIFIED" },
@@ -77,8 +82,12 @@ export default function SovereignBazaarPage() {
     toast({ title: "Link Purged", variant: "destructive" })
   }
 
-  const launchInTerminal = (url: string) => {
-    router.push(`/browser?url=${encodeURIComponent(url)}`)
+  const launchInTerminal = (url: string, id: string) => {
+    if (id === 'fusion-omega') {
+      router.push('/fintech-fusion')
+    } else {
+      router.push(`/browser?url=${encodeURIComponent(url)}`)
+    }
   }
 
   const openDirect = (url: string) => {
@@ -178,15 +187,18 @@ export default function SovereignBazaarPage() {
                    <p className="col-span-2 text-center py-20 text-xs text-muted-foreground italic uppercase tracking-widest">No links found in the bazaar registry.</p>
                  )}
                  {filteredLinks.map((link) => (
-                   <Card key={link.id} className={`glass-card border-white/5 hover:border-emerald-500/20 transition-all group overflow-hidden ${link.status === 'VERIFIED' ? 'border-l-4 border-l-emerald-500' : 'border-l-4 border-l-amber-500'}`}>
+                   <Card key={link.id} className={`glass-card border-white/5 hover:border-emerald-500/20 transition-all group overflow-hidden ${link.status === 'VERIFIED' ? 'border-l-4 border-l-emerald-500' : 'border-l-4 border-l-amber-500'} ${link.premium ? 'bg-primary/5' : ''}`}>
                       <CardContent className="p-5 flex flex-col gap-4">
                          <div className="flex justify-between items-start">
                             <div className="flex gap-4">
                                <div className={`p-3 rounded-xl ${link.status === 'VERIFIED' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>
-                                  {link.category === 'Fintech' ? <CreditCard className="size-6" /> : <ShoppingBag className="size-6" />}
+                                  {link.category === 'Settlement' ? <Merge className="size-6" /> : link.category === 'Fintech' ? <CreditCard className="size-6" /> : <ShoppingBag className="size-6" />}
                                </div>
                                <div className="space-y-1">
-                                  <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{link.category}</p>
+                                  <div className="flex items-center gap-2">
+                                     <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{link.category}</p>
+                                     {link.premium && <Badge className="bg-amber-500 text-black text-[7px] h-4">PREMIUM NODE</Badge>}
+                                  </div>
                                   <h4 className="text-lg font-headline font-bold text-white uppercase">{link.name}</h4>
                                   <p className="text-[10px] font-mono text-primary/60 truncate max-w-[150px]">{link.url}</p>
                                </div>
@@ -221,10 +233,10 @@ export default function SovereignBazaarPage() {
                                        <ExternalLink className="size-3" /> Direct
                                     </Button>
                                     <Button 
-                                      onClick={() => launchInTerminal(link.url)}
+                                      onClick={() => launchInTerminal(link.url, link.id)}
                                       className="h-8 text-[9px] uppercase font-bold bg-emerald-500 text-white px-4 glow-emerald gap-2"
                                     >
-                                       <Monitor className="size-3" /> Terminal
+                                       <Monitor className="size-3" /> {link.id === 'fusion-omega' ? 'Native' : 'Terminal'}
                                     </Button>
                                  </div>
                                )}
@@ -237,6 +249,38 @@ export default function SovereignBazaarPage() {
             </div>
 
             <div className="space-y-8">
+               {/* Premium Node Highlight */}
+               <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-8 opacity-5">
+                    <Sparkles className="size-24 text-amber-500" />
+                  </div>
+                  <CardHeader>
+                     <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
+                        <Zap className="size-4" /> Top Settlement Hub
+                     </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                     <div className="flex items-center gap-3">
+                        <div className="size-10 rounded-lg bg-amber-500/20 flex items-center justify-center border border-amber-500/30">
+                           <Merge className="size-6 text-amber-500" />
+                        </div>
+                        <div className="space-y-0.5">
+                           <p className="text-xs font-bold text-white uppercase">Fintech Fusion Omega</p>
+                           <p className="text-[8px] text-muted-foreground font-mono uppercase">Status: ACTIVE_L6</p>
+                        </div>
+                     </div>
+                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                        "কমান্ডার, ফিউশনপে ওমেগা এখন আমাদের প্রধান সেটেলমেন্ট রেইল হিসেবে কাজ করছে।"
+                     </p>
+                     <Button 
+                        onClick={() => router.push('/fintech-fusion')}
+                        className="w-full bg-amber-500 text-black font-bold uppercase text-[9px] h-8 glow-emerald"
+                      >
+                        Enter Hub Node
+                     </Button>
+                  </CardContent>
+               </Card>
+
                <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
@@ -245,7 +289,7 @@ export default function SovereignBazaarPage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                      <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                        "কমান্ডার, বাজারের প্রতিটি লিঙ্ক চালুর আগে Nora-01 এআই দ্বারা একটি এনক্রিপ্টেড পালস পাঠানো হয়। কোনো লিঙ্কে ঝুঁকি থাকলে সিস্টেম স্বয়ংক্রিয়ভাবে তা ব্লক করবে।"
+                        "বাজারের প্রতিটি লিঙ্ক চালুর আগে Nora-01 এআই দ্বারা একটি এনক্রিপ্টেড পালস পাঠানো হয়।"
                      </p>
                      <div className="pt-2">
                         <Badge variant="outline" className="w-full justify-center h-8 border-emerald-500/30 text-emerald-500 uppercase text-[9px] font-bold">TUNNEL_SECURITY: L4</Badge>
@@ -264,16 +308,6 @@ export default function SovereignBazaarPage() {
                         <span className="text-muted-foreground">Handshake Status</span>
                         <span className="text-emerald-500 font-bold">SUCCESS</span>
                      </div>
-                     <div className="flex justify-between items-center text-[9px] font-mono uppercase">
-                        <span className="text-muted-foreground">Encryption Standard</span>
-                        <span className="text-white">HMAC_V4</span>
-                     </div>
-                     <div className="pt-4 flex justify-center">
-                        <div className="size-20 rounded-full border-2 border-emerald-500/20 flex items-center justify-center relative">
-                           <Cpu className="size-10 text-emerald-500 opacity-20" />
-                           <div className="absolute inset-0 border-t-2 border-emerald-500 rounded-full animate-spin-slow" />
-                        </div>
-                     </div>
                   </CardContent>
                </Card>
 
@@ -285,7 +319,7 @@ export default function SovereignBazaarPage() {
                   </CardHeader>
                   <CardContent>
                      <p className="text-[9px] text-muted-foreground leading-relaxed">
-                        Last Bazaar scan: <strong>PASSED</strong>. 0 malicious scripts detected in external tunnels.
+                        Last Bazaar scan: <strong>PASSED</strong>. 0 malicious scripts detected.
                      </p>
                   </CardContent>
                </Card>
