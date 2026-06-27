@@ -170,7 +170,8 @@ export default function Home() {
               </div>
               
               <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
-                <Card className="glass-card p-6 rounded-2xl border border-primary/30 w-full min-w-[350px] relative overflow-hidden bg-primary/5">
+                {/* Fixed Firebase Performance error by using sovereign-stats-card class instead of long inline Tailwind list */}
+                <Card className="sovereign-stats-card">
                     <div className="absolute top-0 right-0 p-2">
                        <Badge className="bg-emerald-500 text-black border-none text-[7px] font-bold uppercase">Zenith Watch Active</Badge>
                     </div>
