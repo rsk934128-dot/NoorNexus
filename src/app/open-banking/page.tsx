@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect, useRef } from "react"
@@ -48,6 +47,13 @@ import Link from "next/link"
 const PROVIDER_METRICS = [
   { id: "yapily", name: "Yapily (EU/UK)", latency: 32, success: 99.8, status: "OPTIMAL", icon: Globe },
   { id: "plaid", name: "Plaid (US/Global)", latency: 45, success: 99.4, status: "STABLE", icon: Network },
+]
+
+const SIBS_INSTITUTIONS = [
+  { name: "Caixa Geral de Depósitos", type: "Direct" },
+  { name: "Millennium BCP", type: "Direct" },
+  { name: "Banco Santander Totta", type: "Direct" },
+  { name: "Novo Banco", type: "Direct" }
 ]
 
 const VALIDATED_NODES = [
