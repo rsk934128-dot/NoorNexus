@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -46,7 +47,9 @@ import {
   ShoppingBag,
   Maximize2,
   HardDrive,
-  Mail
+  Mail,
+  DollarSign,
+  PieChart
 } from "lucide-react"
 
 import {
@@ -115,6 +118,7 @@ const USER_ITEMS = [
 const ADMIN_ITEMS = [
   { title: "Sovereign Legacy", url: "/legacy", icon: Infinity },
   { title: "Imperial Oracle", url: "/oracle", icon: Compass },
+  { title: "Revenue Matrix", url: "/revenue", icon: DollarSign },
   { title: "Neural Audit (P52)", url: "/neural-audit", icon: FileCheck },
   { title: "AI Governance", url: "/ai-governance", icon: BrainCircuit },
   { title: "Session Monitor", url: "/sessions", icon: Activity },
