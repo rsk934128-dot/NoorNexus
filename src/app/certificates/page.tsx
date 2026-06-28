@@ -104,7 +104,7 @@ export default function CertificateVaultPage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20 overflow-x-hidden">
           <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
@@ -322,7 +322,7 @@ export default function CertificateVaultPage() {
                  </CardHeader>
                  <CardContent className="space-y-4">
                     <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                       "Service Worker (SW v3.5) listening for push events. Latency minimized to < 10ms for signal reception."
+                       "Service Worker (SW v3.5) listening for push events. Latency minimized to &lt; 10ms for signal reception."
                     </p>
                     <div className="flex justify-between items-center text-[9px] font-mono border-t border-white/5 pt-4">
                        <span className="uppercase text-muted-foreground">SW Connection</span>

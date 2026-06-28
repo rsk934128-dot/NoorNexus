@@ -71,7 +71,7 @@ export default function AppHealthPage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20 overflow-x-hidden">
           <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
@@ -140,7 +140,7 @@ export default function AppHealthPage() {
                               className="flex-1 bg-emerald-500/20 rounded-t-sm relative group overflow-hidden"
                               style={{ height: `${20 + Math.random() * 80}%` }}
                              >
-                                <div className="absolute inset-0 bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity animate-pulse" />
+                                <div className="absolute inset-0 bg-emerald-500 opacity-0 group-hover:opacity-10 transition-opacity animate-pulse" />
                              </div>
                            ))}
                         </CardContent>

@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -70,7 +71,7 @@ export default function FeatureIntelligencePage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20 overflow-x-hidden">
           <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
@@ -198,7 +199,7 @@ export default function FeatureIntelligencePage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                      <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                        "If Crashlytics reports an increase in crashes > 0.05%, Nora-56 will automatically trigger a ROLLBACK protocol."
+                        "If Crashlytics reports an increase in crashes &gt; 0.05%, Nora-56 will automatically trigger a ROLLBACK protocol."
                      </p>
                      <div className="pt-2">
                         <Badge variant="outline" className="w-full justify-center h-8 border-emerald-500/30 text-emerald-500 uppercase text-[9px] font-bold">AUTO_PROTECT: ARMED</Badge>
