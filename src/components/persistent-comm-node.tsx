@@ -9,9 +9,9 @@ import { useSidebar } from "@/components/ui/sidebar"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 /**
- * @fileOverview Global Persistent Communication Node (V5.8 - Media Optimized)
+ * @fileOverview Global Persistent Communication Node (V5.9 - Fullscreen Hardened)
  * নূরনেক্সাস সাম্রাজ্যের প্রতিটি পেজে "Shurukkha", "Famelack" এবং "Toffee" হাবের পারসিস্টেন্স নিশ্চিত করে।
- * Updated: Updated Shurukkha Hub URL to the latest Vercel deployment as requested.
+ * Updated: Added 'fullscreen' and 'allowFullScreen' to Famelack iframe for native player support.
  */
 export function PersistentCommNode() {
   const [isMounted, setIsMounted] = useState(false)
@@ -192,8 +192,9 @@ export function PersistentCommNode() {
             src="https://shurukkha-hub.vercel.app/dashboard" 
             className="w-full h-full border-0"
             title="Standard Hub Node"
-            allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
-            sandbox="allow-same-origin allow-scripts allow-popovers allow-forms"
+            allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media; fullscreen"
+            sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals"
+            allowFullScreen
             loading="lazy"
           />
         </div>
@@ -210,8 +211,9 @@ export function PersistentCommNode() {
             src="https://shurukkha-hub.vercel.app/dashboard" 
             className="w-full h-full border-0"
             title="Imperial Hub Node"
-            allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
-            sandbox="allow-same-origin allow-scripts allow-popovers allow-forms"
+            allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media; fullscreen"
+            sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals"
+            allowFullScreen
             loading="lazy"
           />
         </div>
@@ -228,8 +230,9 @@ export function PersistentCommNode() {
             src="https://famelack.com/" 
             className="w-full h-full border-0"
             title="Famelack Hub Node"
-            allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media; payment"
+            allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media; payment; fullscreen"
             sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
+            allowFullScreen
             loading="lazy"
           />
         </div>

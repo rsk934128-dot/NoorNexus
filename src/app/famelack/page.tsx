@@ -1,20 +1,45 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
-import { Globe, RefreshCcw, Sparkles, ShieldCheck, Loader2 } from "lucide-react"
+import { Globe, RefreshCcw, Sparkles, ShieldCheck, Loader2, Maximize2, Minimize2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react"
+import { useToast } from "@/hooks/use-toast"
 
 /**
- * @fileOverview Famelack Hub Page (UI Shell)
+ * @fileOverview Famelack Hub Page (UI Shell v6.0)
  * এই পেজটি এখন আর রিলোড হয় না। কন্টেন্টটি PersistentCommNode থেকে সরাসরি প্রদর্শিত হয়।
+ * Updated: Added Fullscreen toggle logic for the sovereign terminal.
  */
 export default function FamelackPage() {
+  const { toast } = useToast()
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
   const refreshFrame = () => {
     window.location.reload();
   };
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        toast({ title: "Fullscreen Error", description: err.message, variant: "destructive" });
+      });
+      setIsFullscreen(true);
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', handleFsChange);
+    return () => document.removeEventListener('fullscreenchange', handleFsChange);
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -39,8 +64,16 @@ export default function FamelackPage() {
             <div className="flex items-center gap-3">
               <Badge variant="outline" className="hidden sm:flex border-emerald-500/50 text-emerald-500 uppercase items-center gap-1.5 h-7 bg-emerald-500/5">
                 <ShieldCheck className="size-3.5" />
-                <span className="text-[10px] font-bold">V5.7 Persistent</span>
+                <span className="text-[10px] font-bold">V6.0 Persistent</span>
               </Badge>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={toggleFullscreen}
+                className="text-muted-foreground hover:text-primary size-8"
+              >
+                {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+              </Button>
               <Button 
                 variant="ghost" 
                 size="icon" 
