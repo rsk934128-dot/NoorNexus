@@ -49,17 +49,23 @@ import {
   BellRing,
   CloudOff,
   CloudDownload,
-  Chrome
+  Chrome,
+  Eye,
+  EyeOff,
+  Gavel,
+  MessageSquare
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Switch } from "@/components/ui/switch"
 import { requestNotificationPermission } from "@/services/notification-service"
 import { getPendingTasks, processSyncQueue } from "@/services/sync-engine"
 import { googleClientId } from "@/firebase/config"
+import { setSovereignClaims, broadcastMeshMessage, revokeIdentityAccess } from "@/services/admin-service"
 
 export default function EnterpriseSettingsPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
+  const [adminLoading, setAdminLoading] = useState(false)
   const [showSecret, setShowSecret] = useState(false)
   const [notificationsAllowed, setNotificationsAllowed] = useState(false)
   const [pendingTasks, setPendingTasks] = useState<any[]>([])
@@ -71,9 +77,6 @@ export default function EnterpriseSettingsPage() {
     secret: "S0V_RETA_P4SS_9988X_L4",
     googleClientId: googleClientId,
     createdDate: "27 Jun 2026, 12:20 am",
-    redirectUrl: "https://auth.yapily.com/",
-    authHandler: "https://studio-786911773-686ad.firebaseapp.com/__/auth/handler",
-    fromEmail: "noreply@studio-786911773-686ad.firebaseapp.com",
     status: "ENABLED",
     type: "Direct"
   }
@@ -117,6 +120,31 @@ export default function EnterpriseSettingsPage() {
     await processSyncQueue();
     setPendingTasks(getPendingTasks());
     setLoading(false);
+  }
+
+  // Admin Protocol Actions
+  const handleSetClaims = async () => {
+    setAdminLoading(true);
+    try {
+      const res = await setSovereignClaims("ROOT_COMMANDER", { imperial_access: true, mission_500: "PEAK" });
+      toast({ title: "Custom Claims Set", description: res.message });
+    } catch (e) {
+      toast({ title: "Claims Error", variant: "destructive" });
+    } finally {
+      setAdminLoading(false);
+    }
+  }
+
+  const handleBroadcast = async () => {
+    setAdminLoading(true);
+    try {
+      const res = await broadcastMeshMessage("Mission 500 Peak Alert", "Commander Farid has initiated the final sync.", "global");
+      toast({ title: "Broadcast Dispatched", description: res.message });
+    } catch (e) {
+      toast({ title: "FCM Error", variant: "destructive" });
+    } finally {
+      setAdminLoading(false);
+    }
   }
 
   return (
@@ -163,6 +191,7 @@ export default function EnterpriseSettingsPage() {
           <Tabs defaultValue="settings" className="space-y-8">
             <TabsList className="bg-white/5 border border-white/10 p-1 h-12">
               <TabsTrigger value="settings" className="gap-2 px-6"><Settings className="size-4" /> App Settings</TabsTrigger>
+              <TabsTrigger value="admin" className="gap-2 px-6"><Gavel className="size-4" /> Admin Protocols</TabsTrigger>
               <TabsTrigger value="sync" className="gap-2 px-6"><CloudOff className="size-4" /> Offline Ledger</TabsTrigger>
               <TabsTrigger value="permissions" className="gap-2 px-6"><ShieldQuestion className="size-4" /> System Permissions</TabsTrigger>
             </TabsList>
@@ -204,7 +233,7 @@ export default function EnterpriseSettingsPage() {
                                  <div className="flex gap-2">
                                     <Input type={showSecret ? "text" : "password"} value={APP_CONFIG.secret} readOnly className="bg-background/50 border-white/10 font-mono text-xs h-12" />
                                     <Button variant="outline" size="icon" className="h-12 w-12 border-white/10" onClick={() => setShowSecret(!showSecret)}>
-                                       <EyeOff className="size-4" />
+                                       {showSecret ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                                     </Button>
                                     <Button onClick={handleRotateSecret} variant="outline" className="h-12 px-6 border-primary/20 text-primary uppercase font-bold text-[10px] gap-2">
                                        <RefreshCcw className="size-3" /> Rotate
@@ -223,6 +252,85 @@ export default function EnterpriseSettingsPage() {
                         <CardContent className="text-center space-y-4">
                            <p className="text-3xl font-headline font-bold text-white">SECURE</p>
                            <p className="text-[9px] text-muted-foreground italic">"Background Execution: ENABLED via android.uid.system signature."</p>
+                        </CardContent>
+                     </Card>
+                  </div>
+               </div>
+            </TabsContent>
+
+            <TabsContent value="admin" className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="lg:col-span-2 space-y-8">
+                     <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
+                        <CardHeader>
+                           <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
+                              <ShieldAlert className="size-4 text-purple-400" /> Admin SDK Overrides
+                           </CardTitle>
+                           <CardDescription className="text-xs">Privileged operations using the Sovereign Administrative Layer.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-4">
+                                 <div className="flex items-center gap-3">
+                                    <UserCheck className="size-5 text-purple-400" />
+                                    <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Custom Identity Claims</h4>
+                                 </div>
+                                 <p className="text-[10px] text-muted-foreground">Grant Imperial administrative status to a user identity via the backend portal.</p>
+                                 <Button 
+                                    onClick={handleSetClaims} 
+                                    disabled={adminLoading}
+                                    className="w-full bg-purple-500 text-white font-bold h-10 uppercase text-[9px] gap-2"
+                                 >
+                                    {adminLoading ? <Loader2 className="size-3 animate-spin" /> : <Fingerprint className="size-3" />}
+                                    Anchors Imperial Claims
+                                 </Button>
+                              </div>
+
+                              <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-4">
+                                 <div className="flex items-center gap-3">
+                                    <BellRing className="size-5 text-emerald-400" />
+                                    <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">FCM Mesh Broadcast</h4>
+                                 </div>
+                                 <p className="text-[10px] text-muted-foreground">Dispatched encrypted messaging packets to all 100 autonomous nodes.</p>
+                                 <Button 
+                                    onClick={handleBroadcast} 
+                                    disabled={adminLoading}
+                                    className="w-full bg-emerald-500 text-white font-bold h-10 uppercase text-[9px] gap-2"
+                                 >
+                                    {adminLoading ? <Loader2 className="size-3 animate-spin" /> : <MessageSquare className="size-3" />}
+                                    Dispatch FCM Packet
+                                 </Button>
+                              </div>
+                           </div>
+
+                           <Card className="bg-red-500/5 border-red-500/20">
+                              <CardContent className="p-4 flex items-center justify-between">
+                                 <div className="flex items-center gap-4">
+                                    <ZapOff className="size-6 text-red-400" />
+                                    <div className="space-y-0.5">
+                                       <p className="text-xs font-bold text-white uppercase">Identity Revocation</p>
+                                       <p className="text-[9px] text-muted-foreground">Immediately invalidate all refresh tokens for a specific node identity.</p>
+                                    </div>
+                                 </div>
+                                 <Button variant="outline" className="border-red-500/20 text-red-500 uppercase font-bold text-[9px]">Revoke Access</Button>
+                              </CardContent>
+                           </Card>
+                        </CardContent>
+                     </Card>
+                  </div>
+                  <div className="space-y-8">
+                     <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+                        <CardHeader>
+                           <CardTitle className="text-xs font-headline uppercase text-amber-500">Security Rule Control</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                              "Administrative protocols allow real-time adjustment of Firestore security rules and Remote Config parameters for high-stakes compliance."
+                           </p>
+                           <div className="flex justify-between items-center text-[9px] font-mono border-t border-white/5 pt-4">
+                              <span className="uppercase text-muted-foreground">Rule Version</span>
+                              <span className="text-white font-bold">SOV_P51_v3.2</span>
+                           </div>
                         </CardContent>
                      </Card>
                   </div>
@@ -344,7 +452,8 @@ export default function EnterpriseSettingsPage() {
     </div>
   )
 }
-function EyeOff(props: any) {
+
+function ZapOff(props: any) {
   return (
     <svg
       {...props}
@@ -358,9 +467,8 @@ function EyeOff(props: any) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
-      <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
-      <path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+      <path d="M10.5 10.5 3 21l8-9 5 5 1.5-1.5" />
+      <path d="m15.5 15.5 5.5-7.5-8-2-2.5 2.5" />
       <line x1="2" x2="22" y1="2" y2="22" />
     </svg>
   )
