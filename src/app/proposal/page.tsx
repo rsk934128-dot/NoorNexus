@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -45,7 +44,8 @@ import {
   Lock,
   Code2,
   Apple,
-  Handshake
+  Handshake,
+  Github
 } from "lucide-react"
 import { 
   Dialog, 
