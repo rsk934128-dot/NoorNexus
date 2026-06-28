@@ -45,7 +45,8 @@ import {
   Code2,
   Apple,
   Handshake,
-  Github
+  Github,
+  Monitor
 } from "lucide-react"
 import { 
   Dialog, 
@@ -250,7 +251,7 @@ export default function ProposalPage() {
                <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                        <Monitor className="size-4" /> Tech Stack v4.5
+                        <Monitor className="size-4 text-primary" /> Tech Stack v4.5
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
