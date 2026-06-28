@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useMemo, useEffect, useRef } from "react"
@@ -417,6 +416,10 @@ export default function WorldCupPage() {
 
       <Dialog open={isHandshaking} onOpenChange={setIsHandshaking}>
         <DialogContent className="glass-card border-primary/40 w-[92vw] sm:max-w-[500px] bg-black/95 p-8 sm:p-12 rounded-[2rem] shadow-2xl">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Handshake Initiation</DialogTitle>
+            <DialogDescription>Verifying secure link with the sports node.</DialogDescription>
+          </DialogHeader>
           <div className="py-6 sm:py-10 text-center space-y-8 sm:space-y-12">
             <div className="size-20 sm:size-28 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto border border-primary/20 glow-primary">
               <ShieldCheck className="size-12 sm:size-16 text-primary animate-pulse" />
