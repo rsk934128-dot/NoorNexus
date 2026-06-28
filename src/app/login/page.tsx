@@ -16,12 +16,14 @@ import {
   Sparkles, 
   Radio,
   Shield,
-  Lock
+  Lock,
+  ArrowLeft
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState, useCallback } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { SovereignLogo } from "@/components/sovereign-logo"
+import Link from "next/link"
 
 /**
  * @fileOverview Sovereign Gate - Imperial Login Portal (V4.5 - Auto-Handshake Edition)
@@ -108,6 +110,15 @@ export default function LoginPage() {
 
   return (
     <div className="h-screen w-full bg-background cyber-grid flex items-center justify-center p-6 overflow-hidden relative">
+      {/* Back Button Node */}
+      <div className="absolute top-6 left-6 z-20">
+         <Link href="/">
+            <Button variant="ghost" className="text-muted-foreground hover:text-primary gap-2 uppercase font-bold text-[10px] tracking-widest">
+               <ArrowLeft className="size-4" /> Return to Command
+            </Button>
+         </Link>
+      </div>
+
       {/* Background Ambience */}
       <div className="absolute inset-0 z-0 opacity-5 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[4] rotate-12">
@@ -164,7 +175,7 @@ export default function LoginPage() {
               </Button>
 
               <Button 
-                onClick={() => handleAuth('google')}
+                onClick={handleAuth('google')}
                 disabled={signingIn}
                 variant="outline"
                 className="w-full border-white/10 hover:bg-white/5 text-white font-bold uppercase tracking-widest h-12 gap-3"
@@ -173,7 +184,7 @@ export default function LoginPage() {
               </Button>
 
               <Button 
-                onClick={() => handleAuth('microsoft')}
+                onClick={handleAuth('microsoft')}
                 disabled={signingIn}
                 variant="outline"
                 className="w-full border-white/10 hover:bg-white/5 text-white font-bold uppercase tracking-widest h-12 gap-3"
