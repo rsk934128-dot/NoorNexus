@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -37,7 +36,8 @@ import {
   Clock,
   ExternalLink,
   ChevronRight,
-  HeartHandshake
+  HeartHandshake,
+  Database
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { authorizeRemittance, RemittanceComplianceOutput } from "@/ai/flows/remittance-compliance-flow"
