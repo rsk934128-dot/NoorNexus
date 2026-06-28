@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useMemo, useEffect, useRef } from "react"
@@ -199,35 +200,37 @@ export default function WorldCupPage() {
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
-      <AppSidebar />
+      {!isFullscreen && <AppSidebar />}
       <SidebarInset>
         <main className="p-3 sm:p-6 lg:p-10 space-y-6 sm:space-y-8 max-w-[1600px] mx-auto w-full">
-          <header className="flex flex-col gap-4 sm:gap-6">
-            <div className="flex items-center justify-between md:hidden">
-              <SidebarTrigger>
-                <Button variant="ghost" size="icon" className="text-primary -ml-2 h-10 w-10">
-                  <Menu className="size-6" />
-                </Button>
-              </SidebarTrigger>
-              <Badge variant="outline" className="border-primary/30 text-primary text-[8px] uppercase font-bold tracking-widest">GSMIFY L4</Badge>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="size-10 sm:size-12 bg-primary/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-primary/30 glow-primary shrink-0">
-                <Trophy className="size-6 sm:size-7 text-primary" />
+          {!isFullscreen && (
+            <header className="flex flex-col gap-4 sm:gap-6">
+              <div className="flex items-center justify-between md:hidden">
+                <SidebarTrigger>
+                  <Button variant="ghost" size="icon" className="text-primary -ml-2 h-10 w-10">
+                    <Menu className="size-6" />
+                  </Button>
+                </SidebarTrigger>
+                <Badge variant="outline" className="border-primary/30 text-primary text-[8px] uppercase font-bold tracking-widest">GSMIFY L4</Badge>
               </div>
-              <div className="min-w-0">
-                <h2 className="text-xl sm:text-4xl font-headline font-bold uppercase tracking-tight text-primary truncate">SOVEREIGN SPORTS</h2>
-                <div className="flex items-center gap-2 overflow-hidden">
-                  <p className="text-[9px] sm:text-[11px] text-muted-foreground font-mono tracking-widest uppercase truncate">MISSION 400 | WORLD CUP</p>
+              
+              <div className="flex items-center gap-3">
+                <div className="size-10 sm:size-12 bg-primary/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-primary/30 glow-primary shrink-0">
+                  <Trophy className="size-6 sm:size-7 text-primary" />
+                </div>
+                <div className="min-w-0">
+                  <h2 className="text-xl sm:text-4xl font-headline font-bold uppercase tracking-tight text-primary truncate">SOVEREIGN SPORTS</h2>
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <p className="text-[9px] sm:text-[11px] text-muted-foreground font-mono tracking-widest uppercase truncate">MISSION 400 | WORLD CUP</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </header>
+            </header>
+          )}
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div className="xl:col-span-3 space-y-6 order-1">
-              <Card ref={playerRef} className={`glass-card border-white/5 overflow-hidden relative group ${isFullscreen ? 'h-screen w-screen rounded-none z-[9999] bg-black flex flex-col items-center justify-center' : ''}`}>
+              <Card ref={playerRef} className={`glass-card border-white/5 overflow-hidden relative group ${isFullscreen ? 'fixed inset-0 h-screen w-screen rounded-none z-[9999] bg-black flex flex-col items-center justify-center' : ''}`}>
                 <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 bg-white/2 py-3 px-4 sm:px-6 gap-3 w-full">
                   <div className="flex items-center gap-3 min-w-0">
                     <Badge className={`text-[8px] sm:text-[10px] font-bold uppercase ${activeMatch?.status === 'LIVE' ? 'bg-destructive animate-pulse' : 'bg-muted'}`}>
@@ -257,7 +260,7 @@ export default function WorldCupPage() {
                     </Button>
                   </div>
                 </CardHeader>
-                <CardContent className={`p-0 aspect-video bg-black relative w-full ${isFullscreen ? 'flex-1 aspect-auto' : ''}`}>
+                <CardContent className={`p-0 bg-black relative w-full ${isFullscreen ? 'flex-1 aspect-auto' : 'aspect-video'}`}>
                   {playerMode === 'EMBED' && (activeMatch?.uplink) ? (
                     <iframe 
                       width="100%" 
@@ -274,6 +277,15 @@ export default function WorldCupPage() {
                       <Button onClick={handleLaunchUplink} className="bg-primary text-primary-foreground font-bold h-14 sm:h-16 px-8 sm:px-12 text-xs sm:text-lg glow-primary">
                         <Zap className="size-5 sm:size-6 mr-2" /> INITIATE HANDSHAKE
                       </Button>
+                    </div>
+                  )}
+                  
+                  {/* Floating Fullscreen Toggle for Touch Devices in Player Area */}
+                  {!isFullscreen && activeMatch?.uplink && (
+                    <div className="absolute bottom-4 right-4 sm:hidden">
+                       <Button onClick={togglePlayerFullscreen} className="bg-black/60 backdrop-blur-md border border-white/20 text-white size-10 rounded-full">
+                          <Maximize2 className="size-5" />
+                       </Button>
                     </div>
                   )}
                 </CardContent>
@@ -325,91 +337,93 @@ export default function WorldCupPage() {
               )}
             </div>
 
-            <div className="space-y-6 order-2">
-              {/* Mesh Chat */}
-              <Card className="glass-card h-[400px] sm:h-[550px] flex flex-col overflow-hidden shadow-2xl">
-                <CardHeader className="py-4 px-5 border-b border-white/5 bg-white/2">
-                  <CardTitle className="text-[10px] sm:text-xs font-headline text-primary flex items-center gap-2 uppercase tracking-widest">
-                    <MessageSquare className="size-4" /> MESH CHAT
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
-                  <ScrollArea className="flex-1 p-4">
-                    <div className="space-y-5 pb-4">
-                      {chats.map((chat, i) => (
-                        <div key={i} className="space-y-1.5 animate-in fade-in slide-in-from-bottom-1 duration-300">
-                          <div className="flex items-center justify-between text-[8px] font-mono px-1">
-                            <span className="text-primary font-bold uppercase tracking-widest">{chat.user}</span>
-                            <span className="text-muted-foreground opacity-50">
-                              {chat.timestamp ? new Date(chat.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
-                            </span>
+            {!isFullscreen && (
+              <div className="space-y-6 order-2">
+                {/* Mesh Chat */}
+                <Card className="glass-card h-[400px] sm:h-[550px] flex flex-col overflow-hidden shadow-2xl">
+                  <CardHeader className="py-4 px-5 border-b border-white/5 bg-white/2">
+                    <CardTitle className="text-[10px] sm:text-xs font-headline text-primary flex items-center gap-2 uppercase tracking-widest">
+                      <MessageSquare className="size-4" /> MESH CHAT
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
+                    <ScrollArea className="flex-1 p-4">
+                      <div className="space-y-5 pb-4">
+                        {chats.map((chat, i) => (
+                          <div key={i} className="space-y-1.5 animate-in fade-in slide-in-from-bottom-1 duration-300">
+                            <div className="flex items-center justify-between text-[8px] font-mono px-1">
+                              <span className="text-primary font-bold uppercase tracking-widest">{chat.user}</span>
+                              <span className="text-muted-foreground opacity-50">
+                                {chat.timestamp ? new Date(chat.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
+                              </span>
+                            </div>
+                            <div className="text-[10px] sm:text-[11px] text-white/90 bg-white/5 p-3 rounded-2xl border border-white/5 leading-relaxed shadow-sm">
+                              {chat.message}
+                            </div>
                           </div>
-                          <div className="text-[10px] sm:text-[11px] text-white/90 bg-white/5 p-3 rounded-2xl border border-white/5 leading-relaxed shadow-sm">
-                            {chat.message}
-                          </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
+                    </ScrollArea>
+                    <div className="p-4 border-t border-white/5 bg-black/40">
+                       <div className="relative group">
+                          <input 
+                            type="text" 
+                            value={chatInput}
+                            onChange={(e) => setChatInput(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                            placeholder="Broadcast message..." 
+                            className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-[11px] outline-none pr-12 focus:ring-1 focus:ring-primary transition-all group-focus-within:border-primary/50"
+                          />
+                          <Button onClick={handleSendMessage} variant="ghost" size="icon" className="absolute right-1.5 top-1/2 -translate-y-1/2 text-primary size-9 hover:bg-primary/10">
+                            <Send className="size-4" />
+                          </Button>
+                       </div>
                     </div>
-                  </ScrollArea>
-                  <div className="p-4 border-t border-white/5 bg-black/40">
-                     <div className="relative group">
-                        <input 
-                          type="text" 
-                          value={chatInput}
-                          onChange={(e) => setChatInput(e.target.value)}
-                          onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                          placeholder="Broadcast message..." 
-                          className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-[11px] outline-none pr-12 focus:ring-1 focus:ring-primary transition-all group-focus-within:border-primary/50"
-                        />
-                        <Button onClick={handleSendMessage} variant="ghost" size="icon" className="absolute right-1.5 top-1/2 -translate-y-1/2 text-primary size-9 hover:bg-primary/10">
-                          <Send className="size-4" />
-                        </Button>
-                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
 
-              {/* Live Feeds List */}
-              <Card className="glass-card overflow-hidden shadow-2xl border-l-4 border-l-primary">
-                <CardHeader className="py-4 px-5 border-b border-white/5 bg-white/2">
-                   <CardTitle className="text-[10px] sm:text-xs uppercase font-bold text-primary flex items-center gap-2 tracking-widest">
-                      <Radio className="size-4" /> LIVE FEEDS
-                   </CardTitle>
-                </CardHeader>
-                <CardContent className="p-3 sm:p-4">
-                   <ScrollArea className="h-[250px] sm:h-[300px]">
-                   <div className="space-y-3 pr-2">
-                   {matchesLoading ? (
-                     <div className="flex flex-col items-center py-10 gap-3">
-                        <Loader2 className="size-6 animate-spin text-primary" />
-                        <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-widest">Syncing mesh...</p>
-                     </div>
-                   ) : matches.map(match => (
-                     <div 
-                       key={match.id} 
-                       onClick={() => {
-                         setActiveMatch(match)
-                         setAiInsight(null)
-                        }}
-                       className={`p-3.5 bg-white/2 rounded-2xl border flex justify-between items-center cursor-pointer transition-all duration-300 ${activeMatch?.id === match.id ? 'border-primary bg-primary/10 shadow-lg scale-[1.02]' : 'border-white/5 hover:border-white/20'}`}
-                      >
-                        <div className="space-y-1 min-w-0 flex-1">
-                           <p className="text-[10px] sm:text-[11px] font-bold text-white uppercase truncate pr-3">{match.home} vs {match.away}</p>
-                           <div className="flex items-center gap-2.5">
-                              <div className={`size-1.5 rounded-full ${match.status === 'LIVE' ? 'bg-destructive animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]' : 'bg-muted'}`} />
-                              <p className="text-[8px] sm:text-[9px] text-muted-foreground font-mono uppercase truncate">{match.status}</p>
-                           </div>
-                        </div>
-                        <div className="text-right shrink-0">
-                           <Badge variant="secondary" className="bg-black/40 text-primary font-mono text-[10px] sm:text-[11px] font-black h-7 px-3">{match.score || "0-0"}</Badge>
-                        </div>
-                     </div>
-                   ))}
-                   </div>
-                   </ScrollArea>
-                </CardContent>
-              </Card>
-            </div>
+                {/* Live Feeds List */}
+                <Card className="glass-card overflow-hidden shadow-2xl border-l-4 border-l-primary">
+                  <CardHeader className="py-4 px-5 border-b border-white/5 bg-white/2">
+                    <CardTitle className="text-[10px] sm:text-xs uppercase font-bold text-primary flex items-center gap-2 tracking-widest">
+                        <Radio className="size-4" /> LIVE FEEDS
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 sm:p-4">
+                    <ScrollArea className="h-[250px] sm:h-[300px]">
+                    <div className="space-y-3 pr-2">
+                    {matchesLoading ? (
+                      <div className="flex flex-col items-center py-10 gap-3">
+                          <Loader2 className="size-6 animate-spin text-primary" />
+                          <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-widest">Syncing mesh...</p>
+                      </div>
+                    ) : matches.map(match => (
+                      <div 
+                        key={match.id} 
+                        onClick={() => {
+                          setActiveMatch(match)
+                          setAiInsight(null)
+                          }}
+                        className={`p-3.5 bg-white/2 rounded-2xl border flex justify-between items-center cursor-pointer transition-all duration-300 ${activeMatch?.id === match.id ? 'border-primary bg-primary/10 shadow-lg scale-[1.02]' : 'border-white/5 hover:border-white/20'}`}
+                        >
+                          <div className="space-y-1 min-w-0 flex-1">
+                            <p className="text-[10px] sm:text-[11px] font-bold text-white uppercase truncate pr-3">{match.home} vs {match.away}</p>
+                            <div className="flex items-center gap-2.5">
+                                <div className={`size-1.5 rounded-full ${match.status === 'LIVE' ? 'bg-destructive animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]' : 'bg-muted'}`} />
+                                <p className="text-[8px] sm:text-[9px] text-muted-foreground font-mono uppercase truncate">{match.status}</p>
+                            </div>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <Badge variant="secondary" className="bg-black/40 text-primary font-mono text-[10px] sm:text-[11px] font-black h-7 px-3">{match.score || "0-0"}</Badge>
+                          </div>
+                      </div>
+                    ))}
+                    </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </div>
         </main>
       </SidebarInset>
