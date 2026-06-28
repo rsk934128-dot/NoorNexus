@@ -46,7 +46,9 @@ import {
   Shield,
   HeartHandshake,
   MessageSquare,
-  ArrowRight
+  ArrowRight,
+  Tv,
+  PlayCircle
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -254,6 +256,44 @@ export default function Home() {
                   </Card>
                </section>
 
+               {/* Toffee Live Feature Spotlight */}
+               <section className="space-y-4 sm:space-y-6">
+                  <div className="flex justify-between items-center px-1">
+                    <h3 className="text-[10px] sm:text-xs font-headline font-bold uppercase tracking-[0.4em] text-red-500 flex items-center gap-2">
+                      <Tv className="size-3 sm:size-4" /> Live Media Dispatch
+                    </h3>
+                  </div>
+                  <Card className="glass-card border-red-500/20 bg-red-500/5 overflow-hidden group hover:border-red-500/40 transition-all">
+                     <CardContent className="p-6 sm:p-10 flex flex-col md:flex-row items-center gap-8">
+                        <div className="size-24 sm:size-32 bg-red-600/10 rounded-3xl flex items-center justify-center border border-red-500/20 shrink-0 relative">
+                           <div className="absolute inset-0 bg-red-600/5 rounded-full animate-ping opacity-30" />
+                           <Tv className="size-12 sm:size-16 text-red-500" />
+                        </div>
+                        <div className="flex-1 text-center md:text-left space-y-4">
+                           <div className="space-y-1">
+                              <Badge className="bg-red-500 text-white border-none text-[8px] sm:text-[10px] font-bold h-5 px-3 uppercase">Priority Media Node</Badge>
+                              <h4 className="text-2xl sm:text-4xl font-headline font-bold text-white uppercase tracking-tighter">Toffee Live Portal</h4>
+                           </div>
+                           <p className="text-xs sm:text-base text-muted-foreground italic leading-relaxed">
+                              "কমান্ডার, আপনার মিডিয়া হাব এখন সরাসরি টফি লাইভ স্ট্রীমের সাথে সিঙ্ক্রোনাইজড। স্পোর্টস থেকে শুরু করে বিনোদন—সবকিছু এখন একটি সিঙ্গেল টানেলে।"
+                           </p>
+                           <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+                              <Link href="/toffee">
+                                 <Button className="bg-red-500 text-white font-bold h-12 px-8 uppercase text-[10px] sm:text-xs glow-destructive gap-2">
+                                    <PlayCircle className="size-4" /> Launch Live Hub
+                                 </Button>
+                              </Link>
+                              <Link href="/world-cup">
+                                 <Button variant="outline" className="border-white/10 text-white h-12 px-6 uppercase text-[10px] sm:text-xs">
+                                    World Cup Relay
+                                 </Button>
+                              </Link>
+                           </div>
+                        </div>
+                     </CardContent>
+                  </Card>
+               </section>
+
                {/* Legacy & Family Milestones */}
                <section className="space-y-4 sm:space-y-6">
                   <h3 className="text-[10px] sm:text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2 px-1">
@@ -308,6 +348,35 @@ export default function Home() {
                   </Link>
                </Card>
 
+               {/* Quick Access Channels */}
+               <Card className="glass-card border-l-4 border-l-red-500 bg-red-500/5">
+                  <CardHeader className="p-4 sm:p-6">
+                     <CardTitle className="text-[10px] sm:text-xs font-headline uppercase text-red-500 flex items-center gap-2">
+                        <Tv className="size-3 sm:size-4" /> Media Channels
+                     </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4 sm:p-6 pt-0 space-y-3 sm:space-y-4">
+                     <Link href="/toffee" className="w-full block">
+                        <div className="p-3 bg-black/40 rounded-xl border border-red-500/10 hover:border-red-500/40 transition-all flex items-center justify-between group">
+                           <div className="flex items-center gap-3">
+                              <Tv className="size-4 text-red-500 group-hover:animate-pulse" />
+                              <span className="text-[10px] text-white font-bold uppercase">Toffee Live</span>
+                           </div>
+                           <Badge className="bg-red-500/20 text-red-500 border-none text-[8px]">LIVE</Badge>
+                        </div>
+                     </Link>
+                     <Link href="/youtube" className="w-full block">
+                        <div className="p-3 bg-black/40 rounded-xl border border-white/5 hover:border-red-500/20 transition-all flex items-center justify-between group">
+                           <div className="flex items-center gap-3">
+                              <Youtube className="size-4 text-muted-foreground group-hover:text-red-500" />
+                              <span className="text-[10px] text-white font-bold uppercase">Cinema</span>
+                           </div>
+                           <ArrowRight className="size-3 text-muted-foreground" />
+                        </div>
+                     </Link>
+                  </CardContent>
+               </Card>
+
                <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                   <CardHeader className="p-4 sm:p-6">
                      <CardTitle className="text-[10px] sm:text-xs font-headline uppercase text-primary flex items-center gap-2">
@@ -316,11 +385,11 @@ export default function Home() {
                   </CardHeader>
                   <CardContent className="p-4 sm:p-6 pt-0 space-y-3 sm:space-y-4">
                      <div className="p-3 bg-black/40 rounded-lg border border-white/5 flex justify-between items-center">
-                        <span className="text-[8px] sm:text-[10px] text-muted-foreground uppercase">Cold Storage</span>
+                        <span className="text-[8px] sm:text-[10px] text-muted-foreground uppercase font-bold">Cold Storage</span>
                         <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px] sm:text-[9px]">ANCHORED</Badge>
                      </div>
                      <div className="p-3 bg-black/40 rounded-lg border border-white/5 flex justify-between items-center">
-                        <span className="text-[8px] sm:text-[10px] text-muted-foreground uppercase">Digital Will</span>
+                        <span className="text-[8px] sm:text-[10px] text-muted-foreground uppercase font-bold">Digital Will</span>
                         <Badge className="bg-primary/20 text-primary border-none text-[7px] sm:text-[9px]">ACTIVE</Badge>
                      </div>
                   </CardContent>
@@ -337,6 +406,7 @@ export default function Home() {
                   <ScrollArea className="h-full p-4">
                     <div className="space-y-4 sm:space-y-5">
                       {[
+                        "MEDIA: Toffee Live Hub synchronized for Imperial Pulse.",
                         "HEGEMONY: 100 Nodes synchronized at Zenith Peak.",
                         "LEGACY: Digital Will protocol anchored for the next generation.",
                         "FAMILY: Sovereign Shield active for all linked members.",

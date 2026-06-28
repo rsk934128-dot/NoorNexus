@@ -5,14 +5,14 @@ import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
-import { PhoneIncoming, Cloud, Radio, PhoneCall, Globe } from "lucide-react"
+import { PhoneIncoming, Cloud, Radio, PhoneCall, Globe, Tv, Sparkles } from "lucide-react"
 import { useSidebar } from "@/components/ui/sidebar"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 /**
- * @fileOverview Global Persistent Communication Node (V5.7 - Mobile Optimized)
- * নূরনেক্সাস সাম্রাজ্যের প্রতিটি পেজে "Shurukkha" এবং "Famelack" হাবের পারসিস্টেন্স নিশ্চিত করে।
- * Updated: Overlays now explicitly calculate height to avoid covering headers.
+ * @fileOverview Global Persistent Communication Node (V5.8 - Media Optimized)
+ * নূরনেক্সাস সাম্রাজ্যের প্রতিটি পেজে "Shurukkha", "Famelack" এবং "Toffee" হাবের পারসিস্টেন্স নিশ্চিত করে।
+ * Updated: Added a global red trigger for Toffee Live access from any part of the app.
  */
 export function PersistentCommNode() {
   const [isMounted, setIsMounted] = useState(false)
@@ -107,6 +107,7 @@ export function PersistentCommNode() {
   const isStandardActive = pathname === "/shurukkha-standard"
   const isImperialActive = pathname === "/shurukkha-imperial"
   const isFamelackActive = pathname === "/famelack"
+  const isToffeeActive = pathname === "/toffee"
   
   const sidebarWidth = isMobile ? '0px' : (open ? '16rem' : '3rem')
   const headerHeight = '64px' // Standard app header height
@@ -114,6 +115,27 @@ export function PersistentCommNode() {
   return (
     <>
       <div className="fixed bottom-6 sm:bottom-8 right-5 sm:right-8 z-[100] flex flex-col gap-4 sm:gap-5 items-center pointer-events-auto">
+        
+        {/* Universal Toffee Live Trigger */}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="relative group">
+                <Button 
+                  onClick={() => router.push("/toffee")}
+                  className={`size-11 sm:size-14 rounded-2xl p-0 flex items-center justify-center transition-all duration-500 shadow-2xl border-2 ${isToffeeActive ? 'bg-red-600 border-white glow-destructive scale-110' : 'bg-black/80 border-white/10 hover:border-red-500/50'}`}
+                >
+                  <Tv className={`size-5 sm:size-6 ${isToffeeActive ? 'text-white' : 'text-red-500'}`} />
+                  {!isToffeeActive && <Sparkles className="absolute -top-1 -right-1 size-3 text-amber-500 animate-pulse" />}
+                </Button>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="left" className="bg-black/95 border-red-500/50 hidden sm:block">
+               <p className="text-[10px] font-bold uppercase tracking-widest">Open Toffee Live</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -159,7 +181,6 @@ export function PersistentCommNode() {
       </div>
 
       <div className="fixed inset-0 z-[40] pointer-events-none overflow-hidden">
-        {/* Overlay containers now explicitly leave space for the app header */}
         <div 
           className={`absolute inset-x-0 bottom-0 transition-all duration-700 ease-in-out bg-white ${isStandardActive ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 translate-y-full'}`}
           style={{ 
@@ -213,6 +234,8 @@ export function PersistentCommNode() {
             loading="lazy"
           />
         </div>
+
+        {/* Toffee Persistent Background Container (Optional logic here if we wanted zero-reload iframe) */}
       </div>
     </>
   )
