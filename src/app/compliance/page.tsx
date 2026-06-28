@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -14,7 +13,8 @@ import {
   ShieldCheck, Terminal, AlertCircle, CheckCircle2, Cpu, Activity, Zap, 
   Menu, History, Loader2, ShieldAlert, Lock, ShieldEllipsis, RefreshCcw, LayoutGrid,
   ShieldPlus,
-  Atom
+  Atom,
+  BrainCircuit
 } from "lucide-react"
 import { autonomousComplianceMonitor, AutonomousComplianceMonitorOutput } from "@/ai/flows/autonomous-compliance-monitor"
 import { useToast } from "@/hooks/use-toast"
