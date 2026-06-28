@@ -4,7 +4,7 @@
 import { useState, useEffect, useRef } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -178,7 +178,7 @@ export default function ImperialCinemaPage() {
                   <Sparkles className="size-4 text-amber-500 animate-pulse" />
                 </h2>
                 <div className="flex items-center gap-2 mt-1">
-                  <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase truncate">Sovereign Live Media Node v5.8</p>
+                  <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase truncate">Sovereign Live Media Node v5.9</p>
                 </div>
               </div>
             </div>
@@ -266,7 +266,7 @@ export default function ImperialCinemaPage() {
                          <div className="space-y-4 max-w-xl">
                             <h3 className="text-3xl font-headline font-bold text-white uppercase tracking-tighter">High-Security Node Bridge</h3>
                             <p className="text-sm text-muted-foreground leading-relaxed italic">
-                               "কমান্ডার, ইউটিউবের ফুল সাইট নিরাপত্তার কারণে আইফ্রেম টানেলে সরাসরি লোড হতে বাধা দিচ্ছে। নিরবিচ্ছিন্ন এবং বিজ্ঞাপনমুক্ত অভিজ্ঞতার জন্য আপনাকে সরাসরি **Direct Sovereign Tunnel** ব্যবহার করতে হবে।"
+                               "কমান্ডার, ইউটিউবের ফুল সাইট নিরাপত্তার কারণে আইফ্রেম টানেলে সরাসরি লোড হতে বাধা দিতে পারে। নিরবিচ্ছিন্ন এবং বিজ্ঞাপনমুক্ত অভিজ্ঞতার জন্য আপনাকে সরাসরি **Direct Sovereign Tunnel** ব্যবহার করতে হবে।"
                             </p>
                          </div>
                          <div className="flex flex-col sm:flex-row gap-6">

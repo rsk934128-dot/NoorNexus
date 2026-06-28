@@ -32,9 +32,9 @@ import {
 import { useToast } from "@/hooks/use-toast"
 
 /**
- * @fileOverview Toffee Live Imperial Terminal (V5.8 - Sovereign Tunnel Edition)
+ * @fileOverview Toffee Live Imperial Terminal (V5.9 - Hardened Media Node)
  * নূরনেক্সাস অপারেটিং সিস্টেমের জন্য একটি প্রিমিয়াম লাইভ স্ট্রিমিং মিডিয়া নোড।
- * Updated: Fullscreen capability and layout visibility fixed.
+ * Updated: Fixed Error 4032 by adding encrypted-media support to iframe.
  */
 export default function ToffeeLivePage() {
   const { toast } = useToast()
@@ -120,7 +120,7 @@ export default function ToffeeLivePage() {
                     <Sparkles className="size-4 text-amber-500 animate-pulse" />
                   </h2>
                   <div className="flex items-center gap-2 mt-1">
-                    <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase truncate">Sovereign Live Media Node v5.8</p>
+                    <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase truncate">Sovereign Live Media Node v5.9</p>
                   </div>
                 </div>
               </div>
@@ -146,7 +146,7 @@ export default function ToffeeLivePage() {
             {loading && (
               <div className="absolute inset-0 z-[70] bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center gap-8 p-6 text-center">
                  <div className="relative">
-                    <div className="size-24 sm:size-32 rounded-full border-2 border-red-500/20 animate-spin-slow" />
+                    <div className="size-24 rounded-full border-2 border-red-500/20 animate-spin-slow" />
                     <div className="absolute inset-0 border-t-2 border-red-500 rounded-full animate-spin" />
                     <Tv className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-12 text-red-500 animate-pulse" />
                  </div>
@@ -166,7 +166,7 @@ export default function ToffeeLivePage() {
                  <div className="space-y-6 max-w-2xl">
                     <h3 className="text-3xl sm:text-5xl font-headline font-black text-white uppercase tracking-tighter">High-Security Media Block</h3>
                     <p className="text-sm sm:text-lg text-muted-foreground leading-relaxed italic px-4">
-                       "কমান্ডার, Toffee Live-এর হাই-সিকিউরিটি প্রোটোকল আমাদের ব্রাউজার টানেলকে বাধা দিচ্ছে। নিরবিচ্ছিন্ন লাইভ স্ট্রিমিং এবং প্রিমিয়াম অভিজ্ঞতার জন্য আপনাকে সরাসরি **Direct Sovereign Tunnel** ব্যবহার করার পরামর্শ দিচ্ছি।"
+                       "কমান্ডার, Toffee Live-এর হাই-সিকিউরিটি প্রোটোকল আমাদের ব্রাউজার টানেলকে বাধা দিতে পারে (Error 4032)। নিরবিচ্ছিন্ন লাইভ স্ট্রিমিং এবং প্রিমিয়াম অভিজ্ঞতার জন্য আপনাকে সরাসরি **Direct Sovereign Tunnel** ব্যবহার করার পরামর্শ দিচ্ছি।"
                     </p>
                  </div>
 
@@ -198,7 +198,7 @@ export default function ToffeeLivePage() {
               <iframe 
                 ref={iframeRef}
                 src={TARGET_URL} 
-                className="w-full h-full border-0 bg-white absolute inset-0"
+                className="w-full h-full border-0 absolute inset-0"
                 title="Imperial Toffee Terminal"
                 allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                 sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
