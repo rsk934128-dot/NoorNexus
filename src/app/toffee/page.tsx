@@ -62,7 +62,7 @@ export default function ToffeeLivePage() {
     }, 2000)
   }
 
-  const toggleFullscreen = async () => {
+  const togglePlayerFullscreen = async () => {
     if (!containerRef.current) return;
     
     try {
