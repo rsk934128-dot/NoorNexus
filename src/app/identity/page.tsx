@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -74,6 +73,29 @@ export default function IdentityHubPage() {
       toast({ title: "Registry Failure", description: e.message, variant: "destructive" })
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleShareIdentity = async () => {
+    if (!identityResult) return
+    const did = identityResult.did
+    const shareUrl = `${window.location.origin}/identity?did=${did}`
+    const shareData = {
+      title: 'NoorNexus Sovereign Identity',
+      text: `Verify my Sovereign Identity on NoorNexus. DID: ${did}`,
+      url: shareUrl
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        toast({ title: "Identity Shared", description: "Direct Sovereign Link broadcasted." });
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        toast({ title: "Sovereign Link Copied", description: "Identity anchored to clipboard." });
+      }
+    } catch (err) {
+      console.log('Error sharing:', err);
     }
   }
 
@@ -156,6 +178,9 @@ export default function IdentityHubPage() {
                              <p className="text-[8px] font-mono text-muted-foreground uppercase mb-1">Attestation Signature</p>
                              <p className="text-[9px] font-mono text-primary break-all">{identityResult.attestationSignature}</p>
                           </div>
+                          <Button onClick={handleShareIdentity} className="w-full bg-emerald-500 text-white font-bold uppercase text-[10px] h-10 gap-2">
+                             <Share2 className="size-4" /> Broadcast Sovereign Identity
+                          </Button>
                         </div>
                       ) : (
                         <div className="h-[300px] flex flex-col items-center justify-center gap-4 text-center opacity-40">

@@ -29,7 +29,8 @@ import {
   Search,
   Globe,
   Scale,
-  Rocket
+  Rocket,
+  Link2
 } from "lucide-react"
 
 export default function DocsPage() {
@@ -82,6 +83,16 @@ export default function DocsPage() {
                          </p>
                       </CardContent>
                     </Card>
+                    <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+                      <CardHeader>
+                         <CardTitle className="text-lg font-headline text-primary uppercase">Article X: Link Sovereignty</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                         <p className="text-sm text-primary-foreground/80 leading-relaxed italic">
+                            "NoorNexus shall not rely on external link-shortening or dynamic redirection services. All deep-links must be served directly from the Sovereign Mesh to ensure institutional longevity and prevent dependency on sunsetting third-party APIs."
+                         </p>
+                      </CardContent>
+                    </Card>
                     <Card className="glass-card border-white/5">
                       <CardHeader>
                          <CardTitle className="text-sm font-headline text-white uppercase">Article VII: Institutional Longevity</CardTitle>
@@ -96,7 +107,7 @@ export default function DocsPage() {
               </section>
 
               <section className="space-y-6">
-                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-amber-500 flex items-center gap-2">
                     <Rocket className="size-4" /> The Reality Roadmap (Next 5 Objectives)
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
