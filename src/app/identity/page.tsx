@@ -15,16 +15,9 @@ import {
   Loader2, 
   Cpu, 
   Globe, 
-  Link as LinkIcon, 
-  Copy, 
   CheckCircle2, 
-  Star,
   Award,
   Menu,
-  Activity,
-  UserCheck,
-  HeartHandshake,
-  Users,
   Share2,
   Box,
   FileCheck,
@@ -32,7 +25,7 @@ import {
 } from "lucide-react"
 import { issueSovereignIdentity, IdentityReputationOutput } from "@/ai/flows/identity-reputation-flow"
 import { useToast } from "@/hooks/use-toast"
-import { useFirestore, useUser, useDoc } from "@/firebase"
+import { useFirestore, useUser } from "@/firebase"
 import { doc, setDoc, serverTimestamp } from "firebase/firestore"
 
 export default function IdentityHubPage() {
@@ -90,9 +83,11 @@ export default function IdentityHubPage() {
       if (navigator.share) {
         await navigator.share(shareData);
         toast({ title: "Identity Shared", description: "Direct Sovereign Link broadcasted." });
-      } else {
+      } else if (navigator.clipboard) {
         await navigator.clipboard.writeText(shareUrl);
         toast({ title: "Sovereign Link Copied", description: "Identity anchored to clipboard." });
+      } else {
+        toast({ title: "Share Failed", description: "Identity link: " + shareUrl, variant: "destructive" });
       }
     } catch (err) {
       console.log('Error sharing:', err);
@@ -168,9 +163,9 @@ export default function IdentityHubPage() {
                       {identityResult ? (
                         <div className="space-y-6 animate-in fade-in zoom-in-95">
                           <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
-                             <h4 className="text-[10px] font-bold uppercase text-primary">Civilization DID</h4>
-                             <p className="text-[10px] font-mono text-white truncate">{identityResult.did}</p>
-                             <div className="flex items-center gap-1 text-[8px] text-emerald-500">
+                            <h4 className="text-[10px] font-bold uppercase text-primary">Civilization DID</h4>
+                            <p className="text-[10px] font-mono text-white truncate">{identityResult.did}</p>
+                            <div className="flex items-center gap-1 text-[8px] text-emerald-500">
                                 <CheckCircle2 className="size-3" /> VERIFIED BY 12 MESH NODES
                              </div>
                           </div>

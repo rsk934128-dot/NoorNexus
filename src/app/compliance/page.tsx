@@ -3,23 +3,29 @@
 import { useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { Switch } from "@/components/ui/switch"
 import { 
-  ShieldCheck, Terminal, AlertCircle, CheckCircle2, Cpu, Activity, Zap, 
-  Menu, History, Loader2, ShieldAlert, Lock, ShieldEllipsis, RefreshCcw, LayoutGrid,
+  ShieldCheck, 
+  Terminal, 
+  CheckCircle2, 
+  Cpu, 
+  Activity, 
+  Zap, 
+  Menu, 
+  Loader2, 
+  RefreshCcw, 
   ShieldPlus,
   Atom,
   BrainCircuit
 } from "lucide-react"
 import { autonomousComplianceMonitor, AutonomousComplianceMonitorOutput } from "@/ai/flows/autonomous-compliance-monitor"
 import { useToast } from "@/hooks/use-toast"
-import { useFirestore, useCollection } from "@/firebase"
-import { collection, addDoc, query, orderBy, limit } from "firebase/firestore"
+import { useFirestore } from "@/firebase"
+import { collection, addDoc } from "firebase/firestore"
 
 export default function CompliancePage() {
   const { toast } = useToast()

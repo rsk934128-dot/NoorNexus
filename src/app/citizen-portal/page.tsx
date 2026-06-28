@@ -8,46 +8,29 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { 
-  HeartPulse, 
-  Zap, 
   ShieldCheck, 
-  Globe, 
-  TrendingUp, 
-  Star,
-  Award,
   Menu,
   Activity,
-  Cpu,
   Landmark,
-  Scale,
-  ShieldAlert,
   Coins,
-  ShieldPlus,
   Target,
   Waves,
   HeartHandshake,
   Unlock,
-  Eye,
-  Database,
   Fingerprint,
   Smartphone,
   Laptop,
   CheckCircle2,
-  Lock,
   Compass,
-  ArrowRightLeft,
   Settings,
   Share2,
   LockKeyhole,
   History,
   MapPin,
-  Box,
-  Bell,
   Languages,
   UserCog,
   Shield,
   FileCode,
-  Sparkles,
   Vault,
   Gem,
   Users
@@ -109,9 +92,11 @@ export default function CitizenPortalPage() {
       if (navigator.share) {
         await navigator.share(shareData);
         toast({ title: "Identity Shared", description: "Your credentials have been broadcasted via System Mesh." });
-      } else {
+      } else if (navigator.clipboard) {
         await navigator.clipboard.writeText(did);
         toast({ title: "DID Copied", description: "Identity hash anchored to your clipboard buffer." });
+      } else {
+        toast({ title: "Clipboard Unavailable", description: "Please copy the DID manually.", variant: "destructive" });
       }
     } catch (err) {
       console.log('Error sharing:', err);
@@ -297,7 +282,7 @@ export default function CitizenPortalPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
                
-               {/* Integrated Family Asset Management (NEW) */}
+               {/* Integrated Family Asset Management */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
                      <Vault className="size-4" /> Integrated Family Assets

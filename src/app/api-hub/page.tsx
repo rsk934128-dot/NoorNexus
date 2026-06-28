@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -8,38 +8,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
-  Code2, Globe, Terminal, Zap, Send, Loader2, ShieldCheck, 
-  Menu, MessageSquare, Cpu, BookOpen, Layers, ReceiptText,
-  ShieldHalf,
-  Unplug,
-  FlaskConical,
-  Key,
-  Webhook,
-  Activity,
-  Rocket,
-  LayoutGrid,
-  Award,
-  Search,
-  RefreshCcw,
-  ArrowRightLeft,
-  Link2,
-  Lock,
-  Network,
-  Infinity,
-  Fingerprint,
-  Clock,
-  ChevronRight,
-  FileCode,
-  Sparkles,
-  FileCheck,
-  CheckCircle2,
-  ShieldPlus,
-  LockKeyhole,
-  Braces,
-  Play,
-  Monitor,
-  Smartphone,
-  Repeat,
+  Send, Loader2, 
+  Menu, Cpu, 
+  Key, 
+  Rocket, 
+  Link2, 
+  Infinity, 
+  Fingerprint, 
+  FileCode, 
+  LockKeyhole, 
+  Braces, 
+  Repeat, 
   UserCog
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
@@ -55,42 +34,10 @@ export default function ApiHubPage() {
   const [isSandbox, setIsSandbox] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
   
-  // Mock Pulse States
-  const [mockAmount, setMockAmount] = useState("5000")
-  const [pulsing, setPulsing] = useState(false)
-  const [simulatorLogs, setSimulatorLogs] = useState<string[]>([
-    `[${new Date().toLocaleTimeString()}] INITIATING SANDBOX_ENVIRONMENT...`,
-    `[${new Date().toLocaleTimeString()}] WAITING FOR HANDSHAKE...`
-  ])
-
   const generateKey = () => {
     const key = `${isSandbox ? 'SANDBOX' : 'ZENITH'}_SK_${Math.random().toString(16).substring(2, 32).toUpperCase()}`
     setApiKey(key)
     toast({ title: isSandbox ? "Sandbox Access Key Generated" : "Enterprise Bridge Secret Generated", description: "Store this securely in your vault." })
-  }
-
-  const executeMockPulse = async () => {
-    setPulsing(true)
-    const timestamp = () => new Date().toLocaleTimeString()
-    
-    setSimulatorLogs(prev => [...prev, `[${timestamp()}] STARTING MOCK_PULSE: $${mockAmount}`])
-    
-    await new Promise(r => setTimeout(r, 800))
-    setSimulatorLogs(prev => [...prev, `[${timestamp()}] VERIFYING HMAC_V4_SANDBOX_SIG...`])
-    
-    await new Promise(r => setTimeout(r, 600))
-    setSimulatorLogs(prev => [...prev, `[${timestamp()}] GATEWAY_RESPONSE: 200_OK`])
-    
-    await new Promise(r => setTimeout(r, 400))
-    const txId = `SB-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
-    setSimulatorLogs(prev => [...prev, `[${timestamp()}] MOCK_TRANSACTION_APPROVED (ID: ${txId})`])
-    
-    setPulsing(false)
-    toast({
-      title: "Mock Pulse Successful",
-      description: `Transaction ${txId} approved in sandbox environment.`,
-      className: "border-amber-500/50 bg-amber-500/5"
-    })
   }
 
   async function askNora() {
@@ -117,6 +64,19 @@ export default function ApiHubPage() {
       setLoading(false)
     }
   }
+
+  const handleCopySnippet = async (text: string) => {
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+        toast({ title: "Snippet Copied", description: "Code block anchored to your clipboard." });
+      } else {
+        throw new Error("Clipboard API not available");
+      }
+    } catch (err) {
+      toast({ title: "Copy Failed", description: "Please select and copy the text manually.", variant: "destructive" });
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -317,10 +277,7 @@ sheikh.profile.sync({
                             </pre>
                             <Button 
                               size="sm" 
-                              onClick={() => {
-                                navigator.clipboard.writeText(`<script src="https://cdn.noornexus.sovereign/v1/core.js" async></script>\n<script>\n  sheikh.init({ appId: 'YOUR_ZENITH_KEY', omniSync: true });\n</script>`)
-                                toast({ title: "Snippet Copied" })
-                              }}
+                              onClick={() => handleCopySnippet(`<script src="https://cdn.noornexus.sovereign/v1/core.js" async></script>\n<script>\n  sheikh.init({ appId: 'YOUR_ZENITH_KEY', omniSync: true });\n</script>`)}
                               className="mt-6 bg-emerald-500 text-black font-bold uppercase text-[10px] h-9 glow-emerald"
                             >
                                Copy Code Block
@@ -336,7 +293,7 @@ sheikh.profile.sync({
               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-emerald-500 flex items-center gap-2">
-                    <Award className="size-4" /> Zenith Licensing
+                    <Key className="size-4" /> Zenith Licensing
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
