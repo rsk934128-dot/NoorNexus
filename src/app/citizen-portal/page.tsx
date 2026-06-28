@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -177,7 +176,7 @@ export default function CitizenPortalPage() {
                    <div className="relative group">
                       <div className="absolute -inset-2 bg-gradient-to-tr from-primary to-emerald-500 rounded-full opacity-50 blur-lg group-hover:opacity-100 transition-opacity duration-500" />
                       <Avatar className="size-32 sm:size-48 border-4 border-black relative z-10">
-                         <AvatarImage src={user?.photoURL || ""} />
+                         <AvatarImage src={user?.photoURL || undefined} />
                          <AvatarFallback className="bg-muted text-4xl font-bold">
                             {user?.displayName?.substring(0, 2).toUpperCase() || "C"}
                          </AvatarFallback>

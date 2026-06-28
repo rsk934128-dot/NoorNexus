@@ -33,6 +33,7 @@ import { useToast } from "@/hooks/use-toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useUser, useCollection, useFirestore } from "@/firebase"
 import { collection, query, where, limit } from "firebase/firestore"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default function ImperialMailPage() {
   const { toast } = useToast()
@@ -80,10 +81,10 @@ export default function ImperialMailPage() {
                  <SidebarTrigger className="md:hidden text-primary">
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
-                 <Badge variant="outline" className="border-red-500/50 text-red-500 uppercase font-bold tracking-widest px-3 h-8 bg-red-500/5">
+                 <Badge variant="outline" className="border-red-500/50 text-red-500 uppercase font-bold tracking-widest px-3 h-8 bg-red-500/5 text-[10px]">
                    <Mail className="size-3 mr-2" /> Project #170: Unified Identity
                  </Badge>
-                 <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
+                 <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5 text-[10px]">
                    <UserCircle className="size-3 mr-2" /> GMAIL_BRIDGE: ACTIVE
                  </Badge>
               </div>
@@ -122,7 +123,12 @@ export default function ImperialMailPage() {
                   <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="relative group">
                        <div className="absolute -inset-2 bg-red-500/20 rounded-full blur-xl group-hover:bg-red-500/40 transition-all" />
-                       <img src={user?.photoURL || ""} className="size-24 rounded-full border-4 border-black relative z-10" />
+                       <Avatar className="size-24 border-4 border-black relative z-10">
+                          <AvatarImage src={user?.photoURL || undefined} />
+                          <AvatarFallback className="bg-red-500/10 text-red-500 font-bold text-2xl">
+                             {user?.displayName?.substring(0, 2).toUpperCase() || "IM"}
+                          </AvatarFallback>
+                       </Avatar>
                        <div className="absolute -bottom-1 -right-1 size-7 bg-emerald-500 rounded-full border-4 border-black z-20 flex items-center justify-center">
                           <CheckCircle2 className="size-3 text-white" />
                        </div>
