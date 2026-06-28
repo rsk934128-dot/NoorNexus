@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect, useRef, Suspense, useCallback } from "react"
@@ -39,7 +38,8 @@ import {
   ShieldAlert,
   Key,
   CreditCard,
-  UserPlus
+  UserPlus,
+  Tv
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { executeZenithSearch, WebSearchOutput } from "@/ai/flows/web-search-flow"
@@ -47,6 +47,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { useSearchParams } from "next/navigation"
 
 const QUICK_LINKS = [
+  { name: "Toffee Live", url: "https://toffeelive.com/", icon: Tv, color: "text-red-500" },
   { name: "Banking", url: "https://console.yapily.com/", icon: Key, color: "text-amber-500" },
   { name: "RedotPay", url: "https://business.redotpay.com/biz/home/", icon: CreditCard, color: "text-primary" },
   { name: "SSLCommerz", url: "https://join.sslcommerz.com/upload-information", icon: UserPlus, color: "text-red-500" },
@@ -58,7 +59,8 @@ const QUICK_LINKS = [
 const KNOWN_IFRAME_BLOCKERS = [
   'amazon.com', 'google.com', 'facebook.com', 'github.com', 
   'alibaba.com', 'twitter.com', 'linkedin.com', 'yapily.com', 
-  'redotpay.com', 'sslcommerz.com', 'wikipedia.org', 'netflix.com'
+  'redotpay.com', 'sslcommerz.com', 'wikipedia.org', 'netflix.com',
+  'toffeelive.com'
 ];
 
 function BrowserContent() {

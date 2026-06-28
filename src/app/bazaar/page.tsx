@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -31,12 +30,14 @@ import {
   CreditCard,
   Merge,
   Zap,
-  Sparkles
+  Sparkles,
+  Tv
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 
 const INITIAL_LINKS = [
+  { id: "toffee-live", name: "Toffee Live", url: "https://toffeelive.com/", category: "Media", status: "VERIFIED", premium: true },
   { id: "fusion-omega", name: "Fintech Fusion Omega", url: "https://fintech-fusion-omega.vercel.app/", category: "Settlement", status: "VERIFIED", premium: true },
   { id: "1", name: "Amazon Global", url: "https://www.amazon.com", category: "General", status: "VERIFIED" },
   { id: "2", name: "Alibaba B2B", url: "https://www.alibaba.com", category: "Wholesale", status: "VERIFIED" },
@@ -85,6 +86,8 @@ export default function SovereignBazaarPage() {
   const launchInTerminal = (url: string, id: string) => {
     if (id === 'fusion-omega') {
       router.push('/fintech-fusion')
+    } else if (id === 'toffee-live') {
+      router.push('/toffee')
     } else {
       router.push(`/browser?url=${encodeURIComponent(url)}`)
     }
@@ -192,7 +195,7 @@ export default function SovereignBazaarPage() {
                          <div className="flex justify-between items-start">
                             <div className="flex gap-4">
                                <div className={`p-3 rounded-xl ${link.status === 'VERIFIED' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>
-                                  {link.category === 'Settlement' ? <Merge className="size-6" /> : link.category === 'Fintech' ? <CreditCard className="size-6" /> : <ShoppingBag className="size-6" />}
+                                  {link.category === 'Settlement' ? <Merge className="size-6" /> : link.category === 'Fintech' ? <CreditCard className="size-6" /> : link.category === 'Media' ? <Tv className="size-6" /> : <ShoppingBag className="size-6" />}
                                </div>
                                <div className="space-y-1">
                                   <div className="flex items-center gap-2">
@@ -236,7 +239,7 @@ export default function SovereignBazaarPage() {
                                       onClick={() => launchInTerminal(link.url, link.id)}
                                       className="h-8 text-[9px] uppercase font-bold bg-emerald-500 text-white px-4 glow-emerald gap-2"
                                     >
-                                       <Monitor className="size-3" /> {link.id === 'fusion-omega' ? 'Native' : 'Terminal'}
+                                       <Monitor className="size-3" /> {link.id === 'fusion-omega' || link.id === 'toffee-live' ? 'Native' : 'Terminal'}
                                     </Button>
                                  </div>
                                )}
@@ -256,27 +259,27 @@ export default function SovereignBazaarPage() {
                   </div>
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                        <Zap className="size-4" /> Top Settlement Hub
+                        <Tv className="size-4" /> Top Media Node
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                      <div className="flex items-center gap-3">
                         <div className="size-10 rounded-lg bg-amber-500/20 flex items-center justify-center border border-amber-500/30">
-                           <Merge className="size-6 text-amber-500" />
+                           <Tv className="size-6 text-amber-500" />
                         </div>
                         <div className="space-y-0.5">
-                           <p className="text-xs font-bold text-white uppercase">Fintech Fusion Omega</p>
-                           <p className="text-[8px] text-muted-foreground font-mono uppercase">Status: ACTIVE_L6</p>
+                           <p className="text-xs font-bold text-white uppercase">Toffee Live Portal</p>
+                           <p className="text-[8px] text-muted-foreground font-mono uppercase">Status: ENCRYPTED_L4</p>
                         </div>
                      </div>
                      <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                        "কমান্ডার, ফিউশনপে ওমেগা এখন আমাদের প্রধান সেটেলমেন্ট রেইল হিসেবে কাজ করছে।"
+                        "কমান্ডার, টফি লাইভ এখন আমাদের হাই-ক্লিয়ারেন্স মিডিয়া টানেলে যুক্ত।"
                      </p>
                      <Button 
-                        onClick={() => router.push('/fintech-fusion')}
+                        onClick={() => router.push('/toffee')}
                         className="w-full bg-amber-500 text-black font-bold uppercase text-[9px] h-8 glow-emerald"
                       >
-                        Enter Hub Node
+                        Launch Media Terminal
                      </Button>
                   </CardContent>
                </Card>

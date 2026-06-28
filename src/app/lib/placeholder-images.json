@@ -47,6 +47,12 @@
       "description": "YouTube video placeholder for extractor",
       "imageUrl": "https://picsum.photos/seed/video-v60/800/600",
       "imageHint": "video preview"
+    },
+    {
+      "id": "toffee-preview",
+      "description": "Toffee Live Media Node Preview",
+      "imageUrl": "https://picsum.photos/seed/toffee-sov/1200/800",
+      "imageHint": "streaming media"
     }
   ]
 }

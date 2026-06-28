@@ -21,13 +21,17 @@ import {
   Radio,
   Activity,
   Database,
-  Globe
+  Globe,
+  Waves,
+  Cpu,
+  Flame,
+  Maximize2
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 /**
- * @fileOverview Toffee Live Imperial Terminal
- * নূরনেক্সাস অপারেটিং সিস্টেমের জন্য একটি প্রিমিয়াম লাইভ স্ট্রিমিং নোড।
+ * @fileOverview Toffee Live Imperial Terminal (V5.8 - Sovereign Tunnel Edition)
+ * নূরনেক্সাস অপারেটিং সিস্টেমের জন্য একটি প্রিমিয়াম লাইভ স্ট্রিমিং মিডিয়া নোড।
  */
 export default function ToffeeLivePage() {
   const { toast } = useToast()
@@ -60,7 +64,7 @@ export default function ToffeeLivePage() {
     toast({
       title: "Direct Sovereign Tunnel Established",
       description: "Opening Toffee Live in a high-priority external node.",
-      className: "border-emerald-500/50 bg-emerald-500/5"
+      className: "border-emerald-500/50 bg-emerald-500/5 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
     })
   }
 
@@ -70,10 +74,10 @@ export default function ToffeeLivePage() {
       <SidebarInset>
         <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0 relative">
           {/* Imperial Header */}
-          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/50 backdrop-blur-md shrink-0 w-full z-50">
+          <header className="px-4 sm:px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/50 backdrop-blur-md shrink-0 w-full z-50">
             <div className="flex items-center gap-3">
               <SidebarTrigger className="md:hidden text-primary">
-                <Button variant="ghost" size="icon"><Menu className="size-5" /></Button>
+                <Button variant="ghost" size="icon" className="h-10 w-10"><Menu className="size-6" /></Button>
               </SidebarTrigger>
               <div className="size-10 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/30 glow-destructive shrink-0">
                 <Tv className="size-6 text-red-500" />
@@ -84,7 +88,7 @@ export default function ToffeeLivePage() {
                   <Sparkles className="size-4 text-amber-500 animate-pulse" />
                 </h2>
                 <div className="flex items-center gap-2 mt-1">
-                  <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase truncate">Sovereign Live Streaming Node</p>
+                  <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase truncate">Sovereign Live Media Node v5.8</p>
                 </div>
               </div>
             </div>
@@ -107,50 +111,62 @@ export default function ToffeeLivePage() {
           {/* Expansive Display Area */}
           <div className="flex-1 overflow-hidden bg-black/20 w-full p-0 m-0 relative">
             {loading && (
-              <div className="absolute inset-0 z-50 bg-background/80 backdrop-blur-xl flex flex-col items-center justify-center gap-8">
+              <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center gap-8 p-6 text-center">
                  <div className="relative">
-                    <div className="size-24 rounded-full border-2 border-red-500/20 flex items-center justify-center">
-                       <Tv className="size-12 text-red-500 animate-pulse" />
-                    </div>
+                    <div className="size-24 sm:size-32 rounded-full border-2 border-red-500/20 animate-spin-slow" />
                     <div className="absolute inset-0 border-t-2 border-red-500 rounded-full animate-spin" />
+                    <Tv className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-12 text-red-500 animate-pulse" />
                  </div>
                  <div className="text-center space-y-3">
-                    <p className="text-sm font-headline font-bold uppercase tracking-[0.4em] text-red-500 animate-pulse">
-                       Establishing Toffee Bridge...
-                    </p>
-                    <p className="text-[9px] text-muted-foreground font-mono uppercase tracking-widest">Zenith Veracity Verification: ACTIVE</p>
+                    <p className="text-sm sm:text-xl font-headline font-bold text-red-500 uppercase tracking-[0.4em]">Establishing Sovereign Bridge...</p>
+                    <p className="text-[9px] sm:text-xs text-muted-foreground font-mono uppercase tracking-widest animate-pulse">Nora-60 Veracity Verification: ACTIVE</p>
                  </div>
               </div>
             )}
 
             {showBypass ? (
-              <div className="size-full flex flex-col items-center justify-center text-center p-12 space-y-12 animate-in fade-in duration-1000">
-                 <div className="size-24 rounded-2xl bg-amber-500/20 flex items-center justify-center border border-amber-500/40 glow-emerald">
+              <div className="size-full flex flex-col items-center justify-center text-center p-6 sm:p-12 space-y-12 animate-in fade-in duration-1000 overflow-y-auto">
+                 <div className="size-24 rounded-3xl bg-amber-500/10 flex items-center justify-center border border-amber-500/30 glow-emerald relative">
+                    <div className="absolute -inset-4 bg-amber-500/5 rounded-full animate-ping" />
                     <ShieldAlert className="size-12 text-amber-500" />
                  </div>
-                 <div className="space-y-4 max-w-xl">
-                    <h3 className="text-3xl font-headline font-bold text-white uppercase tracking-tighter">High-Security Media Block</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed italic">
-                       "কমান্ডার, Toffee Live এর উচ্চ-নিরাপত্তা প্রোটোকল আমাদের আইফ্রেম টানেলকে বাধা দিচ্ছে। নিরবিচ্ছিন্ন লাইভ স্ট্রিমিং এবং সেরা এক্সপেরিয়েন্সের জন্য আপনাকে সরাসরি **Direct Sovereign Tunnel** ব্যবহার করার পরামর্শ দিচ্ছি।"
+                 <div className="space-y-6 max-w-2xl">
+                    <h3 className="text-3xl sm:text-5xl font-headline font-black text-white uppercase tracking-tighter">High-Security Media Block</h3>
+                    <p className="text-sm sm:text-lg text-muted-foreground leading-relaxed italic px-4">
+                       "কমান্ডার, Toffee Live-এর হাই-সিকিউরিটি প্রোটোকল আমাদের ব্রাউজার টানেলকে বাধা দিচ্ছে। নিরবিচ্ছিন্ন লাইভ স্ট্রিমিং এবং প্রিমিয়াম অভিজ্ঞতার জন্য আপনাকে সরাসরি **Direct Sovereign Tunnel** ব্যবহার করার পরামর্শ দিচ্ছি।"
                     </p>
                  </div>
-                 <div className="flex flex-col sm:flex-row gap-6">
-                    <Button 
-                      onClick={openDirectTunnel}
-                      className="bg-amber-500 text-black font-bold uppercase text-xs h-14 px-10 glow-emerald gap-3"
-                    >
-                       <ExternalLink className="size-5" /> Open Direct Sovereign Tunnel
-                    </Button>
-                    <Button 
-                      variant="outline"
-                      onClick={() => setShowBypass(false)}
-                      className="border-white/10 text-white font-bold uppercase text-xs h-14 px-10 gap-3"
-                    >
-                       <Monitor className="size-5 text-red-500" /> Try Embedded Bridge
-                    </Button>
+
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl px-4">
+                    <Card className="glass-card bg-emerald-500/5 border-emerald-500/20 p-6 flex flex-col items-center text-center gap-4 hover:scale-[1.02] transition-transform cursor-pointer" onClick={openDirectTunnel}>
+                       <div className="size-12 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30">
+                          <ExternalLink className="size-6 text-emerald-500" />
+                       </div>
+                       <div className="space-y-1">
+                          <p className="text-sm font-headline font-bold text-white uppercase">Direct Sovereign Tunnel</p>
+                          <p className="text-[10px] text-muted-foreground uppercase">廣告মুক্ত এবং হাই-স্পিড প্লেব্যাক</p>
+                       </div>
+                       <Button className="w-full bg-emerald-500 text-black font-bold h-11 uppercase text-[10px] glow-emerald">Open External Node</Button>
+                    </Card>
+
+                    <Card className="glass-card bg-primary/5 border-primary/20 p-6 flex flex-col items-center text-center gap-4 hover:scale-[1.02] transition-transform cursor-pointer" onClick={() => setShowBypass(false)}>
+                       <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/30">
+                          <Monitor className="size-6 text-primary" />
+                       </div>
+                       <div className="space-y-1">
+                          <p className="text-sm font-headline font-bold text-white uppercase">Embedded Terminal HUD</p>
+                          <p className="text-[10px] text-muted-foreground uppercase">সিস্টেম ফ্রেমের ভেতরে ট্রাই করুন</p>
+                       </div>
+                       <Button variant="outline" className="w-full border-primary/20 text-primary font-bold h-11 uppercase text-[10px]">Try Embedded Frame</Button>
+                    </Card>
                  </div>
+
                  <div className="pt-20 opacity-20 flex flex-col items-center gap-4">
-                    <Badge variant="outline" className="border-white/10 uppercase tracking-[0.4em] text-[8px]">Auth_Handshake_Bypass_Protocol_v5.7</Badge>
+                    <div className="flex items-center gap-3">
+                       <Waves className="size-3 text-red-500" />
+                       <Badge variant="outline" className="border-white/10 uppercase tracking-[0.4em] text-[8px]">Auth_Handshake_Bypass_Protocol_v5.8</Badge>
+                       <Waves className="size-3 text-red-500" />
+                    </div>
                  </div>
               </div>
             ) : (
@@ -166,16 +182,24 @@ export default function ToffeeLivePage() {
             )}
           </div>
           
-          <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-50">
-            <div className="flex items-center justify-center gap-8 px-4">
+          <footer className="py-3 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-50">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-12 px-4">
                <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.4em] hidden md:block">
-                 NoorNexus OS Integrated Streaming Node | SSL: SHA-256 Encrypted
+                 NoorNexus OS Integrated Streaming Node | SSL: SHA-256 Verified
                </p>
-               <div className="flex items-center gap-2">
-                  <div className="size-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
-                  <span className="text-[8px] font-bold uppercase text-emerald-500">
-                    Signal Veracity: OPTIMAL
-                  </span>
+               <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                     <div className="size-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                     <span className="text-[8px] font-bold uppercase text-emerald-500 tracking-widest">
+                       Veracity: OPTIMAL
+                     </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                     <Cpu className="size-3 text-primary opacity-40" />
+                     <span className="text-[8px] font-bold uppercase text-muted-foreground tracking-widest">
+                       Uplink: L4_CANAL_SECURE
+                     </span>
+                  </div>
                </div>
             </div>
           </footer>
