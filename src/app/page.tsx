@@ -49,7 +49,8 @@ import {
   Tv,
   PlayCircle,
   Youtube,
-  Search
+  Search,
+  Globe
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -115,7 +116,7 @@ export default function Home() {
     if (!aiQuery.trim()) return
     
     // If it looks like a web search, redirect to browser
-    if (aiQuery.includes('search') || aiQuery.includes('find') || aiQuery.includes('what is') || aiQuery.includes('google')) {
+    if (aiQuery.toLowerCase().includes('search') || aiQuery.toLowerCase().includes('find') || aiQuery.toLowerCase().includes('what is') || aiQuery.toLowerCase().includes('google')) {
       router.push(`/browser?url=${encodeURIComponent(aiQuery)}`)
       return
     }
