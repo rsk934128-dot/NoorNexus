@@ -64,6 +64,12 @@ import { getPendingTasks, processSyncQueue } from "@/services/sync-engine"
 import { googleClientId } from "@/firebase/config"
 import { setSovereignClaims, broadcastMeshMessage, revokeIdentityAccess } from "@/services/admin-service"
 
+/**
+ * @fileOverview Application Lifecycle Management (v4.8 - Hardened)
+ * নূরনেক্সাস সাম্রাজ্যের কেন্দ্রীয় কনফিগারেশন হাব। 
+ * এখন গুগল ক্লাউড এবং জিমেইল ইন্টিগ্রেশন প্যারামিটার সাপোর্ট করে।
+ */
+
 export default function EnterpriseSettingsPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
@@ -236,6 +242,31 @@ export default function EnterpriseSettingsPage() {
                         </CardContent>
                      </Card>
                   </div>
+                  <div className="space-y-8">
+                     <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                        <CardHeader>
+                           <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
+                              <ShieldPlus className="size-4" /> Security Hardening
+                           </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           <div className="flex items-center justify-between">
+                              <div className="space-y-0.5">
+                                 <p className="text-[10px] text-white font-bold uppercase">Multi-App Handshake</p>
+                                 <p className="text-[8px] text-muted-foreground">Force SHA-256 peer verification.</p>
+                              </div>
+                              <Switch defaultChecked />
+                           </div>
+                           <div className="flex items-center justify-between">
+                              <div className="space-y-0.5">
+                                 <p className="text-[10px] text-white font-bold uppercase">Identity Persistence</p>
+                                 <p className="text-[8px] text-muted-foreground">Keep sessions active across nodes.</p>
+                              </div>
+                              <Switch defaultChecked />
+                           </div>
+                        </CardContent>
+                     </Card>
+                  </div>
                </div>
             </TabsContent>
 
@@ -255,6 +286,9 @@ export default function EnterpriseSettingsPage() {
                                     <UserCheck className="size-5 text-purple-400" />
                                     <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Custom Identity Claims</h4>
                                  </div>
+                                 <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                                    "Grant special permissions to users based on their civilizational standing."
+                                 </p>
                                  <Button 
                                     onClick={handleSetClaims} 
                                     disabled={adminLoading}
@@ -262,6 +296,23 @@ export default function EnterpriseSettingsPage() {
                                  >
                                     {adminLoading ? <Loader2 className="size-3 animate-spin" /> : <Fingerprint className="size-3" />}
                                     Anchors Imperial Claims
+                                 </Button>
+                              </div>
+                              <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-4">
+                                 <div className="flex items-center gap-3">
+                                    <BellRing className="size-5 text-purple-400" />
+                                    <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Global Mesh Broadcast</h4>
+                                 </div>
+                                 <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                                    "Send a high-clearance notification to every active node in the 100-node grid."
+                                 </p>
+                                 <Button 
+                                    onClick={handleBroadcast} 
+                                    disabled={adminLoading}
+                                    className="w-full bg-purple-500 text-white font-bold h-10 uppercase text-[9px] gap-2"
+                                 >
+                                    {adminLoading ? <Loader2 className="size-3 animate-spin" /> : <MessageSquare className="size-3" />}
+                                    Dispatch FCM Packet
                                  </Button>
                               </div>
                            </div>

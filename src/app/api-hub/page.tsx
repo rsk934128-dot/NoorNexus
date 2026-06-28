@@ -26,6 +26,12 @@ import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
+/**
+ * @fileOverview Discovery Hub (v3.5 - Omni-Sync Edition)
+ * নূরনেক্সাস সাম্রাজ্যের জন্য এপিআই এবং এসডিকে রিসোর্স। 
+ * এখন "Unified Profile Script" এর মাধ্যমে ১১৬+ অ্যাপে সিঙ্গেল আইডেন্টিটি শেয়ার করা সম্ভব।
+ */
+
 export default function ApiHubPage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)

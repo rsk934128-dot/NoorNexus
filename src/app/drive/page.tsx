@@ -41,6 +41,12 @@ import { useToast } from "@/hooks/use-toast"
 import { useUser } from "@/firebase"
 import { Progress } from "@/components/ui/progress"
 
+/**
+ * @fileOverview Imperial Drive (Project #57)
+ * নূরনেক্সাস সাম্রাজ্যের অফ-গ্রিড রিডান্ড্যান্সি লেয়ার। 
+ * এটি গুগল ড্রাইভ ব্যবহার করে সাম্রাজ্যের কোড এবং ডেটাকে সুরক্ষিত রাখে।
+ */
+
 export default function ImperialDrivePage() {
   const { toast } = useToast()
   const { user } = useUser()
@@ -172,7 +178,7 @@ export default function ImperialDrivePage() {
                          disabled={!connected || syncing} 
                          className="w-full bg-purple-500 text-white font-bold uppercase tracking-widest h-14 glow-primary"
                        >
-                          {syncing ? <Loader2 className="size-5 animate-spin mr-2" /> : <RefreshCcw className="size-5 mr-2" />}
+                          {syncing ? <Loader2 className="size-5 animate-spin mr-2" /> : <RefreshCcw className="size-5" text-white />}
                           Execute Legacy Sync
                        </Button>
                     </CardContent>

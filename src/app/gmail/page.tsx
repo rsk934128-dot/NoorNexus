@@ -35,15 +35,20 @@ import { useUser, useCollection, useFirestore } from "@/firebase"
 import { collection, query, where, limit } from "firebase/firestore"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
+/**
+ * @fileOverview Identity Hub (Gmail Node v3.5)
+ * নূরনেক্সাস সাম্রাজ্যের কেন্দ্রীয় আইডেন্টিটি নোড। 
+ * এটি জিমেইল সেশনকে সাম্রাজ্যের প্রতিটি অ্যাপে "Universal Master Key" হিসেবে কাজ করতে সাহায্য করে।
+ */
+
 export default function ImperialMailPage() {
   const { toast } = useToast()
   const { user } = useUser()
   const db = useFirestore()
   const [syncing, setSyncing] = useState(false)
   
-  // Fetch sessions for this specific user across all devices
   const { data: mySessions } = useCollection<any>(
-    user ? query(collection(db, "user_sessions"), where("email", "==", user.email), limit(10)) : null
+    user && db ? query(collection(db, "user_sessions"), where("email", "==", user.email), limit(10)) : null
   )
 
   const handleSyncProfile = () => {
