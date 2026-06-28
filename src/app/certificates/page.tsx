@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useMemo } from "react"
@@ -316,7 +315,7 @@ export default function CertificateVaultPage() {
 
               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xs uppercase font-bold text-primary tracking-widest flex items-center gap-2">
+                    <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
                        <Zap className="size-4" /> Background Sync Node
                     </CardTitle>
                  </CardHeader>
