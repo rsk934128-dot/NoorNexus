@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useMemo, useEffect, useRef } from "react"
@@ -49,6 +48,7 @@ export default function WorldCupPage() {
   const db = useFirestore()
   const { user } = useUser()
   const playerRef = useRef<HTMLDivElement>(null)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
   
   const matchesQuery = useMemo(() => 
     db ? query(
@@ -263,12 +263,14 @@ export default function WorldCupPage() {
                 <CardContent className={`p-0 bg-black relative w-full ${isFullscreen ? 'flex-1 aspect-auto' : 'aspect-video'}`}>
                   {playerMode === 'EMBED' && (activeMatch?.uplink) ? (
                     <iframe 
+                      ref={iframeRef}
                       width="100%" 
                       height="100%" 
-                      src={`https://www.youtube.com/embed/${getYoutubeId(activeMatch.uplink)}?autoplay=1&mute=0`}
+                      src={`https://www.youtube.com/embed/${getYoutubeId(activeMatch.uplink)}?autoplay=1&mute=0&rel=0&modestbranding=1`}
                       frameBorder="0"
                       allowFullScreen
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; orientation-lock"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      allow="accelerometer; autoplay; clipboard-read; clipboard-write; encrypted-media; gyroscope; picture-in-picture; orientation-lock"
                       className="w-full h-full"
                     ></iframe>
                   ) : (
@@ -434,7 +436,7 @@ export default function WorldCupPage() {
             <DialogTitle>Handshake Initiation</DialogTitle>
             <DialogDescription>Verifying secure link with the sports node.</DialogDescription>
           </DialogHeader>
-          <div className="py-6 sm:py-10 text-center space-y-8 sm:space-y-12">
+          <div className="py-6 sm:py-10 text-center space-y-8 sm:py-12">
             <div className="size-20 sm:size-28 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto border border-primary/20 glow-primary">
               <ShieldCheck className="size-12 sm:size-16 text-primary animate-pulse" />
             </div>
