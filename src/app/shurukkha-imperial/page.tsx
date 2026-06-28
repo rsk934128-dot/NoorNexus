@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -57,7 +56,7 @@ export default function ShurukkhaImperialPage() {
 
           <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-[60]">
             <p className="text-[9px] font-mono text-emerald-500/60 uppercase tracking-[0.4em]">
-              NoorNexus OS Integrated Cloud Node | Endpoint: shurukkha-hub-imperial
+              NoorNexus OS Integrated Cloud Node | Endpoint: shurukkha-hub
             </p>
           </footer>
         </main>

@@ -11,7 +11,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 /**
  * @fileOverview Global Persistent Communication Node (V5.8 - Media Optimized)
  * নূরনেক্সাস সাম্রাজ্যের প্রতিটি পেজে "Shurukkha", "Famelack" এবং "Toffee" হাবের পারসিস্টেন্স নিশ্চিত করে।
- * Updated: Optimized icon scaling and safe area spacing for mobile devices.
+ * Updated: Updated Shurukkha Hub URL to the latest Vercel deployment as requested.
  */
 export function PersistentCommNode() {
   const [isMounted, setIsMounted] = useState(false)
@@ -189,7 +189,7 @@ export function PersistentCommNode() {
           }}
         >
           <iframe 
-            src="https://shurukkha-hub-ofzc.vercel.app/dashboard" 
+            src="https://shurukkha-hub.vercel.app/dashboard" 
             className="w-full h-full border-0"
             title="Standard Hub Node"
             allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
@@ -207,7 +207,7 @@ export function PersistentCommNode() {
           }}
         >
           <iframe 
-            src="https://shurukkha-hub-imperial-sovereign-in.vercel.app/dashboard" 
+            src="https://shurukkha-hub.vercel.app/dashboard" 
             className="w-full h-full border-0"
             title="Imperial Hub Node"
             allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media"
