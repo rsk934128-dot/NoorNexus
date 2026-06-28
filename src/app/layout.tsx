@@ -11,9 +11,9 @@ import {initSyncEngine} from '@/services/sync-engine';
 import Script from 'next/script';
 
 /**
- * @fileOverview Root Layout (V4.3 - GTM & Sovereign Edition)
+ * @fileOverview Root Layout (V4.4 - GTM & Sovereign Edition)
  * নূরনেক্সাস অপারেটিং সিস্টেমের কেন্দ্রীয় লেআউট।
- * Google Tag Manager (GTM-ML2HBMVP) এখন গ্লোবাল হেডারে যুক্ত।
+ * Google Tag Manager (GTM-ML2HBMVP) সফলভাবে হেড এবং বডিতে ইন্টিগ্রেটেড।
  */
 
 export default function RootLayout({
@@ -48,7 +48,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="font-body antialiased selection:bg-primary/30 selection:text-primary">
-        {/* Google Tag Manager (noscript) */}
+        {/* Google Tag Manager (noscript) - Placed as specified in Step 2 */}
         <noscript>
           <iframe 
             src="https://www.googletagmanager.com/ns.html?id=GTM-ML2HBMVP"
