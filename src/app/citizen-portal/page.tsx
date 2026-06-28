@@ -48,7 +48,9 @@ import {
   Shield,
   FileCode,
   Sparkles,
-  Vault
+  Vault,
+  Gem,
+  Users
 } from "lucide-react"
 import {
   Dialog,
