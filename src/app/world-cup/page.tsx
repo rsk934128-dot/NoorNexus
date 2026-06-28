@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useMemo, useEffect, useRef } from "react"
@@ -26,7 +25,8 @@ import {
   Radio,
   ExternalLink,
   RefreshCw,
-  Menu
+  Menu,
+  ChevronRight
 } from "lucide-react"
 import {
   Dialog,
@@ -187,15 +187,15 @@ export default function WorldCupPage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-4 sm:p-6 lg:p-10 space-y-6 sm:space-y-8 max-w-[1600px] mx-auto w-full">
-          <header className="flex flex-col gap-6">
+        <main className="p-3 sm:p-6 lg:p-10 space-y-6 sm:space-y-8 max-w-[1600px] mx-auto w-full">
+          <header className="flex flex-col gap-4 sm:gap-6">
             <div className="flex items-center justify-between md:hidden">
               <SidebarTrigger>
-                <Button variant="ghost" size="icon" className="text-primary">
-                  <Menu className="size-6" />
+                <Button variant="ghost" size="icon" className="text-primary -ml-2">
+                  <Menu className="size-5" />
                 </Button>
               </SidebarTrigger>
-              <Badge variant="outline" className="border-primary/30 text-primary">GSMIFY L4</Badge>
+              <Badge variant="outline" className="border-primary/30 text-primary text-[8px] uppercase">GSMIFY L4</Badge>
             </div>
             
             <div className="flex items-center gap-3">
@@ -214,23 +214,23 @@ export default function WorldCupPage() {
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div className="xl:col-span-3 space-y-6 order-1">
               <Card ref={playerRef} className={`glass-card border-white/5 overflow-hidden relative group ${isFullscreen ? 'h-screen w-screen rounded-none z-[9999]' : ''}`}>
-                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 bg-white/2 py-3 px-4 sm:px-6 gap-3">
+                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 bg-white/2 py-3 px-3 sm:px-6 gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <Badge className={`text-[8px] sm:text-[10px] font-bold uppercase ${activeMatch?.status === 'LIVE' ? 'bg-destructive animate-pulse' : 'bg-muted'}`}>
                       {activeMatch?.status || 'AWAITING'}
                     </Badge>
-                    <span className="text-sm sm:text-lg font-headline font-bold uppercase tracking-widest text-white truncate">
+                    <span className="text-xs sm:text-lg font-headline font-bold uppercase tracking-widest text-white truncate">
                       {activeMatch ? `${activeMatch.home} vs ${activeMatch.away}` : "SELECT FEED"}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={() => setPlayerMode(playerMode === 'GATEWAY' ? 'EMBED' : 'GATEWAY')}
-                      className="text-[9px] sm:text-[10px] border-white/10 h-8 flex-1 sm:w-auto"
+                      className="text-[8px] sm:text-[10px] border-white/10 h-8 flex-1 sm:w-auto"
                     >
-                      <Monitor className="size-3 mr-2" />
+                      <Monitor className="size-3 mr-1.5 sm:mr-2" />
                       {playerMode === 'GATEWAY' ? "EMBED" : "GATEWAY"}
                     </Button>
                     <Button 
@@ -255,24 +255,24 @@ export default function WorldCupPage() {
                     ></iframe>
                   ) : (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 sm:gap-8 text-center p-4">
-                      <Youtube className="size-12 sm:size-16 text-primary/50" />
-                      <Button onClick={handleLaunchUplink} className="bg-primary text-primary-foreground font-bold h-12 sm:h-16 px-6 sm:px-12 text-sm sm:text-lg glow-primary">
-                        <Zap className="size-5 sm:size-6 mr-2" /> INITIATE HANDSHAKE
+                      <Youtube className="size-10 sm:size-16 text-primary/30" />
+                      <Button onClick={handleLaunchUplink} className="bg-primary text-primary-foreground font-bold h-12 sm:h-16 px-6 sm:px-12 text-xs sm:text-lg glow-primary">
+                        <Zap className="size-4 sm:size-6 mr-2" /> INITIATE HANDSHAKE
                       </Button>
                     </div>
                   )}
                 </CardContent>
                 {!isFullscreen && (
-                  <div className="bg-muted/30 p-4 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-center justify-between">
+                  <div className="bg-muted/30 p-3 sm:p-4 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-center justify-between">
                     <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
-                      <span className="text-[9px] font-bold text-muted-foreground uppercase">MESH STATUS:</span>
-                      {servers.slice(0, 3).map(s => (
-                        <Badge key={s.id} variant="outline" className={`text-[8px] ${selectedServer?.id === s.id ? 'border-primary text-primary' : ''}`}>
+                      <span className="text-[8px] sm:text-[9px] font-bold text-muted-foreground uppercase">MESH STATUS:</span>
+                      {servers.slice(0, 2).map(s => (
+                        <Badge key={s.id} variant="outline" className={`text-[7px] sm:text-[8px] ${selectedServer?.id === s.id ? 'border-primary text-primary' : 'border-white/10'}`}>
                           {s.name}
                         </Badge>
                       ))}
                     </div>
-                    <Button onClick={handleGetAiInsight} disabled={aiLoading} className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[10px] h-9 w-full sm:w-auto">
+                    <Button onClick={handleGetAiInsight} disabled={aiLoading} className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[9px] sm:text-[10px] h-9 w-full sm:w-auto uppercase font-bold tracking-widest">
                       {aiLoading ? <Loader2 className="size-3 animate-spin mr-2" /> : <Cpu className="size-3 mr-2" />}
                       NORA-AI INSIGHT
                     </Button>
@@ -281,29 +281,29 @@ export default function WorldCupPage() {
               </Card>
 
               {aiInsight && !isFullscreen && (
-                <Card className="glass-card border-amber-500/20 animate-in fade-in slide-in-from-bottom-2">
-                  <CardHeader className="py-4 px-5">
-                    <CardTitle className="text-xs font-headline text-amber-500 flex items-center gap-2 uppercase">
-                      <Cpu className="size-4" /> Tactical Intelligence Dispatch
+                <Card className="glass-card border-amber-500/20 animate-in fade-in slide-in-from-bottom-2 overflow-hidden">
+                  <CardHeader className="py-3 sm:py-4 px-4 sm:px-5 border-b border-white/5 bg-amber-500/5">
+                    <CardTitle className="text-[10px] sm:text-xs font-headline text-amber-500 flex items-center gap-2 uppercase tracking-widest">
+                      <Cpu className="size-3 sm:size-4" /> Tactical Intelligence Dispatch
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="px-5 pb-5 space-y-4">
-                     <div className="grid grid-cols-3 gap-4">
+                  <CardContent className="px-4 sm:px-5 pb-5 pt-5 space-y-4">
+                     <div className="grid grid-cols-3 gap-4 text-center">
                         <div className="space-y-1">
-                           <p className="text-[8px] text-muted-foreground uppercase">{activeMatch?.home}</p>
-                           <p className="text-xl font-bold text-primary">{aiInsight.winProbability.home}%</p>
+                           <p className="text-[7px] sm:text-[8px] text-muted-foreground uppercase font-bold">{activeMatch?.home}</p>
+                           <p className="text-lg sm:text-xl font-bold text-primary">{aiInsight.winProbability.home}%</p>
                         </div>
-                        <div className="space-y-1 text-center">
-                           <p className="text-[8px] text-muted-foreground uppercase">Draw</p>
-                           <p className="text-xl font-bold text-muted-foreground">{aiInsight.winProbability.draw}%</p>
+                        <div className="space-y-1">
+                           <p className="text-[7px] sm:text-[8px] text-muted-foreground uppercase font-bold">Draw</p>
+                           <p className="text-lg sm:text-xl font-bold text-muted-foreground">{aiInsight.winProbability.draw}%</p>
                         </div>
-                        <div className="space-y-1 text-right">
-                           <p className="text-[8px] text-muted-foreground uppercase">{activeMatch?.away}</p>
-                           <p className="text-xl font-bold text-amber-500">{aiInsight.winProbability.away}%</p>
+                        <div className="space-y-1">
+                           <p className="text-[7px] sm:text-[8px] text-muted-foreground uppercase font-bold">{activeMatch?.away}</p>
+                           <p className="text-lg sm:text-xl font-bold text-amber-500">{aiInsight.winProbability.away}%</p>
                         </div>
                      </div>
-                     <div className="p-3 bg-black/40 rounded border border-white/5">
-                        <p className="text-[10px] text-muted-foreground font-mono leading-relaxed italic">"{aiInsight.tacticalAnalysis}"</p>
+                     <div className="p-3 bg-black/40 rounded-xl border border-white/5">
+                        <p className="text-[9px] sm:text-[10px] text-muted-foreground font-mono leading-relaxed italic">"{aiInsight.tacticalAnalysis}"</p>
                      </div>
                   </CardContent>
                 </Card>
@@ -311,31 +311,32 @@ export default function WorldCupPage() {
             </div>
 
             <div className="space-y-6 order-2">
-              <Card className="glass-card h-[400px] sm:h-[500px] flex flex-col">
-                <CardHeader className="py-3 px-4 border-b border-white/5">
-                  <CardTitle className="text-xs font-headline text-primary flex items-center gap-2 uppercase">
-                    <MessageSquare className="size-4" /> MESH CHAT
+              {/* Mesh Chat */}
+              <Card className="glass-card h-[350px] sm:h-[500px] flex flex-col overflow-hidden">
+                <CardHeader className="py-3 px-4 border-b border-white/5 bg-white/2">
+                  <CardTitle className="text-[10px] sm:text-xs font-headline text-primary flex items-center gap-2 uppercase tracking-widest">
+                    <MessageSquare className="size-3 sm:size-4" /> MESH CHAT
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden flex flex-col">
-                  <ScrollArea className="flex-1 p-4">
+                  <ScrollArea className="flex-1 p-3 sm:p-4">
                     <div className="space-y-4">
                       {chats.map((chat, i) => (
                         <div key={i} className="space-y-1">
-                          <div className="flex items-center justify-between text-[8px] font-mono">
-                            <span className="text-primary font-bold">{chat.user}</span>
-                            <span className="text-muted-foreground">
+                          <div className="flex items-center justify-between text-[7px] sm:text-[8px] font-mono">
+                            <span className="text-primary font-bold uppercase">{chat.user}</span>
+                            <span className="text-muted-foreground opacity-60">
                               {chat.timestamp ? new Date(chat.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
                             </span>
                           </div>
-                          <p className="text-[10px] text-muted-foreground bg-white/5 p-2 rounded-lg border border-white/5">
+                          <p className="text-[9px] sm:text-[10px] text-muted-foreground bg-white/5 p-2 rounded-lg border border-white/5 leading-relaxed">
                             {chat.message}
                           </p>
                         </div>
                       ))}
                     </div>
                   </ScrollArea>
-                  <div className="p-4 border-t border-white/5">
+                  <div className="p-3 sm:p-4 border-t border-white/5 bg-black/20">
                      <div className="relative">
                         <input 
                           type="text" 
@@ -343,29 +344,30 @@ export default function WorldCupPage() {
                           onChange={(e) => setChatInput(e.target.value)}
                           onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                           placeholder="Broadcast message..." 
-                          className="w-full bg-background/50 border border-white/10 rounded-lg px-4 py-2.5 text-[10px] outline-none pr-10"
+                          className="w-full bg-background border border-white/10 rounded-lg px-3 py-2 text-[9px] sm:text-[10px] outline-none pr-10 focus:ring-1 focus:ring-primary"
                         />
-                        <Button onClick={handleSendMessage} variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 text-primary">
-                          <Send className="size-4" />
+                        <Button onClick={handleSendMessage} variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 text-primary size-7">
+                          <Send className="size-3.5" />
                         </Button>
                      </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="glass-card">
-                <CardHeader className="py-3 px-4">
-                   <CardTitle className="text-[10px] uppercase font-bold text-primary flex items-center gap-2">
-                      <Radio className="size-4" /> LIVE FEEDS
+              {/* Live Feeds List */}
+              <Card className="glass-card overflow-hidden">
+                <CardHeader className="py-3 px-4 border-b border-white/5 bg-white/2">
+                   <CardTitle className="text-[10px] sm:text-xs uppercase font-bold text-primary flex items-center gap-2 tracking-widest">
+                      <Radio className="size-3 sm:size-4" /> LIVE FEEDS
                    </CardTitle>
                 </CardHeader>
-                <CardContent className="px-4 pb-4">
-                   <ScrollArea className="h-[300px]">
-                   <div className="space-y-3">
+                <CardContent className="p-2 sm:p-4">
+                   <ScrollArea className="h-[250px] sm:h-[300px]">
+                   <div className="space-y-2">
                    {matchesLoading ? (
                      <div className="flex flex-col items-center py-10 gap-2">
-                        <Loader2 className="size-5 animate-spin text-primary" />
-                        <p className="text-[8px] font-mono text-muted-foreground uppercase">Syncing mesh...</p>
+                        <Loader2 className="size-4 animate-spin text-primary" />
+                        <p className="text-[7px] font-mono text-muted-foreground uppercase">Syncing mesh...</p>
                      </div>
                    ) : matches.map(match => (
                      <div 
@@ -374,14 +376,17 @@ export default function WorldCupPage() {
                          setActiveMatch(match)
                          setAiInsight(null)
                         }}
-                       className={`p-3 bg-white/5 rounded-xl border flex justify-between items-center cursor-pointer transition-all ${activeMatch?.id === match.id ? 'border-primary bg-primary/5 shadow-lg' : 'border-white/5 hover:border-white/20'}`}
+                       className={`p-3 bg-white/2 rounded-xl border flex justify-between items-center cursor-pointer transition-all ${activeMatch?.id === match.id ? 'border-primary bg-primary/5 shadow-lg' : 'border-white/5 hover:border-white/10'}`}
                       >
-                        <div className="space-y-0.5">
-                           <p className="text-[10px] font-bold text-white uppercase">{match.home} vs {match.away}</p>
-                           <p className="text-[8px] text-muted-foreground font-mono uppercase truncate max-w-[100px]">{match.status}</p>
+                        <div className="space-y-0.5 min-w-0">
+                           <p className="text-[9px] sm:text-[10px] font-bold text-white uppercase truncate pr-2">{match.home} vs {match.away}</p>
+                           <div className="flex items-center gap-2">
+                              <div className={`size-1 rounded-full ${match.status === 'LIVE' ? 'bg-destructive animate-pulse' : 'bg-muted'}`} />
+                              <p className="text-[7px] sm:text-[8px] text-muted-foreground font-mono uppercase truncate">{match.status}</p>
+                           </div>
                         </div>
-                        <div className="text-right">
-                           <p className="text-[10px] font-bold text-primary">{match.score || "0-0"}</p>
+                        <div className="text-right shrink-0">
+                           <p className="text-[9px] sm:text-[10px] font-bold text-primary font-mono">{match.score || "0-0"}</p>
                         </div>
                      </div>
                    ))}
@@ -395,13 +400,13 @@ export default function WorldCupPage() {
       </SidebarInset>
 
       <Dialog open={isHandshaking} onOpenChange={setIsHandshaking}>
-        <DialogContent className="glass-card border-primary/40 w-[95vw] sm:max-w-[500px] bg-black/95 p-6 sm:p-10">
-          <div className="py-6 sm:py-10 text-center space-y-6 sm:space-y-8">
+        <DialogContent className="glass-card border-primary/40 w-[92vw] sm:max-w-[500px] bg-black/95 p-6 sm:p-10 rounded-2xl sm:rounded-[2rem]">
+          <div className="py-4 sm:py-10 text-center space-y-6 sm:space-y-8">
             <div className="size-16 sm:size-24 bg-primary/10 rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto border border-primary/20 glow-primary">
               <ShieldCheck className="size-10 sm:size-12 text-primary animate-pulse" />
             </div>
             <div className="space-y-4">
-              <p className="text-primary font-mono text-xs sm:text-sm animate-pulse uppercase tracking-widest font-bold">
+              <p className="text-primary font-mono text-[10px] sm:text-sm animate-pulse uppercase tracking-widest font-bold">
                 {handshakeProgress < 100 ? `VERIFYING MESH... ${handshakeProgress}%` : 'IDENTITY VERIFIED'}
               </p>
               <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
@@ -410,15 +415,15 @@ export default function WorldCupPage() {
             </div>
             {handshakeProgress === 100 && (
               <div className="space-y-4 animate-in zoom-in duration-500">
-                <p className="text-[10px] text-muted-foreground font-mono uppercase">Cryptographic signature valid for 5 minutes.</p>
+                <p className="text-[8px] sm:text-[10px] text-muted-foreground font-mono uppercase">Cryptographic signature valid for 5 minutes.</p>
                 <Button 
-                  className="w-full bg-primary text-primary-foreground font-bold h-12 sm:h-16 glow-primary text-sm sm:text-lg"
+                  className="w-full bg-primary text-primary-foreground font-bold h-12 sm:h-16 glow-primary text-xs sm:text-lg uppercase tracking-widest"
                   onClick={() => {
                     setIsHandshaking(false)
                     if (activeMatch?.uplink) window.open(activeMatch.uplink, '_blank')
                   }}
                 >
-                  <ExternalLink className="size-5 sm:size-6 mr-3" /> LAUNCH UPLINK
+                  <ExternalLink className="size-4 sm:size-6 mr-2 sm:mr-3" /> LAUNCH UPLINK
                 </Button>
               </div>
             )}

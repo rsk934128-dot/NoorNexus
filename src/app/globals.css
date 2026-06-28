@@ -60,7 +60,7 @@
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
     border: 1px solid hsla(var(--primary), 0.3);
-    padding: 1.5rem;
+    padding: 1.25rem;
     border-radius: 1rem;
     width: 100%;
     position: relative;
@@ -68,7 +68,13 @@
     background-color: hsla(var(--card), 0.4);
     background-image: linear-gradient(hsla(var(--primary), 0.05), hsla(var(--primary), 0.05));
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    min-width: 350px;
+  }
+
+  @media (min-width: 768px) {
+    .sovereign-stats-card {
+      padding: 1.5rem;
+      min-width: 350px;
+    }
   }
 
   .glow-primary {
@@ -169,7 +175,7 @@
     }
     100% {
       text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75),
-        -0.025em -0.025em 0 rgba(0, 255, 0, 0.75),
+        -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
         -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
     }
   }
@@ -196,16 +202,24 @@
   letter-spacing: -0.02em;
 }
 
-/* Mobile Friendly Spacing */
+/* Mobile Friendly Spacing & Sizing */
 @media (max-width: 768px) {
-  .p-4 { padding: 0.75rem; }
+  .p-4 { padding: 1rem; }
   .p-6 { padding: 1rem; }
   .lg\:p-10 { padding: 1rem; }
-  .text-6xl { font-size: 1.875rem; line-height: 2.25rem; }
-  .text-5xl { font-size: 1.5rem; line-height: 2rem; }
-  .text-4xl { font-size: 1.25rem; line-height: 1.75rem; }
+  .text-6xl { font-size: 2.25rem; line-height: 2.5rem; }
+  .text-5xl { font-size: 1.875rem; line-height: 2.25rem; }
+  .text-4xl { font-size: 1.5rem; line-height: 2rem; }
+  .text-3xl { font-size: 1.25rem; line-height: 1.75rem; }
   .gap-8 { gap: 1rem; }
   .gap-10 { gap: 1.5rem; }
+  
+  /* Buttons Touch Targets */
+  .h-12 { height: 3.5rem; }
+  .h-14 { height: 4rem; }
+  
+  /* Cards */
+  .glass-card { padding: 1rem; }
 }
 
 /* Ensure images don't break layout */
