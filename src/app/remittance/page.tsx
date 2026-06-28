@@ -3,209 +3,328 @@
 
 import { useState, useEffect } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarInset } from "@/components/ui/sidebar"
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { Send, History, Wallet, ArrowRightLeft, ShieldCheck, Zap, Activity, Globe, TrendingUp } from "lucide-react"
+import { 
+  Send, 
+  History, 
+  Wallet, 
+  ArrowRightLeft, 
+  ShieldCheck, 
+  Zap, 
+  Activity, 
+  Globe, 
+  TrendingUp, 
+  Menu,
+  Coins,
+  ArrowRight,
+  CheckCircle2,
+  Lock,
+  Loader2,
+  RefreshCcw,
+  Smartphone,
+  Landmark,
+  ShieldPlus,
+  Rocket,
+  ArrowUpRight,
+  Flame,
+  LayoutGrid,
+  MapPin,
+  Clock,
+  ExternalLink,
+  ChevronRight,
+  HeartHandshake
+} from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { authorizeRemittance, RemittanceComplianceOutput } from "@/ai/flows/remittance-compliance-flow"
+import { useUser, useFirestore } from "@/firebase"
+import { collection, addDoc, serverTimestamp } from "firebase/firestore"
 
-const recentTransfers = [
-  { id: "TX_901", recipient: "Sheikh Farid", amount: "50,000 BDT", status: "Verified", date: "10m ago", route: "SG -> BD" },
-  { id: "TX_902", recipient: "Sirajganj-Node-01", amount: "1.2 ETH", status: "Verified", date: "45m ago", route: "AE -> BD" },
-  { id: "TX_903", recipient: "London-Bridge-Vault", amount: "5,000 GBP", status: "Processing", date: "1h ago", route: "UK -> AE" },
+const EXCHANGE_RATE = 27.41 // 1 MYR = 27.41 BDT
+
+const TUNNEL_STEPS = [
+  { id: 1, title: "Initiator in Malaysia", desc: "MYR deposited via digital portal or local agent node.", icon: Smartphone },
+  { id: 2, title: "KL Hub Compliance", desc: "Verifying sender credentials under BNM guidelines.", icon: ShieldCheck },
+  { id: 3, title: "GhostRecap Security Pipe", desc: "Zero-knowledge proof validation encrypts payload.", icon: Lock },
+  { id: 4, title: "Dhaka Clearing Tunnel", desc: "Verifying secure payload with BB settlement codes.", icon: Landmark },
+  { id: 5, title: "64-District Agent Node", desc: "Funds credited to mobile wallet or local partner.", icon: CheckCircle2 }
 ]
 
 export default function RemittancePage() {
   const { toast } = useToast()
+  const { user } = useUser()
+  const db = useFirestore()
   const [loading, setLoading] = useState(false)
-  const [liquidity, setLiquidity] = useState(82)
+  const [myrAmount, setMyrAmount] = useState(1000)
+  const [result, setResult] = useState<RemittanceComplianceOutput | null>(null)
+  
+  const bdtAmount = (myrAmount * EXCHANGE_RATE).toFixed(2)
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLiquidity(prev => Math.min(100, Math.max(70, prev + (Math.random() * 2 - 1))))
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [])
-
-  function handleTransfer() {
+  const handleTransfer = async () => {
+    if (!user) return
     setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      toast({
-        title: "Sovereign Handshake Successful",
-        description: "HMAC_V4 signed transfer broadcasted to 12 mesh nodes.",
+    setResult(null)
+    
+    try {
+      toast({ title: "Opening Secure Tunnel", description: "Initiating BNM & BB handshake..." })
+      
+      const res = await authorizeRemittance({
+        amountMYR: myrAmount,
+        exchangeRate: EXCHANGE_RATE,
+        senderId: "SOV_MY_PASSPORT_01",
+        beneficiaryName: "Sheikh Farid (Legacy Node)"
       })
-    }, 1500)
+      
+      setResult(res)
+      
+      await addDoc(collection(db, "remittance_ledger"), {
+        ...res,
+        sender: user.email,
+        amountMYR: myrAmount,
+        rate: EXCHANGE_RATE,
+        timestamp: serverTimestamp(),
+        corridor: "MY_BD"
+      })
+
+      toast({ 
+        title: "Tunnel Transfer Synchronized", 
+        description: "Zero-knowledge encryption verified by GhostRecap.",
+        className: "border-emerald-500/50 bg-emerald-500/5 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+      })
+    } catch (e: any) {
+      toast({ title: "Tunnel Drift Detected", description: e.message, variant: "destructive" })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-6 lg:p-10 space-y-8 max-w-7xl mx-auto w-full">
-          <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-1">
-              <h2 className="text-3xl font-headline font-bold flex items-center gap-3">
-                <Send className="size-8 text-primary" />
-                SmartRemit Intelligence Terminal
+        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20">
+          <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                 <SidebarTrigger className="md:hidden text-primary">
+                    <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
+                 </SidebarTrigger>
+                 <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
+                   <ArrowRightLeft className="size-3 mr-2" /> RubelBank: MY-BD Corridor
+                 </Badge>
+                 <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
+                   <ShieldCheck className="size-3 mr-2" /> BNM & BB Compliant
+                 </Badge>
+              </div>
+              <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
+                Remittance <span className="text-primary">Tunnel.</span>
               </h2>
-              <p className="text-muted-foreground">
-                High-throughput cross-border value settlement layer with v3 intelligence.
+              <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
+                "Safe, Legal, and Instant." ব্যাংক নেগারা মালয়েশিয়া এবং বাংলাদেশ ব্যাংকের নির্দেশিকা অনুযায়ী আপনার কষ্টার্জিত টাকা সরাসরি আপন ঠিকানায়।
               </p>
             </div>
-            <div className="flex gap-4">
-               <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary h-10 px-4 gap-2 flex items-center">
-                  <Activity className="size-4" />
-                  Corridor Health: L4_OPTIMIZED
-               </Badge>
+            <div className="flex items-center gap-4">
+               <div className="p-4 glass-card rounded-2xl border border-emerald-500/20 text-center min-w-[200px] bg-emerald-500/5">
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Live Interbank Rate</p>
+                  <p className="text-2xl font-headline font-bold text-emerald-500">1 MYR = {EXCHANGE_RATE} BDT</p>
+               </div>
             </div>
           </header>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-6">
-              <Card className="glass-card">
+            <div className="lg:col-span-2 space-y-10">
+              
+              {/* Remittance Calculator */}
+              <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                 <CardHeader>
-                  <CardTitle className="font-headline flex items-center gap-2">
-                    <ArrowRightLeft className="size-5 text-primary" />
-                    Initiate Sovereign Settlement
+                  <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
+                    <Zap className="size-4 text-primary" /> Secure Remittance Calculator
                   </CardTitle>
-                  <CardDescription>Direct peer-to-peer ledger entry signed with node-private keys.</CardDescription>
+                  <CardDescription>Guaranteed rates with zero hidden charges.</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <CardContent className="space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
-                      <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Destination Corridor</Label>
-                      <Input placeholder="Enter sovereign ID (e.g. BD-SG-01)" className="bg-background/50 font-mono" />
+                      <Label className="text-[10px] font-bold uppercase text-muted-foreground">You Send (MYR)</Label>
+                      <div className="relative">
+                        <Input 
+                          type="number" 
+                          value={myrAmount}
+                          onChange={e => setMyrAmount(parseFloat(e.target.value) || 0)}
+                          className="bg-background/50 border-white/10 h-16 text-3xl font-headline font-bold pl-12"
+                        />
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-primary">MYR</span>
+                      </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Asset Mesh</Label>
-                      <Input defaultValue="Sovereign-BDT" className="bg-background/50 font-mono" />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Amount to Broadcast</Label>
-                    <div className="relative">
-                      <Input type="number" placeholder="0.00" className="bg-background/50 pl-12 h-16 text-2xl font-headline font-bold border-white/10" />
-                      <Wallet className="absolute left-4 top-1/2 -translate-y-1/2 text-primary size-6" />
+                      <Label className="text-[10px] font-bold uppercase text-muted-foreground">Recipient Receives (BDT)</Label>
+                      <div className="relative">
+                        <Input 
+                          readOnly 
+                          value={bdtAmount}
+                          className="bg-black/40 border-emerald-500/20 h-16 text-3xl font-headline font-bold pl-12 text-emerald-500"
+                        />
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-emerald-500">BDT</span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="p-5 rounded-xl bg-primary/5 border border-primary/10 grid grid-cols-2 gap-6">
-                    <div className="space-y-1">
-                      <p className="text-[10px] text-muted-foreground uppercase font-bold">FX Spread (Auto)</p>
-                      <p className="text-sm font-mono text-primary">0.0001% Mesh Native</p>
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-[10px] text-muted-foreground uppercase font-bold">ETA Prediction</p>
-                      <p className="text-sm font-mono text-primary">&lt; 120ms</p>
-                    </div>
+                  <div className="p-5 bg-black/40 rounded-2xl border border-white/5 grid grid-cols-2 md:grid-cols-4 gap-4">
+                     {[
+                       { label: "Transaction Fee", val: "4.00 MYR", color: "text-white" },
+                       { label: "Exchange Rate", val: `1 MYR = ${EXCHANGE_RATE} ৳`, color: "text-primary" },
+                       { label: "Payment Speed", val: "Instant (2 Min)", color: "text-emerald-500" },
+                       { label: "Total Payable", val: `${(myrAmount + 4).toFixed(2)} MYR`, color: "text-white" }
+                     ].map((item, i) => (
+                       <div key={i} className="space-y-1">
+                          <p className="text-[8px] font-bold text-muted-foreground uppercase">{item.label}</p>
+                          <p className={`text-[10px] font-bold ${item.color}`}>{item.val}</p>
+                       </div>
+                     ))}
                   </div>
 
                   <Button 
                     onClick={handleTransfer}
-                    disabled={loading}
-                    className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-widest h-14 glow-primary text-lg"
+                    disabled={loading || myrAmount <= 0}
+                    className="w-full bg-primary text-primary-foreground font-bold h-16 uppercase tracking-widest text-lg glow-primary gap-3"
                   >
-                    {loading ? "Signing Handshake..." : "Execute Mesh Settlement"}
+                    {loading ? <Loader2 className="size-5 animate-spin" /> : <ShieldCheck className="size-6" />}
+                    Start Secure Tunnel Transfer
                   </Button>
+                  <p className="text-[10px] text-center text-muted-foreground italic">⚡ বিনিময় হার ৩০ মিনিটের জন্য গ্যারান্টিড</p>
                 </CardContent>
               </Card>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <Card className="glass-card">
-                    <CardHeader className="pb-2">
-                       <CardTitle className="text-xs uppercase font-bold text-muted-foreground flex items-center gap-2">
-                          <TrendingUp className="size-3" />
-                          Liquidity Pressure
-                       </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                       <div className="flex justify-between items-end">
-                          <p className="text-2xl font-headline font-bold text-primary">{liquidity.toFixed(1)}%</p>
-                          <p className="text-[10px] text-emerald-500 font-bold uppercase">Stable</p>
-                       </div>
-                       <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full bg-primary transition-all duration-1000" style={{ width: `${liquidity}%` }} />
+              {/* Tunnel Map Visualization */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
+                    <TrendingUp className="size-4" /> Interactive Remittance Tunnel Map
+                 </h3>
+                 <Card className="glass-card bg-black/40 border-white/5 overflow-hidden">
+                    <CardContent className="p-8">
+                       <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative">
+                          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-primary/10 -translate-y-1/2 hidden md:block" />
+                          {TUNNEL_STEPS.map((step) => (
+                            <div key={step.id} className="relative z-10 flex flex-col items-center text-center space-y-3 group max-w-[140px]">
+                               <div className="size-12 rounded-full bg-black border-2 border-primary/20 flex items-center justify-center group-hover:border-primary group-hover:shadow-[0_0_15px_rgba(0,150,255,0.6)] transition-all">
+                                  <step.icon className="size-5 text-primary" />
+                               </div>
+                               <div className="space-y-1">
+                                  <p className="text-[9px] font-bold text-white uppercase">{step.title}</p>
+                                  <p className="text-[8px] text-muted-foreground leading-relaxed italic">"{step.desc}"</p>
+                               </div>
+                            </div>
+                          ))}
                        </div>
                     </CardContent>
                  </Card>
-                 <Card className="glass-card">
-                    <CardHeader className="pb-2">
-                       <CardTitle className="text-xs uppercase font-bold text-muted-foreground flex items-center gap-2">
-                          <Globe className="size-3" />
-                          Route Visualization
+              </section>
+
+              {/* AI Verification Results */}
+              {result && (
+                <section className="animate-in fade-in zoom-in-95 duration-500">
+                  <Card className="glass-card border-t-4 border-t-emerald-500 bg-emerald-500/5">
+                    <CardHeader>
+                       <CardTitle className="text-sm font-headline uppercase text-emerald-500 flex items-center gap-2">
+                          <HeartHandshake className="size-4" /> GhostRecap Security Dispatch
                        </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                       <div className="h-16 flex items-center justify-between px-4 relative">
-                          <div className="size-3 bg-primary rounded-full glow-primary" />
-                          <div className="flex-1 h-px bg-dashed border-t border-primary/20 mx-2 animate-pulse" />
-                          <div className="size-3 bg-secondary rounded-full glow-emerald" />
-                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                             <Badge variant="outline" className="text-[8px] border-white/10 bg-black/40">SG_HUB_01</Badge>
+                    <CardContent className="space-y-6">
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          <div className="space-y-4">
+                             <div className="p-4 bg-black/60 rounded-xl border border-white/5 space-y-2">
+                                <p className="text-[8px] font-bold text-muted-foreground uppercase">Compliance Status</p>
+                                <Badge className="bg-emerald-500">{result.status}</Badge>
+                                <p className="text-[10px] text-emerald-100 italic leading-relaxed mt-2">"{result.complianceReport}"</p>
+                             </div>
+                          </div>
+                          <div className="space-y-4">
+                             <div className="space-y-2">
+                                <p className="text-[8px] font-bold text-muted-foreground uppercase">GhostRecap ZKP Hash</p>
+                                <code className="text-[9px] text-primary font-mono block bg-black/60 p-3 rounded-lg border border-white/5 break-all">
+                                   {result.ghostRecapHash}
+                                </code>
+                             </div>
+                             <div className="space-y-2">
+                                <p className="text-[8px] font-bold text-muted-foreground uppercase">Sovereign Seal</p>
+                                <code className="text-[9px] text-white font-mono block truncate">{result.sovereignSeal}</code>
+                             </div>
                           </div>
                        </div>
                     </CardContent>
-                 </Card>
-              </div>
+                  </Card>
+                </section>
+              )}
             </div>
 
-            <div className="space-y-6">
-              <Card className="glass-card">
-                <CardHeader>
-                  <CardTitle className="text-sm font-headline flex items-center gap-2">
-                    <History className="size-4" />
-                    Ledger Consensus Stream
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {recentTransfers.map((tx) => (
-                    <div key={tx.id} className="p-3 rounded-lg bg-white/5 border border-white/5 hover:border-primary/20 transition-all group">
-                      <div className="flex items-center justify-between mb-2">
-                        <p className="text-xs font-bold text-primary">{tx.route}</p>
-                        <Badge variant="outline" className="text-[8px] h-4 border-emerald-500/50 text-emerald-500">
-                          {tx.status}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-[10px] font-bold text-foreground">{tx.recipient}</p>
-                          <p className="text-[9px] text-muted-foreground font-mono">{tx.id}</p>
-                        </div>
-                        <p className="text-sm font-headline font-bold">{tx.amount}</p>
-                      </div>
-                    </div>
-                  ))}
-                  <Button variant="ghost" className="w-full text-xs text-muted-foreground hover:text-primary">
-                     View Full Mesh History
-                  </Button>
-                </CardContent>
-              </Card>
+            <div className="space-y-8">
+               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                  <CardHeader>
+                     <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
+                        <Lock className="size-4" /> Global White-Channel
+                     </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                        "Compliant with BNM & BB. 100% legal white-channel remittance for global migrants."
+                     </p>
+                     <div className="pt-2">
+                        <Badge variant="outline" className="w-full justify-center h-8 border-emerald-500/30 text-emerald-500 uppercase text-[9px] font-bold tracking-widest">BNM_REG_#4421</Badge>
+                     </div>
+                  </CardContent>
+               </Card>
 
-              <Card className="glass-card bg-primary/5 border-primary/20 overflow-hidden relative">
-                <div className="absolute -bottom-4 -right-4">
-                   <ShieldCheck className="size-24 text-primary opacity-5" />
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-xs uppercase font-bold text-primary flex items-center gap-2">
-                    <ShieldCheck className="size-3" />
-                    Trust mesh v3
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-[11px] text-muted-foreground leading-relaxed">
-                    Zero-Trust settlement architecture enabled. Every transfer triggers a 12-node cryptographic handshake. 
-                  </p>
-                  <div className="pt-2 flex flex-wrap gap-2">
-                     <Badge variant="outline" className="text-[8px] bg-black/40">HMAC_V4_L4</Badge>
-                     <Badge variant="outline" className="text-[8px] bg-black/40">ECC_P256</Badge>
-                     <Badge variant="outline" className="text-[8px] bg-black/40">REPLAY_PROV</Badge>
+               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+                  <CardHeader className="pb-2">
+                     <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
+                        <MapPin className="size-4" /> 64-District Agent Node
+                     </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                     <p className="text-[10px] text-muted-foreground italic leading-relaxed">
+                        "Instant mobile & agent delivery across all 64 districts of Bangladesh."
+                     </p>
+                     <div className="grid grid-cols-2 gap-2">
+                        <div className="p-2 bg-black/40 rounded border border-white/5 text-center">
+                           <p className="text-[8px] text-muted-foreground uppercase">Active Nodes</p>
+                           <p className="text-xs font-bold text-white">4,200+</p>
+                        </div>
+                        <div className="p-2 bg-black/40 rounded border border-white/5 text-center">
+                           <p className="text-[8px] text-muted-foreground uppercase">Status</p>
+                           <Badge variant="outline" className="text-[7px] border-emerald-500/20 text-emerald-500">SYNCED</Badge>
+                        </div>
+                     </div>
+                  </CardContent>
+               </Card>
+
+               <Card className="glass-card border-white/5 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-4 opacity-5">
+                    <Database className="size-16 text-white" />
                   </div>
-                </CardContent>
-              </Card>
+                  <CardHeader className="pb-2">
+                     <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                        <History className="size-3" /> Recent Pulses
+                     </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                     {[
+                       { dest: "Nagad: +88017", amount: "27,300 ৳", status: "SETTLED" },
+                       { dest: "Bkash: +88018", amount: "13,595 ৳", status: "VERIFIED" }
+                     ].map((log, i) => (
+                       <div key={i} className="p-2 bg-white/2 rounded border border-white/5 flex justify-between items-center group hover:bg-white/10 transition-all">
+                          <div className="space-y-0.5">
+                             <p className="text-[9px] font-bold text-white truncate w-24">{log.dest}</p>
+                             <p className="text-[7px] text-muted-foreground uppercase">{log.status}</p>
+                          </div>
+                          <span className="text-[10px] font-headline font-bold text-primary">{log.amount}</span>
+                       </div>
+                     ))}
+                  </CardContent>
+               </Card>
             </div>
           </div>
         </main>

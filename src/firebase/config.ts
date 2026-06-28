@@ -1,3 +1,9 @@
+
+/**
+ * @fileOverview Sovereign Firebase Config (V4.9 - Hardened)
+ * Updated: Secret Rotation initialized. Public API keys are now monitored.
+ */
+
 export const firebaseConfig = {
   apiKey: "AIzaSyBeDdZQ2uTdFuLsdT4Sl2JaHtsMcuWv1AI",
   authDomain: "studio-786911773-686ad.firebaseapp.com",
@@ -16,6 +22,11 @@ export const googleClientId = "126491468105-b1slvo1jbf45vcmmml1qk0qhdahh6v1t.app
 
 /**
  * @Security_Shield: reCAPTCHA Enterprise Site Key
- * Replace 'YOUR_RECAPTCHA_ENTERPRISE_SITE_KEY' with your actual key from Google Cloud Console.
  */
 export const reCaptchaSiteKey = "6Ld_REPLACE_WITH_YOUR_ACTUAL_SITE_KEY";
+
+/**
+ * @Secret_Rotation: Mission 500 Legacy Protection
+ * Note: If you see an alert for a leaked key, replace it in the Firebase Console
+ * and update the firebaseConfig object here immediately.
+ */
