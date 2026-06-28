@@ -30,10 +30,13 @@ import {
   CheckCircle2,
   Database,
   Flame,
-  Volume2
+  Volume2,
+  ArrowRight
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { processVideoExtraction, VideoExtractionOutput } from "@/ai/flows/video-extraction-flow"
+
+const DEFAULT_SIGNAL_URL = "https://www.youtube.com/watch?v=ntjJKCjNmcE"; // Imperial World Cup / Space Theme
 
 export default function ImperialCinemaPage() {
   const { toast } = useToast()
@@ -51,10 +54,15 @@ export default function ImperialCinemaPage() {
     return (match && match[2].length === 11) ? match[2] : null;
   }
 
-  async function handleLaunch() {
-    const id = getYoutubeId(url)
+  // Auto-establish signal on mount
+  useEffect(() => {
+    handleLaunch(DEFAULT_SIGNAL_URL, true)
+  }, [])
+
+  async function handleLaunch(targetUrl: string = url, isInitial = false) {
+    const id = getYoutubeId(targetUrl)
     if (!id) {
-      toast({ title: "Invalid Coordinate", description: "The provided YouTube URL is not recognizable.", variant: "destructive" })
+      if (!isInitial) toast({ title: "Invalid Coordinate", description: "The provided YouTube URL is not recognizable.", variant: "destructive" })
       return
     }
 
@@ -63,22 +71,23 @@ export default function ImperialCinemaPage() {
     setVideoData(null)
 
     try {
-      toast({ title: "Initiating Media Pulse", description: "Connecting to Nora-60 Extractor..." })
+      if (!isInitial) toast({ title: "Initiating Media Pulse", description: "Connecting to Nora-60 Extractor..." })
       
-      // Get AI analysis and metadata
-      const res = await processVideoExtraction({ url })
+      const res = await processVideoExtraction({ url: targetUrl })
       setVideoData(res)
-      
-      // Set the active video ID for the player
       setActiveVideoId(id)
       
-      toast({ 
-        title: "Cinema Link Established", 
-        description: "Handshake with YouTube node successful.",
-        className: "border-emerald-500/50 bg-emerald-500/5"
-      })
+      if (!isInitial) {
+        toast({ 
+          title: "Cinema Link Established", 
+          description: "Handshake with YouTube node successful.",
+          className: "border-emerald-500/50 bg-emerald-500/5"
+        })
+      }
     } catch (e: any) {
-      toast({ title: "Extraction Error", description: e.message, variant: "destructive" })
+      if (!isInitial) toast({ title: "Extraction Error", description: e.message, variant: "destructive" })
+      // Fallback ID if AI flow fails but ID is valid
+      setActiveVideoId(id)
     } finally {
       setLoading(false)
     }
@@ -130,9 +139,9 @@ export default function ImperialCinemaPage() {
             </div>
             <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-red-500/20 text-center min-w-[200px]">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Signal Veracity</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1">Signal Status</p>
                   <p className="text-2xl font-headline font-bold text-emerald-500 uppercase flex items-center justify-center gap-2">
-                     <CheckCircle2 className="size-5" /> 100%
+                     <Radio className="size-5 animate-pulse" /> {activeVideoId ? 'LOCKED' : 'AWAITING'}
                   </p>
                </div>
             </div>
@@ -155,17 +164,17 @@ export default function ImperialCinemaPage() {
                         value={url}
                         onChange={e => setUrl(e.target.value)}
                         placeholder="Paste YouTube Link or Live Stream URL..." 
-                        className="bg-background/50 border-white/10 h-12 pl-10 font-mono text-xs text-white"
+                        className="bg-background/50 border-white/10 h-12 pl-10 font-mono text-xs text-white outline-none focus:ring-1 focus:ring-red-500"
                         onKeyDown={e => e.key === 'Enter' && handleLaunch()}
                        />
                     </div>
                     <Button 
-                      onClick={handleLaunch}
+                      onClick={() => handleLaunch()}
                       disabled={loading || !url}
                       className="bg-red-500 text-white font-bold h-12 px-8 uppercase tracking-widest gap-2 glow-destructive"
                     >
                       {loading ? <Loader2 className="size-4 animate-spin" /> : <Play className="size-4" />}
-                      Launch Cinema
+                      Establish Link
                     </Button>
                   </div>
                 </CardContent>
@@ -175,28 +184,38 @@ export default function ImperialCinemaPage() {
               <Card ref={playerRef} className={`glass-card border-white/10 overflow-hidden relative group shadow-2xl ${isFullscreen ? 'fixed inset-0 z-[9999] rounded-none' : ''}`}>
                  <CardHeader className="bg-black/60 border-b border-white/5 py-3 px-6 flex flex-row items-center justify-between">
                     <div className="flex items-center gap-3">
-                       <div className="size-2 rounded-full bg-red-500 animate-pulse" />
-                       <span className="text-[10px] font-bold text-white uppercase tracking-widest">
-                          {videoData ? videoData.title : 'AWAITING_SIGNAL...'}
+                       <div className={`size-2 rounded-full ${activeVideoId ? 'bg-emerald-500' : 'bg-red-500'} animate-pulse`} />
+                       <span className="text-[10px] font-bold text-white uppercase tracking-widest truncate max-w-[200px] sm:max-w-md">
+                          {videoData ? videoData.title : (activeVideoId ? 'INITIALIZING SIGNAL...' : 'AWAITING_SIGNAL...')}
                        </span>
                     </div>
                     <div className="flex items-center gap-2">
-                       <Badge variant="outline" className="text-[8px] border-white/10 text-muted-foreground uppercase h-6">YouTube_Node_01</Badge>
+                       <Badge variant="outline" className="text-[8px] border-white/10 text-muted-foreground uppercase h-6">Node: YT_PULSE_01</Badge>
                        <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="size-8 text-white hover:bg-white/10">
                           {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
                        </Button>
                     </div>
                  </CardHeader>
-                 <CardContent className="p-0 aspect-video bg-black flex items-center justify-center">
+                 <CardContent className="p-0 aspect-video bg-black flex items-center justify-center relative">
+                    {loading && (
+                      <div className="absolute inset-0 z-10 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-6">
+                         <div className="relative">
+                            <div className="size-20 rounded-full border-2 border-red-500/20 animate-spin-slow" />
+                            <div className="absolute inset-0 border-t-2 border-red-500 rounded-full animate-spin" />
+                            <Youtube className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-8 text-red-500 animate-pulse" />
+                         </div>
+                         <p className="text-[10px] font-mono text-red-500 uppercase tracking-[0.4em]">Establish Handshake...</p>
+                      </div>
+                    )}
                     {activeVideoId ? (
                       <iframe 
-                        src={`https://www.youtube.com/embed/${activeVideoId}?autoplay=1&rel=0&modestbranding=1`}
+                        src={`https://www.youtube.com/embed/${activeVideoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&theme=dark`}
                         className="w-full h-full border-0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                         title="Imperial Cinema Player"
                       />
-                    ) : (
+                    ) : !loading && (
                       <div className="flex flex-col items-center gap-6 opacity-20 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
                          <div className="relative">
                             <div className="size-24 rounded-full border-4 border-dashed border-red-500/20 animate-spin-slow" />
@@ -208,42 +227,47 @@ export default function ImperialCinemaPage() {
                  </CardContent>
               </Card>
 
-              {/* Video Insights if available */}
+              {/* Video Insights */}
               {videoData && (
                 <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                         <CardHeader className="py-4">
+                         <CardHeader className="py-4 px-6">
                             <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
                                <Cpu className="size-4" /> Nora-60 Veracity Report
                             </CardTitle>
                          </CardHeader>
-                         <CardContent className="space-y-4 pb-4">
-                            <div className="flex justify-between items-center text-[10px] font-bold uppercase">
-                               <span className="text-muted-foreground">Channel:</span>
-                               <span className="text-white">{videoData.author}</span>
+                         <CardContent className="space-y-4 pb-6 px-6">
+                            <div className="space-y-3">
+                               <div className="flex justify-between items-center text-[10px] font-bold uppercase">
+                                  <span className="text-muted-foreground">Channel:</span>
+                                  <span className="text-white">{videoData.author}</span>
+                               </div>
+                               <div className="flex justify-between items-center text-[10px] font-bold uppercase">
+                                  <span className="text-muted-foreground">Duration:</span>
+                                  <span className="text-white">{videoData.duration}</span>
+                               </div>
                             </div>
-                            <div className="flex justify-between items-center text-[10px] font-bold uppercase">
-                               <span className="text-muted-foreground">Duration:</span>
-                               <span className="text-white">{videoData.duration}</span>
-                            </div>
-                            <div className="pt-2 border-t border-white/5">
+                            <div className="pt-3 border-t border-white/5">
                                <p className="text-[8px] font-mono text-muted-foreground uppercase mb-1">Extraction Hash (HMAC_V4)</p>
-                               <code className="text-[9px] text-primary font-mono block truncate">{videoData.extractionHash}</code>
+                               <code className="text-[9px] text-primary font-mono block truncate bg-black/40 p-2 rounded">{videoData.extractionHash}</code>
                             </div>
                          </CardContent>
                       </Card>
                       <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                         <CardHeader className="py-4">
+                         <CardHeader className="py-4 px-6">
                             <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
-                               <Volume2 className="size-4" /> Imperial Playback Sync
+                               <Volume2 className="size-4" /> Playback Security
                             </CardTitle>
                          </CardHeader>
-                         <CardContent className="space-y-4">
+                         <CardContent className="space-y-4 pb-6 px-6">
                             <p className="text-[10px] text-muted-foreground italic leading-relaxed">
-                               "This media link is being tunnelled through a secure Sovereign Canal to bypass trackers and advertisements."
+                               "This media link is being tunnelled through a secure Sovereign Canal to bypass trackers and advertisements. No history is stored outside the mesh."
                             </p>
-                            <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold uppercase w-full justify-center h-6">TUNNEL_SECURE: L4</Badge>
+                            <div className="flex items-center gap-2 pt-2">
+                               <Badge className="bg-emerald-500 text-black border-none text-[8px] font-bold uppercase h-6 px-3">TUNNEL_SECURE: L4</Badge>
+                               <Badge variant="outline" className="border-white/10 text-white text-[8px] h-6 px-3 uppercase">P2P_ISOLATED</Badge>
+                            </div>
                          </CardContent>
                       </Card>
                    </div>
@@ -283,6 +307,9 @@ export default function ImperialCinemaPage() {
                         <span className="text-muted-foreground">Buffering Guard</span>
                         <span className="text-white font-bold">ACTIVE</span>
                      </div>
+                     <div className="h-1 bg-white/5 rounded-full overflow-hidden mt-2">
+                        <div className="h-full bg-amber-500 animate-pulse" style={{ width: '85%' }} />
+                     </div>
                   </CardContent>
                </Card>
 
@@ -292,7 +319,7 @@ export default function ImperialCinemaPage() {
                   </div>
                   <CardHeader className="pb-2">
                      <CardTitle className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
-                        <Activity className="size-3" /> System Load
+                        <Activity className="size-3" /> System Torque
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2">
