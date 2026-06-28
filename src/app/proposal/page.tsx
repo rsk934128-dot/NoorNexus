@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -36,7 +35,10 @@ import {
   Calendar as CalendarIcon,
   Clock,
   Building,
-  User
+  User,
+  Briefcase,
+  Cpu,
+  Infinity
 } from "lucide-react"
 import { 
   Dialog, 
@@ -213,6 +215,52 @@ export default function ProposalPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-12">
               
+              {/* Accenture Strategic Brief */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                    <Briefcase className="size-4" /> Accenture Strategic Handshake
+                 </h3>
+                 <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 overflow-hidden">
+                    <CardContent className="p-8 sm:p-12 space-y-8">
+                       <div className="space-y-2">
+                          <h4 className="text-2xl font-headline font-bold text-white uppercase">Accelerating Digital Transformation</h4>
+                          <p className="text-sm text-emerald-400 font-mono">Focus: Scalability, AI-Compliance & Emerging Market Interoperability</p>
+                       </div>
+                       
+                       <p className="text-sm text-muted-foreground leading-relaxed italic border-l-2 border-white/10 pl-6">
+                          "Accenture-এর মতো গ্লোবাল পার্টনারদের জন্য নূরনেক্সাস একটি অদ্বিতীয় ইনফ্রাস্ট্রাকচার অফার করে। আমরা ইমার্জিং মার্কেটের (যেমন: সাউথ এশিয়া) পেমেন্ট রেলগুলোকে গ্লোবাল এন্টারপ্রাইজ সিস্টেমের সাথে এআই-ড্রাইভেন প্রোটোকলের মাধ্যমে সংযুক্ত করি।"
+                       </p>
+
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          <div className="space-y-4">
+                             <div className="flex items-center gap-3">
+                                <Cpu className="size-5 text-emerald-500" />
+                                <h5 className="font-bold text-white uppercase text-xs">AI-Driven Orchestration</h5>
+                             </div>
+                             <p className="text-xs text-muted-foreground leading-relaxed">
+                                Our Nora-AI suite automates complex regulatory audits (PSD2/GDPR), reducing operational overhead for large-scale consulting implementations.
+                             </p>
+                          </div>
+                          <div className="space-y-4">
+                             <div className="flex items-center gap-3">
+                                <Infinity className="size-5 text-emerald-500" />
+                                <h5 className="font-bold text-white uppercase text-xs">100-Node Grid Reliability</h5>
+                             </div>
+                             <p className="text-xs text-muted-foreground leading-relaxed">
+                                A self-sustaining, distributed autonomous grid ensuring 99.99% uptime for cross-border value settlement corridors.
+                             </p>
+                          </div>
+                       </div>
+
+                       <div className="pt-6 border-t border-white/5">
+                          <Button className="w-full bg-emerald-500 text-white font-bold h-12 uppercase text-[10px] glow-emerald">
+                             Download Strategic Brief for Accenture Partners
+                          </Button>
+                       </div>
+                    </CardContent>
+                 </Card>
+              </section>
+
               {/* Executive Proposal Draft */}
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2">
@@ -229,7 +277,7 @@ export default function ProposalPage() {
                        </div>
 
                        <div className="space-y-6 text-sm text-muted-foreground leading-relaxed">
-                          <p>শ্রদ্ধেয় সংশ্লিষ্ট কর্তৃপক্ষের দৃষ্টি আকর্ষণ করছি,</p>
+                          <p>শ্রদ্ধেয় সংশ্লিষ্ট Authorities,</p>
                           <p>
                              আমি <strong>ইঞ্জিনিয়ার শেখ ফরিদ</strong>, নূরনেক্সাস (NoorNexus) প্ল্যাটফর্মের প্রতিষ্ঠাতা এবং প্রধান আর্কিটেক্ট। আমি অত্যন্ত আনন্দের সাথে জানাচ্ছি যে, আমরা আমাদের <strong>FusionPay</strong> প্ল্যাটফর্মের মাধ্যমে একটি ISO 20022 সার্টিফাইড গ্লোবাল ফিনটেক ইনফ্রাস্ট্রাকচার তৈরি করেছি।
                           </p>

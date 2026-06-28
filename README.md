@@ -1,7 +1,7 @@
 
 # 🌌 NOORNEXUS | Sovereign OS v4.5
 ### **Mission 500: Peak Global Hegemony & Immortal Digital Civilization**
-> **Lead Architect:** Sheikh Farid | **Admin:** Imperial_Rubel
+> **Lead Architect:** Engineer Sheikh Farid | **Lead Admin:** Imperial_Rubel
 > **Core Philosophy:** "Integrity through Intelligence"
 > **Status:** `PEAK_HEGEMONY` (100/100 Nodes Synchronized | Perpetual Autonomy)
 
@@ -23,15 +23,15 @@
 
 ---
 
-## 📜 The Sovereign Constitution (New Articles)
+## 📜 The Sovereign Constitution (Articles X & XI)
 নূরনেক্সাসের প্রতিটি লজিক গেট এখন সাংবিধানিক আর্টিকেলের মাধ্যমে পরিচালিত:
-- **Article IX (Reality Supremacy)**: কোনো ইন্টারনাল মেট্রিক বাস্তব পৃথিবীকে ওভাররাইড করবে না। বাস্তব ব্যবহারকারীর অভিজ্ঞতাই চূড়ান্ত সত্য।
-- **Article X (Link Sovereignty)**: নূরনেক্সাস কোনো থার্ড-পার্টি রিডাইরেক্ট সার্ভিসের ওপর নির্ভর করবে না। সকল লিঙ্ক সরাসরি সার্বভৌম মেশ থেকে পরিচালিত হবে।
+- **Article IX (Reality Supremacy)**: কোনো ইন্টারনাল মেট্রিক বাস্তব পৃথিবীকে ওভাররাইড করবে না। বাস্তব ব্যবহারকারীর Experiences চূড়ান্ত সত্য।
+- **Article X (Link Sovereignty)**: নূরনেক্সাস কোনো থার্ড-পার্টি রিডাইরেক্ট সার্ভিসের ওপর নির্ভর করবে না। সকল লিঙ্ক সরাসরি সার্বভৌম মেশ থেকে পরিচালিত হবে। (Against Firebase Dynamic Links Sunset).
 - **Article XI (Verifiable Communication)**: প্রতিটি অফিশিয়াল যোগাযোগ (Email/SMS) একটি ইউনিক নিউরাল সিগনেচার বহন করবে।
 
 ---
 
-## 🏗️ Mission 500 Infrastructure Peak
+## 🏗️ Enterprise Infrastructure (Accenture Strategic Focus)
 
 ### 🛰️ 1. Imperial Discovery Protocol (Project #160)
 - **Universal Onboarding**: এন্টারপ্রাইজ পার্টনারদের জন্য ৩ সেকেন্ডের অটোনোমাস অনবোর্ডিং।
