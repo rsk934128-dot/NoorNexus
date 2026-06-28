@@ -30,23 +30,28 @@ import {
   Monitor,
   Merge,
   Loader2,
-  FileText
+  FileText,
+  CheckCircle2
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useUser, useFirestore } from "@/firebase"
+import { collection, addDoc, serverTimestamp } from "firebase/firestore"
+import { runLiquidityRebalance } from "@/services/liquidity-service"
 import Link from "next/link"
 
 export default function FintechFusionPage() {
   const { toast } = useToast()
+  const db = useFirestore()
+  const { user } = useUser()
   const [loading, setLoading] = useState(false)
+  const [rebalancing, setRebalancing] = useState(false)
   const [activeTab, setActiveTab] = useState("overview")
-  const [pulseActive, setPulseActive] = useState(true)
 
-  const balances = [
-    { currency: "USD", amount: "4,250.00", label: "Sovereign Vault", color: "text-primary" },
-    { currency: "BDT", amount: "5,12,000.00", label: "Local Node", color: "text-emerald-500" },
-    { currency: "GBP", amount: "1,200.00", label: "London Rail", color: "text-purple-500" }
-  ]
+  const [balances, setBalances] = useState([
+    { id: 'vault', currency: "USD", amount: 4250.00, label: "Sovereign Vault", color: "text-primary" },
+    { id: 'local', currency: "BDT", amount: 512000.00, label: "Local Node", color: "text-emerald-500" },
+    { id: 'rail', currency: "GBP", amount: 1200.00, label: "London Rail", color: "text-purple-500" }
+  ])
 
   const recentTransactions = [
     { id: "TX-421", entity: "Freelancer.com", amount: "+$1,200.00", status: "VERIFIED", type: "IN", time: "2h ago" },
@@ -64,6 +69,65 @@ export default function FintechFusionPage() {
         className: "border-emerald-500/50 bg-emerald-500/5"
       })
     }, 1500)
+  }
+
+  async function handleExecuteAiRecommendation() {
+    if (!user) return
+    setRebalancing(true)
+    try {
+      toast({ 
+        title: "Initiating Neural Rebalance", 
+        description: "Nora-AI is calculating the optimal path for 3% fund shift..." 
+      })
+
+      // We use the liquidity service which calls the Nora-02-B AI Flow
+      const result = await runLiquidityRebalance({
+        usdc: balances[0].amount,
+        bdt: balances[1].amount,
+        gold: balances[2].amount,
+        throughput: 12500,
+        pending: 4500
+      })
+
+      // Simulate a bit of wait for the "execution" of cross-node transfers
+      await new Promise(r => setTimeout(r, 2500))
+
+      // Update local balances visually to reflect the "rebalance"
+      setBalances(prev => [
+        { ...prev[0], amount: prev[0].amount * 0.97 }, // -3% from vault
+        { ...prev[1], amount: prev[1].amount },
+        { ...prev[2], amount: prev[2].amount + (prev[0].amount * 0.03 * 0.78) } // + equivalent to GBP rail
+      ])
+
+      // Log this executive action to the audit fabric
+      await addDoc(collection(db, "audit_logs"), {
+        action: "AI_LIQUIDITY_REBALANCE_EXECUTED",
+        actor: user.email,
+        severity: "INFO",
+        metadata: {
+          recommendation: "3% shift to European rails",
+          efficiencyScore: result.efficiencyScore,
+          syncHash: result.crossNodeSyncHash,
+          savings: result.savingsEstimation
+        },
+        timestamp: Date.now()
+      })
+
+      toast({ 
+        title: "Rebalance Finalized", 
+        description: `Handshake: ${result.crossNodeSyncHash.substring(0, 16)}...`,
+        className: "border-emerald-500/50 bg-emerald-500/5 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+      })
+
+    } catch (e: any) {
+      toast({ 
+        title: "Neural Drift Detected", 
+        description: "Rebalance failed in the European corridor.",
+        variant: "destructive" 
+      })
+    } finally {
+      setRebalancing(false)
+    }
   }
 
   const refreshFrame = () => {
@@ -125,7 +189,7 @@ export default function FintechFusionPage() {
                         </div>
                         <CardContent className="p-6 space-y-2">
                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">{b.label}</p>
-                           <h3 className={`text-3xl font-headline font-bold ${b.color}`}>{b.currency} {b.amount}</h3>
+                           <h3 className={`text-3xl font-headline font-bold ${b.color}`}>{b.currency} {b.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</h3>
                            <div className="flex items-center gap-2 pt-2 text-[9px] text-muted-foreground font-mono">
                               <div className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
                               VERIFIED_LEGAL_TENDER
@@ -161,7 +225,12 @@ export default function FintechFusionPage() {
                                   <p className="text-sm font-bold text-primary">$42.00</p>
                                </div>
                             </div>
-                            <Button className="w-full bg-primary text-primary-foreground font-bold uppercase text-[10px] h-10 tracking-[0.2em]">
+                            <Button 
+                              onClick={handleExecuteAiRecommendation}
+                              disabled={rebalancing}
+                              className="w-full bg-primary text-primary-foreground font-bold uppercase text-[10px] h-10 tracking-[0.2em] glow-primary gap-2"
+                            >
+                               {rebalancing ? <Loader2 className="size-3 animate-spin" /> : <Zap className="size-3" />}
                                Execute AI Recommendation
                             </Button>
                          </CardContent>
@@ -306,3 +375,4 @@ export default function FintechFusionPage() {
     </div>
   )
 }
+
