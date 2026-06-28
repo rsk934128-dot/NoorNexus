@@ -1,58 +1,35 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
-  ShieldCheck, 
   Menu, 
   Activity, 
   Zap, 
-  BrainCircuit,
-  Database,
-  Cpu,
-  Infinity,
-  Award,
   Sparkles,
-  Lock,
-  Radio,
-  Fingerprint,
-  TrendingUp,
-  Landmark,
-  FileText,
-  Rocket,
-  ShieldPlus,
-  Compass,
-  Check,
-  Waves,
-  Eye,
-  Repeat,
-  Target,
-  Users,
-  Smartphone,
-  Laptop,
-  ArrowRightLeft,
-  Send,
+  Search,
   Loader2,
-  Terminal,
-  Server,
-  LayoutGrid,
-  Link2,
-  BatteryCharging,
-  History,
-  Shield,
-  HeartHandshake,
-  MessageSquare,
   ArrowRight,
   Tv,
   PlayCircle,
   Youtube,
-  Search,
-  Globe
+  Globe,
+  Award,
+  Check,
+  HeartHandshake,
+  Cpu,
+  Infinity,
+  ShieldCheck,
+  Rocket,
+  Apple,
+  Banknote,
+  Smartphone
 } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { useUser, useFirestore, useCollection } from "@/firebase"
 import { SovereignLogo } from "@/components/sovereign-logo"
@@ -61,6 +38,16 @@ import Link from "next/link"
 import { collection, query, orderBy, limit } from "firebase/firestore"
 import { processNeuralQuery, ImperialQueryOutput } from "@/ai/flows/imperial-query-flow"
 import { useRouter } from "next/navigation"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import Autoplay from "embla-carousel-autoplay"
+import Image from "next/image"
+import placeholderData from "@/app/lib/placeholder-images.json"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
@@ -68,6 +55,45 @@ const EVOLUTION_MILESTONES = [
   { id: 480, label: "Omni-App Sync", desc: "Cognitive mesh established between all devices.", status: "COMPLETED", color: "text-emerald-500" },
   { id: 490, label: "Family Legacy Guard", desc: "Digital Will protocol initialized for intergenerational trust.", status: "ACTIVE", color: "text-amber-500" },
   { id: 500, label: "Mission Peak", desc: "100-node hegemony verified as immortal entity.", status: "VERIFIED", color: "text-primary" }
+]
+
+const IMPERIAL_BANNERS = [
+  {
+    id: "m500",
+    title: "Mission 500: Peak Hegemony",
+    subtitle: "The 100-Node Autonomous Grid is Now Perpetual.",
+    status: "SYSTEM_STABLE",
+    icon: Infinity,
+    color: "from-blue-600/40 to-transparent",
+    imgId: "banner-mission-500"
+  },
+  {
+    id: "rubelbank",
+    title: "RubelBank: Global Rails",
+    subtitle: "Instant MYR-BDT Settlement with &lt; 28ms Latency.",
+    status: "FINTECH_LIVE",
+    icon: Banknote,
+    color: "from-emerald-600/40 to-transparent",
+    imgId: "banner-rubelbank"
+  },
+  {
+    id: "nora",
+    title: "Nora AI: Cognitive Cohesion",
+    subtitle: "Unified Intelligence Across the Imperial Mesh.",
+    status: "AI_ACTIVE",
+    icon: Cpu,
+    color: "from-purple-600/40 to-transparent",
+    imgId: "banner-nora-ai"
+  },
+  {
+    id: "apple",
+    title: "Apple SDK: visionOS Ready",
+    subtitle: "Swift-Native Gemini Logic Bridged to visionOS Nodes.",
+    status: "BETA_RELEASE",
+    icon: Apple,
+    color: "from-slate-600/40 to-transparent",
+    imgId: "banner-apple-sdk"
+  }
 ]
 
 export default function Home() {
@@ -78,19 +104,21 @@ export default function Home() {
   const isAdmin = user?.email === ADMIN_EMAIL
 
   const [loading, setLoading] = useState(true)
-  const [mounted, setMounted] = useState(false)
   const [statusText, setStatusText] = useState("CALIBRATING COGNITIVE COHESION...")
   const [aiQuery, setAiQuery] = useState("")
   const [aiLoading, setAiLoading] = useState(false)
   const [aiResult, setAiResult] = useState<ImperialQueryOutput | null>(null)
   const [aiPulses, setAiPulses] = useState(15420)
   
+  const plugin = useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: false })
+  )
+
   const { data: allSessions } = useCollection<any>(
     db ? query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(100)) : null
   )
 
   useEffect(() => {
-    setMounted(true)
     const sequence = [
       { text: "INITIATING DEEP NEURAL SYNC...", time: 600 },
       { text: "ESTABLISHING FAMILY SHIELD...", time: 1200 },
@@ -115,7 +143,6 @@ export default function Home() {
   const handleAiQuery = async () => {
     if (!aiQuery.trim()) return
     
-    // If it looks like a web search, redirect to browser
     if (aiQuery.toLowerCase().includes('search') || aiQuery.toLowerCase().includes('find') || aiQuery.toLowerCase().includes('what is') || aiQuery.toLowerCase().includes('google')) {
       router.push(`/browser?url=${encodeURIComponent(aiQuery)}`)
       return
@@ -174,9 +201,6 @@ export default function Home() {
                     {isAdmin ? 'Imperial Command.' : 'Zenith Hub.'}
                   </h2>
                 </div>
-                <p className="text-muted-foreground max-w-3xl text-[10px] sm:text-xl leading-relaxed italic">
-                   "Integrity through Intelligence." কমান্ডারের নির্দেশে জেমিনি এখন সাম্রাজ্যের প্রতিটি কোণ পরিচালনা করছে। প্রযুক্তি এখন পরিবারের সুরক্ষা বলয়।
-                </p>
               </div>
               
               <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
@@ -190,19 +214,66 @@ export default function Home() {
                        <div className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]" style={{ width: '92%' }} />
                     </div>
                 </Card>
-                
-                <Card className="sovereign-stats-card w-full sm:w-auto p-4 sm:p-6">
-                    <p className="text-[8px] sm:text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1 sm:mb-2">Digital Will Status</p>
-                    <div className="flex items-end gap-2 mb-2">
-                       <p className="text-2xl sm:text-4xl font-headline font-bold text-white uppercase tracking-tighter">PERPETUAL</p>
-                    </div>
-                    <div className="h-1 sm:h-2 bg-white/5 rounded-full overflow-hidden">
-                       <div className="h-full bg-primary shadow-[0_0_15px_rgba(0,150,255,0.6)]" style={{ width: `100%` }} />
-                    </div>
-                </Card>
               </div>
             </div>
           </header>
+
+          {/* Imperial Dynamic Banner Carousel */}
+          <section className="animate-in fade-in slide-in-from-bottom-4 duration-1000">
+             <Carousel 
+                plugins={[plugin.current]}
+                className="w-full"
+                onMouseEnter={plugin.current.stop}
+                onMouseLeave={plugin.current.reset}
+             >
+                <CarouselContent>
+                   {IMPERIAL_BANNERS.map((banner) => {
+                     const BannerIcon = banner.icon;
+                     const bannerImg = placeholderData.placeholderImages.find(img => img.id === banner.imgId);
+                     return (
+                        <CarouselItem key={banner.id}>
+                           <Card className="glass-card border-white/10 bg-black/60 overflow-hidden relative min-h-[300px] sm:min-h-[400px] flex flex-col justify-center">
+                              {bannerImg && (
+                                <Image 
+                                   src={bannerImg.imageUrl}
+                                   alt={banner.title}
+                                   fill
+                                   className="object-cover opacity-20 group-hover:opacity-30 transition-opacity"
+                                   data-ai-hint={bannerImg.imageHint}
+                                />
+                              )}
+                              <div className={`absolute inset-0 bg-gradient-to-r ${banner.color}`} />
+                              
+                              <CardContent className="p-8 sm:p-16 relative z-10 space-y-6">
+                                 <div className="space-y-2">
+                                    <Badge className="bg-primary/20 text-primary border-none text-[8px] sm:text-[10px] font-bold h-6 px-3 uppercase tracking-[0.2em]">
+                                       {banner.status}
+                                    </Badge>
+                                    <h2 className="text-3xl sm:text-6xl font-headline font-black text-white uppercase tracking-tighter leading-tight max-w-3xl">
+                                       {banner.title}
+                                    </h2>
+                                    <p className="text-sm sm:text-2xl text-muted-foreground font-light italic" dangerouslySetInnerHTML={{ __html: banner.subtitle }} />
+                                 </div>
+                                 <div className="flex gap-4">
+                                    <Button className="bg-primary text-black font-bold h-12 px-8 uppercase text-[10px] sm:text-xs glow-primary">
+                                       Explore Node
+                                    </Button>
+                                    <div className="size-12 rounded-full border border-white/10 flex items-center justify-center bg-black/40 backdrop-blur-md">
+                                       <BannerIcon className="size-6 text-white animate-pulse" />
+                                    </div>
+                                 </div>
+                              </CardContent>
+                           </Card>
+                        </CarouselItem>
+                     )
+                   })}
+                </CarouselContent>
+                <div className="hidden sm:flex">
+                   <CarouselPrevious className="left-4 bg-black/40 border-white/10 text-white" />
+                   <CarouselNext className="right-4 bg-black/40 border-white/10 text-white" />
+                </div>
+             </Carousel>
+          </section>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
             <div className="lg:col-span-3 space-y-6 sm:space-y-12">
@@ -294,11 +365,6 @@ export default function Home() {
                                     <PlayCircle className="size-4" /> Launch Live Hub
                                  </Button>
                               </Link>
-                              <Link href="/world-cup">
-                                 <Button variant="outline" className="border-white/10 text-white h-12 px-6 uppercase text-[10px] sm:text-xs">
-                                    World Cup Relay
-                                 </Button>
-                              </Link>
                            </div>
                         </div>
                      </CardContent>
@@ -341,7 +407,7 @@ export default function Home() {
                {/* Family Shield Widget */}
                <Card className="glass-card border-amber-500/40 bg-amber-500/5 p-4 sm:p-8 flex flex-col items-center text-center gap-4 sm:gap-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-4 opacity-5">
-                    <Shield className="size-16 sm:size-24 text-amber-500" />
+                    <HeartHandshake className="size-16 sm:size-24 text-amber-500" />
                   </div>
                   <div className="size-16 sm:size-20 rounded-full border-4 border-amber-500 flex items-center justify-center relative bg-black shadow-[0_0_20px_rgba(245,158,11,0.5)] z-10">
                      <HeartHandshake className="size-7 sm:size-8 text-amber-500 animate-pulse" />
@@ -392,7 +458,7 @@ export default function Home() {
                <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                   <CardHeader className="p-4 sm:p-6">
                      <CardTitle className="text-[10px] sm:text-xs font-headline uppercase text-primary flex items-center gap-2">
-                        <Search className="size-3 sm:size-4" /> Zenith Search
+                        <Globe className="size-3 sm:size-4" /> Zenith Search
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="p-4 sm:p-6 pt-0 space-y-3 sm:space-y-4">

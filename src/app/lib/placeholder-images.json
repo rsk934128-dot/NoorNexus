@@ -1,3 +1,4 @@
+
 {
   "placeholderImages": [
     {
@@ -53,6 +54,30 @@
       "description": "Toffee Live Media Node Preview",
       "imageUrl": "https://picsum.photos/seed/toffee-sov/1200/800",
       "imageHint": "streaming media"
+    },
+    {
+      "id": "banner-mission-500",
+      "description": "Banner representing Mission 500 Hegemony",
+      "imageUrl": "https://picsum.photos/seed/m500/1200/400",
+      "imageHint": "digital empire"
+    },
+    {
+      "id": "banner-rubelbank",
+      "description": "Banner representing RubelBank Fintech Corridor",
+      "imageUrl": "https://picsum.photos/seed/rubelbank/1200/400",
+      "imageHint": "finance network"
+    },
+    {
+      "id": "banner-nora-ai",
+      "description": "Banner representing Nora AI Cognitive Mesh",
+      "imageUrl": "https://picsum.photos/seed/noraai/1200/400",
+      "imageHint": "artificial intelligence"
+    },
+    {
+      "id": "banner-apple-sdk",
+      "description": "Banner representing Apple SDK & Swift Integration",
+      "imageUrl": "https://picsum.photos/seed/applesdk/1200/400",
+      "imageHint": "apple swift"
     }
   ]
 }
