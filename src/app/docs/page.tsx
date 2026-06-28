@@ -32,7 +32,10 @@ import {
   Rocket,
   Link2,
   Mail,
-  MessageSquare
+  MessageSquare,
+  FileText,
+  ShieldPlus,
+  Network
 } from "lucide-react"
 
 export default function DocsPage() {
@@ -70,6 +73,45 @@ export default function DocsPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-12">
+              
+              {/* National Cyber Defense Blueprint (P-150) Section */}
+              <section className="space-y-6">
+                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-amber-500 flex items-center gap-2 px-1">
+                    <ShieldPlus className="size-4" /> Strategic Document: project #150
+                 </h3>
+                 <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5 relative overflow-hidden group">
+                    <CardHeader className="p-8 sm:p-12 pb-0">
+                       <CardTitle className="text-3xl font-headline font-bold text-white uppercase tracking-tighter">National Cyber Defense Blueprint</CardTitle>
+                       <CardDescription className="text-amber-400 font-mono text-[10px] uppercase tracking-[0.3em]">Advanced Cryptographic Sovereignty Strategy</CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-8 sm:p-12 space-y-8">
+                       <p className="text-sm text-muted-foreground leading-relaxed italic border-l-2 border-amber-500/30 pl-6">
+                          "প্রকল্প P-150 হলো একটি রাষ্ট্রের ডিজিটাল বর্ডার এবং ফিনটেক ইনফ্রাস্ট্রাকচার রক্ষার চূড়ান্ত ব্লু-প্রিন্ট। এটি মূলত 'Integrity through Intelligence' দর্শনের ওপর ভিত্তি করে তৈরি, যেখানে প্রতিটি কানেকশন HMAC_V4 দ্বারা অডিট করা হয়।"
+                       </p>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          <div className="space-y-4">
+                             <div className="flex items-center gap-3">
+                                <Lock className="size-5 text-amber-500" />
+                                <h5 className="font-bold text-white uppercase text-xs">Zero-Trust Backbone</h5>
+                             </div>
+                             <p className="text-xs text-muted-foreground">
+                                Implementing a mandatory cryptographic handshake for every node-to-node communication.
+                             </p>
+                          </div>
+                          <div className="space-y-4">
+                             <div className="flex items-center gap-3">
+                                <Network className="size-5 text-amber-500" />
+                                <h5 className="font-bold text-white uppercase text-xs">Resilient Mesh Topology</h5>
+                             </div>
+                             <p className="text-xs text-muted-foreground">
+                                Distributed autonomous grid structure to prevent single-point failures in national systems.
+                             </p>
+                          </div>
+                       </div>
+                    </CardContent>
+                 </Card>
+              </section>
+
               <section className="space-y-6">
                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.3em] text-primary flex items-center gap-2">
                     <Scale className="size-4" /> The Sovereign Constitution
@@ -95,43 +137,6 @@ export default function DocsPage() {
                          </p>
                       </CardContent>
                     </Card>
-                    <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
-                      <CardHeader>
-                         <CardTitle className="text-lg font-headline text-purple-400 uppercase">Article XI: Verifiable Communication</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                         <p className="text-sm text-purple-100 leading-relaxed italic">
-                            "All account management communications (Email/SMS) must originate from a verified Sovereign Domain. Communications shall use neural placeholders for extreme personalization and transparency."
-                         </p>
-                      </CardContent>
-                    </Card>
-                 </div>
-              </section>
-
-              <section className="space-y-6">
-                 <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-amber-500 flex items-center gap-2">
-                    <Rocket className="size-4" /> The Reality Roadmap (Next 5 Objectives)
-                 </h3>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {[
-                      { step: "1. Real Partner Contract", desc: "Moving from simulation to first 3 institutional contracts.", icon: HeartHandshake },
-                      { step: "2. External Audit Report", desc: "First independent evaluation by a third-party firm.", icon: ShieldCheck },
-                      { step: "3. Voluntary Revenue Proof", desc: "First recurring payment from a client who depends on the OS.", icon: Zap },
-                      { step: "4. Public Failure Postmortem", desc: "Transparent report of the first operational incident.", icon: History },
-                      { step: "5. Partner-Led Case Study", desc: "Success story written by an external institution, not us.", icon: BookOpen },
-                    ].map((s, i) => (
-                      <Card key={i} className="glass-card border-white/5 hover:border-amber-500/20 transition-all">
-                        <CardContent className="p-4 flex items-start gap-4">
-                           <div className="p-2 bg-amber-500/10 rounded-lg text-amber-500">
-                              <s.icon className="size-5" />
-                           </div>
-                           <div className="space-y-1">
-                              <p className="text-[10px] font-bold text-white uppercase">{s.step}</p>
-                              <p className="text-[9px] text-muted-foreground leading-relaxed">{s.desc}</p>
-                           </div>
-                        </CardContent>
-                      </Card>
-                    ))}
                  </div>
               </section>
             </div>
@@ -157,13 +162,19 @@ export default function DocsPage() {
               <Card className="glass-card border-amber-500/20">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                    <AlertTriangle className="size-4" /> Anti-Success Trap
+                    <FileText className="size-4" /> Document Hierarchy
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                   <div className="p-3 bg-white/5 rounded border border-white/5 space-y-2 text-center">
-                      <p className="text-[8px] text-muted-foreground uppercase">Internal Validation Cap</p>
-                      <Badge className="bg-primary/20 text-primary border-none text-[8px]">REALITY_ONLY</Badge>
+                <CardContent className="space-y-4">
+                   <div className="p-3 bg-white/5 rounded border border-white/5 space-y-2">
+                      <div className="flex justify-between items-center text-[9px] font-mono">
+                         <span className="text-muted-foreground uppercase">Project #150</span>
+                         <Badge className="bg-amber-500/20 text-amber-500 border-none text-[7px]">STRATEGIC</Badge>
+                      </div>
+                      <div className="flex justify-between items-center text-[9px] font-mono">
+                         <span className="text-muted-foreground uppercase">Mission 500 Peak</span>
+                         <Badge className="bg-primary/20 text-primary border-none text-[7px]">OPERATIONAL</Badge>
+                      </div>
                    </div>
                 </CardContent>
               </Card>
