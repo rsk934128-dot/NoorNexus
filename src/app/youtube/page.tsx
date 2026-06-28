@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect, useRef } from "react"
@@ -24,7 +23,7 @@ import {
   Activity, 
   History,
   Monitor,
-  Sparkles,
+  Sparkles, 
   Link2,
   ExternalLink,
   Radio,
@@ -39,6 +38,7 @@ import {
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { processVideoExtraction, VideoExtractionOutput } from "@/ai/flows/video-extraction-flow"
+import { dispatchSovereignCommand, listenToTunnelResponse } from "@/services/sovereign-bridge"
 
 const DEFAULT_SIGNAL_URL = "https://www.youtube.com/watch?v=ntjJKCjNmcE"; // Imperial World Cup / Space Theme
 
@@ -63,6 +63,14 @@ export default function ImperialCinemaPage() {
   // Auto-establish signal on mount
   useEffect(() => {
     handleLaunch(DEFAULT_SIGNAL_URL, true)
+    
+    // Listen for bridge responses
+    const unsubscribe = listenToTunnelResponse((data) => {
+      if (data.type === 'ACK_PERMIT') {
+        toast({ title: "Tunnel Handshake Secured", description: "L4 Permission granted by Imperial Bridge." })
+      }
+    });
+    return () => unsubscribe();
   }, [])
 
   async function handleLaunch(targetUrl: string = url, isInitial = false) {
@@ -91,6 +99,15 @@ export default function ImperialCinemaPage() {
       setVideoData(res)
       setActiveVideoId(id)
       
+      // Command-Based Permission Handshake
+      setTimeout(() => {
+        dispatchSovereignCommand(iframeRef, {
+          type: 'PERMIT_YOUTUBE',
+          payload: { videoId: id, intent: 'Sovereign Cinema' },
+          signature: 'HMAC_V4_CINEMA'
+        });
+      }, 1500);
+
       if (!isInitial) {
         toast({ 
           title: "Cinema Link Established", 
@@ -174,7 +191,7 @@ export default function ImperialCinemaPage() {
                 "Full-Site Integration & Secure Playback." কমান্ডারের নির্দেশে ইউটিউবের পুরো ওয়েবসাইট এখন নূরনেক্সাস সাম্রাজ্যের সুরক্ষিত টানেলে।
               </p>
             </div>
-            <div className="flex gap-4">
+            <div className="flex items-center gap-4">
                <div className="p-4 glass-card rounded-2xl border border-red-500/20 text-center min-w-[200px] relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-2 opacity-10">
                     <Radio className="size-12 text-red-500" />
@@ -257,7 +274,6 @@ export default function ImperialCinemaPage() {
 
                     {viewMode === 'FULL_SITE' ? (
                       <div className="size-full bg-background relative flex flex-col items-center justify-center text-center p-12 space-y-12">
-                         {/* Notice about YouTube blocking iframes */}
                          <div className="size-20 rounded-2xl bg-amber-500/20 flex items-center justify-center border border-amber-500/40 glow-emerald">
                             <ShieldAlert className="size-10 text-amber-500" />
                          </div>
@@ -286,7 +302,6 @@ export default function ImperialCinemaPage() {
                             <Badge variant="outline" className="border-white/10 uppercase tracking-[0.4em] text-[8px]">Auth_Handshake_Bypass_Protocol_v4.5</Badge>
                          </div>
                          
-                         {/* Hidden iframe that actually tries to load it to show how it's blocked */}
                          <iframe 
                            ref={iframeRef}
                            src="https://www.youtube.com" 
@@ -296,6 +311,7 @@ export default function ImperialCinemaPage() {
                       </div>
                     ) : activeVideoId ? (
                       <iframe 
+                        ref={iframeRef}
                         src={`https://www.youtube.com/embed/${activeVideoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&theme=dark`}
                         className="w-full h-full border-0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; orientation-lock"

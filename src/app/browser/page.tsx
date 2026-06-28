@@ -45,6 +45,7 @@ import { useToast } from "@/hooks/use-toast"
 import { executeZenithSearch, WebSearchOutput } from "@/ai/flows/web-search-flow"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useSearchParams } from "next/navigation"
+import { dispatchSovereignCommand, listenToTunnelResponse } from "@/services/sovereign-bridge"
 
 const QUICK_LINKS = [
   { name: "Toffee Live", url: "https://toffeelive.com/", icon: Tv, color: "text-red-500" },
@@ -74,6 +75,16 @@ function BrowserContent() {
   const [showBypassWarning, setShowBypassWarning] = useState(false)
   const [searchResult, setSearchResult] = useState<WebSearchOutput | null>(null)
   const iframeRef = useRef<HTMLIFrameElement>(null)
+
+  useEffect(() => {
+    // Listen for bridge responses
+    const unsubscribe = listenToTunnelResponse((data) => {
+      if (data.type === 'ACK_PERMIT') {
+        console.log('[BrowserHub] Tunnel Permission Acknowledged.');
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const handleSearch = useCallback(async (query: string) => {
     if (!query.trim()) return
@@ -131,6 +142,17 @@ function BrowserContent() {
     setActiveUrl(finalUrl)
     setUrlInput(finalUrl)
     
+    // Command-Based Permission Handshake
+    if (finalUrl.includes('youtube.com')) {
+      setTimeout(() => {
+        dispatchSovereignCommand(iframeRef, {
+          type: 'PERMIT_YOUTUBE',
+          payload: { intent: 'Imperial Playback', user: 'Commander' },
+          signature: 'HMAC_V4_TRUSTED'
+        });
+      }, 1000);
+    }
+
     setTimeout(() => setLoading(false), 1000)
   }, [urlInput, handleSearch]);
 
