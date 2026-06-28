@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
@@ -11,33 +11,18 @@ import {
   RefreshCcw, 
   ExternalLink, 
   ShieldCheck, 
-  Zap, 
-  Loader2, 
   Menu, 
-  Monitor, 
   Sparkles, 
-  ShieldAlert, 
-  ArrowLeft,
-  Radio,
-  Activity,
-  Cpu,
-  Maximize2,
+  Maximize2, 
   Minimize2,
-  Lock,
-  Globe,
-  CheckCircle2
+  ArrowLeft,
+  Cpu
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
-/**
- * @fileOverview Toffee Live Imperial Terminal (V6.5 - Zenith Media Bridge)
- * নূরনেক্সাস অপারেটিং সিস্টেমের জন্য একটি প্রিমিয়াম লাইভ স্ট্রিমিং মিডিয়া নোড।
- * Resolved: Error 4032 & 1002 using a proactive handshake UI.
- */
 export default function ToffeeLivePage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(true)
-  const [handshakeMode, setHandshakeMode] = useState(true)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -53,7 +38,6 @@ export default function ToffeeLivePage() {
 
   const handleRefresh = () => {
     setLoading(true)
-    setHandshakeMode(true)
     if (iframeRef.current) {
       iframeRef.current.src = TARGET_URL
     }
@@ -94,8 +78,8 @@ export default function ToffeeLivePage() {
     window.open(TARGET_URL, '_blank')
     toast({
       title: "Direct Sovereign Tunnel Established",
-      description: "Opening Toffee Live in a high-priority external node for Error-Free playback.",
-      className: "border-emerald-500/50 bg-emerald-500/5 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+      description: "Opening Toffee Live in an external node for error-free playback.",
+      className: "border-emerald-500/50 bg-emerald-500/5"
     })
   }
 
@@ -104,7 +88,6 @@ export default function ToffeeLivePage() {
       {!isFullscreen && <AppSidebar />}
       <SidebarInset>
         <main className="flex flex-col h-[100dvh] w-full max-w-full overflow-hidden p-0 m-0 relative">
-          {/* Imperial Header */}
           {!isFullscreen && (
             <header className="px-4 sm:px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/80 backdrop-blur-md shrink-0 w-full z-[60]">
               <div className="flex items-center gap-3">
@@ -141,7 +124,6 @@ export default function ToffeeLivePage() {
             </header>
           )}
 
-          {/* Expansive Display Area */}
           <div ref={containerRef} className="flex-1 overflow-hidden bg-black w-full p-0 m-0 relative z-0">
             {loading && (
               <div className="absolute inset-0 z-[70] bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center gap-8 p-6 text-center">
@@ -151,76 +133,30 @@ export default function ToffeeLivePage() {
                     <Tv className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-12 text-red-500 animate-pulse" />
                  </div>
                  <div className="text-center space-y-3">
-                    <p className="text-sm font-headline font-bold text-red-500 uppercase tracking-[0.4em]">Initializing Zenith Media Bridge...</p>
+                    <p className="text-sm font-headline font-bold text-red-500 uppercase tracking-[0.4em]">Establishing Zenith Media Bridge...</p>
                     <p className="text-[9px] sm:text-xs text-muted-foreground font-mono uppercase tracking-widest animate-pulse">DRM Veracity Handshake: ACTIVE</p>
                  </div>
               </div>
             )}
 
-            {handshakeMode && !loading ? (
-              <div className="size-full flex flex-col items-center justify-center text-center p-6 sm:p-12 space-y-12 animate-in fade-in duration-1000 overflow-y-auto bg-background">
-                 <div className="size-24 rounded-3xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30 glow-emerald relative">
-                    <div className="absolute -inset-4 bg-emerald-500/5 rounded-full animate-ping" />
-                    <ShieldCheck className="size-12 text-emerald-500" />
-                 </div>
-                 <div className="space-y-6 max-w-2xl">
-                    <h3 className="text-3xl sm:text-5xl font-headline font-black text-white uppercase tracking-tighter leading-none">Media Portal Ready</h3>
-                    <p className="text-sm sm:text-lg text-muted-foreground leading-relaxed italic px-4">
-                       "কমান্ডার, টুফি লাইভ-এর উচ্চতর DRM নিরাপত্তার কারণে কিছু ডিভাইসে এরর ৪০৩২ বা ১০০২ দেখা দিতে পারে। আপনার স্ট্রিমিং অভিজ্ঞতা নিখুঁত রাখতে সরাসরি **Direct Sovereign Tunnel** ব্যবহার করার পরামর্শ দিচ্ছি।"
-                    </p>
-                 </div>
-
-                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl px-4">
-                    <Card className="glass-card bg-emerald-500/5 border-emerald-500/20 p-6 flex flex-col items-center text-center gap-4 hover:scale-[1.02] transition-transform cursor-pointer shadow-[0_0_30px_rgba(16,185,129,0.1)]" onClick={openDirectTunnel}>
-                       <div className="size-12 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30">
-                          <ExternalLink className="size-6 text-emerald-500" />
-                       </div>
-                       <div className="space-y-1">
-                          <p className="text-sm font-headline font-bold text-white uppercase">Direct Sovereign Tunnel</p>
-                          <p className="text-[10px] text-muted-foreground uppercase">বিনা বাধায় বিজ্ঞাপনমুক্ত প্লেব্যাক</p>
-                       </div>
-                       <Button className="w-full bg-emerald-500 text-black font-bold h-11 uppercase text-[10px] glow-emerald">Launch External Node</Button>
-                    </Card>
-
-                    <Card className="glass-card bg-primary/5 border-primary/20 p-6 flex flex-col items-center text-center gap-4 hover:scale-[1.02] transition-transform cursor-pointer" onClick={() => setHandshakeMode(false)}>
-                       <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/30">
-                          <Monitor className="size-6 text-primary" />
-                       </div>
-                       <div className="space-y-1">
-                          <p className="text-sm font-headline font-bold text-white uppercase">Embedded Terminal HUD</p>
-                          <p className="text-[10px] text-muted-foreground uppercase">সিস্টেম ফ্রেমের ভেতরে ট্রাই করুন</p>
-                       </div>
-                       <Button variant="outline" className="w-full border-primary/20 text-primary font-bold h-11 uppercase text-[10px]">Secure Embedded Frame</Button>
-                    </Card>
-                 </div>
-                 
-                 <div className="pt-8 flex flex-col items-center gap-4 opacity-40">
-                    <div className="flex items-center gap-2">
-                       <Radio className="size-3 text-emerald-500 animate-pulse" />
-                       <span className="text-[8px] font-mono uppercase tracking-[0.4em] text-emerald-500">Uplink Stable: Canal SG-01</span>
-                    </div>
-                 </div>
-              </div>
-            ) : !loading && (
-              <iframe 
-                ref={iframeRef}
-                src={TARGET_URL} 
-                className="w-full h-full border-0 absolute inset-0"
-                title="Imperial Toffee Terminal"
-                referrerPolicy="no-referrer-when-downgrade"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; display-capture; orientation-lock; microphone; camera"
-                sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation allow-orientation-lock"
-                allowFullScreen
-              />
-            )}
+            <iframe 
+              ref={iframeRef}
+              src={TARGET_URL} 
+              className="w-full h-full border-0 absolute inset-0"
+              title="Imperial Toffee Terminal"
+              referrerPolicy="no-referrer-when-downgrade"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; display-capture; orientation-lock; microphone; camera"
+              sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation allow-orientation-lock"
+              allowFullScreen
+            />
             
-            {!handshakeMode && !loading && (
+            {!loading && (
                <div className="absolute bottom-4 right-4 z-50 flex gap-2">
                   <Button 
-                    onClick={() => setHandshakeMode(true)}
+                    onClick={openDirectTunnel}
                     className="bg-black/60 backdrop-blur-md border border-white/20 text-white h-10 px-4 rounded-full hover:bg-black/80 text-[9px] uppercase font-bold"
                   >
-                     <ArrowLeft className="size-3 mr-2" /> Back to Bridge
+                     <ExternalLink className="size-3 mr-2" /> Direct Tunnel
                   </Button>
                   <Button 
                     onClick={togglePlayerFullscreen} 
