@@ -39,3 +39,4 @@ import '@/ai/flows/audio-synthesis-flow.ts';
 import '@/ai/flows/predictive-flow-orchestrator.ts';
 import '@/ai/flows/github-intelligence-flow.ts';
 import '@/ai/flows/deployment-orchestrator-flow.ts';
+import '@/ai/flows/code-exchange-flow.ts';

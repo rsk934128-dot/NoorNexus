@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -73,7 +74,8 @@ import {
   MapPin,
   ChevronRight,
   Film,
-  Tv
+  Tv,
+  Code2
 } from "lucide-react"
 
 import {
@@ -112,6 +114,7 @@ const ADMIN_EMAIL = "rubels1k994@gmail.com"
 const USER_ITEMS = [
   { title: "Command Center", url: "/", icon: LayoutDashboard },
   { title: "AI Gateway", url: "/ai-gateway", icon: LayoutGrid, zenith: true },
+  { title: "Sheikh Code Exchange", url: "/code-exchange", icon: Code2, zenith: true },
   { title: "Imperial Deploy", url: "/imperial-deploy", icon: CloudUpload, zenith: true },
   { title: "Toffee Live", url: "/toffee", icon: Tv, highlight: true },
   { title: "GitHub Reports", url: "/github-reports", icon: Github, highlight: true },
