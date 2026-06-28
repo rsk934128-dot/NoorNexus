@@ -26,7 +26,8 @@ import {
   ExternalLink,
   RefreshCcw,
   Menu,
-  ChevronRight
+  ChevronRight,
+  ArrowLeft
 } from "lucide-react"
 import {
   Dialog,
@@ -266,11 +267,11 @@ export default function WorldCupPage() {
                       ref={iframeRef}
                       width="100%" 
                       height="100%" 
-                      src={`https://www.youtube.com/embed/${getYoutubeId(activeMatch.uplink)}?autoplay=1&mute=0&rel=0&modestbranding=1`}
+                      src={`https://www.youtube.com/embed/${getYoutubeId(activeMatch.uplink)}?autoplay=1&mute=0&rel=0&modestbranding=1&showinfo=0`}
                       frameBorder="0"
                       allowFullScreen
                       referrerPolicy="no-referrer-when-downgrade"
-                      allow="accelerometer; autoplay; clipboard-read; clipboard-write; encrypted-media; gyroscope; picture-in-picture; orientation-lock"
+                      allow="accelerometer; autoplay; clipboard-read; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; orientation-lock; display-capture"
                       sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation allow-orientation-lock"
                       className="w-full h-full"
                     ></iframe>

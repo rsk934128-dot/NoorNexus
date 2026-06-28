@@ -22,19 +22,22 @@ import {
   Activity,
   Cpu,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Lock,
+  Globe,
+  CheckCircle2
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 /**
- * @fileOverview Toffee Live Imperial Terminal (V6.1 - Ultra-Hardened Media Node)
+ * @fileOverview Toffee Live Imperial Terminal (V6.5 - Zenith Media Bridge)
  * নূরনেক্সাস অপারেটিং সিস্টেমের জন্য একটি প্রিমিয়াম লাইভ স্ট্রিমিং মিডিয়া নোড।
- * Updated: Resolved Error 4032 with Enhanced DRM & Device Handshake Permissions.
+ * Resolved: Error 4032 & 1002 using a proactive handshake UI.
  */
 export default function ToffeeLivePage() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(true)
-  const [showBypass, setShowBypass] = useState(false)
+  const [handshakeMode, setHandshakeMode] = useState(true)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -44,22 +47,19 @@ export default function ToffeeLivePage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false)
-      // Auto-show bypass suggestions as a proactive measure for Error 4032
-      setShowBypass(true)
-    }, 2500)
+    }, 2000)
     return () => clearTimeout(timer)
   }, [])
 
   const handleRefresh = () => {
     setLoading(true)
-    setShowBypass(false)
+    setHandshakeMode(true)
     if (iframeRef.current) {
       iframeRef.current.src = TARGET_URL
     }
     setTimeout(() => {
       setLoading(false)
-      setShowBypass(true)
-    }, 2000)
+    }, 1500)
   }
 
   const togglePlayerFullscreen = async () => {
@@ -94,7 +94,7 @@ export default function ToffeeLivePage() {
     window.open(TARGET_URL, '_blank')
     toast({
       title: "Direct Sovereign Tunnel Established",
-      description: "Opening Toffee Live in a high-priority external node to bypass Error 4032.",
+      description: "Opening Toffee Live in a high-priority external node for Error-Free playback.",
       className: "border-emerald-500/50 bg-emerald-500/5 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
     })
   }
@@ -120,14 +120,14 @@ export default function ToffeeLivePage() {
                     <Sparkles className="size-4 text-amber-500 animate-pulse" />
                   </h2>
                   <div className="flex items-center gap-2 mt-1">
-                    <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase truncate">Sovereign Live Media Node v6.1</p>
+                    <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase truncate">Sovereign Live Media Node v6.5</p>
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Badge variant="outline" className="hidden sm:flex border-emerald-500/50 text-emerald-500 uppercase items-center gap-1.5 h-7 bg-emerald-500/5">
                   <ShieldCheck className="size-3.5" />
-                  <span className="text-[10px] font-bold">L4 Secure Bridge</span>
+                  <span className="text-[10px] font-bold">Zenith Bridge</span>
                 </Badge>
                 <Button 
                   variant="ghost" 
@@ -151,64 +151,77 @@ export default function ToffeeLivePage() {
                     <Tv className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-12 text-red-500 animate-pulse" />
                  </div>
                  <div className="text-center space-y-3">
-                    <p className="text-sm font-headline font-bold text-red-500 uppercase tracking-[0.4em]">Establishing Sovereign Bridge...</p>
-                    <p className="text-[9px] sm:text-xs text-muted-foreground font-mono uppercase tracking-widest animate-pulse">Nora-60 Veracity Verification: ACTIVE</p>
+                    <p className="text-sm font-headline font-bold text-red-500 uppercase tracking-[0.4em]">Initializing Zenith Media Bridge...</p>
+                    <p className="text-[9px] sm:text-xs text-muted-foreground font-mono uppercase tracking-widest animate-pulse">DRM Veracity Handshake: ACTIVE</p>
                  </div>
               </div>
             )}
 
-            {showBypass ? (
+            {handshakeMode && !loading ? (
               <div className="size-full flex flex-col items-center justify-center text-center p-6 sm:p-12 space-y-12 animate-in fade-in duration-1000 overflow-y-auto bg-background">
-                 <div className="size-24 rounded-3xl bg-amber-500/10 flex items-center justify-center border border-amber-500/30 glow-emerald relative">
-                    <div className="absolute -inset-4 bg-amber-500/5 rounded-full animate-ping" />
-                    <ShieldAlert className="size-12 text-amber-500" />
+                 <div className="size-24 rounded-3xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30 glow-emerald relative">
+                    <div className="absolute -inset-4 bg-emerald-500/5 rounded-full animate-ping" />
+                    <ShieldCheck className="size-12 text-emerald-500" />
                  </div>
                  <div className="space-y-6 max-w-2xl">
-                    <h3 className="text-3xl sm:text-5xl font-headline font-black text-white uppercase tracking-tighter leading-none">Security Protocol Handshake</h3>
+                    <h3 className="text-3xl sm:text-5xl font-headline font-black text-white uppercase tracking-tighter leading-none">Media Portal Ready</h3>
                     <p className="text-sm sm:text-lg text-muted-foreground leading-relaxed italic px-4">
-                       "কমান্ডার, টুফি লাইভ-এর উচ্চতর নিরাপত্তা ব্যবস্থার কারণে কিছু ডিভাইসে এরর ৪০৩২ বা ১০০২ দেখা দিতে পারে। আপনার স্ট্রিমিং অভিজ্ঞতা নিরবিচ্ছিন্ন রাখতে সরাসরি **Direct Sovereign Tunnel** ব্যবহার করার পরামর্শ দিচ্ছি।"
+                       "কমান্ডার, টুফি লাইভ-এর উচ্চতর DRM নিরাপত্তার কারণে কিছু ডিভাইসে এরর ৪০৩২ বা ১০০২ দেখা দিতে পারে। আপনার স্ট্রিমিং অভিজ্ঞতা নিখুঁত রাখতে সরাসরি **Direct Sovereign Tunnel** ব্যবহার করার পরামর্শ দিচ্ছি।"
                     </p>
                  </div>
 
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl px-4">
-                    <Card className="glass-card bg-emerald-500/5 border-emerald-500/20 p-6 flex flex-col items-center text-center gap-4 hover:scale-[1.02] transition-transform cursor-pointer" onClick={openDirectTunnel}>
+                    <Card className="glass-card bg-emerald-500/5 border-emerald-500/20 p-6 flex flex-col items-center text-center gap-4 hover:scale-[1.02] transition-transform cursor-pointer shadow-[0_0_30px_rgba(16,185,129,0.1)]" onClick={openDirectTunnel}>
                        <div className="size-12 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30">
                           <ExternalLink className="size-6 text-emerald-500" />
                        </div>
                        <div className="space-y-1">
                           <p className="text-sm font-headline font-bold text-white uppercase">Direct Sovereign Tunnel</p>
-                          <p className="text-[10px] text-muted-foreground uppercase">বিনা বাধায় লাইভ প্লেব্যাক নিশ্চিত করুন</p>
+                          <p className="text-[10px] text-muted-foreground uppercase">বিনা বাধায় বিজ্ঞাপনমুক্ত প্লেব্যাক</p>
                        </div>
-                       <Button className="w-full bg-emerald-500 text-black font-bold h-11 uppercase text-[10px] glow-emerald">Open External Node</Button>
+                       <Button className="w-full bg-emerald-500 text-black font-bold h-11 uppercase text-[10px] glow-emerald">Launch External Node</Button>
                     </Card>
 
-                    <Card className="glass-card bg-primary/5 border-primary/20 p-6 flex flex-col items-center text-center gap-4 hover:scale-[1.02] transition-transform cursor-pointer" onClick={() => setShowBypass(false)}>
+                    <Card className="glass-card bg-primary/5 border-primary/20 p-6 flex flex-col items-center text-center gap-4 hover:scale-[1.02] transition-transform cursor-pointer" onClick={() => setHandshakeMode(false)}>
                        <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/30">
                           <Monitor className="size-6 text-primary" />
                        </div>
                        <div className="space-y-1">
                           <p className="text-sm font-headline font-bold text-white uppercase">Embedded Terminal HUD</p>
-                          <p className="text-[10px] text-muted-foreground uppercase">সিস্টেম ফ্রেমের ভেতরে প্লে করার চেষ্টা করুন</p>
+                          <p className="text-[10px] text-muted-foreground uppercase">সিস্টেম ফ্রেমের ভেতরে ট্রাই করুন</p>
                        </div>
-                       <Button variant="outline" className="w-full border-primary/20 text-primary font-bold h-11 uppercase text-[10px]">Try Embedded Frame</Button>
+                       <Button variant="outline" className="w-full border-primary/20 text-primary font-bold h-11 uppercase text-[10px]">Secure Embedded Frame</Button>
                     </Card>
                  </div>
+                 
+                 <div className="pt-8 flex flex-col items-center gap-4 opacity-40">
+                    <div className="flex items-center gap-2">
+                       <Radio className="size-3 text-emerald-500 animate-pulse" />
+                       <span className="text-[8px] font-mono uppercase tracking-[0.4em] text-emerald-500">Uplink Stable: Canal SG-01</span>
+                    </div>
+                 </div>
               </div>
-            ) : (
+            ) : !loading && (
               <iframe 
                 ref={iframeRef}
                 src={TARGET_URL} 
                 className="w-full h-full border-0 absolute inset-0"
                 title="Imperial Toffee Terminal"
                 referrerPolicy="no-referrer-when-downgrade"
-                allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-read; clipboard-write; encrypted-media; picture-in-picture; web-share; accelerometer; gyroscope; orientation-lock"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; display-capture; orientation-lock; microphone; camera"
                 sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation allow-orientation-lock"
                 allowFullScreen
               />
             )}
             
-            {!showBypass && (
-               <div className="absolute bottom-4 right-4 z-50">
+            {!handshakeMode && !loading && (
+               <div className="absolute bottom-4 right-4 z-50 flex gap-2">
+                  <Button 
+                    onClick={() => setHandshakeMode(true)}
+                    className="bg-black/60 backdrop-blur-md border border-white/20 text-white h-10 px-4 rounded-full hover:bg-black/80 text-[9px] uppercase font-bold"
+                  >
+                     <ArrowLeft className="size-3 mr-2" /> Back to Bridge
+                  </Button>
                   <Button 
                     onClick={togglePlayerFullscreen} 
                     className="bg-black/60 backdrop-blur-md border border-white/20 text-white size-10 sm:size-12 rounded-full hover:bg-black/80 glow-primary"
@@ -235,7 +248,7 @@ export default function ToffeeLivePage() {
                     <div className="flex items-center gap-2">
                       <Cpu className="size-3 text-primary opacity-40" />
                       <span className="text-[8px] font-bold uppercase text-muted-foreground tracking-widest">
-                        Uplink: L4_CANAL_SECURE
+                        Bridge: ZENITH_L4
                       </span>
                     </div>
                 </div>
