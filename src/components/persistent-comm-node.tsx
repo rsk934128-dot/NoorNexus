@@ -1,4 +1,3 @@
-
 "use client"
 
 import { usePathname, useRouter } from "next/navigation"
@@ -12,7 +11,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 /**
  * @fileOverview Global Persistent Communication Node (V5.8 - Media Optimized)
  * নূরনেক্সাস সাম্রাজ্যের প্রতিটি পেজে "Shurukkha", "Famelack" এবং "Toffee" হাবের পারসিস্টেন্স নিশ্চিত করে।
- * Updated: Added a global red trigger for Toffee Live access from any part of the app.
+ * Updated: Optimized icon scaling and safe area spacing for mobile devices.
  */
 export function PersistentCommNode() {
   const [isMounted, setIsMounted] = useState(false)
@@ -114,7 +113,7 @@ export function PersistentCommNode() {
 
   return (
     <>
-      <div className="fixed bottom-6 sm:bottom-8 right-5 sm:right-8 z-[100] flex flex-col gap-4 sm:gap-5 items-center pointer-events-auto">
+      <div className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 z-[100] flex flex-col gap-3 sm:gap-5 items-center pointer-events-auto pb-[env(safe-area-inset-bottom)]">
         
         {/* Universal Toffee Live Trigger */}
         <TooltipProvider>
@@ -123,9 +122,9 @@ export function PersistentCommNode() {
               <div className="relative group">
                 <Button 
                   onClick={() => router.push("/toffee")}
-                  className={`size-11 sm:size-14 rounded-2xl p-0 flex items-center justify-center transition-all duration-500 shadow-2xl border-2 ${isToffeeActive ? 'bg-red-600 border-white glow-destructive scale-110' : 'bg-black/80 border-white/10 hover:border-red-500/50'}`}
+                  className={`size-10 sm:size-14 rounded-2xl p-0 flex items-center justify-center transition-all duration-500 shadow-2xl border-2 ${isToffeeActive ? 'bg-red-600 border-white glow-destructive scale-110' : 'bg-black/80 border-white/10 hover:border-red-500/50'}`}
                 >
-                  <Tv className={`size-5 sm:size-6 ${isToffeeActive ? 'text-white' : 'text-red-500'}`} />
+                  <Tv className={`size-4 sm:size-6 ${isToffeeActive ? 'text-white' : 'text-red-500'}`} />
                   {!isToffeeActive && <Sparkles className="absolute -top-1 -right-1 size-3 text-amber-500 animate-pulse" />}
                 </Button>
               </div>
@@ -142,9 +141,9 @@ export function PersistentCommNode() {
               <div className="relative group">
                 <Button 
                   onClick={() => router.push("/famelack")}
-                  className={`size-11 sm:size-14 rounded-2xl p-0 flex items-center justify-center transition-all duration-500 shadow-2xl border-2 ${isFamelackActive ? 'bg-primary border-white glow-primary scale-110' : 'bg-black/80 border-white/10 hover:border-primary/50'}`}
+                  className={`size-10 sm:size-14 rounded-2xl p-0 flex items-center justify-center transition-all duration-500 shadow-2xl border-2 ${isFamelackActive ? 'bg-primary border-white glow-primary scale-110' : 'bg-black/80 border-white/10 hover:border-primary/50'}`}
                 >
-                  <Globe className={`size-5 sm:size-6 ${isFamelackActive ? 'text-white animate-pulse' : 'text-primary'}`} />
+                  <Globe className={`size-4 sm:size-6 ${isFamelackActive ? 'text-white animate-pulse' : 'text-primary'}`} />
                 </Button>
               </div>
             </TooltipTrigger>
@@ -163,12 +162,12 @@ export function PersistentCommNode() {
                 )}
                 <Button 
                   onClick={() => router.push("/shurukkha-standard")}
-                  className={`size-14 sm:size-16 rounded-full p-0 flex items-center justify-center transition-all duration-500 shadow-2xl border-2 ${isIncoming ? 'bg-destructive animate-bounce border-white' : isStandardActive ? 'bg-emerald-500 border-white glow-emerald scale-110' : 'bg-emerald-500/80 border-emerald-400/30 hover:scale-110 glow-emerald'}`}
+                  className={`size-12 sm:size-16 rounded-full p-0 flex items-center justify-center transition-all duration-500 shadow-2xl border-2 ${isIncoming ? 'bg-destructive animate-bounce border-white' : isStandardActive ? 'bg-emerald-500 border-white glow-emerald scale-110' : 'bg-emerald-500/80 border-emerald-400/30 hover:scale-110 glow-emerald'}`}
                 >
                   {isIncoming ? (
-                    <PhoneIncoming className="size-6 sm:size-7 text-white animate-pulse" />
+                    <PhoneIncoming className="size-5 sm:size-7 text-white animate-pulse" />
                   ) : (
-                    <Cloud className="size-7 sm:size-8 text-white" />
+                    <Cloud className="size-6 sm:size-8 text-white" />
                   )}
                 </Button>
               </div>
@@ -234,8 +233,6 @@ export function PersistentCommNode() {
             loading="lazy"
           />
         </div>
-
-        {/* Toffee Persistent Background Container (Optional logic here if we wanted zero-reload iframe) */}
       </div>
     </>
   )
