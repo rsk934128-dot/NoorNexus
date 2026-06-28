@@ -19,7 +19,8 @@ import {
   LockKeyhole, 
   Braces, 
   Repeat, 
-  UserCog
+  UserCog,
+  Zap
 } from "lucide-react"
 import { noraIntegrationAssistant } from "@/ai/flows/integration-assistant-flow"
 import { useToast } from "@/hooks/use-toast"
