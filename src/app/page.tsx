@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -26,7 +27,9 @@ import {
   Rocket,
   Apple,
   Banknote,
-  Smartphone
+  Smartphone,
+  ChevronRight,
+  UserCog
 } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -420,7 +423,9 @@ export default function Home() {
                     "Your family's digital assets are now protected by the 100-node Mesh."
                   </p>
                   <Link href="/citizen-portal" className="w-full z-10">
-                    <Button variant="outline" className="w-full border-amber-500/20 text-amber-500 hover:bg-amber-500/10 text-[9px] sm:text-[10px] uppercase font-bold h-10 sm:h-11">Manage Portal</Button>
+                    <Button variant="outline" className="w-full border-amber-500/20 text-amber-500 hover:bg-amber-500/10 text-[9px] sm:text-[10px] uppercase font-bold h-10 sm:h-11 gap-2">
+                       <UserCog className="size-3.5" /> Manage Portal
+                    </Button>
                   </Link>
                </Card>
 
@@ -507,5 +512,25 @@ export default function Home() {
         </main>
       </SidebarInset>
     </div>
+  )
+}
+
+function Quote(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2H5c-1.25 0-2 .75-2 2v3c0 1.25.75 2 2 2h3c0 4-4 6-4 6" />
+      <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2h-3c-1.25 0-2 .75-2 2v3c0 1.25.75 2 2 2h3c0 4-4 6-4 6" />
+    </svg>
   )
 }
