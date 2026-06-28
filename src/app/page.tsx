@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -49,7 +48,8 @@ import {
   ArrowRight,
   Tv,
   PlayCircle,
-  Youtube
+  Youtube,
+  Search
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
@@ -59,6 +59,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import Link from "next/link"
 import { collection, query, orderBy, limit } from "firebase/firestore"
 import { processNeuralQuery, ImperialQueryOutput } from "@/ai/flows/imperial-query-flow"
+import { useRouter } from "next/navigation"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
@@ -72,6 +73,7 @@ export default function Home() {
   const { toast } = useToast()
   const db = useFirestore()
   const { user } = useUser()
+  const router = useRouter()
   const isAdmin = user?.email === ADMIN_EMAIL
 
   const [loading, setLoading] = useState(true)
@@ -111,6 +113,13 @@ export default function Home() {
 
   const handleAiQuery = async () => {
     if (!aiQuery.trim()) return
+    
+    // If it looks like a web search, redirect to browser
+    if (aiQuery.includes('search') || aiQuery.includes('find') || aiQuery.includes('what is') || aiQuery.includes('google')) {
+      router.push(`/browser?url=${encodeURIComponent(aiQuery)}`)
+      return
+    }
+
     setAiLoading(true)
     setAiResult(null)
     try {
@@ -197,10 +206,10 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
             <div className="lg:col-span-3 space-y-6 sm:space-y-12">
                
-               {/* Gemini Imperial Interface */}
+               {/* Gemini Imperial Interface / Universal Search */}
                <section className="space-y-4 sm:space-y-6">
                   <h3 className="text-[10px] sm:text-xs font-headline font-bold uppercase tracking-[0.4em] text-primary flex items-center gap-2 px-1">
-                    <BrainCircuit className="size-3 sm:size-4 animate-pulse" /> Gemini Imperial Interface
+                    <Search className="size-3 sm:size-4 animate-pulse" /> Universal Search & Command
                   </h3>
                   <Card className="glass-card border-primary/20 bg-primary/5 overflow-hidden shadow-[0_0_50px_rgba(0,150,255,0.1)]">
                     <CardContent className="p-4 sm:p-8 space-y-6 sm:space-y-8">
@@ -209,16 +218,16 @@ export default function Home() {
                            <div className="size-8 sm:size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/40">
                               <SovereignLogo size={20} />
                            </div>
-                           <p className="text-[9px] sm:text-sm font-bold text-white uppercase tracking-widest">Awaiting Command, Commander.</p>
+                           <p className="text-[9px] sm:text-sm font-bold text-white uppercase tracking-widest">Ask Nora or Search Global Mesh...</p>
                         </div>
                         
                         <div className="relative group">
-                          <Terminal className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 size-4 sm:size-5 text-primary opacity-50 group-focus-within:opacity-100 transition-opacity" />
+                          <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 size-4 sm:size-5 text-primary opacity-50 group-focus-within:opacity-100 transition-opacity" />
                           <input 
                             value={aiQuery}
                             onChange={(e) => setAiQuery(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleAiQuery()}
-                            placeholder="Type command..." 
+                            placeholder="Type to search or command... (e.g. Find latest tech news)" 
                             className="w-full bg-black/60 border border-white/10 rounded-xl sm:rounded-2xl h-12 sm:h-16 pl-10 sm:pl-12 pr-12 sm:pr-16 text-xs sm:text-lg outline-none focus:ring-2 focus:ring-primary font-mono text-white transition-all placeholder:text-muted-foreground/30"
                           />
                           <Button 
@@ -226,7 +235,7 @@ export default function Home() {
                             disabled={aiLoading}
                             className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 size-10 sm:size-12 bg-primary text-black hover:bg-primary/80 rounded-lg sm:rounded-xl glow-primary"
                           >
-                            {aiLoading ? <Loader2 className="size-4 sm:size-6 animate-spin" /> : <Send className="size-4 sm:size-6" />}
+                            {aiLoading ? <Loader2 className="size-4 sm:size-6 animate-spin" /> : <Zap className="size-4 sm:size-6" />}
                           </Button>
                         </div>
                       </div>
@@ -378,21 +387,23 @@ export default function Home() {
                   </CardContent>
                </Card>
 
+               {/* Global Search Node */}
                <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                   <CardHeader className="p-4 sm:p-6">
                      <CardTitle className="text-[10px] sm:text-xs font-headline uppercase text-primary flex items-center gap-2">
-                        <Lock className="size-3 sm:size-4" /> Legacy Status
+                        <Search className="size-3 sm:size-4" /> Zenith Search
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="p-4 sm:p-6 pt-0 space-y-3 sm:space-y-4">
-                     <div className="p-3 bg-black/40 rounded-lg border border-white/5 flex justify-between items-center">
-                        <span className="text-[8px] sm:text-[10px] text-muted-foreground uppercase font-bold">Cold Storage</span>
-                        <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px] sm:text-[9px]">ANCHORED</Badge>
-                     </div>
-                     <div className="p-3 bg-black/40 rounded-lg border border-white/5 flex justify-between items-center">
-                        <span className="text-[8px] sm:text-[10px] text-muted-foreground uppercase font-bold">Digital Will</span>
-                        <Badge className="bg-primary/20 text-primary border-none text-[7px] sm:text-[9px]">ACTIVE</Badge>
-                     </div>
+                     <Link href="/browser" className="w-full block">
+                        <div className="p-3 bg-black/40 rounded-xl border border-primary/10 hover:border-primary/40 transition-all flex items-center justify-between group">
+                           <div className="flex items-center gap-3">
+                              <Globe className="size-4 text-primary group-hover:animate-pulse" />
+                              <span className="text-[10px] text-white font-bold uppercase">Open Web Portal</span>
+                           </div>
+                           <ArrowRight className="size-3 text-primary" />
+                        </div>
+                     </Link>
                   </CardContent>
                </Card>
 
@@ -407,13 +418,13 @@ export default function Home() {
                   <ScrollArea className="h-full p-4">
                     <div className="space-y-4 sm:space-y-5">
                       {[
+                        "SEARCH: Nora-18 Search sentinel synchronized with global mesh.",
                         "MEDIA: Toffee Live Hub synchronized for Imperial Pulse.",
                         "HEGEMONY: 100 Nodes synchronized at Zenith Peak.",
                         "LEGACY: Digital Will protocol anchored for the next generation.",
                         "FAMILY: Sovereign Shield active for all linked members.",
                         "INTEL: Project #400 Annual Strategy complete.",
                         "MESH: Omni-Device cognitive bridge active (28ms).",
-                        "VAULT: Deep storage relocation successful (BENELUX).",
                         "SCA: Handshake authorized for Payoneer node."
                       ].map((log, i) => (
                         <div key={i} className="p-3 bg-white/2 rounded-xl border border-white/5 font-mono text-[8px] sm:text-[10px] flex items-start gap-3 animate-in fade-in slide-in-from-right-2 duration-500" style={{ animationDelay: `${i * 100}ms` }}>

@@ -44,10 +44,10 @@ COMMANDER'S SEARCH QUERY: {{{query}}}
 
 MISSION DIRECTIVES:
 1. URL DETECTION: If the query is a URL (e.g. starting with http, www, or having a .com/net/org extension), provide that URL as the primary "Direct Tunnel" result.
-2. SIMULATE SEARCH: Act as a high-speed gateway to the internet. Gather facts, marketplace links, and technical data related to the query.
+2. SIMULATE SEARCH: Act as a high-speed gateway to the internet. Gather facts, marketplace links, and social media nodes related to the query.
 3. RECOMMENDATIONS: Provide 4-5 high-quality results with relevant titles and real or highly realistic simulated URLs. 
+   - If the user asks for "Facebook", "Google", or "YouTube", ensure the official URLs are included.
    - Use internal domains like 'https://vault.sovereign' or 'https://mesh-archives.sovereign' for internal OS data.
-   - For general facts, use official documentation or encyclopedia sources.
 4. INTELLIGENCE SUMMARY: Briefly explain the core findings for the Commander with imperial precision. Ensure the tone is authoritative and helpful.
 5. TONE: Authoritative, highly technical, and technologically superior.
 
@@ -64,7 +64,10 @@ const searchFlow = ai.defineFlow(
     try {
       const {output} = await searchPrompt(input);
       if (!output) throw new Error('Nora-18: Intelligence pulse was blocked or timed out.');
-      return output;
+      return {
+        ...output,
+        searchHash: `HMAC_V4_180_${Math.random().toString(16).substring(2, 12).toUpperCase()}`
+      };
     } catch (error: any) {
       console.error('Nora-18 Search Pulse Error:', error);
       // Enhanced Fallback for safety blocks or API errors

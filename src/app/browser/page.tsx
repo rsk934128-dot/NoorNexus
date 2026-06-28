@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect, useRef, Suspense, useCallback } from "react"
@@ -36,7 +35,9 @@ import {
   Key,
   CreditCard,
   UserPlus,
-  Tv
+  Tv,
+  Facebook,
+  Chrome
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { executeZenithSearch, WebSearchOutput } from "@/ai/flows/web-search-flow"
@@ -45,20 +46,25 @@ import { useSearchParams } from "next/navigation"
 import { dispatchSovereignCommand, listenToTunnelResponse } from "@/services/sovereign-bridge"
 
 const QUICK_LINKS = [
-  { name: "Toffee Live", url: "https://toffeelive.com/", icon: Tv, color: "text-red-500" },
+  { name: "Google", url: "https://www.google.com", icon: Chrome, color: "text-blue-500" },
+  { name: "Facebook", url: "https://www.facebook.com", icon: Facebook, color: "text-blue-600" },
+  { name: "YouTube", url: "https://www.youtube.com", icon: YoutubeIcon, color: "text-red-500" },
+  { name: "Toffee", url: "https://toffeelive.com/", icon: Tv, color: "text-red-500" },
   { name: "Banking", url: "https://console.yapily.com/", icon: Key, color: "text-amber-500" },
   { name: "RedotPay", url: "https://business.redotpay.com/biz/home/", icon: CreditCard, color: "text-primary" },
-  { name: "SSLCommerz", url: "https://join.sslcommerz.com/upload-information", icon: UserPlus, color: "text-red-500" },
-  { name: "Aerospace", url: "https://www.jamesedition.com/jets", icon: Plane, color: "text-purple-500" },
-  { name: "Maritime", url: "https://www.yachtworld.com/", icon: Ship, color: "text-blue-500" },
-  { name: "Gold", url: "https://www.kitco.com/", icon: Gem, color: "text-amber-500" },
 ]
+
+function YoutubeIcon(props: any) {
+  return (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 2-2h15a2 2 0 0 1 2 2 24.12 24.12 0 0 1 0 10 2 2 0 0 1-2 2h-15a2 2 0 0 1-2-2Z"/><path d="m10 15 5-3-5-3z"/></svg>
+  )
+}
 
 const KNOWN_IFRAME_BLOCKERS = [
   'amazon.com', 'google.com', 'facebook.com', 'github.com', 
   'alibaba.com', 'twitter.com', 'linkedin.com', 'yapily.com', 
   'redotpay.com', 'sslcommerz.com', 'wikipedia.org', 'netflix.com',
-  'toffeelive.com'
+  'toffeelive.com', 'messenger.com', 'instagram.com'
 ];
 
 function BrowserContent() {
@@ -183,8 +189,8 @@ function BrowserContent() {
               <Monitor className="size-5 sm:size-6 text-primary" />
            </div>
            <div className="min-w-0">
-              <h2 className="text-xs sm:text-sm font-headline font-bold uppercase tracking-tight text-white truncate leading-none">Imperial Terminal</h2>
-              <p className="text-[7px] sm:text-[8px] text-muted-foreground font-mono tracking-widest uppercase mt-1 truncate">Zenith Intelligence v4.5</p>
+              <h2 className="text-xs sm:text-sm font-headline font-bold uppercase tracking-tight text-white truncate leading-none">Universal Terminal</h2>
+              <p className="text-[7px] sm:text-[8px] text-muted-foreground font-mono tracking-widest uppercase mt-1 truncate">Nora-18 Intelligence Hub</p>
            </div>
         </div>
 
@@ -207,7 +213,7 @@ function BrowserContent() {
                 onChange={(e) => setUrlInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleNavigate()}
                 className="w-full bg-black/40 border-white/10 h-10 pl-8 pr-12 sm:pr-32 text-xs sm:text-xs font-mono text-primary focus:ring-1 focus:ring-primary placeholder:text-muted-foreground/30"
-                placeholder="Ask Nora or Enter URL..."
+                placeholder="Search web or enter URL..."
               />
               <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1">
                  <Button 
@@ -216,7 +222,7 @@ function BrowserContent() {
                    onClick={() => handleSearch(urlInput)}
                    className="hidden sm:flex text-[9px] uppercase font-bold text-amber-500 hover:bg-amber-500/10 h-8 px-2 border-l border-white/5"
                  >
-                    <Search className="size-3 mr-1.5" /> Intelligence
+                    <Search className="size-3 mr-1.5" /> Nora-Search
                  </Button>
                  <Button 
                    size="icon" 
@@ -231,7 +237,7 @@ function BrowserContent() {
 
            <div className="hidden lg:flex items-center gap-2">
               <Badge variant="outline" className={`border-emerald-500/20 text-emerald-500 uppercase text-[8px] h-10 px-3 bg-emerald-500/5`}>
-                {isInternalPage ? 'SOVEREIGN_RESOLVED' : showBypassWarning ? 'DIRECT_REQUIRED' : 'AUTH_PASS: ACTIVE'}
+                {isInternalPage ? 'SOVEREIGN_RESOLVED' : showBypassWarning ? 'DIRECT_REQUIRED' : 'TUNNEL_SECURITY: L4'}
               </Badge>
            </div>
         </div>
@@ -239,7 +245,7 @@ function BrowserContent() {
 
       <div className="px-3 sm:px-4 py-2 border-b border-white/5 bg-black/20 overflow-x-auto flex items-center gap-3 sm:gap-4 no-scrollbar shrink-0">
          <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest shrink-0 flex items-center gap-1.5 sm:gap-2">
-           <Radio className="size-3" /> Channels:
+           <Radio className="size-3" /> Shortcuts:
          </span>
          {QUICK_LINKS.map((link) => (
            <Button 
@@ -266,9 +272,9 @@ function BrowserContent() {
               </div>
               <div className="text-center space-y-2 sm:space-y-3">
                  <p className={`text-xs sm:text-sm font-headline font-bold uppercase tracking-[0.3em] sm:tracking-[0.4em] animate-pulse ${isSearchMode ? 'text-amber-500' : 'text-primary'}`}>
-                    {isSearchMode ? 'Synthesizing Neural Intelligence...' : 'Anchoring Web Canal...'}
+                    {isSearchMode ? 'Consulting Zenith Search Intelligence...' : 'Anchoring Secure Web Canal...'}
                  </p>
-                 <p className="text-[8px] sm:text-[9px] text-muted-foreground font-mono uppercase tracking-[0.2em]">Zenith Veracity Verification: ACTIVE</p>
+                 <p className="text-[8px] sm:text-[9px] text-muted-foreground font-mono uppercase tracking-[0.2em]">Veracity Check: ACTIVE</p>
               </div>
            </div>
         )}
@@ -285,25 +291,20 @@ function BrowserContent() {
                     <div className="space-y-4 sm:space-y-6 relative z-10">
                        <div className="flex items-center justify-between">
                           <h3 className="text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest text-amber-500 flex items-center gap-2 sm:gap-3">
-                             <Cpu className="size-4 sm:size-5" /> Nora-18 Dispatch
+                             <Cpu className="size-4 sm:size-5" /> Nora-18 Search Dispatch
                           </h3>
-                          <Badge variant="outline" className="border-emerald-500/20 text-emerald-500 uppercase text-[7px] sm:text-[8px]">P180_Sync</Badge>
+                          <Badge variant="outline" className="border-emerald-500/20 text-emerald-500 uppercase text-[7px] sm:text-[8px]">Intelligence_Sync</Badge>
                        </div>
                        <p className="text-base sm:text-2xl text-white leading-relaxed font-light italic">
                           "{searchResult.summary}"
                        </p>
-                       <div className="pt-2 sm:pt-4 flex items-center gap-2 sm:gap-3">
-                          <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[7px] sm:text-[8px] px-3 h-6 flex items-center gap-2">
-                             <CheckCircle2 className="size-3" /> VERACITY_CONFIRMED
-                          </Badge>
-                       </div>
                     </div>
                   </Card>
 
                   <div className="space-y-6 sm:space-y-8">
                      <div className="flex items-center justify-between px-2">
-                        <h4 className="text-[8px] sm:text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em] sm:tracking-[0.5em]">Verified Knowledge Hubs</h4>
-                        <span className="text-[8px] sm:text-[9px] text-primary font-mono">{searchResult.results.length} NODES</span>
+                        <h4 className="text-[8px] sm:text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em] sm:tracking-[0.5em]">Web Result Nodes</h4>
+                        <span className="text-[8px] sm:text-[9px] text-primary font-mono">{searchResult.results.length} ENDPOINTS</span>
                      </div>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         {searchResult.results.map((res, i) => (
@@ -344,7 +345,7 @@ function BrowserContent() {
                         </div>
                      </div>
                      <div className="text-center sm:text-right shrink-0">
-                        <p className="text-[8px] font-mono text-muted-foreground uppercase mb-1">Hash (HMAC_V4)</p>
+                        <p className="text-[8px] font-mono text-muted-foreground uppercase mb-1">Search Seal</p>
                         <code className="text-[9px] text-primary font-mono">{searchResult.searchHash.substring(0, 15)}...</code>
                      </div>
                   </div>
@@ -358,99 +359,32 @@ function BrowserContent() {
                       </div>
                    </div>
                    <div className="space-y-3 px-6">
-                      <h3 className="text-xl sm:text-xl font-headline font-bold text-white uppercase tracking-[0.2em]">Initiate Search Pulse</h3>
+                      <h3 className="text-xl sm:text-xl font-headline font-bold text-white uppercase tracking-[0.2em]">Universal Intelligence Pulse</h3>
                       <p className="text-[10px] sm:text-xs text-muted-foreground font-mono uppercase tracking-widest leading-relaxed max-w-sm">
-                         Commander, enter a query in the terminal above to synthesize web-scale intelligence.
+                         Enter any query to search the global mesh through our AI-hardenend neural gateway.
                       </p>
                    </div>
                    <div className="flex flex-wrap justify-center gap-4 px-4">
-                      <Button onClick={() => handleSearch("Latest Global Economic Outlook")} variant="outline" className="text-[9px] font-bold uppercase border-white/10 h-10 px-6 hover:border-primary/40">
-                         Economic Outlook
+                      <Button onClick={() => handleSearch("Global Economic Outlook 2026")} variant="outline" className="text-[9px] font-bold uppercase border-white/10 h-10 px-6 hover:border-primary/40">
+                         Economy
                       </Button>
-                      <Button onClick={() => handleSearch("Maritime Trade Hubs SE Asia")} variant="outline" className="text-[9px] font-bold uppercase border-white/10 h-10 px-6 hover:border-primary/40">
-                         Maritime Hubs
+                      <Button onClick={() => handleSearch("Sovereign AI Infrastructure")} variant="outline" className="text-[9px] font-bold uppercase border-white/10 h-10 px-6 hover:border-primary/40">
+                         AI Infra
                       </Button>
                    </div>
                 </div>
               )}
             </div>
           </ScrollArea>
-        ) : isInternalPage ? (
-          <div className="h-full w-full bg-background flex flex-col items-center justify-center p-6 space-y-10 sm:space-y-12 animate-in fade-in">
-             <div className="max-w-4xl w-full space-y-10 sm:space-y-12">
-                <div className="flex flex-col md:flex-row items-center gap-10 sm:gap-12 border-b border-white/5 pb-10 sm:pb-12">
-                   <div className="size-24 sm:size-32 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center glow-primary shrink-0">
-                      <Infinity className="size-12 sm:size-16 text-primary" />
-                   </div>
-                   <div className="space-y-4 text-center md:text-left">
-                      <h3 className="text-2xl sm:text-3xl font-headline font-bold text-white uppercase tracking-tighter">Sovereign Node: {activeUrl.replace('https://', '').replace('.sovereign', '')}</h3>
-                      <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                         <Badge variant="outline" className="border-emerald-500/20 text-emerald-500 uppercase text-[8px] h-6 px-3">Local_Sync: OK</Badge>
-                         <Badge variant="outline" className="border-primary/20 text-primary uppercase text-[8px] h-6 px-3">Node_Status: ACTIVE</Badge>
-                         <Badge variant="outline" className="border-amber-500/20 text-amber-500 uppercase text-[8px] h-6 px-3">Veracity: 100%</Badge>
-                      </div>
-                      <p className="text-[11px] sm:text-xs text-muted-foreground italic leading-relaxed">
-                         "Internal Sovereign archives are isolated from the public internet. Accessing One Engine Ledger records."
-                      </p>
-                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-                   {[
-                     { label: "Health", val: "99.9%", icon: Activity },
-                     { label: "Signature", val: "HMAC_V4", icon: Fingerprint },
-                     { label: "Sync", val: "28ms", icon: RefreshCcw }
-                   ].map((item, i) => (
-                     <Card key={i} className="glass-card bg-white/2 border-white/5">
-                        <CardContent className="p-6 space-y-2 text-center">
-                           <item.icon className="size-6 text-primary mx-auto mb-2 opacity-50" />
-                           <p className="text-[9px] sm:text-[10px] font-bold text-muted-foreground uppercase">{item.label}</p>
-                           <p className="text-sm sm:text-lg font-headline font-bold text-white uppercase">{item.val}</p>
-                        </CardContent>
-                     </Card>
-                   ))}
-                </div>
-
-                <Card className="glass-card border-white/5 bg-black/40">
-                   <CardHeader className="py-4 border-b border-white/5">
-                      <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
-                         <Database className="size-4" /> Node Logs
-                      </CardTitle>
-                   </CardHeader>
-                   <CardContent className="p-5 sm:p-6">
-                      <div className="space-y-3">
-                         {[
-                           { action: "Handshake Authorized", status: "SUCCESS", id: "P-42" },
-                           { action: "Ledger Reconciliation", status: "FINALIZED", id: "P-43" },
-                           { action: "Sovereign Vault Uplink", status: "ANCHORED", id: "P-44" }
-                         ].map((log, i) => (
-                           <div key={i} className="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5 font-mono text-[9px] sm:text-[10px]">
-                              <div className="flex items-center gap-3">
-                                 <span className="text-muted-foreground">[{log.id}]</span>
-                                 <span className="text-white uppercase">{log.action}</span>
-                              </div>
-                              <span className="text-emerald-500 font-bold">{log.status}</span>
-                           </div>
-                         ))}
-                      </div>
-                   </CardContent>
-                </Card>
-             </div>
-
-             <div className="flex flex-col items-center gap-4 text-center opacity-40">
-                <ShieldCheck className="size-10 text-emerald-500" />
-                <p className="text-[8px] font-mono uppercase tracking-[0.5em]">NoorNexus Internal Only</p>
-             </div>
-          </div>
         ) : showBypassWarning ? (
           <div className="h-full w-full bg-background flex flex-col items-center justify-center p-6 space-y-10 animate-in fade-in">
              <div className="size-20 rounded-full bg-amber-500/20 flex items-center justify-center border border-amber-500/40 glow-emerald">
                 <ShieldAlert className="size-10 text-amber-500" />
              </div>
              <div className="text-center space-y-4 max-w-md">
-                <h3 className="text-2xl sm:text-2xl font-headline font-bold text-white uppercase tracking-tighter">High-Security Node Block</h3>
+                <h3 className="text-2xl sm:text-2xl font-headline font-bold text-white uppercase tracking-tighter">Imperial Direct Tunnel Required</h3>
                 <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed italic px-4">
-                   "কমান্ডার, আপনার অনুরোধ করা সাইটটি নিরাপত্তার কারণে আইফ্রেম টানেলে লোড হতে বাধা দিচ্ছে। সেরা এক্সপেরিয়েন্সের জন্য আপনাকে সরাসরি টানেল (Direct Tunnel) ব্যবহার করতে হবে।"
+                   "Commander, this high-security node (Google/Facebook/Social) blocks embedded frames for your protection. To maintain a seamless session, please use the **Direct Sovereign Tunnel**."
                 </p>
              </div>
              <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto px-6">
@@ -481,29 +415,17 @@ function BrowserContent() {
             />
           </div>
         )}
-
-        <div className="absolute bottom-6 left-6 pointer-events-none z-40">
-          <div className="p-3 glass-card rounded-xl flex items-center gap-3 border-emerald-500/20 bg-black/60 shadow-2xl">
-              <ShieldCheck className="size-4 text-emerald-500" />
-              <div className="space-y-0.5">
-                <p className="text-[9px] font-bold text-white uppercase leading-none">Canal Secure</p>
-                <p className="text-[8px] text-emerald-500/60 font-mono uppercase leading-none">
-                   {isInternalPage ? 'MESH_RESOLVED' : 'Auth Handshake: ON'}
-                </p>
-              </div>
-          </div>
-        </div>
       </div>
       
       <footer className="py-2.5 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-[60]">
         <div className="flex items-center justify-center gap-8">
            <p className="text-[8px] font-mono text-muted-foreground uppercase tracking-[0.4em] truncate px-4">
-             NoorNexus Imperial Web Gateway | SSL Enabled
+             NoorNexus Sovereign Browser Hub | SSL: SHA-256 Verified
            </p>
            <div className="hidden sm:flex items-center gap-2">
-              <div className={`size-1.5 rounded-full ${isSearchMode ? 'bg-amber-500' : 'bg-emerald-500'} animate-pulse shadow-[0_0_8px_rgba(0,150,255,0.4)]`} />
+              <div className={`size-1.5 rounded-full ${isSearchMode ? 'bg-amber-500' : 'bg-emerald-500'} animate-pulse`} />
               <span className={`text-[8px] font-bold uppercase ${isSearchMode ? 'text-amber-500' : 'text-emerald-500'}`}>
-                {isSearchMode ? 'AI Search Pulse: READY' : 'Canal Uplink: STABLE'}
+                {isSearchMode ? 'AI Search Pulse: READY' : 'Tunnel Health: OPTIMAL'}
               </span>
            </div>
         </div>
