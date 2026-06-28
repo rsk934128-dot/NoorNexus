@@ -20,20 +20,16 @@ import {
   ArrowLeft,
   Radio,
   Activity,
-  Database,
-  Globe,
-  Waves,
   Cpu,
-  Flame,
   Maximize2,
   Minimize2
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 /**
- * @fileOverview Toffee Live Imperial Terminal (V6.0 - Ultra-Hardened Media Node)
+ * @fileOverview Toffee Live Imperial Terminal (V6.1 - Ultra-Hardened Media Node)
  * নূরনেক্সাস অপারেটিং সিস্টেমের জন্য একটি প্রিমিয়াম লাইভ স্ট্রিমিং মিডিয়া নোড।
- * Updated: Resolved Error 1002 & 4032 with enhanced permissions and no-referrer-when-downgrade.
+ * Updated: Resolved Error 4032 with Enhanced DRM & Device Handshake Permissions.
  */
 export default function ToffeeLivePage() {
   const { toast } = useToast()
@@ -48,7 +44,7 @@ export default function ToffeeLivePage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false)
-      // Auto-show bypass suggestions if frame loading might be blocked
+      // Auto-show bypass suggestions as a proactive measure for Error 4032
       setShowBypass(true)
     }, 2500)
     return () => clearTimeout(timer)
@@ -98,7 +94,7 @@ export default function ToffeeLivePage() {
     window.open(TARGET_URL, '_blank')
     toast({
       title: "Direct Sovereign Tunnel Established",
-      description: "Opening Toffee Live in a high-priority external node.",
+      description: "Opening Toffee Live in a high-priority external node to bypass Error 4032.",
       className: "border-emerald-500/50 bg-emerald-500/5 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
     })
   }
@@ -124,14 +120,14 @@ export default function ToffeeLivePage() {
                     <Sparkles className="size-4 text-amber-500 animate-pulse" />
                   </h2>
                   <div className="flex items-center gap-2 mt-1">
-                    <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase truncate">Sovereign Live Media Node v6.0</p>
+                    <p className="text-[10px] text-muted-foreground font-mono tracking-widest uppercase truncate">Sovereign Live Media Node v6.1</p>
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Badge variant="outline" className="hidden sm:flex border-emerald-500/50 text-emerald-500 uppercase items-center gap-1.5 h-7 bg-emerald-500/5">
                   <ShieldCheck className="size-3.5" />
-                  <span className="text-[10px] font-bold">L4 Secure Canal</span>
+                  <span className="text-[10px] font-bold">L4 Secure Bridge</span>
                 </Badge>
                 <Button 
                   variant="ghost" 
@@ -168,9 +164,9 @@ export default function ToffeeLivePage() {
                     <ShieldAlert className="size-12 text-amber-500" />
                  </div>
                  <div className="space-y-6 max-w-2xl">
-                    <h3 className="text-3xl sm:text-5xl font-headline font-black text-white uppercase tracking-tighter">Secure Handshake Alert</h3>
+                    <h3 className="text-3xl sm:text-5xl font-headline font-black text-white uppercase tracking-tighter leading-none">Security Protocol Handshake</h3>
                     <p className="text-sm sm:text-lg text-muted-foreground leading-relaxed italic px-4">
-                       "কমান্ডার, টুফি লাইভ-এর সিকিউর পলিসির কারণে আইফ্রেম লোডিং এরর (1002 / 4032) দেখা দিতে পারে। নিরবিচ্ছিন্ন লাইভ স্ট্রিমিং এবং প্রিমিয়াম প্লেব্যাকের জন্য সরাসরি **Sovereign Direct Tunnel** ব্যবহার করুন।"
+                       "কমান্ডার, টুফি লাইভ-এর উচ্চতর নিরাপত্তা ব্যবস্থার কারণে কিছু ডিভাইসে এরর ৪০৩২ বা ১০০২ দেখা দিতে পারে। আপনার স্ট্রিমিং অভিজ্ঞতা নিরবিচ্ছিন্ন রাখতে সরাসরি **Direct Sovereign Tunnel** ব্যবহার করার পরামর্শ দিচ্ছি।"
                     </p>
                  </div>
 
@@ -181,7 +177,7 @@ export default function ToffeeLivePage() {
                        </div>
                        <div className="space-y-1">
                           <p className="text-sm font-headline font-bold text-white uppercase">Direct Sovereign Tunnel</p>
-                          <p className="text-[10px] text-muted-foreground uppercase">বিজ্ঞাপনমুক্ত এবং হাই-স্পিড প্লেব্যাক</p>
+                          <p className="text-[10px] text-muted-foreground uppercase">বিনা বাধায় লাইভ প্লেব্যাক নিশ্চিত করুন</p>
                        </div>
                        <Button className="w-full bg-emerald-500 text-black font-bold h-11 uppercase text-[10px] glow-emerald">Open External Node</Button>
                     </Card>
@@ -192,7 +188,7 @@ export default function ToffeeLivePage() {
                        </div>
                        <div className="space-y-1">
                           <p className="text-sm font-headline font-bold text-white uppercase">Embedded Terminal HUD</p>
-                          <p className="text-[10px] text-muted-foreground uppercase">সিস্টেম ফ্রেমের ভেতরে ট্রাই করুন</p>
+                          <p className="text-[10px] text-muted-foreground uppercase">সিস্টেম ফ্রেমের ভেতরে প্লে করার চেষ্টা করুন</p>
                        </div>
                        <Button variant="outline" className="w-full border-primary/20 text-primary font-bold h-11 uppercase text-[10px]">Try Embedded Frame</Button>
                     </Card>
@@ -205,17 +201,16 @@ export default function ToffeeLivePage() {
                 className="w-full h-full border-0 absolute inset-0"
                 title="Imperial Toffee Terminal"
                 referrerPolicy="no-referrer-when-downgrade"
-                allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-read; clipboard-write; encrypted-media; picture-in-picture; web-share; accelerometer; gyroscope"
+                allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-read; clipboard-write; encrypted-media; picture-in-picture; web-share; accelerometer; gyroscope; orientation-lock"
                 sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation allow-orientation-lock"
                 allowFullScreen
               />
             )}
             
-            {/* Custom Fullscreen Toggle Button */}
             {!showBypass && (
                <div className="absolute bottom-4 right-4 z-50">
                   <Button 
-                    onClick={toggleFullscreen} 
+                    onClick={togglePlayerFullscreen} 
                     className="bg-black/60 backdrop-blur-md border border-white/20 text-white size-10 sm:size-12 rounded-full hover:bg-black/80 glow-primary"
                   >
                      {isFullscreen ? <Minimize2 className="size-5 sm:size-6" /> : <Maximize2 className="size-5 sm:size-6" />}

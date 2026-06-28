@@ -271,6 +271,7 @@ export default function WorldCupPage() {
                       allowFullScreen
                       referrerPolicy="no-referrer-when-downgrade"
                       allow="accelerometer; autoplay; clipboard-read; clipboard-write; encrypted-media; gyroscope; picture-in-picture; orientation-lock"
+                      sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation allow-orientation-lock"
                       className="w-full h-full"
                     ></iframe>
                   ) : (
@@ -282,7 +283,6 @@ export default function WorldCupPage() {
                     </div>
                   )}
                   
-                  {/* Floating Fullscreen Toggle for Touch Devices in Player Area */}
                   {!isFullscreen && activeMatch?.uplink && (
                     <div className="absolute bottom-4 right-4 sm:hidden">
                        <Button onClick={togglePlayerFullscreen} className="bg-black/60 backdrop-blur-md border border-white/20 text-white size-10 rounded-full">
