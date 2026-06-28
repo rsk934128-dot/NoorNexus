@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -72,7 +71,8 @@ import {
   Slash,
   ArrowRight,
   MapPin,
-  ChevronRight
+  ChevronRight,
+  Film
 } from "lucide-react"
 
 import {
@@ -113,6 +113,7 @@ const USER_ITEMS = [
   { title: "AI Gateway", url: "/ai-gateway", icon: LayoutGrid, zenith: true },
   { title: "Imperial Deploy", url: "/imperial-deploy", icon: CloudUpload, zenith: true },
   { title: "GitHub Reports", url: "/github-reports", icon: Github, highlight: true },
+  { title: "Imperial Cinema", url: "/youtube", icon: Film, highlight: true },
   { title: "Citizen & Family Hub", url: "/citizen-portal", icon: UserCircle, badge: true },
   { title: "Sovereign Music Lab", url: "/audio-lab", icon: Mic2, highlight: true },
   { title: "Sovereign Bazaar", url: "/bazaar", icon: Store, highlight: true },
@@ -395,8 +396,8 @@ export function AppSidebar() {
                         prefetch={false}
                         onClick={() => isMobile && setOpenMobile(false)}
                       >
-                        <item.icon className={`size-5 ${item.zenith ? 'text-purple-500' : item.highlight ? 'text-emerald-500' : (item.title === 'Imperial Mail' ? 'text-red-500' : (item.title === 'GitHub Reports' ? 'text-white' : ''))}`} />
-                        <span className={`font-medium text-sm ${item.zenith ? 'text-purple-400 font-bold' : item.highlight ? 'text-emerald-400 font-bold' : (item.title === 'Imperial Mail' ? 'text-red-400 font-bold' : (item.title === 'GitHub Reports' ? 'text-white font-bold' : ''))}`}>{item.title}</span>
+                        <item.icon className={`size-5 ${item.zenith ? 'text-purple-500' : item.highlight ? 'text-emerald-500' : (item.title === 'Imperial Mail' ? 'text-red-500' : (item.title === 'GitHub Reports' ? 'text-white' : (item.title === 'Imperial Cinema' ? 'text-red-400' : '')))}`} />
+                        <span className={`font-medium text-sm ${item.zenith ? 'text-purple-400 font-bold' : item.highlight ? 'text-emerald-400 font-bold' : (item.title === 'Imperial Mail' ? 'text-red-400 font-bold' : (item.title === 'GitHub Reports' ? 'text-white font-bold' : (item.title === 'Imperial Cinema' ? 'text-red-400 font-bold' : '')))}`}>{item.title}</span>
                         {item.badge && (
                           <span className="absolute right-2 top-1/2 -translate-y-1/2 flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
