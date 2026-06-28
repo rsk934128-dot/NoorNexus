@@ -38,6 +38,11 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     width: 100%;
+    /* Handle mobile safe areas (notches) */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
 }
 
@@ -202,27 +207,41 @@
   letter-spacing: -0.02em;
 }
 
-/* Mobile Friendly Spacing & Sizing */
+/* Touch Device Refinements */
 @media (max-width: 768px) {
-  .p-4 { padding: 1rem; }
+  .p-4 { padding: 0.75rem; }
   .p-6 { padding: 1rem; }
-  .lg\:p-10 { padding: 1rem; }
-  .text-6xl { font-size: 2.25rem; line-height: 2.5rem; }
-  .text-5xl { font-size: 1.875rem; line-height: 2.25rem; }
-  .text-4xl { font-size: 1.5rem; line-height: 2rem; }
-  .text-3xl { font-size: 1.25rem; line-height: 1.75rem; }
+  .lg\:p-10 { padding: 1.25rem; }
+  .text-6xl { font-size: 2.5rem; line-height: 2.75rem; }
+  .text-5xl { font-size: 2rem; line-height: 2.25rem; }
+  .text-4xl { font-size: 1.75rem; line-height: 2rem; }
+  .text-3xl { font-size: 1.5rem; line-height: 1.75rem; }
   .gap-8 { gap: 1rem; }
-  .gap-10 { gap: 1.5rem; }
+  .gap-10 { gap: 1.25rem; }
   
   /* Buttons Touch Targets */
-  .h-12 { height: 3.5rem; }
-  .h-14 { height: 4rem; }
+  .h-12 { height: 3.25rem; }
+  .h-14 { height: 3.75rem; }
+  .h-16 { height: 4.25rem; }
   
+  /* Inputs */
+  input, textarea, select {
+    font-size: 16px !important; /* Prevent iOS zoom on focus */
+  }
+
   /* Cards */
   .glass-card { padding: 1rem; }
 }
 
-/* Ensure images don't break layout */
+/* Hide scrollbar but allow scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 img {
   max-width: 100%;
   height: auto;

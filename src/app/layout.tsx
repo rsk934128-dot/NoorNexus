@@ -12,9 +12,9 @@ import Script from 'next/script';
 import { googleClientId } from '@/firebase/config';
 
 /**
- * @fileOverview Root Layout (V4.5 - Google Identity & Sovereign Edition)
+ * @fileOverview Root Layout (V4.6 - Mobile Optimized & Sovereign Edition)
  * নূরনেক্সাস অপারেটিং সিস্টেমের কেন্দ্রীয় লেআউট।
- * Google Tag Manager এবং Google Client ID সফলভাবে ইন্টিগ্রেটেড।
+ * Google Tag Manager এবং Mobile Viewport সেটিংস সফলভাবে ইন্টিগ্রেটেড।
  */
 
 export default function RootLayout({
@@ -32,8 +32,13 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <title>NoorNexus | Sovereign Digital Infrastructure</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        {/* viewport-fit=cover is essential for mobile notch handling */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
         <meta name="google-signin-client_id" content={googleClientId} />
+        <meta name="theme-color" content="#030708" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
