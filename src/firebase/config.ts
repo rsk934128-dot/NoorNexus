@@ -13,3 +13,9 @@ export const firebaseConfig = {
  * Mission 500: Primary Auth Bridge
  */
 export const googleClientId = "126491468105-b1slvo1jbf45vcmmml1qk0qhdahh6v1t.apps.googleusercontent.com";
+
+/**
+ * @Security_Shield: reCAPTCHA Enterprise Site Key
+ * Replace 'YOUR_RECAPTCHA_ENTERPRISE_SITE_KEY' with your actual key from Google Cloud Console.
+ */
+export const reCaptchaSiteKey = "6Ld_REPLACE_WITH_YOUR_ACTUAL_SITE_KEY";

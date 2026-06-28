@@ -5,11 +5,12 @@ import { getFirestore, Firestore, connectFirestoreEmulator } from 'firebase/fire
 import { getAuth, Auth, connectAuthEmulator } from 'firebase/auth';
 import { getAnalytics, Analytics } from 'firebase/analytics';
 import { getPerformance, FirebasePerformance } from 'firebase/performance';
-import { firebaseConfig } from './config';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
+import { firebaseConfig, reCaptchaSiteKey } from './config';
 
 /**
- * @fileOverview NoorNexus Firebase Kernel (V4.8 - Hardened Singleton Edition)
- * Fixed: Auth (11.9.0): INTERNAL ASSERTION FAILED by enforcing a strict singleton pattern.
+ * @fileOverview NoorNexus Firebase Kernel (V4.9 - Security Hardened)
+ * Integrated Firebase App Check for advanced backend protection.
  */
 
 let firebaseApp: FirebaseApp;
@@ -26,6 +27,25 @@ export function initializeFirebase() {
 
   if (!firebaseApp) {
     firebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+
+    // --- APP CHECK INITIALIZATION (Priority 1) ---
+    if (typeof window !== 'undefined') {
+      try {
+        // Support for local debugging
+        if (process.env.NODE_ENV === 'development') {
+          (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+        }
+
+        initializeAppCheck(firebaseApp, {
+          provider: new ReCaptchaEnterpriseProvider(reCaptchaSiteKey),
+          isTokenAutoRefreshEnabled: true
+        });
+        console.log('[NoorNexus-Security] App Check Shield: ARMED.');
+      } catch (err) {
+        console.warn('[NoorNexus-Security] App Check initialization failed or already initialized.');
+      }
+    }
+
     firestoreDb = getFirestore(firebaseApp);
     firebaseAuth = getAuth(firebaseApp);
 
