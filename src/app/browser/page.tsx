@@ -1,6 +1,7 @@
+
 "use client"
 
-import { useState, useEffect, useRef, Suspense } from "react"
+import { useState, useEffect, useRef, Suspense, useCallback } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -54,7 +55,6 @@ const QUICK_LINKS = [
   { name: "Gold", url: "https://www.kitco.com/", icon: Gem, color: "text-amber-500" },
 ]
 
-// Websites that explicitly block iframes via X-Frame-Options or CSP
 const KNOWN_IFRAME_BLOCKERS = [
   'amazon.com', 'google.com', 'facebook.com', 'github.com', 
   'alibaba.com', 'twitter.com', 'linkedin.com', 'yapily.com', 
@@ -73,18 +73,29 @@ function BrowserContent() {
   const [searchResult, setSearchResult] = useState<WebSearchOutput | null>(null)
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
-  useEffect(() => {
-    const url = searchParams.get('url')
-    if (url) {
-      handleNavigate(url)
-    }
-  }, [searchParams])
+  const handleSearch = useCallback(async (query: string) => {
+    if (!query.trim()) return
+    setLoading(true)
+    setIsSearchMode(true)
+    setIsInternalPage(false)
+    setShowBypassWarning(false)
+    setSearchResult(null)
+    setUrlInput(query)
 
-  const handleNavigate = async (url?: string) => {
+    try {
+      const result = await executeZenithSearch({ query })
+      setSearchResult(result)
+    } catch (e: any) {
+      toast({ title: "Neural Sync Error", description: e.message, variant: "destructive" })
+    } finally {
+      setLoading(false)
+    }
+  }, [toast]);
+
+  const handleNavigate = useCallback(async (url?: string) => {
     let target = url || urlInput
     if (!target.trim()) return
 
-    // 1. Check if it's a Sovereign Internal Node
     if (target.includes('.sovereign')) {
       setLoading(true)
       setIsSearchMode(false)
@@ -96,7 +107,6 @@ function BrowserContent() {
       return
     }
 
-    // 2. Precise URL Detection
     const isUrl = target.includes('.') && !target.includes(' ') || target.startsWith('http') || target.startsWith('www.')
     
     if (!isUrl && !url) {
@@ -104,13 +114,11 @@ function BrowserContent() {
       return
     }
 
-    // Standardize URL
     let finalUrl = target
     if (!finalUrl.startsWith('http')) {
       finalUrl = `https://${finalUrl}`
     }
     
-    // Check for high-security iframe blockers
     const domain = finalUrl.toLowerCase();
     const blocksIframe = KNOWN_IFRAME_BLOCKERS.some(b => domain.includes(b));
     
@@ -121,43 +129,15 @@ function BrowserContent() {
     setActiveUrl(finalUrl)
     setUrlInput(finalUrl)
     
-    if (blocksIframe) {
-      toast({
-        title: "High-Security Node Detected",
-        description: "This portal requires a Direct Tunnel for authentication.",
-        variant: "default",
-        className: "border-amber-500/50 bg-amber-500/5"
-      })
-    } else {
-      toast({
-        title: "Establishing Web Bridge",
-        description: "Uplink initiated with Auth-Pass-through.",
-        className: "border-primary/50 bg-primary/5"
-      })
-    }
-
     setTimeout(() => setLoading(false), 1000)
-  }
+  }, [urlInput, handleSearch]);
 
-  const handleSearch = async (query: string) => {
-    if (!query.trim()) return
-    setLoading(true)
-    setIsSearchMode(true)
-    setIsInternalPage(false)
-    setShowBypassWarning(false)
-    setSearchResult(null)
-    setUrlInput(query)
-
-    try {
-      toast({ title: "Zenith Pulse Active", description: "Querying Nora-18 Search Sentinel..." })
-      const result = await executeZenithSearch({ query })
-      setSearchResult(result)
-    } catch (e: any) {
-      toast({ title: "Neural Sync Error", description: e.message || "Drift detected in knowledge mesh.", variant: "destructive" })
-    } finally {
-      setLoading(false)
+  useEffect(() => {
+    const url = searchParams.get('url')
+    if (url && url !== activeUrl) {
+      handleNavigate(url)
     }
-  }
+  }, [searchParams, activeUrl, handleNavigate])
 
   const handleRefresh = () => {
     if (isSearchMode && urlInput) {

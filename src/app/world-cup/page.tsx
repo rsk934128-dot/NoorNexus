@@ -74,22 +74,28 @@ export default function WorldCupPage() {
   const [playerMode, setPlayerMode] = useState<'GATEWAY' | 'EMBED'>('EMBED')
   const [isFullscreen, setIsFullscreen] = useState(false)
 
+  // Stabilized Server Selection
   useEffect(() => {
     if (servers.length > 0 && !selectedServer) {
       setSelectedServer(servers[0])
     }
-    
+  }, [servers, selectedServer])
+
+  // Stabilized Active Match Selection to avoid loops
+  useEffect(() => {
+    if (matchesLoading) return;
+
     if (matches.length > 0) {
       if (!activeMatch) {
         const liveMatch = matches.find(m => m.status === 'LIVE') || matches[0]
         setActiveMatch(liveMatch)
       } else {
         const stillExists = matches.find(m => m.id === activeMatch.id)
-        if (!stillExists) {
+        if (!stillExists && activeMatch.id !== "imperial-default") {
           setActiveMatch(matches[0])
         }
       }
-    } else if (!matchesLoading && !activeMatch) {
+    } else if (!activeMatch) {
       setActiveMatch({
         id: "imperial-default",
         home: "SOVEREIGN",
@@ -100,7 +106,7 @@ export default function WorldCupPage() {
         description: "IMPERIAL MISSION 400 UPLINK"
       })
     }
-  }, [servers, matches, activeMatch, selectedServer, matchesLoading])
+  }, [matches, activeMatch, matchesLoading])
 
   // Monitor Fullscreen Changes
   useEffect(() => {
@@ -117,11 +123,8 @@ export default function WorldCupPage() {
     try {
       if (!document.fullscreenElement) {
         await playerRef.current.requestFullscreen();
-        // Request landscape orientation if supported
         if (window.screen.orientation && (window.screen.orientation as any).lock) {
-          (window.screen.orientation as any).lock("landscape").catch(() => {
-            console.log("Orientation lock not allowed.");
-          });
+          (window.screen.orientation as any).lock("landscape").catch(() => {});
         }
         setIsFullscreen(true);
       } else {

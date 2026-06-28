@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useAuth, useUser } from "@/firebase"
@@ -41,15 +42,20 @@ export default function LoginPage() {
   const [hasRecentPulse, setHasRecentPulse] = useState(false)
   const [autoConnecting, setAutoConnecting] = useState(false)
 
+  // Initialize once on mount
   useEffect(() => {
-    setSystemId(Math.random().toString(16).substring(2, 10).toUpperCase())
+    if (!systemId) {
+      setSystemId(Math.random().toString(16).substring(2, 10).toUpperCase())
+    }
     
-    // Check for a recent successful pulse to enable Quick Connect
-    const lastPulse = localStorage.getItem('noornexus_last_pulse_provider')
+    const lastPulse = typeof window !== 'undefined' ? localStorage.getItem('noornexus_last_pulse_provider') : null
     if (lastPulse === 'github') {
       setHasRecentPulse(true)
     }
+  }, [systemId])
 
+  // Handle Redirection separately
+  useEffect(() => {
     if (!loading && user) {
       router.push("/")
     }
@@ -88,18 +94,15 @@ export default function LoginPage() {
 
   // Neural Auto-Handshake Attempt
   useEffect(() => {
-    if (hasRecentPulse && !user && !loading && !signingIn) {
+    if (hasRecentPulse && !user && !loading && !signingIn && !autoConnecting) {
       const triggerAuto = async () => {
         setAutoConnecting(true)
-        // Brief delay to allow visual calibration
         await new Promise(r => setTimeout(r, 1500))
-        // We don't auto-trigger popup due to browser blocks, 
-        // but we highlight the channel for the commander.
         setAutoConnecting(false)
       }
       triggerAuto()
     }
-  }, [hasRecentPulse, user, loading, signingIn])
+  }, [hasRecentPulse, user, loading, signingIn, autoConnecting])
 
   if (loading) return (
     <div className="h-screen w-full bg-background flex flex-col items-center justify-center p-6 space-y-4">
@@ -110,7 +113,6 @@ export default function LoginPage() {
 
   return (
     <div className="h-screen w-full bg-background cyber-grid flex items-center justify-center p-6 overflow-hidden relative">
-      {/* Back Button Node */}
       <div className="absolute top-6 left-6 z-20">
          <Link href="/">
             <Button variant="ghost" className="text-muted-foreground hover:text-primary gap-2 uppercase font-bold text-[10px] tracking-widest">
@@ -119,7 +121,6 @@ export default function LoginPage() {
          </Link>
       </div>
 
-      {/* Background Ambience */}
       <div className="absolute inset-0 z-0 opacity-5 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[4] rotate-12">
            <Github className="size-96 text-white" />
@@ -175,7 +176,7 @@ export default function LoginPage() {
               </Button>
 
               <Button 
-                onClick={handleAuth('google')}
+                onClick={() => handleAuth('google')}
                 disabled={signingIn}
                 variant="outline"
                 className="w-full border-white/10 hover:bg-white/5 text-white font-bold uppercase tracking-widest h-12 gap-3"
@@ -184,7 +185,7 @@ export default function LoginPage() {
               </Button>
 
               <Button 
-                onClick={handleAuth('microsoft')}
+                onClick={() => handleAuth('microsoft')}
                 disabled={signingIn}
                 variant="outline"
                 className="w-full border-white/10 hover:bg-white/5 text-white font-bold uppercase tracking-widest h-12 gap-3"
