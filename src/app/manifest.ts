@@ -2,9 +2,9 @@
 import { MetadataRoute } from 'next'
 
 /**
- * @fileOverview Sovereign Web Manifest (V3.5 - Standalone & Background Ready)
+ * @fileOverview Sovereign Web Manifest (V4.5 - Standalone & Background Ready)
  * নূরনেক্সাস অপারেটিং সিস্টেমের জন্য পিডাব্লিউএ (PWA) কনফিগারেশন।
- * এটি সিস্টেম লেভেল ব্যাকগ্রাউন্ড প্রসেসিং এবং স্ট্যান্ডঅ্যালোন মোড নিশ্চিত করে।
+ * Updated: Set orientation to 'any' to allow landscape video mode.
  */
 
 export default function manifest(): MetadataRoute.Manifest {
@@ -29,8 +29,8 @@ export default function manifest(): MetadataRoute.Manifest {
         type: 'image/png',
       },
     ],
-    // Essential for Mobile Standalone Experience
-    orientation: 'portrait-primary',
+    // Essential for Mobile Standalone Experience - Changed to 'any' for video rotation
+    orientation: 'any',
     scope: '/',
     categories: ['fintech', 'business', 'productivity'],
   }

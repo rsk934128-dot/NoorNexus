@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect, useRef } from "react"
@@ -105,16 +106,28 @@ export default function ImperialCinemaPage() {
     }
   }
 
-  const toggleFullscreen = () => {
+  const toggleFullscreen = async () => {
     if (!playerRef.current) return;
-    if (!document.fullscreenElement) {
-      playerRef.current.requestFullscreen().catch(err => {
-        toast({ title: "Fullscreen Error", description: err.message, variant: "destructive" });
-      });
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen();
-      setIsFullscreen(false);
+    
+    try {
+      if (!document.fullscreenElement) {
+        await playerRef.current.requestFullscreen();
+        // Request landscape orientation if supported
+        if (window.screen.orientation && (window.screen.orientation as any).lock) {
+          (window.screen.orientation as any).lock("landscape").catch(() => {
+            console.log("Orientation lock ignored by browser.");
+          });
+        }
+        setIsFullscreen(true);
+      } else {
+        await document.exitFullscreen();
+        if (window.screen.orientation && (window.screen.orientation as any).unlock) {
+          (window.screen.orientation as any).unlock();
+        }
+        setIsFullscreen(false);
+      }
+    } catch (err: any) {
+      toast({ title: "Fullscreen Interface Error", description: err.message, variant: "destructive" });
     }
   };
 
@@ -219,8 +232,15 @@ export default function ImperialCinemaPage() {
               </Card>
 
               {/* Player/Site Display Area */}
-              <Card ref={playerRef} className={`glass-card border-white/10 overflow-hidden relative shadow-2xl transition-all duration-500 ${isFullscreen ? 'fixed inset-0 z-[9999] rounded-none' : ''}`}>
-                 <CardContent className={`p-0 bg-black relative ${viewMode === 'FULL_SITE' ? 'h-[800px]' : 'aspect-video'} flex items-center justify-center`}>
+              <Card ref={playerRef} className={`glass-card border-white/10 overflow-hidden relative shadow-2xl transition-all duration-500 ${isFullscreen ? 'fixed inset-0 z-[9999] rounded-none bg-black flex flex-col items-center justify-center' : ''}`}>
+                 {isFullscreen && (
+                    <div className="absolute top-4 right-4 z-[100] flex gap-2">
+                       <Button variant="secondary" size="icon" onClick={toggleFullscreen} className="bg-black/40 backdrop-blur-md border border-white/10 text-white">
+                          <Minimize2 className="size-5" />
+                       </Button>
+                    </div>
+                 )}
+                 <CardContent className={`p-0 bg-black relative ${viewMode === 'FULL_SITE' ? 'h-[800px]' : 'aspect-video'} flex items-center justify-center w-full`}>
                     {loading && (
                       <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center gap-8">
                          <div className="relative">
@@ -278,7 +298,7 @@ export default function ImperialCinemaPage() {
                       <iframe 
                         src={`https://www.youtube.com/embed/${activeVideoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&theme=dark`}
                         className="w-full h-full border-0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; orientation-lock"
                         allowFullScreen
                         title="Imperial Cinema Player"
                       />
@@ -289,10 +309,17 @@ export default function ImperialCinemaPage() {
                       </div>
                     )}
                  </CardContent>
+                 {!isFullscreen && (
+                    <div className="absolute bottom-4 right-4 z-10">
+                       <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-black/60">
+                          <Maximize2 className="size-4" />
+                       </Button>
+                    </div>
+                 )}
               </Card>
 
               {/* Video Insights (only for Player mode) */}
-              {viewMode === 'PLAYER' && videoData && (
+              {viewMode === 'PLAYER' && videoData && !isFullscreen && (
                 <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">

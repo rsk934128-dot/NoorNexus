@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useMemo, useEffect, useRef } from "react"
@@ -116,8 +117,19 @@ export default function WorldCupPage() {
     try {
       if (!document.fullscreenElement) {
         await playerRef.current.requestFullscreen();
+        // Request landscape orientation if supported
+        if (window.screen.orientation && (window.screen.orientation as any).lock) {
+          (window.screen.orientation as any).lock("landscape").catch(() => {
+            console.log("Orientation lock not allowed.");
+          });
+        }
+        setIsFullscreen(true);
       } else {
         await document.exitFullscreen();
+        if (window.screen.orientation && (window.screen.orientation as any).unlock) {
+          (window.screen.orientation as any).unlock();
+        }
+        setIsFullscreen(false);
       }
     } catch (e: any) {
       toast({ title: "Imperial Overlay Error", description: e.message, variant: "destructive" });
@@ -213,8 +225,8 @@ export default function WorldCupPage() {
 
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
             <div className="xl:col-span-3 space-y-6 order-1">
-              <Card ref={playerRef} className={`glass-card border-white/5 overflow-hidden relative group ${isFullscreen ? 'h-screen w-screen rounded-none z-[9999]' : ''}`}>
-                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 bg-white/2 py-3 px-4 sm:px-6 gap-3">
+              <Card ref={playerRef} className={`glass-card border-white/5 overflow-hidden relative group ${isFullscreen ? 'h-screen w-screen rounded-none z-[9999] bg-black flex flex-col items-center justify-center' : ''}`}>
+                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 bg-white/2 py-3 px-4 sm:px-6 gap-3 w-full">
                   <div className="flex items-center gap-3 min-w-0">
                     <Badge className={`text-[8px] sm:text-[10px] font-bold uppercase ${activeMatch?.status === 'LIVE' ? 'bg-destructive animate-pulse' : 'bg-muted'}`}>
                       {activeMatch?.status || 'AWAITING'}
@@ -243,7 +255,7 @@ export default function WorldCupPage() {
                     </Button>
                   </div>
                 </CardHeader>
-                <CardContent className={`p-0 aspect-video bg-black relative ${isFullscreen ? 'h-[calc(100vh-60px)] aspect-auto' : ''}`}>
+                <CardContent className={`p-0 aspect-video bg-black relative w-full ${isFullscreen ? 'flex-1 aspect-auto' : ''}`}>
                   {playerMode === 'EMBED' && (activeMatch?.uplink) ? (
                     <iframe 
                       width="100%" 
@@ -251,6 +263,7 @@ export default function WorldCupPage() {
                       src={`https://www.youtube.com/embed/${getYoutubeId(activeMatch.uplink)}?autoplay=1&mute=0`}
                       frameBorder="0"
                       allowFullScreen
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; orientation-lock"
                       className="w-full h-full"
                     ></iframe>
                   ) : (
