@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -52,7 +53,7 @@ export default function SessionMonitorPage() {
   const isAdmin = user?.email === ADMIN_EMAIL
 
   const { data: sessions, loading: sessionsLoading } = useCollection<any>(
-    query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(200))
+    db ? query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(200)) : null
   )
 
   // Filtered sessions based on search
@@ -76,7 +77,7 @@ export default function SessionMonitorPage() {
   }, [user, authLoading, router])
 
   const handleDeleteSession = async (id: string) => {
-    if (!isAdmin) return;
+    if (!isAdmin || !db) return;
     try {
       await deleteDoc(doc(db, "user_sessions", id));
       toast({ title: "Session Dissolved", description: "Identity record purged from mesh." });

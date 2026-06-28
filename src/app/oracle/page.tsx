@@ -5,8 +5,8 @@ import { useState, useMemo } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { 
   Compass, 
   Zap, 
@@ -52,10 +52,11 @@ export default function OracleHubPage() {
   const [consulting, setConsulting] = useState(false)
   const [insight, setInsight] = useState<ImperialOracleOutput | null>(null)
 
-  const { data: proposals } = useCollection<any>(collection(db, "proposals"))
-  const { data: disputes } = useCollection<any>(collection(db, "trade_disputes"))
+  const { data: proposals } = useCollection<any>(db ? collection(db, "proposals") : null)
+  const { data: disputes } = useCollection<any>(db ? collection(db, "trade_disputes") : null)
 
   async function handleConsultOracle() {
+    if (!db) return;
     setConsulting(true)
     try {
       const result = await consultOracle({

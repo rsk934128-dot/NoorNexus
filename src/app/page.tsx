@@ -1,3 +1,4 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -79,7 +80,7 @@ export default function Home() {
   const [aiPulses, setAiPulses] = useState(15420)
   
   const { data: allSessions } = useCollection<any>(
-    query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(100))
+    db ? query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(100)) : null
   )
 
   useEffect(() => {

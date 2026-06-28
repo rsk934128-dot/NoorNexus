@@ -24,7 +24,7 @@ export default function MerchantManagementPage() {
   const [reviewingId, setReviewingId] = useState<string | null>(null)
   
   const { data: merchants, loading } = useCollection<any>(
-    query(collection(db, "merchant_onboarding_requests"), orderBy("submissionDate", "desc"), limit(50))
+    db ? query(collection(db, "merchant_onboarding_requests"), orderBy("submissionDate", "desc"), limit(50)) : null
   )
 
   const totalRevenue = merchants.reduce((sum: number, m: any) => sum + (m.actualVolume || 0), 0)
@@ -32,6 +32,7 @@ export default function MerchantManagementPage() {
   const concentrationRatio = totalRevenue > 0 ? (largestPartnerRevenue / totalRevenue) * 100 : 0
 
   async function handleRunAudit(merchant: any) {
+    if (!db) return;
     setReviewingId(merchant.id)
     try {
       const performanceStats = {

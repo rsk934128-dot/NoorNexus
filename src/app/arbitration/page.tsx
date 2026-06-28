@@ -35,12 +35,13 @@ export default function ArbitrationChamberPage() {
   const [resolvingId, setResolvingId] = useState<string | null>(null)
   const [verdict, setVerdict] = useState<TradeArbitrationOutput | null>(null)
 
-  // Real-time disputes
+  // Real-time disputes with null guard for db
   const { data: disputes, loading: disputesLoading } = useCollection<any>(
-    query(collection(db, "trade_disputes"), orderBy("createdAt", "desc"), limit(50))
+    db ? query(collection(db, "trade_disputes"), orderBy("createdAt", "desc"), limit(50)) : null
   )
 
   async function handleResolveDispute(dispute: any) {
+    if (!db) return;
     setResolvingId(dispute.id)
     setVerdict(null)
     

@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useMemo } from "react"
@@ -57,11 +58,11 @@ export default function GovernanceHubPage() {
   const [executingId, setExecutingId] = useState<string | null>(null)
   
   const { data: proposals, loading: propsLoading } = useCollection<any>(
-    query(collection(db, "proposals"), orderBy("createdAt", "desc"), limit(50))
+    db ? query(collection(db, "proposals"), orderBy("createdAt", "desc"), limit(50)) : null
   )
 
   const { data: identities } = useCollection<any>(
-    user ? query(collection(db, "identities"), limit(1)) : null
+    user && db ? query(collection(db, "identities"), limit(1)) : null
   )
   const myIdentity = identities?.[0]
   const isEligible = myIdentity?.reputationTier === 'ELITE' || myIdentity?.reputationTier === 'IMPERIAL'
@@ -83,7 +84,7 @@ export default function GovernanceHubPage() {
   }
 
   async function handleCreateProposal() {
-    if (!user || !isEligible) {
+    if (!user || !isEligible || !db) {
       toast({ title: "Ineligible", description: "Only ELITE or IMPERIAL members can propose.", variant: "destructive" })
       return
     }
@@ -128,7 +129,7 @@ export default function GovernanceHubPage() {
   }
 
   async function handleVote(proposalId: string, choice: 'FOR' | 'AGAINST') {
-    if (!isEligible) {
+    if (!isEligible || !db) {
       toast({ title: "Access Denied", description: "You lack the reputation tier to vote.", variant: "destructive" })
       return
     }
@@ -146,7 +147,7 @@ export default function GovernanceHubPage() {
   }
 
   async function handleExecute(proposal: any) {
-    if (!isImperial) {
+    if (!isImperial || !db) {
       toast({ title: "Forbidden", description: "Only IMPERIAL members can trigger execution.", variant: "destructive" })
       return
     }

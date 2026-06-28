@@ -27,10 +27,10 @@ export default function EcosystemParametersPage() {
   
   const isAdmin = user?.email === ADMIN_EMAIL
 
-  // Real-time Collections
-  const { data: matches } = useCollection<any>(collection(db, "sports_matches"))
-  const { data: nodes } = useCollection<any>(query(collection(db, "nodes"), orderBy("name", "asc")))
-  const { data: news } = useCollection<any>(query(collection(db, "sports_news"), orderBy("timestamp", "desc")))
+  // Real-time Collections with null guards for db
+  const { data: matches } = useCollection<any>(db ? collection(db, "sports_matches") : null)
+  const { data: nodes } = useCollection<any>(db ? query(collection(db, "nodes"), orderBy("name", "asc")) : null)
+  const { data: news } = useCollection<any>(db ? query(collection(db, "sports_news"), orderBy("timestamp", "desc")) : null)
 
   // Form States
   const [matchForm, setMatchForm] = useState({ home: "", away: "", status: "UPCOMING", uplink: "", score: "0-0", description: "" })
@@ -45,7 +45,7 @@ export default function EcosystemParametersPage() {
 
   // Handlers
   const addMatch = async () => {
-    if (!matchForm.home || !matchForm.away || !isAdmin) return
+    if (!matchForm.home || !matchForm.away || !isAdmin || !db) return
     try {
       await addDoc(collection(db, "sports_matches"), { ...matchForm, timestamp: Date.now() })
       setMatchForm({ home: "", away: "", status: "UPCOMING", uplink: "", score: "0-0", description: "" })
@@ -54,7 +54,7 @@ export default function EcosystemParametersPage() {
   }
 
   const addNode = async () => {
-    if (!nodeForm.name || !isAdmin) return
+    if (!nodeForm.name || !isAdmin || !db) return
     try {
       await addDoc(collection(db, "nodes"), { ...nodeForm, lastSeen: new Date().toISOString() })
       setNodeForm({ name: "", region: "South Asia", status: "Operational", load: 10, latency: 100, integrity: "Verified" })
@@ -63,14 +63,14 @@ export default function EcosystemParametersPage() {
   }
 
   const updateNodeMetric = async (id: string, field: string, value: any) => {
-    if (!isAdmin) return
+    if (!isAdmin || !db) return
     try {
       await updateDoc(doc(db, "nodes", id), { [field]: value })
     } catch (e) { toast({ title: "Update Failed", variant: "destructive" }) }
   }
 
   const addNews = async () => {
-    if (!newsForm.title || !isAdmin) return
+    if (!newsForm.title || !isAdmin || !db) return
     try {
       await addDoc(collection(db, "sports_news"), { ...newsForm, timestamp: Date.now() })
       setNewsForm({ title: "", content: "", severity: "INFO" })
@@ -79,7 +79,7 @@ export default function EcosystemParametersPage() {
   }
 
   const deleteItem = async (col: string, id: string) => {
-    if (!isAdmin) return
+    if (!isAdmin || !db) return
     await deleteDoc(doc(db, col, id))
     toast({ title: "Removed Successfully" })
   }

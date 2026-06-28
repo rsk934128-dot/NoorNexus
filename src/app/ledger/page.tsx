@@ -32,11 +32,11 @@ export default function LedgerPage() {
   const isAdmin = user?.email === ADMIN_EMAIL
 
   const { data: entries, loading: entriesLoading } = useCollection<any>(
-    query(collection(db, "ledger"), orderBy("timestamp", "desc"), limit(50))
+    db ? query(collection(db, "ledger"), orderBy("timestamp", "desc"), limit(50)) : null
   )
 
   const { data: auditLogs, loading: auditLoading } = useCollection<any>(
-    query(collection(db, "audit_logs"), orderBy("timestamp", "desc"), limit(50))
+    db ? query(collection(db, "audit_logs"), orderBy("timestamp", "desc"), limit(50)) : null
   )
 
   return (

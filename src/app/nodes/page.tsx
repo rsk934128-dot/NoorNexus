@@ -45,10 +45,10 @@ export default function NodesPage() {
   const [testProgress, setTestProgress] = useState(0)
   
   const { data: nodes, loading } = useCollection<any>(
-    query(collection(db, "nodes"), orderBy("name", "asc"))
+    db ? query(collection(db, "nodes"), orderBy("name", "asc")) : null
   )
 
-  const { data: sessions } = useCollection<any>(collection(db, "user_sessions"))
+  const { data: sessions } = useCollection<any>(db ? collection(db, "user_sessions") : null)
 
   const handleGlobalSyncTest = () => {
     setTesting(true)

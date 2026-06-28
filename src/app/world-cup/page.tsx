@@ -51,14 +51,14 @@ export default function WorldCupPage() {
   const playerRef = useRef<HTMLDivElement>(null)
   
   const matchesQuery = useMemo(() => 
-    query(
+    db ? query(
       collection(db, "sports_matches"), 
       where("status", "in", ["LIVE", "UPCOMING"]),
       limit(20)
-    ), [db])
+    ) : null, [db])
     
-  const serversQuery = useMemo(() => query(collection(db, "sports_servers")), [db])
-  const chatQuery = useMemo(() => query(collection(db, "sports_chat"), orderBy("timestamp", "desc"), limit(50)), [db])
+  const serversQuery = useMemo(() => db ? query(collection(db, "sports_servers")) : null, [db])
+  const chatQuery = useMemo(() => db ? query(collection(db, "sports_chat"), orderBy("timestamp", "desc"), limit(50)) : null, [db])
 
   const { data: matches, loading: matchesLoading } = useCollection<any>(matchesQuery)
   const { data: servers } = useCollection<any>(serversQuery)
@@ -151,7 +151,7 @@ export default function WorldCupPage() {
   }
 
   const handleSendMessage = () => {
-    if (!chatInput.trim() || !user) return
+    if (!chatInput.trim() || !user || !db) return
     addDoc(collection(db, "sports_chat"), {
       user: user.displayName || user.email || "Sovereign_User",
       message: chatInput,

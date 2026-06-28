@@ -1,4 +1,3 @@
-
 'use client';
 /**
  * @fileOverview Sovereign Telemetry Service (Project #500).
@@ -9,17 +8,16 @@ import { initializeFirebase } from '@/firebase';
 import { logEvent } from 'firebase/analytics';
 import { trace } from 'firebase/performance';
 
-const { analytics, performance } = initializeFirebase();
-
 /**
  * Logs an imperial event to Google Analytics.
  */
 export const logImperialEvent = (eventName: string, params: any = {}) => {
+  const { analytics } = initializeFirebase();
   if (analytics) {
     logEvent(analytics, eventName, {
       ...params,
       platform: 'NoorNexus_OS',
-      version: 'v3.5',
+      version: 'v4.8',
       commander: 'Sheikh_Farid'
     });
     console.log(`[Telemetry] Event Logged: ${eventName}`);
@@ -31,9 +29,7 @@ export const logImperialEvent = (eventName: string, params: any = {}) => {
  */
 export const reportSovereignError = (error: Error, fatal: boolean = false) => {
   console.error(`[Crashlytics] ${fatal ? 'FATAL' : 'NON-FATAL'} ERROR:`, error);
-  
-  // In a real env, this would go to Firebase Crashlytics
-  // For web, we log to Analytics as an exception
+  const { analytics } = initializeFirebase();
   if (analytics) {
     logEvent(analytics, 'exception', {
       description: error.message,
@@ -46,6 +42,7 @@ export const reportSovereignError = (error: Error, fatal: boolean = false) => {
  * Measures the latency of a critical neural pulse.
  */
 export const measureNeuralPulse = async (taskName: string, task: () => Promise<any>) => {
+  const { performance } = initializeFirebase();
   if (!performance) return await task();
 
   const t = trace(performance, taskName);
