@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect, useRef, Suspense, useCallback } from "react"
@@ -20,7 +21,6 @@ import {
   Plane,
   Ship,
   Gem,
-  Car,
   ExternalLink,
   Menu,
   Cpu,
@@ -29,12 +29,9 @@ import {
   ArrowRight,
   CheckCircle2,
   Database,
-  History,
-  HardDrive,
   Infinity,
   Fingerprint,
   Radio,
-  AlertTriangle,
   ShieldAlert,
   Key,
   CreditCard,
@@ -77,7 +74,6 @@ function BrowserContent() {
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
-    // Listen for bridge responses
     const unsubscribe = listenToTunnelResponse((data) => {
       if (data.type === 'ACK_PERMIT') {
         console.log('[BrowserHub] Tunnel Permission Acknowledged.');
@@ -142,7 +138,6 @@ function BrowserContent() {
     setActiveUrl(finalUrl)
     setUrlInput(finalUrl)
     
-    // Command-Based Permission Handshake
     if (finalUrl.includes('youtube.com')) {
       setTimeout(() => {
         dispatchSovereignCommand(iframeRef, {
@@ -178,8 +173,8 @@ function BrowserContent() {
   }
 
   return (
-    <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0 relative">
-      <header className="px-3 sm:px-4 py-3 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 border-b border-white/5 bg-background/50 backdrop-blur-md shrink-0 w-full z-50">
+    <main className="flex flex-col h-[100dvh] w-full max-w-full overflow-hidden p-0 m-0 relative bg-background">
+      <header className="px-3 sm:px-4 py-3 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 border-b border-white/5 bg-background/80 backdrop-blur-md shrink-0 w-full z-[60]">
         <div className="flex items-center gap-3 w-full sm:w-auto">
            <SidebarTrigger className="md:hidden text-primary -ml-2">
               <Button variant="ghost" size="icon" className="h-10 w-10"><Menu className="size-6" /></Button>
@@ -260,9 +255,9 @@ function BrowserContent() {
          ))}
       </div>
 
-      <div className="flex-1 overflow-hidden bg-black/40 w-full relative">
+      <div className="flex-1 overflow-hidden w-full relative bg-black/40">
         {loading && (
-           <div className="absolute inset-0 z-50 bg-background/80 backdrop-blur-xl flex flex-col items-center justify-center gap-6 sm:gap-8 p-4">
+           <div className="absolute inset-0 z-[70] bg-background/80 backdrop-blur-xl flex flex-col items-center justify-center gap-6 sm:gap-8 p-4">
               <div className="relative">
                  <div className="size-20 sm:size-24 rounded-full border-2 border-primary/20 flex items-center justify-center">
                     {isSearchMode ? <Cpu className="size-10 sm:size-12 text-amber-500 animate-pulse" /> : <Globe className="size-10 sm:size-12 text-primary animate-pulse" />}
@@ -402,7 +397,7 @@ function BrowserContent() {
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
                    {[
-                     { label: "Health", val: "99.9%", icon: HardDrive },
+                     { label: "Health", val: "99.9%", icon: Activity },
                      { label: "Signature", val: "HMAC_V4", icon: Fingerprint },
                      { label: "Sync", val: "28ms", icon: RefreshCcw }
                    ].map((item, i) => (
@@ -475,11 +470,11 @@ function BrowserContent() {
              </div>
           </div>
         ) : (
-          <div className="h-full w-full bg-white relative">
+          <div className="h-full w-full bg-white relative z-0">
             <iframe 
               ref={iframeRef}
               src={activeUrl} 
-              className="w-full h-full border-0"
+              className="w-full h-full border-0 absolute inset-0"
               title="Imperial Web Canal"
               allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; payment"
               sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
@@ -487,7 +482,7 @@ function BrowserContent() {
           </div>
         )}
 
-        <div className="absolute bottom-6 left-6 pointer-events-none">
+        <div className="absolute bottom-6 left-6 pointer-events-none z-40">
           <div className="p-3 glass-card rounded-xl flex items-center gap-3 border-emerald-500/20 bg-black/60 shadow-2xl">
               <ShieldCheck className="size-4 text-emerald-500" />
               <div className="space-y-0.5">
@@ -500,7 +495,7 @@ function BrowserContent() {
         </div>
       </div>
       
-      <footer className="py-2.5 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-50">
+      <footer className="py-2.5 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-[60]">
         <div className="flex items-center justify-center gap-8">
            <p className="text-[8px] font-mono text-muted-foreground uppercase tracking-[0.4em] truncate px-4">
              NoorNexus Imperial Web Gateway | SSL Enabled

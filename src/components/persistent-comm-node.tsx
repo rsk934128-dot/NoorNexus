@@ -1,17 +1,18 @@
+
 "use client"
 
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
-import { PhoneIncoming, ShieldCheck, Zap, Activity, Cloud, Radio, BellRing, PhoneCall, Globe, MessageSquare } from "lucide-react"
+import { PhoneIncoming, Cloud, Radio, PhoneCall, Globe } from "lucide-react"
 import { useSidebar } from "@/components/ui/sidebar"
-import { Badge } from "@/components/ui/badge"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 /**
  * @fileOverview Global Persistent Communication Node (V5.7 - Mobile Optimized)
  * নূরনেক্সাস সাম্রাজ্যের প্রতিটি পেজে "Shurukkha" এবং "Famelack" হাবের পারসিস্টেন্স নিশ্চিত করে।
+ * Updated: Overlays now explicitly calculate height to avoid covering headers.
  */
 export function PersistentCommNode() {
   const [isMounted, setIsMounted] = useState(false)
@@ -108,13 +109,11 @@ export function PersistentCommNode() {
   const isFamelackActive = pathname === "/famelack"
   
   const sidebarWidth = isMobile ? '0px' : (open ? '16rem' : '3rem')
+  const headerHeight = '64px' // Standard app header height
 
   return (
     <>
-      {/* Imperial Comm Cluster (Floating Buttons) */}
       <div className="fixed bottom-6 sm:bottom-8 right-5 sm:right-8 z-[100] flex flex-col gap-4 sm:gap-5 items-center pointer-events-auto">
-        
-        {/* Famelack Hub Trigger */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -125,10 +124,6 @@ export function PersistentCommNode() {
                 >
                   <Globe className={`size-5 sm:size-6 ${isFamelackActive ? 'text-white animate-pulse' : 'text-primary'}`} />
                 </Button>
-                <div className="absolute right-16 sm:right-20 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/90 backdrop-blur-md border border-primary/30 px-4 py-2 rounded-xl whitespace-nowrap pointer-events-none hidden sm:block">
-                   <p className="text-[11px] font-black text-primary uppercase tracking-[0.2em]">Famelack Hub</p>
-                   <p className="text-[9px] text-white/60 uppercase font-mono mt-1">STATUS: SYNCED</p>
-                </div>
               </div>
             </TooltipTrigger>
             <TooltipContent side="left" className="bg-black/95 border-primary/50 hidden sm:block">
@@ -137,7 +132,6 @@ export function PersistentCommNode() {
           </Tooltip>
         </TooltipProvider>
 
-        {/* Shurukkha Hub Trigger */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -155,17 +149,6 @@ export function PersistentCommNode() {
                     <Cloud className="size-7 sm:size-8 text-white" />
                   )}
                 </Button>
-                
-                {/* Node Status Badge */}
-                <div className="absolute top-0 right-0">
-                   <div className={`size-3 sm:size-4 rounded-full border-2 border-black ${swRegistered ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
-                </div>
-
-                {/* Label on Hover */}
-                <div className="absolute right-18 sm:right-22 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/90 backdrop-blur-md border border-emerald-500/30 px-4 py-2 rounded-xl whitespace-nowrap pointer-events-none hidden sm:block">
-                   <p className="text-[11px] font-black text-emerald-400 uppercase tracking-[0.2em]">Cloud Node</p>
-                   <p className="text-[9px] text-white/60 uppercase font-mono mt-1">STATUS: {swRegistered ? 'SYNCHRONIZED' : 'INITIALIZING'}</p>
-                </div>
               </div>
             </TooltipTrigger>
             <TooltipContent side="left" className="bg-black/95 border-emerald-500/50 hidden sm:block">
@@ -176,18 +159,12 @@ export function PersistentCommNode() {
       </div>
 
       <div className="fixed inset-0 z-[40] pointer-events-none overflow-hidden">
-        {swRegistered && (
-          <div className="absolute top-2 right-2 p-2 sm:p-2.5 bg-emerald-500/10 rounded-full border border-emerald-500/20 backdrop-blur-md z-[50]">
-            <Activity className="size-3 text-emerald-500 animate-pulse" />
-          </div>
-        )}
-
-        {/* Overlays remain active for zero-reload switching */}
+        {/* Overlay containers now explicitly leave space for the app header */}
         <div 
-          className={`absolute inset-y-0 right-0 transition-all duration-700 ease-in-out bg-white ${isStandardActive ? 'opacity-100 pointer-events-auto translate-x-0' : 'opacity-0 translate-x-full'}`}
+          className={`absolute inset-x-0 bottom-0 transition-all duration-700 ease-in-out bg-white ${isStandardActive ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 translate-y-full'}`}
           style={{ 
             left: isStandardActive ? sidebarWidth : '100%', 
-            top: '0',
+            top: headerHeight,
             visibility: isStandardActive ? 'visible' : 'hidden'
           }}
         >
@@ -202,10 +179,10 @@ export function PersistentCommNode() {
         </div>
 
         <div 
-          className={`absolute inset-y-0 right-0 transition-all duration-700 ease-in-out bg-white ${isImperialActive ? 'opacity-100 pointer-events-auto translate-x-0' : 'opacity-0 translate-x-full'}`}
+          className={`absolute inset-x-0 bottom-0 transition-all duration-700 ease-in-out bg-white ${isImperialActive ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 translate-y-full'}`}
           style={{ 
             left: isImperialActive ? sidebarWidth : '100%', 
-            top: '0',
+            top: headerHeight,
             visibility: isImperialActive ? 'visible' : 'hidden'
           }}
         >
@@ -220,10 +197,10 @@ export function PersistentCommNode() {
         </div>
 
         <div 
-          className={`absolute inset-y-0 right-0 transition-all duration-700 ease-in-out bg-white ${isFamelackActive ? 'opacity-100 pointer-events-auto translate-x-0' : 'opacity-0 translate-x-full'}`}
+          className={`absolute inset-x-0 bottom-0 transition-all duration-700 ease-in-out bg-white ${isFamelackActive ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 translate-y-full'}`}
           style={{ 
             left: isFamelackActive ? sidebarWidth : '100%', 
-            top: '0',
+            top: headerHeight,
             visibility: isFamelackActive ? 'visible' : 'hidden'
           }}
         >

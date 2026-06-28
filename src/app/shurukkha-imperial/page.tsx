@@ -20,8 +20,8 @@ export default function ShurukkhaImperialPage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset className="flex-1 w-full flex flex-col min-w-0 p-0 m-0">
-        <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0 relative">
-          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/50 backdrop-blur-md shrink-0 w-full z-50">
+        <main className="flex flex-col h-[100dvh] w-full max-w-full overflow-hidden p-0 m-0 relative bg-background">
+          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/80 backdrop-blur-md shrink-0 w-full z-[60]">
             <div className="flex items-center gap-3">
               <div className="size-10 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30 glow-emerald shrink-0">
                 <Shield className="size-6 text-emerald-500" />
@@ -45,7 +45,7 @@ export default function ShurukkhaImperialPage() {
             </div>
           </header>
 
-          <div className="flex-1 flex flex-col items-center justify-center gap-4 bg-black/20 text-center p-6">
+          <div className="flex-1 flex flex-col items-center justify-center gap-4 bg-black/20 text-center p-6 z-0">
             <Loader2 className="size-10 text-emerald-500 animate-spin" />
             <p className="text-sm font-mono text-emerald-500/60 uppercase tracking-widest">
               Imperial Handshake Active...
@@ -54,6 +54,12 @@ export default function ShurukkhaImperialPage() {
               (The hub is active and persistent in the background for zero-reload calling)
             </p>
           </div>
+
+          <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-[60]">
+            <p className="text-[9px] font-mono text-emerald-500/60 uppercase tracking-[0.4em]">
+              NoorNexus OS Integrated Cloud Node | Endpoint: shurukkha-hub-imperial
+            </p>
+          </footer>
         </main>
       </SidebarInset>
     </div>

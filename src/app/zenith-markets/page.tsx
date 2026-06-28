@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -6,11 +7,11 @@ import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { 
   Rocket, 
   Ship, 
-  Plane, 
-  Coins, 
   Car, 
   Smartphone, 
   Zap, 
@@ -18,24 +19,19 @@ import {
   Globe, 
   Menu, 
   TrendingUp, 
-  Search, 
-  ShoppingCart,
   ArrowRightLeft,
   Loader2,
   Lock,
   Cpu,
-  History,
-  Anchor,
   Gem,
   CheckCircle2,
-  AlertTriangle,
-  Scale,
   Database,
   ExternalLink,
   ArrowLeft,
   Monitor,
   Sparkles,
-  RefreshCcw
+  RefreshCcw,
+  Coins
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { executeMappedPayout } from "@/services/pay-bridge"
@@ -155,8 +151,8 @@ export default function ZenithMarketsPage() {
       <AppSidebar />
       <SidebarInset>
         {viewUrl ? (
-          <main className="flex flex-col h-screen w-full overflow-hidden p-0 m-0 animate-in fade-in zoom-in-95">
-             <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/80 backdrop-blur-md shrink-0 w-full z-50">
+          <main className="flex flex-col h-[100dvh] w-full overflow-hidden p-0 m-0 relative">
+             <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/80 backdrop-blur-md shrink-0 w-full z-[60]">
                 <div className="flex items-center gap-4">
                    <Button variant="ghost" size="icon" onClick={() => setViewUrl(null)} className="text-amber-500 hover:bg-amber-500/10">
                       <ArrowLeft className="size-5" />
@@ -181,9 +177,9 @@ export default function ZenithMarketsPage() {
                    </Button>
                 </div>
              </header>
-             <div className="flex-1 bg-white relative">
+             <div className="flex-1 bg-white relative z-0">
                 {loadingView && (
-                  <div className="absolute inset-0 z-10 bg-background flex flex-col items-center justify-center gap-6">
+                  <div className="absolute inset-0 z-[70] bg-background flex flex-col items-center justify-center gap-6">
                      <Loader2 className="size-12 text-amber-500 animate-spin" />
                      <p className="text-xs font-mono uppercase tracking-[0.3em] text-amber-500 animate-pulse">Establishing Sovereign Web Bridge...</p>
                   </div>
@@ -191,18 +187,18 @@ export default function ZenithMarketsPage() {
                 <iframe 
                   id="market-terminal"
                   src={viewUrl} 
-                  className="w-full h-full border-0" 
+                  className="w-full h-full border-0 absolute inset-0" 
                   title="Imperial Market Terminal"
                   allow="camera; microphone; clipboard-write; encrypted-media; payment"
                   sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals"
                 />
              </div>
-             <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center">
+             <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center z-[60]">
                 <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.4em]">NoorNexus OS Secure Frame | SSL: SHA-256 Verified</p>
              </footer>
           </main>
         ) : (
-          <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20">
+          <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20 overflow-x-hidden">
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
@@ -230,7 +226,6 @@ export default function ZenithMarketsPage() {
               </div>
             </header>
 
-            {/* Category Filter & Terminal Access */}
             <section className="flex flex-wrap gap-4">
                <Button 
                  variant={activeCategory === 'all' ? 'default' : 'outline'}
@@ -304,7 +299,6 @@ export default function ZenithMarketsPage() {
               </div>
 
               <div className="space-y-8">
-                 {/* Live Terminal Quick Launch */}
                  <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                     <CardHeader>
                        <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
@@ -329,7 +323,6 @@ export default function ZenithMarketsPage() {
                     </CardContent>
                  </Card>
 
-                 {/* Sovereign Escrow Monitor */}
                  <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                     <CardHeader>
                        <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
@@ -350,7 +343,7 @@ export default function ZenithMarketsPage() {
                                <div className="flex items-center gap-2">
                                   <s.icon className="size-3 text-amber-500" />
                                   <span className="uppercase text-muted-foreground">{s.label}</span>
-                               </div>
+                                </div>
                                <span className="text-white font-bold">{s.val}</span>
                             </div>
                           ))}

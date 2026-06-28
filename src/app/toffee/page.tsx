@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect, useRef } from "react"
@@ -42,10 +43,8 @@ export default function ToffeeLivePage() {
   const TARGET_URL = "https://toffeelive.com/"
 
   useEffect(() => {
-    // Initial handshake simulation
     const timer = setTimeout(() => {
       setLoading(false)
-      // Most streaming sites block iframes, so we proactively prepare the bypass
       setShowBypass(true)
     }, 2000)
     return () => clearTimeout(timer)
@@ -72,9 +71,9 @@ export default function ToffeeLivePage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0 relative">
+        <main className="flex flex-col h-[100dvh] w-full max-w-full overflow-hidden p-0 m-0 relative">
           {/* Imperial Header */}
-          <header className="px-4 sm:px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/50 backdrop-blur-md shrink-0 w-full z-50">
+          <header className="px-4 sm:px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/80 backdrop-blur-md shrink-0 w-full z-[60]">
             <div className="flex items-center gap-3">
               <SidebarTrigger className="md:hidden text-primary">
                 <Button variant="ghost" size="icon" className="h-10 w-10"><Menu className="size-6" /></Button>
@@ -109,23 +108,23 @@ export default function ToffeeLivePage() {
           </header>
 
           {/* Expansive Display Area */}
-          <div className="flex-1 overflow-hidden bg-black/20 w-full p-0 m-0 relative">
+          <div className="flex-1 overflow-hidden bg-black/20 w-full p-0 m-0 relative z-0">
             {loading && (
-              <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center gap-8 p-6 text-center">
+              <div className="absolute inset-0 z-[70] bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center gap-8 p-6 text-center">
                  <div className="relative">
                     <div className="size-24 sm:size-32 rounded-full border-2 border-red-500/20 animate-spin-slow" />
                     <div className="absolute inset-0 border-t-2 border-red-500 rounded-full animate-spin" />
                     <Tv className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-12 text-red-500 animate-pulse" />
                  </div>
                  <div className="text-center space-y-3">
-                    <p className="text-sm sm:text-xl font-headline font-bold text-red-500 uppercase tracking-[0.4em]">Establishing Sovereign Bridge...</p>
+                    <p className="text-sm font-headline font-bold text-red-500 uppercase tracking-[0.4em]">Establishing Sovereign Bridge...</p>
                     <p className="text-[9px] sm:text-xs text-muted-foreground font-mono uppercase tracking-widest animate-pulse">Nora-60 Veracity Verification: ACTIVE</p>
                  </div>
               </div>
             )}
 
             {showBypass ? (
-              <div className="size-full flex flex-col items-center justify-center text-center p-6 sm:p-12 space-y-12 animate-in fade-in duration-1000 overflow-y-auto">
+              <div className="size-full flex flex-col items-center justify-center text-center p-6 sm:p-12 space-y-12 animate-in fade-in duration-1000 overflow-y-auto bg-background">
                  <div className="size-24 rounded-3xl bg-amber-500/10 flex items-center justify-center border border-amber-500/30 glow-emerald relative">
                     <div className="absolute -inset-4 bg-amber-500/5 rounded-full animate-ping" />
                     <ShieldAlert className="size-12 text-amber-500" />
@@ -144,7 +143,7 @@ export default function ToffeeLivePage() {
                        </div>
                        <div className="space-y-1">
                           <p className="text-sm font-headline font-bold text-white uppercase">Direct Sovereign Tunnel</p>
-                          <p className="text-[10px] text-muted-foreground uppercase">廣告মুক্ত এবং হাই-স্পিড প্লেব্যাক</p>
+                          <p className="text-[10px] text-muted-foreground uppercase">বিজ্ঞাপনমুক্ত এবং হাই-স্পিড প্লেব্যাক</p>
                        </div>
                        <Button className="w-full bg-emerald-500 text-black font-bold h-11 uppercase text-[10px] glow-emerald">Open External Node</Button>
                     </Card>
@@ -173,7 +172,7 @@ export default function ToffeeLivePage() {
               <iframe 
                 ref={iframeRef}
                 src={TARGET_URL} 
-                className="w-full h-full border-0 bg-white"
+                className="w-full h-full border-0 bg-white absolute inset-0"
                 title="Imperial Toffee Terminal"
                 allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                 sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
@@ -182,7 +181,7 @@ export default function ToffeeLivePage() {
             )}
           </div>
           
-          <footer className="py-3 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-50">
+          <footer className="py-3 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-[60]">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-12 px-4">
                <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.4em] hidden md:block">
                  NoorNexus OS Integrated Streaming Node | SSL: SHA-256 Verified

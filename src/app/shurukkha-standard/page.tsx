@@ -3,7 +3,7 @@
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
-import { ShieldCheck, RefreshCcw, Cloud, Sparkles, Loader2, Radio, Smartphone, Activity } from "lucide-react"
+import { ShieldCheck, RefreshCcw, Cloud, Sparkles, Radio, Smartphone, Activity } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -21,8 +21,8 @@ export default function ShurukkhaStandardPage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset className="flex-1 w-full flex flex-col min-w-0 p-0 m-0">
-        <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0 relative">
-          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/50 backdrop-blur-md shrink-0 w-full z-50">
+        <main className="flex flex-col h-[100dvh] w-full max-w-full overflow-hidden p-0 m-0 relative bg-background">
+          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/80 backdrop-blur-md shrink-0 w-full z-[60]">
             <div className="flex items-center gap-3">
               <div className="size-10 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30 glow-emerald shrink-0">
                 <Cloud className="size-6 text-emerald-500" />
@@ -53,8 +53,7 @@ export default function ShurukkhaStandardPage() {
             </div>
           </header>
 
-          <div className="flex-1 overflow-hidden bg-black/20 w-full p-0 m-0 relative">
-            {/* The actual hub content is rendered by PersistentCommNode via Iframe overlay */}
+          <div className="flex-1 overflow-hidden bg-black/20 w-full p-0 m-0 relative z-0">
             <div className="size-full flex flex-col items-center justify-center gap-8 p-6 text-center">
                <div className="relative">
                   <div className="size-32 rounded-full border-4 border-emerald-500/20 flex items-center justify-center">
@@ -88,7 +87,7 @@ export default function ShurukkhaStandardPage() {
             </div>
           </div>
           
-          <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full">
+          <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-[60]">
             <p className="text-[9px] font-mono text-emerald-500/60 uppercase tracking-[0.4em]">
               NoorNexus OS Integrated Cloud Node | Endpoint: shurukkha-hub-ofzc
             </p>

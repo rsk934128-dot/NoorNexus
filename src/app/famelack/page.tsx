@@ -20,8 +20,8 @@ export default function FamelackPage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset className="flex-1 w-full flex flex-col min-w-0 p-0 m-0">
-        <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0 relative">
-          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/50 backdrop-blur-md shrink-0 w-full z-50">
+        <main className="flex flex-col h-[100dvh] w-full max-w-full overflow-hidden p-0 m-0 relative bg-background">
+          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/80 backdrop-blur-md shrink-0 w-full z-[60]">
             <div className="flex items-center gap-3">
               <div className="size-10 bg-primary/20 rounded-xl flex items-center justify-center border border-primary/30 glow-primary shrink-0">
                 <Globe className="size-6 text-primary" />
@@ -52,7 +52,7 @@ export default function FamelackPage() {
             </div>
           </header>
 
-          <div className="flex-1 flex flex-col items-center justify-center gap-4 bg-black/20 text-center p-6">
+          <div className="flex-1 flex flex-col items-center justify-center gap-4 bg-black/20 text-center p-6 z-0">
             <Loader2 className="size-10 text-primary animate-spin" />
             <p className="text-sm font-mono text-primary/60 uppercase tracking-widest">
               Establishing Handshake with Famelack...
@@ -62,7 +62,7 @@ export default function FamelackPage() {
             </p>
           </div>
           
-          <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-50">
+          <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-[60]">
             <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.4em]">
               NoorNexus OS Integrated Web-View | Endpoint: famelack.com
             </p>

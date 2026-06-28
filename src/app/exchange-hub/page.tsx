@@ -1,9 +1,10 @@
+
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { Card, CardContent } from "@/components/ui/card"
-import { CandlestickChart, ExternalLink, ShieldCheck, RefreshCcw, Sparkles, TrendingUp } from "lucide-react"
+import { CandlestickChart, ExternalLink, RefreshCcw, Sparkles, TrendingUp } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
@@ -21,9 +22,9 @@ export default function ExchangeHubPage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset className="flex-1 w-full flex flex-col min-w-0 p-0 m-0">
-        <main className="flex flex-col h-screen w-full max-w-full overflow-hidden p-0 m-0 relative">
+        <main className="flex flex-col h-[100dvh] w-full max-w-full overflow-hidden p-0 m-0 relative bg-background">
           {/* Imperial Header */}
-          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/50 backdrop-blur-md shrink-0 w-full z-50">
+          <header className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/80 backdrop-blur-md shrink-0 w-full z-[60]">
             <div className="flex items-center gap-3">
               <div className="size-10 bg-primary/20 rounded-xl flex items-center justify-center border border-primary/30 glow-primary shrink-0">
                 <CandlestickChart className="size-6 text-primary" />
@@ -64,14 +65,13 @@ export default function ExchangeHubPage() {
           </header>
 
           {/* Expansive Display Area */}
-          <div className="flex-1 overflow-hidden bg-black/20 w-full p-0 m-0">
+          <div className="flex-1 overflow-hidden bg-black/20 w-full p-0 m-0 relative z-0">
             <Card className="border-none h-full w-full overflow-hidden relative rounded-none shadow-none bg-transparent m-0 p-0">
-              <div className="absolute inset-0 bg-primary/5 opacity-[0.02] pointer-events-none" />
-              <CardContent className="p-0 h-full w-full">
+              <CardContent className="p-0 h-full w-full relative">
                 <iframe 
                   id="exchange-iframe"
                   src="https://binance-eosin.vercel.app/" 
-                  className="w-full h-full border-0 bg-white"
+                  className="w-full h-full border-0 bg-white absolute inset-0"
                   title="Imperial Exchange Hub Integration"
                   allow="camera; microphone; geolocation; display-capture; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; payment"
                   sandbox="allow-same-origin allow-scripts allow-popovers allow-forms allow-modals allow-downloads allow-presentation"
@@ -81,7 +81,7 @@ export default function ExchangeHubPage() {
             </Card>
           </div>
           
-          <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full">
+          <footer className="py-2 border-t border-white/5 bg-background/80 shrink-0 text-center w-full z-[60]">
             <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.4em]">
               NoorNexus OS Market Sync | Endpoint: binance-eosin
             </p>
