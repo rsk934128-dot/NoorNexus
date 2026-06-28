@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -99,7 +98,7 @@ export default function SovereignGatewayPage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20 overflow-x-hidden">
           <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
@@ -271,7 +270,7 @@ export default function SovereignGatewayPage() {
                               <div className={`p-3 rounded-xl ${step.zenith ? 'bg-emerald-500/10' : 'bg-purple-500/10'} group-hover:bg-purple-500/20 transition-colors`}>
                                  <step.icon className={`size-6 ${step.zenith ? 'text-emerald-400' : 'text-purple-400'}`} />
                               </div>
-                              <Badge className={`${step.zenith ? 'bg-emerald-500/20 text-emerald-500' : 'bg-purple-500/20 text-purple-500'} border-none text-[8px]`}>{step.status}</Badge>
+                              <Badge className={`${step.zenith ? 'bg-emerald-500/20 text-emerald-500' : 'bg-purple-500/20 text-purple-500'} border-none text-[8px] h-5`}>{step.status}</Badge>
                            </div>
                            <div className="space-y-1">
                               <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{step.id}</p>
