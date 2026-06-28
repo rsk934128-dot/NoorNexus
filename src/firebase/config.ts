@@ -12,4 +12,4 @@ export const firebaseConfig = {
  * @Sovereign_Identity: Google OAuth Client ID
  * Mission 500: Primary Auth Bridge
  */
-export const googleClientId = "394844522843-t2kg5tlm28avobja6ccaqmb3iemoklec.apps.googleusercontent.com";
+export const googleClientId = "126491468105-b1slvo1jbf45vcmmml1qk0qhdahh6v1t.apps.googleusercontent.com";
