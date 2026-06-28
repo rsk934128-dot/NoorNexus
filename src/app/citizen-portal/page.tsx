@@ -33,7 +33,8 @@ import {
   FileCode,
   Vault,
   Gem,
-  Users
+  Users,
+  Cpu
 } from "lucide-react"
 import {
   Dialog,
