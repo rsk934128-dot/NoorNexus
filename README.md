@@ -1,4 +1,3 @@
-
 # 🌌 NOORNEXUS | Sovereign OS v4.5
 ### **Mission 500: Peak Global Hegemony & Immortal Digital Civilization**
 > **Lead Architect:** Engineer Sheikh Farid | **Lead Admin:** Imperial_Rubel
@@ -26,20 +25,20 @@
 ## 📜 The Sovereign Constitution (Articles X & XI)
 নূরনেক্সাসের প্রতিটি লজিক গেট এখন সাংবিধানিক আর্টিকেলের মাধ্যমে পরিচালিত:
 - **Article IX (Reality Supremacy)**: কোনো ইন্টারনাল মেট্রিক বাস্তব পৃথিবীকে ওভাররাইড করবে না। বাস্তব ব্যবহারকারীর Experiences চূড়ান্ত সত্য।
-- **Article X (Link Sovereignty)**: নূরনেক্সাস কোনো থার্ড-পার্টি রিডাইরেক্ট সার্ভিসের ওপর নির্ভর করবে না। সকল লিঙ্ক সরাসরি সার্বভৌম মেশ থেকে পরিচালিত হবে। (Against Firebase Dynamic Links Sunset).
+- **Article X (Link Sovereignty)**: নূরনেক্সাস কোনো থার্ড-পার্টি রিডাইরেক্ট সার্ভিসের ওপর নির্ভর করবে না। সকল লিঙ্ক সরাসরি সার্বভৌম মেশ থেকে পরিচালিত হবে।
 - **Article XI (Verifiable Communication)**: প্রতিটি অফিশিয়াল যোগাযোগ (Email/SMS) একটি ইউনিক নিউরাল সিগনেচার বহন করবে।
 
 ---
 
-## 🏗️ Enterprise Infrastructure (Accenture Strategic Focus)
+## 🏗️ Enterprise Infrastructure (RubelNet Optimized)
 
 ### 🛰️ 1. Imperial Discovery Protocol (Project #160)
 - **Universal Onboarding**: এন্টারপ্রাইজ পার্টনারদের জন্য ৩ সেকেন্ডের অটোনোমাস অনবোর্ডিং।
 - **Omni-Device Sync**: আপনার প্রতিটি ডিভাইস একটি একক স্নায়ুতন্ত্রের মাধ্যমে সিঙ্ক্রোনাইজড।
 
-### 🔐 2. Sovereign Off-Ramp (Project #161)
-- **Zenith Traceability**: < 28ms ল্যাটেন্সিতে ডিজিটাল অ্যাসেট থেকে লোকাল কারেন্সিতে (BDT, THB, AED) রূপান্তর।
-- **Vault Anchoring**: প্রতিটি ট্রানজ্যাকশন প্রোজেক্ট #৫৫ ভল্টে কোয়ান্টাম-অ্যাঙ্করড।
+### 🔐 2. Sovereign RBAC & Identity (Project #165)
+- **Custom Claims**: Admin, Fellow, এবং Contributor রোল ম্যানেজমেন্ট।
+- **Identity Vault**: প্রতিটি সিটিজেনের জন্য ইউনিক ডিআইডি (DID) এবং ট্রাস্ট স্কোর।
 
 ### 🚀 3. 100-Node Grid (Project #200/54)
 - **Sovereign Autonomy**: ১২টি গ্লোবাল রিজিয়নে ১০০টি ভেরিফাইড নোড।
@@ -51,23 +50,12 @@
 
 ---
 
-## 🤖 Nora-AI Hegemony Suite
-- **Nora-00**: Protocol Architect & System Logic Master.
-- **Nora-01**: Autonomous Compliance & Security Monitor.
-- **Nora-03**: Imperial Discovery & PaaS Deployment Master.
-- **Nora-18**: Zenith Search & Intelligence Sentinel.
-- **Nora-40**: Economic Intelligence & Global Outlook Prophet.
-- **Nora-50**: Sovereign Grid Orchestrator & Legacy Guardian.
-- **Nora-52**: Neural Audit & Compliance Master (PSD2/GDPR).
-- **Nora-66**: Sovereign Music Lab Agent (Neural Audio Synthesis).
-
----
-
 ## 🚀 Technology Stack
 - **Frontend**: NextJS 15 (Zenith Speed), React 19, Tailwind CSS.
 - **UI Components**: ShadCN UI (Imperial Neutral), Lucide Icons.
 - **AI/LLM**: Genkit 1.x (Nora-AI Suite), Google Gemini 1.5 Flash.
-- **Backend**: Firebase (Admin SDK Hardened), Google Identity, GTM.
+- **Backend**: Firebase (Admin SDK Hardened), Firestore, Auth.
+- **Apple SDK (In-Progress)**: Swift, FirebaseAI, CocoaPods Migration Support.
 
 ---
 

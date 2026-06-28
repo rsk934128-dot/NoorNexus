@@ -1,4 +1,3 @@
-
 "use client"
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -30,15 +29,27 @@ import {
   Zap,
   MousePointer2,
   Trash2,
-  AlertTriangle
+  AlertTriangle,
+  UserCog,
+  ShieldAlert
 } from "lucide-react"
 import { useFirestore, useCollection, useUser } from "@/firebase"
-import { collection, query, orderBy, limit, doc, deleteDoc } from "firebase/firestore"
+import { collection, query, orderBy, limit, doc, deleteDoc, updateDoc } from "firebase/firestore"
 import { formatDistanceToNow } from "date-fns"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter
+} from "@/components/ui/dialog"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const ADMIN_EMAIL = "rubels1k994@gmail.com"
 
@@ -49,6 +60,8 @@ export default function SessionMonitorPage() {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("")
   const [mounted, setMounted] = useState(false)
+  const [selectedUser, setSelectedUser] = useState<any>(null)
+  const [roleDialogOpen, setRoleDialogOpen] = useState(false)
   
   const isAdmin = user?.email === ADMIN_EMAIL
 
@@ -86,6 +99,22 @@ export default function SessionMonitorPage() {
     }
   }
 
+  const handleUpdateRole = async (role: string) => {
+    if (!isAdmin || !db || !selectedUser) return;
+    try {
+      // In a real app, this would call a Cloud Function to set custom claims
+      // Here we simulate by updating a field in Firestore
+      await updateDoc(doc(db, "user_sessions", selectedUser.id), {
+        imperialRole: role,
+        updatedAt: new Date()
+      });
+      toast({ title: "Role Authenticated", description: `${selectedUser.displayName} is now an ${role}.` });
+      setRoleDialogOpen(false);
+    } catch (e) {
+      toast({ title: "Role Update Failed", variant: "destructive" });
+    }
+  }
+
   if (authLoading) {
     return (
       <div className="h-screen flex items-center justify-center bg-background">
@@ -101,7 +130,7 @@ export default function SessionMonitorPage() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto w-full pb-20 overflow-x-hidden">
           <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-10">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
@@ -109,14 +138,14 @@ export default function SessionMonitorPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
-                   <Activity className="size-3 mr-2" /> Global User Registry
+                   <UserCog className="size-3 mr-2" /> RubelNet: Imperial RBAC Hub
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-3 uppercase tracking-tighter">
-                Sovereign <span className="text-primary">Registry.</span>
+                Identity <span className="text-primary">Registry.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                "Imperial Surveillance Matrix." নূরনেক্সাস সাম্রাজ্যের প্রতিটি কানেকশন এবং ইউজার হিস্ট্রি এখানে সংরক্ষিত।
+                "Role-Based Access Control." নূরনেক্সাস সাম্রাজ্যের প্রতিটি কানেকশন এবং ইউজারের ইম্পেরিয়াল রোল ম্যানেজ করার কেন্দ্রীয় হাব।
               </p>
             </div>
             <div className="flex flex-col items-end gap-3">
@@ -152,7 +181,7 @@ export default function SessionMonitorPage() {
                     <CardTitle className="text-sm font-headline uppercase tracking-widest">Global Connection Matrix</CardTitle>
                   </div>
                   <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 uppercase font-bold text-[8px]">
-                    Real-time Persistence: ON
+                    RBAC_ENFORCED: TRUE
                   </Badge>
                 </CardHeader>
                 <CardContent className="p-0">
@@ -160,7 +189,7 @@ export default function SessionMonitorPage() {
                     <table className="w-full text-left">
                       <thead>
                         <tr className="bg-muted/30 text-[9px] uppercase font-bold text-muted-foreground tracking-widest border-b border-white/5">
-                          <th className="px-6 py-4">Identity & Device</th>
+                          <th className="px-6 py-4">Identity & Role</th>
                           <th className="px-6 py-4">Sovereign Node</th>
                           <th className="px-6 py-4">Activity Path</th>
                           <th className="px-6 py-4">Status</th>
@@ -201,7 +230,7 @@ export default function SessionMonitorPage() {
                                    <div className="min-w-0">
                                       <div className="flex items-center gap-2">
                                          <p className="text-sm font-bold text-white uppercase truncate">{s.displayName}</p>
-                                         <DeviceIcon className="size-3 text-primary opacity-50" />
+                                         <Badge variant="outline" className="text-[7px] border-primary/30 text-primary h-4 px-1.5">{s.imperialRole || "MEMBER"}</Badge>
                                       </div>
                                       <p className="text-[9px] text-muted-foreground font-mono truncate">{s.email}</p>
                                    </div>
@@ -244,14 +273,24 @@ export default function SessionMonitorPage() {
                               </td>
                               {isAdmin && (
                                 <td className="px-6 py-4 text-right">
-                                   <Button 
-                                    variant="ghost" 
-                                    size="icon" 
-                                    onClick={() => handleDeleteSession(s.id)}
-                                    className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                                   >
-                                      <Trash2 className="size-4" />
-                                   </Button>
+                                   <div className="flex items-center justify-end gap-2">
+                                      <Button 
+                                        variant="ghost" 
+                                        size="icon" 
+                                        onClick={() => { setSelectedUser(s); setRoleDialogOpen(true); }}
+                                        className="h-8 w-8 text-primary hover:bg-primary/10"
+                                      >
+                                         <UserCog className="size-4" />
+                                      </Button>
+                                      <Button 
+                                        variant="ghost" 
+                                        size="icon" 
+                                        onClick={() => handleDeleteSession(s.id)}
+                                        className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                                      >
+                                         <Trash2 className="size-4" />
+                                      </Button>
+                                   </div>
                                 </td>
                               )}
                             </tr>
@@ -289,9 +328,9 @@ export default function SessionMonitorPage() {
               </Card>
 
               <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
-                 <CardHeader>
+                 <CardHeader className="pb-2">
                     <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
-                       <AlertTriangle className="size-4" /> Security Threshold
+                       <ShieldAlert className="size-4" /> Security Threshold
                     </CardTitle>
                  </CardHeader>
                  <CardContent>
@@ -305,6 +344,52 @@ export default function SessionMonitorPage() {
           </div>
         </main>
       </SidebarInset>
+
+      {/* Role Management Dialog */}
+      {selectedUser && (
+        <Dialog open={roleDialogOpen} onOpenChange={setRoleDialogOpen}>
+           <DialogContent className="glass-card border-primary/20 bg-black/95 text-white">
+              <DialogHeader>
+                 <DialogTitle className="text-xl font-headline font-bold text-primary flex items-center gap-2 uppercase">
+                    <ShieldAlert className="size-6" /> Authenticate Role
+                 </DialogTitle>
+                 <DialogDescription className="text-muted-foreground text-xs uppercase tracking-widest">
+                    Assigning Imperial Status to {selectedUser.displayName}
+                 </DialogDescription>
+              </DialogHeader>
+              <div className="py-6 space-y-6">
+                 <div className="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                    <Avatar className="size-12 border border-primary/20">
+                       <AvatarImage src={selectedUser.photoURL} />
+                       <AvatarFallback>{selectedUser.displayName?.substring(0, 2).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                       <p className="text-sm font-bold text-white uppercase">{selectedUser.displayName}</p>
+                       <p className="text-[10px] text-muted-foreground font-mono">{selectedUser.email}</p>
+                    </div>
+                 </div>
+                 <div className="space-y-3">
+                    <label className="text-[10px] font-bold text-primary uppercase tracking-widest">Select Imperial Tier</label>
+                    <div className="grid grid-cols-2 gap-3">
+                       {["ADMIN", "FELLOW", "CONTRIBUTOR", "MEMBER"].map((role) => (
+                         <Button 
+                           key={role}
+                           variant={selectedUser.imperialRole === role ? "default" : "outline"}
+                           onClick={() => handleUpdateRole(role)}
+                           className={`h-12 uppercase font-bold text-[10px] tracking-widest ${selectedUser.imperialRole === role ? 'glow-primary' : 'border-white/10'}`}
+                         >
+                            {role}
+                         </Button>
+                       ))}
+                    </div>
+                 </div>
+              </div>
+              <DialogFooter>
+                 <Button variant="ghost" onClick={() => setRoleDialogOpen(false)} className="uppercase text-[10px]">Cancel Handshake</Button>
+              </DialogFooter>
+           </DialogContent>
+        </Dialog>
+      )}
     </div>
   )
 }

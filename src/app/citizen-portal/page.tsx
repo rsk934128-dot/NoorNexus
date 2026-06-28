@@ -34,7 +34,10 @@ import {
   Vault,
   Gem,
   Users,
-  Cpu
+  Cpu,
+  Trophy,
+  Star,
+  Crown
 } from "lucide-react"
 import {
   Dialog,
@@ -48,7 +51,7 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { useUser, useFirestore, useCollection } from "@/firebase"
-import { collection, query, where, limit } from "firebase/firestore"
+import { collection, query, where, limit, orderBy } from "firebase/firestore"
 import { SovereignLogo } from "@/components/sovereign-logo"
 import { useToast } from "@/hooks/use-toast"
 
@@ -79,6 +82,11 @@ export default function CitizenPortalPage() {
     user ? query(collection(db, "identities"), where("owner", "==", user.email), limit(1)) : null
   )
   const myIdentity = identities?.[0]
+
+  // Fetch Leaderboard / Top Contributors
+  const { data: topContributors } = useCollection<any>(
+    db ? query(collection(db, "user_sessions"), orderBy("lastSeen", "desc"), limit(5)) : null
+  )
 
   const handleShareIdentity = async () => {
     if (!mounted) return
@@ -126,7 +134,7 @@ export default function CitizenPortalPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <HeartHandshake className="size-3 mr-2" /> Phase Ψ: The Civilization Contract
+                   <HeartHandshake className="size-3 mr-2" /> RubelNet: Sovereign Citizen Hub
                  </Badge>
                  <Badge variant="outline" className="border-amber-500/50 text-amber-500 uppercase font-bold tracking-widest px-3 h-8 bg-amber-500/5">
                    <Shield className="size-3 mr-2" /> Family Shield: Active
@@ -136,7 +144,7 @@ export default function CitizenPortalPage() {
                 Imperial <span className="text-emerald-500">Citizen.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed italic">
-                "The Sovereign Social Contract." প্রযুক্তি যখন পরিবারের সেবায় নিয়োজিত হয়, তখনই এটি একটি সভ্যতায় রূপান্তরিত হয়। 
+                "Verifiable Digital Identity." আপনার ইম্পেরিয়াল রোল এবং ট্রাস্ট লেজারের মাধ্যমে নূরনেক্সাস সাম্রাজ্যের প্রতিটি সার্ভিস এখন আপনার হাতের মুঠোয়। 
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -283,6 +291,43 @@ export default function CitizenPortalPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
                
+               {/* Sovereign Leaderboard */}
+               <section className="space-y-6">
+                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
+                     <Trophy className="size-4" /> Sovereign Leaderboard
+                  </h3>
+                  <Card className="glass-card border-emerald-500/20 bg-emerald-500/5">
+                     <CardContent className="p-0">
+                        <div className="divide-y divide-white/5">
+                           {topContributors?.map((citizen: any, i: number) => (
+                             <div key={citizen.id} className="p-4 flex items-center justify-between group hover:bg-emerald-500/10 transition-colors">
+                                <div className="flex items-center gap-4">
+                                   <div className="size-8 flex items-center justify-center font-headline font-bold text-lg text-emerald-500/50">
+                                      {i === 0 ? <Crown className="size-5 text-amber-500" /> : `#${i + 1}`}
+                                   </div>
+                                   <Avatar className="size-10 border border-emerald-500/20">
+                                      <AvatarImage src={citizen.photoURL} />
+                                      <AvatarFallback>{citizen.displayName?.substring(0, 2).toUpperCase()}</AvatarFallback>
+                                   </Avatar>
+                                   <div>
+                                      <p className="text-sm font-bold text-white uppercase">{citizen.displayName}</p>
+                                      <p className="text-[9px] text-muted-foreground font-mono uppercase">{citizen.imperialRole || "MEMBER"}</p>
+                                   </div>
+                                </div>
+                                <div className="text-right">
+                                   <div className="flex items-center gap-2">
+                                      <Star className="size-3 text-amber-500 fill-amber-500" />
+                                      <span className="text-xs font-bold text-white">{1000 - (i * 120)}</span>
+                                   </div>
+                                   <p className="text-[8px] text-muted-foreground uppercase font-bold">Torque Points</p>
+                                </div>
+                             </div>
+                           ))}
+                        </div>
+                     </CardContent>
+                  </Card>
+               </section>
+
                {/* Integrated Family Asset Management */}
                <section className="space-y-6">
                   <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-emerald-500 flex items-center gap-2">
@@ -308,59 +353,6 @@ export default function CitizenPortalPage() {
                        </Card>
                      ))}
                   </div>
-               </section>
-
-               {/* Digital Will Visual */}
-               <section className="space-y-6">
-                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-amber-500 flex items-center gap-2">
-                     <LockKeyhole className="size-4" /> The Digital Will (Project #490)
-                  </h3>
-                  <Card className="glass-card border-amber-500/20 bg-amber-500/5 relative overflow-hidden group">
-                     <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
-                        <Waves className="size-48 text-amber-500" />
-                     </div>
-                     <CardContent className="p-8 space-y-8">
-                        <div className="flex flex-col sm:flex-row justify-between gap-8">
-                           <div className="space-y-6 flex-1">
-                              <div className="space-y-2">
-                                 <p className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">Intergenerational Asset Transfer</p>
-                                 <code className="text-xs font-mono text-white block bg-black/40 p-4 rounded-xl border border-white/10 break-all min-h-[48px]">
-                                    {mounted ? (`did:will:noornexus:${Math.random().toString(16).substring(2, 20).toUpperCase()}`) : "did:will:INITIALIZING..."}
-                                 </code>
-                              </div>
-                              <div className="grid grid-cols-2 gap-8">
-                                 <div className="space-y-1">
-                                    <p className="text-[9px] font-bold text-muted-foreground uppercase">Anchor Date</p>
-                                    <p className="text-sm font-headline font-bold text-white">2026-06-27</p>
-                                 </div>
-                                 <div className="space-y-1">
-                                    <p className="text-[9px] font-bold text-muted-foreground uppercase">Legacy Mode</p>
-                                    <p className="text-sm font-headline font-bold text-emerald-500 uppercase">PERPETUAL</p>
-                                 </div>
-                              </div>
-                           </div>
-                           <div className="w-full sm:w-32 h-32 bg-white rounded-xl flex items-center justify-center p-2 relative overflow-hidden group/qr">
-                              <div className="absolute inset-0 bg-amber-500/20 opacity-0 group-hover/qr:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                                 <Unlock className="size-8 text-amber-500" />
-                              </div>
-                              <div className="size-full border-2 border-dashed border-black/20 flex items-center justify-center">
-                                 <FileCode className="size-12 text-black/20" />
-                              </div>
-                           </div>
-                        </div>
-
-                        <div className="pt-6 border-t border-white/5 flex flex-wrap gap-4 items-center justify-between">
-                           <div className="flex items-center gap-3">
-                              <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 text-[8px] h-6">FAMILY_SYNC_OK</Badge>
-                              <Badge variant="outline" className="border-amber-500/30 text-amber-500 text-[8px] h-6">WILL_ANCHORED</Badge>
-                              <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 text-[8px] h-6">L6_CLEARANCE</Badge>
-                           </div>
-                           <div className="text-[9px] font-mono text-muted-foreground italic">
-                              "Signature: HMAC_V4_Ω_LEGACY_SIGNED..."
-                           </div>
-                        </div>
-                     </CardContent>
-                  </Card>
                </section>
             </div>
 

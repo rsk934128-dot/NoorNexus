@@ -42,7 +42,9 @@ import {
   LayoutGrid,
   ShieldPlus,
   Lock,
-  Code2
+  Code2,
+  Apple,
+  Handshake
 } from "lucide-react"
 import { 
   Dialog, 
@@ -99,10 +101,10 @@ export default function ProposalPage() {
       ]
     },
     {
-      group: "AI & Cyber Strategy",
+      group: "AI & Apple Integration",
       projects: [
         { name: "NoorAI", desc: "Neural AI Suite for Fintech & Civilizational Logic", status: "EVOLVING", icon: BrainCircuit },
-        { name: "Fusion AI Cloud", desc: "DevOps Execution Layer & Cloud Orchestration", status: "READY", icon: Rocket },
+        { name: "Firebase AI Logic (Apple)", desc: "Swift-native Gemini Foundation Models framework adapter.", status: "PREVIEW", icon: Apple },
         { name: "National Cyber Defense Blueprint (P-150)", desc: "Strategic Sovereign Cybersecurity Strategy", status: "WHITE_PAPER", icon: FileText }
       ]
     }
@@ -247,21 +249,21 @@ export default function ProposalPage() {
                <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                        <TrendingUp className="size-4" /> Portfolio Velocity
+                        <Apple className="size-4" /> Tech Stack Excellence
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                      <div className="space-y-4">
                         <div className="flex justify-between items-center text-[10px] font-bold uppercase">
-                           <span className="text-muted-foreground">Applications Built</span>
-                           <span className="text-primary">116+</span>
+                           <span className="text-muted-foreground">Apple SDK Sync</span>
+                           <span className="text-primary">V12.15</span>
                         </div>
                         <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                            <div className="h-full bg-primary" style={{ width: '100%' }} />
                         </div>
                      </div>
                      <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                        "Your output across SaaS and Fintech sectors demonstrates a rare integration of high-level architecture and execution torque."
+                        "Your output across SaaS and Fintech sectors demonstrates a rare integration of high-level architecture and Apple Ecosystem readiness."
                      </p>
                   </CardContent>
                </Card>
@@ -352,13 +354,5 @@ export default function ProposalPage() {
         </main>
       </SidebarInset>
     </div>
-  )
-}
-
-function Handshake(props: any) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m11 17 2 2 4-4" /><path d="m18 10 1-1a2 2 0 0 0-3-3l-2.26 2.26a.45.45 0 0 1-.63 0L11 6a2 2 0 0 0-3 3l2 2" /><path d="m14 14 2 2" /><path d="m3 7 3-3 4.5 4.5" /><path d="M6.3 20.3a2.1 2.1 0 1 1-3-3" /><path d="m18 14-3 3" />
-    </svg>
   )
 }

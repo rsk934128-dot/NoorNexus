@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
@@ -31,12 +30,15 @@ import {
   RefreshCcw,
   Repeat,
   Radio,
-  Users
+  Users,
+  Terminal,
+  History
 } from "lucide-react"
 import { useFirestore, useCollection } from "@/firebase"
-import { collection, query, orderBy } from "firebase/firestore"
+import { collection, query, orderBy, limit } from "firebase/firestore"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 export default function NodesPage() {
   const { toast } = useToast()
@@ -85,14 +87,14 @@ export default function NodesPage() {
                     <Button variant="ghost" size="icon"><Menu className="size-6" /></Button>
                  </SidebarTrigger>
                  <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <Infinity className="size-3 mr-2" /> Mission 500: The Sovereign Peak
+                   <Infinity className="size-3 mr-2" /> RubelNet: Sovereign Grid Manager
                  </Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Regional <span className="text-emerald-500">Watchtower.</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl text-sm sm:text-lg leading-relaxed">
-                "The Zenith of Grid Resilience." ১০০-নোড অটোনোমাস গ্রিডের রিয়েল-টাইম কানেক্টিভিটি এবং প্রতিটি কমান্ডারের সেশন এখন ট্র্যাক করা হচ্ছে।
+                "Real-time Grid Surveillance." ১০০-নোড অটোনোমাস গ্রিড এবং লাইভ পালস ড্যাশবোর্ড। নূরনেক্সাস সাম্রাজ্যের প্রতিটি নোড এখন আপনার হাতের মুঠোয়।
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -113,8 +115,8 @@ export default function NodesPage() {
             </div>
           </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-3 space-y-12">
+          <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+            <div className="xl:col-span-3 space-y-12">
                
                {/* 100-Node Grid Visualization */}
                <section className="space-y-6">
@@ -197,21 +199,36 @@ export default function NodesPage() {
             </div>
 
             <div className="space-y-8">
-               <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
+              <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                 <CardHeader>
                   <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                    <Users className="size-4" /> Imperial Registry Sync
+                    <Terminal className="size-4" /> Live Pulse Log
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                      "Total of {sessions.length} Unique Identities are anchored in the Sovereign Registry. Mission 500 Hegemony TORQUE is stable."
-                   </p>
+                <CardContent className="p-0">
+                  <ScrollArea className="h-[400px]">
+                    <div className="p-4 space-y-3">
+                       {[
+                         "NODE_01: Heartbeat Stabilized.",
+                         "CORRIDOR_AS: Identity verified.",
+                         "GATEWAY: P51 Handshake success.",
+                         "VAULT: P55 Cold storage sync.",
+                         "CITIZEN_07: Logged in via SG-02.",
+                         "NODE_42: Code Exchange Pulse.",
+                         "GRID: 100 Nodes Synchronized."
+                       ].map((log, i) => (
+                         <div key={i} className="flex gap-3 text-[9px] font-mono border-b border-white/5 pb-2 last:border-0">
+                            <span className="text-emerald-500">[{new Date().toLocaleTimeString()}]</span>
+                            <span className="text-white uppercase truncate">{log}</span>
+                         </div>
+                       ))}
+                    </div>
+                  </ScrollArea>
                 </CardContent>
               </Card>
 
-              <Card className="glass-card border-l-4 border-l-amber-500">
-                 <CardHeader>
+              <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
+                 <CardHeader className="pb-2">
                     <CardTitle className="text-xs uppercase font-bold text-amber-500 tracking-widest flex items-center gap-2">
                        <ShieldPlus className="size-4" /> Sovereignty Guard
                     </CardTitle>
