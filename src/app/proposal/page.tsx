@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react"
@@ -68,6 +69,11 @@ import { SovereignLogo } from "@/components/sovereign-logo"
 import { useFirestore, useUser } from "@/firebase"
 import { collection, addDoc, serverTimestamp } from "firebase/firestore"
 
+/**
+ * @fileOverview Sovereign Prospectus (v4.5 - Zenith Edition)
+ * Formal presentation of Sheikh Farid's Project Matrix and Technology Readiness.
+ */
+
 export default function ProposalPage() {
   const { toast } = useToast()
   const db = useFirestore()
@@ -89,7 +95,7 @@ export default function ProposalPage() {
       group: "Enterprise Ecosystem",
       projects: [
         { name: "SheikhTech Globalizer", desc: "116+ Modular Apps (BanglaBot AI, HealthPulse, TakaFlow, VisaAssist)", status: "PRODUCTION", icon: Globe },
-        { name: "NoorNexus Sovereign OS v3", desc: "Autonomous Enterprise Software Integration Platform", status: "CORE_OS", icon: Infinity }
+        { name: "NoorNexus Sovereign OS v4.5", desc: "Autonomous Enterprise Software Integration Platform", status: "STABLE_GOLD", icon: Infinity }
       ]
     },
     {
@@ -103,9 +109,9 @@ export default function ProposalPage() {
     {
       group: "AI & Apple Integration",
       projects: [
-        { name: "NoorAI", desc: "Neural AI Suite for Fintech & Civilizational Logic", status: "EVOLVING", icon: BrainCircuit },
+        { name: "NoorAI (Nora Suite)", desc: "Neural AI Suite for Fintech & Civilizational Logic", status: "EVOLVING", icon: BrainCircuit },
         { name: "Firebase AI Logic (Apple)", desc: "Swift-native Gemini Foundation Models framework adapter.", status: "PREVIEW", icon: Apple },
-        { name: "National Cyber Defense Blueprint (P-150)", desc: "Strategic Sovereign Cybersecurity Strategy", status: "WHITE_PAPER", icon: FileText }
+        { name: "National Cyber Defense Blueprint (P-150)", desc: "Strategic Sovereign Cybersecurity Strategy", status: "RELEASED", icon: FileText }
       ]
     }
   ]
@@ -118,7 +124,7 @@ export default function ProposalPage() {
       setDownloading(false)
       toast({
         title: "Prospectus Dispatched",
-        description: "Portfolio records anchored to PDF buffer.",
+        description: "Portfolio records v4.5.0-gold anchored to PDF buffer.",
         className: "border-emerald-500/50 bg-emerald-500/5"
       })
     }, 2000)
@@ -161,6 +167,7 @@ export default function ProposalPage() {
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5 text-[10px]">
                    <Award className="size-3 mr-2" /> Global Architect Portfolio
                  </Badge>
+                 <Badge className="bg-emerald-500 text-black text-[10px] font-bold">STABLE: v4.5.0-gold</Badge>
               </div>
               <h2 className="text-3xl sm:text-5xl font-headline font-bold flex items-center gap-4 uppercase tracking-tighter">
                 Imperial <span className="text-primary">Prospectus.</span>
@@ -172,7 +179,7 @@ export default function ProposalPage() {
             <div className="flex gap-4">
                <Button onClick={handleDownloadPitch} disabled={downloading} className="bg-primary text-primary-foreground font-bold h-12 uppercase tracking-widest gap-2 glow-primary px-8">
                  {downloading ? <Loader2 className="size-4 animate-spin" /> : <FileDown className="size-4" />}
-                 Export Project Matrix
+                 Export Prospectus
                </Button>
             </div>
           </header>
@@ -200,12 +207,6 @@ export default function ProposalPage() {
                                   <h4 className="text-xl font-headline font-bold text-white uppercase tracking-tight">{project.name}</h4>
                                   <p className="text-xs text-muted-foreground leading-relaxed italic">"{project.desc}"</p>
                                </div>
-                               <div className="pt-4 mt-4 border-t border-white/5 flex justify-between items-center">
-                                  <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Handshake: OPTIMAL</span>
-                                  <Button variant="ghost" size="icon" className="size-8 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                                     <ArrowRight className="size-4" />
-                                  </Button>
-                               </div>
                             </CardContent>
                          </Card>
                        ))}
@@ -213,32 +214,32 @@ export default function ProposalPage() {
                  </section>
                ))}
 
-               {/* National Cyber Defense Blueprint Highlight */}
+               {/* Apple & CI/CD Spotlight */}
                <section className="space-y-6">
-                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-amber-500 flex items-center gap-2 px-1">
-                     <ShieldCheck className="size-4" /> Strategic Policy Highlight
+                  <h3 className="text-xs font-headline font-bold uppercase tracking-[0.4em] text-purple-500 flex items-center gap-2 px-1">
+                     <ShieldCheck className="size-4" /> Engineering Excellence
                   </h3>
-                  <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5 relative overflow-hidden group">
-                     <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
-                        <Scale className="size-48 text-amber-500" />
-                     </div>
-                     <CardContent className="p-8 sm:p-12 space-y-6 relative z-10">
-                        <div className="space-y-2">
-                           <h4 className="text-2xl font-headline font-bold text-white uppercase tracking-tighter">National Cyber Defense Blueprint (P-150)</h4>
-                           <p className="text-sm text-amber-400 font-mono">Cybersecurity Strategy for Sovereign Infrastructure</p>
-                        </div>
-                        <p className="text-sm text-muted-foreground leading-relaxed italic max-w-3xl">
-                           "প্রকল্প P-150 হলো ডিজিটাল সার্বভৌমত্ব রক্ষার একটি ব্লু-প্রিন্ট। এটি একটি দেশের ডিজিটাল সম্পদ এবং ফিনটেক ইকোসিস্টেমকে সাইবার হুমকি থেকে রক্ষা করার জন্য HMAC_V4 এবং জিরো-ট্রাস্ট প্রোটোকল ব্যবহারের নির্দেশনা দেয়।"
-                        </p>
-                        <div className="flex gap-4 pt-4">
-                           <Link href="/docs">
-                              <Button className="bg-amber-500 text-black font-bold h-11 uppercase text-[10px] glow-emerald gap-2">
-                                 Explore Strategy <ArrowRight className="size-4" />
-                              </Button>
-                           </Link>
-                           <Button variant="outline" className="border-white/10 text-white font-bold h-11 uppercase text-[10px]">
-                              Request White-paper
-                           </Button>
+                  <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5 relative overflow-hidden group">
+                     <CardContent className="p-8 sm:p-12 space-y-8 relative z-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                           <div className="space-y-4">
+                              <div className="flex items-center gap-3">
+                                 <Apple className="size-6 text-white" />
+                                 <h4 className="text-xl font-headline font-bold text-white uppercase">Apple SDK Integration</h4>
+                              </div>
+                              <p className="text-xs text-muted-foreground leading-relaxed">
+                                 Swift-native integration with Firebase AI Logic. We provide a bridge for Gemini Foundation Models directly into iOS and visionOS nodes.
+                              </p>
+                           </div>
+                           <div className="space-y-4">
+                              <div className="flex items-center gap-3">
+                                 <Github className="size-6 text-purple-400" />
+                                 <h4 className="text-xl font-headline font-bold text-white uppercase">CI/CD Automation</h4>
+                              </div>
+                              <p className="text-xs text-muted-foreground leading-relaxed">
+                                 Full automation with GitHub Actions. Build guards and auto-deployment ensuring 100% stability across the global PaaS grid.
+                              </p>
+                           </div>
                         </div>
                      </CardContent>
                   </Card>
@@ -249,71 +250,50 @@ export default function ProposalPage() {
                <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                   <CardHeader>
                      <CardTitle className="text-xs font-headline uppercase tracking-widest text-primary flex items-center gap-2">
-                        <Apple className="size-4" /> Tech Stack Excellence
-                     </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                     <div className="space-y-4">
-                        <div className="flex justify-between items-center text-[10px] font-bold uppercase">
-                           <span className="text-muted-foreground">Apple SDK Sync</span>
-                           <span className="text-primary">V12.15</span>
-                        </div>
-                        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                           <div className="h-full bg-primary" style={{ width: '100%' }} />
-                        </div>
-                     </div>
-                     <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                        "Your output across SaaS and Fintech sectors demonstrates a rare integration of high-level architecture and Apple Ecosystem readiness."
-                     </p>
-                  </CardContent>
-               </Card>
-
-               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                  <CardHeader className="pb-2">
-                     <CardTitle className="text-xs font-headline uppercase text-emerald-500 flex items-center gap-2">
-                        <Database className="size-4" /> Verified Records
+                        <Monitor className="size-4" /> Tech Stack v4.5
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                     {[
-                       { label: "Fintech Ledger", status: "VERIFIED", icon: Landmark },
-                       { label: "Code-base Audit", status: "PASSED", icon: Code2 },
-                       { label: "Patent Pending", status: "2 NODES", icon: Scale }
-                     ].map((item, i) => (
-                       <div key={i} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
-                          <div className="flex items-center gap-2">
-                             <item.icon className="size-3 text-emerald-500" />
-                             <span className="text-[10px] text-muted-foreground uppercase font-bold">{item.label}</span>
-                          </div>
-                          <Badge className="bg-emerald-500/10 text-emerald-500 border-none text-[8px] h-4">{item.status}</Badge>
-                       </div>
-                     ))}
+                     <div className="space-y-2">
+                        {[
+                           "Next.js 15 (Zenith)",
+                           "React 19 (Perpetual)",
+                           "Google Genkit (Nora)",
+                           "Firebase Admin (Hardened)",
+                           "Swift & Apple AI (Swift)"
+                        ].map((t, i) => (
+                           <div key={i} className="flex justify-between items-center text-[10px] font-mono border-b border-white/5 pb-1">
+                              <span className="text-muted-foreground uppercase">{t.split('(')[0]}</span>
+                              <span className="text-primary font-bold">{t.split('(')[1].replace(')', '')}</span>
+                           </div>
+                        ))}
+                     </div>
                   </CardContent>
                </Card>
 
-               <Card className="glass-card border-amber-500/20 bg-amber-500/5 p-6 flex flex-col items-center text-center gap-4">
-                 <div className="size-16 rounded-full bg-amber-500/10 flex items-center justify-center border border-amber-500/30">
-                    <Mail className="size-8 text-amber-500" />
+               <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5 p-6 flex flex-col items-center text-center gap-4">
+                 <div className="size-16 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30">
+                    <Handshake className="size-8 text-emerald-500" />
                  </div>
                  <div className="space-y-1">
-                    <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Connect with Architect</p>
-                    <p className="text-[10px] text-muted-foreground uppercase font-mono">rubels1k994@gmail.com</p>
+                    <p className="text-xs font-headline font-bold text-white uppercase tracking-widest">Global Partner Access</p>
+                    <p className="text-[10px] text-muted-foreground uppercase font-mono">v4.5.0-gold: PRODUCTION_READY</p>
                  </div>
                  
                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger asChild>
-                       <Button className="w-full bg-amber-500 text-black font-bold uppercase text-[10px] h-11 glow-emerald gap-2">
-                          <Presentation className="size-4" /> Schedule PoC Meeting
+                       <Button className="w-full bg-emerald-500 text-black font-bold uppercase text-[10px] h-11 glow-emerald gap-2">
+                          <Presentation className="size-4" /> Request PoC Sync
                        </Button>
                     </DialogTrigger>
                     <DialogContent className="glass-card border-primary/20 bg-black/95 text-white sm:max-w-[500px]">
                        <DialogHeader>
-                          <div className="size-12 rounded-xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20 mb-4">
-                             <Handshake className="size-6 text-amber-500" />
-                          </div>
                           <DialogTitle className="text-xl font-headline font-bold uppercase tracking-tight text-white flex items-center gap-3">
-                             Schedule PoC Handshake
+                             Request PoC Handshake
                           </DialogTitle>
+                          <DialogDescription className="text-muted-foreground text-xs uppercase tracking-widest font-mono">
+                             Mission 500: Institutional Integration Protocol.
+                          </DialogDescription>
                        </DialogHeader>
                        <div className="grid gap-6 py-6">
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -342,8 +322,8 @@ export default function ProposalPage() {
                           </div>
                        </div>
                        <DialogFooter>
-                          <Button onClick={handleScheduleMeeting} disabled={submitting} className="w-full bg-amber-500 text-black font-bold h-12">
-                             {submitting ? <Loader2 className="animate-spin" /> : "Broadcast Request"}
+                          <Button onClick={handleScheduleMeeting} disabled={submitting} className="w-full bg-emerald-500 text-black font-bold h-12">
+                             {submitting ? <Loader2 className="animate-spin" /> : "Initiate Handshake"}
                           </Button>
                        </DialogFooter>
                     </DialogContent>
