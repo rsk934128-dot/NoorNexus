@@ -9,11 +9,12 @@ import {SessionTracker} from '@/components/session-tracker';
 import {useEffect} from 'react';
 import {initSyncEngine} from '@/services/sync-engine';
 import Script from 'next/script';
+import { googleClientId } from '@/firebase/config';
 
 /**
- * @fileOverview Root Layout (V4.4 - GTM & Sovereign Edition)
+ * @fileOverview Root Layout (V4.5 - Google Identity & Sovereign Edition)
  * নূরনেক্সাস অপারেটিং সিস্টেমের কেন্দ্রীয় লেআউট।
- * Google Tag Manager (GTM-ML2HBMVP) সফলভাবে হেড এবং বডিতে ইন্টিগ্রেটেড।
+ * Google Tag Manager এবং Google Client ID সফলভাবে ইন্টিগ্রেটেড।
  */
 
 export default function RootLayout({
@@ -32,6 +33,7 @@ export default function RootLayout({
       <head>
         <title>NoorNexus | Sovereign Digital Infrastructure</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="google-signin-client_id" content={googleClientId} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -48,7 +50,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="font-body antialiased selection:bg-primary/30 selection:text-primary">
-        {/* Google Tag Manager (noscript) - Placed as specified in Step 2 */}
+        {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe 
             src="https://www.googletagmanager.com/ns.html?id=GTM-ML2HBMVP"

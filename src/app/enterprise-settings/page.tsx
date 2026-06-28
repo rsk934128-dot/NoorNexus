@@ -48,12 +48,14 @@ import {
   Smartphone,
   BellRing,
   CloudOff,
-  CloudDownload
+  CloudDownload,
+  Chrome
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Switch } from "@/components/ui/switch"
 import { requestNotificationPermission } from "@/services/notification-service"
 import { getPendingTasks, processSyncQueue } from "@/services/sync-engine"
+import { googleClientId } from "@/firebase/config"
 
 export default function EnterpriseSettingsPage() {
   const { toast } = useToast()
@@ -67,6 +69,7 @@ export default function EnterpriseSettingsPage() {
     name: "NoorNexus",
     id: "studio-786911773-686ad",
     secret: "S0V_RETA_P4SS_9988X_L4",
+    googleClientId: googleClientId,
     createdDate: "27 Jun 2026, 12:20 am",
     redirectUrl: "https://auth.yapily.com/",
     authHandler: "https://studio-786911773-686ad.firebaseapp.com/__/auth/handler",
@@ -170,7 +173,7 @@ export default function EnterpriseSettingsPage() {
                      <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
                         <CardHeader>
                            <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
-                              <Key className="size-4 text-primary" /> API Credentials
+                              <Key className="size-4 text-primary" /> API & Identity Credentials
                            </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-6">
@@ -185,9 +188,24 @@ export default function EnterpriseSettingsPage() {
                                  </div>
                               </div>
                               <div className="space-y-2">
+                                 <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Google Client ID</Label>
+                                 <div className="flex gap-2">
+                                    <div className="relative flex-1">
+                                       <Chrome className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                                       <Input value={APP_CONFIG.googleClientId} readOnly className="bg-background/50 border-white/10 font-mono text-xs h-12 pl-10" />
+                                    </div>
+                                    <Button variant="outline" size="icon" className="h-12 w-12 shrink-0 border-white/10" onClick={() => handleCopy(APP_CONFIG.googleClientId, "Client ID")}>
+                                       <Copy className="size-4" />
+                                    </Button>
+                                 </div>
+                              </div>
+                              <div className="space-y-2">
                                  <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Application Secret</Label>
                                  <div className="flex gap-2">
                                     <Input type={showSecret ? "text" : "password"} value={APP_CONFIG.secret} readOnly className="bg-background/50 border-white/10 font-mono text-xs h-12" />
+                                    <Button variant="outline" size="icon" className="h-12 w-12 border-white/10" onClick={() => setShowSecret(!showSecret)}>
+                                       <EyeOff className="size-4" />
+                                    </Button>
                                     <Button onClick={handleRotateSecret} variant="outline" className="h-12 px-6 border-primary/20 text-primary uppercase font-bold text-[10px] gap-2">
                                        <RefreshCcw className="size-3" /> Rotate
                                     </Button>
@@ -324,5 +342,26 @@ export default function EnterpriseSettingsPage() {
         </main>
       </SidebarInset>
     </div>
+  )
+}
+function EyeOff(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+      <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+      <path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+      <line x1="2" x2="22" y1="2" y2="22" />
+    </svg>
   )
 }

@@ -7,3 +7,9 @@ export const firebaseConfig = {
   appId: "1:126491468105:web:73ce56367b4f1f5704fa98",
   measurementId: "G-Q09C752QLE"
 };
+
+/**
+ * @Sovereign_Identity: Google OAuth Client ID
+ * Mission 500: Primary Auth Bridge
+ */
+export const googleClientId = "394844522843-t2kg5tlm28avobja6ccaqmb3iemoklec.apps.googleusercontent.com";
