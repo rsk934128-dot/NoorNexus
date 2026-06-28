@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -146,6 +147,7 @@ export default function RevenueMatrixPage() {
   }
 
   const handleSaveParameters = () => {
+    if (!selectedChannel) return
     setSavingParam(true)
     setTimeout(() => {
       setSavingParam(false)
@@ -157,6 +159,9 @@ export default function RevenueMatrixPage() {
       })
     }, 1500)
   }
+
+  // Local helper for dynamic icon rendering
+  const ChannelIcon = selectedChannel?.icon;
 
   return (
     <div className="flex min-h-screen bg-background cyber-grid">
@@ -223,37 +228,40 @@ export default function RevenueMatrixPage() {
                      <PieChart className="size-4" /> Active Revenue Channels
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                     {REVENUE_STREAMS.map((stream) => (
-                       <Card key={stream.id} className="glass-card border-white/5 hover:border-primary/20 transition-all group overflow-hidden">
-                          <CardContent className="p-6">
-                             <div className="flex justify-between items-start mb-4">
-                                <div className={`p-3 rounded-xl bg-white/5 border border-white/10 group-hover:bg-primary/10 transition-colors`}>
-                                   <stream.icon className={`size-6 ${stream.color}`} />
-                                </div>
-                                <div className="text-right">
-                                   <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px] h-5 mb-1">{stream.growth}</Badge>
-                                   <p className="text-[10px] text-muted-foreground font-mono uppercase">{stream.rate}</p>
-                                </div>
-                             </div>
-                             <div className="space-y-2">
-                                <h4 className="text-lg font-headline font-bold text-white uppercase">{stream.name}</h4>
-                                <p className="text-xs text-primary font-mono font-bold">{stream.source}</p>
-                                <p className="text-xs text-muted-foreground leading-relaxed italic">"{stream.description}"</p>
-                             </div>
-                             <div className="pt-4 mt-4 border-t border-white/5 flex justify-between items-center">
-                                <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Channel Status: OPTIMAL</span>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm" 
-                                  className="text-[9px] uppercase font-bold text-primary gap-2 h-7 hover:bg-primary/10"
-                                  onClick={() => handleManageChannel(stream)}
-                                >
-                                   Manage Channel <ArrowUpRight className="size-3" />
-                                </Button>
-                             </div>
-                          </CardContent>
-                       </Card>
-                     ))}
+                     {REVENUE_STREAMS.map((stream) => {
+                       const StreamIcon = stream.icon;
+                       return (
+                         <Card key={stream.id} className="glass-card border-white/5 hover:border-primary/20 transition-all group overflow-hidden">
+                            <CardContent className="p-6">
+                               <div className="flex justify-between items-start mb-4">
+                                  <div className={`p-3 rounded-xl bg-white/5 border border-white/10 group-hover:bg-primary/10 transition-colors`}>
+                                     <StreamIcon className={`size-6 ${stream.color}`} />
+                                  </div>
+                                  <div className="text-right">
+                                     <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px] h-5 mb-1">{stream.growth}</Badge>
+                                     <p className="text-[10px] text-muted-foreground font-mono uppercase">{stream.rate}</p>
+                                  </div>
+                               </div>
+                               <div className="space-y-2">
+                                  <h4 className="text-lg font-headline font-bold text-white uppercase">{stream.name}</h4>
+                                  <p className="text-xs text-primary font-mono font-bold">{stream.source}</p>
+                                  <p className="text-xs text-muted-foreground leading-relaxed italic">"{stream.description}"</p>
+                               </div>
+                               <div className="pt-4 mt-4 border-t border-white/5 flex justify-between items-center">
+                                  <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Channel Status: OPTIMAL</span>
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    className="text-[9px] uppercase font-bold text-primary gap-2 h-7 hover:bg-primary/10"
+                                    onClick={() => handleManageChannel(stream)}
+                                  >
+                                     Manage Channel <ArrowUpRight className="size-3" />
+                                  </Button>
+                               </div>
+                            </CardContent>
+                         </Card>
+                       )
+                     })}
                   </div>
                </section>
 
@@ -363,10 +371,10 @@ export default function RevenueMatrixPage() {
           <DialogContent className="glass-card border-primary/20 bg-black/95 text-white sm:max-w-[500px]">
              <DialogHeader>
                 <div className={`size-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 mb-4`}>
-                   <selectedChannel.icon className={`size-6 ${selectedChannel.color}`} />
+                   {ChannelIcon && <ChannelIcon className={`size-6 ${selectedChannel?.color || 'text-primary'}`} />}
                 </div>
                 <DialogTitle className="text-xl font-headline font-bold uppercase tracking-tight text-white flex items-center gap-3">
-                   Manage: {selectedChannel.name}
+                   Manage: {selectedChannel?.name || 'Channel'}
                 </DialogTitle>
                 <DialogDescription className="text-muted-foreground text-xs uppercase tracking-widest font-mono">
                    Economic Parameter Optimization Hub.
@@ -390,12 +398,12 @@ export default function RevenueMatrixPage() {
 
                 <div className="space-y-4">
                    <div className="flex justify-between items-end">
-                      <Label className="text-xs font-bold uppercase text-primary">{selectedChannel.paramLabel}</Label>
+                      <Label className="text-xs font-bold uppercase text-primary">{selectedChannel?.paramLabel}</Label>
                       <span className="text-lg font-headline font-bold text-white">
-                        {selectedChannel.id.includes('markup') || selectedChannel.id.includes('levy') ? `${selectedChannel.currentVal}%` : `$${selectedChannel.currentVal}`}
+                        {selectedChannel?.id?.includes('markup') || selectedChannel?.id?.includes('levy') ? `${selectedChannel?.currentVal}%` : `$${selectedChannel?.currentVal}`}
                       </span>
                    </div>
-                   <Slider defaultValue={[selectedChannel.currentVal]} max={selectedChannel.id.includes('tier') ? 10000 : 10} step={0.1} />
+                   <Slider defaultValue={[selectedChannel?.currentVal || 0]} max={selectedChannel?.id?.includes('tier') ? 10000 : 10} step={0.1} />
                    <div className="flex justify-between text-[8px] text-muted-foreground font-mono uppercase">
                       <span>Min Safe</span>
                       <span>Max Optimization</span>

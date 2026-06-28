@@ -276,6 +276,8 @@ export function AppSidebar() {
     })
   }
 
+  const RegionIcon = selectedRegion?.icon || Globe;
+
   return (
     <Sidebar className="border-r border-white/5 bg-sidebar text-sidebar-foreground">
       <SidebarHeader className="p-4 flex flex-col gap-4 shrink-0">
@@ -300,10 +302,10 @@ export function AppSidebar() {
               <button className="w-full flex items-center justify-between p-2.5 bg-primary/5 border border-primary/20 rounded-xl hover:bg-primary/10 transition-all group outline-none">
                  <div className="flex items-center gap-3">
                     <div className="size-8 rounded-lg bg-primary/20 flex items-center justify-center border border-primary/30 group-hover:scale-110 transition-transform">
-                       <selectedRegion.icon className="size-4 text-primary" />
+                       <RegionIcon className="size-4 text-primary" />
                     </div>
                     <div className="text-left">
-                       <p className="text-[10px] font-bold text-white uppercase leading-none">{selectedRegion.name}</p>
+                       <p className="text-[10px] font-bold text-white uppercase leading-none">{selectedRegion?.name || 'Region'}</p>
                        <p className="text-[8px] text-muted-foreground font-mono uppercase mt-1">STATUS: SYNCED</p>
                     </div>
                  </div>
@@ -313,22 +315,25 @@ export function AppSidebar() {
            <DropdownMenuContent className="w-56 glass-card border-primary/20 bg-black/95 text-white" align="start" side="bottom">
               <DropdownMenuLabel className="text-[10px] uppercase tracking-widest font-bold text-primary px-3 py-2">Select Sovereign Node</DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-white/5" />
-              {SOVEREIGN_REGIONS.map((region) => (
-                <DropdownMenuItem 
-                  key={region.code} 
-                  onClick={() => handleRegionSelect(region)}
-                  className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-primary/10 focus:bg-primary/10 group transition-all"
-                >
-                  <region.icon className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                  <div className="flex-1">
-                     <p className="text-xs font-bold uppercase">{region.name}</p>
-                     <p className="text-[8px] font-mono text-muted-foreground">{region.code}</p>
-                  </div>
-                  {selectedRegion.code === region.code && (
-                    <div className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  )}
-                </DropdownMenuItem>
-              ))}
+              {SOVEREIGN_REGIONS.map((region) => {
+                const DropIcon = region.icon;
+                return (
+                  <DropdownMenuItem 
+                    key={region.code} 
+                    onClick={() => handleRegionSelect(region)}
+                    className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-primary/10 focus:bg-primary/10 group transition-all"
+                  >
+                    <DropIcon className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    <div className="flex-1">
+                       <p className="text-xs font-bold uppercase">{region.name}</p>
+                       <p className="text-[8px] font-mono text-muted-foreground">{region.code}</p>
+                    </div>
+                    {selectedRegion?.code === region.code && (
+                      <div className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    )}
+                  </DropdownMenuItem>
+                )
+              })}
            </DropdownMenuContent>
         </DropdownMenu>
 
