@@ -53,7 +53,9 @@ import {
   Eye,
   EyeOff,
   Gavel,
-  MessageSquare
+  MessageSquare,
+  Sparkles,
+  SmartphoneNfc
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Switch } from "@/components/ui/switch"
@@ -70,7 +72,6 @@ export default function EnterpriseSettingsPage() {
   const [notificationsAllowed, setNotificationsAllowed] = useState(false)
   const [pendingTasks, setPendingTasks] = useState<any[]>([])
   
-  // Official App Config & Security Template
   const APP_CONFIG = {
     name: "NoorNexus",
     id: "studio-786911773-686ad",
@@ -80,6 +81,13 @@ export default function EnterpriseSettingsPage() {
     status: "ENABLED",
     type: "Direct"
   }
+
+  const PLACEHOLDERS = [
+    { key: "%DISPLAY_NAME%", desc: "Recipient's Name" },
+    { key: "%APP_NAME%", desc: "NoorNexus OS" },
+    { key: "%LINK%", desc: "Action Target URL" },
+    { key: "%EMAIL%", desc: "Primary Identity" }
+  ]
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'Notification' in window) {
@@ -122,7 +130,6 @@ export default function EnterpriseSettingsPage() {
     setLoading(false);
   }
 
-  // Admin Protocol Actions
   const handleSetClaims = async () => {
     setAdminLoading(true);
     try {
@@ -161,9 +168,6 @@ export default function EnterpriseSettingsPage() {
                  <Badge variant="outline" className="border-primary/50 text-primary uppercase font-bold tracking-widest px-3 h-8 bg-primary/5">
                    <Settings className="size-3 mr-2" /> Application Lifecycle Management
                  </Badge>
-                 <Badge variant="outline" className="border-emerald-500/50 text-emerald-500 uppercase font-bold tracking-widest px-3 h-8 bg-emerald-500/5">
-                   <ShieldPlus className="size-3 mr-2" /> 2-Step Verification Active
-                 </Badge>
               </div>
               <div className="flex items-center gap-4">
                  <div className="size-12 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-headline font-bold text-2xl">
@@ -192,8 +196,8 @@ export default function EnterpriseSettingsPage() {
             <TabsList className="bg-white/5 border border-white/10 p-1 h-12">
               <TabsTrigger value="settings" className="gap-2 px-6"><Settings className="size-4" /> App Settings</TabsTrigger>
               <TabsTrigger value="admin" className="gap-2 px-6"><Gavel className="size-4" /> Admin Protocols</TabsTrigger>
+              <TabsTrigger value="messaging" className="gap-2 px-6"><Mail className="size-4" /> Identity Messaging</TabsTrigger>
               <TabsTrigger value="sync" className="gap-2 px-6"><CloudOff className="size-4" /> Offline Ledger</TabsTrigger>
-              <TabsTrigger value="permissions" className="gap-2 px-6"><ShieldQuestion className="size-4" /> System Permissions</TabsTrigger>
             </TabsList>
 
             <TabsContent value="settings" className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -228,37 +232,14 @@ export default function EnterpriseSettingsPage() {
                                     </Button>
                                  </div>
                               </div>
-                              <div className="space-y-2">
-                                 <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Application Secret</Label>
-                                 <div className="flex gap-2">
-                                    <Input type={showSecret ? "text" : "password"} value={APP_CONFIG.secret} readOnly className="bg-background/50 border-white/10 font-mono text-xs h-12" />
-                                    <Button variant="outline" size="icon" className="h-12 w-12 border-white/10" onClick={() => setShowSecret(!showSecret)}>
-                                       {showSecret ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                                    </Button>
-                                    <Button onClick={handleRotateSecret} variant="outline" className="h-12 px-6 border-primary/20 text-primary uppercase font-bold text-[10px] gap-2">
-                                       <RefreshCcw className="size-3" /> Rotate
-                                    </Button>
-                                 </div>
-                              </div>
                            </div>
-                        </CardContent>
-                     </Card>
-                  </div>
-                  <div className="space-y-8">
-                     <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
-                        <CardHeader>
-                           <CardTitle className="text-xs font-headline uppercase text-emerald-500">Fortress Health</CardTitle>
-                        </CardHeader>
-                        <CardContent className="text-center space-y-4">
-                           <p className="text-3xl font-headline font-bold text-white">SECURE</p>
-                           <p className="text-[9px] text-muted-foreground italic">"Background Execution: ENABLED via android.uid.system signature."</p>
                         </CardContent>
                      </Card>
                   </div>
                </div>
             </TabsContent>
 
-            <TabsContent value="admin" className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <TabsContent value="admin" className="space-y-8 animate-in fade-in duration-500">
                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                   <div className="lg:col-span-2 space-y-8">
                      <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
@@ -266,7 +247,6 @@ export default function EnterpriseSettingsPage() {
                            <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
                               <ShieldAlert className="size-4 text-purple-400" /> Admin SDK Overrides
                            </CardTitle>
-                           <CardDescription className="text-xs">Privileged operations using the Sovereign Administrative Layer.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -275,7 +255,6 @@ export default function EnterpriseSettingsPage() {
                                     <UserCheck className="size-5 text-purple-400" />
                                     <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Custom Identity Claims</h4>
                                  </div>
-                                 <p className="text-[10px] text-muted-foreground">Grant Imperial administrative status to a user identity via the backend portal.</p>
                                  <Button 
                                     onClick={handleSetClaims} 
                                     disabled={adminLoading}
@@ -285,51 +264,84 @@ export default function EnterpriseSettingsPage() {
                                     Anchors Imperial Claims
                                  </Button>
                               </div>
+                           </div>
+                        </CardContent>
+                     </Card>
+                  </div>
+               </div>
+            </TabsContent>
 
-                              <div className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-4">
-                                 <div className="flex items-center gap-3">
-                                    <BellRing className="size-5 text-emerald-400" />
-                                    <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">FCM Mesh Broadcast</h4>
+            <TabsContent value="messaging" className="space-y-8 animate-in fade-in duration-500">
+               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="lg:col-span-2 space-y-8">
+                     <Card className="glass-card border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                        <CardHeader>
+                           <CardTitle className="text-sm font-headline uppercase tracking-widest text-white flex items-center gap-2">
+                              <Mail className="size-4 text-emerald-400" /> Account Management Messaging
+                           </CardTitle>
+                           <CardDescription className="text-xs">Customizing password resets, email verification, and SMS alerts.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-8">
+                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div className="space-y-4">
+                                 <h4 className="text-[10px] font-bold text-primary uppercase tracking-widest">Template Placeholders</h4>
+                                 <div className="space-y-2">
+                                    {PLACEHOLDERS.map((p, i) => (
+                                       <div key={i} className="flex justify-between items-center p-2.5 bg-black/40 rounded border border-white/5">
+                                          <code className="text-emerald-500 text-[10px] font-bold">{p.key}</code>
+                                          <span className="text-[9px] text-muted-foreground uppercase">{p.desc}</span>
+                                       </div>
+                                    ))}
                                  </div>
-                                 <p className="text-[10px] text-muted-foreground">Dispatched encrypted messaging packets to all 100 autonomous nodes.</p>
-                                 <Button 
-                                    onClick={handleBroadcast} 
-                                    disabled={adminLoading}
-                                    className="w-full bg-emerald-500 text-white font-bold h-10 uppercase text-[9px] gap-2"
-                                 >
-                                    {adminLoading ? <Loader2 className="size-3 animate-spin" /> : <MessageSquare className="size-3" />}
-                                    Dispatch FCM Packet
-                                 </Button>
+                              </div>
+                              <div className="space-y-4">
+                                 <h4 className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">Custom Sender Hub</h4>
+                                 <div className="p-4 bg-white/2 rounded-xl border border-white/10 space-y-3">
+                                    <div className="flex justify-between items-center">
+                                       <span className="text-[10px] text-white font-bold uppercase">Sovereign Domain</span>
+                                       <Badge variant="outline" className="border-emerald-500/30 text-emerald-500 text-[8px]">VERIFIED</Badge>
+                                    </div>
+                                    <p className="text-[11px] text-muted-foreground italic leading-relaxed">
+                                       "Sender: noreply@noornexus.sovereign. All communications are signed with Article XI Verifiable standards."
+                                    </p>
+                                    <Button variant="outline" className="w-full border-white/10 h-9 text-[9px] uppercase font-bold gap-2">
+                                       <Globe className="size-3" /> Customize Domain
+                                    </Button>
+                                 </div>
                               </div>
                            </div>
 
-                           <Card className="bg-red-500/5 border-red-500/20">
-                              <CardContent className="p-4 flex items-center justify-between">
-                                 <div className="flex items-center gap-4">
-                                    <ZapOff className="size-6 text-red-400" />
-                                    <div className="space-y-0.5">
-                                       <p className="text-xs font-bold text-white uppercase">Identity Revocation</p>
-                                       <p className="text-[9px] text-muted-foreground">Immediately invalidate all refresh tokens for a specific node identity.</p>
-                                    </div>
+                           <div className="space-y-4">
+                              <h4 className="text-[10px] font-bold text-white uppercase tracking-widest">Action Link Configuration</h4>
+                              <div className="p-4 bg-black/60 rounded-xl border border-primary/20 space-y-4 relative overflow-hidden">
+                                 <div className="absolute top-0 right-0 p-4 opacity-5">
+                                    <Sparkles className="size-16 text-primary" />
                                  </div>
-                                 <Button variant="outline" className="border-red-500/20 text-red-500 uppercase font-bold text-[9px]">Revoke Access</Button>
-                              </CardContent>
-                           </Card>
+                                 <div className="space-y-2">
+                                    <Label className="text-[9px] uppercase font-bold text-muted-foreground">Action URL Bridge</Label>
+                                    <Input readOnly value="https://noornexus.sovereign/acctmgmt/__/auth/action" className="bg-background/50 border-white/5 font-mono text-[10px] h-10" />
+                                 </div>
+                                 <p className="text-[9px] text-muted-foreground leading-relaxed italic">
+                                    "Custom Action URL allows NoorNexus to handle password resets and email verification natively, bypassing default rails."
+                                 </p>
+                              </div>
+                           </div>
                         </CardContent>
                      </Card>
                   </div>
                   <div className="space-y-8">
                      <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
                         <CardHeader>
-                           <CardTitle className="text-xs font-headline uppercase text-amber-500">Security Rule Control</CardTitle>
+                           <CardTitle className="text-xs font-headline uppercase text-amber-500 flex items-center gap-2">
+                              <ShieldPlus className="size-4" /> Comm Integrity
+                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                            <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                              "Administrative protocols allow real-time adjustment of Firestore security rules and Remote Config parameters for high-stakes compliance."
+                              "Every outbound SMS/Email carries a neural integrity seal. Placeholders are injected at the edge nodes for zero-latency delivery."
                            </p>
-                           <div className="flex justify-between items-center text-[9px] font-mono border-t border-white/5 pt-4">
-                              <span className="uppercase text-muted-foreground">Rule Version</span>
-                              <span className="text-white font-bold">SOV_P51_v3.2</span>
+                           <div className="pt-2">
+                              <Badge variant="outline" className="w-full justify-center h-8 border-amber-500/30 text-amber-500 uppercase text-[9px] font-bold">ARTICLE_XI_ENFORCED</Badge>
                            </div>
                         </CardContent>
                      </Card>
@@ -345,7 +357,6 @@ export default function EnterpriseSettingsPage() {
                            <CardTitle className="text-sm font-headline uppercase text-amber-500 flex items-center gap-2">
                               <Database className="size-4" /> Offline Task Ledger
                            </CardTitle>
-                           <CardDescription className="text-xs">Tasks queued while the system node was disconnected.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                            {pendingTasks.length === 0 ? (
@@ -382,94 +393,11 @@ export default function EnterpriseSettingsPage() {
                         </CardContent>
                      </Card>
                   </div>
-                  <div className="space-y-8">
-                     <Card className="glass-card border-l-4 border-l-primary bg-primary/5">
-                        <CardHeader>
-                           <CardTitle className="text-xs font-headline uppercase text-primary flex items-center gap-2">
-                              <ShieldPlus className="size-4" /> Sync Torque
-                           </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                           <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                              "নূরনেক্সাস সিনক্রোনাইজেশন ইঞ্জিন ইন্টারনেট ফিরে আসা মাত্রই সেকেন্ডের মধ্যে আপনার সকল পেন্ডিং কাজ শেষ করে দেবে।"
-                           </p>
-                           <div className="flex justify-between items-center text-[9px] font-mono border-t border-white/5 pt-4">
-                              <span className="uppercase text-muted-foreground">Queue Mode</span>
-                              <span className="text-emerald-500 font-bold uppercase">READY</span>
-                           </div>
-                        </CardContent>
-                     </Card>
-                  </div>
-               </div>
-            </TabsContent>
-
-            <TabsContent value="permissions" className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
-               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                  <div className="lg:col-span-2 space-y-8">
-                     <Card className="glass-card border-l-4 border-l-amber-500 bg-amber-500/5">
-                        <CardHeader>
-                           <CardTitle className="text-sm font-headline uppercase tracking-widest text-amber-500 flex items-center gap-2">
-                              <UserCheck className="size-5" /> OAuth Scope & Permission Registry
-                           </CardTitle>
-                           <CardDescription className="text-xs">These permissions are automatically requested during system open.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                           {[
-                             { name: "profile", label: "Identity Profile", desc: "Access to name, photo and bio for Gemini personalization.", status: "REQUIRED", toggle: false },
-                             { name: "email", label: "Sovereign Gmail", desc: "Core identifier for cross-app synchronization.", status: "REQUIRED", toggle: false },
-                             { name: "openid", label: "Session OpenID", desc: "Unified authentication bridge token.", status: "REQUIRED", toggle: false },
-                             { name: "background", label: "Always-Alive Execution", desc: "Permission to run foreground services regardless of usage.", status: "ENABLED", toggle: false },
-                             { name: "notifications", label: "Imperial Matrix Notifications", desc: "Push API for real-time alerts from Nora-AI and Fortress.", status: notificationsAllowed ? "GRANTED" : "DISABLED", toggle: true, action: handleNotificationToggle, val: notificationsAllowed }
-                           ].map((perm, i) => (
-                             <div key={i} className="p-4 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between group hover:border-amber-500/20 transition-all">
-                                <div className="flex items-center gap-4">
-                                   <div className="size-10 rounded-lg bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
-                                      {perm.name === 'notifications' ? <BellRing className="size-5 text-amber-500" /> : <ShieldCheck className="size-5 text-amber-500" />}
-                                   </div>
-                                   <div className="space-y-0.5">
-                                      <p className="text-sm font-bold text-white uppercase">{perm.label}</p>
-                                      <p className="text-[10px] text-muted-foreground italic">"{perm.desc}"</p>
-                                   </div>
-                                </div>
-                                <div className="flex flex-col items-end gap-2">
-                                   <Badge className={`${perm.status === 'GRANTED' || perm.status === 'REQUIRED' || perm.status === 'ENABLED' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-red-500/20 text-red-500'} border-none text-[8px]`}>{perm.status}</Badge>
-                                   {perm.toggle ? (
-                                      <Switch checked={perm.val} onCheckedChange={perm.action} />
-                                   ) : (
-                                      <Switch checked={true} disabled />
-                                   )}
-                                </div>
-                             </div>
-                           ))}
-                        </CardContent>
-                     </Card>
-                  </div>
                </div>
             </TabsContent>
           </Tabs>
         </main>
       </SidebarInset>
     </div>
-  )
-}
-
-function ZapOff(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M10.5 10.5 3 21l8-9 5 5 1.5-1.5" />
-      <path d="m15.5 15.5 5.5-7.5-8-2-2.5 2.5" />
-      <line x1="2" x2="22" y1="2" y2="22" />
-    </svg>
   )
 }

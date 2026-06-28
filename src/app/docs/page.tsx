@@ -30,7 +30,9 @@ import {
   Globe,
   Scale,
   Rocket,
-  Link2
+  Link2,
+  Mail,
+  MessageSquare
 } from "lucide-react"
 
 export default function DocsPage() {
@@ -89,17 +91,17 @@ export default function DocsPage() {
                       </CardHeader>
                       <CardContent>
                          <p className="text-sm text-primary-foreground/80 leading-relaxed italic">
-                            "NoorNexus shall not rely on external link-shortening or dynamic redirection services. All deep-links must be served directly from the Sovereign Mesh to ensure institutional longevity and prevent dependency on sunsetting third-party APIs."
+                            "NoorNexus shall not rely on external link-shortening or dynamic redirection services. All deep-links must be served directly from the Sovereign Mesh to ensure institutional longevity."
                          </p>
                       </CardContent>
                     </Card>
-                    <Card className="glass-card border-white/5">
+                    <Card className="glass-card border-l-4 border-l-purple-500 bg-purple-500/5">
                       <CardHeader>
-                         <CardTitle className="text-sm font-headline text-white uppercase">Article VII: Institutional Longevity</CardTitle>
+                         <CardTitle className="text-lg font-headline text-purple-400 uppercase">Article XI: Verifiable Communication</CardTitle>
                       </CardHeader>
                       <CardContent>
-                         <p className="text-xs text-muted-foreground leading-relaxed">
-                            "No capability shall be optimized at the expense of long-term institutional survival."
+                         <p className="text-sm text-purple-100 leading-relaxed italic">
+                            "All account management communications (Email/SMS) must originate from a verified Sovereign Domain. Communications shall use neural placeholders for extreme personalization and transparency."
                          </p>
                       </CardContent>
                     </Card>
