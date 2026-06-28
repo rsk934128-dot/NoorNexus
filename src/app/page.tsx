@@ -182,7 +182,7 @@ export default function Home() {
     <div className="flex min-h-screen bg-background cyber-grid">
       <AppSidebar />
       <SidebarInset>
-        <main className="p-4 sm:p-6 lg:p-10 space-y-6 sm:space-y-10 max-w-[1800px] mx-auto w-full overflow-x-hidden pb-20">
+        <main className="p-4 sm:p-6 lg:p-10 space-y-6 sm:space-y-10 max-w-[1600px] mx-auto w-full overflow-x-hidden pb-20">
           <header className="relative space-y-4 sm:space-y-6">
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8 border-b border-white/5 pb-6 sm:pb-10">
               <div className="space-y-3 sm:space-y-4 w-full">
